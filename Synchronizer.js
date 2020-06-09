@@ -1,32 +1,57 @@
 class Synchronizer {
   constructor(viewerArray) {
-    let syncedViews = [];
-    let activeViewer = null;
+    let syncedViewers = [];
+    let activeViewerId = null;
+
+    // Loop through array of n-viewers
     viewerArray.forEach(function (elem) {
-      // console.log(elem);
-      let currentViewer = elem.getViewer();
+      let currentNv = elem;
+      // let locked = currentNv.getLocked()
+      let currentViewer = currentNv.getViewer();
       let id = currentViewer.id;
+
       currentViewer.addHandler('pan', handler);
       currentViewer.addHandler('zoom', handler);
 
       function handler() {
-        if (activeViewer == null) {
-          activeViewer = id; // init
+        // My viewer is clicked, I'm the active viewer
+        if (activeViewerId == null) {
+          activeViewerId = id;
         }
-        if (activeViewer !== id) {
-          return; // somebody else leading
+        if (activeViewerId !== id) {
+          return;
         }
-        syncedViews.forEach(function (view) {
+
+        // As for everybody else...
+        syncedViewers.forEach(function (item) {
+          let view = item.getViewer()
           if (view.id === id) {
             return;
           }
-          view.viewport.zoomTo(currentViewer.viewport.getZoom());
-          view.viewport.panTo(currentViewer.viewport.getCenter());
-        });
-        activeViewer = null;
-      }
 
-      syncedViews.push(currentViewer);
+          // other viewers' coords set to my coordinates
+          // unless they are locked
+          if (!item.getLocked()) {
+            view.viewport.zoomTo(currentViewer.viewport.getZoom());
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
+
+        });
+        activeViewerId = null;
+      }
+      syncedViewers.push(currentNv);
     });
+
+    this.setLocked = function (idx, bool) {
+      syncedViewers[idx].setLocked(bool);
+      syncedViewers.forEach(function (item) {
+        console.log(item.getViewer().id, item.getLocked())
+      });
+    }
+
+    this.getLocked = function (idx) {
+      return syncedViewers[idx].getViewer().getLocked();
+    }
+
   }
 }

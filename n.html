@@ -12,26 +12,26 @@
 <body>
   <h3>TCGA Segmentation Data</h3>
 
-  <div id="selections" class="foo"></div>
+  <div id="selections"></div>
   <p>&nbsp;</p><br>
-  <div id="viewers" class="wrapper"></div>
+  <div id="viewers" class="container"></div>
 
   <script src="//openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
   <script src="openseadragon/openseadragon-filtering.js"></script>
   <script src="Dropdown.js"></script>
-  <script src="Viewer.js"></script>
+  <script src="nViewer.js"></script>
   <script src="Synchronizer.js"></script>
   <script>
 
     const arr = [];
-    const style = "box dragon";
+    const style = "dragonbox";
     // const iiif = "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg";
     const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
     const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
 
     const num_viewers = 6;
     for (let i = 0; i < num_viewers; i++) {
-      let v = new Viewer("viewer" + i, style);
+      let v = new nViewer("viewer" + i, style);
       arr.push(v);
     }
 

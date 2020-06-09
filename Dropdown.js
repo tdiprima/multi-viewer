@@ -52,7 +52,7 @@ class Dropdown {
       let si = iiif + "/featureimages/" + cVal + "/" + iVal + "-featureimage.tif/info.json";
 
       if (imageExists(ti)) {
-        // Do something now that you know the image exists.
+        // Do something now you know the image exists.
         viewerArray.forEach(function (elem) {
           elem.getViewer().open([ti, si]);
           // elem.setSources([ti, si], [1.0, 1.0]); // why not this?
@@ -68,7 +68,6 @@ class Dropdown {
     function initTypes() {
       let d = document.createDocumentFragment();
       let newDiv = document.createElement("div");
-      newDiv.setAttribute("class", "foo1");
       newDiv.innerHTML = "Type&nbsp;";
       d.appendChild(newDiv);
       cancerSelect = document.createElement('select');
@@ -87,7 +86,6 @@ class Dropdown {
     function initImages() {
       let d = document.createDocumentFragment();
       let newDiv = document.createElement("div");
-      newDiv.setAttribute("class", "foo2");
       newDiv.innerHTML = "Image&nbsp;";
       d.appendChild(newDiv);
       imageSelect = document.createElement("select");

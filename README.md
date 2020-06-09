@@ -1,5 +1,5 @@
 # n-viewer
-Inter-locklable N-viewers synchronized together, with clean, light-weight, reusable, modular code
+Goal: Inter-locklable N-viewers synchronized together, with clean, light-weight, reusable, modular code
 
 List of products: https://quip.bmi.stonybrook.edu/tcgaseg/demo.html
 

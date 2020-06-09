@@ -7,43 +7,47 @@
   <title>Quad-Viewer</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="slider.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
   <h3>TCGA Segmentation Data</h3>
 
-  <div id="selections" class="foo"></div>
-  <p>&nbsp;</p><br>
-  <div id="viewers" class="wrapper"></div>
+  <div id="selections"></div>
+  <div><br>&nbsp;</div>
+  <div id="viewers" class="container"></div>
 
   <script src="//openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
   <script src="openseadragon/openseadragon-filtering.js"></script>
+  <script src="openseadragon/viewerinputhook.js"></script>
   <script src="Dropdown.js"></script>
-  <script src="Viewer.js"></script>
+  <script src="nViewer.js"></script>
   <script src="Synchronizer.js"></script>
   <script>
 
     const arr = [];
-    const style = "box dragon";
+    const style = "dragonbox";
     // const iiif = "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg";
     const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
     const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
 
     const num_viewers = 4;
     for (let i = 0; i < num_viewers; i++) {
-      let v = new Viewer("viewer" + i, style);
+      let v = new nViewer("viewer" + i, style);
+      // console.log("v instanceof nViewer", (v instanceof nViewer)) TRUE.
       arr.push(v);
     }
 
     new Dropdown(arr);
 
     arr.forEach(function (elem) {
+      // console.log("elem instanceof nViewer", (elem instanceof nViewer)) TRUE
       elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
-            iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
+      iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
         [1.0, 1.0]);
     });
 
-    new Synchronizer(arr);
+    sync = new Synchronizer(arr);  // Pass an array of nViewers
 
   </script>
 </body>
