@@ -35,6 +35,15 @@ class Dropdown {
       selectImage();
     }
 
+    function imageExists(image_url) {
+
+      let http = new XMLHttpRequest();
+      http.open('HEAD', image_url, false);
+      http.send();
+      return http.status !== 404;
+
+    }
+
     function selectImage() {
       let cVal = cancerSelect.value;
       let iVal = imageSelect.value;
@@ -42,10 +51,18 @@ class Dropdown {
       let ti = iiif + "/tcgaimages/" + cVal + "/" + iVal + ".svs/info.json";
       let si = iiif + "/featureimages/" + cVal + "/" + iVal + "-featureimage.tif/info.json";
 
-      viewerArray.forEach(function (elem) {
-        elem.getViewer().open([ti, si]);
-        // elem.setSources([ti, si], [1.0, 1.0]); // why not this?
-      });
+      if (imageExists(ti)) {
+        // Do something now that you know the image exists.
+        viewerArray.forEach(function (elem) {
+          elem.getViewer().open([ti, si]);
+          // elem.setSources([ti, si], [1.0, 1.0]); // why not this?
+        });
+      } else {
+        // Image doesn't exist - do something else.
+        alert('Image does not exist\n' + ti);
+        return false;
+      }
+
     }
 
     function initTypes() {

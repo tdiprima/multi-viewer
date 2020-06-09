@@ -23,27 +23,45 @@
   <script src="Synchronizer.js"></script>
   <script>
 
-    const arr = [];
-    const style = "box dragon";
-    // const iiif = "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg";
-    const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
-    const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
+    function production() {
+      // My variables
+      const arr = [];
+      const style = "box dragon";
+      // const iiif = "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg";
+      const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
+      const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
 
-    const num_viewers = 1;
-    for (let i = 0; i < num_viewers; i++) {
-      let v = new Viewer("viewer" + i, style);
-      arr.push(v);
+      // Create viewer(s)
+      const num_viewers = 1;
+      for (let i = 0; i < num_viewers; i++) {
+        let v = new Viewer("viewer" + i, style);
+        arr.push(v);
+      }
+
+      // Add dropdown to the page
+      // (Now that we have 1 or more viewers created)
+      new Dropdown(arr);
+
+      // Set viewer source
+      arr.forEach(function (elem) {
+        elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
+        iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
+          [1.0, 1.0]);
+      });
+
+      // Controller to keep viewers in sync
+      new Synchronizer(arr);
     }
+    // production();
 
-    new Dropdown(arr);
-
-    arr.forEach(function (elem) {
-      elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
-            iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
-        [1.0, 1.0]);
-    });
-
-    new Synchronizer(arr);
+    function testing() {
+      let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
+      let myViewer = new Viewer("seadragon-viewer", "box dragon");
+      myViewer.getViewer().open(dzi); // setSources will not work here.
+      new Dropdown([myViewer]);
+      new Synchronizer([myViewer]);
+    }
+    testing();
 
   </script>
 </body>

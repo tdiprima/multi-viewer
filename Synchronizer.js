@@ -1,39 +1,32 @@
-function Synchronizer(viewerArray) {
+class Synchronizer {
+  constructor(viewerArray) {
+    let syncedViews = [];
+    let activeViewer = null;
+    viewerArray.forEach(function (elem) {
+      // console.log(elem);
+      let currentViewer = elem.getViewer();
+      let id = currentViewer.id;
+      currentViewer.addHandler('pan', handler);
+      currentViewer.addHandler('zoom', handler);
 
-  let syncedViews = [];
-  let activeViewer = null;
-
-  viewerArray.forEach(function (elem) {
-    // console.log(elem);
-    let currentViewer = elem.getViewer();
-    let id = currentViewer.id;
-
-    currentViewer.addHandler('pan', handler);
-    currentViewer.addHandler('zoom', handler);
-
-    function handler() {
-
-      if (activeViewer == null) {
-        activeViewer = id; // init
-      }
-
-      if (activeViewer !== id) {
-        return; // somebody else leading
-      }
-
-      syncedViews.forEach(function (view) {
-        if (view.id === id) {
-          return
+      function handler() {
+        if (activeViewer == null) {
+          activeViewer = id; // init
         }
-        view.viewport.zoomTo(currentViewer.viewport.getZoom());
-        view.viewport.panTo(currentViewer.viewport.getCenter());
+        if (activeViewer !== id) {
+          return; // somebody else leading
+        }
+        syncedViews.forEach(function (view) {
+          if (view.id === id) {
+            return;
+          }
+          view.viewport.zoomTo(currentViewer.viewport.getZoom());
+          view.viewport.panTo(currentViewer.viewport.getCenter());
+        });
+        activeViewer = null;
+      }
 
-      });
-      activeViewer = null;
-
-    }
-
-    syncedViews.push(currentViewer);
-  })
-
+      syncedViews.push(currentViewer);
+    });
+  }
 }

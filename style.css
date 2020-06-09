@@ -6,6 +6,7 @@ body {
   margin-right: 20px;
 }
 
+/* container */
 .wrapper {
   display: grid;
   /* grid-template-columns: 600px 600px; */
@@ -15,6 +16,7 @@ body {
   color: #444;
 }
 
+/* box, dragon = div list viewer */
 .box {
   background-color: #fff;
   color: #fff;
@@ -31,6 +33,7 @@ body {
   background: transparent;
 }
 
+/* not using */
 .seadragon-viewer {
   background: transparent;
   display: inline-block;
@@ -38,6 +41,7 @@ body {
   height: 600px;
 }
 
+/* Sliders: */
 .foo {
   width: 300px;
 }
