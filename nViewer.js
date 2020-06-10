@@ -23,7 +23,7 @@ class nViewer {
       return locked;
     }
 
-    this.setLocked = function (bool) {
+    function setLocked(bool) {
       locked = bool;
     }
 
@@ -146,8 +146,7 @@ class nViewer {
         let idx = parseInt(lockId.replace("lock", ""));
         if (this.classList.contains("fa-unlock")) {
           // It's unlocked, we're gonna lock it
-          sync.setLocked(idx, true);
-          viewer.locked = true;
+          setLocked(true);
           this.classList.add("fa-lock");
           this.classList.remove("fa-unlock");
           viewer.gestureSettingsMouse.clickToZoom = false;
@@ -160,8 +159,7 @@ class nViewer {
         } else {
           if (this.classList.contains("fa-lock")) {
             // It's locked, we're gonna unlock it
-            sync.setLocked(idx, false);
-            viewer.locked = false;
+            setLocked(false);
             this.classList.add("fa-unlock");
             this.classList.remove("fa-lock");
             viewer.gestureSettingsMouse.clickToZoom = true;

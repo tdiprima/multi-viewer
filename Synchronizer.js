@@ -22,6 +22,8 @@ class Synchronizer {
               return;
           }
           // end magic
+          
+          // console.log("activeViewerId:", activeViewerId);
 
           // As for everybody else...
           syncedViewers.forEach(function(item) {
@@ -41,17 +43,6 @@ class Synchronizer {
       }
       syncedViewers.push(elem);  // add our [viewer] to our list
     });
-
-    this.setLocked = function (idx, bool) {
-      syncedViewers[idx].setLocked(bool);
-      syncedViewers.forEach(function (item) {
-        console.log(item.getViewer().id, item.getLocked())
-      });
-    }
-
-    this.getLocked = function (idx) {
-      return syncedViewers[idx].getViewer().getLocked();
-    }
 
   }
 }
