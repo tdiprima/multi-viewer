@@ -22,6 +22,7 @@
   <script src="openseadragon/openseadragon-filtering.js"></script>
   <script src="openseadragon/viewerinputhook.js"></script>
   <script src="Dropdown.js"></script>
+  <script src="Lock.js"></script>
   <script src="nViewer.js"></script>
   <script src="Synchronizer.js"></script>
   <script>
@@ -41,19 +42,17 @@
 
     new Dropdown(arr);
 
-    let highsmith = "//openseadragon.github.io/example-images/highsmith/highsmith.dzi";
-    arr.forEach(function (elem) {
-      // console.log("elem instanceof nViewer", (elem instanceof nViewer)) TRUE
-      elem.getViewer().openDzi(highsmith);
-    });
-    /*
+    // let highsmith = "//openseadragon.github.io/example-images/highsmith/highsmith.dzi";
+    // arr.forEach(function (elem) {
+    //   // console.log("elem instanceof nViewer", (elem instanceof nViewer)) TRUE
+    //   elem.getViewer().openDzi(highsmith);
+    // });
     arr.forEach(function (elem) {
       // console.log("elem instanceof nViewer", (elem instanceof nViewer)) TRUE
       elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
       iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
         [1.0, 1.0]);
     });
-    */
 
     sync = new Synchronizer(arr);  // Pass an array of nViewers
 

@@ -7,8 +7,12 @@ class nViewer {
   constructor(divId, cssName) {
     let myFilter = {};
     let sliders = [];
-    let locked = false;
     let viewer = {};
+
+    let panLock = {};
+    let zoomLock = {};
+    let centerLock = {};
+
     const maindiv = document.getElementById('viewers');
     setFilter();
     // setSliders(); <- we do this later
@@ -17,14 +21,6 @@ class nViewer {
     this.getViewer = function () {
       return viewer;
     };
-
-    this.getLocked = function () {
-      return locked;
-    }
-
-    function setLocked(bool) {
-      locked = bool;
-    }
 
     /**
      * @param imageArray
@@ -100,40 +96,14 @@ class nViewer {
     }
 
     function setLock(div) {
-      // locker.id = divId.replace("viewer", "lock")
-      // locker.style.color = 'purple';
-      // locker.classList.add("fa-unlock");
-
-      let d = document.createDocumentFragment();
-
-      // PAN
-      let lockPan = document.createElement('i');
-      lockPan.id = divId.replace("viewer", "pan")
-      lockPan.style.marginRight = "10px";
-      lockPan.classList.add("fa");
-      lockPan.classList.add("fa-arrows");
-      d.appendChild(lockPan);
-
-      // ZOOM
-      let lockZoom = document.createElement('i');
-      // let lockZoom = document.createElement('img');
-      lockZoom.id = divId.replace("viewer", "zoom")
-      lockZoom.style.marginRight = "10px";
-      lockZoom.classList.add("fa");
-      lockZoom.classList.add("fa-search-plus");
-      // lockZoom.src = "zoombox.svg";
-      // lockZoom.alt = "Lock Center Point";
-      d.appendChild(lockZoom);
-
-      // CENTER POINT
-      let lockCenter = document.createElement('i');
-      lockCenter.id = divId.replace("viewer", "center")
-      lockCenter.style.marginRight = "10px";
-      lockCenter.classList.add("fa");
-      lockCenter.classList.add("fa-crosshairs");
-      d.appendChild(lockCenter);
-
-      div.appendChild(d);
+      let idx = divId.replace("viewer", "");
+      let style = "margin-right: 10px;";
+      panLock = new Lock("i", "pan" + idx, "fa fa-arrows", style);
+      zoomLock = new Lock("i", "zoom" + idx, "fa fa-search-plus", style);
+      centerLock = new Lock("i", "center" + idx, "fa fa-crosshairs", style);
+      let div1 = document.createElement('div');
+      div1.innerHTML = panLock.show() + zoomLock.show() + centerLock.show();
+      div.appendChild(div1);
 
     }
 
@@ -169,6 +139,7 @@ class nViewer {
       }
 
       // LOCK ZOOM EVENT LISTENER
+      /*
       lockZoom.addEventListener('click', function (e) {
         let lockId = this.id;
         let idx = parseInt(lockId.replace("lock", ""));
@@ -205,6 +176,7 @@ class nViewer {
           }
         }
       });
+      */
 
       viewer.setFilterOptions({
         filters: [{

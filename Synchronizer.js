@@ -33,13 +33,13 @@ class Synchronizer {
           }
           // other viewers' coords set to my coordinates
           // unless they are locked
-          if (item.getLocked()) {
-            view.viewport.panTo(currentViewer.viewport.getCenter());
-          }
-          else {
+          // if (item.getLocked()) {
+          //   view.viewport.panTo(currentViewer.viewport.getCenter());
+          // }
+          // else {
             view.viewport.zoomTo(currentViewer.viewport.getZoom());
             view.viewport.panTo(currentViewer.viewport.getCenter());
-          }
+          // }
         });
         // magic support
         activeViewerId = null;
