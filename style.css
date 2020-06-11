@@ -1,14 +1,55 @@
 body {
-  font-family: sans-serif;
+    font-family: sans-serif;
 }
 
 .container {
-  display: grid;
-  height: 100vh;
-  grid-template-columns: auto auto;
-  grid-template-rows: auto auto;
+    display: grid;
+    height: 100vh;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
 }
 
 .dragonbox {
-  padding-bottom: 70px;
+    padding-bottom: 70px;
+}
+
+/* FONTAWESOME STUFF */
+a {
+    text-decoration: none;
+    cursor: default;
+}
+
+.fa-hover a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    color: #222;
+    line-height: 32px;
+    height: 32px;
+    padding-left: 10px;
+    border-radius: 4px
+}
+
+.fontawesome-icon-list .fa-hover a .fa {
+    width: 32px;
+    font-size: 14px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 10px
+}
+
+.fontawesome-icon-list .fa-hover a:hover {
+    background-color: #3996f2;
+    color: #fff;
+    text-decoration: none
+}
+
+.fontawesome-icon-list .fa-hover a:hover .fa {
+    font-size: 28px;
+    vertical-align: -6px
+}
+
+.fontawesome-icon-list .fa-hover a:hover .text-muted {
+    color: #edf5fd
 }
