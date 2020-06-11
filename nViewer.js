@@ -7,7 +7,6 @@ class nViewer {
   constructor(divId, cssName) {
     let myFilter = {};
     let sliders = [];
-    let locker;
     let locked = false;
     let viewer = {};
     const maindiv = document.getElementById('viewers');
@@ -101,12 +100,41 @@ class nViewer {
     }
 
     function setLock(div) {
-      locker = document.createElement('i');
-      locker.id = divId.replace("viewer", "lock")
-      locker.style.color = 'purple';
-      locker.classList.add("fa");
-      locker.classList.add("fa-unlock");
-      div.appendChild(locker);
+      // locker.id = divId.replace("viewer", "lock")
+      // locker.style.color = 'purple';
+      // locker.classList.add("fa-unlock");
+
+      let d = document.createDocumentFragment();
+
+      // PAN
+      let lockPan = document.createElement('i');
+      lockPan.id = divId.replace("viewer", "pan")
+      lockPan.style.marginRight = "10px";
+      lockPan.classList.add("fa");
+      lockPan.classList.add("fa-arrows");
+      d.appendChild(lockPan);
+
+      // ZOOM
+      let lockZoom = document.createElement('i');
+      // let lockZoom = document.createElement('img');
+      lockZoom.id = divId.replace("viewer", "zoom")
+      lockZoom.style.marginRight = "10px";
+      lockZoom.classList.add("fa");
+      lockZoom.classList.add("fa-search-plus");
+      // lockZoom.src = "zoombox.svg";
+      // lockZoom.alt = "Lock Center Point";
+      d.appendChild(lockZoom);
+
+      // CENTER POINT
+      let lockCenter = document.createElement('i');
+      lockCenter.id = divId.replace("viewer", "center")
+      lockCenter.style.marginRight = "10px";
+      lockCenter.classList.add("fa");
+      lockCenter.classList.add("fa-crosshairs");
+      d.appendChild(lockCenter);
+
+      div.appendChild(d);
+
     }
 
     /**
@@ -140,35 +168,40 @@ class nViewer {
         });
       }
 
-      // LOCKER EVENT LISTENER
-      locker.addEventListener('click', function (e) {
+      // LOCK ZOOM EVENT LISTENER
+      lockZoom.addEventListener('click', function (e) {
         let lockId = this.id;
         let idx = parseInt(lockId.replace("lock", ""));
-        if (this.classList.contains("fa-unlock")) {
+        if (!locked) {
           // It's unlocked, we're gonna lock it
           setLocked(true);
-          this.classList.add("fa-lock");
-          this.classList.remove("fa-unlock");
+          lockZoom.style.color = 'red';
+          // this.classList.add("fa-lock");
+          // this.classList.remove("fa-unlock");
           viewer.gestureSettingsMouse.clickToZoom = false;
-          viewer.addViewerInputHook({
-            hooks: [
-              // Disable zoom on mouse wheel and/or pinch zoom
-              { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
-            ]
-          });
+          // TODO: TEMPORARY
+          // viewer.addViewerInputHook({
+          //   hooks: [
+          //     // Disable zoom on mouse wheel and/or pinch zoom
+          //     { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
+          //   ]
+          // });
         } else {
-          if (this.classList.contains("fa-lock")) {
+          if (locked) {
             // It's locked, we're gonna unlock it
             setLocked(false);
-            this.classList.add("fa-unlock");
-            this.classList.remove("fa-lock");
+            // lockZoom.style.color = 'lime'; // or black
+            lockZoom.style.color = 'black';
+            // this.classList.add("fa-unlock");
+            // this.classList.remove("fa-lock");
             viewer.gestureSettingsMouse.clickToZoom = true;
-            viewer.addViewerInputHook({
-              hooks: [
-                // Enable zoom on mouse wheel and/or pinch zoom
-                { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
-              ]
-            });
+            // TODO: TEMPORARY
+            // viewer.addViewerInputHook({
+            //   hooks: [
+            //     // Enable zoom on mouse wheel and/or pinch zoom
+            //     { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
+            //   ]
+            // });
           }
         }
       });
