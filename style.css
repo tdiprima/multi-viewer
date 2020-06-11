@@ -13,12 +13,12 @@ body {
     padding-bottom: 70px;
 }
 
-/* FONTAWESOME STUFF */
+/* HOVER */
+/*
 a {
     text-decoration: none;
     cursor: default;
 }
-
 .fa-hover a {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -30,7 +30,6 @@ a {
     padding-left: 10px;
     border-radius: 4px
 }
-
 .fontawesome-icon-list .fa-hover a .fa {
     width: 32px;
     font-size: 14px;
@@ -38,18 +37,13 @@ a {
     text-align: right;
     margin-right: 10px
 }
-
 .fontawesome-icon-list .fa-hover a:hover {
     background-color: #3996f2;
-    color: #fff;
+    color: #edf5fd;
     text-decoration: none
 }
-
 .fontawesome-icon-list .fa-hover a:hover .fa {
     font-size: 28px;
     vertical-align: -6px
 }
-
-.fontawesome-icon-list .fa-hover a:hover .text-muted {
-    color: #edf5fd
-}
+*/
