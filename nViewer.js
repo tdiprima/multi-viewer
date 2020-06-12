@@ -8,6 +8,9 @@ class nViewer {
     let idx = divId.replace("viewer", "");
     let myFilter = {};
     let sliders = [];
+    let chkPan = {};
+    let chkZoom = {};
+    let chkCenter = {};
     let viewer = {};
     const maindiv = document.getElementById('viewers');
     setFilter();
@@ -94,13 +97,20 @@ class nViewer {
      */
     function setCheckboxes(div) {
 
-      let chkPan = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
-      let chkZoom = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
-      let chkCenter = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
+      // Create.
+      let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
+      let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
+      let chkCenter1 = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
 
+      // Draw.
       let div1 = document.createElement('div');
-      div1.innerHTML = chkPan.show() + chkZoom.show() + chkCenter.show();
+      div1.innerHTML = chkPan1.show() + chkZoom1.show() + chkCenter1.show();
       div.appendChild(div1);
+
+      // Set. (class variables)
+      chkPan = chkPan1.getElement("chkPan");
+      chkZoom = chkZoom1.getElement("chkZoom");
+      chkCenter = chkCenter1.getElement("chkCenter");
 
     }
 
