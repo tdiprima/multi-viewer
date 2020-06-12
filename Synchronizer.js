@@ -23,23 +23,28 @@ class Synchronizer {
         }
         // end magic
 
-        // console.log("activeViewerId:", activeViewerId);
-
         // As for everybody else...
         syncedViewers.forEach(function (item) {
           let view = item.getViewer()
           if (view.id === currentViewer.id) {
             return;
           }
+        /*
           // other viewers' coords set to my coordinates
           // unless they are locked
-          // if (item.getLocked()) {
-          //   view.viewport.panTo(currentViewer.viewport.getCenter());
-          // }
-          // else {
+          if (!item.getLocked()) {
             view.viewport.zoomTo(currentViewer.viewport.getZoom());
             view.viewport.panTo(currentViewer.viewport.getCenter());
-          // }
+          }
+         */
+          // Lock zoom position, keep pan
+          if (item.getLocked()) {
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
+          else {
+            view.viewport.zoomTo(currentViewer.viewport.getZoom());
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
         });
         // magic support
         activeViewerId = null;

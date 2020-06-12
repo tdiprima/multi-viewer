@@ -6,10 +6,7 @@ function Lock(tagName, id, classList, style) {
     this.locked = false;
 
     this.show = function show() {
-        var html = "";
-        html = `<${this.tagName} id="${this.id}" class="${this.classList}" style="${this.style}"></${this.tagName}>`;
-        console.log("html", html)
-        return html;
+        return `<${this.tagName} id="${this.id}" class="${this.classList}" style="${this.style}"></${this.tagName}>`;
     }
 
     this.isLocked = function isLocked() {

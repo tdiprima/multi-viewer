@@ -7,12 +7,15 @@ class nViewer {
   constructor(divId, cssName) {
     let myFilter = {};
     let sliders = [];
-    let viewer = {};
 
+    let locker = {};
+    let locked = false;
     let panLock = {};
     let zoomLock = {};
     let centerLock = {};
 
+    let viewer = {};
+    let idx = divId.replace("viewer", "");
     const maindiv = document.getElementById('viewers');
     setFilter();
     // setSliders(); <- we do this later
@@ -21,6 +24,13 @@ class nViewer {
     this.getViewer = function () {
       return viewer;
     };
+
+    this.getLocked = function () {
+      return locked;
+    }
+    function setLocked(bool) {
+      locked = bool;
+    }
 
     /**
      * @param imageArray
@@ -96,14 +106,21 @@ class nViewer {
     }
 
     function setLock(div) {
-      let idx = divId.replace("viewer", "");
       let style = "margin-right: 10px;";
-      panLock = new Lock("i", "pan" + idx, "fa fa-arrows", style);
-      zoomLock = new Lock("i", "zoom" + idx, "fa fa-search-plus", style);
-      centerLock = new Lock("i", "center" + idx, "fa fa-crosshairs", style);
+
+      let a = new Lock("i", "lock" + idx, "fa fa-unlock", style); // original name; don't worry abt it.
+      let b = new Lock("i", "pan" + idx, "fa fa-arrows", style);
+      let c = new Lock("i", "zoom" + idx, "fa fa-search-plus", style);
+      let d = new Lock("i", "center" + idx, "fa fa-crosshairs", style);
+
       let div1 = document.createElement('div');
-      div1.innerHTML = panLock.show() + zoomLock.show() + centerLock.show();
+      div1.innerHTML = a.show() + b.show() + c.show() + d.show();
       div.appendChild(div1);
+
+      locker = document.getElementById("lock" + idx);
+      panLock = document.getElementById("pan" + idx);
+      zoomLock = document.getElementById("zoom" + idx);
+      centerLock = document.getElementById("center" + idx);
 
     }
 
@@ -138,46 +155,59 @@ class nViewer {
         });
       }
 
-      // LOCK ZOOM EVENT LISTENER
       /*
-      lockZoom.addEventListener('click', function (e) {
-        let lockId = this.id;
-        let idx = parseInt(lockId.replace("lock", ""));
+      // "Just Lock" EVENT LISTENER
+      locker.addEventListener('click', function (e) {
+        if (this.classList.contains("fa-unlock")) {
+          // It's unlocked, we're gonna lock it
+          setLocked(true);
+          this.classList.add("fa-lock");
+          this.classList.remove("fa-unlock");
+          viewer.gestureSettingsMouse.clickToZoom = false;
+          viewer.addViewerInputHook({
+            hooks: [
+              // Disable zoom on mouse wheel and/or pinch zoom
+              { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
+            ]
+          });
+        } else {
+          if (this.classList.contains("fa-lock")) {
+            // It's locked, we're gonna unlock it
+            setLocked(false);
+            this.classList.add("fa-unlock");
+            this.classList.remove("fa-lock");
+            viewer.gestureSettingsMouse.clickToZoom = true;
+            viewer.addViewerInputHook({
+              hooks: [
+                // Enable zoom on mouse wheel and/or pinch zoom
+                { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
+              ]
+            });
+          }
+        }
+      });
+       */
+      // LOCK ZOOM EVENT LISTENER
+      // It worked, but I was able to break it today.
+      zoomLock.addEventListener('click', function (e) {
+        // we temporarily reused the term locked to mean lock zoom
         if (!locked) {
           // It's unlocked, we're gonna lock it
           setLocked(true);
-          lockZoom.style.color = 'red';
-          // this.classList.add("fa-lock");
-          // this.classList.remove("fa-unlock");
+          zoomLock.style.color = 'red';
           viewer.gestureSettingsMouse.clickToZoom = false;
-          // TODO: TEMPORARY
-          // viewer.addViewerInputHook({
-          //   hooks: [
-          //     // Disable zoom on mouse wheel and/or pinch zoom
-          //     { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
-          //   ]
-          // });
         } else {
           if (locked) {
             // It's locked, we're gonna unlock it
             setLocked(false);
-            // lockZoom.style.color = 'lime'; // or black
-            lockZoom.style.color = 'black';
-            // this.classList.add("fa-unlock");
-            // this.classList.remove("fa-lock");
+            // zoomLock.style.color = 'lime'; // or black
+            zoomLock.style.color = 'black';
             viewer.gestureSettingsMouse.clickToZoom = true;
-            // TODO: TEMPORARY
-            // viewer.addViewerInputHook({
-            //   hooks: [
-            //     // Enable zoom on mouse wheel and/or pinch zoom
-            //     { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
-            //   ]
-            // });
           }
         }
       });
-      */
 
+      // FILTERING
       viewer.setFilterOptions({
         filters: [{
           items: viewer.world.getItemAt(1),
