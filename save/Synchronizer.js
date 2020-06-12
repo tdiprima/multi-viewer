@@ -29,9 +29,22 @@ class Synchronizer {
           if (view.id === currentViewer.id) {
             return;
           }
+        /*
           // other viewers' coords set to my coordinates
-          view.viewport.zoomTo(currentViewer.viewport.getZoom());
-          view.viewport.panTo(currentViewer.viewport.getCenter());
+          // unless they are locked
+          if (!item.getLocked()) {
+            view.viewport.zoomTo(currentViewer.viewport.getZoom());
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
+         */
+          // Lock zoom position, keep pan
+          if (item.getLocked()) {
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
+          else {
+            view.viewport.zoomTo(currentViewer.viewport.getZoom());
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
         });
         // magic support
         activeViewerId = null;

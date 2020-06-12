@@ -5,24 +5,37 @@
  */
 class nViewer {
   constructor(divId, cssName) {
-    let idx = divId.replace("viewer", "");
-    let chkPan = {};
-    let chkZoom = {};
-    let chkCenter = {};
     let myFilter = {};
     let sliders = [];
+
+    let locker = {};
+    let locked = false;
+    let panLock = {};
+    let zoomLock = {};
+    let centerLock = {};
+
     let viewer = {};
+    let idx = divId.replace("viewer", "");
     const maindiv = document.getElementById('viewers');
     setFilter();
+    // setSliders(); <- we do this later
     setViewer();
 
     this.getViewer = function () {
       return viewer;
     };
 
+    this.getLocked = function () {
+      return locked;
+    }
+    function setLocked(bool) {
+      locked = bool;
+    }
+
     /**
      * @param imageArray
      * @param opacityArray
+     * @returns nViewer
      */
     this.setSources = function (imageArray, opacityArray) {
       imageArray.forEach(function (image, index) {
@@ -68,7 +81,7 @@ class nViewer {
           };
         }
       });
-
+      return viewer;
     };
 
     function setSliders(div) {
@@ -92,29 +105,23 @@ class nViewer {
       }
     }
 
-    /**
-     * Match pan, match zoom, match center point
-     */
-    function setCheckboxes(div) {
+    function setLock(div) {
+      let style = "margin-right: 10px;";
 
-      let dd = document.createElement('div');
-      chkPan = makeCheckbox("chkPan");
-      dd.appendChild(chkPan);
-      chkZoom = makeCheckbox("chkZoom");
-      dd.appendChild(chkZoom);
-      chkCenter = makeCheckbox("chkCenter");
-      dd.appendChild(chkCenter);
+      let a = new Lock("i", "lock" + idx, "fa fa-unlock", style); // original name; don't worry abt it.
+      let b = new Lock("i", "pan" + idx, "fa fa-arrows", style);
+      let c = new Lock("i", "zoom" + idx, "fa fa-search-plus", style);
+      let d = new Lock("i", "center" + idx, "fa fa-crosshairs", style);
 
-      div.appendChild(dd);
+      let div1 = document.createElement('div');
+      div1.innerHTML = a.show() + b.show() + c.show() + d.show();
+      div.appendChild(div1);
 
-    }
+      locker = document.getElementById("lock" + idx);
+      panLock = document.getElementById("pan" + idx);
+      zoomLock = document.getElementById("zoom" + idx);
+      centerLock = document.getElementById("center" + idx);
 
-    function makeCheckbox(name) {
-      let obj = document.createElement("INPUT");
-      obj.setAttribute("type", "checkbox");
-      obj.id = name + idx;
-      obj.checked = true; //:shrug:
-      return obj;
     }
 
     /**
@@ -126,7 +133,7 @@ class nViewer {
       div.setAttribute('class', cssName);
       maindiv.appendChild(div);
       setSliders(div);
-      setCheckboxes(div);
+      setLock(div);
 
       // document.body.appendChild(div);
       viewer = OpenSeadragon({
@@ -148,6 +155,58 @@ class nViewer {
         });
       }
 
+      /*
+      // "Just Lock" EVENT LISTENER
+      locker.addEventListener('click', function (e) {
+        if (this.classList.contains("fa-unlock")) {
+          // It's unlocked, we're gonna lock it
+          setLocked(true);
+          this.classList.add("fa-lock");
+          this.classList.remove("fa-unlock");
+          viewer.gestureSettingsMouse.clickToZoom = false;
+          viewer.addViewerInputHook({
+            hooks: [
+              // Disable zoom on mouse wheel and/or pinch zoom
+              { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
+            ]
+          });
+        } else {
+          if (this.classList.contains("fa-lock")) {
+            // It's locked, we're gonna unlock it
+            setLocked(false);
+            this.classList.add("fa-unlock");
+            this.classList.remove("fa-lock");
+            viewer.gestureSettingsMouse.clickToZoom = true;
+            viewer.addViewerInputHook({
+              hooks: [
+                // Enable zoom on mouse wheel and/or pinch zoom
+                { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
+              ]
+            });
+          }
+        }
+      });
+       */
+      // LOCK ZOOM EVENT LISTENER
+      // It worked, but I was able to break it today.
+      zoomLock.addEventListener('click', function (e) {
+        // we temporarily reused the term locked to mean lock zoom
+        if (!locked) {
+          // It's unlocked, we're gonna lock it
+          setLocked(true);
+          zoomLock.style.color = 'red';
+          viewer.gestureSettingsMouse.clickToZoom = false;
+        } else {
+          if (locked) {
+            // It's locked, we're gonna unlock it
+            setLocked(false);
+            // zoomLock.style.color = 'lime'; // or black
+            zoomLock.style.color = 'black';
+            viewer.gestureSettingsMouse.clickToZoom = true;
+          }
+        }
+      });
+
       // FILTERING
       viewer.setFilterOptions({
         filters: [{
@@ -157,11 +216,6 @@ class nViewer {
           ]
         }]
       });
-
-      // TODO: Checkbox event listeners
-      chkPan.addEventListener('check', function (e) {
-
-      })
     }
 
     function setFilter() {

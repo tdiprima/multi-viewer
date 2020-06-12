@@ -55,7 +55,6 @@ class Dropdown {
         // Do something now you know the image exists.
         viewerArray.forEach(function (elem) {
           elem.getViewer().open([ti, si]);
-          // elem.setSources([ti, si], [1.0, 1.0]); // why not this?
         });
       } else {
         // Image doesn't exist - do something else.
