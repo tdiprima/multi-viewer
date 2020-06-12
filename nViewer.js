@@ -6,9 +6,6 @@
 class nViewer {
   constructor(divId, cssName) {
     let idx = divId.replace("viewer", "");
-    let chkPan = {};
-    let chkZoom = {};
-    let chkCenter = {};
     let myFilter = {};
     let sliders = [];
     let viewer = {};
@@ -97,24 +94,14 @@ class nViewer {
      */
     function setCheckboxes(div) {
 
-      let dd = document.createElement('div');
-      chkPan = makeCheckbox("chkPan");
-      dd.appendChild(chkPan);
-      chkZoom = makeCheckbox("chkZoom");
-      dd.appendChild(chkZoom);
-      chkCenter = makeCheckbox("chkCenter");
-      dd.appendChild(chkCenter);
+      let chkPan = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
+      let chkZoom = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
+      let chkCenter = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
 
-      div.appendChild(dd);
+      let div1 = document.createElement('div');
+      div1.innerHTML = chkPan.show() + chkZoom.show() + chkCenter.show();
+      div.appendChild(div1);
 
-    }
-
-    function makeCheckbox(name) {
-      let obj = document.createElement("INPUT");
-      obj.setAttribute("type", "checkbox");
-      obj.id = name + idx;
-      obj.checked = true; //:shrug:
-      return obj;
     }
 
     /**
@@ -159,9 +146,7 @@ class nViewer {
       });
 
       // TODO: Checkbox event listeners
-      chkPan.addEventListener('check', function (e) {
-
-      })
+      // chkPan.addEventListener('check', function (e) {})
     }
 
     function setFilter() {
