@@ -11,10 +11,27 @@ class nViewer {
     let chkPan = {};
     let chkZoom = {};
     let chkCenter = {};
+
     let viewer = {};
     const maindiv = document.getElementById('viewers');
     setFilter();
     setViewer();
+
+    this.getViewer = function () {
+      return viewer;
+    };
+
+    this.getChkPan = function () {
+      return chkPan;
+    };
+
+    this.getChkZoom = function () {
+      return chkZoom;
+    };
+
+    this.getChkCenter = function () {
+      return chkCenter;
+    }
 
     this.getViewer = function () {
       return viewer;

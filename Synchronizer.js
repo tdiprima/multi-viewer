@@ -29,6 +29,11 @@ class Synchronizer {
           if (view.id === currentViewer.id) {
             return;
           }
+
+          let p = item.getChkPan()
+          let z = item.getChkZoom();
+          let c = item.getChkCenter();
+
           // other viewers' coords set to my coordinates
           view.viewport.zoomTo(currentViewer.viewport.getZoom());
           view.viewport.panTo(currentViewer.viewport.getCenter());

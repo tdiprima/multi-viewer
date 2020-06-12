@@ -29,14 +29,14 @@ class Synchronizer {
           if (view.id === currentViewer.id) {
             return;
           }
-        /*
-          // other viewers' coords set to my coordinates
-          // unless they are locked
-          if (!item.getLocked()) {
-            view.viewport.zoomTo(currentViewer.viewport.getZoom());
-            view.viewport.panTo(currentViewer.viewport.getCenter());
-          }
-         */
+          /*
+            // other viewers' coords set to my coordinates
+            // unless they are locked
+            if (!item.getLocked()) {
+              view.viewport.zoomTo(currentViewer.viewport.getZoom());
+              view.viewport.panTo(currentViewer.viewport.getCenter());
+            }
+           */
           // Lock zoom position, keep pan
           if (item.getLocked()) {
             view.viewport.panTo(currentViewer.viewport.getCenter());
