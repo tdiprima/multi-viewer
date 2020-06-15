@@ -30,13 +30,27 @@ class Synchronizer {
             return;
           }
 
-          let p = item.getChkPan()
+          let p = item.getChkPan();
           let z = item.getChkZoom();
-          let c = item.getChkCenter();
+          // let c = item.getChkCenter();
 
           // other viewers' coords set to my coordinates
-          view.viewport.zoomTo(currentViewer.viewport.getZoom());
-          view.viewport.panTo(currentViewer.viewport.getCenter());
+          // EXCEPT...
+
+          if (p) {
+            // If I say to do the pan, then do the pan.
+            view.viewport.panTo(currentViewer.viewport.getCenter());
+          }
+
+          if (z) {
+            // If I say zoom, then do zoom.
+            view.viewport.zoomTo(currentViewer.viewport.getZoom());
+          }
+
+          // if (c) {
+          //   // If center, Then... ??
+          // }
+
         });
         // magic support
         activeViewerId = null;
