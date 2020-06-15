@@ -8,9 +8,13 @@ class nViewer {
     let idx = divId.replace("viewer", "");
     let myFilter = {};
     let sliders = [];
+
+    // let locker = {};
+    // let locked = false;
+
     let chkPan = {};
     let chkZoom = {};
-    // let chkCenter = {};
+    let chkCenter = {};
 
     let viewer = {};
     const maindiv = document.getElementById('viewers');
@@ -21,17 +25,24 @@ class nViewer {
       return viewer;
     };
 
+    // this.getLocked = function () {
+    //   return locked;
+    // }
+    // function setLocked(bool) {
+    //   locked = bool;
+    // }
+
     this.getChkPan = function () {
-        return chkPan.checked;
+      return chkPan.checked;
     };
 
     this.getChkZoom = function () {
-        return chkZoom.checked;
+      return chkZoom.checked;
     };
 
-    // this.getChkCenter = function () {
-    //     return chkCenter.checked;
-    // }
+    this.getChkCenter = function () {
+      return chkCenter.checked;
+    }
 
     this.getViewer = function () {
       return viewer;
@@ -115,19 +126,23 @@ class nViewer {
     function setCheckboxes(div) {
 
       // Create.
+      // let style = "margin-right: 10px;";
+      // let a = new Lock("i", "lock" + idx, "fa fa-unlock", style)
+
       let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
       let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
-      // let chkCenter1 = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
+      let chkCenter1 = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
 
       // Draw.
       let div1 = document.createElement('div');
-      div1.innerHTML = chkPan1.show() + chkZoom1.show(); // + chkCenter1.show();
+      div1.innerHTML = a.show() + chkPan1.show() + chkZoom1.show() + chkCenter1.show();
       div.appendChild(div1);
 
       // Set. (class variables)
+      // locker = document.getElementById("lock" + idx);
       chkPan = document.getElementById("chkPan" + idx)
       chkZoom = document.getElementById("chkZoom" + idx)
-      // chkCenter = document.getElementById("chkCenter" + idx)
+      chkCenter = document.getElementById("chkCenter" + idx)
 
     }
 
@@ -162,6 +177,38 @@ class nViewer {
         });
       }
 
+      /*
+      // "LOCK" EVENT LISTENER
+      locker.addEventListener('click', function (e) {
+        if (this.classList.contains("fa-unlock")) {
+          // It's unlocked, we're gonna lock it
+          setLocked(true);
+          this.classList.add("fa-lock");
+          this.classList.remove("fa-unlock");
+          viewer.gestureSettingsMouse.clickToZoom = false;
+          viewer.addViewerInputHook({
+            hooks: [
+              // Disable zoom on mouse wheel and/or pinch zoom
+              { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
+            ]
+          });
+        } else {
+          if (this.classList.contains("fa-lock")) {
+            // It's locked, we're gonna unlock it
+            setLocked(false);
+            this.classList.add("fa-unlock");
+            this.classList.remove("fa-lock");
+            viewer.gestureSettingsMouse.clickToZoom = true;
+            viewer.addViewerInputHook({
+              hooks: [
+                // Enable zoom on mouse wheel and/or pinch zoom
+                { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
+              ]
+            });
+          }
+        }
+      });*/
+
       // FILTERING
       viewer.setFilterOptions({
         filters: [{
@@ -172,8 +219,6 @@ class nViewer {
         }]
       });
 
-      // TODO: Checkbox event listeners
-      // chkPan.addEventListener('check', function (e) {})
     }
 
     function setFilter() {

@@ -32,23 +32,24 @@ class Synchronizer {
 
           let p = item.getChkPan();
           let z = item.getChkZoom();
-          // let c = item.getChkCenter();
+          let c = item.getChkCenter();
 
           // other viewers' coords set to my coordinates
           // EXCEPT...
 
+          // if (!item.getLocked()) {
           if (p) {
             // If I say to do the pan, then do the pan.
             view.viewport.panTo(currentViewer.viewport.getCenter());
           }
-
           if (z) {
             // If I say zoom, then do zoom.
             view.viewport.zoomTo(currentViewer.viewport.getZoom());
           }
-
-          // if (c) {
-          //   // If center, Then... ??
+          if (c) {
+            // If center, Then... ??
+            view.viewport.panTo(currentViewer.viewport.getCenter())
+          }
           // }
 
         });
@@ -57,6 +58,5 @@ class Synchronizer {
       }
       syncedViewers.push(elem);  // add our [viewer] to our list
     });
-
   }
 }
