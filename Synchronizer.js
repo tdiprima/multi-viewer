@@ -32,7 +32,7 @@ class Synchronizer {
 
           let p = item.getChkPan();
           let z = item.getChkZoom();
-          let c = item.getChkCenter();
+          // let c = item.getChkCenter();
 
           // other viewers' coords set to my coordinates
           // EXCEPT...
@@ -46,10 +46,10 @@ class Synchronizer {
             // If I say zoom, then do zoom.
             view.viewport.zoomTo(currentViewer.viewport.getZoom());
           }
-          if (c) {
-            // If center, Then... ??
-            view.viewport.panTo(currentViewer.viewport.getCenter())
-          }
+          // if (c) {
+          //   // If center, Then... ??
+          //   view.viewport.panTo(currentViewer.viewport.getCenter())
+          // }
           // }
 
         });

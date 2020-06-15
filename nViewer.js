@@ -14,7 +14,7 @@ class nViewer {
 
     let chkPan = {};
     let chkZoom = {};
-    let chkCenter = {};
+    // let chkCenter = {};
 
     let viewer = {};
     const maindiv = document.getElementById('viewers');
@@ -40,9 +40,9 @@ class nViewer {
       return chkZoom.checked;
     };
 
-    this.getChkCenter = function () {
-      return chkCenter.checked;
-    }
+    // this.getChkCenter = function () {
+    //   return chkCenter.checked;
+    // }
 
     this.getViewer = function () {
       return viewer;
@@ -131,18 +131,18 @@ class nViewer {
 
       let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
       let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
-      let chkCenter1 = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
+      // let chkCenter1 = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
 
       // Draw.
       let div1 = document.createElement('div');
-      div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() + chkCenter1.show();
+      div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() /*+chkCenter1.show();*/
       div.appendChild(div1);
 
       // Set. (class variables)
       // locker = document.getElementById("lock" + idx);
       chkPan = document.getElementById("chkPan" + idx)
       chkZoom = document.getElementById("chkZoom" + idx)
-      chkCenter = document.getElementById("chkCenter" + idx)
+      // chkCenter = document.getElementById("chkCenter" + idx)
 
     }
 
