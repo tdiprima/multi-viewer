@@ -141,6 +141,7 @@ class nViewer {
 
       // Draw.
       let div1 = document.createElement('div');
+      // let cogHtml = "<div id='cog'><i class=\"fa fa-cog\" style='color: #0575fb;'></i><div id='popup'>&nbsp;show sliders&nbsp;</div></div>";
       let cogHtml = "<div id='cog'><i class=\"fa fa-cog\" style='color: #0575fb;'></i><div id='popup'>&nbsp;menu&nbsp;</div></div>";
       div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() + cogHtml /*+chkCenter1.show();*/
       div.appendChild(div1);
