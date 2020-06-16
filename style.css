@@ -1,3 +1,4 @@
+/* style */
 body {
     font-family: sans-serif;
 }
@@ -13,37 +14,63 @@ body {
     padding-bottom: 70px;
 }
 
-/* HOVER */
-/*
-a {
-    text-decoration: none;
-    cursor: default;
+/* range sliders */
+.slider-square {
+  -webkit-appearance: none;
+  width: 90%;
+  height: 12px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: opacity .15s ease-in-out;
+  transition: opacity .15s ease-in-out;
 }
-.fa-hover a {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+.slider-square:hover {
+  opacity: 1;
+}
+
+.slider-square::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #8ac1ef;
+  cursor: pointer;
+}
+
+.slider-square::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  background: #8ac1ef;
+  cursor: pointer;
+}
+
+/* popover menu */
+#cog {
+    padding: 6px;
     display: block;
-    color: #222;
-    line-height: 32px;
-    height: 32px;
-    padding-left: 10px;
-    border-radius: 4px
+    position: relative;
 }
-.fontawesome-icon-list .fa-hover a .fa {
-    width: 32px;
-    font-size: 14px;
-    display: inline-block;
-    text-align: right;
-    margin-right: 10px
+
+#popup {
+    opacity: 0;
+    position: absolute;
+    top: 32px;
+    background: #fafafa;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    height: 0px;
+    padding: 0 12px;
+    overflow: hidden;
+    -webkit-transition: all 500ms;
+    transition: all 500ms;
 }
-.fontawesome-icon-list .fa-hover a:hover {
-    background-color: #3996f2;
-    color: #edf5fd;
-    text-decoration: none
+
+#cog:hover #popup {
+    padding: 12px 12px;
+    height: auto;
+    opacity: 1;
+    border: 1px solid #eeeeee;
 }
-.fontawesome-icon-list .fa-hover a:hover .fa {
-    font-size: 28px;
-    vertical-align: -6px
-}
-*/

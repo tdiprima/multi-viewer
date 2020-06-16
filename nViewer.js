@@ -135,7 +135,8 @@ class nViewer {
 
       // Draw.
       let div1 = document.createElement('div');
-      div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() /*+chkCenter1.show();*/
+      let cogHtml = "<div id=\"cog\"><i class=\"fa fa-cog\"></i><div id=\"popup\">&nbsp;menu&nbsp;</div></div>";
+      div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() + cogHtml /*+chkCenter1.show();*/
       div.appendChild(div1);
 
       // Set. (class variables)
