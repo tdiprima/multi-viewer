@@ -113,11 +113,17 @@ class nViewer {
         range.max = "100";
         range.value = "100";
         range.setAttribute('class', "slider-square");
+        range.style.display = "none";
         dd.appendChild(range); // append range to div
         d.appendChild(dd); // append div to fragment
         div.appendChild(d); // append fragment to parent
         sliders.push(range);
       }
+    }
+
+    function cog() {
+      // alert('clicked!');
+
     }
 
     /**
@@ -135,7 +141,7 @@ class nViewer {
 
       // Draw.
       let div1 = document.createElement('div');
-      let cogHtml = "<div id=\"cog\"><i class=\"fa fa-cog\"></i><div id=\"popup\">&nbsp;menu&nbsp;</div></div>";
+      let cogHtml = "<div id='cog'><i class=\"fa fa-cog\" style='color: #0575fb;'></i><div id='popup'>&nbsp;menu&nbsp;</div></div>";
       div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() + cogHtml /*+chkCenter1.show();*/
       div.appendChild(div1);
 
@@ -144,6 +150,17 @@ class nViewer {
       chkPan = document.getElementById("chkPan" + idx)
       chkZoom = document.getElementById("chkZoom" + idx)
       // chkCenter = document.getElementById("chkCenter" + idx)
+      let cog = document.getElementById("cog");
+      cog.addEventListener('click', function () {
+        var x = sliders[0];
+        if (x.style.display === 'none') {
+          x.style.display = 'block';
+          sliders[1].style.display = 'block';
+        } else {
+          x.style.display = 'none';
+          sliders[1].style.display = 'none';
+        }
+      });
 
     }
 
