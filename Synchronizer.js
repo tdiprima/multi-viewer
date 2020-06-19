@@ -30,6 +30,8 @@ class Synchronizer {
                         return;
                     }
 
+                    pin_overlay(view);  // IN PROGRESS...
+
                     // other viewers' coords set to my coordinates
                     // EXCEPT...
 
