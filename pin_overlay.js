@@ -1,3 +1,15 @@
+pin_overlay = function(viewer) {
+    // canvas-nonprimary-press
+    viewer.addHandler('canvas-click', function (event) {
+        const webPoint = event.position;
+        const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+    
+        console.log("webPoint", webPoint);
+        console.log("viewportPoint", viewportPoint);
+    
+        displayPinIcon(viewportPoint);
+    });
+
 viewer.addHandler('canvas-nonprimary-press', function (event) {
     const webPoint = event.position;
     const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
@@ -6,11 +18,6 @@ viewer.addHandler('canvas-nonprimary-press', function (event) {
 });
 
 function displayPinIcon(point, item) {
-    let href = '/sitemaps/edit-pin/' + siteId;
-    if (item) {
-        href += '/' + item;
-    }
-
     let link = document.createElement('a');
     link.href = '#';
     link.dataset.href = href;
@@ -34,7 +41,7 @@ function displayPinIcon(point, item) {
             const webPointX = this.element.offsetWidth / 2 + this.element.offsetLeft;
             const webPointY = this.element.offsetHeight / 2 + this.element.offsetTop;
             const viewportPoint = viewer.viewport.pointFromPixel(new OpenSeadragon.Point(webPointX, webPointY));
-            displayPinOverlay(href, viewportPoint);
+            displayPinIcon(viewportPoint, href);
         },
         dragHandler: function (event) {
             // Update the pin's overlay position from the given event parameters.
