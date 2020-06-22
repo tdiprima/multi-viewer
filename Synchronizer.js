@@ -11,7 +11,7 @@ class Synchronizer {
             // Add handlers
             currentViewer.addHandler('pan', handler);
             currentViewer.addHandler('zoom', handler);
-            pin_overlay(currentViewer, syncedViewers);  // IN PROGRESS...
+            pin_overlay(currentViewer, syncedViewers);
 
             function handler() {
                 // My viewer is clicked, I'm the active viewer
@@ -31,23 +31,14 @@ class Synchronizer {
                         return;
                     }
 
-                    
-
                     // other viewers' coords set to my coordinates
                     // EXCEPT...
-
-                    // if (!item.getLocked()) {
                     if (item.getChkPan() && elem.getChkPan()) {
                         view.viewport.panTo(currentViewer.viewport.getCenter());
                     }
                     if (item.getChkZoom() && elem.getChkZoom()) {
                         view.viewport.zoomTo(currentViewer.viewport.getZoom());
                     }
-                    // if (item.getChkCenter()) {
-                    //   // If center, Then... ??
-                    //   view.viewport.panTo(currentViewer.viewport.getCenter())
-                    // }
-                    // }
 
                 });
                 // magic support

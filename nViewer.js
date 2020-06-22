@@ -8,14 +8,8 @@ class nViewer {
     let idx = divId.replace("viewer", "");
     let myFilter = {};
     let sliders = [];
-
-    // let locker = {};
-    // let locked = false;
-
     let chkPan = {};
     let chkZoom = {};
-    // let chkCenter = {};
-
     let viewer = {};
     const maindiv = document.getElementById('viewers');
     setFilter();
@@ -25,13 +19,6 @@ class nViewer {
       return viewer;
     };
 
-    // this.getLocked = function () {
-    //   return locked;
-    // }
-    // function setLocked(bool) {
-    //   locked = bool;
-    // }
-
     this.getChkPan = function () {
       return chkPan.checked;
     };
@@ -39,10 +26,6 @@ class nViewer {
     this.getChkZoom = function () {
       return chkZoom.checked;
     };
-
-    // this.getChkCenter = function () {
-    //   return chkCenter.checked;
-    // }
 
     this.getViewer = function () {
       return viewer;
@@ -121,37 +104,25 @@ class nViewer {
       }
     }
 
-    function cog() {
-      // alert('clicked!');
-
-    }
-
     /**
      * Match pan, match zoom, match center point
      */
     function setCheckboxes(div) {
 
       // Create.
-      // let style = "margin-right: 10px;";
-      // let a = new Lock("i", "lock" + idx, "fa fa-unlock", style)
-
       let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
       let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
-      // let chkCenter1 = new Toggle("checkbox", "chkCenter" + idx, "Match Center");
-
+      let wCog = new Widget("fa fa-cog", "cog" + idx, "#0575fb");
+      let wPaint = new Widget("fa fa-paint-brush", "paint" + idx, "#0575fb");
       // Draw.
       let div1 = document.createElement('div');
-      // let cogHtml = "<div id='cog'><i class=\"fa fa-cog\" style='color: #0575fb;'></i><div id='popup'>&nbsp;show sliders&nbsp;</div></div>";
-      let cogHtml = "<div id='cog'><i class=\"fa fa-cog\" style='color: #0575fb;'></i><div id='popup'>&nbsp;menu&nbsp;</div></div>";
-      div1.innerHTML = /*a.show()+*/ chkPan1.show() + chkZoom1.show() + cogHtml /*+chkCenter1.show();*/
+      div1.innerHTML = chkPan1.show() + chkZoom1.show() + wCog.show() + wPaint.show();
       div.appendChild(div1);
 
       // Set. (class variables)
-      // locker = document.getElementById("lock" + idx);
       chkPan = document.getElementById("chkPan" + idx)
       chkZoom = document.getElementById("chkZoom" + idx)
-      // chkCenter = document.getElementById("chkCenter" + idx)
-      let cog = document.getElementById("cog");
+      let cog = document.getElementById("cog" + idx);
       cog.addEventListener('click', function () {
         var x = sliders[0];
         if (x.style.display === 'none') {
@@ -161,6 +132,11 @@ class nViewer {
           x.style.display = 'none';
           sliders[1].style.display = 'none';
         }
+      });
+
+      let paint = document.getElementById("paint" + idx);
+      paint.addEventListener('click', function () {
+          alert('it worked!')
       });
 
     }
@@ -195,38 +171,6 @@ class nViewer {
           }
         });
       }
-
-      /*
-      // "LOCK" EVENT LISTENER
-      locker.addEventListener('click', function (e) {
-        if (this.classList.contains("fa-unlock")) {
-          // It's unlocked, we're gonna lock it
-          setLocked(true);
-          this.classList.add("fa-lock");
-          this.classList.remove("fa-unlock");
-          viewer.gestureSettingsMouse.clickToZoom = false;
-          viewer.addViewerInputHook({
-            hooks: [
-              // Disable zoom on mouse wheel and/or pinch zoom
-              { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = true; } }
-            ]
-          });
-        } else {
-          if (this.classList.contains("fa-lock")) {
-            // It's locked, we're gonna unlock it
-            setLocked(false);
-            this.classList.add("fa-unlock");
-            this.classList.remove("fa-lock");
-            viewer.gestureSettingsMouse.clickToZoom = true;
-            viewer.addViewerInputHook({
-              hooks: [
-                // Enable zoom on mouse wheel and/or pinch zoom
-                { tracker: 'viewer', handler: 'scrollHandler', hookHandler: function (event) { event.preventDefaultAction = false; } }
-              ]
-            });
-          }
-        }
-      });*/
 
       // FILTERING
       viewer.setFilterOptions({
