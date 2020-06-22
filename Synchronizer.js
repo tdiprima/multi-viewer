@@ -11,6 +11,7 @@ class Synchronizer {
             // Add handlers
             currentViewer.addHandler('pan', handler);
             currentViewer.addHandler('zoom', handler);
+            pin_overlay(currentViewer, syncedViewers);  // IN PROGRESS...
 
             function handler() {
                 // My viewer is clicked, I'm the active viewer
@@ -30,7 +31,7 @@ class Synchronizer {
                         return;
                     }
 
-                    pin_overlay(view);  // IN PROGRESS...
+                    
 
                     // other viewers' coords set to my coordinates
                     // EXCEPT...
