@@ -125,7 +125,7 @@ class nViewer {
                 crossOriginPolicy: 'Anonymous'
             });
             viewer.setControlsEnabled(false);
-            new Paint(document.getElementById('btnDraw' + idx), viewer);
+            new Paint(idx, viewer);
 
             // SLIDER EVENT LISTENER
             for (let i = 0; i < sliders.length; i++) {
