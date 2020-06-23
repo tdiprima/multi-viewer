@@ -1,4 +1,4 @@
-function color(elem) {
+function Color(elem) {
     var HEX = CP.HEX; // Old hex color parser
 
     CP.HEX = function (x) {

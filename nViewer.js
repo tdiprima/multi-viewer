@@ -136,7 +136,7 @@ class nViewer {
                 }
             });
 
-            let jsc = new color(document.getElementById('mark' + idx));
+            let jsc = new Color(document.getElementById('mark' + idx));
 
             //   let paint = document.getElementById("paint" + idx);
             //   paint.addEventListener('click', function () {
