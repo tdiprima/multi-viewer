@@ -82,7 +82,7 @@ class nViewer {
 
         };
 
-        function setSliders(div) {
+        function setControls(div) {
             let d = document.createDocumentFragment();
             let dd = document.createElement('div');
 
@@ -102,47 +102,10 @@ class nViewer {
                 div.appendChild(d); // append fragment to parent
                 sliders.push(range);
             }
-        }
 
-        /**
-         * Match pan, match zoom, match center point
-         */
-        function setCheckboxes(div) {
-
-            // Create.
-            let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
-            let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
-            let wCog = new Widget("fa fa-cog", "cog" + idx, "#0575fb");
-            //   let wPaint = new Widget("fa fa-paint-brush", "paint" + idx, "#0575fb");
-            let wPaint = `<mark id='mark${idx}'>#0f0</mark>`;
-
-            // Draw.
-            let div1 = document.createElement('div');
-            div1.innerHTML = chkPan1.show() + chkZoom1.show() + wCog.show() + wPaint;
-            div.appendChild(div1);
-
-            // Set. (class variables)
+            new ControlPanel(div, idx, sliders);
             chkPan = document.getElementById("chkPan" + idx)
             chkZoom = document.getElementById("chkZoom" + idx)
-            let cog = document.getElementById("cog" + idx);
-            cog.addEventListener('click', function () {
-                var x = sliders[0];
-                if (x.style.display === 'none') {
-                    x.style.display = 'block';
-                    sliders[1].style.display = 'block';
-                } else {
-                    x.style.display = 'none';
-                    sliders[1].style.display = 'none';
-                }
-            });
-
-            let jsc = new Color(document.getElementById('mark' + idx));
-
-            //   let paint = document.getElementById("paint" + idx);
-            //   paint.addEventListener('click', function () {
-            //       alert('it worked!')
-            //   });
-
         }
 
         /**
@@ -153,8 +116,7 @@ class nViewer {
             div.id = divId;
             div.setAttribute('class', cssName);
             maindiv.appendChild(div);
-            setSliders(div);
-            setCheckboxes(div);
+            setControls(div);
 
             // document.body.appendChild(div);
             viewer = OpenSeadragon({
@@ -210,6 +172,5 @@ class nViewer {
                 };
             };
         }
-
     }
 }
