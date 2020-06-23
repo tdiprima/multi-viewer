@@ -118,14 +118,14 @@ class nViewer {
             maindiv.appendChild(div);
             setControls(div);
 
-            // document.body.appendChild(div);
             viewer = OpenSeadragon({
                 id: divId,
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
                 showNavigationControl: false,
                 crossOriginPolicy: 'Anonymous'
             });
-            // viewer.setControlsEnabled(false)
+            viewer.setControlsEnabled(false);
+            new Paint(document.getElementById('btnDraw' + idx), viewer);
 
             // SLIDER EVENT LISTENER
             for (let i = 0; i < sliders.length; i++) {

@@ -24,6 +24,5 @@ function ControlPanel(div, idx, sliders) {
             sliders[1].style.display = 'none';
         }
     });
-    let jsc = new Color(document.getElementById('mark' + idx));
-    // let p = new Paint(document.getElementById('btnDraw' + idx), viewer);
+    new Color(document.getElementById('mark' + idx));
 }

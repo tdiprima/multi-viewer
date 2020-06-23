@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quad-Viewer</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     <link href="color-picker.min.css" rel="stylesheet">
 </head>
@@ -21,6 +21,8 @@
     <script src="//openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
     <script src="openseadragon/openseadragon-filtering.js"></script>
     <script src="openseadragon/viewerinputhook.js"></script>
+    <script src="openseadragon/openseadragon-fabricjs-overlay.js"></script>
+    <script src="openseadragon/fabric.adapted.js"></script>
     <script src="pin_overlay.js"></script>
     <script src="dropdown.js"></script>
     <script src="toggle.js"></script>
@@ -67,8 +69,8 @@
             });
         }
 
-        // test();
-        live();
+        test();
+        // live();
 
         sync = new Synchronizer(arr);  // Pass an array of nViewers
 

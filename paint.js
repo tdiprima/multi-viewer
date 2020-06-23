@@ -1,8 +1,11 @@
 function Paint(elem, viewer) {
-    let overlay = viewer.fabricjsOverlay({
+    // initialize overlay
+    let options = {
         scale: 1000
-    });
+    }
+    let overlay = viewer.fabricjsOverlay(options);
 
+    // DRAWING START
     elem.addEventListener('click', function () {
         overlay.fabricCanvas().freeDrawingBrush.color = 'red';
         overlay.fabricCanvas().freeDrawingBrush.width = 15;
@@ -12,36 +15,33 @@ function Paint(elem, viewer) {
     // DRAWING END
     overlay.fabricCanvas().on('mouse:up', function (options) {
         let my_target = options.target;
-        console.log("mouseup", my_target);
-        // Get coordinates of human markup
-        if (my_target.type === "path") {
-            // drawing has ended!
-            btnDraw(false);
-            console.log("PATH:\n" + my_target.path);
+        if (isRealValue(my_target)) {
+            console.log("mouseup", my_target);
+            // Get coordinates of human markup
+            if (my_target.type === "path") {
+                // drawing has ended!
+                btnDraw(false);
+                console.log("PATH:\n" + my_target.path);
+            }
         }
-    })
+    });
 
     btnDraw = function(flag) {
         if (flag) {
             viewer.setMouseNavEnabled(false);
             viewer.outerTracker.setTracking(false);
-            over.fabricCanvas().isDrawingMode = true;
+            overlay.fabricCanvas().isDrawingMode = true;
             elem.style.background='lightgreen';
         } else {
             viewer.setMouseNavEnabled(true);
             viewer.outerTracker.setTracking(true);
             elem.style.background='lightgray';
-            over.fabricCanvas().isDrawingMode = false;
+            overlay.fabricCanvas().isDrawingMode = false;
         }
     }
 
-    // DRAWING START
-    // overlay.fabricCanvas().on('mouse:down', function (options) {
-    //     let my_target = options.target;
-    //     // we clicked the button
-    //     if (my_target && (my_target.action === 'button')) {
-    //         btnDraw(true);
-    //     }
-    // });
-    
+    isRealValue = function(obj)
+    {
+        return obj && obj !== 'null' && obj !== 'undefined';
+    }
 }
