@@ -3,7 +3,10 @@ function ControlPanel(div, idx, sliders) {
     let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
     let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
     let wCog = new Widget("fa fa-cog", "cog" + idx, "#0575fb");
-    let wPaint = `<mark id='mark${idx}'>#0f0</mark>&nbsp;&nbsp;`;
+    let wPaint;
+    // wPaint = `<span id='mark${idx}'>#0f0</span>&nbsp;&nbsp;`;
+    wPaint = `<mark id='mark${idx}'>#0f0</mark>&nbsp;&nbsp;`;
+    // wPaint = `<input type="text" id='mark${idx}' value="#0f0" maxlen="8" maxsize="8">&nbsp;&nbsp;`
     let btnDraw = `<button id="btnDraw${idx}">Draw</button>&nbsp;`;
     //fa fa-paint-brush
 
@@ -24,5 +27,6 @@ function ControlPanel(div, idx, sliders) {
             sliders[1].style.display = 'none';
         }
     });
-    new Color(document.getElementById('mark' + idx));
+    let jsc = new Color(document.getElementById('mark' + idx));
+    // let p = new Paint(document.getElementById('btnDraw' + idx));
 }
