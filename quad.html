@@ -19,6 +19,7 @@
     <div><br>&nbsp;</div>
     <div id="viewers" class="container"></div>
 
+    <!-- <script src="jquery-1.12.4.min.js"></script> -->
     <script src="//openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
     <script src="openseadragon/openseadragon-filtering.js"></script>
     <script src="openseadragon/viewerinputhook.js"></script>
@@ -30,7 +31,7 @@
     <script src="color-picker.min.js"></script>
     <script src="color.js"></script>
     <script src="paint.js"></script>
-    <script src="control_panel.js"></script>
+    <script src="toolbar.js"></script>
     <script src="nViewer.js"></script>
     <script src="synchronizer.js"></script>
     <script>
@@ -70,10 +71,14 @@
             });
         }
 
-        // test();
-        live();
+        test();
+        // live();
 
         sync = new Synchronizer(arr);  // Pass an array of nViewers
+
+        // $("mark").on('DOMSubtreeModified', function () {
+        //   console.log("Mark HTML is now " + $(this).html());
+        // });
 
     </script>
 </body>

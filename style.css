@@ -78,3 +78,8 @@ body {
     opacity: 1;
     border: 1px solid #eeeeee;
 }
+
+/* color-picker */
+.color-picker.no-alpha .color-picker\:a {
+    display: none;
+}
