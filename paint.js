@@ -13,22 +13,17 @@ function Paint(idx, viewer) {
     mark.addEventListener('change', function () {
         console.log("mark change", mark.id, mark.innerText);
         overlay.fabricCanvas().freeDrawingBrush.color = mark.innerText;
-    });
-
-    // mark.addEventListener('blur', function () {
-    //     console.log("mark blur", mark.id, mark.innerText);
-    //     overlay.fabricCanvas().freeDrawingBrush.color = mark.innerText;
-    // });
+    })
 
     // DRAWING START
     button.addEventListener('click', function () {
-        // console.log("button click", button.id);
+        console.log("button click", button.id);
         btnDraw(true, viewer, overlay, mark, button);
     });
 
     // DRAWING END
     overlay.fabricCanvas().on('mouse:up', function (options) {
-        // console.log("mouseup");
+        console.log("mouseup");
         let my_target = options.target;
         if (isRealValue(my_target)) {
             // console.log("mouseup", my_target);
@@ -36,7 +31,7 @@ function Paint(idx, viewer) {
             if (my_target.type === "path") {
                 // drawing has ended!
                 btnDraw(false, viewer, overlay, mark, button);
-                // console.log("PATH:\n" + my_target.path);
+                console.log("PATH:\n" + my_target.path);
             }
         }
     });
