@@ -28,20 +28,22 @@ function Paint(button, viewer) {
 
     // DRAWING END
     canvas.on('mouse:up', function (options) {
-        let my_target = options.target;
-        // console.log("mouseup", my_target);
-        if (isRealValue(my_target)) {
+        let lineDrawn = options.target;
+        // console.log("mouseup", lineDrawn);
+        if (isRealValue(lineDrawn)) {
             // Get coordinates of human markup
-            if (my_target.type === "path") {
+            if (lineDrawn.type === "path") {
                 // drawing has ended!
                 viewer.setMouseNavEnabled(true);
                 viewer.outerTracker.setTracking(true);
                 button.style.background = 'lightgray';
                 canvas.isDrawingMode = false;
-                canvas.item(0)['hasControls'] = false;
-                canvas.item(0)['hasBorders'] = false;
-                canvas.item(0)['evented'] = false;
-                // console.log("PATH:\n" + my_target.path);
+                lineDrawn['hasControls'] = false;
+                lineDrawn['hasBorders'] = false;
+                lineDrawn['evented'] = false;
+                // let arr = canvas.getObjects();
+                // lineDrawn is canvas.item(n)
+                // console.log("PATH:\n" + lineDrawn.path);
             }
         }
 
