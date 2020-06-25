@@ -8,24 +8,26 @@ function Paint(button, viewer) {
     let overlay = viewer.fabricjsOverlay({
         scale: 1000
     });
+    let canvas = overlay.fabricCanvas();
+    let paintBrush = overlay.fabricCanvas().freeDrawingBrush;
 
     let idx = button.id.trim(-1).replace("btnDraw", "");
     let mark = document.getElementById('mark' + idx);
-    overlay.fabricCanvas().freeDrawingBrush.color = mark.innerHTML;
+    paintBrush.color = mark.innerHTML;
 
     // button event listener
     // DRAWING START
     button.addEventListener('click', function () {
-        overlay.fabricCanvas().freeDrawingBrush.color = mark.innerHTML;
-        overlay.fabricCanvas().freeDrawingBrush.width = 3;
+        paintBrush.color = mark.innerHTML;
+        paintBrush.width = 3;
         viewer.setMouseNavEnabled(false);
         viewer.outerTracker.setTracking(false);
-        overlay.fabricCanvas().isDrawingMode = true;
+        canvas.isDrawingMode = true;
         button.style.background = 'lightgreen';
     });
 
     // DRAWING END
-    overlay.fabricCanvas().on('mouse:up', function (options) {
+    canvas.on('mouse:up', function (options) {
         let my_target = options.target;
         // console.log("mouseup", my_target);
         if (isRealValue(my_target)) {
@@ -35,7 +37,7 @@ function Paint(button, viewer) {
                 viewer.setMouseNavEnabled(true);
                 viewer.outerTracker.setTracking(true);
                 button.style.background = 'lightgray';
-                overlay.fabricCanvas().isDrawingMode = false;
+                canvas.isDrawingMode = false;
                 // console.log("PATH:\n" + my_target.path);
             }
         }
