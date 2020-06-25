@@ -38,15 +38,22 @@ function Paint(button, viewer) {
                 viewer.outerTracker.setTracking(true);
                 button.style.background = 'lightgray';
                 canvas.isDrawingMode = false;
-                lineDrawn['hasControls'] = false;
-                lineDrawn['hasBorders'] = false;
-                lineDrawn['evented'] = false;
-                // let arr = canvas.getObjects();
-                // lineDrawn is canvas.item(n)
-                // console.log("PATH:\n" + lineDrawn.path);
+                customizeControls(lineDrawn);
+                saveCoordinates(lineDrawn);
             }
         }
+    });
 
-    })
+    function customizeControls(lineDrawn) {
+        lineDrawn['hasControls'] = false;
+        lineDrawn['hasBorders'] = false;
+        lineDrawn['evented'] = false;
+        // let arr = canvas.getObjects();
+        // lineDrawn is canvas.item(n)
+    }
 
+    function saveCoordinates(lineDrawn) {
+        // TBA
+        // console.log("PATH:\n" + lineDrawn.path);
+    }
 }
