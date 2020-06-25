@@ -1,4 +1,4 @@
-pin_overlay = function (currentViewer, syncedViewers) {
+map_marker = function (currentViewer, syncedViewers) {
     //canvas-click
     currentViewer.addHandler('canvas-nonprimary-press', function (event) {
         const webPoint = event.position;
