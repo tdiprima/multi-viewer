@@ -5,14 +5,14 @@ function Paint(button, viewer) {
         return obj && obj !== 'null' && obj !== 'undefined';
     }
 
-    let overlay = viewer.fabricjsOverlay({
+    const overlay = viewer.fabricjsOverlay({
         scale: 1000
     });
-    let canvas = overlay.fabricCanvas();
-    let paintBrush = overlay.fabricCanvas().freeDrawingBrush;
+    const canvas = overlay.fabricCanvas();
+    const paintBrush = overlay.fabricCanvas().freeDrawingBrush;
 
-    let idx = button.id.trim(-1).replace("btnDraw", "");
-    let mark = document.getElementById('mark' + idx);
+    const idx = button.id.trim(-1).replace("btnDraw", "");
+    const mark = document.getElementById('mark' + idx);
     paintBrush.color = mark.innerHTML;
 
     // button event listener
@@ -38,6 +38,9 @@ function Paint(button, viewer) {
                 viewer.outerTracker.setTracking(true);
                 button.style.background = 'lightgray';
                 canvas.isDrawingMode = false;
+                canvas.item(0)['hasControls'] = false;
+                canvas.item(0)['hasBorders'] = false;
+                canvas.item(0)['evented'] = false;
                 // console.log("PATH:\n" + my_target.path);
             }
         }
