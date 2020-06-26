@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="#000" name="theme-color">
+    <meta content="width=device-width" name="viewport">
+    <meta content="Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability." name="description">
+    <title>Color Picker &middot; A simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</title>
+    <link href="../favicon.ico" rel="icon">
+    <link href="../color-picker/color-picker.min.css" rel="stylesheet">
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+    :root {
+      background: #fff;
+      color: #000;
+      border-top: 4px solid;
+      font: normal normal 16px/1.25 serif;
+    }
+    a {
+      color: #009;
+      text-decoration: none;
+    }
+    a, code {
+      word-wrap: break-word;
+    }
+    code {
+      font-family: monospace;
+      font-size: 80%;
+    }
+    footer, header, main, nav {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    hr {
+      border: 0;
+      color: inherit;
+      border-top: 1px dashed;
+      height: 0;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    pre code {
+      display: block;
+      background: #eee;
+      padding: 1em;
+    }
+    table {
+      width: 100%;
+    }
+    td, th {
+      text-align: left;
+      vertical-align: top;
+    }
+    body > p:first-child {
+      background: #ffa;
+      border: 1px dashed;
+      margin-top: 0;
+      padding: .75em 1em;
+    }
+    </style>
+  </head>
+  <body>
+    <p>Do you like this project? Please support my <a href="https://github.com/mecha-cms">Mecha CMS</a> project too. Thank you!</p>
+    <header>
+      <h1>Color Picker v2.1.1</h1>
+      <p>Color Picker is a simple JavaScript application that aims to provide custom color picker feature to the web with the most basic appearance and usability.</p>
+      <hr>
+    </header>
+    <main>
+      <p>It&rsquo;s easy to set-up, has no animation effects, and no color support other than hex color code (you can add your own custom color supports yourself). My purpose in making this application is to provide a JavaScript color picker solution as simple as possible with the most minimal features without requiring any dependency on JavaScript library such as jQuery. Use the available hooks to make your own improvements without having to touch the application core.</p>
+      <form method="get" target="_blank">
+        <div style="
+          background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fff 25%, #fff 75%, #eee 75%, #eee 100%);
+          background-size: 20px 20px;
+          background-position: 0 0, 10px 10px;
+        ">
+          <p style="
+            margin: 0;
+            padding: 3em;
+          ">
+            <input name="color" type="text" value="#f00">
+          </p>
+        </div>
+        <p>Set the color to <a href="javascript:void(picker.value(255, 0, 0, 1));">red</a>, <a href="javascript:void(picker.value(0, 255, 0, 1));">green</a>, <a href="javascript:void(picker.value(0, 0, 255, 1));">blue</a>, <a href="javascript:void(picker.value(0, 0, 255, .5));">blue with 50% opacity</a></p>
+        <p>Get the color as <a href="javascript:void(alert(JSON.stringify(picker.get())));">raw</a>, <a href="javascript:void(alert(CP.HEX(picker.get())));">hex string</a></p>
+        <p><button type="submit">Submit</button></p>
+      </form>
+      <h2>Features</h2>
+      <ul>
+        <li>Light-weight, no dependencies. It uses vanilla JavaScript.</li>
+        <li>Simple <abbr title="Application Programming Interface">API</abbr>. Easy to master.</li>
+        <li>Responsive. It tries to place itself inside an area that is visible within the browser window.</li>
+        <li>Has alpha channel support by default.</li>
+        <li>Its value has been standardized to the RGBA color model. You can convert those data into other color models by creating your own color parser.</li>
+      </ul>
+      <h2>Usage</h2>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html dir="ltr"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;link href="<a href="color-picker.min.css" target="_blank">color-picker.min.css</a>" rel="stylesheet"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;&lt;input type="text"&gt;&lt;/p&gt;
+    &lt;script src="<a href="color-picker.min.js" target="_blank">color-picker.min.js</a>"&gt;&lt;/script&gt;
+    &lt;script&gt;
+    let picker = new CP(document.querySelector('input'));
+    picker.on('change', function(r, g, b, a) {
+        if (1 === a) {
+            this.source.value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        } else {
+            this.source.value = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+        }
+    });
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+  </body>
+</html>
