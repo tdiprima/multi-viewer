@@ -1,17 +1,5 @@
 class nViewer {
-    constructor(divId, cssName, maindiv = "viewers", options1) {
-        // let options = { filterOn: true, slidersOn: true, toolbarOn: true, multipleOn: true };
-        // if (options1) {
-        //     if (typeof options1.filterOn !== 'undefined') {
-        //         options.filterOn = options1.filterOn;
-        //     }
-        //     if (typeof options1.slidersOn !== 'undefined') {
-        //         options.slidersOn = options1.slidersOn;
-        //     }
-        //     if (typeof options1.toolbarOn !== 'undefined') {
-        //         options.toolbarOn = options1.toolbarOn;
-        //     }
-        // }
+    constructor(divId, cssName, maindiv = "viewers", options) {
 
         let idx = divId.replace("viewer", "");
         let myFilter = {};
@@ -21,9 +9,7 @@ class nViewer {
         let viewer = {};
         maindiv = document.getElementById(maindiv);
 
-        if (options.filterOn) {
-            setFilter();
-        }
+        setFilter();
         setViewer();
 
         this.getViewer = function () {
@@ -161,7 +147,7 @@ class nViewer {
                 }
             }
 
-            if (options.sfilterOn) {
+            if (options.filterOn) {
                 // FILTERING
                 viewer.setFilterOptions({
                     filters: [{

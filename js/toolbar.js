@@ -12,13 +12,12 @@ function Toolbar(div, idx, sliders, options) {
 
     // Draw.
     let div1 = document.createElement('div');
-    div1.innerHTML = options.multipleOn ? chkPan1.show() + chkZoom1.show() : "" + wPaint + btnDraw + wCog.show();
+    div1.innerHTML = (options.multipleOn ? chkPan1.show() + chkZoom1.show() : "") + wPaint + btnDraw + wCog.show();
     div.appendChild(div1);
 
     // Event listeners
     if (options.slidersOn) {
         let cog = document.getElementById("cog" + idx);
-        console.log(cog)
         if (cog !== null) {
             cog.addEventListener('click', function () {
                 let x = sliders[0];
@@ -30,6 +29,8 @@ function Toolbar(div, idx, sliders, options) {
                     sliders[1].style.display = 'none';
                 }
             });
+        } else {
+            console.log('whoa! cog is null.')
         }
 
     }
