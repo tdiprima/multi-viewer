@@ -100,7 +100,7 @@ class nViewer {
                 sliders.push(range);
             }
 
-            new ControlPanel(div, idx, sliders);
+            new Toolbar(div, idx, sliders);
             chkPan = document.getElementById("chkPan" + idx)
             chkZoom = document.getElementById("chkZoom" + idx)
         }

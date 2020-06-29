@@ -1,4 +1,4 @@
-function ControlPanel(div, idx, sliders) {
+function Toolbar(div, idx, sliders) {
     // Create.
     let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
     let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
