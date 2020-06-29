@@ -1,13 +1,27 @@
 class nViewer {
-    constructor(divId, cssName, filterOn = true) {
+    constructor(divId, cssName, maindiv = "viewers", options1) {
+        // let options = { filterOn: true, slidersOn: true, toolbarOn: true, multipleOn: true };
+        // if (options1) {
+        //     if (typeof options1.filterOn !== 'undefined') {
+        //         options.filterOn = options1.filterOn;
+        //     }
+        //     if (typeof options1.slidersOn !== 'undefined') {
+        //         options.slidersOn = options1.slidersOn;
+        //     }
+        //     if (typeof options1.toolbarOn !== 'undefined') {
+        //         options.toolbarOn = options1.toolbarOn;
+        //     }
+        // }
+
         let idx = divId.replace("viewer", "");
         let myFilter = {};
         let sliders = [];
         let chkPan = {};
         let chkZoom = {};
         let viewer = {};
-        const maindiv = document.getElementById('viewers');
-        if (filterOn) {
+        maindiv = document.getElementById(maindiv);
+
+        if (options.filterOn) {
             setFilter();
         }
         setViewer();
@@ -83,26 +97,33 @@ class nViewer {
             let d = document.createDocumentFragment();
             let dd = document.createElement('div');
 
-            // Sliders
-            let len = 2;
-            for (let i = 0; i < len; i++) {
-                let range = document.createElement('input');
-                range.type = "range";
-                range.id = "sliderRange" + i;
-                range.min = "0";
-                range.max = "100";
-                range.value = "100";
-                range.setAttribute('class', "slider-square");
-                range.style.display = "none";
-                dd.appendChild(range); // append range to div
-                d.appendChild(dd); // append div to fragment
-                div.appendChild(d); // append fragment to parent
-                sliders.push(range);
+            if (options.slidersOn) {
+                // Sliders
+                let len = 2;
+                for (let i = 0; i < len; i++) {
+                    let range = document.createElement('input');
+                    range.type = "range";
+                    range.id = "sliderRange" + i;
+                    range.min = "0";
+                    range.max = "100";
+                    range.value = "100";
+                    range.setAttribute('class', "slider-square");
+                    range.style.display = "none";
+                    dd.appendChild(range); // append range to div
+                    d.appendChild(dd); // append div to fragment
+                    div.appendChild(d); // append fragment to parent
+                    sliders.push(range);
+                }
             }
 
-            new Toolbar(div, idx, sliders);
-            chkPan = document.getElementById("chkPan" + idx)
-            chkZoom = document.getElementById("chkZoom" + idx)
+            if (options.toolbarOn) {
+                new Toolbar(div, idx, sliders, options);
+                if (options.multipleOn) {
+                    chkPan = document.getElementById("chkPan" + idx);
+                    chkZoom = document.getElementById("chkZoom" + idx);
+                }
+
+            }
         }
 
         /**
@@ -115,7 +136,6 @@ class nViewer {
             maindiv.appendChild(div);
             setControls(div);
 
-            // document.body.appendChild(div);
             viewer = OpenSeadragon({
                 id: divId,
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
@@ -123,20 +143,25 @@ class nViewer {
                 crossOriginPolicy: 'Anonymous'
             });
             // viewer.setControlsEnabled(false);
-            let p = new Paint(document.getElementById('btnDraw' + idx), viewer);
 
-            // SLIDER EVENT LISTENER
-            for (let i = 0; i < sliders.length; i++) {
-                sliders[i].addEventListener("input", function () {
-                    if (viewer.world.getItemAt(i) !== undefined) {
-                        viewer.world.getItemAt(i).setOpacity(sliders[i].value / 100);
-                    } else {
-                        sliders[i].hidden = true;
-                    }
-                });
+            if (options.toolbarOn) {
+                let p = new Paint(document.getElementById('btnDraw' + idx), viewer);
             }
 
-            if (filterOn) {
+            // SLIDER EVENT LISTENER
+            if (options.slidersOn) {
+                for (let i = 0; i < sliders.length; i++) {
+                    sliders[i].addEventListener("input", function () {
+                        if (viewer.world.getItemAt(i) !== undefined) {
+                            viewer.world.getItemAt(i).setOpacity(sliders[i].value / 100);
+                        } else {
+                            sliders[i].hidden = true;
+                        }
+                    });
+                }
+            }
+
+            if (options.sfilterOn) {
                 // FILTERING
                 viewer.setFilterOptions({
                     filters: [{

@@ -36,8 +36,9 @@
     <script src="./js/synchronizer.js"></script>
     <script>
 
-        const arr = [new nViewer("viewer0", "dragonbox", false)];
-        new Dropdown(arr);
+        let options = { filterOn: false, slidersOn: false, toolbarOn: true, multipleOn: false }
+        const arr = [new nViewer("viewer0", "dragonbox", "viewers", options)];
+        // new Dropdown(arr);
 
         function testing() {
             // TESTING
