@@ -5,7 +5,7 @@
     <title>OpenSeadragon Fabricjs Overlay Demo</title>
     <script src="../openseadragon/openseadragon.js"></script>
     <script src="../fabric/openseadragon-fabricjs-overlay.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="../js/jquery-1.11.2.min.js"></script>
     <script src="../fabric/fabric.adapted.js"></script>
     <style type="text/css">
         html,
@@ -74,7 +74,6 @@
                 var overlay = this.viewer.fabricjsOverlay(options);
 
                 // add fabric rectangle
-
                 var rect = new fabric.Rect({
                     left: 0,
                     top: 0,
@@ -86,7 +85,6 @@
                 overlay.fabricCanvas().add(rect);
 
                 // add fabric circle
-
                 var circle = new fabric.Circle({
                     left: 1500,
                     top: 0,
@@ -99,7 +97,6 @@
                 overlay.fabricCanvas().add(circle);
 
                 // create circle falling animation
-
                 circle.animate('top', '+=1200', {
                     onChange: overlay.fabricCanvas().renderAll.bind(overlay.fabricCanvas()),
                     duration: 2000,
@@ -112,7 +109,7 @@
                 });
 
                 // animate circle on mouse release (try to drag circle up)
-
+                /*
                 overlay.fabricCanvas().on('mouse:up', function (options) {
                     if (options.target && (options.target.action === 'gravity')) {
                         delta = overlay.fabricCanvas().height - options.target.top;
@@ -129,10 +126,23 @@
 
                         }
                     }
-                })
+                });*/
+
+                // TD edit.
+                overlay.fabricCanvas().on('mouse:up', function (options) {
+                    let lineDrawn = options.target;
+                    if (lineDrawn && lineDrawn !== 'null' && lineDrawn !== 'undefined') {
+                        // End freedrawing mode
+                        if (lineDrawn.type === "path") {
+                            self.viewer.setMouseNavEnabled(true);
+                            self.viewer.outerTracker.setTracking(true);
+                            circle2.set('fill', 'lightgray');
+                            overlay.fabricCanvas().isDrawingMode = false;
+                        }
+                    }
+                });
 
                 // add fabric circle with text
-
                 var circle2 = new fabric.Circle({
                     left: 930,
                     top: 100,
@@ -158,12 +168,10 @@
                 });
                 overlay.fabricCanvas().add(text);
 
-
                 overlay.fabricCanvas().freeDrawingBrush.color = 'red';
                 overlay.fabricCanvas().freeDrawingBrush.width = 30;
 
                 // start freedrawing mode
-
                 overlay.fabricCanvas().on('mouse:down', function (options) {
 
                     if (options.target && (options.target.action === 'button')) {
