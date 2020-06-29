@@ -1,10 +1,5 @@
-/**
- * @param divId
- * @param cssName
- * @constructor
- */
 class nViewer {
-    constructor(divId, cssName) {
+    constructor(divId, cssName, filterOn = true) {
         let idx = divId.replace("viewer", "");
         let myFilter = {};
         let sliders = [];
@@ -12,7 +7,9 @@ class nViewer {
         let chkZoom = {};
         let viewer = {};
         const maindiv = document.getElementById('viewers');
-        setFilter();
+        if (filterOn) {
+            setFilter();
+        }
         setViewer();
 
         this.getViewer = function () {
@@ -139,15 +136,17 @@ class nViewer {
                 });
             }
 
-            // FILTERING
-            viewer.setFilterOptions({
-                filters: [{
-                    items: viewer.world.getItemAt(1),
-                    processors: [
-                        myFilter.prototype.COLORIZE(0, 255, 0)
-                    ]
-                }]
-            });
+            if (filterOn) {
+                // FILTERING
+                viewer.setFilterOptions({
+                    filters: [{
+                        items: viewer.world.getItemAt(1),
+                        processors: [
+                            myFilter.prototype.COLORIZE(0, 255, 0)
+                        ]
+                    }]
+                });
+            }
 
         }
 

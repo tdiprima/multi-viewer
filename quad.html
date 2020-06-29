@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quad-Viewer</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./Font-Awesome-4.7.0/css/font-awesome.min.css"
+    <link rel="stylesheet" href="./font-awesome-4.7.0/css/font-awesome.min.css"
         integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     <link href="./color-picker/color-picker.min.css" rel="stylesheet">
 </head>
@@ -24,6 +24,7 @@
     <script src="./fabric/fabric.adapted.js"></script>
     <script src="./openseadragon/openseadragon-filtering.js"></script>
     <script src="./openseadragon/viewerinputhook.js"></script>
+    <script src="./openseadragon/imaginghelper.js"></script>
     <script src="./js/map-marker.js"></script>
     <script src="./js/dropdown.js"></script>
     <script src="./js/toggle.js"></script>
@@ -37,7 +38,6 @@
     <script>
         const arr = [];
         const style = "dragonbox";
-        // const iiif = "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg";
         const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
         const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
 
@@ -54,8 +54,6 @@
             // TESTING
             let highsmith = "//openseadragon.github.io/example-images/highsmith/highsmith.dzi";
             arr.forEach(function (elem) {
-                // console.log("elem instanceof nViewer", (elem instanceof nViewer)) TRUE
-                // elem.getViewer().openDzi(highsmith);
                 elem.getViewer().open(highsmith)
             });
         }
@@ -63,7 +61,6 @@
         function live() {
             // FOR REAL
             arr.forEach(function (elem) {
-                // console.log("elem instanceof nViewer", (elem instanceof nViewer)) TRUE
                 elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
                 iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
                     [1.0, 1.0]);
@@ -74,10 +71,6 @@
         // live();
 
         sync = new Synchronizer(arr);  // Pass an array of nViewers
-
-        // $("mark").on('DOMSubtreeModified', function () {
-        //   console.log("Mark HTML is now " + $(this).html());
-        // });
 
     </script>
 </body>
