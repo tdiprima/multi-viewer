@@ -34,6 +34,8 @@ function Paint(button, viewer) {
 
     function setBrushWidth(viewer) {
         let viewportZoom = viewer.viewport.getZoom();
+        // Warning: [Viewport.viewportToImageZoom] is not accurate with multi-image.
+        // But we only need an estimate here anyway.
         let x = viewer.viewport.viewportToImageZoom(viewportZoom);
         let b = 0;
 
@@ -60,7 +62,7 @@ function Paint(button, viewer) {
             b = 3;
         }
 
-        // console.log('brush', b);
+        console.log('brush', b);
         paintBrush.width = b;
 
     }
