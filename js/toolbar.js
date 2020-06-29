@@ -12,7 +12,7 @@ function Toolbar(div, idx, sliders, options) {
 
     // Draw.
     let div1 = document.createElement('div');
-    div1.innerHTML = (options.multipleOn ? chkPan1.show() + chkZoom1.show() : "") + wPaint + btnDraw + wCog.show();
+    div1.innerHTML = (options.multipleOn ? chkPan1.show() + chkZoom1.show() : "") + wPaint + btnDraw + (options.slidersOn ? wCog.show() : "");
     div.appendChild(div1);
 
     // Event listeners
@@ -29,10 +29,7 @@ function Toolbar(div, idx, sliders, options) {
                     sliders[1].style.display = 'none';
                 }
             });
-        } else {
-            console.log('whoa! cog is null.')
         }
-
     }
 
     let jsc = new Color(document.getElementById('mark' + idx));
