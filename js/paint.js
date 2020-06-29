@@ -35,7 +35,7 @@ function Paint(button, viewer) {
     function setBrushWidth(viewer) {
         let viewportZoom = viewer.viewport.getZoom();
         let x = viewer.viewport.viewportToImageZoom(viewportZoom);
-        let b;
+        let b = 0;
 
         if (between(x, 0.69, 1.1)) {
             b = 1;
@@ -54,6 +54,10 @@ function Paint(button, viewer) {
         }
         if (between(x, 0, 0.022)) {
             b = 6;
+        }
+
+        if (b === 0) {
+            b = 3;
         }
 
         // console.log('brush', b);
