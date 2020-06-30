@@ -1,13 +1,13 @@
 class nViewer {
-    constructor(divId, cssName, maindiv = "viewers", options) {
+    constructor(viewerDivId, cssName, mainDiv, options) {
 
-        let idx = divId.replace("viewer", "");
+        let idx = viewerDivId.replace("viewer", "");
         let myFilter = {};
         let sliders = [];
         let chkPan = {};
         let chkZoom = {};
         let viewer = {};
-        maindiv = document.getElementById(maindiv);
+        mainDiv = document.getElementById(mainDiv);
 
         setFilter();
         setViewer();
@@ -116,14 +116,16 @@ class nViewer {
          * INITIALIZE
          */
         function setViewer() {
+            let diva = document.createElement('div');
+            mainDiv.appendChild(diva);
+            setControls(diva);
             let div = document.createElement('div');
-            div.id = divId;
+            div.id = viewerDivId;
             div.setAttribute('class', cssName);
-            maindiv.appendChild(div);
-            setControls(div);
+            diva.appendChild(div);
 
             viewer = OpenSeadragon({
-                id: divId,
+                id: viewerDivId,
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
                 showNavigationControl: false,
                 crossOriginPolicy: 'Anonymous'
