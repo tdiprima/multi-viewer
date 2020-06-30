@@ -117,6 +117,7 @@ class nViewer {
          */
         function setViewer() {
             let diva = document.createElement('div');
+            diva.setAttribute('class', 'nViewer');
             mainDiv.appendChild(diva);
             setControls(diva);
             let div = document.createElement('div');
@@ -127,7 +128,7 @@ class nViewer {
             viewer = OpenSeadragon({
                 id: viewerDivId,
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
-                showNavigationControl: false,
+                // showNavigationControl: false,
                 crossOriginPolicy: 'Anonymous'
             });
             // viewer.setControlsEnabled(false);

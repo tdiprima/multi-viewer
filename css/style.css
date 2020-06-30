@@ -10,9 +10,15 @@ body {
     grid-template-rows: auto auto;
 }
 
+.nViewer {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 25px;
+    /* padding-bottom: 20px; */
+}
+
 .dragonbox {
     height: 100%;
-    padding-bottom: 70px;
     /* height: 100vh; */
 }
 
