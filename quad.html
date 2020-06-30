@@ -22,6 +22,7 @@
     <script src="./fabric/openseadragon-fabricjs-overlay.js"></script>
     <script src="./js/jquery-1.11.2.min.js"></script>
     <script src="./fabric/fabric.adapted.js"></script>
+    <!-- <script src="./fabric/fabric.js"></script> -->
     <script src="./openseadragon/openseadragon-filtering.js"></script>
     <script src="./openseadragon/viewerinputhook.js"></script>
     <script src="./openseadragon/imaginghelper.js"></script>
@@ -52,9 +53,9 @@
 
         function test() {
             // TESTING
-            let highsmith = "//openseadragon.github.io/example-images/highsmith/highsmith.dzi";
+            let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
             arr.forEach(function (elem) {
-                elem.getViewer().open(highsmith)
+                elem.getViewer().open(dzi)
             });
         }
 

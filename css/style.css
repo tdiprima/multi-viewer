@@ -11,8 +11,9 @@ body {
 }
 
 .dragonbox {
-    height: 100vh;
+    height: 100%;
     padding-bottom: 70px;
+    /* height: 100vh; */
 }
 
 /* range sliders */
