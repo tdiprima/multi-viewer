@@ -5598,484 +5598,484 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, {
             });
             this._hoveredTarget = null;
             // target && target.fire("mouseout", { TJD
-            target && target.fire(fabric.eventMapping.out, { e: e });
-            e: e
-        });
-    if (this._iTextInstances) {
-        this._iTextInstances.forEach(function (obj) {
-            if (obj.isEditing) {
-                obj.hiddenTextarea.focus();
-            }
-        });
-    }
-},
-    _onMouseEnter: function(e) {
-        if (!this.findTarget(e)) {
-            this.fire("mouse:over", {
-                target: null,
+            target && target.fire(fabric.eventMapping.out, {
                 e: e
             });
-            this._hoveredTarget = null;
+            if (this._iTextInstances) {
+                this._iTextInstances.forEach(function (obj) {
+                    if (obj.isEditing) {
+                        obj.hiddenTextarea.focus();
+                    }
+                });
+            }
+        },
+        _onMouseEnter: function (e) {
+            if (!this.findTarget(e)) {
+                this.fire("mouse:over", {
+                    target: null,
+                    e: e
+                });
+                this._hoveredTarget = null;
+            }
+        },
+        _onOrientationChange: function (e, self) {
+            this.__onOrientationChange && this.__onOrientationChange(e, self);
+        },
+        _onShake: function (e, self) {
+            this.__onShake && this.__onShake(e, self);
+        },
+        _onLongPress: function (e, self) {
+            this.__onLongPress && this.__onLongPress(e, self);
+        },
+        _onDragOver: function (e) {
+            e.preventDefault();
+            var target = this._simpleEventHandler("dragover", e);
+            this._fireEnterLeaveEvents(target, e);
+        },
+        _onContextMenu: function (e) {
+            if (this.stopContextMenu) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            return false;
+        },
+        _onDoubleClick: function (e) {
+            this._handleEvent(e, "dblclick");
+        },
+        _onMouseDown: function (e) {
+            this.__onMouseDown(e);
+            addListener(fabric.document, "touchend", this._onMouseUp, addEventOptions);
+            addListener(fabric.document, "touchmove", this._onMouseMove, addEventOptions);
+            // removeListener(this.upperCanvasEl, "mousemove", this._onMouseMove); TJD
+            removeListener(this.upperCanvasEl, fabric.eventMapping.move, this._onMouseMove);
+            removeListener(this.upperCanvasEl, "touchmove", this._onMouseMove, addEventOptions);
+            if (e.type === "touchstart") {
+                // removeListener(this.upperCanvasEl, "mousedown", this._onMouseDown); TJD
+                removeListener(this.upperCanvasEl, fabric.eventMapping.down, this._onMouseDown);
+            } else {
+                // addListener(fabric.document, "mouseup", this._onMouseUp); TJD
+                // addListener(fabric.document, "mousemove", this._onMouseMove); TJD
+                addListener(fabric.document, fabric.eventMapping.up, this._onMouseUp);
+                addListener(fabric.document, fabric.eventMapping.move, this._onMouseMove);
+            }
+        },
+        _onMouseUp: function (e) {
+            this.__onMouseUp(e);
+            //removeListener(fabric.document, "mouseup", this._onMouseUp); TJD
+            removeListener(fabric.document, fabric.eventMapping.up, this._onMouseUp);
+            removeListener(fabric.document, "touchend", this._onMouseUp, addEventOptions);
+            //removeListener(fabric.document, "mousemove", this._onMouseMove); TJD
+            removeListener(fabric.document, fabric.eventMapping.move, this._onMouseMove);
+            removeListener(fabric.document, "touchmove", this._onMouseMove, addEventOptions);
+            //addListener(this.upperCanvasEl, "mousemove", this._onMouseMove); TJD
+            addListener(this.upperCanvasEl, fabric.eventMapping.move, this._onMouseMove);
+            addListener(this.upperCanvasEl, "touchmove", this._onMouseMove, addEventOptions);
+            if (e.type === "touchend") {
+                var _this = this;
+                setTimeout(function () {
+                    // addListener(_this.upperCanvasEl, "mousedown", _this._onMouseDown); TJD
+                    addListener(_this.upperCanvasEl, fabric.eventMapping.down, _this._onMouseDown);
+                }, 400);
+            }
+        },
+        _onMouseMove: function (e) {
+            !this.allowTouchScrolling && e.preventDefault && e.preventDefault();
+            this.__onMouseMove(e);
+        },
+        _onResize: function () {
+            this.calcOffset();
+        },
+        _shouldRender: function (target, pointer) {
+            var activeObject = this._activeObject;
+            if (activeObject && activeObject.isEditing && target === activeObject) {
+                return false;
+            }
+            return !!(target && (target.isMoving || target !== activeObject) || !target && !!activeObject || !target && !activeObject && !this._groupSelector || pointer && this._previousPointer && this.selection && (pointer.x !== this._previousPointer.x || pointer.y !== this._previousPointer.y));
+        },
+        __onMouseUp: function (e) {
+            var target, searchTarget = true, transform = this._currentTransform, groupSelector = this._groupSelector, isClick = !groupSelector || groupSelector.left === 0 && groupSelector.top === 0;
+            if (checkClick(e, RIGHT_CLICK)) {
+                if (this.fireRightClick) {
+                    this._handleEvent(e, "up", target, RIGHT_CLICK, isClick);
+                }
+                return;
+            }
+            if (checkClick(e, MIDDLE_CLICK)) {
+                if (this.fireMiddleClick) {
+                    this._handleEvent(e, "up", target, MIDDLE_CLICK, isClick);
+                }
+                return;
+            }
+            if (this.isDrawingMode && this._isCurrentlyDrawing) {
+                this._onMouseUpInDrawingMode(e);
+                return;
+            }
+            if (transform) {
+                this._finalizeCurrentTransform(e);
+                searchTarget = !transform.actionPerformed;
+            }
+            target = searchTarget ? this.findTarget(e, true) : transform.target;
+            var shouldRender = this._shouldRender(target, this.getPointer(e));
+            if (target || !isClick) {
+                this._maybeGroupObjects(e);
+            } else {
+                this._groupSelector = null;
+                this._currentTransform = null;
+            }
+            if (target) {
+                target.isMoving = false;
+            }
+            this._setCursorFromEvent(e, target);
+            this._handleEvent(e, "up", target ? target : null, LEFT_CLICK, isClick);
+            target && (target.__corner = 0);
+            shouldRender && this.requestRenderAll();
+        },
+        _simpleEventHandler: function (eventType, e) {
+            var target = this.findTarget(e), targets = this.targets, options = {
+                e: e,
+                target: target,
+                subTargets: targets
+            };
+            this.fire(eventType, options);
+            target && target.fire(eventType, options);
+            if (!targets) {
+                return target;
+            }
+            for (var i = 0; i < targets.length; i++) {
+                targets[i].fire(eventType, options);
+            }
+            return target;
+        },
+        _handleEvent: function (e, eventType, targetObj, button, isClick) {
+            var target = typeof targetObj === "undefined" ? this.findTarget(e) : targetObj, targets = this.targets || [], options = {
+                e: e,
+                target: target,
+                subTargets: targets,
+                button: button || LEFT_CLICK,
+                isClick: isClick || false
+            };
+            this.fire("mouse:" + eventType, options);
+            target && target.fire("mouse" + eventType, options);
+            for (var i = 0; i < targets.length; i++) {
+                targets[i].fire("mouse" + eventType, options);
+            }
+        },
+        _finalizeCurrentTransform: function (e) {
+            var transform = this._currentTransform, target = transform.target;
+            if (target._scaling) {
+                target._scaling = false;
+            }
+            target.setCoords();
+            this._restoreOriginXY(target);
+            if (transform.actionPerformed || this.stateful && target.hasStateChanged()) {
+                this.fire("object:modified", {
+                    target: target,
+                    e: e
+                });
+                target.fire("modified", {
+                    e: e
+                });
+            }
+        },
+        _restoreOriginXY: function (target) {
+            if (this._previousOriginX && this._previousOriginY) {
+                var originPoint = target.translateToOriginPoint(target.getCenterPoint(), this._previousOriginX, this._previousOriginY);
+                target.originX = this._previousOriginX;
+                target.originY = this._previousOriginY;
+                target.left = originPoint.x;
+                target.top = originPoint.y;
+                this._previousOriginX = null;
+                this._previousOriginY = null;
+            }
+        },
+        _onMouseDownInDrawingMode: function (e) {
+            this._isCurrentlyDrawing = true;
+            if (this.getActiveObject()) {
+                this.discardActiveObject(e).requestRenderAll();
+            }
+            if (this.clipTo) {
+                fabric.util.clipContext(this, this.contextTop);
+            }
+            var pointer = this.getPointer(e);
+            this.freeDrawingBrush.onMouseDown(pointer);
+            this._handleEvent(e, "down");
+        },
+        _onMouseMoveInDrawingMode: function (e) {
+            if (this._isCurrentlyDrawing) {
+                var pointer = this.getPointer(e);
+                this.freeDrawingBrush.onMouseMove(pointer);
+            }
+            this.setCursor(this.freeDrawingCursor);
+            this._handleEvent(e, "move");
+        },
+        _onMouseUpInDrawingMode: function (e) {
+            this._isCurrentlyDrawing = false;
+            if (this.clipTo) {
+                this.contextTop.restore();
+            }
+            this.freeDrawingBrush.onMouseUp();
+            this._handleEvent(e, "up");
+        },
+        __onMouseDown: function (e) {
+            var target = this.findTarget(e) || null;
+            if (checkClick(e, RIGHT_CLICK)) {
+                if (this.fireRightClick) {
+                    this._handleEvent(e, "down", target, RIGHT_CLICK);
+                }
+                return;
+            }
+            if (checkClick(e, MIDDLE_CLICK)) {
+                if (this.fireMiddleClick) {
+                    this._handleEvent(e, "down", target, MIDDLE_CLICK);
+                }
+                return;
+            }
+            if (this.isDrawingMode) {
+                this._onMouseDownInDrawingMode(e);
+                return;
+            }
+            if (this._currentTransform) {
+                return;
+            }
+            var pointer = this.getPointer(e, true);
+            this._previousPointer = pointer;
+            var shouldRender = this._shouldRender(target, pointer), shouldGroup = this._shouldGroup(e, target);
+            if (this._shouldClearSelection(e, target)) {
+                this.discardActiveObject(e);
+            } else if (shouldGroup) {
+                this._handleGrouping(e, target);
+                target = this._activeObject;
+            }
+            if (this.selection && (!target || !target.selectable && !target.isEditing && target !== this._activeObject)) {
+                this._groupSelector = {
+                    ex: pointer.x,
+                    ey: pointer.y,
+                    top: 0,
+                    left: 0
+                };
+            }
+            if (target) {
+                if (target.selectable) {
+                    this.setActiveObject(target, e);
+                }
+                if (target === this._activeObject && (target.__corner || !shouldGroup)) {
+                    this._beforeTransform(e, target);
+                    this._setupCurrentTransform(e, target);
+                }
+            }
+            this._handleEvent(e, "down", target);
+            shouldRender && this.requestRenderAll();
+        },
+        _beforeTransform: function (e, target) {
+            this.stateful && target.saveState();
+            if (target._findTargetCorner(this.getPointer(e, true))) {
+                this.onBeforeScaleRotate(target);
+            }
+        },
+        _setOriginToCenter: function (target) {
+            this._previousOriginX = this._currentTransform.target.originX;
+            this._previousOriginY = this._currentTransform.target.originY;
+            var center = target.getCenterPoint();
+            target.originX = "center";
+            target.originY = "center";
+            target.left = center.x;
+            target.top = center.y;
+            this._currentTransform.left = target.left;
+            this._currentTransform.top = target.top;
+        },
+        _setCenterToOrigin: function (target) {
+            var originPoint = target.translateToOriginPoint(target.getCenterPoint(), this._previousOriginX, this._previousOriginY);
+            target.originX = this._previousOriginX;
+            target.originY = this._previousOriginY;
+            target.left = originPoint.x;
+            target.top = originPoint.y;
+            this._previousOriginX = null;
+            this._previousOriginY = null;
+        },
+        __onMouseMove: function (e) {
+            var target, pointer;
+            if (this.isDrawingMode) {
+                this._onMouseMoveInDrawingMode(e);
+                return;
+            }
+            if (typeof e.touches !== "undefined" && e.touches.length > 1) {
+                return;
+            }
+            var groupSelector = this._groupSelector;
+            if (groupSelector) {
+                pointer = this.getPointer(e, true);
+                groupSelector.left = pointer.x - groupSelector.ex;
+                groupSelector.top = pointer.y - groupSelector.ey;
+                this.renderTop();
+            } else if (!this._currentTransform) {
+                target = this.findTarget(e) || null;
+                this._setCursorFromEvent(e, target);
+                this._fireOverOutEvents(target, e);
+            } else {
+                this._transformObject(e);
+            }
+            this._handleEvent(e, "move", this._currentTransform ? null : target);
+        },
+        _fireOverOutEvents: function (target, e) {
+            this.fireSynteticInOutEvents(target, e, {
+                targetName: "_hoveredTarget",
+                canvasEvtOut: "mouse:out",
+                // evtOut: "mouseout", TJD
+                evtOut: fabric.eventMapping.out,
+                canvasEvtIn: "mouse:over",
+                evtIn: "mouseover"
+            });
+        },
+        _fireEnterLeaveEvents: function (target, e) {
+            this.fireSynteticInOutEvents(target, e, {
+                targetName: "_draggedoverTarget",
+                evtOut: "dragleave",
+                evtIn: "dragenter"
+            });
+        },
+        fireSynteticInOutEvents: function (target, e, config) {
+            var inOpt, outOpt, oldTarget = this[config.targetName], outFires, inFires, targetChanged = oldTarget !== target, canvasEvtIn = config.canvasEvtIn, canvasEvtOut = config.canvasEvtOut;
+            if (targetChanged) {
+                inOpt = {
+                    e: e,
+                    target: target,
+                    previousTarget: oldTarget
+                };
+                outOpt = {
+                    e: e,
+                    target: oldTarget,
+                    nextTarget: target
+                };
+                this[config.targetName] = target;
+            }
+            inFires = target && targetChanged;
+            outFires = oldTarget && targetChanged;
+            if (outFires) {
+                canvasEvtOut && this.fire(canvasEvtOut, outOpt);
+                oldTarget.fire(config.evtOut, outOpt);
+            }
+            if (inFires) {
+                canvasEvtIn && this.fire(canvasEvtIn, inOpt);
+                target.fire(config.evtIn, inOpt);
+            }
+        },
+        __onMouseWheel: function (e) {
+            this._handleEvent(e, "wheel");
+        },
+        _transformObject: function (e) {
+            var pointer = this.getPointer(e), transform = this._currentTransform;
+            transform.reset = false;
+            transform.target.isMoving = true;
+            transform.shiftKey = e.shiftKey;
+            transform.altKey = e[this.centeredKey];
+            this._beforeScaleTransform(e, transform);
+            this._performTransformAction(e, transform, pointer);
+            transform.actionPerformed && this.requestRenderAll();
+        },
+        _performTransformAction: function (e, transform, pointer) {
+            var x = pointer.x, y = pointer.y, target = transform.target, action = transform.action, actionPerformed = false;
+            if (action === "rotate") {
+                (actionPerformed = this._rotateObject(x, y)) && this._fire("rotating", target, e);
+            } else if (action === "scale") {
+                (actionPerformed = this._onScale(e, transform, x, y)) && this._fire("scaling", target, e);
+            } else if (action === "scaleX") {
+                (actionPerformed = this._scaleObject(x, y, "x")) && this._fire("scaling", target, e);
+            } else if (action === "scaleY") {
+                (actionPerformed = this._scaleObject(x, y, "y")) && this._fire("scaling", target, e);
+            } else if (action === "skewX") {
+                (actionPerformed = this._skewObject(x, y, "x")) && this._fire("skewing", target, e);
+            } else if (action === "skewY") {
+                (actionPerformed = this._skewObject(x, y, "y")) && this._fire("skewing", target, e);
+            } else {
+                actionPerformed = this._translateObject(x, y);
+                if (actionPerformed) {
+                    this._fire("moving", target, e);
+                    this.setCursor(target.moveCursor || this.moveCursor);
+                }
+            }
+            transform.actionPerformed = transform.actionPerformed || actionPerformed;
+        },
+        _fire: function (eventName, target, e) {
+            this.fire("object:" + eventName, {
+                target: target,
+                e: e
+            });
+            target.fire(eventName, {
+                e: e
+            });
+        },
+        _beforeScaleTransform: function (e, transform) {
+            if (transform.action === "scale" || transform.action === "scaleX" || transform.action === "scaleY") {
+                var centerTransform = this._shouldCenterTransform(transform.target);
+                if (centerTransform && (transform.originX !== "center" || transform.originY !== "center") || !centerTransform && transform.originX === "center" && transform.originY === "center") {
+                    this._resetCurrentTransform();
+                    transform.reset = true;
+                }
+            }
+        },
+        _onScale: function (e, transform, x, y) {
+            if (this._isUniscalePossible(e, transform.target)) {
+                transform.currentAction = "scale";
+                return this._scaleObject(x, y);
+            } else {
+                if (!transform.reset && transform.currentAction === "scale") {
+                    this._resetCurrentTransform();
+                }
+                transform.currentAction = "scaleEqually";
+                return this._scaleObject(x, y, "equally");
+            }
+        },
+        _isUniscalePossible: function (e, target) {
+            return (e[this.uniScaleKey] || this.uniScaleTransform) && !target.get("lockUniScaling");
+        },
+        _setCursorFromEvent: function (e, target) {
+            if (!target) {
+                this.setCursor(this.defaultCursor);
+                return false;
+            }
+            var hoverCursor = target.hoverCursor || this.hoverCursor, activeSelection = this._activeObject && this._activeObject.type === "activeSelection" ? this._activeObject : null, corner = (!activeSelection || !activeSelection.contains(target)) && target._findTargetCorner(this.getPointer(e, true));
+            if (!corner) {
+                this.setCursor(hoverCursor);
+            } else {
+                this.setCursor(this.getCornerCursor(corner, target, e));
+            }
+        },
+        getCornerCursor: function (corner, target, e) {
+            if (this.actionIsDisabled(corner, target, e)) {
+                return this.notAllowedCursor;
+            } else if (corner in cursorOffset) {
+                return this._getRotatedCornerCursor(corner, target, e);
+            } else if (corner === "mtr" && target.hasRotatingPoint) {
+                return this.rotationCursor;
+            } else {
+                return this.defaultCursor;
+            }
+        },
+        actionIsDisabled: function (corner, target, e) {
+            if (corner === "mt" || corner === "mb") {
+                return e[this.altActionKey] ? target.lockSkewingX : target.lockScalingY;
+            } else if (corner === "ml" || corner === "mr") {
+                return e[this.altActionKey] ? target.lockSkewingY : target.lockScalingX;
+            } else if (corner === "mtr") {
+                return target.lockRotation;
+            } else {
+                return this._isUniscalePossible(e, target) ? target.lockScalingX && target.lockScalingY : target.lockScalingX || target.lockScalingY;
+            }
+        },
+        _getRotatedCornerCursor: function (corner, target, e) {
+            var n = Math.round(target.angle % 360 / 45);
+            if (n < 0) {
+                n += 8;
+            }
+            n += cursorOffset[corner];
+            if (e[this.altActionKey] && cursorOffset[corner] % 2 === 0) {
+                n += 2;
+            }
+            n %= 8;
+            return this.cursorMap[n];
         }
-    },
-_onOrientationChange: function(e, self) {
-    this.__onOrientationChange && this.__onOrientationChange(e, self);
-},
-_onShake: function(e, self) {
-    this.__onShake && this.__onShake(e, self);
-},
-_onLongPress: function(e, self) {
-    this.__onLongPress && this.__onLongPress(e, self);
-},
-_onDragOver: function(e) {
-    e.preventDefault();
-    var target = this._simpleEventHandler("dragover", e);
-    this._fireEnterLeaveEvents(target, e);
-},
-_onContextMenu: function(e) {
-    if (this.stopContextMenu) {
-        e.stopPropagation();
-        e.preventDefault();
-    }
-    return false;
-},
-_onDoubleClick: function(e) {
-    this._handleEvent(e, "dblclick");
-},
-_onMouseDown: function(e) {
-    this.__onMouseDown(e);
-    addListener(fabric.document, "touchend", this._onMouseUp, addEventOptions);
-    addListener(fabric.document, "touchmove", this._onMouseMove, addEventOptions);
-    // removeListener(this.upperCanvasEl, "mousemove", this._onMouseMove); TJD
-    removeListener(this.upperCanvasEl, fabric.eventMapping.move, this._onMouseMove);
-    removeListener(this.upperCanvasEl, "touchmove", this._onMouseMove, addEventOptions);
-    if (e.type === "touchstart") {
-        // removeListener(this.upperCanvasEl, "mousedown", this._onMouseDown); TJD
-        removeListener(this.upperCanvasEl, fabric.eventMapping.down, this._onMouseDown);
-    } else {
-        // addListener(fabric.document, "mouseup", this._onMouseUp); TJD
-        // addListener(fabric.document, "mousemove", this._onMouseMove); TJD
-        addListener(fabric.document, fabric.eventMapping.up, this._onMouseUp);
-        addListener(fabric.document, fabric.eventMapping.move, this._onMouseMove);
-    }
-},
-_onMouseUp: function(e) {
-    this.__onMouseUp(e);
-    //removeListener(fabric.document, "mouseup", this._onMouseUp); TJD
-    removeListener(fabric.document, fabric.eventMapping.up, this._onMouseUp);
-    removeListener(fabric.document, "touchend", this._onMouseUp, addEventOptions);
-    //removeListener(fabric.document, "mousemove", this._onMouseMove); TJD
-    removeListener(fabric.document, fabric.eventMapping.move, this._onMouseMove);
-    removeListener(fabric.document, "touchmove", this._onMouseMove, addEventOptions);
-    //addListener(this.upperCanvasEl, "mousemove", this._onMouseMove); TJD
-    addListener(this.upperCanvasEl, fabric.eventMapping.move, this._onMouseMove);
-    addListener(this.upperCanvasEl, "touchmove", this._onMouseMove, addEventOptions);
-    if (e.type === "touchend") {
-        var _this = this;
-        setTimeout(function () {
-            // addListener(_this.upperCanvasEl, "mousedown", _this._onMouseDown); TJD
-            addListener(_this.upperCanvasEl, fabric.eventMapping.down, _this._onMouseDown);
-        }, 400);
-    }
-},
-_onMouseMove: function(e) {
-    !this.allowTouchScrolling && e.preventDefault && e.preventDefault();
-    this.__onMouseMove(e);
-},
-_onResize: function() {
-    this.calcOffset();
-},
-_shouldRender: function(target, pointer) {
-    var activeObject = this._activeObject;
-    if (activeObject && activeObject.isEditing && target === activeObject) {
-        return false;
-    }
-    return !!(target && (target.isMoving || target !== activeObject) || !target && !!activeObject || !target && !activeObject && !this._groupSelector || pointer && this._previousPointer && this.selection && (pointer.x !== this._previousPointer.x || pointer.y !== this._previousPointer.y));
-},
-__onMouseUp: function(e) {
-    var target, searchTarget = true, transform = this._currentTransform, groupSelector = this._groupSelector, isClick = !groupSelector || groupSelector.left === 0 && groupSelector.top === 0;
-    if (checkClick(e, RIGHT_CLICK)) {
-        if (this.fireRightClick) {
-            this._handleEvent(e, "up", target, RIGHT_CLICK, isClick);
-        }
-        return;
-    }
-    if (checkClick(e, MIDDLE_CLICK)) {
-        if (this.fireMiddleClick) {
-            this._handleEvent(e, "up", target, MIDDLE_CLICK, isClick);
-        }
-        return;
-    }
-    if (this.isDrawingMode && this._isCurrentlyDrawing) {
-        this._onMouseUpInDrawingMode(e);
-        return;
-    }
-    if (transform) {
-        this._finalizeCurrentTransform(e);
-        searchTarget = !transform.actionPerformed;
-    }
-    target = searchTarget ? this.findTarget(e, true) : transform.target;
-    var shouldRender = this._shouldRender(target, this.getPointer(e));
-    if (target || !isClick) {
-        this._maybeGroupObjects(e);
-    } else {
-        this._groupSelector = null;
-        this._currentTransform = null;
-    }
-    if (target) {
-        target.isMoving = false;
-    }
-    this._setCursorFromEvent(e, target);
-    this._handleEvent(e, "up", target ? target : null, LEFT_CLICK, isClick);
-    target && (target.__corner = 0);
-    shouldRender && this.requestRenderAll();
-},
-_simpleEventHandler: function(eventType, e) {
-    var target = this.findTarget(e), targets = this.targets, options = {
-        e: e,
-        target: target,
-        subTargets: targets
-    };
-    this.fire(eventType, options);
-    target && target.fire(eventType, options);
-    if (!targets) {
-        return target;
-    }
-    for (var i = 0; i < targets.length; i++) {
-        targets[i].fire(eventType, options);
-    }
-    return target;
-},
-_handleEvent: function(e, eventType, targetObj, button, isClick) {
-    var target = typeof targetObj === "undefined" ? this.findTarget(e) : targetObj, targets = this.targets || [], options = {
-        e: e,
-        target: target,
-        subTargets: targets,
-        button: button || LEFT_CLICK,
-        isClick: isClick || false
-    };
-    this.fire("mouse:" + eventType, options);
-    target && target.fire("mouse" + eventType, options);
-    for (var i = 0; i < targets.length; i++) {
-        targets[i].fire("mouse" + eventType, options);
-    }
-},
-_finalizeCurrentTransform: function(e) {
-    var transform = this._currentTransform, target = transform.target;
-    if (target._scaling) {
-        target._scaling = false;
-    }
-    target.setCoords();
-    this._restoreOriginXY(target);
-    if (transform.actionPerformed || this.stateful && target.hasStateChanged()) {
-        this.fire("object:modified", {
-            target: target,
-            e: e
-        });
-        target.fire("modified", {
-            e: e
-        });
-    }
-},
-_restoreOriginXY: function(target) {
-    if (this._previousOriginX && this._previousOriginY) {
-        var originPoint = target.translateToOriginPoint(target.getCenterPoint(), this._previousOriginX, this._previousOriginY);
-        target.originX = this._previousOriginX;
-        target.originY = this._previousOriginY;
-        target.left = originPoint.x;
-        target.top = originPoint.y;
-        this._previousOriginX = null;
-        this._previousOriginY = null;
-    }
-},
-_onMouseDownInDrawingMode: function(e) {
-    this._isCurrentlyDrawing = true;
-    if (this.getActiveObject()) {
-        this.discardActiveObject(e).requestRenderAll();
-    }
-    if (this.clipTo) {
-        fabric.util.clipContext(this, this.contextTop);
-    }
-    var pointer = this.getPointer(e);
-    this.freeDrawingBrush.onMouseDown(pointer);
-    this._handleEvent(e, "down");
-},
-_onMouseMoveInDrawingMode: function(e) {
-    if (this._isCurrentlyDrawing) {
-        var pointer = this.getPointer(e);
-        this.freeDrawingBrush.onMouseMove(pointer);
-    }
-    this.setCursor(this.freeDrawingCursor);
-    this._handleEvent(e, "move");
-},
-_onMouseUpInDrawingMode: function(e) {
-    this._isCurrentlyDrawing = false;
-    if (this.clipTo) {
-        this.contextTop.restore();
-    }
-    this.freeDrawingBrush.onMouseUp();
-    this._handleEvent(e, "up");
-},
-__onMouseDown: function(e) {
-    var target = this.findTarget(e) || null;
-    if (checkClick(e, RIGHT_CLICK)) {
-        if (this.fireRightClick) {
-            this._handleEvent(e, "down", target, RIGHT_CLICK);
-        }
-        return;
-    }
-    if (checkClick(e, MIDDLE_CLICK)) {
-        if (this.fireMiddleClick) {
-            this._handleEvent(e, "down", target, MIDDLE_CLICK);
-        }
-        return;
-    }
-    if (this.isDrawingMode) {
-        this._onMouseDownInDrawingMode(e);
-        return;
-    }
-    if (this._currentTransform) {
-        return;
-    }
-    var pointer = this.getPointer(e, true);
-    this._previousPointer = pointer;
-    var shouldRender = this._shouldRender(target, pointer), shouldGroup = this._shouldGroup(e, target);
-    if (this._shouldClearSelection(e, target)) {
-        this.discardActiveObject(e);
-    } else if (shouldGroup) {
-        this._handleGrouping(e, target);
-        target = this._activeObject;
-    }
-    if (this.selection && (!target || !target.selectable && !target.isEditing && target !== this._activeObject)) {
-        this._groupSelector = {
-            ex: pointer.x,
-            ey: pointer.y,
-            top: 0,
-            left: 0
-        };
-    }
-    if (target) {
-        if (target.selectable) {
-            this.setActiveObject(target, e);
-        }
-        if (target === this._activeObject && (target.__corner || !shouldGroup)) {
-            this._beforeTransform(e, target);
-            this._setupCurrentTransform(e, target);
-        }
-    }
-    this._handleEvent(e, "down", target);
-    shouldRender && this.requestRenderAll();
-},
-_beforeTransform: function(e, target) {
-    this.stateful && target.saveState();
-    if (target._findTargetCorner(this.getPointer(e, true))) {
-        this.onBeforeScaleRotate(target);
-    }
-},
-_setOriginToCenter: function(target) {
-    this._previousOriginX = this._currentTransform.target.originX;
-    this._previousOriginY = this._currentTransform.target.originY;
-    var center = target.getCenterPoint();
-    target.originX = "center";
-    target.originY = "center";
-    target.left = center.x;
-    target.top = center.y;
-    this._currentTransform.left = target.left;
-    this._currentTransform.top = target.top;
-},
-_setCenterToOrigin: function(target) {
-    var originPoint = target.translateToOriginPoint(target.getCenterPoint(), this._previousOriginX, this._previousOriginY);
-    target.originX = this._previousOriginX;
-    target.originY = this._previousOriginY;
-    target.left = originPoint.x;
-    target.top = originPoint.y;
-    this._previousOriginX = null;
-    this._previousOriginY = null;
-},
-__onMouseMove: function(e) {
-    var target, pointer;
-    if (this.isDrawingMode) {
-        this._onMouseMoveInDrawingMode(e);
-        return;
-    }
-    if (typeof e.touches !== "undefined" && e.touches.length > 1) {
-        return;
-    }
-    var groupSelector = this._groupSelector;
-    if (groupSelector) {
-        pointer = this.getPointer(e, true);
-        groupSelector.left = pointer.x - groupSelector.ex;
-        groupSelector.top = pointer.y - groupSelector.ey;
-        this.renderTop();
-    } else if (!this._currentTransform) {
-        target = this.findTarget(e) || null;
-        this._setCursorFromEvent(e, target);
-        this._fireOverOutEvents(target, e);
-    } else {
-        this._transformObject(e);
-    }
-    this._handleEvent(e, "move", this._currentTransform ? null : target);
-},
-_fireOverOutEvents: function(target, e) {
-    this.fireSynteticInOutEvents(target, e, {
-        targetName: "_hoveredTarget",
-        canvasEvtOut: "mouse:out",
-        // evtOut: "mouseout", TJD
-        evtOut: fabric.eventMapping.out,
-        canvasEvtIn: "mouse:over",
-        evtIn: "mouseover"
     });
-},
-_fireEnterLeaveEvents: function(target, e) {
-    this.fireSynteticInOutEvents(target, e, {
-        targetName: "_draggedoverTarget",
-        evtOut: "dragleave",
-        evtIn: "dragenter"
-    });
-},
-fireSynteticInOutEvents: function(target, e, config) {
-    var inOpt, outOpt, oldTarget = this[config.targetName], outFires, inFires, targetChanged = oldTarget !== target, canvasEvtIn = config.canvasEvtIn, canvasEvtOut = config.canvasEvtOut;
-    if (targetChanged) {
-        inOpt = {
-            e: e,
-            target: target,
-            previousTarget: oldTarget
-        };
-        outOpt = {
-            e: e,
-            target: oldTarget,
-            nextTarget: target
-        };
-        this[config.targetName] = target;
-    }
-    inFires = target && targetChanged;
-    outFires = oldTarget && targetChanged;
-    if (outFires) {
-        canvasEvtOut && this.fire(canvasEvtOut, outOpt);
-        oldTarget.fire(config.evtOut, outOpt);
-    }
-    if (inFires) {
-        canvasEvtIn && this.fire(canvasEvtIn, inOpt);
-        target.fire(config.evtIn, inOpt);
-    }
-},
-__onMouseWheel: function(e) {
-    this._handleEvent(e, "wheel");
-},
-_transformObject: function(e) {
-    var pointer = this.getPointer(e), transform = this._currentTransform;
-    transform.reset = false;
-    transform.target.isMoving = true;
-    transform.shiftKey = e.shiftKey;
-    transform.altKey = e[this.centeredKey];
-    this._beforeScaleTransform(e, transform);
-    this._performTransformAction(e, transform, pointer);
-    transform.actionPerformed && this.requestRenderAll();
-},
-_performTransformAction: function(e, transform, pointer) {
-    var x = pointer.x, y = pointer.y, target = transform.target, action = transform.action, actionPerformed = false;
-    if (action === "rotate") {
-        (actionPerformed = this._rotateObject(x, y)) && this._fire("rotating", target, e);
-    } else if (action === "scale") {
-        (actionPerformed = this._onScale(e, transform, x, y)) && this._fire("scaling", target, e);
-    } else if (action === "scaleX") {
-        (actionPerformed = this._scaleObject(x, y, "x")) && this._fire("scaling", target, e);
-    } else if (action === "scaleY") {
-        (actionPerformed = this._scaleObject(x, y, "y")) && this._fire("scaling", target, e);
-    } else if (action === "skewX") {
-        (actionPerformed = this._skewObject(x, y, "x")) && this._fire("skewing", target, e);
-    } else if (action === "skewY") {
-        (actionPerformed = this._skewObject(x, y, "y")) && this._fire("skewing", target, e);
-    } else {
-        actionPerformed = this._translateObject(x, y);
-        if (actionPerformed) {
-            this._fire("moving", target, e);
-            this.setCursor(target.moveCursor || this.moveCursor);
-        }
-    }
-    transform.actionPerformed = transform.actionPerformed || actionPerformed;
-},
-_fire: function(eventName, target, e) {
-    this.fire("object:" + eventName, {
-        target: target,
-        e: e
-    });
-    target.fire(eventName, {
-        e: e
-    });
-},
-_beforeScaleTransform: function(e, transform) {
-    if (transform.action === "scale" || transform.action === "scaleX" || transform.action === "scaleY") {
-        var centerTransform = this._shouldCenterTransform(transform.target);
-        if (centerTransform && (transform.originX !== "center" || transform.originY !== "center") || !centerTransform && transform.originX === "center" && transform.originY === "center") {
-            this._resetCurrentTransform();
-            transform.reset = true;
-        }
-    }
-},
-_onScale: function(e, transform, x, y) {
-    if (this._isUniscalePossible(e, transform.target)) {
-        transform.currentAction = "scale";
-        return this._scaleObject(x, y);
-    } else {
-        if (!transform.reset && transform.currentAction === "scale") {
-            this._resetCurrentTransform();
-        }
-        transform.currentAction = "scaleEqually";
-        return this._scaleObject(x, y, "equally");
-    }
-},
-_isUniscalePossible: function(e, target) {
-    return (e[this.uniScaleKey] || this.uniScaleTransform) && !target.get("lockUniScaling");
-},
-_setCursorFromEvent: function(e, target) {
-    if (!target) {
-        this.setCursor(this.defaultCursor);
-        return false;
-    }
-    var hoverCursor = target.hoverCursor || this.hoverCursor, activeSelection = this._activeObject && this._activeObject.type === "activeSelection" ? this._activeObject : null, corner = (!activeSelection || !activeSelection.contains(target)) && target._findTargetCorner(this.getPointer(e, true));
-    if (!corner) {
-        this.setCursor(hoverCursor);
-    } else {
-        this.setCursor(this.getCornerCursor(corner, target, e));
-    }
-},
-getCornerCursor: function(corner, target, e) {
-    if (this.actionIsDisabled(corner, target, e)) {
-        return this.notAllowedCursor;
-    } else if (corner in cursorOffset) {
-        return this._getRotatedCornerCursor(corner, target, e);
-    } else if (corner === "mtr" && target.hasRotatingPoint) {
-        return this.rotationCursor;
-    } else {
-        return this.defaultCursor;
-    }
-},
-actionIsDisabled: function(corner, target, e) {
-    if (corner === "mt" || corner === "mb") {
-        return e[this.altActionKey] ? target.lockSkewingX : target.lockScalingY;
-    } else if (corner === "ml" || corner === "mr") {
-        return e[this.altActionKey] ? target.lockSkewingY : target.lockScalingX;
-    } else if (corner === "mtr") {
-        return target.lockRotation;
-    } else {
-        return this._isUniscalePossible(e, target) ? target.lockScalingX && target.lockScalingY : target.lockScalingX || target.lockScalingY;
-    }
-},
-_getRotatedCornerCursor: function(corner, target, e) {
-    var n = Math.round(target.angle % 360 / 45);
-    if (n < 0) {
-        n += 8;
-    }
-    n += cursorOffset[corner];
-    if (e[this.altActionKey] && cursorOffset[corner] % 2 === 0) {
-        n += 2;
-    }
-    n %= 8;
-    return this.cursorMap[n];
-}
-    });
-}) ();
+})();
 
 (function () {
     var min = Math.min, max = Math.max;

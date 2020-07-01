@@ -11187,8 +11187,8 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
      * Adds mouse listeners to canvas
      * @private
      */
-    // TJD
     _initEventListeners: function () {
+      /* START TJD */
       var eventMapping = {};
       if (window.PointerEvent) {
         // IE11 and other W3C Pointer Event implementations (see http://www.w3.org/TR/pointerevents)
@@ -11229,7 +11229,8 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
         }*/
       }
 
-      fabric.eventMapping = eventMapping; // TJD
+      fabric.eventMapping = eventMapping;
+      /* END TJD */
       // in case we initialized the class twice. This should not happen normally
       // but in some kind of applications where the canvas element may be changed
       // this is a workaround to having double listeners.
@@ -11251,18 +11252,18 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
         eventTypePrefix = this._getEventPrefix();
       functor(fabric.window, 'resize', this._onResize);
       if (eventTypePrefix === 'mouse') {
-        // mouse
+        // mouse - tjd
         functor(canvasElement, fabric.eventMapping.down, this._onMouseDown);
         functor(canvasElement, fabric.eventMapping.move, this._onMouseMove, addEventOptions);
         functor(canvasElement, fabric.eventMapping.out, this._onMouseOut);
         functor(canvasElement, fabric.eventMapping.enter, this._onMouseEnter);
       }
       else {
-        // touch
-        functor(canvasElement, eventTypePrefix + 'down', this._onMouseDown); //TJD
+        // touch - tjd
+        functor(canvasElement, eventTypePrefix + 'down', this._onMouseDown);
         functor(canvasElement, eventTypePrefix + 'move', this._onMouseMove, addEventOptions); //TJD
-        functor(canvasElement, eventTypePrefix + 'out', this._onMouseOut); //TJD
-        functor(canvasElement, eventTypePrefix + 'enter', this._onMouseEnter); //TJD
+        functor(canvasElement, eventTypePrefix + 'out', this._onMouseOut);
+        functor(canvasElement, eventTypePrefix + 'enter', this._onMouseEnter);
       }
       functor(canvasElement, 'wheel', this._onMouseWheel);
       functor(canvasElement, 'contextmenu', this._onContextMenu);
@@ -11291,10 +11292,11 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
       // if you dispose on a mouseDown, before mouse up, you need to clean document to...
       var eventTypePrefix = this._getEventPrefix();
       if (eventTypePrefix === 'mouse') {
-        // TJD
+        // mouse - tjd
         removeListener(fabric.document, fabric.eventMapping.up, this._onMouseUp);
         removeListener(fabric.document, fabric.eventMapping.move, this._onMouseMove, addEventOptions);
       } else {
+        // touch - tjd
         removeListener(fabric.document, eventTypePrefix + 'up', this._onMouseUp);
         removeListener(fabric.document, eventTypePrefix + 'move', this._onMouseMove, addEventOptions);
       }
@@ -11535,12 +11537,13 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
       var canvasElement = this.upperCanvasEl,
         eventTypePrefix = this._getEventPrefix();
       if (eventTypePrefix === 'mouse') {
-        // TJD
+        // mouse - tjd
         removeListener(canvasElement, fabric.eventMapping.move, this._onMouseMove, addEventOptions);
         addListener(fabric.document, fabric.eventMapping.up, this._onMouseUp);
         addListener(fabric.document, fabric.eventMapping.move, this._onMouseMove, addEventOptions);
 
       } else {
+        // touch - tjd
         removeListener(canvasElement, eventTypePrefix + 'move', this._onMouseMove, addEventOptions);
         addListener(fabric.document, eventTypePrefix + 'up', this._onMouseUp);
         addListener(fabric.document, eventTypePrefix + 'move', this._onMouseMove, addEventOptions);

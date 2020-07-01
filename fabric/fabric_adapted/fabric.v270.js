@@ -11324,6 +11324,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
       // target undefined will make the _handleEvent search the target
       if (checkClick(e, RIGHT_CLICK)) {
         if (this.fireRightClick) {
+          console.log('here?')
           this._handleEvent(e, 'up', RIGHT_CLICK, isClick);
         }
         return;
@@ -11331,6 +11332,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
 
       if (checkClick(e, MIDDLE_CLICK)) {
         if (this.fireMiddleClick) {
+          console.log('here?')
           this._handleEvent(e, 'up', MIDDLE_CLICK, isClick);
         }
         this._resetTransformEventData();
@@ -11355,6 +11357,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
         target.isMoving = false;
       }
       this._setCursorFromEvent(e, target);
+      console.log('here?')
       this._handleEvent(e, 'up', LEFT_CLICK, isClick);
       this._groupSelector = null;
       this._currentTransform = null;
@@ -11535,6 +11538,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
         this.contextTop.restore();
       }
       this.freeDrawingBrush.onMouseUp();
+      console.log('here?')
       this._handleEvent(e, 'up');
     },
 
@@ -28237,6 +28241,7 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
     if (this.selectionStart === 0 && this.selectionEnd === 0) {
       return;
     }
+    console.log('here?')
     this._moveCursorUpOrDown('Up', e);
   },
 
