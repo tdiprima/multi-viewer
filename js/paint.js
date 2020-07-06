@@ -20,7 +20,7 @@ function Paint(button, viewer) {
         return x >= min && x <= max;
     }
 
-    function customizeControls1(lineDrawn) {
+    function ctrls(lineDrawn) {
         lineDrawn['hasControls'] = false;
         lineDrawn['hasBorders'] = false;
         lineDrawn['evented'] = false;
@@ -53,6 +53,7 @@ function Paint(button, viewer) {
         });
 
         canvas.on('object:modified', function (e) {
+            // on move completion
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
         });
 
