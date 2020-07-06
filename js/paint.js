@@ -1,6 +1,7 @@
 // paint handler
 function Paint(button, viewer) {
 
+    // console.log('fabric', fabric);
     const overlay = viewer.fabricjsOverlay({
         scale: 1000
     });
@@ -27,21 +28,11 @@ function Paint(button, viewer) {
         // let arr = canvas.getObjects();
         // lineDrawn is canvas.item(n)
     }
-
+    
     function customizeControls(lineDrawn) {
-        console.log('lineDrawn', lineDrawn);
-        let ControlsVisibility = {
-            'tr': false
-        };
-
-        // fabric.Image.fromURL('smiley.png', function (img) {
-        //     img.top = 60;
-        //     img.left = 30;
-        //     img.setControlsVisibility(ControlsVisibility);
-        //     canvas.add(img);
-        // });
-
-        canvas.renderAll();
+        
+        lineDrawn['hasControls'] = false;
+        // canvas.renderAll();
 
         function addDeleteBtn(x, y) {
             $(".deleteBtn").remove();
@@ -65,15 +56,7 @@ function Paint(button, viewer) {
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
         });
 
-        canvas.on('object:scaling', function (e) {
-            $(".deleteBtn").remove();
-        });
-
         canvas.on('object:moving', function (e) {
-            $(".deleteBtn").remove();
-        });
-
-        canvas.on('object:rotating', function (e) {
             $(".deleteBtn").remove();
         });
 
@@ -120,7 +103,6 @@ function Paint(button, viewer) {
             b = 3;
         }
 
-        console.log('brush', b);
         paintBrush.width = b;
 
     }
