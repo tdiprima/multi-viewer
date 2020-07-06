@@ -129,6 +129,9 @@ class nViewer {
                 id: viewerDivId,
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
                 // showNavigationControl: false,
+                showHomeControl: true,
+                showFullPageControl: false,
+                showZoomControl: false,
                 crossOriginPolicy: 'Anonymous'
             });
             // viewer.setControlsEnabled(false);
