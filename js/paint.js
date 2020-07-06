@@ -19,12 +19,70 @@ function Paint(button, viewer) {
         return x >= min && x <= max;
     }
 
-    function customizeControls(lineDrawn) {
+    function customizeControls1(lineDrawn) {
         lineDrawn['hasControls'] = false;
         lineDrawn['hasBorders'] = false;
         lineDrawn['evented'] = false;
+
         // let arr = canvas.getObjects();
         // lineDrawn is canvas.item(n)
+    }
+
+    function customizeControls(lineDrawn) {
+        console.log('lineDrawn', lineDrawn);
+        let ControlsVisibility = {
+            'tr': false
+        };
+
+        // fabric.Image.fromURL('smiley.png', function (img) {
+        //     img.top = 60;
+        //     img.left = 30;
+        //     img.setControlsVisibility(ControlsVisibility);
+        //     canvas.add(img);
+        // });
+
+        canvas.renderAll();
+
+        function addDeleteBtn(x, y) {
+            $(".deleteBtn").remove();
+            let btnLeft = x - 10;
+            let btnTop = y - 10;
+            let deleteBtn = '<img src="icons/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;"/>';
+            $(".canvas-container").append(deleteBtn);
+        }
+
+        canvas.on('object:selected', function (e) {
+            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+        });
+
+        canvas.on('mouse:down', function (e) {
+            if (!canvas.getActiveObject()) {
+                $(".deleteBtn").remove();
+            }
+        });
+
+        canvas.on('object:modified', function (e) {
+            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+        });
+
+        canvas.on('object:scaling', function (e) {
+            $(".deleteBtn").remove();
+        });
+
+        canvas.on('object:moving', function (e) {
+            $(".deleteBtn").remove();
+        });
+
+        canvas.on('object:rotating', function (e) {
+            $(".deleteBtn").remove();
+        });
+
+        $(document).on('click', ".deleteBtn", function () {
+            if (canvas.getActiveObject()) {
+                canvas.remove(canvas.getActiveObject());
+                $(".deleteBtn").remove();
+            }
+        });
     }
 
     function saveCoordinates(lineDrawn) {
@@ -78,6 +136,10 @@ function Paint(button, viewer) {
         canvas.isDrawingMode = true;
         button.style.background = 'lightgreen';
     });
+
+    // canvas.on('mouse:down', function (event) {
+    //     console.log('event', event)
+    // });
 
     // DRAWING END
     canvas.on('mouse:up', function (options) {
