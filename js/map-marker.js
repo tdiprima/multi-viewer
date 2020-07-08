@@ -1,34 +1,64 @@
 map_marker = function (currentViewer, syncedViewers) {
-    //canvas-click
-    currentViewer.addHandler('canvas-nonprimary-press', function (event) {
-        const webPoint = event.position;
-        const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint);
-        displayPinIcon(viewportPoint);
+
+    // prevent modal
+    $(currentViewer.element).on('contextmenu', function (event) {
+        event.preventDefault();
     });
 
-    function displayPinIcon(point) {
+    // right-click
+    currentViewer.addHandler('canvas-nonprimary-press', (event) => {
+        if (event.button === 2) { // Right mouse
+            const webPoint = event.position;
+            const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint);
+            displayPinIcon(viewportPoint);
+        }
+    });
+
+    function createLink() {
+        let rand = Math.floor(Math.random() * 11);
+        let link = document.createElement('a');
+        let href = "#";
+        link.href = href;
+        link.dataset.href = href;
+        link.id = 'map-marker-' + rand;
+        link.className = 'fa fa-map-marker';
+        link.style.cssText =
+            ' text-decoration: none; font-size: 22px; color: red;' +
+            ' cursor: pointer';
+        return link;
+    }
+
+    function thisViewer(point) {
+        let link = createLink();
+        currentViewer.addOverlay({
+            element: link,
+            location: point,
+            placement: 'BOTTOM',
+            checkResize: false
+        });
+    }
+
+    function allOtherViewers(point) {
         syncedViewers.forEach(function (item) {
             let viewer = item.getViewer()
             if (viewer.id === currentViewer.id) {
                 return;
             }
 
-            let link = document.createElement('a');
-            link.href = '#';
-            link.dataset.href = '#';
-            link.id = 'pin-something';
-
-            link.className = 'fa fa-map-marker';
-            link.style.cssText =
-                ' text-decoration: none; font-size: 22px; color: red;' +
-                ' cursor: pointer';
-
+            let link = createLink();
             viewer.addOverlay({
                 element: link,
                 location: point,
                 placement: 'BOTTOM',
                 checkResize: false
             });
+
         });
+    }
+
+    // display map marker
+    function displayPinIcon(point) {
+        // allOtherViewers(point);
+        thisViewer(point);
     }
 }
