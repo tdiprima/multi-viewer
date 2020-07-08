@@ -36,6 +36,7 @@ map_marker = function (currentViewer, syncedViewers) {
             placement: 'BOTTOM',
             checkResize: false
         });
+        // mousetracker(link, currentViewer);
     }
 
     function allOtherViewers(point) {
@@ -44,7 +45,6 @@ map_marker = function (currentViewer, syncedViewers) {
             if (viewer.id === currentViewer.id) {
                 return;
             }
-
             let link = createLink();
             viewer.addOverlay({
                 element: link,
@@ -52,7 +52,7 @@ map_marker = function (currentViewer, syncedViewers) {
                 placement: 'BOTTOM',
                 checkResize: false
             });
-
+            // mousetracker(link, viewer);
         });
     }
 
@@ -61,4 +61,21 @@ map_marker = function (currentViewer, syncedViewers) {
         // allOtherViewers(point);
         thisViewer(point);
     }
+
+    // TODO: disable fabric event handlers
+    // target osd-overlaycanvas-1
+    function mousetracker(link, viewer) {
+        new OpenSeadragon.MouseTracker({
+            element: link,
+            clickHandler: function () {
+                console.log('clickHandler')
+                // do what u want to do
+            },
+            dragHandler: function (event) {
+                console.log('dragHandler')
+                // do what u want to do
+            }
+        });
+    }
+
 }
