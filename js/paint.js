@@ -28,9 +28,9 @@ function Paint(button, viewer) {
         // let arr = canvas.getObjects();
         // lineDrawn is canvas.item(n)
     }
-    
+
     function customizeControls(lineDrawn) {
-        
+
         lineDrawn['hasControls'] = false;
         // canvas.renderAll();
 
@@ -125,9 +125,9 @@ function Paint(button, viewer) {
     // });
 
     // DRAWING END
-    canvas.on('mouse:up', function (options) {
-        let lineDrawn = options.target;
-        // console.log("mouseup", lineDrawn);
+    canvas.on("path:created", function (e) {
+        let lineDrawn = e.path;
+        // console.log('PATH:\n', e.path.path);
         if (isRealValue(lineDrawn)) {
             // Get coordinates of human markup
             if (lineDrawn.type === "path") {
