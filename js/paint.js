@@ -71,7 +71,7 @@ function Paint(button, viewer) {
 
     function saveCoordinates(lineDrawn) {
         // TBA
-        // console.log("PATH:\n" + lineDrawn.path);
+        console.log("PATH:\n" + lineDrawn.path);
     }
 
     function setBrushWidth(viewer) {
