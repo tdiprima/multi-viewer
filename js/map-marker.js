@@ -58,11 +58,11 @@ map_marker = function (currentViewer, syncedViewers) {
 
     // display map marker
     function displayPinIcon(point) {
-        // allOtherViewers(point);
-        thisViewer(point);
+        allOtherViewers(point);
+        // thisViewer(point);
     }
 
-    // TODO: disable fabric event handlers
+    // TODO: disable fabricjs event handlers
     // target osd-overlaycanvas-1
     function mousetracker(link, viewer) {
         new OpenSeadragon.MouseTracker({
