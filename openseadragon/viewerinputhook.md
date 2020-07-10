@@ -10,7 +10,8 @@ viewer.addViewerInputHook({hooks: [
     ]});
 ```
 
-### MouseTracker Handlers:
+### Handlers:
+(MouseTracker handlers)
 
 ```
 'enterHandler'
