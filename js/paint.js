@@ -1,7 +1,6 @@
 // paint handler
 function Paint(button, viewer) {
 
-    // console.log('fabric', fabric);
     const overlay = viewer.fabricjsOverlay({
         scale: 1000
     });
@@ -32,13 +31,13 @@ function Paint(button, viewer) {
     function customizeControls(lineDrawn) {
 
         lineDrawn['hasControls'] = false;
-        // canvas.renderAll();
+        canvas.renderAll(); //
 
         function addDeleteBtn(x, y) {
             $(".deleteBtn").remove();
             let btnLeft = x - 10;
             let btnTop = y - 10;
-            let deleteBtn = '<img src="icons/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;"/>';
+            let deleteBtn = '<img src="icons/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;" alt="Delete Me"/>';
             $(".canvas-container").append(deleteBtn);
         }
 
@@ -71,7 +70,7 @@ function Paint(button, viewer) {
 
     function saveCoordinates(lineDrawn) {
         // TBA
-        console.log("PATH:\n" + lineDrawn.path);
+        // console.log("PATH:\n" + lineDrawn.path);
     }
 
     function setBrushWidth(viewer) {
@@ -81,30 +80,44 @@ function Paint(button, viewer) {
         let x = viewer.viewport.viewportToImageZoom(viewportZoom);
         let b = 0;
 
-        if (between(x, 0.69, 1.1)) {
-            b = 1;
+        if (x < 0.003) {
+            b = 10;
         }
-        if (between(x, 0, 0.35)) {
-            b = 2;
+
+        if (between(x, 0.003, 0.005)) {
+            b = 9;
         }
-        if (between(x, 0, 0.18)) {
+        if (between(x, 0.005    , 0.01)) {
+            b = 7;
+        }
+        if (between(x, 0.01, 0.02)) {
             b = 3;
         }
-        if (between(x, 0, 0.086)) {
-            b = 4;
+        if (between(x, 0.02, 0.04)) {
+            b = 2;
         }
-        if (between(x, 0, 0.043)) {
-            b = 5;
+        if (between(x, 0.04, 0.09)) {
+            b = 1;
         }
-        if (between(x, 0, 0.022)) {
-            b = 6;
+        if (between(x, 0.09, 0.17)) {
+            b = 0.5;
+        }
+        if (between(x, 0.17, 0.35)) {
+            b = 0.25;
+        }
+
+        if (x > 0.35) {
+            b = 0.1;
         }
 
         if (b === 0) {
-            b = 3;
+            console.log('b === 0');
+            b = 1;
         }
 
         paintBrush.width = b;
+        console.log('zoom:', x);
+        console.log('brush width:', b);
 
     }
 
