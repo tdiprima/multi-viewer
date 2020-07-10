@@ -3,6 +3,22 @@ body {
     font-family: sans-serif;
 }
 
+.btn {
+  background-color: #f1f1f1;
+  color: black;
+  font-size: 14px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: black;
+  color: white;
+}
+
 .container {
     display: grid;
     height: 100vh;
@@ -64,6 +80,7 @@ body {
 }
 
 /* popover menu */
+/*
 #popup {
     opacity: 0;
     position: absolute;
@@ -85,7 +102,7 @@ body {
     height: auto;
     opacity: 1;
     border: 1px solid #eeeeee;
-}
+}*/
 
 /* color-picker */
 .color-picker.no-alpha .color-picker\:a {
