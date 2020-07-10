@@ -34,3 +34,6 @@ viewer.addViewerInputHook({hooks: [
 'focusHandler'
 'blurHandler'
 ```
+
+### hookHandler:
+An event handler that *you* write.
