@@ -121,7 +121,8 @@ function Paint(button, viewer) {
         viewer.setMouseNavEnabled(false);
         viewer.outerTracker.setTracking(false);
         canvas.isDrawingMode = true;
-        button.style.background = 'lightgreen';
+        button.classList.remove('btn');
+        button.classList.add('btnOn');
     });
 
     // DRAWING END
@@ -134,7 +135,8 @@ function Paint(button, viewer) {
                 // drawing has ended!
                 viewer.setMouseNavEnabled(true);
                 viewer.outerTracker.setTracking(true);
-                button.style.background = 'lightgray';
+                button.classList.remove('btnOn');
+                button.classList.add('btn');
                 canvas.isDrawingMode = false;
                 customizeControls(lineDrawn);
                 saveCoordinates(lineDrawn);

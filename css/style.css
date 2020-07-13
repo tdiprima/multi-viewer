@@ -14,6 +14,17 @@ body {
   text-align: center;
 }
 
+.btnOn {
+    background-color: lightgreen;
+    color: black;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+  }
+
 .btn:hover {
   background-color: black;
   color: white;
