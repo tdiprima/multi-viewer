@@ -3,7 +3,11 @@ function Toolbar(div, idx, sliders, options) {
     let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
     let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
     let btnSlide = `<button class="btn" id="btnSlide${idx}">Sliders</button>&nbsp;`;
-    let wPaint = `<mark id='mark${idx}'>#0f0</mark>&nbsp;&nbsp;`;
+    let color = "#00f";  // default color
+    if (options.paintbrushColor) {
+        color = options.paintbrushColor;
+    }
+    let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
     let btnDraw = `<button class="btn" id="btnDraw${idx}">Draw</button>&nbsp;`;
 
     // Draw.
