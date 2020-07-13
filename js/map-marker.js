@@ -21,7 +21,7 @@ map_marker = function (currentViewer, syncedViewers) {
         link.href = href;
         link.dataset.href = href;
         link.id = 'map-marker-' + rand;
-        link.className = 'fa fa-map-marker';
+        link.className = 'fa fa-map-marker';  //fa-map-pin
         link.style.cssText =
             ' text-decoration: none; font-size: 22px; color: red;' +
             ' cursor: pointer';
