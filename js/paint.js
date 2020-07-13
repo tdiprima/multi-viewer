@@ -29,54 +29,35 @@ function Paint(button, viewer) {
     }
 
     function customizeControls(lineDrawn) {
-        console.log('customizeControls');
-        console.log(viewer);
-
         lineDrawn['hasControls'] = false;
         lineDrawn.lockMovementX = true;
         lineDrawn.lockMovementY = true;
         canvas.renderAll(); //
 
-        function addDeleteBtn(x, y) {
-            console.log('addDeleteBtn');
+        function addDeleteBtn(x, y, el) {
             $(".deleteBtn").remove();
             let btnLeft = x - 10;
             let btnTop = y - 10;
-            let deleteBtn = '<img src="icons/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;" alt="Delete Me"/>';
-            $(".canvas-container").append(deleteBtn);
+            var deleteBtn = document.createElement('img');
+            deleteBtn.src = "icons/delete-icon.png";
+            deleteBtn.classList.add('deleteBtn')
+            deleteBtn.style = 'position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;';
+            deleteBtn.alt = "Delete Me";
+            el.appendChild(deleteBtn);
         }
 
         canvas.on('object:selected', function (e) {
-            console.log('selected');
-            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
+            let el = this.lowerCanvasEl.parentElement;
+            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         });
 
-        canvas.on('mouse:down', function (e) {
-            console.log('down');
-            if (!canvas.getActiveObject()) {
-                console.log('not get active');
-                $(".deleteBtn").remove();
-            }
-        });
-
-        canvas.on('object:modified', function (e) {
-            console.log('down');
-            // on move completion
-            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
-        });
-
-        canvas.on('object:moving', function (e) {
-            console.log('moving');
-            $(".deleteBtn").remove();
-        });
-
-        $(document).on('click', ".deleteBtn", function () {
-            console.log('click deleteBtn');
+        $(document).on('click', ".deleteBtn", function (event) {
+            // TODO: osd on click
+            // event.originalEvent.preventDefault();
+            // event.originalEvent.stopPropagation();
             if (canvas.getActiveObject()) {
-                console.log('get active');
                 canvas.remove(canvas.getActiveObject());
                 $(".deleteBtn").remove();
-                console.log('rm obj & dlt');
             }
         });
     }
