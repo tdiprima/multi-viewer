@@ -41,7 +41,7 @@ function Paint(button, viewer) {
             var deleteBtn = document.createElement('img');
             deleteBtn.src = "icons/delete-icon.png";
             deleteBtn.classList.add('deleteBtn')
-            deleteBtn.style = 'position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;';
+            deleteBtn.style = `position:absolute; top:${btnTop}px; left:${btnLeft}px; cursor:pointer; width:20px; height:20px;`;
             deleteBtn.alt = "Delete Me";
             el.appendChild(deleteBtn);
         }
@@ -51,10 +51,12 @@ function Paint(button, viewer) {
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         });
 
-        $(document).on('click', ".deleteBtn", function (event) {
+        $(".canvas-container").on('click', ".deleteBtn", function (event) {
+            console.log('event', event);
             // TODO: osd on click
             // event.originalEvent.preventDefault();
             // event.originalEvent.stopPropagation();
+            console.log('canvas', canvas);
             if (canvas.getActiveObject()) {
                 canvas.remove(canvas.getActiveObject());
                 $(".deleteBtn").remove();
@@ -81,7 +83,7 @@ function Paint(button, viewer) {
         if (between(x, 0.003, 0.005)) {
             b = 9;
         }
-        if (between(x, 0.005    , 0.01)) {
+        if (between(x, 0.005, 0.01)) {
             b = 7;
         }
         if (between(x, 0.01, 0.02)) {
