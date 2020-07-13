@@ -15,10 +15,6 @@ function Paint(button, viewer) {
         return obj && obj !== 'null' && obj !== 'undefined';
     }
 
-    function between(x, min, max) {
-        return x >= min && x <= max;
-    }
-
     function ctrls(lineDrawn) {
         lineDrawn['hasControls'] = false;
         lineDrawn['hasBorders'] = false;
@@ -64,11 +60,13 @@ function Paint(button, viewer) {
         // console.log("PATH:\n" + lineDrawn.path);
     }
 
+    /**
+     * Warning: [Viewport.viewportToImageZoom] is not accurate with multi-image.
+     * But we only need an estimate here anyway.
+     */
     function setBrushWidth(viewer) {
-        // Warning: [Viewport.viewportToImageZoom] is not accurate with multi-image.
-        // But we only need an estimate here anyway.
         let vzoom = viewer.viewport.getZoom(true);
-        let izoom = viewer.viewport.viewportToImageZoom(vzoom);
+        // let izoom = viewer.viewport.viewportToImageZoom(vzoom);
         paintBrush.width = 20 / vzoom;
         console.log('brush width:', paintBrush.width)
     }
