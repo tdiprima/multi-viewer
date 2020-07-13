@@ -29,11 +29,16 @@ function Paint(button, viewer) {
     }
 
     function customizeControls(lineDrawn) {
+        console.log('customizeControls');
+        console.log(viewer);
 
         lineDrawn['hasControls'] = false;
+        lineDrawn.lockMovementX = true;
+        lineDrawn.lockMovementY = true;
         canvas.renderAll(); //
 
         function addDeleteBtn(x, y) {
+            console.log('addDeleteBtn');
             $(".deleteBtn").remove();
             let btnLeft = x - 10;
             let btnTop = y - 10;
@@ -42,28 +47,36 @@ function Paint(button, viewer) {
         }
 
         canvas.on('object:selected', function (e) {
+            console.log('selected');
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
         });
 
         canvas.on('mouse:down', function (e) {
+            console.log('down');
             if (!canvas.getActiveObject()) {
+                console.log('not get active');
                 $(".deleteBtn").remove();
             }
         });
 
         canvas.on('object:modified', function (e) {
+            console.log('down');
             // on move completion
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y);
         });
 
         canvas.on('object:moving', function (e) {
+            console.log('moving');
             $(".deleteBtn").remove();
         });
 
         $(document).on('click', ".deleteBtn", function () {
+            console.log('click deleteBtn');
             if (canvas.getActiveObject()) {
+                console.log('get active');
                 canvas.remove(canvas.getActiveObject());
                 $(".deleteBtn").remove();
+                console.log('rm obj & dlt');
             }
         });
     }
