@@ -23,7 +23,6 @@ function Paint(button, viewer) {
         lineDrawn['hasControls'] = false;
         lineDrawn['hasBorders'] = false;
         lineDrawn['evented'] = false;
-
         // let arr = canvas.getObjects();
         // lineDrawn is canvas.item(n)
     }
@@ -52,11 +51,7 @@ function Paint(button, viewer) {
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function (event) {
-            console.log('event', event);
-            // TODO: osd on click
-            // event.originalEvent.preventDefault();
-            // event.originalEvent.stopPropagation();
-            console.log('canvas', canvas);
+            // this = deleteBtn
             if (canvas.getActiveObject()) {
                 canvas.remove(canvas.getActiveObject());
                 $(".deleteBtn").remove();
@@ -128,10 +123,6 @@ function Paint(button, viewer) {
         canvas.isDrawingMode = true;
         button.style.background = 'lightgreen';
     });
-
-    // canvas.on('mouse:down', function (event) {
-    //     console.log('event', event)
-    // });
 
     // DRAWING END
     canvas.on("path:created", function (e) {

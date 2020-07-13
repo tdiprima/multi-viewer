@@ -34,8 +34,6 @@ class nViewer {
          */
         this.setSources = function (imageArray, opacityArray) {
 
-
-
             imageArray.forEach(function (image, index) {
                 // add images to viewer
                 viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 });
