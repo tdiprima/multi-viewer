@@ -52,7 +52,7 @@ map_marker = function (currentViewer, syncedViewers) {
                 placement: 'BOTTOM',
                 checkResize: false
             });
-            // mousetracker(link, viewer);
+            mousetracker(link, viewer);
         });
     }
 
@@ -62,17 +62,15 @@ map_marker = function (currentViewer, syncedViewers) {
         // thisViewer(point);
     }
 
-    // TODO: disable fabricjs event handlers
-    // target osd-overlaycanvas-1
     function mousetracker(link, viewer) {
         new OpenSeadragon.MouseTracker({
             element: link,
             clickHandler: function () {
-                console.log('clickHandler')
+                console.log('clickHandler');
                 // do what u want to do
             },
             dragHandler: function (event) {
-                console.log('dragHandler')
+                console.log('dragHandler');
                 // do what u want to do
             }
         });
