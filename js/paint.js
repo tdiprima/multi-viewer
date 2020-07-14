@@ -35,6 +35,13 @@ function Paint(button, viewer) {
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         });
 
+        canvas.on('mouse:down', function (e) {
+            // For example, panning or zooming after selection
+            if (!canvas.getActiveObject()) {
+                $(".deleteBtn").remove();
+            }
+        });
+
         $(".canvas-container").on('click', ".deleteBtn", function (event) {
             // this = deleteBtn
             if (canvas.getActiveObject()) {
@@ -42,6 +49,7 @@ function Paint(button, viewer) {
                 $(".deleteBtn").remove();
             }
         });
+
     }
 
     function saveCoordinates(d) {
