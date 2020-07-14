@@ -62,10 +62,11 @@ function Paint(button, viewer) {
 
     // param: viewer, button, canvas
     function toggleDraw(v, btn, c) {
+        let mouseTracker = v.outerTracker;
         if (btn.classList.contains('btnOn')) {
             // End Draw
             v.setMouseNavEnabled(true);
-            v.outerTracker.setTracking(true);
+            mouseTracker.setTracking(true);
             clearClassList(btn);
             btn.classList.add('btn');
             c.isDrawingMode = false;
@@ -73,7 +74,7 @@ function Paint(button, viewer) {
         else {
             // Start Draw
             v.setMouseNavEnabled(false);
-            v.outerTracker.setTracking(false);
+            mouseTracker.setTracking(false);
             c.isDrawingMode = true;
             clearClassList(btn);
             btn.classList.add('btnOn');
