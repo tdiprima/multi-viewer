@@ -11,22 +11,11 @@ function Paint(button, viewer) {
     const mark = document.getElementById('mark' + idx);
     paintBrush.color = mark.innerHTML;
 
-    function isRealValue(obj) {
-        return obj && obj !== 'null' && obj !== 'undefined';
-    }
-
-    function ctrls(lineDrawn) {
-        lineDrawn['hasControls'] = false;
-        lineDrawn['hasBorders'] = false;
-        lineDrawn['evented'] = false;
-        // let arr = canvas.getObjects();
-        // lineDrawn is canvas.item(n)
-    }
-
-    function customizeControls(lineDrawn) {
-        lineDrawn['hasControls'] = false;
-        lineDrawn.lockMovementX = true;
-        lineDrawn.lockMovementY = true;
+    function customizeControls(obj) {
+        // For the object that was drawn
+        obj['hasControls'] = false;
+        obj.lockMovementX = true;
+        obj.lockMovementY = true;
         canvas.renderAll(); //
 
         function addDeleteBtn(x, y, el) {
@@ -36,7 +25,7 @@ function Paint(button, viewer) {
             var deleteBtn = document.createElement('img');
             deleteBtn.src = "icons/delete-icon.png";
             deleteBtn.classList.add('deleteBtn')
-            deleteBtn.style = `position:absolute; top:${btnTop}px; left:${btnLeft}px; cursor:pointer; width:20px; height:20px;`;
+            deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
             deleteBtn.alt = "Delete Me";
             el.appendChild(deleteBtn);
         }
@@ -55,51 +44,59 @@ function Paint(button, viewer) {
         });
     }
 
-    function saveCoordinates(lineDrawn) {
+    function saveCoordinates(d) {
         // TBA
-        // console.log("PATH:\n" + lineDrawn.path);
     }
 
-    /**
-     * Warning: [Viewport.viewportToImageZoom] is not accurate with multi-image.
-     * But we only need an estimate here anyway.
-     */
     function setBrushWidth(viewer) {
         let vzoom = viewer.viewport.getZoom(true);
-        // let izoom = viewer.viewport.viewportToImageZoom(vzoom);
         paintBrush.width = 20 / vzoom;
-        console.log('brush width:', paintBrush.width)
+    }
+
+    function clearClassList(element) {
+        let classList = element.classList;
+        while (classList.length > 0) {
+            classList.remove(classList.item(0));
+        }
+    }
+
+    // param: viewer, button, canvas
+    function toggleDraw(v, btn, c) {
+        if (btn.classList.contains('btnOn')) {
+            // End Draw
+            v.setMouseNavEnabled(true);
+            v.outerTracker.setTracking(true);
+            clearClassList(btn);
+            btn.classList.add('btn');
+            c.isDrawingMode = false;
+        }
+        else {
+            // Start Draw
+            v.setMouseNavEnabled(false);
+            v.outerTracker.setTracking(false);
+            c.isDrawingMode = true;
+            clearClassList(btn);
+            btn.classList.add('btnOn');
+        }
     }
 
     // EVENT LISTENERS
 
-    // DRAWING START
+    // START DRAW
     button.addEventListener('click', function () {
         paintBrush.color = mark.innerHTML;
-        setBrushWidth(viewer)
-        viewer.setMouseNavEnabled(false);
-        viewer.outerTracker.setTracking(false);
-        canvas.isDrawingMode = true;
-        button.classList.remove('btn');
-        button.classList.add('btnOn');
+        setBrushWidth(viewer);
+        toggleDraw(viewer, button, canvas);
+
     });
 
-    // DRAWING END
+    // END DRAW
     canvas.on("path:created", function (e) {
-        let lineDrawn = e.path;
+        toggleDraw(viewer, button, canvas);
+        let d = e.path;
+        customizeControls(d);
+        saveCoordinates(d);
         // console.log('PATH:\n', e.path.path);
-        if (isRealValue(lineDrawn)) {
-            // Get coordinates of human markup
-            if (lineDrawn.type === "path") {
-                // drawing has ended!
-                viewer.setMouseNavEnabled(true);
-                viewer.outerTracker.setTracking(true);
-                button.classList.remove('btnOn');
-                button.classList.add('btn');
-                canvas.isDrawingMode = false;
-                customizeControls(lineDrawn);
-                saveCoordinates(lineDrawn);
-            }
-        }
+
     });
 }
