@@ -28,50 +28,47 @@ map_marker = function (currentViewer, syncedViewers) {
         return link;
     }
 
-    function thisViewer(point) {
+    function doOverlay(point, viewer) {
         let link = createLink();
-        currentViewer.addOverlay({
+        viewer.addOverlay({
             element: link,
             location: point,
             placement: 'BOTTOM',
             checkResize: false
         });
-        // mousetracker(link, currentViewer);
-    }
+        mousetracker(link, viewer);
 
-    function allOtherViewers(point) {
-        syncedViewers.forEach(function (item) {
-            let viewer = item.getViewer()
-            if (viewer.id === currentViewer.id) {
-                return;
-            }
-            let link = createLink();
-            viewer.addOverlay({
-                element: link,
-                location: point,
-                placement: 'BOTTOM',
-                checkResize: false
-            });
-            mousetracker(link, viewer);
-        });
     }
 
     // display map marker
     function displayPinIcon(point) {
-        allOtherViewers(point);
-        // thisViewer(point);
+        const all = true; // temporarily
+        if (all) {
+            // Show on all other viewers
+            syncedViewers.forEach(function (item) {
+                let viewer = item.getViewer()
+                if (viewer.id === currentViewer.id) {
+                    return;
+                }
+                doOverlay(point, viewer);
+            });
+        } else {
+            // Show only on this viewer
+            doOverlay(point, currentViewer)
+        }
     }
 
     function mousetracker(link, viewer) {
+        // TBA
         new OpenSeadragon.MouseTracker({
             element: link,
             clickHandler: function () {
                 console.log('clickHandler');
-                // do what u want to do
+                // etc
             },
             dragHandler: function (event) {
                 console.log('dragHandler');
-                // do what u want to do
+                // etc
             }
         });
     }
