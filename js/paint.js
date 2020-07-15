@@ -40,6 +40,9 @@ function Paint(button, viewer) {
             if (!canvas.getActiveObject()) {
                 $(".deleteBtn").remove();
             }
+            else {
+                viewer.gestureSettingsMouse.clickToZoom = false;
+            }
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function (event) {
@@ -48,6 +51,7 @@ function Paint(button, viewer) {
                 canvas.remove(canvas.getActiveObject());
                 $(".deleteBtn").remove();
             }
+            viewer.gestureSettingsMouse.clickToZoom = true;
         });
 
     }
