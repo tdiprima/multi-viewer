@@ -26,7 +26,7 @@ map_marker = function (currentViewer, syncedViewers) {
     });
 
     function createLink() {
-        let rand = Math.floor(Math.random() * 11);
+        // let rand = Math.floor(Math.random() * 11);
         let link = document.createElement('a');
         let href = "#";
         link.href = href;
