@@ -18,6 +18,7 @@ map_marker = function (currentViewer, syncedViewers) {
             const webPoint = event.position;
             const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint);
             // document.getElementById("btnMap" + idx).style.display = 'block';
+            document.querySelector('#toggle-overlay').style.display = 'block';
             displayPinIcon(viewportPoint);
         }
     });
@@ -28,7 +29,8 @@ map_marker = function (currentViewer, syncedViewers) {
         let href = "#";
         link.href = href;
         link.dataset.href = href;
-        link.id = 'map-marker-' + rand;
+        link.id = 'map-marker';
+        // link.id = 'map-marker-' + rand;
         link.className = 'fa fa-map-marker';
         link.style.cssText =
             ' text-decoration: none; font-size: 22px; color: red;' +
@@ -37,6 +39,7 @@ map_marker = function (currentViewer, syncedViewers) {
     }
 
     function doOverlay(point, viewer) {
+        // console.log('v', viewer.overlaysContainer.children);
         let link = createLink();
         viewer.addOverlay({
             element: link,
@@ -45,6 +48,7 @@ map_marker = function (currentViewer, syncedViewers) {
             checkResize: false
         });
         mousetracker(link, viewer);
+        // viewer.removeOverlay()
 
     }
 
@@ -80,5 +84,32 @@ map_marker = function (currentViewer, syncedViewers) {
             }
         });
     }
+
+
+    let elementList = document.querySelectorAll('#toggle-overlay');
+    elementList.forEach(function(userItem) {
+        let overlay = false;
+        userItem.addEventListener('click', function () {
+            if (overlay)
+            {
+                s = 'block';
+                h = "<i class=\"fa fa-map-marker\"></i> Hide markers";
+            }
+            else {
+                s = 'none';
+                h = "<i class=\"fa fa-map-marker\"></i> Show markers";
+            }
+            this.innerHTML = h;
+            document.querySelectorAll('#map-marker').forEach(function (thing) {
+                thing.style.display = s;
+            })
+            overlay = !overlay;
+        })
+    });
+
+    document.querySelector('#toggle-overlay').addEventListener('click', function() {
+
+
+    });
 
 }

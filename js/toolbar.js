@@ -23,8 +23,8 @@ function Toolbar(div, idx, sliders, options) {
     let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
     // let btnDraw = `<button class="btn" id="btnDraw${idx}">Draw</button>&nbsp;&nbsp;`;
     let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil"></i> Draw</button>&nbsp;&nbsp;`;
-    let btnMapMarker = `<button class="btn" id="btnMap${idx}" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
-
+    // let btnMapMarker = `<button class="btn" id="btnMap${idx}" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
+    let btnMapMarker = `<button class="btn" id="toggle-overlay" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
     // Draw.
     let div1 = document.createElement('div');
     div1.innerHTML = (options.multipleOn ? chkPan1.show() + chkZoom1.show() : "") + wPaint + btnDraw + (options.slidersOn ? btnSlide : "") + btnMapMarker;
