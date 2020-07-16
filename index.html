@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quad-Viewer</title>
+    <title>TCGA Segmentation Data</title>
     <link rel="stylesheet" href="./css/style.css">
     <link href="./js/vendor/color-picker/color-picker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -37,18 +37,23 @@
     <script src="./js/synchronizer.js"></script>
 
     <script>
+        // Variables
         const arr = [];
         const style = "dragonbox";
+        //const style = ""; // one viewer
         const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
         const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
-        const options = { filterOn: true, slidersOn: true, toolbarOn: true, multipleOn: true, paintbrushColor: "#0ff" };
+        const options = { filterOn: true, slidersOn: false, toolbarOn: false, multipleOn: false, paintbrushColor: "#0ff" };
 
-        const num_viewers = 4;
+        // Create viewer(s)
+        const num_viewers = 1;
         for (let i = 0; i < num_viewers; i++) {
             let v = new nViewer("viewer" + i, style, "viewers", options);
             arr.push(v);
         }
 
+        // Add dropdown to the page
+        // (Now that we have 1 or more viewers created)
         new Dropdown(arr, 'selections', './json/tcga.json');
 
         function test() {
@@ -60,7 +65,7 @@
         }
 
         function live() {
-            // FOR REAL
+            // Set viewer source
             arr.forEach(function (elem) {
                 elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
                 iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
@@ -68,9 +73,10 @@
             });
         }
 
-        test();
-        // live();
+        // test();
+        live();
 
+        // Controller to keep viewers in sync
         sync = new Synchronizer(arr);  // Pass an array of nViewers
 
     </script>

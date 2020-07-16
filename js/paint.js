@@ -27,7 +27,7 @@ function Paint(button, viewer) {
             let btnLeft = x - 10;
             let btnTop = y - 10;
             var deleteBtn = document.createElement('img');
-            deleteBtn.src = "icons/delete-icon.png";
+            deleteBtn.src = "./img/delete-icon.png";
             deleteBtn.classList.add('deleteBtn')
             deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
             deleteBtn.alt = "Delete Me";
