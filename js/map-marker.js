@@ -5,6 +5,8 @@
  */
 map_marker = function (currentViewer, syncedViewers) {
 
+    const idx = currentViewer.id.trim(-1).replace("viewer", "");
+
     // prevent modal
     $(currentViewer.element).on('contextmenu', function (event) {
         event.preventDefault();
@@ -15,6 +17,7 @@ map_marker = function (currentViewer, syncedViewers) {
         if (event.button === 2) { // Right mouse
             const webPoint = event.position;
             const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint);
+            // document.getElementById("btnMap" + idx).style.display = 'block';
             displayPinIcon(viewportPoint);
         }
     });
@@ -26,7 +29,7 @@ map_marker = function (currentViewer, syncedViewers) {
         link.href = href;
         link.dataset.href = href;
         link.id = 'map-marker-' + rand;
-        link.className = 'fa fa-map-marker';  //fa-map-pin
+        link.className = 'fa fa-map-marker';
         link.style.cssText =
             ' text-decoration: none; font-size: 22px; color: red;' +
             ' cursor: pointer';
