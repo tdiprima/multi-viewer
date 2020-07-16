@@ -5,7 +5,7 @@
  */
 map_marker = function (currentViewer, syncedViewers) {
 
-    const idx = currentViewer.id.trim(-1).replace("viewer", "");
+    // const idx = currentViewer.id.trim(-1).replace("viewer", "");
 
     // prevent modal
     $(currentViewer.element).on('contextmenu', function (event) {
@@ -18,7 +18,9 @@ map_marker = function (currentViewer, syncedViewers) {
             const webPoint = event.position;
             const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint);
             // document.getElementById("btnMap" + idx).style.display = 'block';
-            document.querySelector('#toggle-overlay').style.display = 'block';
+            document.querySelectorAll('#toggle-overlay').forEach(function (item) {
+                item.style.display = 'block';
+            });
             displayPinIcon(viewportPoint);
         }
     });
@@ -87,11 +89,10 @@ map_marker = function (currentViewer, syncedViewers) {
 
 
     let elementList = document.querySelectorAll('#toggle-overlay');
-    elementList.forEach(function(userItem) {
+    elementList.forEach(function (elem) {
         let overlay = false;
-        userItem.addEventListener('click', function () {
-            if (overlay)
-            {
+        elem.addEventListener('click', function () {
+            if (overlay) {
                 s = 'block';
                 h = "<i class=\"fa fa-map-marker\"></i> Hide markers";
             }
@@ -105,11 +106,6 @@ map_marker = function (currentViewer, syncedViewers) {
             })
             overlay = !overlay;
         })
-    });
-
-    document.querySelector('#toggle-overlay').addEventListener('click', function() {
-
-
     });
 
 }
