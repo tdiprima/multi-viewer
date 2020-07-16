@@ -1,3 +1,6 @@
+/**
+ * Wrapper object for the osd viewers
+ */
 class nViewer {
     constructor(viewerDivId, cssName, mainDiv, options) {
 

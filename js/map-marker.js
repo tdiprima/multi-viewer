@@ -1,3 +1,8 @@
+/**
+ * Handler for right-click, add map marker.
+ * @param currentViewer
+ * @param syncedViewers
+ */
 map_marker = function (currentViewer, syncedViewers) {
 
     // prevent modal

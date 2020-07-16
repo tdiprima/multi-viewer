@@ -1,3 +1,8 @@
+/**
+ * Attach custom color picker to toolbar
+ * @param elem
+ * @constructor
+ */
 function Color(elem) {
     var picker = new CP(elem);
     picker.self.classList.add('no-alpha');
@@ -19,8 +24,8 @@ function Color(elem) {
         e.stopPropagation();
     }, false);
 
-    document.documentElement.addEventListener('click', function() {
+    document.documentElement.addEventListener('click', function () {
         picker.exit();
     }, false);
-    
+
 }

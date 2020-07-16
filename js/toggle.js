@@ -1,4 +1,10 @@
-// Checkbox toggle
+/**
+ * Checkbox toggle
+ * @param tagName
+ * @param id
+ * @param label
+ * @constructor
+ */
 function Toggle(tagName, id, label) {
     this.tagName = tagName;
     this.id = id;

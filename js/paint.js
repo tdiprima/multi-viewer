@@ -1,4 +1,9 @@
-// paint handler
+/**
+ * Paint handler
+ * @param button
+ * @param viewer
+ * @constructor
+ */
 function Paint(button, viewer) {
 
     const overlay = viewer.fabricjsOverlay({

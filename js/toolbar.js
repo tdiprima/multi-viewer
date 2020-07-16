@@ -1,3 +1,11 @@
+/**
+ * Match pan, match zoom, show sliders, color options, and 'draw' button.
+ * @param div
+ * @param idx
+ * @param sliders
+ * @param options
+ * @constructor
+ */
 function Toolbar(div, idx, sliders, options) {
     // Create.
     let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");

@@ -1,3 +1,6 @@
+/**
+ * Handles synchronization of the viewers
+ */
 class Synchronizer {
     constructor(viewerArray) {
         let syncedViewers = []; // array of synchronized viewers
