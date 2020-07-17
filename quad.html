@@ -39,7 +39,17 @@
         const style = "dragonbox";
         const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
         const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
-        const options = { filterOn: true, slidersOn: true, toolbarOn: true, paintbrushColor: "#0ff" };
+        const options = {
+            filterOn: true,
+            slidersOn: true,
+            toolbarOn: true,
+            paintbrushColor: "#0ff",
+            viewerOpts: {
+                showFullPageControl: false,
+                showHomeControl: true,
+                showZoomControl: false
+            }
+        };
 
         const num_viewers = 4;
         for (let i = 0; i < num_viewers; i++) {
@@ -66,8 +76,8 @@
             });
         }
 
-        test();
-        // live();
+        // test();
+        live();
 
         sync = new Synchronizer(arr);  // Pass an array of nViewers
 
