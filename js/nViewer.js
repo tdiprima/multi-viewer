@@ -115,7 +115,9 @@ class nViewer {
                     range.max = "100";
                     range.value = "100";
                     range.setAttribute('class', "slider-square");
-                    // range.style.display = "none";
+                    if (options.toolbarOn) {
+                        range.style.display = "none"; // bc we have a btn to toggle it
+                    }
                     dd.appendChild(range); // append range to div
                     d.appendChild(dd); // append div to fragment
                     div.appendChild(d); // append fragment to parent
