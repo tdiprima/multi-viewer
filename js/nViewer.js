@@ -115,7 +115,7 @@ class nViewer {
                     range.max = "100";
                     range.value = "100";
                     range.setAttribute('class', "slider-square");
-                    range.style.display = "none";
+                    // range.style.display = "none";
                     dd.appendChild(range); // append range to div
                     d.appendChild(dd); // append div to fragment
                     div.appendChild(d); // append fragment to parent
@@ -146,16 +146,22 @@ class nViewer {
             div.setAttribute('class', cssName);
             diva.appendChild(div);
 
+            if (!options.viewerOpts) {
+                options.viewerOpts = {
+                    showFullPageControl: true,
+                    showHomeControl: true,
+                    showZoomControl: true
+                }
+            }
+
             viewer = OpenSeadragon({
                 id: viewerDivId,
-                prefixUrl: "//openseadragon.github.io/openseadragon/images/",
-                // showNavigationControl: false,
-                showHomeControl: true,
-                showFullPageControl: false,
-                showZoomControl: false,
+                showFullPageControl: options.viewerOpts.showFullPageControl,
+                showHomeControl: options.viewerOpts.showHomeControl,
+                prefixUrl: "./js/vendor/openseadragon/images/",
+                showZoomControl: options.viewerOpts.showZoomControl,
                 crossOriginPolicy: 'Anonymous'
             });
-            // viewer.setControlsEnabled(false);
 
             if (options.toolbarOn) {
                 let p = new Paint(document.getElementById('btnDraw' + idx), viewer);
