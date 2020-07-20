@@ -19,7 +19,7 @@ function Paint(button, viewer) {
     function customizeControls(obj) {
         // For the object that was drawn
         obj['hasControls'] = false;
-        obj.lockMovementX = true;
+        obj.lockMovementX = true; // hold in place
         obj.lockMovementY = true;
 
         function addDeleteBtn(x, y, el) {
@@ -47,6 +47,7 @@ function Paint(button, viewer) {
             else {
                 // Make sure the viewer doesn't zoom when we click the delete button.
                 viewer.gestureSettingsMouse.clickToZoom = false;
+                // TODO: Fix works, but we also can't zoom in/out if we actually wanted to.
             }
         });
 
