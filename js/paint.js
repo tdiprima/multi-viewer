@@ -51,6 +51,24 @@ function Paint(button, viewer) {
             }
         });
 
+        /*
+        // Handle all the things (maybe)
+        canvas.on('object:modified', function (e) {
+            let el = this.lowerCanvasEl.parentElement; // here too
+            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
+
+        });
+        canvas.on('object:scaling', function (e) {
+            $(".deleteBtn").remove();
+        });
+        canvas.on('object:moving', function (e) {
+            $(".deleteBtn").remove();
+        });
+        canvas.on('object:rotating', function (e) {
+            $(".deleteBtn").remove();
+        });
+        */
+
         $(".canvas-container").on('click', ".deleteBtn", function (event) {
             // this = deleteBtn
             if (canvas.getActiveObject()) {
