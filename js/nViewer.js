@@ -31,14 +31,14 @@ class nViewer {
             return viewer;
         };
 
-        this.modOptions = function (numViewers) {
-            if (numViewers > 1) {
-                options.multipleOn = true;
-            } else {
-                options.multipleOn = false;
-            }
-            console.log(options);
-        }
+        // this.modOptions = function (numViewers) {
+        //     if (numViewers > 1) {
+        //         options.multipleOn = true;
+        //     } else {
+        //         options.multipleOn = false;
+        //     }
+        //     console.log(options);
+        // }
 
         /**
          * @param imageArray

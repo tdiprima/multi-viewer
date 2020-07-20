@@ -4,8 +4,8 @@
 class Synchronizer {
     constructor(viewerArray) {
 
-        let len = viewerArray.length;
-        viewerArray.forEach(element => element.modOptions(len));
+        // let len = viewerArray.length;
+        // viewerArray.forEach(element => element.modOptions(len));
 
         let syncedViewers = []; // array of synchronized viewers
         let activeViewerId = null; // magic init
