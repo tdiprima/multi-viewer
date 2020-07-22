@@ -18,15 +18,16 @@ function Paint(button, viewer) {
 
     function customizeControls(obj) {
         // For the object that was drawn
-        // obj['hasControls'] = false;
-        // obj.lockMovementX = true; // hold in place
-        // obj.lockMovementY = true;
+        obj['hasControls'] = false;
+        obj.lockMovementX = true; // hold in place
+        obj.lockMovementY = true;
 
         function addDeleteBtn(x, y, el) {
+            // console.log(x, y, el);
             $(".deleteBtn").remove();
             let btnLeft = x - 10;
             let btnTop = y - 10;
-            var deleteBtn = document.createElement('img');
+            let deleteBtn = document.createElement('img');
             deleteBtn.src = "./img/delete-icon.png";
             deleteBtn.classList.add('deleteBtn')
             deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
@@ -34,10 +35,11 @@ function Paint(button, viewer) {
             el.appendChild(deleteBtn);
         }
 
-        canvas.on('object:selected', function (e) {
+        // object:selected this event is deprecated as of 4.0.0
+        canvas.on('selection:created', function (e) {
             let el = this.lowerCanvasEl.parentElement;
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
-        });
+        })
 
         canvas.on('mouse:down', function (e) {
             // For example, panning or zooming after selection
@@ -51,18 +53,20 @@ function Paint(button, viewer) {
             }
         });
 
-        // Handle all the things (maybe)
+        // Handle all the things
         canvas.on('object:modified', function (e) {
-            let el = this.lowerCanvasEl.parentElement; // here too
+            let el = this.lowerCanvasEl.parentElement;
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
-
         });
+
         canvas.on('object:scaling', function (e) {
             $(".deleteBtn").remove();
         });
+
         canvas.on('object:moving', function (e) {
             $(".deleteBtn").remove();
         });
+
         canvas.on('object:rotating', function (e) {
             $(".deleteBtn").remove();
         });
