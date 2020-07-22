@@ -18,9 +18,9 @@ function Paint(button, viewer) {
 
     function customizeControls(obj) {
         // For the object that was drawn
-        obj['hasControls'] = false;
-        obj.lockMovementX = true; // hold in place
-        obj.lockMovementY = true;
+        // obj['hasControls'] = false;
+        // obj.lockMovementX = true; // hold in place
+        // obj.lockMovementY = true;
 
         function addDeleteBtn(x, y, el) {
             $(".deleteBtn").remove();
@@ -43,15 +43,14 @@ function Paint(button, viewer) {
             // For example, panning or zooming after selection
             if (!canvas.getActiveObject()) {
                 $(".deleteBtn").remove();
+                viewer.gestureSettingsMouse.clickToZoom = true;
             }
             else {
                 // Make sure the viewer doesn't zoom when we click the delete button.
                 viewer.gestureSettingsMouse.clickToZoom = false;
-                // TODO: Fix works, but we also can't zoom in/out if we actually wanted to.
             }
         });
 
-        /*
         // Handle all the things (maybe)
         canvas.on('object:modified', function (e) {
             let el = this.lowerCanvasEl.parentElement; // here too
@@ -67,7 +66,6 @@ function Paint(button, viewer) {
         canvas.on('object:rotating', function (e) {
             $(".deleteBtn").remove();
         });
-        */
 
         $(".canvas-container").on('click', ".deleteBtn", function (event) {
             // this = deleteBtn

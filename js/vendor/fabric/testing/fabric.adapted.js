@@ -1,3 +1,7 @@
+/**
+ * Testing to see if simply overwriting the relevant functions will work.
+ * From fabric.js 4.0.0-rc.1
+ */
 (function () {
 
   var addListener = fabric.util.addListener,
