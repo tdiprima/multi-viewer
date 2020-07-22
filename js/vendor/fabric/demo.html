@@ -3,10 +3,10 @@
 
 <head>
     <title>OpenSeadragon Fabricjs Overlay Demo</title>
-    <script src="../openseadragon/openseadragon.js"></script>
-    <script src="../fabric/openseadragon-fabricjs-overlay.js"></script>
-    <script src="../js/jquery-1.11.2.min.js"></script>
-    <script src="../fabric/fabric.adapted.js"></script>
+    <script src="../openseadragon/openseadragon.min.js"></script>
+    <script src="./openseadragon-fabricjs-overlay.js"></script>
+    <script src="../jquery-1.11.2.min.js"></script>
+    <script src="./fabric.adapted.js"></script>
     <style type="text/css">
         html,
         body,
@@ -22,9 +22,9 @@
         App = {
             // ----------
             init: function () {
-                var self = this;
+                let self = this;
 
-                var tileSource = {
+                let tileSource = {
                     Image: {
                         xmlns: "http://schemas.microsoft.com/deepzoom/2008",
                         Url: "http://openseadragon.github.io/example-images/highsmith/highsmith_files/",
@@ -38,7 +38,7 @@
                     }
                 };
 
-                var tileSourceIIIF = {
+                let tileSourceIIIF = {
                     "@context": "http://iiif.io/api/image/2/context.json",
                     "@id": "https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2",
                     "height": 7200,
@@ -69,13 +69,13 @@
                 });
 
                 // initialize overlay
-                var options = {
+                let options = {
                     scale: 1000
                 }
-                var overlay = this.viewer.fabricjsOverlay(options);
+                let overlay = this.viewer.fabricjsOverlay(options);
 
                 // add fabric rectangle
-                var rect = new fabric.Rect({
+                let rect = new fabric.Rect({
                     left: 0,
                     top: 0,
                     fill: 'red',
@@ -85,7 +85,7 @@
                 overlay.fabricCanvas().add(rect);
 
                 // add fabric circle
-                var circle = new fabric.Circle({
+                let circle = new fabric.Circle({
                     left: 1500,
                     top: 0,
                     fill: 'green',
@@ -137,14 +137,13 @@
 
                 }
 
-                overlay.fabricCanvas().on('path:created', function(e) {
+                overlay.fabricCanvas().on('path:created', function (e) {
                     console.log("path:created", e)
                 });
 
                 overlay.fabricCanvas().on('mouse:up', function (event) {
 
                     if (isRealValue(event.target)) {
-                        //console.log('up', event.target)
 
                         if (event.target.type === "path") {
                             btnDraw(false, overlay, circle2, text);
@@ -168,14 +167,13 @@
                         }
 
                     } else {
-                        //console.log('up: X', event.target);
                         btnDraw(false, overlay, circle2, text);
                     }
 
                 })
 
                 // add fabric circle with text
-                var circle2 = new fabric.Circle({
+                let circle2 = new fabric.Circle({
                     left: 930,
                     top: 100,
                     fill: 'lightgray',
@@ -185,7 +183,7 @@
                 });
                 overlay.fabricCanvas().add(circle2);
 
-                var text = new fabric.Text('Start\n drawing', {
+                let text = new fabric.Text('Start\n drawing', {
                     left: 950,
                     top: 150,
                     fontSize: 50,
@@ -204,12 +202,9 @@
                 // start free-drawing mode
                 overlay.fabricCanvas().on('mouse:down', function (event) {
                     if (isRealValue(event.target)) {
-                        //console.log('down', event.target)
                         if (event.target.action === 'button') {
                             btnDraw(true, overlay, circle2, text);
                         }
-                    } else {
-                        //console.log('down: X', event.target);
                     }
 
                 });
