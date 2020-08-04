@@ -10,20 +10,15 @@ function Toolbar(div, idx, sliders, options) {
     // Create.
     let chkPan1 = new Toggle("checkbox", "chkPan" + idx, "Match Pan");
     let chkZoom1 = new Toggle("checkbox", "chkZoom" + idx, "Match Zoom");
-    // let btnSlide = `<button class="btn" id="btnSlide${idx}">Slider Toggle</button>&nbsp;&nbsp;`;
     let btnSlide = `<button class="btn" id="btnSlide${idx}"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;&nbsp;`;
 
-    let color;
+    let color = "#00f";
     if (options.paintbrushColor) {
         color = options.paintbrushColor;
-    } else {
-        color = "#00f";  // default color
     }
 
     let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
-    // let btnDraw = `<button class="btn" id="btnDraw${idx}">Draw</button>&nbsp;&nbsp;`;
     let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil"></i> Draw</button>&nbsp;&nbsp;`;
-    // let btnMapMarker = `<button class="btn" id="btnMap${idx}" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
     let btnMapMarker = `<button class="btn" id="toggle-overlay" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
     // Draw.
     let div1 = document.createElement('div');
@@ -72,19 +67,5 @@ function Toolbar(div, idx, sliders, options) {
 
     }
 
-    // let btn = document.getElementById("btnMap" + idx);
-    // if (btn !== null) {
-    //     btn.addEventListener('click', function () {
-    //         let el = document.getElementsByClassName('fa fa-map-marker').item(0);
-    //         console.log("dd", el.style.display)
-    //         if (el.style.display === 'none') {
-    //             setMarkerStyle(true);
-    //         } else {
-    //             setMarkerStyle(false);
-    //         }
-    //     });
-    // }
-
     let jsc = new Color(document.getElementById('mark' + idx));
-    // let p = new Paint(document.getElementById('btnDraw' + idx));
 }
