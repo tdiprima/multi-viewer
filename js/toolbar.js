@@ -19,7 +19,7 @@ function Toolbar(div, idx, sliders, options) {
     let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil"></i> Draw</button>&nbsp;&nbsp;`;
     let btnMapMarker = `<button class="btn" id="toggle-overlay" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
     let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
-    //<i style='font-size:24px' class='fas'>&#xf5ee;</i>
+    // let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i style='font-size:24px' class='fas'>&#xf5ee;</i> Draw Polygon</button>&nbsp;&nbsp;`;
 
     // Draw.
     let div1 = document.createElement('div');
