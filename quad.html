@@ -21,8 +21,6 @@
     <script src="./js/vendor/fabric/openseadragon-fabricjs-overlay.js"></script>
     <script src="./js/vendor/jquery-3.5.1.min.js"></script>
     <script src="./js/vendor/fabric/fabric.adapted.js"></script>
-    <script src="./js/script.js"></script>
-    <script src="./js/polygon.js"></script>
     <script src="./js/vendor/openseadragon/openseadragon-filtering.js"></script>
     <script src="./js/vendor/openseadragon/viewerinputhook.js"></script>
     <script src="./js/vendor/openseadragon/imaginghelper.js"></script>
@@ -41,7 +39,7 @@
         const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
         const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
         const options = {
-            filterOn: false,
+            filterOn: true,
             slidersOn: true,
             toolbarOn: true,
             multipleOn: true,
@@ -78,8 +76,8 @@
             });
         }
 
-        test();
-        // live();
+        // test();
+        live();
 
         sync = new Synchronizer(arr);  // Pass an array of nViewers
 
