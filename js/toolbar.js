@@ -15,7 +15,9 @@ function Toolbar(div, idx, sliders, options) {
     let btnSlide = `<button class="btn" id="btnSlide${idx}"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;&nbsp;`;
 
     let color = "#00f";
-    if (options.paintbrushColor) { color = options.paintbrushColor; }
+    if (options.paintbrushColor) {
+        color = options.paintbrushColor;
+    }
 
     // Paint/Draw buttons handled by paint.js
     let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
@@ -26,13 +28,13 @@ function Toolbar(div, idx, sliders, options) {
 
     // Polygon - NEW!
     let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
-    // Trying to get an icon to show:
-    // let btnPolygon = `<button class="btn" style="background: url(../img/71.png); background-repeat:no-repeat;" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
-    // let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i style='font-size:24px' class='fas'>&#xf5ee;</i> Draw Polygon</button>&nbsp;&nbsp;`;
+
+    // Grid - NEW!
+    let btnGrid = `<button class="btn" id="btnGrid${idx}">Draw Grid&nbsp;&nbsp;`;
 
     // Attach toolbar to viewer
     let div1 = document.createElement('div');
-    div1.innerHTML = (options.multipleOn ? chkPan1 + chkZoom1 : "") + wPaint + btnDraw + (options.slidersOn ? btnSlide : "") + btnPolygon + btnMapMarker;
+    div1.innerHTML = (options.multipleOn ? chkPan1 + chkZoom1 : "") + wPaint + btnDraw + (options.slidersOn ? btnSlide : "") + btnPolygon + btnGrid + btnMapMarker;
     div.appendChild(div1);
 
     // Slider button event handler
@@ -54,6 +56,14 @@ function Toolbar(div, idx, sliders, options) {
             });
         }
     }
+
+    document.getElementById("btnPolygon" + idx).addEventListener('click', function () {
+        alert("Coming soon!");
+    });
+
+    document.getElementById('btnGrid' + idx).addEventListener('click', function () {
+        alert("Coming real soon!");
+    })
 
     // Color picker event handler
     new Color(document.getElementById('mark' + idx));
