@@ -19,13 +19,15 @@ function Toolbar(div, idx, sliders, options) {
 
     // Paint/Draw buttons handled by paint.js
     let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
-    let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil"></i> Draw</button>&nbsp;&nbsp;`;
+    let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil-alt"></i> Draw</button>&nbsp;&nbsp;`;
 
     // Map markers handled by map-marker.js
     let btnMapMarker = `<button class="btn" id="toggle-overlay" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
 
     // Polygon - NEW!
     let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
+    // Trying to get an icon to show:
+    // let btnPolygon = `<button class="btn" style="background: url(../img/71.png); background-repeat:no-repeat;" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
     // let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i style='font-size:24px' class='fas'>&#xf5ee;</i> Draw Polygon</button>&nbsp;&nbsp;`;
 
     // Attach toolbar to viewer
