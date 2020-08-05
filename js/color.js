@@ -4,7 +4,7 @@
  * @constructor
  */
 function Color(elem) {
-    var picker = new CP(elem);
+    let picker = new CP(elem);
     picker.self.classList.add('no-alpha');
 
     // Disable the default blur and focus behavior
