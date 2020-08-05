@@ -53,29 +53,6 @@ function Toolbar(div, idx, sliders, options) {
         }
     }
 
-    // TODO: Toggle markers on and off.
-    function setMarkerStyle(b) {
-        let x = document.getElementsByClassName("fa fa-map-marker");
-        let s, h;
-        if (b) {
-            s = 'block';
-            h = "<i class=\"fa fa-map-marker\"></i> Hide markers";
-        }
-        else {
-            s = 'none';
-            h = "<i class=\"fa fa-map-marker\"></i> Show markers";
-        }
-
-        // get a HTMLCollection of elements in the page
-        let collection = document.getElementsByTagName("i");
-        for (let item of collection) {
-            console.log(item);
-            item.style.display = s;
-            item.innerHTML = h;
-        }
-
-    }
-
     // Color picker event handler
     new Color(document.getElementById('mark' + idx));
 }
