@@ -49,7 +49,7 @@ map_marker = function (currentViewer, syncedViewers) {
             placement: 'BOTTOM',
             checkResize: false
         });
-        mousetracker(link, viewer);
+        mouseTracker(link, viewer);
         // viewer.removeOverlay()
 
     }
@@ -72,7 +72,7 @@ map_marker = function (currentViewer, syncedViewers) {
         }
     }
 
-    function mousetracker(link, viewer) {
+    function mouseTracker(link, viewer) {
         // TBA
         new OpenSeadragon.MouseTracker({
             element: link,
@@ -80,7 +80,7 @@ map_marker = function (currentViewer, syncedViewers) {
                 console.log('clickHandler');
                 // etc
             },
-            dragHandler: function (event) {
+            dragHandler: function () {
                 console.log('dragHandler');
                 // etc
             }
@@ -91,6 +91,7 @@ map_marker = function (currentViewer, syncedViewers) {
     let elementList = document.querySelectorAll('#toggle-overlay');
     elementList.forEach(function (elem) {
         let overlay = false;
+        let s, h;
         elem.addEventListener('click', function () {
             if (overlay) {
                 s = 'block';
