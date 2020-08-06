@@ -42,58 +42,53 @@ function Toolbar(div, idx, sliders, options) {
         //     // return false;
         // });
 
-
-
         // Menu animation
         $("a").on('click', function () {
             let page = $(this).data("page");
+            if (typeof page === "undefined")
+                return;
 
-            if ($('div:animated').id !== page) {
-                console.log($('div:animated').id);
-                console.log('does not equal', page);
+            let ind = page.trim(-1).replace("fold", "");
+            console.log(ind);
 
-                let active = $(".fold.active");
+            if (ind === idx) {
+                if ($('div:animated').id !== page) {
 
-                // if there is visible fold element on page (user already clicked at least once on link)
-                if (active.length) {
-                    console.log('active', active);
-                    active.animate({
-                        width: "0"
-                    }, 200)
-                        .animate({
-                            height: "0"
-                        }, 200, function () {
-                            // this happens after above animations are complete
-                            $(this).removeClass("active");
+                    let active = $(".fold.active");
+                    // if there is visible fold element on page (user already clicked at least once on link)
+                    if (active.length) {
 
-                        })
+                        active.animate({
+                            width: "0"
+                        }, 200)
+                            .animate({
+                                height: "0"
+                            }, 200, function () {
+                                // this happens after above animations are complete
+                                $(this).removeClass("active");
 
-                    // clicking for the first time
-                } else {
-                    console.log(':p active', active);
+                            })
+
+                        // clicking for the first time
+                    }
+
+                    if (active.attr("id") !== page) {
+
+                        $("#" + page)
+                            .addClass("active")
+                            .animate({
+                                height: "75px"
+                            }, 777, 'linear')
+                            .animate({
+                                width: "300px"
+                            }, 400, 'linear')
+
+                    }
                 }
 
-                if (active.attr("id") !== page) {
-                    console.log(active.attr("id"))
-                    console.log("not equals", page)
-                    $("#" + page)
-                        .addClass("active")
-                        .animate({
-                            height: "75px"
-                        }, 777, 'linear')
-                        .animate({
-                            width: "300px"
-                        }, 400, 'linear')
+            }
 
-                } else {
-                    console.log(active.attr("id"))
-                    console.log(":p equals", page)
-                }
-            }
-            else {
-                console.log($('div:animated').id);
-                console.log(':p equals', page);
-            }
+
         });
 
 
