@@ -58,6 +58,7 @@ function Toolbar(div, idx, sliders, options) {
                     // if there is visible fold element on page (user already clicked at least once on link)
                     if (active.length) {
 
+                        // Close it
                         active.animate({
                             width: "0"
                         }, 200)
@@ -69,28 +70,22 @@ function Toolbar(div, idx, sliders, options) {
 
                             })
 
-                        // clicking for the first time
-                    }
-
-                    if (active.attr("id") !== page) {
-
+                    } else {
+                        // Open it
                         $("#" + page)
                             .addClass("active")
                             .animate({
                                 height: "75px"
-                            }, 777, 'linear')
+                            }, 700, 'linear')
                             .animate({
-                                width: "300px"
+                                width: "500px"
                             }, 400, 'linear')
-
                     }
                 }
 
             }
 
-
         });
-
 
         // Slider
         sliderEvt();
