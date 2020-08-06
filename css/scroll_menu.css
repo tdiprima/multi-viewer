@@ -1,0 +1,43 @@
+/*Scroll*/
+div.scrollmenu {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+    background-color: #777;
+}
+
+/*Foldout*/
+.fold {
+    display: none;
+    width: 0;
+    height: 0;
+     position: 50;
+    /*position: absolute;*/
+}
+
+.fold.active {
+    display: inline-block;
+}
+
+ul {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    list-style-type: none;
+}
+
+/*Link*/
+a:link {
+    text-decoration: none;
+}

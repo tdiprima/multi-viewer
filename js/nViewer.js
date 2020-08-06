@@ -126,7 +126,8 @@ class nViewer {
             }
 
             if (options.toolbarOn) {
-                new Toolbar(div, idx, sliders, options);
+                // new Toolbar(div, idx, sliders, options).buttons();
+                new Toolbar(div, idx, sliders, options).menu();
                 if (options.multipleOn) {
                     chkPan = document.getElementById("chkPan" + idx);
                     chkZoom = document.getElementById("chkZoom" + idx);
@@ -165,8 +166,9 @@ class nViewer {
                 crossOriginPolicy: 'Anonymous'
             });
 
+            // Paintbrush handler
             if (options.toolbarOn) {
-                let p = new Paint(document.getElementById('btnDraw' + idx), viewer);
+                new Paint(document.getElementById('btnDraw' + idx), viewer);
             }
 
             // SLIDER EVENT LISTENER

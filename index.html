@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCGA Segmentation Data</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/scroll_menu.css">
     <link href="./js/vendor/color-picker/color-picker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./js/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
 </head>
@@ -42,8 +43,8 @@
         const options = {
             filterOn: true,
             slidersOn: true,
-            toolbarOn: false,
-            multipleOn: false,
+            toolbarOn: true,
+            multipleOn: true,
             paintbrushColor: "#0ff"
         };
 
@@ -75,13 +76,14 @@
             });
         }
 
-        // test();
-        live();
+        test();
+        // live();
 
         // Controller to keep viewers in sync
         sync = new Synchronizer(arr);  // Pass an array of nViewers
 
     </script>
+
 </body>
 
 </html>
