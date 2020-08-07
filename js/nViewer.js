@@ -171,7 +171,7 @@ class nViewer {
                 let draw = document.getElementById('btnDraw' + idx);
                 let poly = document.getElementById('btnPolygon' + idx)
                 new FreeDrawing(draw, viewer);
-                new Polygon(poly, viewer);
+                // new Polygon(poly, viewer);
             }
 
             // SLIDER EVENT LISTENER
