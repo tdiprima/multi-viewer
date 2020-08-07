@@ -1,10 +1,10 @@
 /**
- * Paint handler
+ * FreeDrawing handler
  * @param button
  * @param viewer
  * @constructor
  */
-function Paint(button, viewer) {
+function FreeDrawing(button, viewer) {
 
     const overlay = viewer.fabricjsOverlay({
         scale: 1000
@@ -14,9 +14,9 @@ function Paint(button, viewer) {
     let idx;
 
     if (button.id.includes("btnDraw"))
-      freeDrawing();
+        freeDrawing();
     else
-      drawPolygon();
+        drawPolygon();
 
     function isRealValue(obj) {
         return obj && obj !== 'null' && obj !== 'undefined';
@@ -243,7 +243,9 @@ function Paint(button, viewer) {
                     canvas.selection = true;
                 });
             } else {
-              viewer.gestureSettingsMouse.clickToZoom = true;
+                viewer.gestureSettingsMouse.clickToZoom = true;
+                // Disable fabric selection; otherwise, you get the weird purple box.
+                overlay._fabricCanvas.selection = false;
             }
         });
 
@@ -260,9 +262,9 @@ function Paint(button, viewer) {
             }
         });
 
-        canvas.on("after:render", function(){canvas.calcOffset();});
-
+        canvas.on("after:render", function () { canvas.calcOffset(); });
         function setStartingPoint(options) {
+            // TODO: This is wrong?
             x = options.e.pageX - canvas._offset.left;
             y = options.e.pageY - canvas._offset.top;
         }

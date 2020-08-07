@@ -33,6 +33,7 @@ function Toolbar(div, idx, sliders, options) {
         <a href="#"><mark id="mark${idx}" style="background-color: rgb(0, 255, 255);">#00ffff</mark></a>
         <a id="btnDraw${idx}" href="#"><i class="fa fa-pencil-alt"></i> Draw</a>
         <a id="btnPolygon${idx}" href="#"><i class="fa fa-draw-polygon"></i> Draw polygon</a>
+        <a id="btnGrid${idx}" href="#"><i class="fa fa-draw"></i> Draw grid</a>
         <a id="btnSlide${idx}" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
         <a id="toggle-overlay" style="display: none" href="#"><i class="fa fa-map-marker-alt"></i> Hide markers</a>
     </div>`;
@@ -90,7 +91,7 @@ function Toolbar(div, idx, sliders, options) {
         sliderEvt();
 
         // Color & paint
-        colorPaintEvt();
+        colorDrawEvt();
 
     }
 
@@ -102,7 +103,7 @@ function Toolbar(div, idx, sliders, options) {
         // Slider button
         let btnSlide = `<button class="btn" id="btnSlide${idx}"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;&nbsp;`;
 
-        // Paint/Draw buttons handled by paint.js
+        // FreeDrawing buttons handled by draw.js
         let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
         let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil-alt"></i> Draw</button>&nbsp;&nbsp;`;
 
@@ -114,7 +115,7 @@ function Toolbar(div, idx, sliders, options) {
         let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
 
         // Grid - NEW!
-        // let btnGrid = `<button class="btn" id="btnGrid${idx}">Draw Grid&nbsp;&nbsp;`;
+        let btnGrid = `<button class="btn" id="btnGrid${idx}">Draw Grid&nbsp;&nbsp;`;
 
         // Attach toolbar to viewer
         div1.innerHTML = innerHtml + wPaint + btnDraw + (options.slidersOn ? btnSlide : "") + btnPolygon + btnGrid + btnMapMarker;
@@ -123,17 +124,16 @@ function Toolbar(div, idx, sliders, options) {
         // Slider
         sliderEvt();
 
-
-        //
-        // document.getElementById('btnGrid' + idx).addEventListener('click', function () {
-        //     alert("Coming real soon!");
-        // })
+        // TODO:
+        document.getElementById('btnGrid' + idx).addEventListener('click', function () {
+            alert("Coming real soon!");
+        });
 
         // Drawing tools
-        colorPaintEvt();
+        colorDrawEvt();
     }
 
-    function colorPaintEvt() {
+    function colorDrawEvt() {
         // Color picker event handler
         new Color(document.getElementById('mark' + idx));
     }
@@ -159,5 +159,4 @@ function Toolbar(div, idx, sliders, options) {
             }
         }
     }
-
 }

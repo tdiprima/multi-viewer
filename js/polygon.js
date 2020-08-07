@@ -1,126 +1,166 @@
-prototypeFabric.polygon = {
-    drawPolygon: function () {
-        polygonMode = true;
-        pointArray = [];
-        lineArray = [];
-        activeLine = {};
-    },
-    addPoint: function (options) {
-        let random = Math.floor(Math.random() * (max - min + 1)) + min;
-        let id = new Date().getTime() + random;
-        let layerX, layerY; // Mouse position relative to closest positioned ancestor element.
-        layerX = options.e.layerX;
-        layerY = options.e.layerY;
-        let circle = new fabric.Circle({
-            radius: 5,
-            fill: '#ffffff',
-            stroke: '#333333',
-            strokeWidth: 0.5,
-            left: (layerX / canvas.getZoom()),
-            top: (layerY / canvas.getZoom()),
-            selectable: false,
-            hasBorders: false,
-            hasControls: false,
-            originX: 'center',
-            originY: 'center',
-            id: id
-        });
+/**
+ * POLYGON handler
+ * @param button
+ * @param viewer
+ * @constructor
+ */
+function Polygon(button, viewer) {
 
-        if (pointArray.length === 0) {
-            circle.set({
-                fill: 'red'
-            })
-        }
+    const overlay = viewer.fabricjsOverlay({
+        scale: 1000
+    });
 
-        let points = [(layerX / canvas.getZoom()), (layerY / canvas.getZoom()), (layerX / canvas.getZoom()), (layerY / canvas.getZoom())];
-        let line = new fabric.Line(points, {
-            strokeWidth: 2,
-            fill: '#999999',
-            stroke: '#999999',
-            class: 'line',
-            originX: 'center',
-            originY: 'center',
-            selectable: false,
-            hasBorders: false,
-            hasControls: false,
-            evented: false
-        });
+    const canvas = overlay.fabricCanvas();
+    let idx;
 
-        if (activeShape) {
-            let pos = canvas.getPointer(options.e);
-            let points = activeShape.get("points");
-            points.push({
-                x: pos.x,
-                y: pos.y
-            });
-
-            let polygon = new fabric.Polygon(points, {
-                stroke: '#333333',
-                strokeWidth: 1,
-                fill: '#cccccc',
-                opacity: 0.1,
-                selectable: false,
-                hasBorders: false,
-                hasControls: false,
-                evented: false
-            });
-
-            canvas.remove(activeShape);
-            canvas.add(polygon);
-            activeShape = polygon;
-            canvas.renderAll();
-        } else {
-            let polyPoint = [{ x: (layerX / canvas.getZoom()), y: (layerY / canvas.getZoom()) }];
-            let polygon = new fabric.Polygon(polyPoint, {
-                stroke: '#333333',
-                strokeWidth: 1,
-                fill: '#cccccc',
-                opacity: 0.1,
-                selectable: false,
-                hasBorders: false,
-                hasControls: false,
-                evented: false
-            });
-            activeShape = polygon;
-            canvas.add(polygon);
-        }
-        activeLine = line;
-
-        pointArray.push(circle);
-        lineArray.push(line);
-
-        canvas.add(line);
-        canvas.add(circle);
-        canvas.selection = false;
-    },
-    generatePolygon: function (pointArray) {
-        let points = [];
-        $.each(pointArray, function (index, point) {
-            points.push({
-                x: point.left,
-                y: point.top
-            });
-            canvas.remove(point);
-        });
-
-        $.each(lineArray, function (index, line) {
-            canvas.remove(line);
-        });
-
-        canvas.remove(activeShape).remove(activeLine);
-        let polygon = new fabric.Polygon(points, {
-            stroke: '#333333',
-            strokeWidth: 0.5,
-            fill: 'red',
-            opacity: 1,
-            hasBorders: false,
-            hasControls: false
-        });
-        canvas.add(polygon);
-
-        activeLine = null;
-        activeShape = null;
-        polygonMode = false;
-        canvas.selection = true;
+    function isRealValue(obj) {
+        return obj && obj !== 'null' && obj !== 'undefined';
     }
-};
+
+    idx = button.id.trim(-1).replace("btnPolygon", ""); // something else
+    let roof = null;
+    let roofPoints = [];
+    let lines = [];
+    let lineCounter = 0;
+
+    let drawingObject = {
+        type: '',
+        background: '',
+        border: ''
+    };
+
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    button.addEventListener('click', function () {
+
+        if (drawingObject.type === "roof") {
+
+            drawingObject.type = "";
+            lines.forEach(function (value) {
+                canvas.remove(value);
+            });
+
+            //canvas.remove(lines[lineCounter - 1]);
+            roof = makeRoof(roofPoints);
+            canvas.add(roof);
+            canvas.renderAll();
+
+        } else {
+            drawingObject.type = "roof"; // roof type
+        }
+    });
+
+    // Canvas Drawing
+    let x = 0;
+    let y = 0;
+
+    // Double-click = finish.
+    fabric.util.addListener(window, 'dblclick', function () {
+
+        drawingObject.type = "";
+        lines.forEach(function (value) {
+            canvas.remove(value);
+        });
+
+        //canvas.remove(lines[lineCounter - 1]);
+        roof = makeRoof(roofPoints);
+        canvas.add(roof);
+        canvas.renderAll();
+
+        //clear arrays
+        roofPoints = [];
+        lines = [];
+        lineCounter = 0;
+
+        viewer.gestureSettingsMouse.clickToZoom = true;
+
+    });
+
+    // Add points
+    canvas.on('mouse:down', function (options) {
+        viewer.gestureSettingsMouse.clickToZoom = false;
+
+        if (drawingObject.type === "roof") {
+
+            canvas.selection = false;
+            setStartingPoint(options); // set x,y
+            roofPoints.push(new Point(x, y));
+            let points = [x, y, x, y];
+
+            lines.push(new fabric.Line(points, {
+                strokeWidth: 3,
+                selectable: false,
+                stroke: 'red'
+            }));
+            // }).setOriginX(x).setOriginY(y));
+
+            canvas.add(lines[lineCounter]);
+
+            lineCounter++;
+
+            canvas.on('mouse:up', function () {
+                canvas.selection = true;
+            });
+        } else {
+            viewer.gestureSettingsMouse.clickToZoom = true;
+            // Disable fabric selection; otherwise, you get the weird purple box.
+            overlay._fabricCanvas.selection = false;
+        }
+    });
+
+    canvas.on('mouse:move', function (options) {
+
+        if (isRealValue(lines[0]) && drawingObject.type === "roof") {
+
+            setStartingPoint(options);
+            lines[lineCounter - 1].set({
+                "x2": x,
+                "y2": y
+            });
+            canvas.renderAll();
+        }
+    });
+
+    canvas.on("after:render", function () { canvas.calcOffset(); });
+    function setStartingPoint(options) {
+        // TODO: This is wrong?
+        x = options.e.pageX - canvas._offset.left;
+        y = options.e.pageY - canvas._offset.top;
+    }
+
+    function makeRoof(roofPoints) {
+
+        let left = findPaddingForRoof(roofPoints, 'x');
+        let top = findPaddingForRoof(roofPoints, 'y');
+
+        roofPoints.push(new Point(roofPoints[0].x, roofPoints[0].y))
+
+        let roof = new fabric.Polyline(roofPoints, {
+            fill: 'rgba(0,0,0,0)',
+            stroke: '#58c'
+        });
+
+        roof.set({
+            left: left,
+            top: top,
+        });
+
+        return roof;
+    }
+
+    function findPaddingForRoof(roofPoints, coord) {
+        let result = 999999;
+
+        for (let i = 0; i < lineCounter; i++) {
+            if (roofPoints[i][coord] < result) {
+                result = roofPoints[i][coord];
+            }
+        }
+
+        return Math.abs(result);
+    }
+
+}

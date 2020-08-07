@@ -170,8 +170,8 @@ class nViewer {
             if (options.toolbarOn) {
                 let draw = document.getElementById('btnDraw' + idx);
                 let poly = document.getElementById('btnPolygon' + idx)
-                new Paint(draw, viewer);
-                new Paint(poly, viewer);
+                new FreeDrawing(draw, viewer);
+                new Polygon(poly, viewer);
             }
 
             // SLIDER EVENT LISTENER
