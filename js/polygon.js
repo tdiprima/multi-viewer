@@ -1,8 +1,9 @@
 /**
  * POLYGON handler
- * @param button
- * @param viewer
- * @constructor
+ * mouse:down
+ * mouse:up
+ * mouse:move
+ * after:render
  */
 function Polygon(button, viewer) {
 
@@ -33,6 +34,11 @@ function Polygon(button, viewer) {
     }
 
     button.addEventListener('click', function () {
+
+        // TODO: TEMP
+        for (var prop in canvas.__eventListeners) {
+            console.log(prop);
+        }
 
         if (drawingObject.type === "roof") {
 
@@ -133,20 +139,30 @@ function Polygon(button, viewer) {
 
     function makeRoof(roofPoints) {
 
+        let roof = {};
         let left = findPaddingForRoof(roofPoints, 'x');
         let top = findPaddingForRoof(roofPoints, 'y');
+        console.log('left', left);
+        console.log('top', top);
 
-        roofPoints.push(new Point(roofPoints[0].x, roofPoints[0].y))
+        // TODO: Canvas.
+        if (left === 999999 || top === 999999) {
+            return;
+        } else {
+            roofPoints.push(new Point(roofPoints[0].x, roofPoints[0].y))
 
-        let roof = new fabric.Polyline(roofPoints, {
-            fill: 'rgba(0,0,0,0)',
-            stroke: '#58c'
-        });
-
-        roof.set({
-            left: left,
-            top: top,
-        });
+            roof = new fabric.Polyline(roofPoints, {
+                strokeWidth: 3,
+                fill: 'rgba(0,0,0,0)',
+                stroke: 'green'
+                // stroke: '#58c'
+            });
+    
+            roof.set({
+                left: left,
+                top: top,
+            });
+        }
 
         return roof;
     }

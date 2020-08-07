@@ -132,7 +132,6 @@ class nViewer {
                     chkPan = document.getElementById("chkPan" + idx);
                     chkZoom = document.getElementById("chkZoom" + idx);
                 }
-
             }
         }
 
@@ -168,10 +167,10 @@ class nViewer {
 
             // Paintbrush handler
             if (options.toolbarOn) {
-                let draw = document.getElementById('btnDraw' + idx);
-                let poly = document.getElementById('btnPolygon' + idx)
-                new FreeDrawing(draw, viewer);
-                // new Polygon(poly, viewer);
+                // TODO: uncomment
+                // new FreeDrawing(document.getElementById('btnDraw' + idx), viewer);
+                new Polygon(document.getElementById('btnPolygon' + idx), viewer);
+                new Grid(document.getElementById('btnGrid' + idx), viewer)
             }
 
             // SLIDER EVENT LISTENER

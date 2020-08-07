@@ -34,6 +34,7 @@ function Toolbar(div, idx, sliders, options) {
         <a id="btnDraw${idx}" href="#"><i class="fa fa-pencil-alt"></i> Draw</a>
         <a id="btnPolygon${idx}" href="#"><i class="fa fa-draw-polygon"></i> Draw polygon</a>
         <a id="btnGrid${idx}" href="#"><i class="fa fa-draw"></i> Draw grid</a>
+        <a id="btnMarker${idx}" href="#"><i class="fa fa-draw"></i> Activate marker</a>
         <a id="btnSlide${idx}" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
         <a id="toggle-overlay" style="display: none" href="#"><i class="fa fa-map-marker-alt"></i> Hide markers</a>
     </div>`;
@@ -96,7 +97,7 @@ function Toolbar(div, idx, sliders, options) {
         // Color & paint
         colorDrawEvt();
 
-        temp();
+        // temp();
 
     }
 
@@ -132,7 +133,7 @@ function Toolbar(div, idx, sliders, options) {
         // Drawing tools
         colorDrawEvt();
 
-        temp();
+        // temp();
     }
 
 
