@@ -168,7 +168,10 @@ class nViewer {
 
             // Paintbrush handler
             if (options.toolbarOn) {
-                new Paint(document.getElementById('btnDraw' + idx), viewer);
+                let draw = document.getElementById('btnDraw' + idx);
+                let poly = document.getElementById('btnPolygon' + idx)
+                new Paint(draw, viewer);
+                new Paint(poly, viewer);
             }
 
             // SLIDER EVENT LISTENER

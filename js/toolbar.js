@@ -25,10 +25,14 @@ function Toolbar(div, idx, sliders, options) {
 
     innerHtml += `<a data-page="fold${idx}" href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Menu</a>`
 
+    /**
+     * Fold-out menu
+     */
     this.menu = function name() {
         innerHtml += `<div class="fold scrollmenu" id="fold${idx}" style="max-width:400px;margin:0 auto;">
         <a href="#"><mark id="mark${idx}" style="background-color: rgb(0, 255, 255);">#00ffff</mark></a>
         <a id="btnDraw${idx}" href="#"><i class="fa fa-pencil-alt"></i> Draw</a>
+        <a id="btnPolygon${idx}" href="#"><i class="fa fa-draw-polygon"></i> Draw polygon</a>
         <a id="btnSlide${idx}" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
         <a id="toggle-overlay" style="display: none" href="#"><i class="fa fa-map-marker-alt"></i> Hide markers</a>
     </div>`;
@@ -36,11 +40,6 @@ function Toolbar(div, idx, sliders, options) {
         // Attach toolbar
         div1.innerHTML = innerHtml;
         div.appendChild(div1);
-        // let blah = document.getElementById('blah' + idx);
-        // blah.addEventListener('click', function () {
-        //     alert('blah!');
-        //     // return false;
-        // });
 
         // Menu animation
         $("a").on('click', function () {
@@ -95,7 +94,9 @@ function Toolbar(div, idx, sliders, options) {
 
     }
 
-
+    /**
+     * Buttons
+     */
     this.buttons = function () {
 
         // Slider button
@@ -110,7 +111,7 @@ function Toolbar(div, idx, sliders, options) {
         let btnMapMarker = `<button class="btn" id="toggle-overlay" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
 
         // Polygon - NEW!
-        // let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
+        let btnPolygon = `<button class="btn" id="btnPolygon${idx}"><i class='fas fa-draw-polygon'></i> Draw Polygon</button>&nbsp;&nbsp;`;
 
         // Grid - NEW!
         // let btnGrid = `<button class="btn" id="btnGrid${idx}">Draw Grid&nbsp;&nbsp;`;
@@ -122,15 +123,13 @@ function Toolbar(div, idx, sliders, options) {
         // Slider
         sliderEvt();
 
-        // document.getElementById("btnPolygon" + idx).addEventListener('click', function () {
-        //     alert("Coming soon!");
-        // });
+
         //
         // document.getElementById('btnGrid' + idx).addEventListener('click', function () {
         //     alert("Coming real soon!");
         // })
 
-        // Color & paint
+        // Drawing tools
         colorPaintEvt();
     }
 
