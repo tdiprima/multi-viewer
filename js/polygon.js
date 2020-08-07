@@ -11,13 +11,7 @@ function Polygon(button, viewer) {
     });
 
     const canvas = overlay.fabricCanvas();
-    let idx;
-
-    function isRealValue(obj) {
-        return obj && obj !== 'null' && obj !== 'undefined';
-    }
-
-    idx = button.id.trim(-1).replace("btnPolygon", ""); // something else
+    let idx = button.id.trim(-1).replace("btnPolygon", "");
     let roof = null;
     let roofPoints = [];
     let lines = [];
@@ -28,6 +22,10 @@ function Polygon(button, viewer) {
         background: '',
         border: ''
     };
+
+    function isRealValue(obj) {
+        return obj && obj !== 'null' && obj !== 'undefined';
+    }
 
     function Point(x, y) {
         this.x = x;
@@ -58,7 +56,9 @@ function Polygon(button, viewer) {
     let y = 0;
 
     // Double-click = finish.
-    fabric.util.addListener(window, 'dblclick', function () {
+    // TODO: Consider another way?
+    // fabric.util.addListener(window, 'dblclick', function () {
+    fabric.util.addListener(document, 'dblclick', function () {
 
         drawingObject.type = "";
         lines.forEach(function (value) {
