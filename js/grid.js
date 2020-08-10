@@ -6,10 +6,10 @@
  */
 function Grid(button, viewer) {
 
-    const overlay = viewer.fabricjsOverlay({ scale: 1000});
+    const overlay = viewer.fabricjsOverlay({ scale: 1000 });
     const canvas = overlay.fabricCanvas();
     let str = button.id;
-    let idx = parseInt(str.charAt(str.length-1));
+    let idx = parseInt(str.charAt(str.length - 1));
     let cellX = [], cellY = [];
     const sizeOfBox = 50;
     const width = canvas.width;
@@ -21,19 +21,7 @@ function Grid(button, viewer) {
         cellY[imoY + 1] = imoY * sizeOfBox;
     }
     let gridAdded = false;
-    let pawn = false;
-
-    // let my_event_setter = function (toggle) {
-    //     let lvo = {
-    //         'object:over': function (e) {
-    //             mouseover_handler(e)
-    //         }
-    //     };
-    //     toggle ? my_fabric_canvas.on(lvo) : my_fabric_canvas.off(lvo);
-    // }
-    // let mouseover_handler = function (e) {
-    //     my_event_setter(false);
-    // }
+    let toggle = false;
 
     function makeLine(coords) {
         return new fabric.Line(coords, {
@@ -43,23 +31,16 @@ function Grid(button, viewer) {
         });
     }
 
-    // viewer.addHandler('update-viewport', function () {
-    //     var canvas = viewer.drawer.canvas;
-    //     var ctx = viewer.drawer.context;
-    //     ctx.strokeStyle = 'red';
-    //     ctx.lineWidth = 10;
-    //     ctx.strokeRect(2, 2, canvas.width - 4, canvas.height - 4);
-    // });
-    // viewer.addHandler('update-viewport', mouseCoords);
-
-
     // Mouse move event-handler
     function mouseCoords(e) {
         // let c = viewer.drawer.canvas;
+        let pointer = e.absolutePointer;
+        // let pointer = e.pointer;
         let ctx = viewer.drawer.context;
-
-        let cx = e.clientX; // get horizontal coordinate of mouse pointer
-        let cy = e.clientY; // vertical coordinate
+        // let cx = e.clientX; // get horizontal coordinate of mouse pointer
+        // let cy = e.clientY; // vertical coordinate
+        let cx = pointer.x;
+        let cy = pointer.y;
 
         let x = cx / sizeOfBox;
         let y = cy / sizeOfBox;
@@ -88,31 +69,27 @@ function Grid(button, viewer) {
 
     });
 
+
     let btnMarker = document.getElementById('btnMarker' + idx);
-    btnMarker.addEventListener('click', function () {
+    btnMarker.addEventListener('click', markerHandler);
 
-        for (let prop in canvas.__eventListeners) {
-            console.log('m', prop);
-        }
+    function markerHandler() {
 
-        console.log('pawn', pawn);
-        if (pawn) {
+        if (toggle) {
             canvas.off("mouse:move", mouseCoords);
-            pawn = false;
-            btnMarker.innerHTML = "Activate Marker";
+            btnMarker.innerHTML = "Activate marker";
+            toggle = false;
 
         } else {
             if (!gridAdded) {
                 alert("Add a grid first!");
             }
             else {
-                pawn = true;
                 canvas.on("mouse:move", mouseCoords);
-                btnMarker.innerHTML = "Marker Activated";
+                btnMarker.innerHTML = "Marker activated";
+                toggle = true;
             }
         }
-        pawn = false;
-
-    });
+    }
 
 }
