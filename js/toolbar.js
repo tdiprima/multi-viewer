@@ -70,7 +70,7 @@ function Toolbar(div, idx, sliders, options) {
                         }, 200)
                             .animate({
                                 height: "0"
-                            }, 200, function () {
+                            }, 100, function () {
                                 // this happens after above animations are complete
                                 $(this).removeClass("active");
 
@@ -82,10 +82,10 @@ function Toolbar(div, idx, sliders, options) {
                             .addClass("active")
                             .animate({
                                 height: "75px"
-                            }, 700, 'linear')
+                            }, 100, 'linear')
                             .animate({
                                 width: "500px"
-                            }, 400, 'linear')
+                            }, 100, 'linear')
                     }
                 }
             }

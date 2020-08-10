@@ -34,10 +34,6 @@ function Polygon(button, viewer) {
 
     button.addEventListener('click', function () {
 
-        for (let prop in canvas.__eventListeners) {
-            console.log(prop);
-        }
-
         if (drawingObject.type === "roof") {
 
             drawingObject.type = "";
@@ -45,7 +41,6 @@ function Polygon(button, viewer) {
                 canvas.remove(value);
             });
 
-            //canvas.remove(lines[lineCounter - 1]);
             roof = makeRoof(roofPoints);
             canvas.add(roof);
             canvas.renderAll();
@@ -60,19 +55,15 @@ function Polygon(button, viewer) {
     let y = 0;
 
     // Double-click = finish.
-    // TODO: Consider another way?
-    // fabric.util.addListener(window, 'dblclick', function () {
-    fabric.util.addListener(document, 'dblclick', function () {
-        for (let prop in canvas.__eventListeners) {
-            console.log(prop);
-        }
+    canvas.on('mouse:dblclick', finishPolygon);
+
+    function finishPolygon() {
 
         drawingObject.type = "";
         lines.forEach(function (value) {
             canvas.remove(value);
         });
 
-        //canvas.remove(lines[lineCounter - 1]);
         roof = makeRoof(roofPoints);
         canvas.add(roof);
         canvas.renderAll();
@@ -84,13 +75,10 @@ function Polygon(button, viewer) {
 
         viewer.gestureSettingsMouse.clickToZoom = true;
 
-    });
+    }
 
     // Add points
     canvas.on('mouse:down', function (options) {
-        for (let prop in canvas.__eventListeners) {
-            console.log(prop);
-        }
         viewer.gestureSettingsMouse.clickToZoom = false;
 
         if (drawingObject.type === "roof") {
@@ -136,7 +124,6 @@ function Polygon(button, viewer) {
 
     canvas.on("after:render", function () { canvas.calcOffset(); });
     function setStartingPoint(options) {
-        // TODO: This is wrong?
         x = options.e.pageX - canvas._offset.left;
         y = options.e.pageY - canvas._offset.top;
     }
@@ -146,10 +133,7 @@ function Polygon(button, viewer) {
         let roof = {};
         let left = findPaddingForRoof(roofPoints, 'x');
         let top = findPaddingForRoof(roofPoints, 'y');
-        console.log('left', left);
-        console.log('top', top);
 
-        // TODO: Canvas.
         if (left === 999999 || top === 999999) {
             return;
         } else {
@@ -161,7 +145,7 @@ function Polygon(button, viewer) {
                 stroke: 'green'
                 // stroke: '#58c'
             });
-    
+
             roof.set({
                 left: left,
                 top: top,

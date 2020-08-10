@@ -3,6 +3,11 @@
  * mouse:down
  * mouse:up
  * path:created
+ * selection:created
+ * object:modified
+ * object:scaling
+ * object:moving
+ * object:rotating
  */
 function FreeDrawing(button, viewer) {
 
@@ -23,7 +28,6 @@ function FreeDrawing(button, viewer) {
         obj.lockMovementY = true;
 
         function addDeleteBtn(x, y, el) {
-            // console.log(x, y, el);
             $(".deleteBtn").remove();
             let btnLeft = x - 10;
             let btnTop = y - 10;
@@ -31,11 +35,10 @@ function FreeDrawing(button, viewer) {
             deleteBtn.src = "./img/delete-icon.png";
             deleteBtn.classList.add('deleteBtn')
             deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
-            deleteBtn.alt = "Delete Me";
+            deleteBtn.alt = "delete object";
             el.appendChild(deleteBtn);
         }
 
-        // object:selected this event is deprecated as of 4.0.0
         canvas.on('selection:created', function (e) {
             let el = this.lowerCanvasEl.parentElement;
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
@@ -71,9 +74,7 @@ function FreeDrawing(button, viewer) {
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function () {
-            for (let prop in canvas.__eventListeners) {
-                console.log(prop);
-            }
+
             // this = deleteBtn
             if (canvas.getActiveObject()) {
                 canvas.remove(canvas.getActiveObject());
@@ -125,10 +126,6 @@ function FreeDrawing(button, viewer) {
 
     // START DRAW
     button.addEventListener('click', function () {
-
-        for (let prop in canvas.__eventListeners) {
-            console.log(prop);
-        }
 
         paintBrush.color = mark.innerHTML;
         setBrushWidth(viewer);

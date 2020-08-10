@@ -55,10 +55,6 @@ function Grid(button, viewer) {
 
     button.addEventListener('click', function () {
 
-        for (let prop in canvas.__eventListeners) {
-            console.log('b', prop);
-        }
-
         gridAdded = false;
         for (let i = 0; i < numBoxes; i++) {
             canvas.add(makeLine([i * sizeOfBox, 0, i * sizeOfBox, width]));
@@ -68,14 +64,10 @@ function Grid(button, viewer) {
 
     });
 
-
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
     function markerHandler() {
-        for (let prop in canvas.__eventListeners) {
-            console.log('m', prop);
-        }
 
         if (toggle) {
             canvas.off("mouse:move", mouseCoords);

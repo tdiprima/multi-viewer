@@ -52,13 +52,6 @@ class nViewer {
             });
 
             viewer.world.addHandler("add-item", function (data) {
-                // try {
-                //     console.log(viewer.world.getItemAt(0).source);
-                // }
-                // catch (err) {
-                //     console.log(err.message);
-                // }
-                // console.log('data', data);
 
                 if (viewer.world.getItemCount() === 2) {
                     // colorize layer 2
@@ -104,8 +97,8 @@ class nViewer {
             let d = document.createDocumentFragment();
             let dd = document.createElement('div');
 
+            // SLIDERS
             if (options.slidersOn) {
-                // Sliders
                 let len = 2;
                 for (let i = 0; i < len; i++) {
                     let range = document.createElement('input');
@@ -125,9 +118,10 @@ class nViewer {
                 }
             }
 
+            // TOOLBAR
             if (options.toolbarOn) {
-                // new Toolbar(div, idx, sliders, options).buttons();
                 new Toolbar(div, idx, sliders, options).menu();
+                // CHECKBOXES
                 if (options.multipleOn) {
                     chkPan = document.getElementById("chkPan" + idx);
                     chkZoom = document.getElementById("chkZoom" + idx);
@@ -165,12 +159,11 @@ class nViewer {
                 crossOriginPolicy: 'Anonymous'
             });
 
-            // Paintbrush handler
+            // DRAWING TOOLS
             if (options.toolbarOn) {
-                // TODO: uncomment
-                // new FreeDrawing(document.getElementById('btnDraw' + idx), viewer);
+                new FreeDrawing(document.getElementById('btnDraw' + idx), viewer);
                 new Polygon(document.getElementById('btnPolygon' + idx), viewer);
-                new Grid(document.getElementById('btnGrid' + idx), viewer)
+                new Grid(document.getElementById('btnGrid' + idx), viewer);
             }
 
             // SLIDER EVENT LISTENER
