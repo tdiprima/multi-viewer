@@ -2,7 +2,7 @@
  * GRID handler
  * mouse:down
  * mouse:up
- * mouse:move - to be.
+ * mouse:move
  */
 function Grid(button, viewer) {
 
@@ -65,7 +65,6 @@ function Grid(button, viewer) {
             canvas.add(makeLine([0, i * sizeOfBox, width, i * sizeOfBox]));
         }
         gridAdded = true;
-        // $("#btnGrid").on("click", create_grid);
 
     });
 
@@ -74,6 +73,9 @@ function Grid(button, viewer) {
     btnMarker.addEventListener('click', markerHandler);
 
     function markerHandler() {
+        for (let prop in canvas.__eventListeners) {
+            console.log('m', prop);
+        }
 
         if (toggle) {
             canvas.off("mouse:move", mouseCoords);
