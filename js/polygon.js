@@ -12,7 +12,6 @@ function Polygon(button, viewer) {
     });
 
     const canvas = overlay.fabricCanvas();
-    let idx = button.id.trim(-1).replace("btnPolygon", "");
     let roof = null;
     let roofPoints = [];
     let lines = [];
@@ -35,8 +34,7 @@ function Polygon(button, viewer) {
 
     button.addEventListener('click', function () {
 
-        // TODO: TEMP
-        for (var prop in canvas.__eventListeners) {
+        for (let prop in canvas.__eventListeners) {
             console.log(prop);
         }
 
@@ -65,6 +63,9 @@ function Polygon(button, viewer) {
     // TODO: Consider another way?
     // fabric.util.addListener(window, 'dblclick', function () {
     fabric.util.addListener(document, 'dblclick', function () {
+        for (let prop in canvas.__eventListeners) {
+            console.log(prop);
+        }
 
         drawingObject.type = "";
         lines.forEach(function (value) {
@@ -87,6 +88,9 @@ function Polygon(button, viewer) {
 
     // Add points
     canvas.on('mouse:down', function (options) {
+        for (let prop in canvas.__eventListeners) {
+            console.log(prop);
+        }
         viewer.gestureSettingsMouse.clickToZoom = false;
 
         if (drawingObject.type === "roof") {
