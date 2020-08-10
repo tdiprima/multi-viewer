@@ -11,11 +11,10 @@
  */
 function FreeDrawing(button, viewer) {
 
-    const overlay = viewer.fabricjsOverlay({
-        scale: 1000
-    });
+    let obj = fb.create(viewer);
+    const overlay = obj.o;
+    const canvas = obj.c;
 
-    const canvas = overlay.fabricCanvas();
     const idx = button.id.trim(-1).replace("btnDraw", "");
     const paintBrush = overlay.fabricCanvas().freeDrawingBrush;
     const mark = document.getElementById('mark' + idx);
