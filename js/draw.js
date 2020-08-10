@@ -71,6 +71,9 @@ function FreeDrawing(button, viewer) {
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function () {
+            for (let prop in canvas.__eventListeners) {
+                console.log(prop);
+            }
             // this = deleteBtn
             if (canvas.getActiveObject()) {
                 canvas.remove(canvas.getActiveObject());
@@ -122,8 +125,8 @@ function FreeDrawing(button, viewer) {
 
     // START DRAW
     button.addEventListener('click', function () {
-        // TODO: TEMP
-        for (var prop in canvas.__eventListeners) {
+
+        for (let prop in canvas.__eventListeners) {
             console.log(prop);
         }
 
