@@ -6,8 +6,8 @@
  */
 function Grid(button, viewer) {
 
-    const overlay = viewer.fabricjsOverlay({ scale: 1000 });
-    const canvas = overlay.fabricCanvas();
+    const canvas = fb.create(viewer).c;
+
     let str = button.id;
     let idx = parseInt(str.charAt(str.length - 1));
     let cellX = [], cellY = [];
