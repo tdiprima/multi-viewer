@@ -161,7 +161,8 @@ class nViewer {
 
             // DRAWING TOOLS
             if (options.toolbarOn) {
-                new FreeDrawing(document.getElementById('btnDraw' + idx), viewer);
+                new markupTools(idx, viewer);
+                // new FreeDrawing(document.getElementById('btnDraw' + idx), viewer);
                 // new Polygon(document.getElementById('btnPolygon' + idx), viewer);
                 // new Grid(document.getElementById('btnGrid' + idx), viewer);
             }
