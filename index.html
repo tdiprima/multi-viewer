@@ -7,8 +7,11 @@
     <title>TCGA Segmentation Data</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/scroll_menu.css">
-    <link href="./js/vendor/color-picker/color-picker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./js/vendor/color-picker/color-picker.min.css">
     <link rel="stylesheet" href="./js/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
+    <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all">
+
 </head>
 
 <body>
@@ -23,8 +26,6 @@
     <script src="./js/vendor/jquery-3.5.1.min.js"></script>
     <script src="./js/vendor/fabric/fabric.adapted.js"></script>
     <script src="./js/vendor/openseadragon/openseadragon-filtering.js"></script>
-    <script src="./js/vendor/openseadragon/viewerinputhook.js"></script>
-    <script src="./js/vendor/openseadragon/imaginghelper.js"></script>
     <script src="./js/dropdown.js"></script>
     <script src="./js/map-marker.js"></script>
     <script src="./js/vendor/color-picker/color-picker.min.js"></script>
@@ -55,8 +56,7 @@
             arr.push(v);
         }
 
-        // Add dropdown to the page
-        // (Now that we have 1 or more viewers created)
+        // Viewers created; add dropdown to page
         new Dropdown(arr, 'selections', './json/tcga.json');
 
         function test() {
@@ -79,8 +79,8 @@
         // test();
         live();
 
-        // Controller to keep viewers in sync
-        sync = new Synchronizer(arr);  // Pass an array of nViewers
+        // Pan zoom controller
+        sync = new Synchronizer(arr);  // Pass array of nViewers
 
     </script>
 
