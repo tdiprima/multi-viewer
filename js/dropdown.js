@@ -14,6 +14,34 @@ class Dropdown {
         let data = {};
         initialize();
 
+        // Speed up calls to hasOwnProperty
+        let hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        function isEmpty(obj) {
+
+            // null and undefined are "empty"
+            if (obj == null) return true;
+
+            // Assume if it has a length property with a non-zero value
+            // that that property is correct.
+            if (obj.length > 0)    return false;
+            if (obj.length === 0)  return true;
+
+            // If it isn't an object at this point
+            // it is empty, but it can't be anything *but* empty
+            // Is it empty?  Depends on your application.
+            if (typeof obj !== "object") return true;
+
+            // Otherwise, does it have any properties of its own?
+            // Note that this doesn't handle
+            // toString and valueOf enumeration bugs in IE < 9
+            for (var key in obj) {
+                if (hasOwnProperty.call(obj, key)) return false;
+            }
+
+            return true;
+        }
+
         function initialize() {
             let getSlideData = async function () {
                 return (await fetch(dataSource)).json();
@@ -21,8 +49,10 @@ class Dropdown {
             let x = getSlideData();
             x.then(function (result) {
                 data = result;
-                initTypes();
-                initImages();
+                if (!isEmpty(data)) {
+                    initTypes();
+                    initImages();
+                }
             });
         }
 
@@ -87,23 +117,26 @@ class Dropdown {
         }
 
         function initImages() {
-            let d = document.createDocumentFragment();
-            let newDiv = document.createElement("div");
-            newDiv.innerHTML = "Image&nbsp;";
-            d.appendChild(newDiv);
-            imageSelect = document.createElement("select");
-            imageSelect.id = "imageids";
+
             let images = data[cancertypes[0]];
-            images.forEach(function (item) {
-                let opt = document.createElement('option');
-                opt.innerHTML = item.id;
-                opt.value = item.id;
-                imageSelect.appendChild(opt);
-            });
-            imageSelect.addEventListener("change", selectImage);
-            newDiv.appendChild(imageSelect);
-            maindiv.appendChild(d);
+            if (typeof images !== 'undefined') {
+                let d = document.createDocumentFragment();
+                let newDiv = document.createElement("div");
+                newDiv.innerHTML = "Image&nbsp;";
+                d.appendChild(newDiv);
+                imageSelect = document.createElement("select");
+                imageSelect.id = "imageids";
+
+                images.forEach(function (item) {
+                    let opt = document.createElement('option');
+                    opt.innerHTML = item.id;
+                    opt.value = item.id;
+                    imageSelect.appendChild(opt);
+                });
+                imageSelect.addEventListener("change", selectImage);
+                newDiv.appendChild(imageSelect);
+                maindiv.appendChild(d);
+            }
         }
     }
-
 }
