@@ -43,7 +43,7 @@ demo.execute = function (num_viewers, prod, options) {
     }
 
     // Viewers created; add dropdown to page
-    new Dropdown(arr, 'selections', '../json/tcga.json');
+    new Dropdown(arr, 'selections', './json/tcga.json');
 
     function test() {
         // TESTING
