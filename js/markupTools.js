@@ -94,7 +94,7 @@ function markupTools(idx, viewer) {
      * POLYGON handler
      */
 
-    let roof = null;
+    let roof = new fabric.Polyline();
     let roofPoints = [];
     let lines = [];
     let lineCounter = 0;
@@ -115,8 +115,7 @@ function markupTools(idx, viewer) {
     }
 
 
-    btnPolygon.addEventListener('click', function (e) {
-        console.log('e', e);
+    btnPolygon.addEventListener('click', function () {
         if (drawingObject.type === "roof") {
             drawingObject.type = "";
             lines.forEach(function (value) {
@@ -138,13 +137,19 @@ function markupTools(idx, viewer) {
     canvas.on('mouse:dblclick', finishPolygon);
 
     function finishPolygon() {
+
         drawingObject.type = "";
         lines.forEach(function (value) {
             canvas.remove(value);
         });
+
         roof = makeRoof(roofPoints);
-        canvas.add(roof);
-        canvas.renderAll();
+
+        if (Array.isArray(roof.points) && roof.points.length) {
+            canvas.add(roof);
+            canvas.renderAll();
+        }
+
         //clear arrays
         roofPoints = [];
         lines = [];
@@ -212,10 +217,9 @@ function markupTools(idx, viewer) {
     function makeRoof(roofPoints) {
         let left = findPaddingForRoof(roofPoints, 'x');
         let top = findPaddingForRoof(roofPoints, 'y');
-        if (left === 999999 || top === 999999) {
-            return;
-        } else {
-            roofPoints.push(new Point(roofPoints[0].x, roofPoints[0].y))
+
+        if (left !== 999999 && top !== 999999) {
+            roofPoints.push(new Point(roofPoints[0].x, roofPoints[0].y));
             roof = new fabric.Polyline(roofPoints, {
                 strokeWidth: 3,
                 fill: 'rgba(0,0,0,0)',
