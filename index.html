@@ -43,8 +43,8 @@
         const options = {
             filterOn: true,
             slidersOn: true,
-            toolbarOn: true,
-            multipleOn: true,
+            toolbarOn: false,
+            multipleOn: false,
             paintbrushColor: "#0ff"
         };
 
@@ -76,8 +76,8 @@
             });
         }
 
-        test();
-        // live();
+        // test();
+        live();
 
         // Controller to keep viewers in sync
         sync = new Synchronizer(arr);  // Pass an array of nViewers
