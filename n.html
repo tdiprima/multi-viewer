@@ -3,14 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quad-Viewer</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/scroll_menu.css">
-    <link rel="stylesheet" href="./js/vendor/color-picker/color-picker.min.css">
-    <link rel="stylesheet" href="./js/vendor/font-awesome-4.7.0/css/font-awesome.min.css" />
-    <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
-    <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>N-Viewer</title>
+    <link href="./css/style.css" rel="stylesheet">
+    <link href="./css/scroll_menu.css" rel="stylesheet">
+    <link href="./js/vendor/color-picker/color-picker.min.css" rel="stylesheet">
+    <link href="./js/vendor/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all" rel="stylesheet">
 
 </head>
 
@@ -19,7 +18,7 @@
 
     <div id="selections"></div>
     <div><br>&nbsp;</div>
-    <div id="viewers" class="container"></div>
+    <div class="container" id="viewers"></div>
 
     <script src="./js/vendor/openseadragon/openseadragon.js"></script>
     <script src="./js/vendor/fabric/openseadragon-fabricjs-overlay.js"></script>
@@ -35,59 +34,9 @@
     <script src="./js/nViewer.js"></script>
     <script src="./js/synchronizer.js"></script>
 
-    <script>
-        // Variables
-        const arr = [];
-        const style = "dragonbox";
-        const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
-        const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
-        const options = {
-            filterOn: true,
-            slidersOn: true,
-            toolbarOn: true,
-            multipleOn: true,
-            paintbrushColor: "#0ff",
-            viewerOpts: {
-                showFullPageControl: false,
-                showHomeControl: true,
-                showZoomControl: false
-            }
-        };
+    <script src="js/demo.js"></script>
+    <script>demo.execute(6, true)</script>
 
-        // Create viewer(s)
-        const num_viewers = 6;
-        for (let i = 0; i < num_viewers; i++) {
-            let v = new nViewer("viewer" + i, style, "viewers", options);
-            arr.push(v);
-        }
-
-        // Viewers created; add dropdown to page
-        new Dropdown(arr, 'selections', './json/tcga.json');
-
-        function test() {
-            // TESTING
-            let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-            arr.forEach(function (elem) {
-                elem.getViewer().open(dzi)
-            });
-        }
-
-        function live() {
-            // Set viewer source
-            arr.forEach(function (elem) {
-                elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
-                iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
-                    [1.0, 1.0]);
-            });
-        }
-
-        // test();
-        live();
-
-        // Pan zoom controller
-        sync = new Synchronizer(arr);  // Pass array of nViewers
-
-    </script>
 </body>
 
 </html>
