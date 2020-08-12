@@ -154,7 +154,7 @@ class nViewer {
                 id: viewerDivId,
                 showFullPageControl: options.viewerOpts.showFullPageControl,
                 showHomeControl: options.viewerOpts.showHomeControl,
-                prefixUrl: "./js/vendor/openseadragon/images/",
+                prefixUrl: "./js/lib/openseadragon/images/",
                 showZoomControl: options.viewerOpts.showZoomControl,
                 crossOriginPolicy: 'Anonymous'
             });
