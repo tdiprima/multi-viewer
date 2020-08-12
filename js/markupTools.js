@@ -12,6 +12,24 @@ function markupTools(idx, viewer) {
     const btnPolygon = document.getElementById('btnPolygon' + idx);
     const btnDraw = document.getElementById('btnDraw' + idx);
 
+
+    function clearClassList(element) {
+        let classList = element.classList;
+        while (classList.length > 0) {
+            classList.remove(classList.item(0));
+        }
+    }
+
+    function toggleButton(btn) {
+        let isOn = btn.classList.contains('btnOn');
+        clearClassList(btn);
+        if (isOn) {
+            btn.classList.add('btn');
+        } else {
+            btn.classList.add('btnOn');
+        }
+    }
+
     /**
      * GRID handler
      */
@@ -323,34 +341,28 @@ function markupTools(idx, viewer) {
     }
 
     function setBrushWidth(viewer) {
-        paintBrush.width = 20 / viewer.viewport.getZoom(true);
+        paintBrush.width = 10 / viewer.viewport.getZoom(true);
     }
 
-    function clearClassList(element) {
-        let classList = element.classList;
-        while (classList.length > 0) {
-            classList.remove(classList.item(0));
-        }
-    }
+
 
     // param: viewer, button, canvas
     function toggleDraw(v, btn, c) {
         let mouseTracker = v.outerTracker;
+
         if (btn.classList.contains('btnOn')) {
             // End Draw
             v.setMouseNavEnabled(true);
             mouseTracker.setTracking(true);
-            clearClassList(btn);
-            btn.classList.add('btn');
             c.isDrawingMode = false;
         } else {
             // Start Draw
             v.setMouseNavEnabled(false);
             mouseTracker.setTracking(false);
             c.isDrawingMode = true;
-            clearClassList(btn);
-            btn.classList.add('btnOn');
         }
+
+        toggleButton(btn);
     }
 
     // EVENT LISTENERS
