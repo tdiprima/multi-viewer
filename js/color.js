@@ -1,8 +1,9 @@
 /**
- * @author Tammy DiPrima <tammy.diprima@stonybrook.edu>
+ * Attach custom color picker to toolbar
+ * @param elem
+ * @constructor
  */
 function Color(elem) {
-    // Attach custom color picker to toolbar
     let picker = new CP(elem);
     picker.self.classList.add('no-alpha');
 
