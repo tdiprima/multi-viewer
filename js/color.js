@@ -8,8 +8,10 @@ function Color(elem) {
     picker.self.classList.add('no-alpha');
 
     // Disable the default blur and focus behavior
-    picker.on('blur', function () { });
-    picker.on('focus', function () { });
+    picker.on('blur', function () {
+    });
+    picker.on('focus', function () {
+    });
 
     // Set color value and style
     picker.on('change', function (r, g, b) {
