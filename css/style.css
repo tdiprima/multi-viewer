@@ -4,32 +4,44 @@ body {
     font-family: sans-serif;
 }
 
+
+/*Link*/
+
+a:link {
+    text-decoration: none;
+}
+
+/*a:visited {*/
+/*    color: #0000CC;*/
+/*    color: #000099;*/
+/*    color: #551A8B;*/
+/*}*/
+
+
+ul {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    list-style-type: none;
+}
+
+
 .btn {
-    /*background-color: #f1f1f1;*/
-    color: black;
-    font-size: 14px;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
+    color: #0e74da;
+    border: 1px solid #0e74da;
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
 }
 
 .btnOn {
-    background-color: lightgreen;
-    color: black;
-    font-size: 14px;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
+    color: #74f272;
+    border: 1px solid #74f272;
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
 }
 
-.btn:hover {
-    background-color: black;
-    color: white;
-}
 
 .container {
     display: grid;
@@ -42,12 +54,10 @@ body {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 75px;
-    /* padding-bottom: 20px; */
 }
 
 .dragonbox {
     height: 100%;
-    /* height: 100vh; */
 }
 
 
@@ -87,36 +97,9 @@ body {
 
 .widget {
     padding: 3px;
-    /* padding: 6px; */
-    /* display: block; */
     display: inline;
     position: relative;
 }
-
-
-/* popover menu */
-
-
-/* #popup {
-    opacity: 0;
-    position: absolute;
-    top: 0px;
-    background: #fafafa;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    height: 0px;
-    padding: 0 12px;
-    overflow: hidden;
-    -webkit-transition: all 500ms;
-    transition: all 500ms;
-}
-
-#cog:hover #popup {
-    display: inline-flex;
-    height: auto;
-    opacity: 1;
-    border: 1px solid #eeeeee;
-} */
 
 
 /* color-picker */
@@ -129,21 +112,23 @@ body {
 /*Scroll*/
 
 div.scrollmenu {
-    background-color: #777;
     overflow: auto;
     white-space: nowrap;
 }
 
+
 div.scrollmenu a {
     display: inline-block;
-    color: white;
     text-align: center;
     padding: 14px;
     text-decoration: none;
 }
 
 div.scrollmenu a:hover {
-    background-color: #333;
+    color: #ffffff;
+    background-color: #0e74da;
+    border: 1px solid #0e74da;
+    border-radius: 5px;
 }
 
 
@@ -154,23 +139,8 @@ div.scrollmenu a:hover {
     width: 0;
     height: 0;
     position: 50;
-    /*position: absolute;*/
 }
 
 .fold.active {
     display: inline-block;
-}
-
-ul {
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    list-style-type: none;
-}
-
-
-/*Link*/
-
-a:link {
-    text-decoration: none;
 }

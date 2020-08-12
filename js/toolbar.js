@@ -31,11 +31,11 @@ function Toolbar(div, idx, sliders, options) {
     this.menu = function name() {
         innerHtml += `<div class="fold scrollmenu" id="fold${idx}" style="max-width:400px;margin:0 auto;">
         <a href="#"><mark id="mark${idx}" style="background-color: rgb(0, 255, 255);">#00ffff</mark></a>
-        <a id="btnDraw${idx}" href="#"><i class="fa fa-pencil-alt"></i> Draw</a>
-        <a id="btnPolygon${idx}" href="#"><i class="fa fa-draw-polygon"></i> Draw polygon</a>
-        <a id="btnGrid${idx}" href="#"><i class="fa fa-draw"></i> Draw grid</a>
-        <a id="btnMarker${idx}" href="#"><i class="fa fa-draw"></i> Activate marker</a>
-        <a id="btnSlide${idx}" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
+        <a id="btnDraw${idx}" class="btn" href="#"><i class="fa fa-pencil-alt"></i> Draw</a>
+        <a id="btnPolygon${idx}" class="btn" href="#"><i class="fa fa-draw-polygon"></i> Draw polygon</a>
+        <a id="btnGrid${idx}" class="btn" href="#"><i class="fa fa-draw"></i> Draw grid</a>
+        <a id="btnMarker${idx}" class="btn" href="#"><i class="fa fa-draw"></i> Activate marker</a>
+        <a id="btnSlide${idx}" class="btn" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
         <a id="toggle-overlay" style="display: none" href="#"><i class="fa fa-map-marker-alt"></i> Hide markers</a>
     </div>`;
 

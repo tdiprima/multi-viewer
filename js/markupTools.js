@@ -44,7 +44,6 @@ function markupTools(idx, viewer) {
         cellY[imoY + 1] = imoY * sizeOfBox;
     }
     let gridAdded = false;
-    let toggle = false;
 
     function makeLine(coords) {
         return new fabric.Line(coords, {
@@ -92,10 +91,9 @@ function markupTools(idx, viewer) {
 
     function markerHandler() {
 
-        if (toggle) {
+        if (btnMarker.classList.contains('btnOn')) {
             canvas.off("mouse:move", mouseCoords);
             btnMarker.innerHTML = "Activate marker";
-            toggle = false;
 
         } else {
             if (!gridAdded) {
@@ -103,9 +101,9 @@ function markupTools(idx, viewer) {
             } else {
                 canvas.on("mouse:move", mouseCoords);
                 btnMarker.innerHTML = "Marker activated";
-                toggle = true;
             }
         }
+        toggleButton(btnMarker);
     }
 
     /**
@@ -134,6 +132,7 @@ function markupTools(idx, viewer) {
 
 
     btnPolygon.addEventListener('click', function () {
+        toggleButton(btnPolygon);
         if (drawingObject.type === "roof") {
             drawingObject.type = "";
             lines.forEach(function (value) {
@@ -155,6 +154,8 @@ function markupTools(idx, viewer) {
     canvas.on('mouse:dblclick', finishPolygon);
 
     function finishPolygon() {
+
+        toggleButton(btnPolygon);
 
         drawingObject.type = "";
         lines.forEach(function (value) {
