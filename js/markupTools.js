@@ -97,19 +97,23 @@ function markupTools(idx, viewer) {
 
     function markerHandler() {
 
+        let toggle = true;
         if (btnMarker.classList.contains('btnOn')) {
             canvas.off("mouse:move", mouseCoords);
             btnMarker.innerHTML = "Activate marker";
 
         } else {
             if (!gridAdded) {
+                toggle = false;
                 alert("Add a grid first!");
             } else {
                 canvas.on("mouse:move", mouseCoords);
                 btnMarker.innerHTML = "Marker activated";
             }
         }
-        toggleButton(btnMarker);
+        if (toggle) {
+            toggleButton(btnMarker);
+        }
     }
 
     /**
