@@ -78,13 +78,7 @@ function markupTools(idx, viewer) {
     btnGrid.addEventListener('click', function () {
 
         if (btnGrid.classList.contains('btnOn')) {
-
-            let r = canvas.getObjects();
-            console.log('r', r)
-            while (r.length !== 0) {
-                canvas.remove(r[0]);
-                // canvas.discardActiveGroup();
-            }
+            canvas.remove(...canvas.getObjects());
             gridAdded = false;
 
         } else {
