@@ -151,21 +151,33 @@ function markupTools(idx, viewer) {
         return obj && obj !== 'null' && obj !== 'undefined';
     }
 
-
     btnPolygon.addEventListener('click', function () {
+
         toggleButton(btnPolygon);
         if (drawingObject.type === "roof") {
+            // drawing off
             drawingObject.type = "";
-            lines.forEach(function (value) {
-                canvas.remove(value);
-            });
-            roof = makeRoof(roofPoints);
-            canvas.add(roof);
-            canvas.renderAll();
+            clear();
         } else {
-            drawingObject.type = "roof"; // roof type
+            // drawing on
+            drawingObject.type = "roof";
         }
+
     });
+    
+    function clear() {
+        drawingObject.type = "";
+        lines.forEach(function (value) {
+            canvas.remove(value);
+        });
+
+        // clear arrays
+        roofPoints = [];
+        lines = [];
+        lineCounter = 0;
+        // reset click-to-zoom
+        viewer.gestureSettingsMouse.clickToZoom = true;
+    }
 
     // Canvas Drawing
     let x = 0;
@@ -176,25 +188,21 @@ function markupTools(idx, viewer) {
 
     function finishPolygon() {
 
-        toggleButton(btnPolygon);
+        if (lines.length > 0) {
+            // length > 0; because "double-click happens"
+            roof = makeRoof(roofPoints);
 
-        drawingObject.type = "";
-        lines.forEach(function (value) {
-            canvas.remove(value);
-        });
+            if (Array.isArray(roof.points) && roof.points.length) {
+                // makeRoof successful
+                canvas.add(roof);
+                canvas.renderAll();
+            }
 
-        roof = makeRoof(roofPoints);
-
-        if (Array.isArray(roof.points) && roof.points.length) {
-            canvas.add(roof);
-            canvas.renderAll();
+            // button reset
+            toggleButton(btnPolygon);
+            clear();
         }
 
-        //clear arrays
-        roofPoints = [];
-        lines = [];
-        lineCounter = 0;
-        viewer.gestureSettingsMouse.clickToZoom = true;
     }
 
     function canvasSelect() {
@@ -287,8 +295,6 @@ function markupTools(idx, viewer) {
     /**
      * FreeDrawing handler
      */
-
-
     const paintBrush = overlay.fabricCanvas().freeDrawingBrush;
     const mark = document.getElementById('mark' + idx);
     paintBrush.color = mark.innerHTML;
@@ -385,8 +391,6 @@ function markupTools(idx, viewer) {
 
         toggleButton(btn);
     }
-
-    // EVENT LISTENERS
 
     // START DRAW
     btnDraw.addEventListener('click', function () {
