@@ -150,7 +150,6 @@ class nViewer {
                 }
             }
 
-            // TODO: Options?
             viewer = OpenSeadragon({
                 id: viewerDivId,
                 prefixUrl: "./js/lib/openseadragon/images/",
