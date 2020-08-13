@@ -33,7 +33,7 @@ function Toolbar(div, idx, sliders, options) {
         <a href="#"><mark id="mark${idx}" style="background-color: rgb(0, 255, 255);">#00ffff</mark></a>
         <a id="btnDraw${idx}" class="btn" href="#"><i class="fa fa-pencil-alt"></i> Draw</a>
         <a id="btnPolygon${idx}" class="btn" href="#"><i class="fa fa-draw-polygon"></i> Draw polygon</a>
-        <a id="btnEdit${idx}" class="btn" href="#"><i class="fa fa-draw-polygon"></i> Toggle edit</button>
+        <a id="btnEdit${idx}" class="btn" href="#"><i class="fa fa-draw-polygon"></i> Edit polygon</button>
         <a id="btnGrid${idx}" class="btn" href="#"><i class="fa fa-border-all"></i> Draw grid</a>
         <a id="btnMarker${idx}" class="btn" href="#"><i class="fa fa-paint-brush"></i> Mark grid</a>
         <a id="btnSlide${idx}" class="btn" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
