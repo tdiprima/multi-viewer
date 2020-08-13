@@ -97,11 +97,11 @@ function markupTools(idx, viewer) {
 
     });
 
-//     function onObjectSelected(e) {
-//         console.log(e.target.get('type'));
-//     }
-//     canvas.on('selection:created', onObjectSelected);
-
+    // function onObjectSelected(e) {
+    //     console.log(e.target.get('type'));
+    // }
+    // canvas.on('selection:created', onObjectSelected);
+    
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
