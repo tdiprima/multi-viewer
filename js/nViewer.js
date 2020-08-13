@@ -51,7 +51,7 @@ class nViewer {
                 viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 });
             });
 
-            viewer.world.addHandler("add-item", function (data) {
+            viewer.world.addHandler("add-item", function () {
 
                 if (viewer.world.getItemCount() === 2) {
                     // colorize layer 2
@@ -150,18 +150,19 @@ class nViewer {
                 }
             }
 
+            // TODO: Options?
             viewer = OpenSeadragon({
                 id: viewerDivId,
+                prefixUrl: "./js/lib/openseadragon/images/",
                 showFullPageControl: options.viewerOpts.showFullPageControl,
                 showHomeControl: options.viewerOpts.showHomeControl,
-                prefixUrl: "./js/lib/openseadragon/images/",
                 showZoomControl: options.viewerOpts.showZoomControl,
                 crossOriginPolicy: 'Anonymous'
             });
 
             // DRAWING TOOLS
             if (options.toolbarOn) {
-                new markupTools(idx, viewer);
+                markupTools(idx, viewer);
             }
 
             // SLIDER EVENT LISTENER

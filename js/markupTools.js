@@ -346,7 +346,6 @@ function markupTools(idx, viewer) {
     }
 
 
-
     // param: viewer, button, canvas
     function toggleDraw(v, btn, c) {
         let mouseTracker = v.outerTracker;

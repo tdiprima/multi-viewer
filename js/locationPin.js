@@ -96,8 +96,7 @@ locationPin = function (currentViewer, syncedViewers) {
             if (overlay) {
                 s = 'block';
                 h = "<i class=\"fa fa-map-marker\"></i> Hide markers";
-            }
-            else {
+            } else {
                 s = 'none';
                 h = "<i class=\"fa fa-map-marker\"></i> Show markers";
             }

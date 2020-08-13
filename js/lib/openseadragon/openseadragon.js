@@ -7060,6 +7060,9 @@ $.Viewer = function( options ) {
             controls:           args.length > 3 ? args[ 3 ] : undefined,
             overlays:           args.length > 4 ? args[ 4 ] : undefined
         };
+        console.log('options', options);
+    } else {
+        console.log('not plain object');
     }
 
     //options.config and the general config argument are deprecated

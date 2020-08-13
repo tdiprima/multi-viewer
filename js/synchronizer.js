@@ -51,6 +51,7 @@ class Synchronizer {
                 // magic support
                 activeViewerId = null;
             }
+
             syncedViewers.push(elem);  // add our [viewer] to our list
         });
     }

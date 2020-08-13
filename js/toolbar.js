@@ -43,12 +43,6 @@ function Toolbar(div, idx, sliders, options) {
         div1.innerHTML = innerHtml;
         div.appendChild(div1);
 
-        // let blah = document.getElementById('blah' + idx);
-        // blah.addEventListener('click', function () {
-        //     alert('blah!');
-        //     // return false;
-        // });
-
         // Menu animation
         $("a").on('click', function () {
             let page = $(this).data("page");
@@ -93,12 +87,9 @@ function Toolbar(div, idx, sliders, options) {
 
         // Slider
         sliderEvt();
-
+        
         // Color & paint
         colorDrawEvt();
-
-        // temp();
-
     }
 
     /**
@@ -132,19 +123,6 @@ function Toolbar(div, idx, sliders, options) {
 
         // Drawing tools
         colorDrawEvt();
-
-        // temp();
-    }
-
-
-    function temp() {
-        // TODO:
-        document.getElementById("btnPolygon" + idx).addEventListener('click', function () {
-            alert("Coming real soon!");
-        });
-        document.getElementById('btnGrid' + idx).addEventListener('click', function () {
-            alert("Coming real soon!");
-        })
     }
 
     function colorDrawEvt() {
