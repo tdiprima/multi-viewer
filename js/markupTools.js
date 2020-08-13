@@ -77,12 +77,24 @@ function markupTools(idx, viewer) {
 
     btnGrid.addEventListener('click', function () {
 
-        gridAdded = false;
-        for (let i = 0; i < numBoxes; i++) {
-            canvas.add(makeLine([i * sizeOfBox, 0, i * sizeOfBox, width]));
-            canvas.add(makeLine([0, i * sizeOfBox, width, i * sizeOfBox]));
+        if (btnGrid.classList.contains('btnOn')) {
+
+            let r = canvas.getObjects();
+            console.log('r', r)
+            while (r.length !== 0) {
+                canvas.remove(r[0]);
+                // canvas.discardActiveGroup();
+            }
+            gridAdded = false;
+
+        } else {
+            for (let i = 0; i < numBoxes; i++) {
+                canvas.add(makeLine([i * sizeOfBox, 0, i * sizeOfBox, width]));
+                canvas.add(makeLine([0, i * sizeOfBox, width, i * sizeOfBox]));
+            }
+            gridAdded = true;
         }
-        gridAdded = true;
+        toggleButton(btnGrid);
 
     });
 
