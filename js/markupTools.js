@@ -101,7 +101,7 @@ function markupTools(idx, viewer) {
     //     console.log(e.target.get('type'));
     // }
     // canvas.on('selection:created', onObjectSelected);
-    
+
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
@@ -109,7 +109,7 @@ function markupTools(idx, viewer) {
         let toggle = true;
         if (btnMarker.classList.contains('btnOn')) {
             canvas.off("mouse:move", mouseCoords);
-            btnMarker.innerHTML = "Activate marker";
+            btnMarker.innerHTML = "Mark grid";
 
         } else {
             if (!gridAdded) {
@@ -117,7 +117,7 @@ function markupTools(idx, viewer) {
                 alert("Add a grid first!");
             } else {
                 canvas.on("mouse:move", mouseCoords);
-                btnMarker.innerHTML = "Marker activated";
+                btnMarker.innerHTML = "Done marking";
             }
         }
         if (toggle) {
@@ -128,7 +128,7 @@ function markupTools(idx, viewer) {
     /**
      * POLYGON handler
      */
-    let roof = new fabric.Polyline();
+    let roof = new fabric.Polyline(); // It's a POLYLINE.
     let roofPoints = [];
     let lines = [];
     let lineCounter = 0;
@@ -288,6 +288,13 @@ function markupTools(idx, viewer) {
         }
         return Math.abs(result);
     }
+
+    let btnEdit = document.getElementById('btnEdit' + idx);
+    btnEdit.addEventListener('click', function () {
+
+        Edit(canvas);
+
+    });
 
     /**
      * FreeDrawing handler
