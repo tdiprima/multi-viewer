@@ -18,7 +18,7 @@ class Synchronizer {
             // Add handlers
             currentViewer.addHandler('pan', handler);
             currentViewer.addHandler('zoom', handler);
-            map_marker(currentViewer, syncedViewers);
+            locationPin(currentViewer, syncedViewers);
 
             function handler() {
                 // My viewer is clicked, I'm the active viewer

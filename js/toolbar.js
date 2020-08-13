@@ -113,7 +113,7 @@ function Toolbar(div, idx, sliders, options) {
         let wPaint = `<mark id='mark${idx}'>${options.paintbrushColor}</mark>&nbsp;&nbsp;`;
         let btnDraw = `<button class="btn" id="btnDraw${idx}"><i class="fa fa-pencil-alt"></i> Draw</button>&nbsp;&nbsp;`;
 
-        // Map markers handled by map-marker.js
+        // Map markers handled by locationPin.js
         // TODO: A toggle for each. (This one does everything.)  Or not!
         let btnMapMarker = `<button class="btn" id="toggle-overlay" style="display: none"><i class="fa fa-map-marker"></i> Hide markers</button>&nbsp;&nbsp;`;
 

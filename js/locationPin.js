@@ -3,7 +3,7 @@
  * @param currentViewer
  * @param syncedViewers
  */
-map_marker = function (currentViewer, syncedViewers) {
+locationPin = function (currentViewer, syncedViewers) {
 
     // const idx = currentViewer.id.trim(-1).replace("viewer", "");
 
