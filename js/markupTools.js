@@ -74,11 +74,16 @@ function markupTools(idx, viewer) {
         ctx.fillRect(cellX[imoX], cellY[imoY], sizeOfBox, sizeOfBox);
 
     }
-
+    
     btnGrid.addEventListener('click', function () {
 
         if (btnGrid.classList.contains('btnOn')) {
-            canvas.remove(...canvas.getObjects());
+            // remove only the lines
+            let r = canvas.getObjects('line');
+            for (let i = 0; i < r.length; i++) {
+                canvas.remove(r[i]);
+            }
+            btnGrid.innerHTML = 'Draw grid';
             gridAdded = false;
 
         } else {
@@ -86,11 +91,17 @@ function markupTools(idx, viewer) {
                 canvas.add(makeLine([i * sizeOfBox, 0, i * sizeOfBox, width]));
                 canvas.add(makeLine([0, i * sizeOfBox, width, i * sizeOfBox]));
             }
+            btnGrid.innerHTML = 'Remove grid';
             gridAdded = true;
         }
         toggleButton(btnGrid);
 
     });
+    
+    function onObjectSelected(e) {
+        console.log(e.target.get('type'));
+    }
+    canvas.on('selection:created', onObjectSelected);
 
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
