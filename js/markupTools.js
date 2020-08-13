@@ -12,7 +12,6 @@ function markupTools(idx, viewer) {
     const btnPolygon = document.getElementById('btnPolygon' + idx);
     const btnDraw = document.getElementById('btnDraw' + idx);
 
-
     function clearClassList(element) {
         let classList = element.classList;
         while (classList.length > 0) {
@@ -74,7 +73,7 @@ function markupTools(idx, viewer) {
         ctx.fillRect(cellX[imoX], cellY[imoY], sizeOfBox, sizeOfBox);
 
     }
-    
+
     btnGrid.addEventListener('click', function () {
 
         if (btnGrid.classList.contains('btnOn')) {
@@ -97,7 +96,7 @@ function markupTools(idx, viewer) {
         toggleButton(btnGrid);
 
     });
-    
+
     function onObjectSelected(e) {
         console.log(e.target.get('type'));
     }
@@ -107,7 +106,6 @@ function markupTools(idx, viewer) {
     btnMarker.addEventListener('click', markerHandler);
 
     function markerHandler() {
-
         let toggle = true;
         if (btnMarker.classList.contains('btnOn')) {
             canvas.off("mouse:move", mouseCoords);
@@ -130,7 +128,6 @@ function markupTools(idx, viewer) {
     /**
      * POLYGON handler
      */
-
     let roof = new fabric.Polyline();
     let roofPoints = [];
     let lines = [];
@@ -164,7 +161,7 @@ function markupTools(idx, viewer) {
         }
 
     });
-    
+
     function clear() {
         drawingObject.type = "";
         lines.forEach(function (value) {
@@ -352,7 +349,6 @@ function markupTools(idx, viewer) {
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function () {
-
             // this = deleteBtn
             if (canvas.getActiveObject()) {
                 canvas.remove(canvas.getActiveObject());
@@ -371,7 +367,6 @@ function markupTools(idx, viewer) {
     function setBrushWidth(viewer) {
         paintBrush.width = 10 / viewer.viewport.getZoom(true);
     }
-
 
     // param: viewer, button, canvas
     function toggleDraw(v, btn, c) {
