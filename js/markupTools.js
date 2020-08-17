@@ -150,7 +150,6 @@ function markupTools(idx, viewer) {
 
     // POLYGON BUTTON
     btnPolygon.addEventListener('click', function () {
-        console.log('canvas.isDrawingMode', canvas.isDrawingMode);
 
         if (!canvas.isDrawingMode) {
             toggleButton(btnPolygon);
@@ -217,7 +216,6 @@ function markupTools(idx, viewer) {
 
     // Add points
     function addPoints(options) {
-
 
         if (drawingObject.type === "roof") {
             canvas.selection = false;
@@ -296,11 +294,8 @@ function markupTools(idx, viewer) {
         return Math.abs(result);
     }
 
-    let btnEdit = document.getElementById('btnEdit' + idx);
-    btnEdit.addEventListener('click', function () {
-
+    document.getElementById('btnEdit' + idx).addEventListener('click', function () {
         Edit(canvas);
-
     });
 
     /**
@@ -310,25 +305,26 @@ function markupTools(idx, viewer) {
     const mark = document.getElementById('mark' + idx);
     paintBrush.color = mark.innerHTML;
 
+    function addDeleteBtn(x, y, el) {
+        $(".deleteBtn").remove();
+        let btnLeft = x - 10;
+        let btnTop = y - 10;
+        let deleteBtn = document.createElement('img');
+        deleteBtn.src = "./img/delete-icon.png";
+        deleteBtn.classList.add('deleteBtn')
+        deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
+        deleteBtn.alt = "delete object";
+        el.appendChild(deleteBtn);
+    }
+
     function customizeControls(obj) {
         // For the object that was drawn
         obj['hasControls'] = false;
         obj.lockMovementX = true; // hold in place
         obj.lockMovementY = true;
 
-        function addDeleteBtn(x, y, el) {
-            $(".deleteBtn").remove();
-            let btnLeft = x - 10;
-            let btnTop = y - 10;
-            let deleteBtn = document.createElement('img');
-            deleteBtn.src = "./img/delete-icon.png";
-            deleteBtn.classList.add('deleteBtn')
-            deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
-            deleteBtn.alt = "delete object";
-            el.appendChild(deleteBtn);
-        }
-
         canvas.on('selection:created', function (e) {
+            // viewer.gestureSettingsMouse.clickToZoom = false;
             let el = this.lowerCanvasEl.parentElement;
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         })
@@ -352,6 +348,7 @@ function markupTools(idx, viewer) {
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function () {
+            viewer.gestureSettingsMouse.clickToZoom = false;
             // this = deleteBtn
             if (canvas.getActiveObject()) {
                 canvas.remove(canvas.getActiveObject());
@@ -373,22 +370,27 @@ function markupTools(idx, viewer) {
 
     // DRAW BUTTON
     btnDraw.addEventListener('click', function () {
+        toggleButton(btnDraw);
         function pathCreatedHandler(e) {
+            canvas.off('mouse:down', mousedownHandler);
             let d = e.path;
             customizeControls(d);
-            saveCoordinates(d);
+            clearClassList(btnDraw);
+            btnDraw.classList.add('btn');
+            // saveCoordinates(d); // TODO: Add button for save
+            // console.log('PATH:\n', e.path.path);
+        }
+
+        function mouseupHandler() {
             // Drawing off
-            canvas.off('mouse:down', mousedownHandler);
             viewer.setMouseNavEnabled(true);
             viewer.outerTracker.setTracking(true);
             canvas.isDrawingMode = false;
-            toggleButton(btnDraw);
-            // console.log('PATH:\n', e.path.path);
         }
+        canvas.on("mouse:up", mouseupHandler);
         canvas.on("path:created", pathCreatedHandler);
 
         function mousedownHandler() {
-            console.log('mousedownHandler');
             // For example, panning or zooming after selection
             if (!canvas.getActiveObject()) {
                 $(".deleteBtn").remove();
@@ -399,7 +401,6 @@ function markupTools(idx, viewer) {
             }
         }
 
-        toggleButton(btnDraw);
         let mouseTracker = viewer.outerTracker;
         if (canvas.isDrawingMode) {
             // drawing off
@@ -407,7 +408,6 @@ function markupTools(idx, viewer) {
             viewer.setMouseNavEnabled(true);
             mouseTracker.setTracking(true);
             canvas.isDrawingMode = false;
-
         }
         else {
             // drawing on
@@ -417,9 +417,6 @@ function markupTools(idx, viewer) {
             viewer.setMouseNavEnabled(false);
             mouseTracker.setTracking(false);
             canvas.isDrawingMode = true;
-
         }
-
     });
-
 }
