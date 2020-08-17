@@ -42,6 +42,7 @@ function markupTools(idx, viewer) {
     for (let imoY = 0; imoY < numBoxes; imoY++) {
         cellY[imoY + 1] = imoY * sizeOfBox;
     }
+
     let gridAdded = false;
 
     function makeLine(coords) {
@@ -317,6 +318,11 @@ function markupTools(idx, viewer) {
         el.appendChild(deleteBtn);
     }
 
+    function f(e, c) {
+        let el = c.lowerCanvasEl.parentElement;
+        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
+    }
+
     function customizeControls(obj) {
         // For the object that was drawn
         obj['hasControls'] = false;
@@ -324,27 +330,27 @@ function markupTools(idx, viewer) {
         obj.lockMovementY = true;
 
         canvas.on('selection:created', function (e) {
-            // viewer.gestureSettingsMouse.clickToZoom = false;
-            let el = this.lowerCanvasEl.parentElement;
-            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
+            f(e, canvas);
         })
 
-        // Handle all the things
+        // It's not movable/scalable/etc now, but it might be one day.
         canvas.on('object:modified', function (e) {
-            let el = this.lowerCanvasEl.parentElement;
-            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
+            f(e, canvas);
         });
 
-        canvas.on('object:scaling', function () {
+        canvas.on('object:scaling', function (e) {
             $(".deleteBtn").remove();
+            f(e, canvas);
         });
 
-        canvas.on('object:moving', function () {
+        canvas.on('object:moving', function (e) {
             $(".deleteBtn").remove();
+            f(e, canvas);
         });
 
-        canvas.on('object:rotating', function () {
+        canvas.on('object:rotating', function (e) {
             $(".deleteBtn").remove();
+            f(e, canvas);
         });
 
         $(".canvas-container").on('click', ".deleteBtn", function () {
@@ -371,6 +377,7 @@ function markupTools(idx, viewer) {
     // DRAW BUTTON
     btnDraw.addEventListener('click', function () {
         toggleButton(btnDraw);
+
         function pathCreatedHandler(e) {
             canvas.off('mouse:down', mousedownHandler);
             let d = e.path;
@@ -387,6 +394,7 @@ function markupTools(idx, viewer) {
             viewer.outerTracker.setTracking(true);
             canvas.isDrawingMode = false;
         }
+
         canvas.on("mouse:up", mouseupHandler);
         canvas.on("path:created", pathCreatedHandler);
 
@@ -396,7 +404,7 @@ function markupTools(idx, viewer) {
                 $(".deleteBtn").remove();
                 viewer.gestureSettingsMouse.clickToZoom = true;
             } else {
-                // Make sure the viewer doesn't zoom when we click the delete button.
+                // Prevent zoom on delete.
                 viewer.gestureSettingsMouse.clickToZoom = false;
             }
         }
@@ -408,8 +416,7 @@ function markupTools(idx, viewer) {
             viewer.setMouseNavEnabled(true);
             mouseTracker.setTracking(true);
             canvas.isDrawingMode = false;
-        }
-        else {
+        } else {
             // drawing on
             canvas.on('mouse:down', mousedownHandler);
             paintBrush.color = mark.innerHTML;
