@@ -148,16 +148,26 @@ function markupTools(idx, viewer) {
         return obj && obj !== 'null' && obj !== 'undefined';
     }
 
+    // POLYGON BUTTON
     btnPolygon.addEventListener('click', function () {
+        console.log('canvas.isDrawingMode', canvas.isDrawingMode);
 
-        toggleButton(btnPolygon);
-        if (drawingObject.type === "roof") {
-            // drawing off
-            drawingObject.type = "";
-            clear();
-        } else {
-            // drawing on
-            drawingObject.type = "roof";
+        if (!canvas.isDrawingMode) {
+            toggleButton(btnPolygon);
+            if (drawingObject.type === "roof") {
+                // drawing off
+                drawingObject.type = "";
+                canvas.off('mouse:down', addPoints);
+                clear();
+                // click-to-zoom on
+                viewer.gestureSettingsMouse.clickToZoom = true;
+            } else {
+                // drawing on
+                drawingObject.type = "roof";
+                canvas.on('mouse:down', addPoints);
+                // click-to-zoom off
+                viewer.gestureSettingsMouse.clickToZoom = false;
+            }
         }
 
     });
@@ -172,8 +182,7 @@ function markupTools(idx, viewer) {
         roofPoints = [];
         lines = [];
         lineCounter = 0;
-        // reset click-to-zoom
-        viewer.gestureSettingsMouse.clickToZoom = true;
+
     }
 
     // Canvas Drawing
@@ -209,7 +218,7 @@ function markupTools(idx, viewer) {
     // Add points
     function addPoints(options) {
 
-        viewer.gestureSettingsMouse.clickToZoom = false;
+
         if (drawingObject.type === "roof") {
             canvas.selection = false;
             setStartingPoint(options); // set x,y
@@ -225,13 +234,11 @@ function markupTools(idx, viewer) {
             lineCounter++;
             canvas.on('mouse:up', canvasSelect);
         } else {
-            viewer.gestureSettingsMouse.clickToZoom = true;
+
             // Disable fabric selection; otherwise, you get the weird purple box.
             overlay._fabricCanvas.selection = false;
         }
     }
-
-    canvas.on('mouse:down', addPoints);
 
     function calculateLines(options) {
         if (isRealValue(lines[0]) && drawingObject.type === "roof") {
@@ -326,17 +333,6 @@ function markupTools(idx, viewer) {
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         })
 
-        canvas.on('mouse:down', function () {
-            // For example, panning or zooming after selection
-            if (!canvas.getActiveObject()) {
-                $(".deleteBtn").remove();
-                viewer.gestureSettingsMouse.clickToZoom = true;
-            } else {
-                // Make sure the viewer doesn't zoom when we click the delete button.
-                viewer.gestureSettingsMouse.clickToZoom = false;
-            }
-        });
-
         // Handle all the things
         canvas.on('object:modified', function (e) {
             let el = this.lowerCanvasEl.parentElement;
@@ -375,41 +371,54 @@ function markupTools(idx, viewer) {
         paintBrush.width = 10 / viewer.viewport.getZoom(true);
     }
 
-    // param: viewer, button, canvas
-    function toggleDraw(v, btn, c) {
-        let mouseTracker = v.outerTracker;
+    // DRAW BUTTON
+    btnDraw.addEventListener('click', function () {
+        function pathCreatedHandler(e) {
+            let d = e.path;
+            customizeControls(d);
+            saveCoordinates(d);
+            // Drawing off
+            canvas.off('mouse:down', mousedownHandler);
+            viewer.setMouseNavEnabled(true);
+            viewer.outerTracker.setTracking(true);
+            canvas.isDrawingMode = false;
+            toggleButton(btnDraw);
+            // console.log('PATH:\n', e.path.path);
+        }
+        canvas.on("path:created", pathCreatedHandler);
 
-        if (btn.classList.contains('btnOn')) {
-            // End Draw
-            v.setMouseNavEnabled(true);
-            mouseTracker.setTracking(true);
-            c.isDrawingMode = false;
-        } else {
-            // Start Draw
-            v.setMouseNavEnabled(false);
-            mouseTracker.setTracking(false);
-            c.isDrawingMode = true;
+        function mousedownHandler() {
+            console.log('mousedownHandler');
+            // For example, panning or zooming after selection
+            if (!canvas.getActiveObject()) {
+                $(".deleteBtn").remove();
+                viewer.gestureSettingsMouse.clickToZoom = true;
+            } else {
+                // Make sure the viewer doesn't zoom when we click the delete button.
+                viewer.gestureSettingsMouse.clickToZoom = false;
+            }
         }
 
-        toggleButton(btn);
-    }
+        toggleButton(btnDraw);
+        let mouseTracker = viewer.outerTracker;
+        if (canvas.isDrawingMode) {
+            // drawing off
+            canvas.off('mouse:down', mousedownHandler);
+            viewer.setMouseNavEnabled(true);
+            mouseTracker.setTracking(true);
+            canvas.isDrawingMode = false;
 
-    // START DRAW
-    btnDraw.addEventListener('click', function () {
+        }
+        else {
+            // drawing on
+            canvas.on('mouse:down', mousedownHandler);
+            paintBrush.color = mark.innerHTML;
+            setBrushWidth(viewer);
+            viewer.setMouseNavEnabled(false);
+            mouseTracker.setTracking(false);
+            canvas.isDrawingMode = true;
 
-        paintBrush.color = mark.innerHTML;
-        setBrushWidth(viewer);
-        toggleDraw(viewer, btnDraw, canvas);
-
-    });
-
-    // END DRAW
-    canvas.on("path:created", function (e) {
-        toggleDraw(viewer, btnDraw, canvas);
-        let d = e.path;
-        customizeControls(d);
-        saveCoordinates(d);
-        // console.log('PATH:\n', e.path.path);
+        }
 
     });
 
