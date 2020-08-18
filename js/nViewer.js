@@ -153,6 +153,7 @@ class nViewer {
             viewer = OpenSeadragon({
                 id: viewerDivId,
                 prefixUrl: "./js/lib/openseadragon/images/",
+                // homeFillsViewer: true,  // Not what I expected.
                 showFullPageControl: options.viewerOpts.showFullPageControl,
                 showHomeControl: options.viewerOpts.showHomeControl,
                 showZoomControl: options.viewerOpts.showZoomControl,
