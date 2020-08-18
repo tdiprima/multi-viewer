@@ -256,13 +256,13 @@ function markupTools(idx, viewer) {
         canvas.calcOffset();
     });
 
+    let offset = canvas._offset;
     function setStartingPoint(options) {
-        // clientX, offsetX, pageX
-        // let offset = $('#canvas-tools').offset();
-        // x = options.e.pageX - offset.left;
-        // y = options.e.pageY - offset.top;
-        x = options.e.pageX - canvas._offset.left;
-        y = options.e.pageY - canvas._offset.top;
+        let event = options.e;
+        // x = event.pageX - offset.left;
+        // y = event.pageY - offset.top;
+        x = event.offsetX ? (event.offsetX) : event.pageX - offset.left;
+        y = event.offsetY ? (event.offsetY) : event.pageY - offset.top;
     }
 
     function makeRoof(roofPoints) {
