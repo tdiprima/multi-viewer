@@ -54,45 +54,6 @@ function anchorWrapper(anchorIndex, fn) {
     }
 }
 
-// let once = true;
-// function getPolygon(canvas) {
-
-//     if (once) {
-//         // Transform polyline to polygon
-//         let polyline;
-//         if (canvas.getActiveObject()) {
-//             polyline = canvas.getActiveObject();
-//         } else {
-//             polyline = canvas.getObjects()[0];
-//         }
-
-//         let polygon = new fabric.Polygon(polyline.points, {
-//             left: polyline.left,
-//             top: polyline.top,
-//             fill: polyline.fill,
-//             strokeWidth: polyline.strokeWidth,
-//             stroke: polyline.stroke,
-//             scaleX: 1,
-//             scaleY: 1,
-//             objectCaching: false,
-//             transparentCorners: false,
-//             cornerColor: polyline.cornerColor,
-//         });
-
-//         canvas.remove(polyline);
-//         canvas.add(polygon);
-//         once = false;
-//         return polygon;
-//     }
-//     else {
-//         if (canvas.getActiveObject()) {
-//             return canvas.getActiveObject();
-//         } else {
-//             return canvas.getObjects()[0]; // TODO: check object(s)
-//         }
-//     }
-// }
-
 function getPolygon(canvas) {
     if (canvas.getActiveObject()) {
         return canvas.getActiveObject();
