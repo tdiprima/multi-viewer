@@ -221,6 +221,7 @@ function markupTools(idx, viewer) {
         if (drawingObject.type === "roof") {
             canvas.selection = false;
             setStartingPoint(options); // set x,y
+            // console.log(new Point(x, y))
             roofPoints.push(new Point(x, y));
             let points = [x, y, x, y];
             lines.push(new fabric.Line(points, {
@@ -257,6 +258,8 @@ function markupTools(idx, viewer) {
     });
 
     let offset = canvas._offset;
+    // console.log('offset', offset);
+
     function setStartingPoint(options) {
         let event = options.e;
         // x = event.pageX - offset.left;
@@ -271,25 +274,25 @@ function markupTools(idx, viewer) {
 
         if (left !== 999999 && top !== 999999) {
             roofPoints.push(new Point(roofPoints[0].x, roofPoints[0].y));
-            roof = new fabric.Polyline(roofPoints, {
-                strokeWidth: 3,
-                fill: 'rgba(0,0,0,0)',
-                stroke: 'green'
-                // stroke: '#58c'
-            });
-            roof.set({
-                left: left,
-                top: top,
-            });
         }
-        return roof;
+
+        // Return 'roof' (Polygon).
+        return new fabric.Polygon(roofPoints, {
+            strokeWidth: 3,
+            fill: 'rgba(0,0,0,0)',
+            stroke: 'green',
+            left: left,
+            top: top
+            // stroke: '#58c'
+        });
     }
 
-    function findPaddingForRoof(roofPoints, coord) {
+    // coordinate = x or y.
+    function findPaddingForRoof(roofPoints, coordinate) {
         let result = 999999;
         for (let i = 0; i < lineCounter; i++) {
-            if (roofPoints[i][coord] < result) {
-                result = roofPoints[i][coord];
+            if (roofPoints[i][coordinate] < result) {
+                result = roofPoints[i][coordinate];
             }
         }
         return Math.abs(result);
