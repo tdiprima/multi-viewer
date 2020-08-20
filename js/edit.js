@@ -58,34 +58,43 @@ function getPolygon(canvas) {
     if (canvas.getActiveObject()) {
         return canvas.getActiveObject();
     } else {
-        return canvas.getObjects()[0]; // TODO: check object(s)
+        return canvas.getObjects()[0];
     }
+}
+
+function isRealValue(obj) {
+    return obj && obj !== 'null' && obj !== 'undefined';
 }
 
 function Edit(canvas) {
 
     let polygon = getPolygon(canvas);
     // canvas.viewportTransform = [0.7, 0, 0, 0.7, -50, 50]; // ???
-    canvas.setActiveObject(polygon);
-    polygon.edit = !polygon.edit;
-    if (polygon.edit) {
-        let lastControl = polygon.points.length - 1;
-        polygon.cornerStyle = 'circle';
-        polygon.cornerColor = 'rgba(0,0,255,0.5)';
-        polygon.controls = polygon.points.reduce(function (acc, point, index) {
-            acc['p' + index] = new fabric.Control({
-                positionHandler: polygonPositionHandler,
-                actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
-                actionName: 'modifyPolygon',
-                pointIndex: index
-            });
-            return acc;
-        }, {});
+
+    if (isRealValue(polygon)) {
+        canvas.setActiveObject(polygon);
+        polygon.edit = !polygon.edit;
+        if (polygon.edit) {
+            let lastControl = polygon.points.length - 1;
+            polygon.cornerStyle = 'circle';
+            polygon.cornerColor = 'rgba(0,0,255,0.5)';
+            polygon.controls = polygon.points.reduce(function (acc, point, index) {
+                acc['p' + index] = new fabric.Control({
+                    positionHandler: polygonPositionHandler,
+                    actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
+                    actionName: 'modifyPolygon',
+                    pointIndex: index
+                });
+                return acc;
+            }, {});
+        } else {
+            polygon.cornerColor = 'blue';
+            polygon.cornerStyle = 'rect';
+            polygon.controls = fabric.Object.prototype.controls;
+        }
+        polygon.hasBorders = !polygon.edit;
+        canvas.requestRenderAll();
     } else {
-        polygon.cornerColor = 'blue';
-        polygon.cornerStyle = 'rect';
-        polygon.controls = fabric.Object.prototype.controls;
+        alert('DRAW a polygon first!');
     }
-    polygon.hasBorders = !polygon.edit;
-    canvas.requestRenderAll();
 }
