@@ -1,7 +1,7 @@
 #!/bin/bash
+#$HOME/Documents/workspace/minify/bin/minifyjs myPackage.js >temp.js
 
-cat color.js demo.js dropdown.js edit.js locationPin.js markupTools.js nViewer.js synchronizer.js toolbar.js >myPackage.js
-$HOME/Documents/workspace/minify/bin/minifyjs myPackage.js >temp.js
-
-cat ultraviewer.author.js temp.js >ultraviewer.min.js
-rm temp.js myPackage.js
+rm ultraviewer.min.js
+find . -type f -name '*.js' -maxdepth 1 -exec cat {} \; > ultraviewer.min.js
+subl ultraviewer.min.js lib/ultraviewer.author.js
+open https://javascript-minifier.com/
