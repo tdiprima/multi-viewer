@@ -1,15 +1,11 @@
 function markupTools(idx, viewer) {
 
-    // const obj = fb.create(viewer);
-    // const overlay = obj.o;
-    // const canvas = obj.c;
     const overlay = viewer.fabricjsOverlay({
         scale: 1000
     });
     const canvas = overlay.fabricCanvas();
 
     const btnGrid = document.getElementById('btnGrid' + idx);
-    const btnPolygon = document.getElementById('btnPolygon' + idx);
     const btnDraw = document.getElementById('btnDraw' + idx);
 
     function clearClassList(element) {
@@ -55,14 +51,13 @@ function markupTools(idx, viewer) {
 
     // Mouse move event-handler
     function mouseCoords(e) {
-        // let c = viewer.drawer.canvas;
-        let pointer = e.absolutePointer;
-        // let pointer = e.pointer;
-        let ctx = viewer.drawer.context;
-        // let cx = e.clientX; // get horizontal coordinate of mouse pointer
-        // let cy = e.clientY; // vertical coordinate
+        let pointer = e.pointer;
         let cx = pointer.x;
         let cy = pointer.y;
+        let ctx = viewer.drawer.context;
+        // let cx = e.clientX; // undefined
+        // let cy = e.clientY; // undefined
+        // console.log('x, y', cx, cy);
 
         let x = cx / sizeOfBox;
         let y = cy / sizeOfBox;
@@ -70,6 +65,7 @@ function markupTools(idx, viewer) {
         let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
         let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
 
+        // TODO: fix
         ctx.fillStyle = "red";
         ctx.fillRect(cellX[imoX], cellY[imoY], sizeOfBox, sizeOfBox);
 
@@ -152,7 +148,10 @@ function markupTools(idx, viewer) {
 
     function f(e, c) {
         let el = c.lowerCanvasEl.parentElement;
-        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
+        console.log('oCoords', e.target.oCoords);
+        if (isRealValue(e.target.oCoords.tr) && isRealValue(el)) {
+            addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
+        }
     }
 
     function customizeControls(obj) {
@@ -212,17 +211,42 @@ function markupTools(idx, viewer) {
         viewer.outerTracker.setTracking(what);
     }
 
+    function lineToPoly(line) {
+        let arr = line.path;
+        let points = [], obj = {};
+
+        for (let i = 0; i < arr.length; i++) {
+            obj.x = arr[i][1];
+            obj.y = arr[i][2];
+            points.push(obj);
+            obj = {};
+        }
+
+        // Initiate a polygon instance
+        let polygon = new fabric.Polygon(points, {
+            stroke: '#8a2be2',
+            strokeWidth: 2,
+            fill: ''
+        });
+
+        // Render the polygon in canvas
+        canvas.add(polygon);
+        canvas.remove(line);
+    }
+
     // DRAW BUTTON
     btnDraw.addEventListener('click', function () {
         toggleButton(btnDraw);
 
-        function pathCreatedHandler(e) {
-            canvas.off('mouse:down', mousedownHandler);
-            let d = e.path;
-            customizeControls(d);
+        function pathCreatedHandler(options) {
+            let line = options.path;
+            let path = line.path;
+            lineToPoly(line);
+            customizeControls(path);
             clearClassList(btnDraw);
             btnDraw.classList.add('btn');
-            // saveCoordinates(d); // TODO: Add button for save
+            canvas.off('mouse:down', mousedownHandler);
+            // saveCoordinates(d); // TODO: implement save
             // console.log('PATH:\n', e.path.path);
         }
 
@@ -246,7 +270,6 @@ function markupTools(idx, viewer) {
             }
         }
 
-        let mouseTracker = viewer.outerTracker;
         if (canvas.isDrawingMode) {
             // drawing off
             canvas.off('mouse:down', mousedownHandler);
