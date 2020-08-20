@@ -148,7 +148,6 @@ function markupTools(idx, viewer) {
 
     function f(e, c) {
         let el = c.lowerCanvasEl.parentElement;
-        console.log('oCoords', e.target.oCoords);
         if (isRealValue(e.target.oCoords.tr) && isRealValue(el)) {
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         }
@@ -184,7 +183,6 @@ function markupTools(idx, viewer) {
             f(e, canvas);
         });
 
-        // TODO: select
         $(".canvas-container").on('click', ".deleteBtn", function () {
             viewer.gestureSettingsMouse.clickToZoom = false;
             // this = deleteBtn
@@ -196,10 +194,6 @@ function markupTools(idx, viewer) {
             viewer.gestureSettingsMouse.clickToZoom = true;
         });
 
-    }
-
-    function saveCoordinates(d) {
-        // TBA
     }
 
     function setBrushWidth(viewer) {
@@ -215,11 +209,16 @@ function markupTools(idx, viewer) {
         let arr = line.path;
         let points = [], obj = {};
 
+        // todo: fix. it makes 2 on 2nd make line.
+        console.log('len', arr.length);
         for (let i = 0; i < arr.length; i++) {
-            obj.x = arr[i][1];
-            obj.y = arr[i][2];
-            points.push(obj);
-            obj = {};
+            // mod reduce num of points
+            if (i % 10 === 0) {
+                obj.x = arr[i][1];
+                obj.y = arr[i][2];
+                points.push(obj);
+                obj = {};
+            }
         }
 
         // Initiate a polygon instance
@@ -246,8 +245,8 @@ function markupTools(idx, viewer) {
             clearClassList(btnDraw);
             btnDraw.classList.add('btn');
             canvas.off('mouse:down', mousedownHandler);
-            // saveCoordinates(d); // TODO: implement save
-            // console.log('PATH:\n', e.path.path);
+            // TODO: implement save
+            // console.log('PATH:\n', path);
         }
 
         function mouseupHandler() {
