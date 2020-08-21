@@ -205,14 +205,29 @@ function markupTools(idx, viewer) {
         viewer.outerTracker.setTracking(what);
     }
 
+    // todo: Goes with:
+    // "Make start and end point the same"
+    // function routine(ind, arr, points) {
+    //     let obj = {};
+    //     obj.x = arr[ind][1];
+    //     obj.y = arr[ind][2];
+    //     points.push(obj);
+    // }
+
     function lineToPoly(line) {
+        // todo: fix. it makes 2 on 2nd make line.
+
         let arr = line.path;
         let points = [], obj = {};
-
-        // todo: fix. it makes 2 on 2nd make line.
-        console.log('len', arr.length);
+        // console.log('len', arr.length);
         for (let i = 0; i < arr.length; i++) {
-            // mod reduce num of points
+            // not reducing points:
+            // obj.x = arr[i][1];
+            // obj.y = arr[i][2];
+            // points.push(obj);
+            // obj = {};
+
+            // reduce num of points
             if (i % 10 === 0) {
                 obj.x = arr[i][1];
                 obj.y = arr[i][2];
@@ -220,6 +235,22 @@ function markupTools(idx, viewer) {
                 obj = {};
             }
         }
+
+        /*
+        // Make start and end point the same. It's not, but... I'm workin on it.
+        let points = [];
+        let arr = line.path;
+        // start point
+        routine(0, arr, points); // <-- START
+        for (let i = 0; i < arr.length; i++) {
+            // mod reduce num of points
+            if (i % 10 === 0) {
+                routine(i, arr, points);
+            }
+        }
+        // end point
+        routine(0, arr, points); // <-- END
+        */
 
         // Initiate a polygon instance
         let polygon = new fabric.Polygon(points, {

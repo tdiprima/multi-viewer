@@ -56,8 +56,10 @@ function anchorWrapper(anchorIndex, fn) {
 
 function getPolygon(canvas) {
     if (canvas.getActiveObject()) {
+        console.log('ActiveObject');
         return canvas.getActiveObject();
     } else {
+        console.log('no ActiveObject');
         return canvas.getObjects()[0];
     }
 }
@@ -72,6 +74,7 @@ function Edit(canvas) {
     // canvas.viewportTransform = [0.7, 0, 0, 0.7, -50, 50]; // ???
 
     if (isRealValue(polygon)) {
+        console.log("instance of Polygon:", polygon instanceof fabric.Polygon);
         canvas.setActiveObject(polygon);
         polygon.edit = !polygon.edit;
         if (polygon.edit) {
