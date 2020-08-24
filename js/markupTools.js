@@ -216,8 +216,11 @@ function markupTools(idx, viewer) {
 
     // todo: fix. it makes 2 on 2nd make line.
     function pathToPoly(line) {
-        // NOTE: ok wait, you can't convert a path to polygon, not easily and not with many many points.
+        // NOTE: "can't" convert a path to polygon; not easily and not with many points.
         // You can apply the control api logic to a path.
+        // You need to convert the commands all to absolute, and eliminate the A entirely.
+        // Swap V and H with L.
+        // Once the swap is done, you can position the controls following specific values.
 
         let arr = line.path;
         let points = [], obj = {};
