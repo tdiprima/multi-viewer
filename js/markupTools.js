@@ -214,10 +214,10 @@ function markupTools(idx, viewer) {
     //     points.push(obj);
     // }
 
+    // todo: fix. it makes 2 on 2nd make line.
     function pathToPoly(line) {
         // NOTE: ok wait, you can't convert a path to polygon, not easily and not with many many points.
-
-        // todo: fix. it makes 2 on 2nd make line.
+        // You can apply the control api logic to a path.
 
         let arr = line.path;
         let points = [], obj = {};
