@@ -214,7 +214,9 @@ function markupTools(idx, viewer) {
     //     points.push(obj);
     // }
 
-    function lineToPoly(line) {
+    function pathToPoly(line) {
+        // NOTE: ok wait, you can't convert a path to polygon, not easily and not with many many points.
+
         // todo: fix. it makes 2 on 2nd make line.
 
         let arr = line.path;
@@ -271,7 +273,7 @@ function markupTools(idx, viewer) {
         function pathCreatedHandler(options) {
             let line = options.path;
             let path = line.path;
-            lineToPoly(line);
+            pathToPoly(line);
             customizeControls(path);
             clearClassList(btnDraw);
             btnDraw.classList.add('btn');
