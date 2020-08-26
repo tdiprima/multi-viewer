@@ -205,68 +205,32 @@ function markupTools(idx, viewer) {
         viewer.outerTracker.setTracking(what);
     }
 
-    // todo: Goes with:
-    // "Make start and end point the same"
-    // function routine(ind, arr, points) {
-    //     let obj = {};
-    //     obj.x = arr[ind][1];
-    //     obj.y = arr[ind][2];
-    //     points.push(obj);
-    // }
-
     // todo: fix. it makes 2 on 2nd make line.
-    function pathToPoly(line) {
-        // NOTE: "can't" convert a path to polygon; not easily and not with many points.
-        // You can apply the control api logic to a path.
-        // You need to convert the commands all to absolute, and eliminate the A entirely.
-        // Swap V and H with L.
-        // Once the swap is done, you can position the controls following specific values.
+    function pathToPoly(fabPath) {
 
-        let arr = line.path;
-        let points = [], obj = {};
-        // console.log('len', arr.length);
-        for (let i = 0; i < arr.length; i++) {
-            // not reducing points:
-            // obj.x = arr[i][1];
-            // obj.y = arr[i][2];
-            // points.push(obj);
-            // obj = {};
+        let arr = fabPath.path;
+        console.log('len', arr.length);
 
-            // reduce num of points
-            if (i % 10 === 0) {
-                obj.x = arr[i][1];
-                obj.y = arr[i][2];
-                points.push(obj);
-                obj = {};
-            }
-        }
-
-        /*
-        // Make start and end point the same. It's not, but... I'm workin on it.
-        let points = [];
-        let arr = line.path;
-        // start point
-        routine(0, arr, points); // <-- START
-        for (let i = 0; i < arr.length; i++) {
-            // mod reduce num of points
-            if (i % 10 === 0) {
-                routine(i, arr, points);
-            }
-        }
-        // end point
-        routine(0, arr, points); // <-- END
-        */
+        // Reduce points before using in polygon
+        // Or - make the poly, then reduce the controls
+        let points = arr.reduce(
+          function(accumulator, currentValue, currentIndex) {
+              if (currentIndex % 10 === 0)
+                  accumulator.push({x: arr[currentIndex][1], y: arr[currentIndex][2]});
+              return accumulator;
+          }, []);
+        console.log('len', points.length);
 
         // Initiate a polygon instance
         let polygon = new fabric.Polygon(points, {
-            stroke: '#8a2be2',
-            strokeWidth: 2,
+            stroke: mark.innerHTML,
+            strokeWidth: paintBrush.width,
             fill: ''
         });
 
         // Render the polygon in canvas
         canvas.add(polygon);
-        canvas.remove(line);
+        canvas.remove(fabPath);
     }
 
     // DRAW BUTTON
@@ -319,4 +283,5 @@ function markupTools(idx, viewer) {
             canvas.isDrawingMode = true;
         }
     });
+
 }

@@ -1,7 +1,7 @@
 // Locate the controls.
 // This function will be used both for drawing and for interaction.
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
-    // THIRD (for all points)
+    // Do for all points
     let x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x),
         y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y);
     return fabric.util.transformPoint(
@@ -20,7 +20,8 @@ function polygonPositionHandler(dim, finalMatrix, fabricObject) {
 // and the current position in canvas coordinates.
 // transform.target is a reference to the current object being transformed.
 function actionHandler(eventData, transform, x, y) {
-    // SECOND
+    // move-handler
+    // polygon.__corner is the handle that you dragged.
     let polygon = transform.target,
         currentControl = polygon.controls[polygon.__corner],
         mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), 'center', 'center'),
@@ -37,7 +38,7 @@ function actionHandler(eventData, transform, x, y) {
 // Keep the polygon in the same position when we change its
 // width/height/top/left.
 function anchorWrapper(anchorIndex, fn) {
-    // FIRST
+    // Once per button click when edit = yes.
     return function (eventData, transform, x, y) {
         let fabricObject = transform.target,
             absolutePoint = fabric.util.transformPoint({
@@ -45,7 +46,6 @@ function anchorWrapper(anchorIndex, fn) {
                 y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y),
             }, fabricObject.calcTransformMatrix()),
             actionPerformed = fn(eventData, transform, x, y),
-            newDim = fabricObject._setPositionDimensions({}),
             polygonBaseSize = fabricObject._getNonTransformedDimensions(),
             newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x,
             newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
@@ -56,11 +56,14 @@ function anchorWrapper(anchorIndex, fn) {
 
 function getPolygon(canvas) {
     if (canvas.getActiveObject()) {
-        console.log('ActiveObject');
         return canvas.getActiveObject();
     } else {
-        console.log('no ActiveObject');
-        return canvas.getObjects()[0];
+        if (canvas.getObjects()[0] && canvas.getObjects()[0].type === 'polygon') {
+            return canvas.getObjects()[0];
+        } else {
+            alert('Please select a polygon for editing.');
+        }
+
     }
 }
 
@@ -71,16 +74,17 @@ function isRealValue(obj) {
 function Edit(canvas) {
 
     let polygon = getPolygon(canvas);
-    // canvas.viewportTransform = [0.7, 0, 0, 0.7, -50, 50]; // ???
 
     if (isRealValue(polygon)) {
-        console.log("instance of Polygon:", polygon instanceof fabric.Polygon);
+        // console.log("instance of Polygon:", polygon instanceof fabric.Polygon);
         canvas.setActiveObject(polygon);
         polygon.edit = !polygon.edit;
         if (polygon.edit) {
             let lastControl = polygon.points.length - 1;
             polygon.cornerStyle = 'circle';
             polygon.cornerColor = 'rgba(0,0,255,0.5)';
+
+            // Create a control object for each polygon point
             polygon.controls = polygon.points.reduce(function (acc, point, index) {
                 acc['p' + index] = new fabric.Control({
                     positionHandler: polygonPositionHandler,
@@ -93,6 +97,7 @@ function Edit(canvas) {
         } else {
             polygon.cornerColor = 'blue';
             polygon.cornerStyle = 'rect';
+            // Default controls
             polygon.controls = fabric.Object.prototype.controls;
         }
         polygon.hasBorders = !polygon.edit;
