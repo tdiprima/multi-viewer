@@ -27,10 +27,6 @@ class nViewer {
             return chkZoom.checked;
         };
 
-        this.getViewer = function () {
-            return viewer;
-        };
-
         // this.modOptions = function (numViewers) {
         //     if (numViewers > 1) {
         //         options.multipleOn = true;
