@@ -215,7 +215,7 @@ function markupTools(idx, viewer) {
         canvas.on("path:created", pathCreatedHandler);
 
         function pathCreatedHandler(options) {
-            console.log('options', options);
+            // options gives you the Path object
             // todo: get this to stop doing it for all objects.
             let fabPath = options.path;
             pathToPoly(fabPath, canvas, paintBrush);
@@ -229,8 +229,7 @@ function markupTools(idx, viewer) {
         }
 
         function mouseupHandler(options) {
-            let evt = options.e;
-            console.log('options', evt.target)
+            // options gives you the PointerEvent object
             // Drawing off
             canvas.isDrawingMode = false;
             mToggle(true);
