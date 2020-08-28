@@ -200,7 +200,7 @@ function markupTools(idx, viewer) {
         paintBrush.width = 10 / viewer.viewport.getZoom(true);
     }
 
-    function souris(what) {
+    function mToggle(what) {
         viewer.setMouseNavEnabled(what);
         viewer.outerTracker.setTracking(what);
     }
@@ -251,7 +251,7 @@ function markupTools(idx, viewer) {
 
         function mouseupHandler() {
             // Drawing off
-            souris(true);
+            mToggle(true);
             canvas.isDrawingMode = false;
         }
 
@@ -272,14 +272,14 @@ function markupTools(idx, viewer) {
         if (canvas.isDrawingMode) {
             // drawing off
             canvas.off('mouse:down', mousedownHandler);
-            souris(true);
+            mToggle(true);
             canvas.isDrawingMode = false;
         } else {
             // drawing on
             canvas.on('mouse:down', mousedownHandler);
             paintBrush.color = mark.innerHTML;
             setBrushWidth(viewer);
-            souris(false);
+            mToggle(false);
             canvas.isDrawingMode = true;
         }
     });
