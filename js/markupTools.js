@@ -216,7 +216,7 @@ function markupTools(idx, viewer) {
 
         function pathCreatedHandler(options) {
             console.log('options', options);
-            // todo: why this doing it for all objects?
+            // todo: get this to stop doing it for all objects.
             let fabPath = options.path;
             pathToPoly(fabPath, canvas, paintBrush);
             customizeControls(fabPath);
