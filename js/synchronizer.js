@@ -20,7 +20,7 @@ class Synchronizer {
             currentViewer.addHandler('zoom', handler);
             locationPin(currentViewer, syncedViewers);
 
-            function handler() {
+            function handler(event) {
                 // My viewer is clicked, I'm the active viewer
                 // start magic
                 if (activeViewerId == null) {

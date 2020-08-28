@@ -8,7 +8,7 @@ locationPin = function (currentViewer, syncedViewers) {
     // const idx = currentViewer.id.trim(-1).replace("viewer", "");
 
     // prevent modal
-    $(currentViewer.element).on('contextmenu', function (event) {
+    $(currentViewer.element).on('contextmenu', (event) => {
         event.preventDefault();
     });
 

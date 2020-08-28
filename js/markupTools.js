@@ -215,6 +215,8 @@ function markupTools(idx, viewer) {
         canvas.on("path:created", pathCreatedHandler);
 
         function pathCreatedHandler(options) {
+            console.log('options', options);
+            // todo: why this doing it for all objects?
             let fabPath = options.path;
             pathToPoly(fabPath, canvas, paintBrush);
             customizeControls(fabPath);
@@ -226,10 +228,12 @@ function markupTools(idx, viewer) {
             // console.log('PATH:\n', path);
         }
 
-        function mouseupHandler() {
+        function mouseupHandler(options) {
+            let evt = options.e;
+            console.log('options', evt.target)
             // Drawing off
-            mToggle(true);
             canvas.isDrawingMode = false;
+            mToggle(true);
         }
 
         function mousedownHandler() {
@@ -245,16 +249,18 @@ function markupTools(idx, viewer) {
 
         if (canvas.isDrawingMode) {
             // drawing off
+            canvas.isDrawingMode = false;
             canvas.off('mouse:down', mousedownHandler);
             mToggle(true);
-            canvas.isDrawingMode = false;
+
         } else {
             // drawing on
+            canvas.isDrawingMode = true;
             canvas.on('mouse:down', mousedownHandler);
             paintBrush.color = mark.innerHTML;
             setBrushWidth(viewer);
             mToggle(false);
-            canvas.isDrawingMode = true;
+
         }
     });
 

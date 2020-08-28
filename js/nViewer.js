@@ -47,7 +47,7 @@ class nViewer {
                 viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 });
             });
 
-            viewer.world.addHandler("add-item", function () {
+            viewer.world.addHandler("add-item", (event) => {
 
                 if (viewer.world.getItemCount() === 2) {
                     // colorize layer 2
@@ -150,7 +150,6 @@ class nViewer {
             viewer = OpenSeadragon({
                 id: viewerDivId,
                 prefixUrl: "./js/lib/openseadragon/images/",
-                // homeFillsViewer: true,  // Not what I expected.
                 showFullPageControl: options.viewerOpts.showFullPageControl,
                 showHomeControl: options.viewerOpts.showHomeControl,
                 showZoomControl: options.viewerOpts.showZoomControl,
