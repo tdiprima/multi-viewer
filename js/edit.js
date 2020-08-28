@@ -1,8 +1,43 @@
+pathToPoly = function (fabPath, canvas, paintBrush) {
+
+    const _points0 = fabPath.path.map(item => ({
+        x: item[1],
+        y: item[2]
+    }));
+
+    // THERE ARE WAY TOO MANY POINTS; REDUCE THEM:
+    let points = _points0.reduce(
+        function (accumulator, currentValue, currentIndex) {
+            if (currentIndex % 7 === 0)
+                accumulator.push(currentValue);
+            return accumulator;
+        }, []);
+
+    // CREATE NEW OBJECT
+    let poly = new fabric.Polygon(points, {
+        left: fabPath.left,
+        top: fabPath.top,
+        fill: "",
+        strokeWidth: paintBrush.width,
+        stroke: paintBrush.color,
+        scaleX: fabPath.scaleX,
+        scaleY: fabPath.scaleY,
+        objectCaching: false,
+        transparentCorners: false,
+        cornerColor: "blue"
+    });
+    canvas.add(poly);
+    canvas.setActiveObject(poly);
+    canvas.remove(fabPath);
+}
+
+// CONTROL HANDLING FUNCTIONS
+
 // Locate the controls.
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
     // Do for all points
-    let x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x),
-        y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y);
+    let x = fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x,
+        y = fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y;
     return fabric.util.transformPoint(
         { x: x, y: y },
         fabric.util.multiplyTransformMatrices(
@@ -18,12 +53,20 @@ function actionHandler(eventData, transform, x, y) {
     // polygon.__corner is the handle that you dragged.
     let polygon = transform.target,
         currentControl = polygon.controls[polygon.__corner],
-        mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), 'center', 'center'),
+        mouseLocalPosition = polygon.toLocalPoint(
+            new fabric.Point(x, y),
+            "center",
+            "center"
+        ),
         polygonBaseSize = polygon._getNonTransformedDimensions(),
         size = polygon._getTransformedDimensions(0, 0),
         finalPointPosition = {
-            x: mouseLocalPosition.x * polygonBaseSize.x / size.x + polygon.pathOffset.x,
-            y: mouseLocalPosition.y * polygonBaseSize.y / size.y + polygon.pathOffset.y
+            x:
+                (mouseLocalPosition.x * polygonBaseSize.x) / size.x +
+                polygon.pathOffset.x,
+            y:
+                (mouseLocalPosition.y * polygonBaseSize.y) / size.y +
+                polygon.pathOffset.y
         };
     polygon.points[currentControl.pointIndex] = finalPointPosition;
     return true;
@@ -35,17 +78,24 @@ function anchorWrapper(anchorIndex, fn) {
     // Once per button click when edit = yes.
     return function (eventData, transform, x, y) {
         let fabricObject = transform.target,
-            absolutePoint = fabric.util.transformPoint({
-                x: (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x),
-                y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y),
-            }, fabricObject.calcTransformMatrix()),
+            absolutePoint = fabric.util.transformPoint(
+                {
+                    x: fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x,
+                    y: fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y
+                },
+                fabricObject.calcTransformMatrix()
+            ),
             actionPerformed = fn(eventData, transform, x, y),
             polygonBaseSize = fabricObject._getNonTransformedDimensions(),
-            newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x,
-            newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
+            newX =
+                (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) /
+                polygonBaseSize.x,
+            newY =
+                (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) /
+                polygonBaseSize.y;
         fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5);
         return actionPerformed;
-    }
+    };
 }
 
 function getPolygon(canvas) {

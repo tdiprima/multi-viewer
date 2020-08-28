@@ -206,45 +206,22 @@ function markupTools(idx, viewer) {
     }
 
     // todo: fix. it makes 2 on 2nd make line.
-    function pathToPoly(fabPath) {
-
-        let arr = fabPath.path;
-        console.log('len', arr.length);
-
-        // Reduce points before using in polygon
-        // Or - make the poly, then reduce the controls
-        let points = arr.reduce(
-          function(accumulator, currentValue, currentIndex) {
-              if (currentIndex % 10 === 0)
-                  accumulator.push({x: arr[currentIndex][1], y: arr[currentIndex][2]});
-              return accumulator;
-          }, []);
-        console.log('len', points.length);
-
-        // Initiate a polygon instance
-        let polygon = new fabric.Polygon(points, {
-            stroke: mark.innerHTML,
-            strokeWidth: paintBrush.width,
-            fill: ''
-        });
-
-        // Render the polygon in canvas
-        canvas.add(polygon);
-        canvas.remove(fabPath);
-    }
+    //function pathToPoly(fabPath) {
 
     // DRAW BUTTON
     btnDraw.addEventListener('click', function () {
         toggleButton(btnDraw);
+        canvas.on("mouse:up", mouseupHandler);
+        canvas.on("path:created", pathCreatedHandler);
 
         function pathCreatedHandler(options) {
-            let line = options.path;
-            let path = line.path;
-            pathToPoly(line);
-            customizeControls(path);
+            let fabPath = options.path;
+            pathToPoly(fabPath, canvas, paintBrush);
+            customizeControls(fabPath);
             clearClassList(btnDraw);
             btnDraw.classList.add('btn');
-            canvas.off('mouse:down', mousedownHandler);
+            // canvas.off('mouse:down', mousedownHandler);
+            // canvas.off("mouse:up", mouseupHandler);
             // TODO: implement save
             // console.log('PATH:\n', path);
         }
@@ -254,9 +231,6 @@ function markupTools(idx, viewer) {
             mToggle(true);
             canvas.isDrawingMode = false;
         }
-
-        canvas.on("mouse:up", mouseupHandler);
-        canvas.on("path:created", pathCreatedHandler);
 
         function mousedownHandler() {
             // For example, panning or zooming after selection
