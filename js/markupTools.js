@@ -141,7 +141,7 @@ function markupTools(idx, viewer) {
         let deleteBtn = document.createElement('img');
         deleteBtn.src = "./img/delete-icon.png";
         deleteBtn.classList.add('deleteBtn')
-        deleteBtn.style = `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`;
+        deleteBtn.style = `position:absolute;top:${btnTop};left:${btnLeft};cursor:pointer;width:20px;height:20px;`;
         deleteBtn.alt = "delete object";
         el.appendChild(deleteBtn);
     }
