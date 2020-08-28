@@ -1,5 +1,4 @@
 // Locate the controls.
-// This function will be used both for drawing and for interaction.
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
     // Do for all points
     let x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x),
@@ -13,14 +12,9 @@ function polygonPositionHandler(dim, finalMatrix, fabricObject) {
     );
 }
 
-// Define what the control does.
 // This function will be called on every mouse move after a control has been
 // clicked and is being dragged.
-// The function receives as argument the mouse event, the current transform object
-// and the current position in canvas coordinates.
-// transform.target is a reference to the current object being transformed.
 function actionHandler(eventData, transform, x, y) {
-    // move-handler
     // polygon.__corner is the handle that you dragged.
     let polygon = transform.target,
         currentControl = polygon.controls[polygon.__corner],
@@ -73,19 +67,20 @@ function isRealValue(obj) {
 
 function Edit(canvas) {
 
-    let polygon = getPolygon(canvas);
+    let poly = getPolygon(canvas);
 
-    if (isRealValue(polygon)) {
-        // console.log("instance of Polygon:", polygon instanceof fabric.Polygon);
-        canvas.setActiveObject(polygon);
-        polygon.edit = !polygon.edit;
-        if (polygon.edit) {
-            let lastControl = polygon.points.length - 1;
-            polygon.cornerStyle = 'circle';
-            polygon.cornerColor = 'rgba(0,0,255,0.5)';
+    if (isRealValue(poly)) {
+        // console.log("instance of Polygon:", poly instanceof fabric.Polygon);
+        canvas.setActiveObject(poly);
+        poly.edit = !poly.edit;
+        if (poly.edit) {
+            let lastControl = poly.points.length - 1;
+            poly.cornerStyle = 'circle';
+            poly.cornerColor = 'rgba(0,0,255,0.5)';
 
-            // Create a control object for each polygon point
-            polygon.controls = polygon.points.reduce(function (acc, point, index) {
+            // accumulator, next item, index
+            let reduceFun = function (acc, point, index) {
+                // Create a control object for each polygon point
                 acc['p' + index] = new fabric.Control({
                     positionHandler: polygonPositionHandler,
                     actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
@@ -93,14 +88,19 @@ function Edit(canvas) {
                     pointIndex: index
                 });
                 return acc;
-            }, {});
+            }
+
+            // Create a control buddy [hashtable]. Point p0 = corresponding Control object.
+            // function, initial value
+            poly.controls = poly.points.reduce(reduceFun, {});
+
         } else {
-            polygon.cornerColor = 'blue';
-            polygon.cornerStyle = 'rect';
-            // Default controls
-            polygon.controls = fabric.Object.prototype.controls;
+            poly.cornerColor = 'blue';
+            poly.cornerStyle = 'rect';
+            // Default controls:
+            poly.controls = fabric.Object.prototype.controls;
         }
-        polygon.hasBorders = !polygon.edit;
+        poly.hasBorders = !poly.edit;
         canvas.requestRenderAll();
     } else {
         alert('DRAW a polygon first!');
