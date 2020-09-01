@@ -122,8 +122,12 @@ class nViewer {
 
             // TOOLBAR
             if (options.toolbarOn) {
-                new Toolbar(div, idx, sliders, options).menu();
-                // new Toolbar(div, idx, sliders, options).buttons();
+                if (options.menu) {
+                    new Toolbar(div, idx, sliders, options).menu();
+                } else {
+                    new Toolbar(div, idx, sliders, options).buttons();
+                }
+
                 // CHECKBOXES
                 if (options.multipleOn) {
                     chkPan = document.getElementById("chkPan" + idx);

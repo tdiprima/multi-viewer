@@ -28,47 +28,66 @@ function markupTools(idx, viewer) {
     /**
      * GRID handler
      */
-    let cellX = [], cellY = [];
-    const sizeOfBox = 50;
-    const width = canvas.width;
-    const numBoxes = (width / sizeOfBox);
-    for (let imoX = 0; imoX < numBoxes; imoX++) {
-        cellX[imoX + 1] = imoX * sizeOfBox;
+    const getOffset = (element, horizontal = false) => {
+        if (!element) return 0;
+        return getOffset(element.offsetParent, horizontal) + (horizontal ? element.offsetLeft : element.offsetTop);
     }
-    for (let imoY = 0; imoY < numBoxes; imoY++) {
-        cellY[imoY + 1] = imoY * sizeOfBox;
+
+    function newDims() {
+        let myElements = document.querySelectorAll("canvas");
+        let retVal = [];
+        let h = 0;
+        for (let i = 0; i < myElements.length; i++) {
+            let d = myElements[i];
+            if (d.id) {
+                h = d.height;
+                console.log(d.id, d.width, d.height);
+                break;
+            }
+        }
+
+        console.log('canvas', canvas.width, canvas.height)
+        let myElement = document.getElementById('viewer' + idx);
+        retVal[0] = canvas.width; // let the width stay the same
+        const offsetY = getOffset(myElement);
+        retVal[1] = h + offsetY; // change height
+
+        console.log('new', retVal[0], retVal[1]);
+
+        return retVal;
     }
 
     let gridAdded = false;
-
-    function makeLine(coords) {
-        return new fabric.Line(coords, {
-            stroke: "#ccc",
+    function line(x1, y1, x2, y2) {
+        let line = new fabric.Line([x1, y1, x2, y2], {
+            // stroke: 'white'
+            // stroke: "#ccc",
+            stroke: 'red',
             strokeWidth: 2,
             selectable: false
         });
+        canvas.add(line);
     }
 
-    // Mouse move event-handler
-    function mouseCoords(e) {
-        let pointer = e.pointer;
-        let cx = pointer.x;
-        let cy = pointer.y;
-        let ctx = viewer.drawer.context;
-        // let cx = e.clientX; // undefined
-        // let cy = e.clientY; // undefined
-        // console.log('x, y', cx, cy);
+    function draw() {
 
-        let x = cx / sizeOfBox;
-        let y = cy / sizeOfBox;
+        let dd = newDims();
+        let width = dd[0], height = dd[1];
 
-        let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
-        let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
+        let x = 50;
+        // Draw a line from x,0 to x,height.
+        while (x < width) {
+            line(x, 0, x, height);
+            x += 50;
+        }
 
-        // TODO: fix
-        ctx.fillStyle = "red";
-        ctx.fillRect(cellX[imoX], cellY[imoY], sizeOfBox, sizeOfBox);
-
+        let y = 50;
+        while (y < height) {
+            // Draw a line from 0,y to width,y.
+            line(0, y, width, y);
+            y += 50;
+        }
+        gridAdded = true;
     }
 
     btnGrid.addEventListener('click', function () {
@@ -83,10 +102,7 @@ function markupTools(idx, viewer) {
             gridAdded = false;
 
         } else {
-            for (let i = 0; i < numBoxes; i++) {
-                canvas.add(makeLine([i * sizeOfBox, 0, i * sizeOfBox, width]));
-                canvas.add(makeLine([0, i * sizeOfBox, width, i * sizeOfBox]));
-            }
+            draw();
             btnGrid.innerHTML = 'Remove grid';
             gridAdded = true;
         }
@@ -99,6 +115,7 @@ function markupTools(idx, viewer) {
     // }
     // canvas.on('selection:created', onObjectSelected);
 
+    /*
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
@@ -120,7 +137,7 @@ function markupTools(idx, viewer) {
         if (toggle) {
             toggleButton(btnMarker);
         }
-    }
+    }*/
 
     // EDIT POLYGON
     document.getElementById('btnEdit' + idx).addEventListener('click', function () {
@@ -262,5 +279,4 @@ function markupTools(idx, viewer) {
 
         }
     });
-
 }
