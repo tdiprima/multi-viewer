@@ -45,12 +45,31 @@ function markupTools(idx, viewer) {
         canvas.add(line);
     }
 
+    function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
+
+        var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+        return { width: Math.round(srcWidth * ratio), height: Math.round(srcHeight * ratio) };
+    }
+
+    function get_dims(viewer) {
+        // Image dimensions
+        let dim = viewer.world.getItemAt(0).source.dimensions;
+        let dpr = window.devicePixelRatio;
+        let w = dim.x / dpr;
+        let h = dim.y / dpr;
+        // Fit it to the div
+        return calculateAspectRatioFit(w, h, 800, 700);
+    }
+
     function draw() {
 
-        let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
-        let whatever = $('#' + arr[2]);
+        // let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
+        // let whatever = $('#' + arr[2]);
         let width = canvas.width;
-        let height = whatever.height() + getOffset(document.getElementById(arr[2]));
+        // let height = whatever.height() + getOffset(document.getElementById(arr[2]));
+        let fit = get_dims(viewer);
+        // let width = fit.width;
+        let height = fit.height;
 
         let x = 50;
         // Draw a line from x,0 to x,height.
