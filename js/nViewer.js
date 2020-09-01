@@ -122,7 +122,7 @@ class nViewer {
 
             // TOOLBAR
             if (options.toolbarOn) {
-                if (options.menu) {
+                if (isRealValue(options.menu) && options.menu) {
                     new Toolbar(div, idx, sliders, options).menu();
                 } else {
                     new Toolbar(div, idx, sliders, options).buttons();
