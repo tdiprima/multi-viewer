@@ -48,8 +48,9 @@ function markupTools(idx, viewer) {
     function draw() {
 
         let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
-        let whatever = $( '#' + arr[2] );
-        let width = canvas.width, height = whatever.height() + getOffset(document.getElementById(arr[1]));
+        let whatever = $('#' + arr[2]);
+        let width = canvas.width;
+        let height = whatever.height() + getOffset(document.getElementById(arr[2]));
 
         let x = 50;
         // Draw a line from x,0 to x,height.
