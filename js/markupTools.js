@@ -45,13 +45,11 @@ function markupTools(idx, viewer) {
                 break;
             }
         }
-
         console.log('canvas', canvas.width, canvas.height)
         let myElement = document.getElementById('viewer' + idx);
         retVal[0] = canvas.width; // let the width stay the same
         const offsetY = getOffset(myElement);
         retVal[1] = h + offsetY; // change height
-
         console.log('new', retVal[0], retVal[1]);
 
         return retVal;
@@ -71,8 +69,13 @@ function markupTools(idx, viewer) {
 
     function draw() {
 
-        let dd = newDims();
-        let width = dd[0], height = dd[1];
+        // let dd = newDims();
+        // let width = dd[0], height = dd[1];
+        //let whatever = $( '#viewers' );
+        let whatever = $( '#viewers' );
+        // console.log('whatever', whatever.width(), whatever.height())
+        //let width = whatever.width(), height = whatever.height();
+        let width = canvas.width, height = whatever.height();
 
         let x = 50;
         // Draw a line from x,0 to x,height.
