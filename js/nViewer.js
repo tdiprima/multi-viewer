@@ -11,6 +11,11 @@ class nViewer {
         let chkZoom = {};
         let viewer = {};
         mainDiv = document.getElementById(mainDiv);
+        if (!isRealValue(mainDiv)) {
+            mainDiv = document.createElement('div')
+            mainDiv.id = 'viewers';
+            document.body.appendChild(mainDiv);
+        }
 
         setFilter();
         setViewer();
@@ -47,6 +52,7 @@ class nViewer {
                 viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 });
             });
 
+            // https://github.com/openseadragon/openseadragon/issues/1239#issuecomment-313735641
             viewer.world.addHandler("add-item", (event) => {
 
                 if (viewer.world.getItemCount() === 2) {
