@@ -63,28 +63,30 @@ function markupTools(idx, viewer) {
 
     function draw() {
 
+        // Experiments:
         // let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
         // let whatever = $('#' + arr[2]);
-        let width = canvas.width;
+        // let width = canvas.width;
         // let height = whatever.height() + getOffset(document.getElementById(arr[2]));
-        let fit = get_dims(viewer);
+        // let fit = get_dims(viewer);
         // let width = fit.width;
-        let height = fit.height;
+        // let height = fit.height;
+        
+        let x = 0, y = 0, cell_size = 50;
 
-        let x = 50;
-        // Draw a line from x,0 to x,height.
-        while (x < width) {
-            line(x, 0, x, height);
-            x += 50;
+            while (x < canvas.width) {
+                // Draw a line from x,0 to x,canvas.height.
+                line(x, 0, x, canvas.height);
+                x += cell_size;
+            }
+
+            while (y < canvas.height) {
+                // Draw a line from 0,y to width,y.
+                line(0, y, canvas.width, y);
+                y += cell_size;
+            }
         }
 
-        let y = 50;
-        while (y < height) {
-            // Draw a line from 0,y to width,y.
-            line(0, y, width, y);
-            y += 50;
-        }
-        gridAdded = true;
     }
 
     btnGrid.addEventListener('click', function () {
@@ -106,35 +108,6 @@ function markupTools(idx, viewer) {
         toggleButton(btnGrid);
 
     });
-
-    // function onObjectSelected(e) {
-    //     console.log(e.target.get('type'));
-    // }
-    // canvas.on('selection:created', onObjectSelected);
-
-    /*
-    let btnMarker = document.getElementById('btnMarker' + idx);
-    btnMarker.addEventListener('click', markerHandler);
-
-    function markerHandler() {
-        let toggle = true;
-        if (btnMarker.classList.contains('btnOn')) {
-            canvas.off("mouse:move", mouseCoords);
-            btnMarker.innerHTML = "Mark grid";
-
-        } else {
-            if (!gridAdded) {
-                toggle = false;
-                alert("Draw a GRID first!");
-            } else {
-                canvas.on("mouse:move", mouseCoords);
-                btnMarker.innerHTML = "Done marking";
-            }
-        }
-        if (toggle) {
-            toggleButton(btnMarker);
-        }
-    }*/
 
     // EDIT POLYGON
     document.getElementById('btnEdit' + idx).addEventListener('click', function () {
