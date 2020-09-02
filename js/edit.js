@@ -104,10 +104,7 @@ function getPolygon(canvas) {
     } else {
         if (canvas.getObjects()[0] && canvas.getObjects()[0].type === 'polygon') {
             return canvas.getObjects()[0];
-        } else {
-            alert('Please select a polygon for editing.');
         }
-
     }
 }
 
@@ -153,6 +150,6 @@ function Edit(canvas) {
         poly.hasBorders = !poly.edit;
         canvas.requestRenderAll();
     } else {
-        alert('DRAW a polygon first!');
+        alert('Please select a polygon for editing.');
     }
 }
