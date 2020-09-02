@@ -66,10 +66,18 @@ function markupTools(idx, viewer) {
         // Experiments:
         // let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
         // let whatever = $('#' + arr[2]);
-        // let width = canvas.width;
+        ////let width = canvas.width;
         // let height = whatever.height() + getOffset(document.getElementById(arr[2]));
-        // let fit = get_dims(viewer);
+        ////let fit = get_dims(viewer);
         // let width = fit.width;
+        ////let height = fit.height;
+
+        let x = 50;
+        // Draw a line from x,0 to x,height.
+        while (x < width) {
+            line(x, 0, x, height);
+            x += 50;
+        }
         // let height = fit.height;
         
         let x = 0, y = 0, cell_size = 50;
@@ -85,6 +93,7 @@ function markupTools(idx, viewer) {
                 line(0, y, canvas.width, y);
                 y += cell_size;
             }
+            gridAdded = true;
         }
 
     }
