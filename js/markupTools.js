@@ -47,7 +47,7 @@ function markupTools(idx, viewer) {
 
     function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 
-        var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+        let ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
         return { width: Math.round(srcWidth * ratio), height: Math.round(srcHeight * ratio) };
     }
 
@@ -63,38 +63,42 @@ function markupTools(idx, viewer) {
 
     function draw() {
 
+        // Good for 4 elements on screen:
+        let width, height, x = 0, y = 0, cell_size = 30;
+        // height = canvas.height;
+        width = canvas.width; // always perfect fit.
+
         // Experiments:
         // let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
-        // let whatever = $('#' + arr[2]);
-        ////let width = canvas.width;
-        // let height = whatever.height() + getOffset(document.getElementById(arr[2]));
-        ////let fit = get_dims(viewer);
-        // let width = fit.width;
-        ////let height = fit.height;
 
-        let x = 50;
-        // Draw a line from x,0 to x,height.
+        // One viewer on screen:
+        // Using element 'viewers' too tall.
+        // Using element 'viewer0' too short.
+        // Ditto for osd-overlaycanvas-1.
+
+        // 4 viewers on screen, this is good:
+        // let someElement = $('#' + arr[0]);
+        // width = someElement.width();
+        // height = someElement.height();
+
+        // 1 viewer on screen, this is good:
+        let fit = get_dims(viewer);
+        // width = fit.width; // nah.
+        height = fit.height; // better.
+
         while (x < width) {
+            // Draw a line from x,0 to x,canvas.height.
             line(x, 0, x, height);
-            x += 50;
+            x += cell_size;
         }
-        // let height = fit.height;
-        
-        let x = 0, y = 0, cell_size = 50;
 
-            while (x < canvas.width) {
-                // Draw a line from x,0 to x,canvas.height.
-                line(x, 0, x, canvas.height);
-                x += cell_size;
-            }
-
-            while (y < canvas.height) {
-                // Draw a line from 0,y to width,y.
-                line(0, y, canvas.width, y);
-                y += cell_size;
-            }
-            gridAdded = true;
+        // while (y < canvas.height) {
+        while (y < height) {
+            // Draw a line from 0,y to width,y.
+            line(0, y, width, y);
+            y += cell_size;
         }
+        gridAdded = true;
 
     }
 
