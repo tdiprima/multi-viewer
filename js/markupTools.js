@@ -36,9 +36,8 @@ function markupTools(idx, viewer) {
     let gridAdded = false;
     function line(x1, y1, x2, y2) {
         let line = new fabric.Line([x1, y1, x2, y2], {
-            // stroke: 'white'
-            // stroke: "#ccc",
-            stroke: 'red',
+            // stroke: red
+            stroke: "#ccc",
             strokeWidth: 2,
             selectable: false
         });
@@ -110,12 +109,12 @@ function markupTools(idx, viewer) {
             for (let i = 0; i < r.length; i++) {
                 canvas.remove(r[i]);
             }
-            btnGrid.innerHTML = 'Draw grid';
+            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid';
             gridAdded = false;
 
         } else {
             draw();
-            btnGrid.innerHTML = 'Remove grid';
+            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
             gridAdded = true;
         }
         toggleButton(btnGrid);
