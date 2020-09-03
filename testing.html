@@ -3,19 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Testing</title>
+    <!-- https://stackoverflow.com/questions/24977634/css-float-4-divs-in-a-square-order-float-left-only-2-and-4-does-not-work/24977686 -->
+    <style>
+        .divSquare{
+            width:48%; height:560px; margin:4px; border:1px solid black; float: left; border: 1px solid blueviolet
+        }
+        .controls {
+            width: 640px; height: 70px; border: 1px solid red
+        }
+        .viewer {
+            width: 640px; height: 480px; border: 1px solid green
+        }
+        .floated {
+            float:left;
+            margin-right:5px;
+        }
+    </style>
 </head>
 <body>
 
-    <div style="float: left;">
-        <div style="width: 640px; height: 20px; border: 1px solid red"></div>
-        <div style="width: 640px; height: 480px; border: 1px solid green"></div>
+    <!-- First div test contains things -->
+    <div class="divSquare">
+        <div class="controls">
+            <div>
+                <input type="range" min="1" max="100" value="50" class="slider" id="myRange" /><br>
+                <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
+            </div>
+            <div class="floated"><button type="button">Click Me!</button><button type="button">And Me!</button><button type="button">And Me!!</button></div>
+        </div>
+        <div class="viewer"></div>
     </div>
 
-    <div style="float: right;">
-        <div style="width: 640px; height: 20px; border: 1px solid red"></div>
-        <div style="width: 640px; height: 480px; border: 1px solid green"></div>
-    </div>
-    
+    <!-- Very simple -->
+    <div class="divSquare">2</div>
+    <div style='clear:both'></div>
+    <div class="divSquare">3</div>
+    <div class="divSquare">4</div>
+
 </body>
 </html>
