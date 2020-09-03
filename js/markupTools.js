@@ -28,113 +28,41 @@ function markupTools(idx, viewer) {
     /**
      * GRID handler
      */
-    const getOffset = (element, horizontal = false) => {
-        if (!element) return 0;
-        return getOffset(element.offsetParent, horizontal) + (horizontal ? element.offsetLeft : element.offsetTop);
-    }
 
-    let gridAdded = false;
-    function line(x1, y1, x2, y2) {
-        let line = new fabric.Line([x1, y1, x2, y2], {
-            // stroke: red
-            stroke: "#ccc",
-            strokeWidth: 2,
-            selectable: false
-        });
-        canvas.add(line);
-    }
-
-    function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-
-        let ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
-        return { width: Math.round(srcWidth * ratio), height: Math.round(srcHeight * ratio) };
-    }
-
-    function get_dims(viewer) {
-        // Image dimensions
-        let dim = viewer.world.getItemAt(0).source.dimensions;
-        let dpr = window.devicePixelRatio;
-        let w = dim.x / dpr;
-        let h = dim.y / dpr;
-        // Fit it to the div
-        return calculateAspectRatioFit(w, h, 800, 700);
-    }
+    let cellX = [], cellY = [], cell_size = 50, gridAdded = false, dim_width, dim_height;
 
     function renderGrid(width, height, cell_width, cell_height, color) {
-        // TODO: is the css throwing the rendering off with the height?
+        console.log(width, height, cell_width, cell_height, color)
 
         let lineOption = { stroke: color, strokeWidth: 2, selectable: false }
 
         // Horizontal grid lines
         for (let y = 0; y < Math.ceil(height / cell_height); ++y) {
             canvas.add(new fabric.Line([0, y * cell_height, width, y * cell_height], lineOption));
+            cellY[y + 1] = y * cell_height;
         }
 
         // Vertical grid lines
         for (let x = 0; x < Math.ceil(width / cell_width); ++x) {
             canvas.add(new fabric.Line([x * cell_width, 0, x * cell_width, height], lineOption));
+            // cellX[x + 1] = x * cell_width;
+            cellX[x] = x * cell_width;
         }
         canvas.renderAll();
-
-    }
-
-    function renderGrid1() {
-
-        // Good for 4 elements on screen:
-        let width, height, x = 0, y = 0, cell_size = 40;
-        // height = canvas.height;
-        width = canvas.width; // always perfect fit.
-
-        // Experiments:
-        // let arr = ["osd-overlaycanvas-1", "viewer0", "viewers"]
-
-        // One viewer on screen:
-        // Using element 'viewers' too tall.
-        // Using element 'viewer0' too short.
-        // Ditto for osd-overlaycanvas-1.
-
-        // 4 viewers on screen, this is good:
-        // let someElement = $('#' + arr[0]);
-        // width = someElement.width();
-        // height = someElement.height();
-
-        // 1 viewer on screen, this is good:
-        let fit = get_dims(viewer);
-        // width = fit.width; // nah.
-        height = fit.height; // better.
-
-        while (x < width) {
-            // Draw a line from x,0 to x,canvas.height.
-            line(x, 0, x, height);
-            x += cell_size;
-        }
-
-        // while (y < canvas.height) {
-        while (y < height) {
-            // Draw a line from 0,y to width,y.
-            line(0, y, width, y);
-            y += cell_size;
-        }
         gridAdded = true;
 
     }
 
-    let cellX = [], cellY = [], cell_size = 50;
+    // Grid button event handler
     btnGrid.addEventListener('click', function () {
 
-        let fit = get_dims(viewer);
-        let width = canvas.width, height = fit.height
-
-        for (let imoX = 0; imoX < (width / cell_size); imoX++) {
-            cellX[imoX + 1] = imoX * cell_size;
-        } // array fix [imoX+1]: 0-9 => 1-10 index
-
-        for (let imoY = 0; imoY < (width / cell_size); imoY++) {
-            cellY[imoY + 1] = imoY * cell_size;
-        } // array fix [imoY+1]: 0-9 => 1-10 index
+        let dimWidthEl = document.getElementById("dim-w");
+        let dimHeightEl = document.getElementById("dim-h");
+        dim_width = Math.ceil(dimWidthEl.value);
+        dim_height = Math.ceil(dimHeightEl.value);
 
         if (btnGrid.classList.contains('btnOn')) {
-            // remove only the lines
+            // Remove only the lines
             let r = canvas.getObjects('line');
             for (let i = 0; i < r.length; i++) {
                 canvas.remove(r[i]);
@@ -145,7 +73,7 @@ function markupTools(idx, viewer) {
         } else {
 
             // DRAW GRID
-            renderGrid(width, height, cell_size, cell_size, 'red');
+            renderGrid(dim_width, dim_height, cell_size, cell_size, 'red');
             btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
             gridAdded = true;
         }
@@ -153,15 +81,18 @@ function markupTools(idx, viewer) {
 
     });
 
+
+    // Grid Marker
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
+    // Get coordinates of mouse pointer
     function mouseCoords(options) {
         let event = options.e;
         let rect = document.getElementById('viewer' + idx).getBoundingClientRect();
         const mouseCoords = { x: event.clientX - rect.left, y: event.clientY - rect.top }
 
-        let cx = mouseCoords.x; // get horizontal coordinate of mouse pointer
+        let cx = mouseCoords.x;
         let cy = mouseCoords.y;
 
         let x = cx / cell_size;
@@ -174,9 +105,11 @@ function markupTools(idx, viewer) {
         ctx.fillRect(cellX[imoX], cellY[imoY], cell_size, cell_size);
     }
 
+    // Grid marker event handler
     function markerHandler() {
         let toggle = true;
         if (btnMarker.classList.contains('btnOn')) {
+            // Remove mouse:move listener (we also use it for other things)
             canvas.off("mouse:move", mouseCoords);
             btnMarker.innerHTML = "Mark grid";
 
@@ -185,6 +118,7 @@ function markupTools(idx, viewer) {
                 toggle = false;
                 alert("Please draw a grid first.");
             } else {
+                // Add listener
                 canvas.on("mouse:move", mouseCoords);
                 btnMarker.innerHTML = "Done marking";
             }

@@ -41,6 +41,20 @@ class nViewer {
         //     console.log(options);
         // }
 
+        viewer.addHandler('open', (param) => {
+            let dimWidthEl = document.getElementById("dim-w");
+            let dimHeightEl = document.getElementById("dim-h");
+            let tiledImage = viewer.world.getItemAt(0);
+            let imgRect = tiledImage.getBounds(true);
+            let elementRect = viewer.viewport.viewportToViewerElementRectangle(
+              imgRect
+            );
+            dimWidthEl.value = elementRect.width;
+            dimHeightEl.value = elementRect.height;
+            console.log(elementRect)
+
+        })
+
         /**
          * @param imageArray
          * @param opacityArray
@@ -90,6 +104,7 @@ class nViewer {
                         return uri;
                     };
                 }
+
             });
 
         };
@@ -140,11 +155,20 @@ class nViewer {
          */
         function setViewer() {
             let diva = document.createElement('div');
+            diva.style.border = "2px solid red"
             diva.setAttribute('class', 'nViewer');
             mainDiv.appendChild(diva);
             setControls(diva);
             let div = document.createElement('div');
+            div.style.border = "2px solid green"
             div.id = viewerDivId;
+            div.style.width = "640px";
+            div.style.height = "480px";
+            if (idx % 2 === 0) {
+                div.style.float = "left";
+            } else {
+                div.style.float = "right";
+            }
             div.setAttribute('class', cssName);
             diva.appendChild(div);
 

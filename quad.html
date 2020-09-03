@@ -12,26 +12,10 @@
 </head>
 
 <body>
-    <h3>TCGA Segmentation Data</h3>
+    <input type="hidden" id="dim-w" value="">
+    <input type="hidden" id="dim-h" value="">
 
-    <!-- <i class="fas fa-layer-group .dropbtn" onmouseout="document.getElementById('layers').style.display='none'"
-        onmouseover="document.getElementById('layers').style.display='inline-block'"></i> Layers -->
-    <!-- <ul class="dropdown-content" id="layers" style="display: none">
-        <li><a href="#">1Weather Layers <i class="fas fa-cloud"></i></a></li>
-        <li><a href="">None</a></li> -->
-    <!-- <li><a href="">None</a></li>
-        <li><a href="">Fire</a></li>
-        <li><a href="">Floods</a></li>
-        <li><a href="">Fog</a></li>
-        <li><a href="">Freezing</a></li>
-        <li><a href="">Hurricane and tropical</a></li>
-        <li><a href="">Hurricane and tropical tracks</a></li>
-        <li><a href="">Ice</a></li>
-        <li><a href="">Snow</a></li>
-        <li><a href="">Storm and tornados</a></li>
-        <li><a href="#">Wind</a></li>
-        <li><a href="#">Winter</a></li> -->
-    <!--    </ul>-->
+    <h3>TCGA Segmentation Data</h3>
 
     <div id="selections"></div>
     <div><br>&nbsp;</div>
@@ -71,27 +55,6 @@
         // demo.execute(4, false, options);
         demo.execute(4, true);
 
-        /*
-        window.onload = function () {
-            let arr = [];
-            const canvii = document.querySelectorAll("canvas");
-            canvii.forEach(can => {
-                if (can.id)
-                    arr.push(can.id);
-                // console.log(can.id);
-            });
-            const divs = document.querySelectorAll("div");
-            divs.forEach(d => {
-                if (d.id)
-                    arr.push(d.id);
-                // console.log(d.id);
-            });
-            arr.forEach(a => {
-                let mm = $('#' + a);
-                console.log(mm[0].id, mm.width(), mm.height());
-            });
-        }
-        */
     </script>
 
 </body>

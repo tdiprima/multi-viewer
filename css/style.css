@@ -99,22 +99,22 @@ a:link {
     cursor: pointer;
 }
 
-.container {
-    display: grid;
-    height: 100vh;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-}
+/*.container {*/
+/*    display: grid;*/
+/*    height: 100vh;*/
+/*    grid-template-columns: auto auto;*/
+/*    grid-template-rows: auto auto;*/
+/*}*/
 
-.nViewer {
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 75px;
-}
+/*.nViewer {*/
+/*    margin-left: 20px;*/
+/*    margin-right: 20px;*/
+/*    margin-bottom: 75px;*/
+/*}*/
 
-.dragonbox {
-    height: 100%;
-}
+/*.dragonbox {*/
+/*    height: 100%;*/
+/*}*/
 
 
 /* range sliders */
