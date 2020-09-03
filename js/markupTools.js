@@ -60,10 +60,28 @@ function markupTools(idx, viewer) {
         return calculateAspectRatioFit(w, h, 800, 700);
     }
 
-    function draw() {
+    function renderGrid(width, height, cell_width, cell_height, color) {
+        // TODO: is the css throwing the rendering off with the height?
+
+        let lineOption = { stroke: color, strokeWidth: 2, selectable: false }
+
+        // Horizontal grid lines
+        for (let y = 0; y < Math.ceil(height / cell_height); ++y) {
+            canvas.add(new fabric.Line([0, y * cell_height, width, y * cell_height], lineOption));
+        }
+
+        // Vertical grid lines
+        for (let x = 0; x < Math.ceil(width / cell_width); ++x) {
+            canvas.add(new fabric.Line([x * cell_width, 0, x * cell_width, height], lineOption));
+        }
+        canvas.renderAll();
+
+    }
+
+    function renderGrid1() {
 
         // Good for 4 elements on screen:
-        let width, height, x = 0, y = 0, cell_size = 30;
+        let width, height, x = 0, y = 0, cell_size = 40;
         // height = canvas.height;
         width = canvas.width; // always perfect fit.
 
@@ -101,7 +119,19 @@ function markupTools(idx, viewer) {
 
     }
 
+    let cellX = [], cellY = [], cell_size = 50;
     btnGrid.addEventListener('click', function () {
+
+        let fit = get_dims(viewer);
+        let width = canvas.width, height = fit.height
+
+        for (let imoX = 0; imoX < (width / cell_size); imoX++) {
+            cellX[imoX + 1] = imoX * cell_size;
+        } // array fix [imoX+1]: 0-9 => 1-10 index
+
+        for (let imoY = 0; imoY < (width / cell_size); imoY++) {
+            cellY[imoY + 1] = imoY * cell_size;
+        } // array fix [imoY+1]: 0-9 => 1-10 index
 
         if (btnGrid.classList.contains('btnOn')) {
             // remove only the lines
@@ -113,13 +143,56 @@ function markupTools(idx, viewer) {
             gridAdded = false;
 
         } else {
-            draw();
+
+            // DRAW GRID
+            renderGrid(width, height, cell_size, cell_size, 'red');
             btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
             gridAdded = true;
         }
         toggleButton(btnGrid);
 
     });
+
+    let btnMarker = document.getElementById('btnMarker' + idx);
+    btnMarker.addEventListener('click', markerHandler);
+
+    function mouseCoords(options) {
+        let event = options.e;
+        let rect = document.getElementById('viewer' + idx).getBoundingClientRect();
+        const mouseCoords = { x: event.clientX - rect.left, y: event.clientY - rect.top }
+
+        let cx = mouseCoords.x; // get horizontal coordinate of mouse pointer
+        let cy = mouseCoords.y;
+
+        let x = cx / cell_size;
+        let y = cy / cell_size;
+        let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
+        let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
+
+        let ctx = viewer.drawer.context;
+        ctx.fillStyle = "red";
+        ctx.fillRect(cellX[imoX], cellY[imoY], cell_size, cell_size);
+    }
+
+    function markerHandler() {
+        let toggle = true;
+        if (btnMarker.classList.contains('btnOn')) {
+            canvas.off("mouse:move", mouseCoords);
+            btnMarker.innerHTML = "Mark grid";
+
+        } else {
+            if (!gridAdded) {
+                toggle = false;
+                alert("Please draw a grid first.");
+            } else {
+                canvas.on("mouse:move", mouseCoords);
+                btnMarker.innerHTML = "Done marking";
+            }
+        }
+        if (toggle) {
+            toggleButton(btnMarker);
+        }
+    }
 
     // EDIT POLYGON
     document.getElementById('btnEdit' + idx).addEventListener('click', function () {
