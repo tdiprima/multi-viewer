@@ -51,7 +51,7 @@ class nViewer {
             );
             dimWidthEl.value = elementRect.width;
             dimHeightEl.value = elementRect.height;
-            console.log(elementRect)
+            // console.log(elementRect)
 
         })
 
@@ -113,7 +113,7 @@ class nViewer {
             let d = document.createDocumentFragment();
             let dd = document.createElement('div');
 
-            // SLIDERS
+            // ADD SLIDER ELEMENTS
             if (options.slidersOn) {
                 let len = 2;
                 for (let i = 0; i < len; i++) {
@@ -134,7 +134,7 @@ class nViewer {
                 }
             }
 
-            // TOOLBAR
+            // ADD TOOLBAR ELEMENTS
             if (options.toolbarOn) {
                 if (isRealValue(options.menu) && options.menu) {
                     new Toolbar(div, idx, sliders, options).menu();
@@ -142,7 +142,7 @@ class nViewer {
                     new Toolbar(div, idx, sliders, options).buttons();
                 }
 
-                // CHECKBOXES
+                // SET CHECKBOX CLASS VARS
                 if (options.multipleOn) {
                     chkPan = document.getElementById("chkPan" + idx);
                     chkZoom = document.getElementById("chkZoom" + idx);
@@ -154,24 +154,33 @@ class nViewer {
          * INITIALIZE
          */
         function setViewer() {
+            let width = "640px", height = "480px";
+
             let diva = document.createElement('div');
             diva.style.border = "2px solid red"
+            // diva.style.width = width;
+            // diva.style.height = "20px";
             diva.setAttribute('class', 'nViewer');
             mainDiv.appendChild(diva);
             setControls(diva);
+
             let div = document.createElement('div');
             div.style.border = "2px solid green"
             div.id = viewerDivId;
-            div.style.width = "640px";
-            div.style.height = "480px";
+            div.style.width = width;
+            div.style.height = height;
+            div.setAttribute('class', cssName);
+
             if (idx % 2 === 0) {
                 div.style.float = "left";
+                // diva.appendChild(div);
             } else {
                 div.style.float = "right";
+                // diva.appendChild(div).appendChild(document.createElement("BR"));
             }
-            div.setAttribute('class', cssName);
             diva.appendChild(div);
 
+            // VIEWER OPTIONS
             if (!options.viewerOpts) {
                 options.viewerOpts = {
                     showFullPageControl: true,
@@ -180,6 +189,7 @@ class nViewer {
                 }
             }
 
+            // VIEWER
             viewer = OpenSeadragon({
                 id: viewerDivId,
                 prefixUrl: "./js/lib/openseadragon/images/",
@@ -189,7 +199,7 @@ class nViewer {
                 crossOriginPolicy: 'Anonymous'
             });
 
-            // DRAWING TOOLS
+            // DRAWING TOOLS EVENT LISTENERS
             if (options.toolbarOn) {
                 markupTools(idx, viewer);
             }
