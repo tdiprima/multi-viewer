@@ -1,0 +1,35 @@
+.divSquare {
+    width: 48%;
+    height: 560px;
+    margin: 4px;
+    float: left;
+    border: 1px solid blueviolet
+}
+
+.controls {
+    width: 640px;
+    height: 70px;
+    border: 1px solid red;
+}
+
+.range {
+    border: 1px solid blue;
+    width: 100%;
+}
+
+.buttons {
+    border: 1px solid cornflowerblue;
+    width: 100%;
+}
+
+.viewer {
+    /*width: 640px;*/
+    /*height: 480px;*/
+    height: 100%;
+    border: 1px solid green;
+}
+
+.floated {
+    float: left;
+    margin-right: 5px;
+}
