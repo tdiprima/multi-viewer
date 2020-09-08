@@ -3,7 +3,7 @@
     height: 560px;
     margin: 4px;
     float: left;
-    border: 1px solid blueviolet
+    /*border: 1px solid blueviolet*/
 }
 
 /*.controls {*/
@@ -18,7 +18,7 @@
 /*}*/
 
 .buttons {
-    border: 1px solid cornflowerblue;
+    /*border: 1px solid cornflowerblue;*/
     width: 100%;
 }
 
