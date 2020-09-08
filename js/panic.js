@@ -2,19 +2,17 @@ function setup(num, options) {
 
 }
 
-let createDivs = async function (num) {
+let createDivs = async function (num, options) {
     // Make 'num' divs.
-    // for (let idx = 1; idx <= num; idx++) {
-    //     create(idx);
-    // }
     for (let idx = 1; idx <= num; idx++) {
-        create(idx);
+        create(idx, options);
     }
     return "done";
 };
 
-function create(idx) {
+function create(idx, options) {
     let name;
+    let sliders = [];
 
     let container = document.createElement('div');
     container.className = 'divSquare';
@@ -45,7 +43,9 @@ function create(idx) {
     // buttonDiv.innerHTML =
     controlsDiv.append(buttonDiv);
 
-    createButtons(5, buttonDiv, idx);
+    createButtons(buttonDiv, idx);
+
+    // sliderEvt(sliders, options, idx);
 
 
     name = 'viewer';
