@@ -14,7 +14,7 @@
 <body>
     <input type="hidden" id="dim-w" value="">
     <input type="hidden" id="dim-h" value="">
-    
+
     <h3>TCGA Segmentation Data</h3>
 
     <div id="selections"></div>
@@ -30,7 +30,11 @@
     <script src="./js/lib/color-picker.min.js"></script>
     <script src="js/ultraviewer.min.js"></script>
 
-    <script>demo.execute(1, true)</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            demo.execute(1, true);
+        });
+    </script>
 
 </body>
 

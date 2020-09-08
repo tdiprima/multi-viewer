@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Quad-Viewer</title>
+    <link href="./css/quad.css" rel="stylesheet">
     <link href="./css/style.css" rel="stylesheet">
     <link href="./css/awesome-color.css" rel="stylesheet">
     <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all" rel="stylesheet">
@@ -40,22 +41,20 @@
 
     <script>
 
-        
         document.addEventListener('DOMContentLoaded', (event) => {
-            // console.log('DOM fully loaded and parsed');
-        const options = {
-            filterOn: false,
-            slidersOn: false,
-            toolbarOn: true,
-            multipleOn: false,
-            menu: false,
-            paintbrushColor: "#0ff",
-            viewerOpts: {
-                showFullPageControl: true,
-                showHomeControl: true,
-                showZoomControl: true
-            }
-        };
+            const options = {
+                filterOn: false,
+                slidersOn: false,
+                toolbarOn: true,
+                multipleOn: false,
+                menu: false,
+                paintbrushColor: "#0ff",
+                viewerOpts: {
+                    showFullPageControl: true,
+                    showHomeControl: true,
+                    showZoomControl: true
+                }
+            };
             // demo.execute(4, false, options); // for testing
             demo.execute(4, true);
         });
