@@ -5,16 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Testing</title>
-    <link rel="stylesheet" href="../css/quad.css">
-    <script src="../js/viewer-setup.js"></script>
+
 </head>
 
 <body>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            intermediate(4);
-        });
+        let promiseA = async function () {
+            console.log("Just do some crap.");
+            return "crap is done";
+            // return (await fetch(url)).json()
+        };
+
+        // Call the function
+        let promiseB = promiseA();
+
+        // Use results from function
+        promiseB.then(function (result) {
+            // let thing = result[0].something;
+            console.log('result', result);
+        })
     </script>
 
 </body>

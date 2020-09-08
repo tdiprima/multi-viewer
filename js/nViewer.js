@@ -3,6 +3,7 @@
  */
 class nViewer {
     constructor(viewerDivId, options) {
+        console.log('viewerDivId', viewerDivId);
 
         let idx = viewerDivId.replace("viewer", "");
         let myFilter = {};
@@ -12,7 +13,7 @@ class nViewer {
         let viewer = {};
 
         setFilter();
-        setViewer();
+        setViewer(viewerDivId);
 
         this.getViewer = function () {
             return viewer;
@@ -137,10 +138,10 @@ class nViewer {
         /**
          * INITIALIZE
          */
-        function setViewer() {
+        function setViewer(viewerDivId) {
 
-            let viewerDivId = document.getElementById(viewerDivId);
-            // setControls(viewerDivId);
+            let div = document.getElementById(viewerDivId);
+            // setControls(div);
 
             // VIEWER
             viewer = OpenSeadragon({

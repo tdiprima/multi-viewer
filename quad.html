@@ -30,6 +30,7 @@
     <script src="./js/lib/color-picker.min.js"></script>
     <!-- <script src="./js/ultraviewer.min.js"></script> -->
     <script src="./js/color.js"></script>
+    <script src="./js/viewer-setup.js"></script>
     <script src="./js/demo.js"></script>
     <script src="./js/dropdown.js"></script>
     <script src="./js/edit.js"></script>
@@ -43,10 +44,10 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             const options = {
-                filterOn: false,
-                slidersOn: false,
+                filterOn: true,
+                slidersOn: true,
                 toolbarOn: true,
-                multipleOn: false,
+                multipleOn: true,
                 menu: false,
                 paintbrushColor: "#0ff",
                 viewerOpts: {
@@ -56,7 +57,7 @@
                 }
             };
             // demo.execute(4, false, options); // for testing
-            demo.execute(4, true);
+            demo.execute(4, true, options);
         });
 
     </script>

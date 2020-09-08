@@ -35,8 +35,25 @@ demo.execute = function (num_viewers, prod, options) {
         }
     }
 
-    let arr = setup(num_viewers, options);
-    console.log('arr', arr);
+    // Call the function
+    let promiseB = createDivs(num_viewers);
+    // console.log('promiseB', promiseB);
+
+    // Use results from function
+    promiseB.then(function (result) {
+        if (isRealValue(document.getElementById('viewer1'))) {
+            // alert('hooray!')
+            let promiseC = createViewers(num_viewers, options);
+            promiseC.then(function (r) {
+                console.log('idk', r)
+            })
+        }
+        else {
+            // alert('try again')
+        }
+        // arr = createViewers(num_viewers, options);
+        // console.log('arr', arr);
+    });
 
     // Create viewer(s)
     // for (let i = 0; i < num_viewers; i++) {
@@ -45,31 +62,31 @@ demo.execute = function (num_viewers, prod, options) {
     // }
 
     // Viewers created; add dropdown to page
-    new Dropdown(arr, 'selections', './json/tcga.json');
+    // new Dropdown(arr, 'selections', './json/tcga.json');
 
-    function test() {
-        // TESTING
-        let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-        arr.forEach(function (elem) {
-            elem.getViewer().open(dzi)
-        });
-    }
+    // function test() {
+    //     // TESTING
+    //     let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
+    //     arr.forEach(function (elem) {
+    //         elem.getViewer().open(dzi)
+    //     });
+    // }
 
-    function live() {
-        // Set viewer source
-        arr.forEach(function (elem) {
-            elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
-            iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
-                [1.0, 1.0]);
-        });
-    }
+    // function live() {
+    //     // Set viewer source
+    //     arr.forEach(function (elem) {
+    //         elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
+    //         iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
+    //             [1.0, 1.0]);
+    //     });
+    // }
 
-    if (prod) {
-        live();
-    } else {
-        test();
-    }
+    // if (prod) {
+    //     live();
+    // } else {
+    //     test();
+    // }
 
     // Pan zoom controller
-    sync = new Synchronizer(arr);  // Pass array of nViewers
+    // sync = new Synchronizer(arr);  // Pass array of nViewers
 }

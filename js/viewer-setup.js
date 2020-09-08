@@ -1,32 +1,14 @@
 function setup(num, options) {
 
-
-    new Promise(function (resolve, reject) {
-        createDivs(num);
-
-    }).then(function (result) {
-        let arr = [];
-        createViewers(num, options, arr);
-        return arr;
-    });
-
 }
 
-function createDivs(num) {
+let createDivs = async function (num) {
     // Make 'num' divs.
     for (let idx = 1; idx <= num; idx++) {
         create(idx);
     }
-
-}
-
-function createViewers(num_viewers, options, arr) {
-    for (let i = 1; i <= num_viewers; i++) {
-        let v = new nViewer("viewer" + i, options);
-        arr.push(v);
-    }
-}
-
+    return "done";
+};
 
 function create(idx) {
     let name;
@@ -57,7 +39,7 @@ function create(idx) {
 
     let buttonDiv = document.createElement("div"); // div containing 'buttons'
     buttonDiv.classList = 'floated buttons';
-    // buttonDiv.innerHTML = 'buttons';
+    buttonDiv.innerHTML = ;
     controlsDiv.append(buttonDiv);
 
     createButtons(5, buttonDiv);
@@ -108,4 +90,12 @@ function createButtons(len, div) {
         btn.innerHTML = 'button ' + i.toString();
         div.append(btn);
     }
+}
+
+let createViewers = async function(num_viewers, options) {
+    let arr = [];
+    for (let i = 1; i <= num_viewers; i++) {
+        arr.push(new nViewer("viewer" + i, options));
+    }
+    return arr;
 }
