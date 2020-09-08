@@ -6,16 +6,16 @@
     border: 1px solid blueviolet
 }
 
-.controls {
-    width: 640px;
-    height: 70px;
-    border: 1px solid red;
-}
+/*.controls {*/
+/*    width: 640px;*/
+/*    height: 70px;*/
+/*    border: 1px solid red;*/
+/*}*/
 
-.range {
-    border: 1px solid blue;
-    width: 100%;
-}
+/*.range {*/
+/*    border: 1px solid blue;*/
+/*    width: 100%;*/
+/*}*/
 
 .buttons {
     border: 1px solid cornflowerblue;
@@ -26,7 +26,7 @@
     width: 640px;
     height: 480px;
     /*height: 100%;*/
-    border: 1px solid green;
+    /*border: 1px solid green;*/
 }
 
 .floated {

@@ -2,7 +2,7 @@
  * Wrapper object for the osd viewers
  */
 class nViewer {
-    constructor(viewerDivId, cssName, mainDiv, options) {
+    constructor(viewerDivId, options) {
 
         let idx = viewerDivId.replace("viewer", "");
         let myFilter = {};
@@ -10,12 +10,6 @@ class nViewer {
         let chkPan = {};
         let chkZoom = {};
         let viewer = {};
-        mainDiv = document.getElementById(mainDiv);
-        if (!isRealValue(mainDiv)) {
-            mainDiv = document.createElement('div')
-            mainDiv.id = 'viewers';
-            document.body.appendChild(mainDiv);
-        }
 
         setFilter();
         setViewer();
@@ -32,15 +26,6 @@ class nViewer {
             return chkZoom.checked;
         };
 
-        // this.modOptions = function (numViewers) {
-        //     if (numViewers > 1) {
-        //         options.multipleOn = true;
-        //     } else {
-        //         options.multipleOn = false;
-        //     }
-        //     console.log(options);
-        // }
-
         viewer.addHandler('open', (param) => {
             let dimWidthEl = document.getElementById("dim-w");
             let dimHeightEl = document.getElementById("dim-h");
@@ -51,7 +36,6 @@ class nViewer {
             );
             dimWidthEl.value = elementRect.width;
             dimHeightEl.value = elementRect.height;
-            // console.log(elementRect)
 
         })
 
@@ -154,40 +138,9 @@ class nViewer {
          * INITIALIZE
          */
         function setViewer() {
-            let width = "640px", height = "480px";
 
-            let diva = document.createElement('div');
-            diva.style.border = "2px solid red"
-            // diva.style.width = width;
-            // diva.style.height = "20px";
-            diva.setAttribute('class', 'nViewer');
-            mainDiv.appendChild(diva);
-            setControls(diva);
-
-            let div = document.createElement('div');
-            div.style.border = "2px solid green"
-            div.id = viewerDivId;
-            div.style.width = width;
-            div.style.height = height;
-            div.setAttribute('class', cssName);
-
-            if (idx % 2 === 0) {
-                div.style.float = "left";
-                // diva.appendChild(div);
-            } else {
-                div.style.float = "right";
-                // diva.appendChild(div).appendChild(document.createElement("BR"));
-            }
-            diva.appendChild(div);
-
-            // VIEWER OPTIONS
-            if (!options.viewerOpts) {
-                options.viewerOpts = {
-                    showFullPageControl: true,
-                    showHomeControl: true,
-                    showZoomControl: true
-                }
-            }
+            let viewerDivId = document.getElementById(viewerDivId);
+            // setControls(viewerDivId);
 
             // VIEWER
             viewer = OpenSeadragon({

@@ -1,52 +1,73 @@
-function intermediate(num) {
-    // Make 'num' divs; 2x2.
+function setup(num, options) {
+
+
+    new Promise(function (resolve, reject) {
+        createDivs(num);
+
+    }).then(function (result) {
+        let arr = [];
+        createViewers(num, options, arr);
+        return arr;
+    });
+
+}
+
+function createDivs(num) {
+    // Make 'num' divs.
     for (let idx = 1; idx <= num; idx++) {
-        complex(idx);
+        create(idx);
     }
 
 }
 
-function complex(idx) {
+function createViewers(num_viewers, options, arr) {
+    for (let i = 1; i <= num_viewers; i++) {
+        let v = new nViewer("viewer" + i, options);
+        arr.push(v);
+    }
+}
+
+
+function create(idx) {
     let name;
 
-    // First div test contains things
     let container = document.createElement('div');
     container.className = 'divSquare';
-    container.innerHTML = 'container'
+    // container.innerHTML = 'container';
     document.body.appendChild(container);
 
 
     name = 'controls';
-    let controlsDiv = document.createElement("div"); // controls div
+    let controlsDiv = document.createElement("div"); // 'controls' div
     controlsDiv.id = name;
     controlsDiv.className = name;
-    controlsDiv.innerHTML = name;
+    // controlsDiv.innerHTML = name;
 
-    container.appendChild(controlsDiv); //.appendChild(viewerDiv); // add to container div
+    container.appendChild(controlsDiv); // add to 'container' div
 
 
     name = 'range';
-    let rangeDiv = document.createElement("div"); // div containing sliders
-    rangeDiv.innerHTML = name;
+    let rangeDiv = document.createElement("div"); // div containing 'sliders'
+    // rangeDiv.innerHTML = name;
     rangeDiv.className = name;
     controlsDiv.append(rangeDiv);
 
     createSliders(rangeDiv);
 
 
-    let buttonDiv = document.createElement("div"); // div containing buttons
+    let buttonDiv = document.createElement("div"); // div containing 'buttons'
     buttonDiv.classList = 'floated buttons';
-    buttonDiv.innerHTML = 'buttons';
+    // buttonDiv.innerHTML = 'buttons';
     controlsDiv.append(buttonDiv);
 
     createButtons(5, buttonDiv);
 
 
     name = 'viewer';
-    let viewerDiv = document.createElement("div"); // viewer div
+    let viewerDiv = document.createElement("div"); // 'viewer' div
     viewerDiv.id = name + idx;
     viewerDiv.className = name;
-    viewerDiv.innerHTML = name;
+    // viewerDiv.innerHTML = name;
 
     container.appendChild(viewerDiv);
 

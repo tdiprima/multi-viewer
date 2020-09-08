@@ -4,7 +4,6 @@ let demo = function () {
 
 demo.execute = function (num_viewers, prod, options) {
     // Variables
-    const arr = [];
     const style = "dragonbox";
     const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
     const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
@@ -36,11 +35,14 @@ demo.execute = function (num_viewers, prod, options) {
         }
     }
 
+    let arr = setup(num_viewers, options);
+    console.log('arr', arr);
+
     // Create viewer(s)
-    for (let i = 0; i < num_viewers; i++) {
-        let v = new nViewer("viewer" + i, style, "viewers", options);
-        arr.push(v);
-    }
+    // for (let i = 0; i < num_viewers; i++) {
+    //     let v = new nViewer("viewer" + i, style, "viewers", options);
+    //     arr.push(v);
+    // }
 
     // Viewers created; add dropdown to page
     new Dropdown(arr, 'selections', './json/tcga.json');
