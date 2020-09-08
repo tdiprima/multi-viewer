@@ -52,8 +52,12 @@
                 showZoomControl: true
             }
         };
-        // demo.execute(4, false, options);
-        demo.execute(4, true);
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // console.log('DOM fully loaded and parsed');
+            // demo.execute(4, false, options);
+            demo.execute(4, true);
+        });
 
     </script>
 
