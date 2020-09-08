@@ -39,6 +39,10 @@
     <script src="./js/toolbar.js"></script>
 
     <script>
+
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // console.log('DOM fully loaded and parsed');
         const options = {
             filterOn: false,
             slidersOn: false,
@@ -52,10 +56,7 @@
                 showZoomControl: true
             }
         };
-        
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // console.log('DOM fully loaded and parsed');
-            // demo.execute(4, false, options);
+            // demo.execute(4, false, options); // for testing
             demo.execute(4, true);
         });
 
