@@ -20,8 +20,8 @@ function Toolbar(div, idx, sliders, options) {
     } else {
         innerHtml = '';
     }
-    
-    
+
+
     /**
      * Fold-out menu
      */
@@ -36,12 +36,12 @@ function Toolbar(div, idx, sliders, options) {
         <a id="btnSlide${idx}" class="btn" href="#"><i class="fa fa-sliders"></i> Show sliders</a>
         <a id="toggle-overlay" style="display: none" href="#"><i class="fa fa-map-marker-alt"></i> Hide markers</a>
     </div>`;
-        
-        
+
+
         div1.innerHTML = innerHtml;
         div.appendChild(div1); // Attach toolbar
-        
-        
+
+
         // Menu animation
         $("a").on('click', function () {
             let page = $(this).data("page");
@@ -78,15 +78,15 @@ function Toolbar(div, idx, sliders, options) {
 
         colorDrawEvt(); // Color & paint
     };
-    
-    
-    
+
+
+
     /**
      * Buttons
      */
     this.buttons = function () {
         innerHtml += `<div>
-        <a href="#"><mark id="mark${idx}">${options.paintbrushColor}</mark></button>&nbsp;&nbsp;
+        <mark id="mark${idx}">${options.paintbrushColor}</mark></button>&nbsp;&nbsp;
         <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;&nbsp;
         <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;&nbsp;
         <button id="btnGrid${idx}" class="btn"><i class="fa fa-border-all"></i> Draw grid</button>&nbsp;&nbsp;
@@ -94,8 +94,8 @@ function Toolbar(div, idx, sliders, options) {
         <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;&nbsp;
         <button id="toggle-overlay" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
     </div>`;
-        
-        
+
+
         /*
         // Slider button
         let btnSlide = `<button class="btn" id="btnSlide${idx}"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;&nbsp;`;
@@ -108,11 +108,11 @@ function Toolbar(div, idx, sliders, options) {
              // Grid
         let btnGrid = `<button class="btn" id="btnGrid${idx}">Draw Grid&nbsp;&nbsp;`;
          */
-        
+
         // Attach toolbar
         // div1.innerHTML = innerHtml + wPaint + btnDraw + (options.slidersOn ? btnSlide : "") + btnGrid + btnMapMarker;
 
-        
+
         div1.innerHTML = innerHtml;
         div.appendChild(div1); // Attach toolbar
 
@@ -121,13 +121,13 @@ function Toolbar(div, idx, sliders, options) {
         colorDrawEvt(); // Drawing tools
     };
 
-    
+
     function colorDrawEvt() {
         // Color picker event handler
         new Color(document.getElementById('mark' + idx));
     }
 
-    
+
     function sliderEvt() {
         // Slider button event handler
         if (options.slidersOn) {
