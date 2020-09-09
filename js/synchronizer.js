@@ -3,7 +3,7 @@
  */
 class Synchronizer {
     constructor(viewerArray) {
-        console.log('viewerArray', viewerArray);
+        // console.log('viewerArray', viewerArray);
 
         // let len = viewerArray.length;
         // viewerArray.forEach(element => element.modOptions(len));

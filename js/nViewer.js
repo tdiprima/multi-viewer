@@ -2,15 +2,20 @@
  * Wrapper object for the osd viewers
  */
 class nViewer {
-    constructor(viewerDivId, options) {
-        // console.log('viewerDivId', viewerDivId);
+    constructor(viewerDivId, sliders, options) {
+        // console.log(viewerDivId, sliders, options);
 
         let idx = viewerDivId.replace("viewer", "");
         let myFilter = {};
-        let sliders = [];
+        let viewer = {};
+
+        // Checkboxes
         let chkPan = {};
         let chkZoom = {};
-        let viewer = {};
+        if (options.multipleOn) {
+            chkPan = document.getElementById("chkPan" + idx);
+            chkZoom = document.getElementById("chkZoom" + idx);
+        }
 
         setFilter();
         setViewer(viewerDivId);
@@ -94,56 +99,11 @@ class nViewer {
 
         };
 
-        function setControls(div) {
-            let d = document.createDocumentFragment();
-            let dd = document.createElement('div');
-
-            // ADD SLIDER ELEMENTS
-            if (options.slidersOn) {
-                let len = 2;
-                for (let i = 0; i < len; i++) {
-                    let range = document.createElement('input');
-                    range.type = "range";
-                    range.id = "sliderRange" + i;
-                    range.min = "0";
-                    range.max = "100";
-                    range.value = "100";
-                    range.setAttribute('class', "slider-square");
-                    if (options.toolbarOn) {
-                        range.style.display = "none"; // bc we have a btn to toggle it
-                    }
-                    dd.appendChild(range); // append range to div
-                    d.appendChild(dd); // append div to fragment
-                    div.appendChild(d); // append fragment to parent
-                    sliders.push(range);
-                }
-            }
-
-            // ADD TOOLBAR ELEMENTS
-            if (options.toolbarOn) {
-                if (isRealValue(options.menu) && options.menu) {
-                    new Toolbar(div, idx, sliders, options).menu();
-                } else {
-                    new Toolbar(div, idx, sliders, options).buttons();
-                }
-
-                // SET CHECKBOX CLASS VARS
-                if (options.multipleOn) {
-                    chkPan = document.getElementById("chkPan" + idx);
-                    chkZoom = document.getElementById("chkZoom" + idx);
-                }
-            }
-        }
-
         /**
          * INITIALIZE
          */
         function setViewer(viewerDivId) {
 
-            let div = document.getElementById(viewerDivId);
-            // setControls(div);
-
-            // VIEWER
             viewer = OpenSeadragon({
                 id: viewerDivId,
                 prefixUrl: "./js/lib/openseadragon/images/",
@@ -153,12 +113,12 @@ class nViewer {
                 crossOriginPolicy: 'Anonymous'
             });
 
-            // DRAWING TOOLS EVENT LISTENERS
+            // Markup tools event listeners
             if (options.toolbarOn) {
                 markupTools(idx, viewer);
             }
 
-            // SLIDER EVENT LISTENER
+            // Sliders event listeners
             if (options.slidersOn) {
                 for (let i = 0; i < sliders.length; i++) {
                     sliders[i].addEventListener("input", function () {
@@ -171,8 +131,9 @@ class nViewer {
                 }
             }
 
+            // Filtering
             if (options.filterOn) {
-                // FILTERING
+
                 viewer.setFilterOptions({
                     filters: [{
                         items: viewer.world.getItemAt(1),
@@ -182,7 +143,6 @@ class nViewer {
                     }]
                 });
             }
-
         }
 
         function setFilter() {

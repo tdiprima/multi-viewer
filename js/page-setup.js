@@ -120,8 +120,13 @@ let createDivs = function (idx, options) {
     buttonDiv.classList.add('buttons');
     controlsDiv.append(buttonDiv);
 
-    createButtons(idx, buttonDiv);
+    // Create buttons
+    createButtons(idx, buttonDiv, options.paintbrushColor);
 
+    // Color picker event handler
+    new Color(document.getElementById('mark' + idx));
+
+    // Slider button event handler
     sliderBtnEvt(idx, sliders);
 
 
@@ -132,6 +137,7 @@ let createDivs = function (idx, options) {
     // viewerDiv.innerHTML = name;
 
     container.appendChild(viewerDiv);
+
 
     this.viewers.push(new nViewer("viewer" + idx, sliders, options));
 
@@ -168,11 +174,14 @@ let createSliders = function (idx, div, num) {
 }
 
 
-let createButtons = function (idx, div) {
+let createButtons = function (idx, div, color) {
+    if (!color) {
+        color = "#00f";
+    }
 
     div.innerHTML = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
-        <a href="#"><mark id="mark${idx}" style="background-color: rgb(0, 255, 255);">#00ffff</mark>&nbsp;
+        <a href="#"><mark id="mark${idx}">${color}</mark>&nbsp;
         <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
         <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
         <button id="btnGrid${idx}" class="btn"><i class="fa fa-border-all"></i> Draw grid</button>&nbsp;
