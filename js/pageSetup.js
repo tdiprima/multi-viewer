@@ -151,6 +151,26 @@ let createDivs = function (idx, options) {
 
 }
 
+
+let createButtons = function (idx, div, color) {
+    if (!color) {
+        color = "#00f";
+    }
+
+    div.innerHTML = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
+    <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
+        <mark id="mark${idx}">${color}</mark>&nbsp;
+        <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
+        <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
+        <button id="btnGrid${idx}" class="btn"><i class="fa fa-border-all"></i> Draw grid</button>&nbsp;
+        <button id="btnMarker${idx}" class="btn"><i class="fa fa-paint-brush"></i> Mark grid</button>&nbsp;
+        <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;
+        <button id="toggle-overlay" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
+    </a>`;
+
+}
+
+
 let createSliders = function (idx, div, num) {
     let sliders = [];
     let d = document.createDocumentFragment();
@@ -173,24 +193,6 @@ let createSliders = function (idx, div, num) {
     return sliders;
 }
 
-
-let createButtons = function (idx, div, color) {
-    if (!color) {
-        color = "#00f";
-    }
-
-    div.innerHTML = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
-    <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
-        <a href="#"><mark id="mark${idx}">${color}</mark>&nbsp;
-        <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
-        <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
-        <button id="btnGrid${idx}" class="btn"><i class="fa fa-border-all"></i> Draw grid</button>&nbsp;
-        <button id="btnMarker${idx}" class="btn"><i class="fa fa-paint-brush"></i> Mark grid</button>&nbsp;
-        <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;
-        <button id="toggle-overlay" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
-    </a>`;
-
-}
 
 let sliderBtnEvt = function (idx, sliders) {
     // Slider button event handler
