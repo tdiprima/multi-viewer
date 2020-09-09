@@ -4,10 +4,10 @@
  */
 class Dropdown {
     constructor(viewerArray, divId, dataSource) {
+        // console.log('viewerArray', viewerArray);
 
         const cancertypes = ["blca", "brca", "cesc", "gbm", "luad", "lusc", "paad", "prad", "skcm", "ucec"];
         const maindiv = document.getElementById(divId);
-        // const iiif = "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg";
         const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
         let cancerSelect = {};
         let imageSelect = {};

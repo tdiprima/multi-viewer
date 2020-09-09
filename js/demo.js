@@ -2,11 +2,7 @@ let demo = function () {
 
 }
 
-demo.execute = function (num_viewers, prod, options) {
-    // Variables
-    const style = "dragonbox";
-    const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
-    const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
+demo.execute = function (num_divs, prod, options) {
 
     if (!options) {
         // default
@@ -24,7 +20,7 @@ demo.execute = function (num_viewers, prod, options) {
         }
 
         // default if single viewer
-        if (num_viewers === 1) {
+        if (num_divs === 1) {
             options = {
                 filterOn: true,
                 slidersOn: true,
@@ -35,49 +31,6 @@ demo.execute = function (num_viewers, prod, options) {
         }
     }
 
-    // Call the function
-    let promiseB = createDivs(num_viewers, options);
-    // console.log('promiseB', promiseB);
-
-    // Use results from function
-    promiseB.then(function (result) {
-        if (isRealValue(document.getElementById('viewer1'))) { // simple test
-            // alert('hooray!')
-            let promiseC = createViewers(num_viewers, options);
-            promiseC.then(function (arr) {
-                console.log('arr', arr)
-                // Viewers created; add dropdown to page
-                new Dropdown(arr, 'selections', './json/tcga.json');
-                function test() {
-                    // TESTING
-                    let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-                    arr.forEach(function (elem) {
-                        elem.getViewer().open(dzi)
-                    });
-                }
-
-                function live() {
-                    // Set viewer source
-                    arr.forEach(function (elem) {
-                        elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
-                        iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
-                            [1.0, 1.0]);
-                    });
-                }
-
-                if (prod) {
-                    live();
-                } else {
-                    test();
-                }
-
-                // Pan zoom controller
-                sync = new Synchronizer(arr);  // Pass array of nViewers
-            })
-        }
-    });
-
-
-
+    new pageSetup().setup(num_divs, options, prod)
 
 }

@@ -1,19 +1,71 @@
-function setup(num, options) {
+this.viewers = [];
+this.sliders = [];
+this.sync = {};
+let pageSetup = function () {
+
+    let num_divs, options, prod;
+
+    this.setup = function (num_divs1, options1, prod1) {
+        num_divs = num_divs1;
+        options = options1;
+        prod = prod1;
+
+        new Promise(function (resolve, reject) {
+
+            // Create divs
+            for (let idx = 1; idx <= num_divs; idx++) {
+                createDivs(idx);
+            }
+            return resolve(1); // todo: ?
+
+        }).then(function (result) {
+
+            // Create viewers
+            for (let i = 1; i <= num_divs; i++) {
+                this.viewers.push(new nViewer("viewer" + i, options));
+            }
+            return result * 2;
+        }).then(function (result) {
+            // Viewers created; add dropdown to page
+            new Dropdown(this.viewers, 'selections', './json/tcga.json');
+            return result * 2;
+        }).then(function (result) {
+            // Pan zoom controller
+            new Synchronizer(this.viewers);  // Pass array of nViewers
+            return result * 2;
+        }).then(function (result) {
+            function test() {
+                // TESTING
+                let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
+                this.viewers.forEach(function (elem) {
+                    elem.getViewer().open(dzi)
+                });
+            }
+
+            function live() {``
+                // Set viewer source
+                const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
+                const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
+                this.viewers.forEach(function (elem) {
+                    elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
+                    iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
+                        [1.0, 1.0]);
+                });
+            }
+
+            if (prod) {
+                live();
+            } else {
+                test();
+            }
+        });
+
+    }
 
 }
 
-let createDivs = async function (num) {
-    // Make 'num' divs.
-    // for (let idx = 1; idx <= num; idx++) {
-    //     create(idx);
-    // }
-    for (let idx = 1; idx <= num; idx++) {
-        create(idx);
-    }
-    return "done";
-};
 
-function create(idx) {
+let createDivs = function (idx) {
     let name;
 
     let container = document.createElement('div');
@@ -42,10 +94,11 @@ function create(idx) {
 
     let buttonDiv = document.createElement("div"); // div containing 'buttons'
     buttonDiv.classList = 'floated buttons';
-    // buttonDiv.innerHTML =
     controlsDiv.append(buttonDiv);
 
-    createButtons(5, buttonDiv, idx);
+    createButtons(buttonDiv, idx);
+
+    sliderEvt(idx);
 
 
     name = 'viewer';
@@ -66,7 +119,7 @@ function create(idx) {
 
 }
 
-function createSliders(div) {
+let createSliders = function (div) {
     let d = document.createDocumentFragment();
     let len = 2;
     for (let i = 0; i < len; i++) {
@@ -80,12 +133,12 @@ function createSliders(div) {
         range.style.display = "none"; // bc we have a btn to toggle it
         d.appendChild(range); // append div to fragment
         div.appendChild(d); // append fragment to parent
-        // sliders.push(range); // todo: are
+        this.sliders.push(range);
     }
 }
 
 
-function createButtons(len, div, idx) {
+let createButtons = function (div, idx) {
 
     div.innerHTML = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
@@ -98,40 +151,28 @@ function createButtons(len, div, idx) {
         <button id="toggle-overlay" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
     </a>`;
 
-    // Create 5 buttons
-    // for (let i = 1; i <= len; i++) {
-    //     let btn = document.createElement("BUTTON");
-    //     btn.innerHTML = 'button ' + i.toString();
-    //     div.append(btn);
-    // }
 }
 
-function sliderEvt(sliders, options, idx) {
+let sliderEvt = function (idx) {
     // Slider button event handler
-    if (options.slidersOn) {
-        let sld = document.getElementById("btnSlide" + idx);
-        if (sld !== null) {
-            sld.addEventListener('click', function () {
+    // if (this.options.slidersOn) {
+    let sld = document.getElementById("btnSlide" + idx);
+    if (sld !== null) {
+        sld.addEventListener('click', function () {
 
-                let x = sliders[0];
-                if (x.style.display === 'none') {
-                    x.style.display = 'inline';
-                    sliders[1].style.display = 'inline';
-                    this.innerHTML = "<i class=\"fa fa-sliders\"></i> Hide sliders";
-                } else {
-                    x.style.display = 'none';
-                    sliders[1].style.display = 'none';
-                    this.innerHTML = "<i class=\"fa fa-sliders\"></i> Show sliders";
-                }
-            });
-        }
+            let x = sliders[0];
+            if (x.style.display === 'none') {
+                x.style.display = 'inline';
+                sliders[1].style.display = 'inline';
+                this.innerHTML = "<i class=\"fa fa-sliders\"></i> Hide sliders";
+            } else {
+                x.style.display = 'none';
+                sliders[1].style.display = 'none';
+                this.innerHTML = "<i class=\"fa fa-sliders\"></i> Show sliders";
+            }
+        });
+    } else {
+        alert('slide is null')
     }
-}
-
-let createViewers = async function (num_viewers, options) {
-    let arr = [];
-    for (let i = 1; i <= num_viewers; i++) {
-        arr.push(new nViewer("viewer" + i, options));
-    }
-    return arr;
+    // }
 }
