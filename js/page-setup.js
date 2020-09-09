@@ -1,3 +1,5 @@
+count = 0;
+viewers = [];
 let pageSetup = function () {
 
     let num_divs, options, prod;
@@ -38,18 +40,9 @@ let pageSetup = function () {
 
             // Create divs
             for (let idx = 1; idx <= num_divs; idx++) {
-                createDivs(idx);
+                createDivs(idx, options);
             }
-            return resolve(1);
-
-        }).then(function (result) {
-
-            // Create viewers
-            let viewers = [];
-            for (let i = 1; i <= num_divs; i++) {
-                viewers.push(new nViewer("viewer" + i, options));
-            }
-            return viewers;
+            return resolve(this.viewers);
 
         }).then(function (viewers) {
 
@@ -95,7 +88,7 @@ let pageSetup = function () {
 }
 
 
-let createDivs = function (idx) {
+let createDivs = function (idx, options) {
     let name;
 
     let container = document.createElement('div');
@@ -119,14 +112,15 @@ let createDivs = function (idx) {
     rangeDiv.className = name;
     controlsDiv.append(rangeDiv);
 
-    let sliders = createSliders(rangeDiv);
+    // 2 sliders
+    let sliders = createSliders(idx, rangeDiv, 2);
 
     let buttonDiv = document.createElement("div"); // div containing 'buttons'
     buttonDiv.classList.add('floated');
     buttonDiv.classList.add('buttons');
     controlsDiv.append(buttonDiv);
 
-    createButtons(buttonDiv, idx);
+    createButtons(idx, buttonDiv);
 
     sliderBtnEvt(idx, sliders);
 
@@ -139,6 +133,8 @@ let createDivs = function (idx) {
 
     container.appendChild(viewerDiv);
 
+    this.viewers.push(new nViewer("viewer" + idx, sliders, options));
+
 
     // Clear:both between rows
     if (idx % 2 === 0) {
@@ -149,14 +145,16 @@ let createDivs = function (idx) {
 
 }
 
-let createSliders = function (div) {
+let createSliders = function (idx, div, num) {
     let sliders = [];
     let d = document.createDocumentFragment();
-    let len = 2;
-    for (let i = 0; i < len; i++) {
+
+    for (let i = 0; i < num; i++) {
+
         let range = document.createElement('input');
         range.type = "range";
-        range.id = "sliderRange" + i;
+        this.count += 1;
+        range.id = "sliderRange" + this.count;
         range.min = "0";
         range.max = "100";
         range.value = "100";
@@ -170,7 +168,7 @@ let createSliders = function (div) {
 }
 
 
-let createButtons = function (div, idx) {
+let createButtons = function (idx, div) {
 
     div.innerHTML = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
