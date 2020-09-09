@@ -120,7 +120,8 @@ let createDivs = function (idx) {
 
 
     let buttonDiv = document.createElement("div"); // div containing 'buttons'
-    buttonDiv.classList = 'floated buttons';
+    buttonDiv.classList.add('floated');
+    buttonDiv.classList.add('buttons');
     controlsDiv.append(buttonDiv);
 
     createButtons(buttonDiv, idx);
