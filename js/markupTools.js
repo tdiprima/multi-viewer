@@ -58,24 +58,27 @@ function markupTools(idx, viewer) {
 
         let dimWidthEl = document.getElementById("dim-w");
         let dimHeightEl = document.getElementById("dim-h");
-        dim_width = Math.ceil(dimWidthEl.value);
-        dim_height = Math.ceil(dimHeightEl.value);
 
-        if (btnGrid.classList.contains('btnOn')) {
-            // Remove only the lines
-            let r = canvas.getObjects('line');
-            for (let i = 0; i < r.length; i++) {
-                canvas.remove(r[i]);
+        if (isRealValue(dimWidthEl) && isRealValue(dimHeightEl)) {
+            dim_width = Math.ceil(dimWidthEl.value);
+            dim_height = Math.ceil(dimHeightEl.value);
+
+            if (btnGrid.classList.contains('btnOn')) {
+                // Remove only the lines
+                let r = canvas.getObjects('line');
+                for (let i = 0; i < r.length; i++) {
+                    canvas.remove(r[i]);
+                }
+                btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid';
+                gridAdded = false;
+
+            } else {
+
+                // DRAW GRID
+                renderGrid(dim_width, dim_height, cell_size, cell_size, 'red');
+                btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
+                gridAdded = true;
             }
-            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid';
-            gridAdded = false;
-
-        } else {
-
-            // DRAW GRID
-            renderGrid(dim_width, dim_height, cell_size, cell_size, 'red');
-            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
-            gridAdded = true;
         }
         toggleButton(btnGrid);
 
@@ -111,7 +114,7 @@ function markupTools(idx, viewer) {
         if (btnMarker.classList.contains('btnOn')) {
             // Remove mouse:move listener (we also use it for other things)
             canvas.off("mouse:move", mouseCoords);
-            btnMarker.innerHTML = "Mark grid";
+            btnMarker.innerHTML = "<i class=\"fa fa-paint-brush\"></i> Mark grid";
 
         } else {
             if (!gridAdded) {
@@ -120,7 +123,7 @@ function markupTools(idx, viewer) {
             } else {
                 // Add listener
                 canvas.on("mouse:move", mouseCoords);
-                btnMarker.innerHTML = "Done marking";
+                btnMarker.innerHTML = "<i class=\"fa fa-paint-brush\"></i> Done marking";
             }
         }
         if (toggle) {
@@ -130,6 +133,7 @@ function markupTools(idx, viewer) {
 
     // EDIT POLYGON
     document.getElementById('btnEdit' + idx).addEventListener('click', function () {
+        toggleButton(this);
         Edit(canvas);
     });
 
