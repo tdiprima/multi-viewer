@@ -6,10 +6,11 @@ let pageSetup = function () {
 
     this.setup = function (num_divs1, prod1, options1) {
         num_divs = num_divs1;
-        options = options1;
         prod = prod1;
 
-        if (!options) {
+        if (isRealValue(options1)) {
+            options = options1;
+        } else {
             // default
             options = {
                 filterOn: true,
@@ -31,7 +32,12 @@ let pageSetup = function () {
                     slidersOn: true,
                     toolbarOn: false,
                     multipleOn: false,
-                    paintbrushColor: "#0ff"
+                    paintbrushColor: "#0ff",
+                    viewerOpts: {
+                        showFullPageControl: false,
+                        showHomeControl: true,
+                        showZoomControl: false
+                    }
                 }
             }
         }
@@ -113,21 +119,29 @@ let createDivs = function (idx, options) {
     controlsDiv.append(rangeDiv);
 
     // 2 sliders
-    let sliders = createSliders(idx, rangeDiv, 2);
+    let sliders;
+    if (options.slidersOn) {
+        sliders = createSliders(idx, rangeDiv, 2, options);
+    }
 
-    let buttonDiv = document.createElement("div"); // div containing 'buttons'
-    buttonDiv.classList.add('floated');
-    buttonDiv.classList.add('buttons');
-    controlsDiv.append(buttonDiv);
 
-    // Create buttons
-    createButtons(idx, buttonDiv, options.paintbrushColor);
+    if (options.toolbarOn) {
+        let buttonDiv = document.createElement("div"); // div containing 'buttons'
+        buttonDiv.classList.add('floated');
+        buttonDiv.classList.add('buttons');
+        controlsDiv.append(buttonDiv);
 
-    // Color picker event handler
-    new Color(document.getElementById('mark' + idx));
+        // Create buttons
+        createButtons(idx, buttonDiv, options);
+
+        // Color picker event handler
+        new Color(document.getElementById('mark' + idx));
+    }
 
     // Slider button event handler
-    sliderBtnEvt(idx, sliders);
+    if (options.slidersOn && options.toolbarOn) {
+        sliderBtnEvt(idx, sliders);
+    }
 
 
     name = 'viewer';
@@ -152,12 +166,21 @@ let createDivs = function (idx, options) {
 }
 
 
-let createButtons = function (idx, div, color) {
-    if (!color) {
+let createButtons = function (idx, div, options) {
+    let color;
+    if (isRealValue(options.paintbrushColor)) {
+        color = options.paintbrushColor;
+    } else {
         color = "#00f";
     }
 
-    div.innerHTML = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
+    let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
+    <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`;
+
+    if (!options.multipleOn) {
+        htm = '';
+    }
+    div.innerHTML = htm + `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
         <mark id="mark${idx}">${color}</mark>&nbsp;
         <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
@@ -171,7 +194,7 @@ let createButtons = function (idx, div, color) {
 }
 
 
-let createSliders = function (idx, div, num) {
+let createSliders = function (idx, div, num, options) {
     let sliders = [];
     let d = document.createDocumentFragment();
 
@@ -185,7 +208,12 @@ let createSliders = function (idx, div, num) {
         range.max = "100";
         range.value = "100";
         range.setAttribute('class', "slider-square");
-        range.style.display = "none"; // bc we have a btn to toggle it
+        if (options.toolbarOn) {
+            range.style.display = 'none';
+        } else {
+            range.style.display = 'inline'; // bc we have a btn to toggle it
+        }
+
         d.appendChild(range); // append div to fragment
         div.appendChild(d); // append fragment to parent
         sliders.push(range);
@@ -195,9 +223,10 @@ let createSliders = function (idx, div, num) {
 
 
 let sliderBtnEvt = function (idx, sliders) {
+
     // Slider button event handler
     let btnSlide = document.getElementById("btnSlide" + idx);
-    if (btnSlide !== null) {
+    if (isRealValue(btnSlide)) {
         btnSlide.addEventListener('click', function () {
 
             // (2) sliders.
@@ -218,10 +247,10 @@ let sliderBtnEvt = function (idx, sliders) {
                 // Style the button
                 this.innerHTML = "<i class=\"fa fa-sliders\"></i> Show sliders";
             }
-            toggleBtn(btnSlide)
+            toggleBtn(btnSlide);
         });
     } else {
-        alert('slide is null')
+        console.log('slide is null');
     }
 
     function toggleBtn(btn) {

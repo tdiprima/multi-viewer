@@ -20,7 +20,6 @@
 
     <div id="selections"></div>
     <div><br>&nbsp;</div>
-    <div class="container" id="viewers"></div>
 
     <script src="./js/lib/openseadragon/openseadragon.js"></script>
     <script src="./js/lib/openseadragon-fabricjs-overlay.js"></script>
@@ -29,15 +28,15 @@
     <script src="./js/lib/openseadragon-filtering.js"></script>
     <script src="./js/lib/color-picker.min.js"></script>
     <!-- distribution -->
-    <!-- <script src="./js/ultraviewer.min.js"></script> -->
-    <script src="./js/color.js"></script>
-    <script src="./js/pageSetup.js"></script>
-    <script src="./js/dropdown.js"></script>
-    <script src="./js/edit.js"></script>
-    <script src="./js/locationPin.js"></script>
-    <script src="./js/markupTools.js"></script>
-    <script src="./js/nViewer.js"></script>
-    <script src="./js/synchronizer.js"></script>
+     <script src="./js/ultraviewer.min.js"></script>
+<!--    <script src="./js/color.js"></script>-->
+<!--    <script src="./js/dropdown.js"></script>-->
+<!--    <script src="./js/pageSetup.js"></script>-->
+<!--    <script src="./js/edit.js"></script>-->
+<!--    <script src="./js/locationPin.js"></script>-->
+<!--    <script src="./js/markupTools.js"></script>-->
+<!--    <script src="./js/nViewer.js"></script>-->
+<!--    <script src="./js/synchronizer.js"></script>-->
 
     <script>
 
@@ -55,8 +54,8 @@
                     showZoomControl: true
                 }
             };
-            // new pageSetup().setup(4, false, options); // for testing
-            new pageSetup().setup(4, true, options);
+            new pageSetup().setup(4, false); // for testing
+            // new pageSetup().setup(4, true, options);
         });
 
     </script>

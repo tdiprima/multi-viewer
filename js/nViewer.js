@@ -103,6 +103,7 @@ class nViewer {
          * INITIALIZE
          */
         function setViewer(viewerDivId) {
+            // console.log(viewerDivId);
 
             viewer = OpenSeadragon({
                 id: viewerDivId,
@@ -120,7 +121,9 @@ class nViewer {
 
             // Sliders event listeners
             if (options.slidersOn) {
+
                 for (let i = 0; i < sliders.length; i++) {
+
                     sliders[i].addEventListener("input", function () {
                         if (viewer.world.getItemAt(i) !== undefined) {
                             viewer.world.getItemAt(i).setOpacity(sliders[i].value / 100);
