@@ -27,11 +27,12 @@
     <script src="./js/lib/fabric.adapted.js"></script>
     <script src="./js/lib/openseadragon-filtering.js"></script>
     <script src="./js/lib/color-picker.min.js"></script>
+    <!-- distribution -->
     <script src="js/ultraviewer.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            demo.execute(6, true);
+            new pageSetup().setup(6, true);
         });
     </script>
 

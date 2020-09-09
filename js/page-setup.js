@@ -5,10 +5,37 @@ let pageSetup = function () {
 
     let num_divs, options, prod;
 
-    this.setup = function (num_divs1, options1, prod1) {
+    this.setup = function (num_divs1, prod1, options1) {
         num_divs = num_divs1;
         options = options1;
         prod = prod1;
+
+        if (!options) {
+            // default
+            options = {
+                filterOn: true,
+                slidersOn: true,
+                toolbarOn: true,
+                multipleOn: true,
+                paintbrushColor: "#0ff",
+                viewerOpts: {
+                    showFullPageControl: false,
+                    showHomeControl: true,
+                    showZoomControl: false
+                }
+            }
+
+            // default if single viewer
+            if (num_divs === 1) {
+                options = {
+                    filterOn: true,
+                    slidersOn: true,
+                    toolbarOn: false,
+                    multipleOn: false,
+                    paintbrushColor: "#0ff"
+                }
+            }
+        }
 
         new Promise(function (resolve, reject) {
 
@@ -42,7 +69,7 @@ let pageSetup = function () {
                 });
             }
 
-            function live() {``
+            function live() {
                 // Set viewer source
                 const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
                 const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";

@@ -28,10 +28,10 @@
     <script src="./js/lib/fabric.adapted.js"></script>
     <script src="./js/lib/openseadragon-filtering.js"></script>
     <script src="./js/lib/color-picker.min.js"></script>
+    <!-- distribution -->
     <!-- <script src="./js/ultraviewer.min.js"></script> -->
     <script src="./js/color.js"></script>
     <script src="./js/page-setup.js"></script>
-    <script src="./js/demo.js"></script>
     <script src="./js/dropdown.js"></script>
     <script src="./js/edit.js"></script>
     <script src="./js/locationPin.js"></script>
@@ -56,8 +56,8 @@
                     showZoomControl: true
                 }
             };
-            // demo.execute(4, false, options); // for testing
-            demo.execute(4, true, options);
+            // new pageSetup().setup(4, false, options); // for testing
+            new pageSetup().setup(4, true, options);
         });
 
     </script>
