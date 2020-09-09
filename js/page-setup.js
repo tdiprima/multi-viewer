@@ -1,6 +1,3 @@
-this.viewers = [];
-this.sliders = [];
-this.sync = {};
 let pageSetup = function () {
 
     let num_divs, options, prod;
@@ -43,28 +40,35 @@ let pageSetup = function () {
             for (let idx = 1; idx <= num_divs; idx++) {
                 createDivs(idx);
             }
-            return resolve(1); // todo: ?
+            return resolve(1);
 
         }).then(function (result) {
 
             // Create viewers
+            let viewers = [];
             for (let i = 1; i <= num_divs; i++) {
-                this.viewers.push(new nViewer("viewer" + i, options));
+                viewers.push(new nViewer("viewer" + i, options));
             }
-            return result * 2;
-        }).then(function (result) {
+            return viewers;
+
+        }).then(function (viewers) {
+
             // Viewers created; add dropdown to page
-            new Dropdown(this.viewers, 'selections', './json/tcga.json');
-            return result * 2;
-        }).then(function (result) {
+            new Dropdown(viewers, 'selections', './json/tcga.json');
+            return viewers
+
+        }).then(function (viewers) {
+
             // Pan zoom controller
-            new Synchronizer(this.viewers);  // Pass array of nViewers
-            return result * 2;
-        }).then(function (result) {
+            new Synchronizer(viewers);  // Pass array of nViewers
+            return viewers;
+
+        }).then(function (viewers) {
+
             function test() {
                 // TESTING
                 let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-                this.viewers.forEach(function (elem) {
+                viewers.forEach(function (elem) {
                     elem.getViewer().open(dzi)
                 });
             }
@@ -73,7 +77,7 @@ let pageSetup = function () {
                 // Set viewer source
                 const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
                 const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
-                this.viewers.forEach(function (elem) {
+                viewers.forEach(function (elem) {
                     elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
                     iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
                         [1.0, 1.0]);
@@ -85,10 +89,9 @@ let pageSetup = function () {
             } else {
                 test();
             }
+
         });
-
     }
-
 }
 
 
@@ -116,8 +119,7 @@ let createDivs = function (idx) {
     rangeDiv.className = name;
     controlsDiv.append(rangeDiv);
 
-    createSliders(rangeDiv);
-
+    let sliders = createSliders(rangeDiv);
 
     let buttonDiv = document.createElement("div"); // div containing 'buttons'
     buttonDiv.classList.add('floated');
@@ -126,7 +128,7 @@ let createDivs = function (idx) {
 
     createButtons(buttonDiv, idx);
 
-    sliderEvt(idx);
+    sliderBtnEvt(idx, sliders);
 
 
     name = 'viewer';
@@ -148,6 +150,7 @@ let createDivs = function (idx) {
 }
 
 let createSliders = function (div) {
+    let sliders = [];
     let d = document.createDocumentFragment();
     let len = 2;
     for (let i = 0; i < len; i++) {
@@ -161,8 +164,9 @@ let createSliders = function (div) {
         range.style.display = "none"; // bc we have a btn to toggle it
         d.appendChild(range); // append div to fragment
         div.appendChild(d); // append fragment to parent
-        this.sliders.push(range);
+        sliders.push(range);
     }
+    return sliders;
 }
 
 
@@ -181,26 +185,33 @@ let createButtons = function (div, idx) {
 
 }
 
-let sliderEvt = function (idx) {
+let sliderBtnEvt = function (idx, sliders) {
     // Slider button event handler
-    // if (this.options.slidersOn) {
-    let sld = document.getElementById("btnSlide" + idx);
-    if (sld !== null) {
-        sld.addEventListener('click', function () {
+    let btnSlide = document.getElementById("btnSlide" + idx);
+    if (btnSlide !== null) {
+        btnSlide.addEventListener('click', function () {
 
-            let x = sliders[0];
-            if (x.style.display === 'none') {
-                x.style.display = 'inline';
+            // (2) sliders.
+            if (sliders[0].style.display === 'none') { // no need to check both; just the one.
+
+                // Show the sliders
+                sliders[0].style.display = 'inline';
                 sliders[1].style.display = 'inline';
+
+                // Style the button
                 this.innerHTML = "<i class=\"fa fa-sliders\"></i> Hide sliders";
+
             } else {
-                x.style.display = 'none';
+                // Hide the sliders
+                sliders[0].style.display = 'none';
                 sliders[1].style.display = 'none';
+
+                // Style the button
                 this.innerHTML = "<i class=\"fa fa-sliders\"></i> Show sliders";
             }
         });
     } else {
         alert('slide is null')
     }
-    // }
+
 }
