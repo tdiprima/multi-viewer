@@ -180,9 +180,7 @@ let createButtons = function (idx, div, options) {
     if (!options.multipleOn) {
         htm = '';
     }
-    div.innerHTML = htm + `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
-    <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;
-        <mark id="mark${idx}">${color}</mark>&nbsp;
+    div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
         <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
         <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
         <button id="btnGrid${idx}" class="btn"><i class="fa fa-border-all"></i> Draw grid</button>&nbsp;

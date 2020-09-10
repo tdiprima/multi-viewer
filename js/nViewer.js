@@ -10,9 +10,8 @@ class nViewer {
         let viewer = {};
 
         // Checkboxes
-        let chkPan = {};
-        let chkZoom = {};
-        if (options.multipleOn) {
+        let chkPan = {}, chkZoom = {};
+        if (options.multipleOn && options.toolbarOn) {
             chkPan = document.getElementById("chkPan" + idx);
             chkZoom = document.getElementById("chkZoom" + idx);
         }
@@ -25,11 +24,29 @@ class nViewer {
         };
 
         this.getChkPan = function () {
-            return chkPan.checked;
+            if (typeof chkPan.checked !== 'undefined') {
+                return chkPan.checked;
+            } else {
+                if (options.multipleOn) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         };
 
         this.getChkZoom = function () {
-            return chkZoom.checked;
+            if (typeof chkZoom.checked !== 'undefined') {
+                return chkZoom.checked;
+            } else {
+                if (options.multipleOn) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         };
 
         viewer.addHandler('open', (param) => {
@@ -38,7 +55,7 @@ class nViewer {
             let tiledImage = viewer.world.getItemAt(0);
             let imgRect = tiledImage.getBounds(true);
             let elementRect = viewer.viewport.viewportToViewerElementRectangle(
-              imgRect
+                imgRect
             );
             dimWidthEl.value = elementRect.width;
             dimHeightEl.value = elementRect.height;
