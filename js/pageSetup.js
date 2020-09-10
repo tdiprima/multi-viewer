@@ -6,7 +6,7 @@ let pageSetup = function () {
     let options, prod;
 
     this.setup = function (num_divs1, prod1, options1) {
-        num_divs = num_divs1;
+        this.num_divs = num_divs1;
         prod = prod1;
 
         if (isRealValue(options1)) {
