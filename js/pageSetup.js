@@ -6,7 +6,7 @@ let pageSetup = function () {
     let options, prod;
 
     this.setup = function (num_divs1, prod1, options1) {
-        this.num_divs = num_divs1;
+        num_divs = num_divs1;
         prod = prod1;
 
         if (isRealValue(options1)) {
@@ -44,29 +44,29 @@ let pageSetup = function () {
         new Promise(function (resolve, reject) {
 
             // Create divs
-            for (let idx = 1; idx <= num_divs; idx++) {
+            for (let idx = 1; idx <= this.num_divs; idx++) {
                 createDivs(idx, options);
             }
             return resolve(this.viewers);
 
-        }).then(function (viewers) {
+        }).then(function (v) {
 
             // Viewers created; add dropdown to page
-            new Dropdown(viewers, 'selections', './json/tcga.json');
-            return viewers
+            new Dropdown(v, 'selections', './json/tcga.json');
+            return v
 
-        }).then(function (viewers) {
+        }).then(function (v) {
 
             // Pan zoom controller
-            new Synchronizer(viewers);  // Pass array of nViewers
-            return viewers;
+            new Synchronizer(v);  // Pass array of nViewers
+            return v;
 
-        }).then(function (viewers) {
+        }).then(function (v) {
 
             function test() {
                 // TESTING
                 let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-                viewers.forEach(function (elem) {
+                v.forEach(function (elem) {
                     elem.getViewer().open(dzi)
                 });
             }
@@ -75,7 +75,7 @@ let pageSetup = function () {
                 // Set viewer source
                 const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
                 const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
-                viewers.forEach(function (elem) {
+                v.forEach(function (elem) {
                     elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
                     iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
                         [1.0, 1.0]);
@@ -94,6 +94,7 @@ let pageSetup = function () {
 
 
 let createDivs = function (idx, options) {
+
     let name;
 
     let container = document.createElement('div');
@@ -177,7 +178,7 @@ let createButtons = function (idx, div, options) {
     let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`;
 
-    if (this.num_divs <= 1) {
+    if (num_divs <= 1) {
         htm = '';
     }
     div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
@@ -193,6 +194,7 @@ let createButtons = function (idx, div, options) {
 
 
 let createSliders = function (idx, div, num, options) {
+
     let sliders = [];
     let d = document.createDocumentFragment();
 
