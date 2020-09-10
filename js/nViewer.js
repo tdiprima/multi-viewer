@@ -11,7 +11,7 @@ class nViewer {
 
         // Checkboxes
         let chkPan = {}, chkZoom = {};
-        if (options.multipleOn && options.toolbarOn) {
+        if (num_divs > 1 && options.toolbarOn) {
             chkPan = document.getElementById("chkPan" + idx);
             chkZoom = document.getElementById("chkZoom" + idx);
         }
@@ -25,26 +25,26 @@ class nViewer {
 
         this.getChkPan = function () {
             if (typeof chkPan.checked !== 'undefined') {
-                return chkPan.checked;
+                return chkPan.checked; // user decision
             } else {
-                if (options.multipleOn) {
-                    return true;
+                if (num_divs === 1) {
+                    return false; // nothing to synchronize
                 }
                 else {
-                    return false;
+                    return true; // default: keep in sync
                 }
             }
         };
 
         this.getChkZoom = function () {
             if (typeof chkZoom.checked !== 'undefined') {
-                return chkZoom.checked;
+                return chkPan.checked; // user decision
             } else {
-                if (options.multipleOn) {
-                    return true;
+                if (num_divs === 1) {
+                    return false; // nothing to synchronize
                 }
                 else {
-                    return false;
+                    return true; // default: keep in sync
                 }
             }
         };

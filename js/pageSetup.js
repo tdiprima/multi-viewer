@@ -1,8 +1,9 @@
 count = 0;
+num_divs = 0;
 viewers = [];
 let pageSetup = function () {
 
-    let num_divs, options, prod;
+    let options, prod;
 
     this.setup = function (num_divs1, prod1, options1) {
         num_divs = num_divs1;
@@ -16,7 +17,6 @@ let pageSetup = function () {
                 filterOn: true,
                 slidersOn: true,
                 toolbarOn: true,
-                multipleOn: true,
                 paintbrushColor: "#0ff",
                 viewerOpts: {
                     showFullPageControl: false,
@@ -31,7 +31,6 @@ let pageSetup = function () {
                     filterOn: true,
                     slidersOn: true,
                     toolbarOn: false,
-                    multipleOn: false,
                     paintbrushColor: "#0ff",
                     viewerOpts: {
                         showFullPageControl: false,
@@ -167,6 +166,7 @@ let createDivs = function (idx, options) {
 
 
 let createButtons = function (idx, div, options) {
+
     let color;
     if (isRealValue(options.paintbrushColor)) {
         color = options.paintbrushColor;
@@ -177,7 +177,7 @@ let createButtons = function (idx, div, options) {
     let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`;
 
-    if (!options.multipleOn) {
+    if (this.num_divs <= 1) {
         htm = '';
     }
     div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
