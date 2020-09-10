@@ -33,9 +33,9 @@ let pageSetup = function () {
                     toolbarOn: false,
                     paintbrushColor: "#0ff",
                     viewerOpts: {
-                        showFullPageControl: false,
+                        showFullPageControl: true,
                         showHomeControl: true,
-                        showZoomControl: false
+                        showZoomControl: true
                     }
                 }
             }
