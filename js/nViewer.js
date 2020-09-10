@@ -38,7 +38,7 @@ class nViewer {
 
         this.getChkZoom = function () {
             if (typeof chkZoom.checked !== 'undefined') {
-                return chkPan.checked; // user decision
+                return chkZoom.checked; // user decision
             } else {
                 if (num_divs === 1) {
                     return false; // nothing to synchronize
