@@ -8,9 +8,9 @@ locationPin = function (currentViewer, syncedViewers) {
     // const idx = currentViewer.id.trim(-1).replace("viewer", "");
 
     // prevent modal
-    // $(currentViewer.element).on('contextmenu', (event) => {
-    //     event.preventDefault();
-    // });
+    $(currentViewer.element).on('contextmenu', (event) => {
+        event.preventDefault();
+    });
 
     // right-click
     currentViewer.addHandler('canvas-nonprimary-press', (event) => {
