@@ -1,4 +1,14 @@
+cornerColor = 'rgba(0, 0, 255, 0.5)'; // default color for handles
 pathToPoly = function (fabPath, canvas, paintBrush) {
+    const c = paintBrush.color.toLowerCase()
+    console.log(c)
+
+    if (c.endsWith('ff') && c !== '#00ffff' && c !== '#ff00ff') {
+        // blue corners with blue paint won't show up
+        this.cornerColor = 'rgba(255, 255, 0, 1)';
+    } else {
+        this.cornerColor = 'rgba(0, 0, 255, 1)';
+    }
 
     const _points0 = fabPath.path.map(item => ({
         x: item[1],
@@ -24,7 +34,7 @@ pathToPoly = function (fabPath, canvas, paintBrush) {
         scaleY: fabPath.scaleY,
         objectCaching: false,
         transparentCorners: false,
-        cornerColor: "blue"
+        cornerColor: this.cornerColor
     });
     canvas.add(poly);
     canvas.setActiveObject(poly);
@@ -123,7 +133,7 @@ function Edit(canvas) {
         if (poly.edit) {
             let lastControl = poly.points.length - 1;
             poly.cornerStyle = 'circle';
-            poly.cornerColor = 'rgba(0,0,255,0.5)';
+            poly.cornerColor = cornerColor;
 
             // accumulator, next item, index
             let reduceFun = function (acc, point, index) {
@@ -142,7 +152,7 @@ function Edit(canvas) {
             poly.controls = poly.points.reduce(reduceFun, {});
 
         } else {
-            poly.cornerColor = 'blue';
+            poly.cornerColor = cornerColor;
             poly.cornerStyle = 'rect';
             // Default controls:
             poly.controls = fabric.Object.prototype.controls;
