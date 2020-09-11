@@ -224,14 +224,17 @@ function markupTools(idx, viewer) {
         canvas.on("mouse:up", mouseupHandler);
         canvas.on("path:created", pathCreatedHandler);
 
+        // Because we need the object that we just created.
         function pathCreatedHandler(options) {
-            // options gives you the Path object
+            // 'options' gives you the Path object
             // todo: get this to stop doing it for all objects.
             let fabPath = options.path;
             pathToPoly(fabPath, canvas, paintBrush);
+
             customizeControls(fabPath);
             clearClassList(btnDraw);
             btnDraw.classList.add('btn');
+
             // canvas.off('mouse:down', mousedownHandler);
             // canvas.off("mouse:up", mouseupHandler);
             // TODO: implement save
@@ -239,8 +242,9 @@ function markupTools(idx, viewer) {
         }
 
         function mouseupHandler(options) {
-            // options gives you the PointerEvent object
-            // Drawing off
+            // 'options' contains mouse pointer coordinates stuff
+
+            // drawing off
             canvas.isDrawingMode = false;
             mToggle(true);
         }
