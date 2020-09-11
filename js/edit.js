@@ -96,6 +96,7 @@ function anchorWrapper(anchorIndex, fn) {
                 fabricObject.calcTransformMatrix()
             ),
             actionPerformed = fn(eventData, transform, x, y),
+            newDim = fabricObject._setPositionDimensions({}),
             polygonBaseSize = fabricObject._getNonTransformedDimensions(),
             newX =
                 (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) /
