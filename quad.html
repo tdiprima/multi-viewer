@@ -28,21 +28,23 @@
     <script src="./js/lib/openseadragon-filtering.js"></script>
     <script src="./js/lib/color-picker.min.js"></script>
     <!-- distribution -->
-     <script src="./js/ultraviewer.min.js"></script>
-<!--    <script src="./js/color.js"></script>-->
-<!--    <script src="./js/dropdown.js"></script>-->
-<!--    <script src="./js/pageSetup.js"></script>-->
-<!--    <script src="./js/edit.js"></script>-->
-<!--    <script src="./js/locationPin.js"></script>-->
-<!--    <script src="./js/markupTools.js"></script>-->
-<!--    <script src="./js/nViewer.js"></script>-->
-<!--    <script src="./js/synchronizer.js"></script>-->
+    <!-- <script src="./js/ultraviewer.min.js"></script> -->
+    <script src="./js/color.js"></script>
+    <script src="./js/dropdown.js"></script>
+    <script src="./js/pageSetup.js"></script>
+    <script src="./js/edit.js"></script>
+    <script src="./js/draw.js"></script>
+    <script src="./js/grid.js"></script>
+    <script src="./js/locationPin.js"></script>
+    <script src="./js/markupTools.js"></script>
+    <script src="./js/nViewer.js"></script>
+    <script src="./js/synchronizer.js"></script>
 
     <script>
 
         document.addEventListener('DOMContentLoaded', (event) => {
             const options = {
-                filterOn: true,
+                filterOn: false,
                 slidersOn: true,
                 toolbarOn: true,
                 paintbrushColor: "#0ff",
@@ -52,7 +54,7 @@
                     showZoomControl: true
                 }
             };
-            // new pageSetup().setup(4, false, options); // for testing
+            // new pageSetup().setup(1, false, options); // for testing
             new pageSetup().setup(4, true, options);
         });
 

@@ -4,27 +4,21 @@
  * mouse:up
  * path:created
  */
-function freeDrawing(idx, viewer, clearClassList, toggleButton) {
+function freeDrawing(idx, viewer, overlay) {
 
-    const overlay = viewer.fabricjsOverlay({
-        scale: 1000
-    });
     const canvas = overlay.fabricCanvas();
 
     const btnDraw = document.getElementById('btnDraw' + idx);
-    const btnEdit = document.getElementById('btnEdit' + idx);
     const mark = document.getElementById('mark' + idx);
-
     const paintBrush = overlay.fabricCanvas().freeDrawingBrush;
     paintBrush.color = mark.innerHTML;
 
-    // Edit-polygon handler
-    btnEdit.addEventListener('click', function () {
+    // EDIT POLYGON
+    document.getElementById('btnEdit' + idx).addEventListener('click', function () {
         toggleButton(this);
         Edit(canvas);
     });
 
-    // Add delete button to polygon bounding box
     function addDeleteBtn(x, y, el) {
         $(".deleteBtn").remove();
         let btnLeft = x - 10;
@@ -37,22 +31,42 @@ function freeDrawing(idx, viewer, clearClassList, toggleButton) {
         el.appendChild(deleteBtn);
     }
 
-    function f(e, c) {
+    function checkCoords(e, c) {
         let el = c.lowerCanvasEl.parentElement;
         if (isRealValue(e.target.oCoords.tr) && isRealValue(el)) {
             addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y, el);
         }
     }
 
-    // For the object that was drawn
     function customizeControls(obj) {
+        // For the object that was drawn
         obj['hasControls'] = false;
         obj.lockMovementX = true; // hold in place
         obj.lockMovementY = true;
 
         canvas.on('selection:created', function (e) {
-            f(e, canvas);
+            checkCoords(e, canvas);
         })
+
+        // It's not movable/scalable/etc now, but it might be one day.
+        canvas.on('object:modified', function (e) {
+            checkCoords(e, canvas);
+        });
+
+        canvas.on('object:scaling', function (e) {
+            $(".deleteBtn").remove();
+            checkCoords(e, canvas);
+        });
+
+        canvas.on('object:moving', function (e) {
+            $(".deleteBtn").remove();
+            checkCoords(e, canvas);
+        });
+
+        canvas.on('object:rotating', function (e) {
+            $(".deleteBtn").remove();
+            checkCoords(e, canvas);
+        });
 
         $(".canvas-container").on('click', ".deleteBtn", function () {
             viewer.gestureSettingsMouse.clickToZoom = false;
@@ -67,12 +81,12 @@ function freeDrawing(idx, viewer, clearClassList, toggleButton) {
 
     }
 
+    function setBrushWidth(viewer) {
+        paintBrush.width = 10 / viewer.viewport.getZoom(true);
+    }
+
     // DRAW BUTTON
     btnDraw.addEventListener('click', function () {
-        // TEMP
-        // for (let prop in canvas.__eventListeners) {
-        //     console.log(prop);
-        // }
         toggleButton(btnDraw);
         canvas.on("mouse:up", mouseupHandler);
         canvas.on("path:created", pathCreatedHandler);
@@ -89,12 +103,12 @@ function freeDrawing(idx, viewer, clearClassList, toggleButton) {
 
             // canvas.off('mouse:down', mousedownHandler);
             // canvas.off("mouse:up", mouseupHandler);
-            // TODO: implement save
             // console.log('PATH:\n', path);
         }
 
         function mouseupHandler(options) {
             // 'options' contains mouse pointer coordinates stuff
+
             // drawing off
             canvas.isDrawingMode = false;
             viewer.setMouseNavEnabled(true);
@@ -102,7 +116,6 @@ function freeDrawing(idx, viewer, clearClassList, toggleButton) {
         }
 
         function mousedownHandler() {
-            console.log('mousedown')
             // For example, panning or zooming after selection
             if (!canvas.getActiveObject()) {
                 $(".deleteBtn").remove();
@@ -113,24 +126,22 @@ function freeDrawing(idx, viewer, clearClassList, toggleButton) {
             }
         }
 
-
         if (canvas.isDrawingMode) {
             // drawing off
             canvas.isDrawingMode = false;
             canvas.off('mouse:down', mousedownHandler);
             viewer.setMouseNavEnabled(true);
             viewer.outerTracker.setTracking(true);
-            console.log(canvas.isDrawingMode)
 
         } else {
             // drawing on
             canvas.isDrawingMode = true;
             canvas.on('mouse:down', mousedownHandler);
             paintBrush.color = mark.innerHTML;
-            paintBrush.width = 10 / viewer.viewport.getZoom(true);
+            setBrushWidth(viewer);
             viewer.setMouseNavEnabled(false);
             viewer.outerTracker.setTracking(false);
-            console.log(canvas.isDrawingMode)
+
         }
     });
 }

@@ -4,11 +4,9 @@
  * mouse:up
  * mouse:move
  */
-function grid(idx, viewer, toggleButton) {
+function grid(idx, viewer, overlay) {
 
-    const overlay = viewer.fabricjsOverlay({ scale: 1000 });
     const canvas = overlay.fabricCanvas();
-    // const canvas = fb.create(viewer).c;
 
     const btnGrid = document.getElementById('btnGrid' + idx);
     let cellX = [], cellY = [], cell_size = 50, gridAdded = false, dim_width, dim_height;
