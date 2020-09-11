@@ -1,13 +1,13 @@
 cornerColor = 'rgba(0, 0, 255, 0.5)'; // default color for handles
 pathToPoly = function (fabPath, canvas, paintBrush) {
-    const c = paintBrush.color.toLowerCase()
-    console.log(c)
+    // console.log('pathToPoly');
 
+    const c = paintBrush.color.toLowerCase()
     if (c.endsWith('ff') && c !== '#00ffff' && c !== '#ff00ff') {
         // blue corners with blue paint won't show up
-        this.cornerColor = 'rgba(255, 255, 0, 1)';
+        this.cornerColor = 'rgba(255, 255, 0, 0.5)';
     } else {
-        this.cornerColor = 'rgba(0, 0, 255, 1)';
+        this.cornerColor = 'rgba(0, 0, 255, 0.5)';
     }
 
     const _points0 = fabPath.path.map(item => ({

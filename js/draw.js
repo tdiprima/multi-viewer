@@ -81,11 +81,7 @@ function freeDrawing(idx, viewer, overlay) {
 
     }
 
-    function setBrushWidth(viewer) {
-        paintBrush.width = 10 / viewer.viewport.getZoom(true);
-    }
-
-    // DRAW BUTTON
+    // DRAW BUTTON EVENT HANDLER
     btnDraw.addEventListener('click', function () {
         toggleButton(btnDraw);
         canvas.on("mouse:up", mouseupHandler);
@@ -93,6 +89,8 @@ function freeDrawing(idx, viewer, overlay) {
 
         // Because we need the object that we just created.
         function pathCreatedHandler(options) {
+            // console.log('pathCreatedHandler')
+
             // 'options' gives you the Path object
             let fabPath = options.path;
             pathToPoly(fabPath, canvas, paintBrush);
@@ -104,6 +102,7 @@ function freeDrawing(idx, viewer, overlay) {
             // canvas.off('mouse:down', mousedownHandler);
             // canvas.off("mouse:up", mouseupHandler);
             // console.log('PATH:\n', path);
+            canvas.off("path:created", pathCreatedHandler);
         }
 
         function mouseupHandler(options) {
@@ -138,7 +137,7 @@ function freeDrawing(idx, viewer, overlay) {
             canvas.isDrawingMode = true;
             canvas.on('mouse:down', mousedownHandler);
             paintBrush.color = mark.innerHTML;
-            setBrushWidth(viewer);
+            paintBrush.width = 10 / viewer.viewport.getZoom(true);
             viewer.setMouseNavEnabled(false);
             viewer.outerTracker.setTracking(false);
 
