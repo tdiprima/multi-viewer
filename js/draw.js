@@ -143,4 +143,62 @@ function freeDrawing(idx, viewer, overlay) {
 
         }
     });
+
+    // HOVER
+    canvas.on('mouse:over', mouseOver);
+    canvas.on('mouse:out', mouseOut);
+
+    function mouseOver(e) {
+        try {
+            let obj = e.target;
+            if (obj !== null) {
+
+                // TARGET FILL
+                obj.set({
+                    fill: obj.stroke,
+                    opacity: 0.5
+                });
+
+                // TEXT
+                // let pointer = canvas.getPointer(e);
+                let left = obj.left, top = obj.top;
+                let longText = 'PROPERTIES BLAH BLAH BLAH';
+                // TODO: Simplify the toJSON; WHICH properties are relevant?
+                // let longText = JSON.stringify(obj.toJSON());
+
+                textBox = new fabric.Text(longText, {
+                    fontSize: 18,
+                    fontFamily: 'Courier',
+                    backgroundColor: 'rgba(102, 102, 102, 0.7)',
+                    stroke: 'rgba(255, 255, 255, 1)',
+                    fill: 'rgba(255, 255, 255, 1)',
+                    left: left, //pointer.x,
+                    top: top //pointer.y
+                });
+                canvas.add(textBox);
+                canvas.renderAll();
+            }
+        } catch (e) {
+            console.log('eee', e.message);
+        }
+    }
+
+    function mouseOut(e) {
+        try {
+            let obj = e.target;
+            if (obj !== null) {
+
+                // TARGET FILL
+                obj.set({
+                    fill: ''
+                });
+
+                // REMOVE TEXT
+                canvas.remove(textBox);
+                canvas.renderAll();
+            }
+        } catch (e) {
+            console.log('eee', e.message);
+        }
+    }
 }
