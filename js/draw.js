@@ -148,9 +148,12 @@ function freeDrawing(idx, viewer, overlay) {
     canvas.on('mouse:over', mouseOver);
     canvas.on('mouse:out', mouseOut);
 
+    let textBox;
     function mouseOver(e) {
         try {
             let obj = e.target;
+            // console.log(e);
+            // console.log(obj);
             if (obj !== null) {
 
                 // TARGET FILL
@@ -162,11 +165,23 @@ function freeDrawing(idx, viewer, overlay) {
                 // TEXT
                 // let pointer = canvas.getPointer(e);
                 let left = obj.left, top = obj.top;
-                let longText = 'PROPERTIES BLAH BLAH BLAH';
-                // TODO: Simplify the toJSON; WHICH properties are relevant?
-                // let longText = JSON.stringify(obj.toJSON());
+                let type = obj.type;
+                // let json = obj.toJSON(), longText = JSON.stringify(json);
 
-                textBox = new fabric.Text(longText, {
+                // let longText = 'PROPERTIES BLAH BLAH BLAH';
+                // points
+                // pathOffset
+                // fill
+                // stroke
+                // strokeWidth
+                // opacity
+                // cornerColor
+                // top
+                // left
+                // width
+                // height
+
+                textBox = new fabric.Text(type + ', blah blah blah', {
                     fontSize: 18,
                     fontFamily: 'Courier',
                     backgroundColor: 'rgba(102, 102, 102, 0.7)',
