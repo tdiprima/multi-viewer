@@ -152,9 +152,8 @@ function freeDrawing(idx, viewer, overlay) {
     function mouseOver(e) {
         try {
             let obj = e.target;
-            // console.log(e);
-            // console.log(obj);
-            if (obj !== null) {
+            let type = obj.type;
+            if (isRealValue(obj) && type !== 'line') {
 
                 // TARGET FILL
                 obj.set({
@@ -165,7 +164,7 @@ function freeDrawing(idx, viewer, overlay) {
                 // TEXT
                 // let pointer = canvas.getPointer(e);
                 let left = obj.left, top = obj.top;
-                let type = obj.type;
+
                 // let json = obj.toJSON(), longText = JSON.stringify(json);
 
                 // let longText = 'PROPERTIES BLAH BLAH BLAH';
@@ -181,7 +180,7 @@ function freeDrawing(idx, viewer, overlay) {
                 // width
                 // height
 
-                textBox = new fabric.Text(type + ', blah blah blah', {
+                textBox = new fabric.Text(type, {
                     fontSize: 18,
                     fontFamily: 'Courier',
                     backgroundColor: 'rgba(102, 102, 102, 0.7)',
@@ -194,7 +193,7 @@ function freeDrawing(idx, viewer, overlay) {
                 canvas.renderAll();
             }
         } catch (e) {
-            console.log('eee', e.message);
+            // console.log('eee', e.message);
         }
     }
 
@@ -213,7 +212,7 @@ function freeDrawing(idx, viewer, overlay) {
                 canvas.renderAll();
             }
         } catch (e) {
-            console.log('eee', e.message);
+            // console.log('eee', e.message);
         }
     }
 }

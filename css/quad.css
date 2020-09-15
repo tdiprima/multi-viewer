@@ -1,5 +1,5 @@
 .divSquare {
-    /* border: 1px solid blueviolet */
+    /* border: 1px solid blueviolet; */
     width: 48%;
     height: 560px;
     margin: 4px;
@@ -23,7 +23,7 @@
 }
 
 .viewer {
-    /* border: 1px solid blue; */
+    /* border: 1px solid lawngreen; */
     width: 640px;
     height: 480px;
     /*height: 100%;*/
