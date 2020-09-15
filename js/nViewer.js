@@ -49,6 +49,7 @@ class nViewer {
         };
 
         viewer.addHandler('open', (param) => {
+            console.log('viewer open handler');
             let dimWidthEl = document.getElementById("dim-w");
             let dimHeightEl = document.getElementById("dim-h");
             let tiledImage = viewer.world.getItemAt(0);
@@ -68,6 +69,7 @@ class nViewer {
         this.setSources = function (imageArray, opacityArray) {
 
             imageArray.forEach(function (image, index) {
+                console.log(image)
                 // add images to viewer
                 viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 });
             });
