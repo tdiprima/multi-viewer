@@ -5,93 +5,91 @@ let pageSetup = function () {
 
     let options, prod;
 
-    this.setup = function (num_divs1, prod1, options1) {
-        num_divs = num_divs1;
-        prod = prod1;
+    this.setup = function (num_divs1, prod1, sourceImages, options1) {
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+            num_divs = num_divs1;
+            prod = prod1;
 
-        if (isRealValue(options1)) {
-            options = options1;
-        } else {
-            // default
-            options = {
-                filterOn: true,
-                slidersOn: true,
-                toolbarOn: true,
-                paintbrushColor: "#0ff",
-                viewerOpts: {
-                    showFullPageControl: false,
-                    showHomeControl: true,
-                    showZoomControl: false
-                }
-            }
-
-            // default if single viewer
-            if (num_divs === 1) {
+            if (isRealValue(options1)) {
+                options = options1;
+            } else {
+                // default
                 options = {
                     filterOn: true,
                     slidersOn: true,
-                    toolbarOn: false,
+                    toolbarOn: true,
                     paintbrushColor: "#0ff",
                     viewerOpts: {
-                        showFullPageControl: true,
+                        showFullPageControl: false,
                         showHomeControl: true,
-                        showZoomControl: true
+                        showZoomControl: false
+                    }
+                }
+
+                // default if single viewer
+                if (num_divs === 1) {
+                    options = {
+                        filterOn: true,
+                        slidersOn: true,
+                        toolbarOn: false,
+                        paintbrushColor: "#0ff",
+                        viewerOpts: {
+                            showFullPageControl: true,
+                            showHomeControl: true,
+                            showZoomControl: true
+                        }
                     }
                 }
             }
-        }
 
-        new Promise(function (resolve, reject) {
+            new Promise(function (resolve, reject) {
 
-            // Create divs
-            for (let idx = 1; idx <= this.num_divs; idx++) {
-                createDivs(idx, options);
-            }
-            return resolve(this.viewers);
+                // Create divs
+                for (let idx = 1; idx <= this.num_divs; idx++) {
+                    createDivs(idx, options);
+                }
+                return resolve(this.viewers);
 
-        }).then(function (v) {
+            }).then(function (v) {
 
-            // Viewers created; add dropdown to page
-            new Dropdown(v, 'selections', './json/tcga.json');
-            return v
+                // Viewers created; add dropdown to page
+                new Dropdown(v, 'selections', './json/tcga.json');
+                return v
 
-        }).then(function (v) {
+            }).then(function (v) {
 
-            // Pan zoom controller
-            new Synchronizer(v);  // Pass array of nViewers
-            return v;
+                // Pan zoom controller
+                new Synchronizer(v);  // Pass array of nViewers
+                return v;
 
-        }).then(function (v) {
+            }).then(function (v) {
 
-            function test() {
-                // TESTING
-                let dzi = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-                v.forEach(function (elem) {
-                    elem.getViewer().open(dzi)
-                });
-            }
+                function test() {
+                    // TESTING
+                    v.forEach(function (elem) {
+                        elem.getViewer().open(sourceImages[0]) // <- open()
+                    });
+                }
 
-            function live() {
-                // Set viewer source
-                const iiif = window.location.origin + "/iiif/?iiif=/tcgaseg";
-                const id = "blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E";
-                v.forEach(function (elem) {
-                    elem.setSources([iiif + "/tcgaimages/" + id + ".svs/info.json",
-                    iiif + "/featureimages/" + id + "-featureimage.tif/info.json"],
-                        [1.0, 1.0]);
-                });
-            }
+                function live() {
+                    // Set viewer source
+                    v.forEach(function (elem) {
+                        elem.setSources(sourceImages, [1.0, 1.0]); // <- setSources()
+                    });
+                }
 
-            if (prod) {
-                live();
-            } else {
-                test();
-            }
+                if (prod) {
+                    live();
+                } else {
+                    test();
+                }
 
+            });
         });
     }
-}
 
+}
 
 let createDivs = function (idx, options) {
 

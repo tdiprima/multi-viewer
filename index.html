@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>TCGA Segmentation Data</title>
     <link href="./css/quad.css" rel="stylesheet">
     <link href="./css/style.css" rel="stylesheet">
@@ -13,8 +13,8 @@
 </head>
 
 <body>
-    <input type="hidden" id="dim-w" value="">
-    <input type="hidden" id="dim-h" value="">
+    <input id="dim-w" type="hidden" value="">
+    <input id="dim-h" type="hidden" value="">
 
     <h3>TCGA Segmentation Data</h3>
 
@@ -28,12 +28,11 @@
     <script src="./js/lib/openseadragon-filtering.js"></script>
     <script src="./js/lib/color-picker.min.js"></script>
     <!-- distribution -->
-     <script src="./js/ultraviewer.min.js"></script>
+    <script src="./js/ultraviewer.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            new pageSetup().setup(1, true);
-        });
+        arr = ["https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json", "https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json"];
+        new pageSetup().setup(1, true, arr);
     </script>
 
 </body>

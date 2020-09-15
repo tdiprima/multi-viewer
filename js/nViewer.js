@@ -3,7 +3,6 @@
  */
 class nViewer {
     constructor(viewerDivId, sliders, options) {
-        // console.log(viewerDivId, sliders, options);
 
         let idx = viewerDivId.replace("viewer", "");
         let myFilter = {};

@@ -12,7 +12,6 @@ function grid(idx, viewer, overlay) {
     let cellX = [], cellY = [], cell_size = 50, gridAdded = false, dim_width, dim_height;
 
     function renderGrid(width, height, cell_width, cell_height, color) {
-        console.log(width, height, cell_width, cell_height, color)
 
         let lineOption = { stroke: color, strokeWidth: 2, selectable: false }
 
