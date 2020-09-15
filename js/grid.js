@@ -67,20 +67,17 @@ function grid(idx, viewer, overlay) {
     // Get coordinates of mouse pointer
     function mouseCoords(options) {
         let event = options.e;
-        let rect = document.getElementById('viewer' + idx).getBoundingClientRect();
-        const mouseCoords = { x: event.clientX - rect.left, y: event.clientY - rect.top }
-
-        let cx = mouseCoords.x;
-        let cy = mouseCoords.y;
-
-        let x = cx / cell_size;
-        let y = cy / cell_size;
-        let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
-        let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
-
-        let ctx = viewer.drawer.context;
-        ctx.fillStyle = "red";
-        ctx.fillRect(cellX[imoX], cellY[imoY], cell_size, cell_size);
+        let pointer = canvas.getPointer(event);
+        let rect = new fabric.Rect({
+            left: Math.ceil(pointer.x),
+            top: Math.ceil(pointer.y),
+            fill: 'red',
+            width: cell_size,
+            height: cell_size,
+            opacity: 0.5,
+            selectable: false
+        });
+        canvas.add(rect); // TODO: snap-to
     }
 
     // Grid marker event handler
