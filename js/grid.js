@@ -35,30 +35,26 @@ function grid(idx, viewer, overlay) {
     // Grid button event handler
     btnGrid.addEventListener('click', function () {
 
-        let dimWidthEl = document.getElementById("dim-w");
-        let dimHeightEl = document.getElementById("dim-h");
+        dim_width = Math.ceil(canvas.width);
+        dim_height = Math.ceil(canvas.height);
 
-        if (isRealValue(dimWidthEl) && isRealValue(dimHeightEl)) {
-            dim_width = Math.ceil(dimWidthEl.value);
-            dim_height = Math.ceil(dimHeightEl.value);
-
-            if (btnGrid.classList.contains('btnOn')) {
-                // Remove only the lines
-                let r = canvas.getObjects('line');
-                for (let i = 0; i < r.length; i++) {
-                    canvas.remove(r[i]);
-                }
-                btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid';
-                gridAdded = false;
-
-            } else {
-
-                // DRAW GRID
-                renderGrid(dim_width, dim_height, cell_size, cell_size, 'red');
-                btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
-                gridAdded = true;
+        if (btnGrid.classList.contains('btnOn')) {
+            // Remove only the lines
+            let r = canvas.getObjects('line');
+            for (let i = 0; i < r.length; i++) {
+                canvas.remove(r[i]);
             }
+            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid';
+            gridAdded = false;
+
+        } else {
+
+            // DRAW GRID
+            renderGrid(dim_width, dim_height, cell_size, cell_size, 'red');
+            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
+            gridAdded = true;
         }
+
         toggleButton(btnGrid);
 
     });
