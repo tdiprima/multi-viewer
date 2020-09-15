@@ -48,20 +48,6 @@ class nViewer {
             }
         };
 
-        viewer.addHandler('open', (param) => {
-            console.log('viewer open handler');
-            let dimWidthEl = document.getElementById("dim-w");
-            let dimHeightEl = document.getElementById("dim-h");
-            let tiledImage = viewer.world.getItemAt(0);
-            let imgRect = tiledImage.getBounds(true);
-            let elementRect = viewer.viewport.viewportToViewerElementRectangle(
-                imgRect
-            );
-            dimWidthEl.value = elementRect.width;
-            dimHeightEl.value = elementRect.height;
-
-        })
-
         /**
          * @param imageArray
          * @param opacityArray
@@ -69,7 +55,7 @@ class nViewer {
         this.setSources = function (imageArray, opacityArray) {
 
             imageArray.forEach(function (image, index) {
-                console.log(image)
+                // console.log(image)
                 // add images to viewer
                 viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 });
             });
