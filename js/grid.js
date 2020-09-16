@@ -24,8 +24,7 @@ function grid(idx, viewer, overlay) {
         // Vertical grid lines
         for (let x = 0; x < Math.ceil(width / cell_width); ++x) {
             canvas.add(new fabric.Line([x * cell_width, 0, x * cell_width, height], lineOption));
-            // cellX[x + 1] = x * cell_width;
-            cellX[x] = x * cell_width;
+            cellX[x + 1] = x * cell_width;
         }
         canvas.renderAll();
         gridAdded = true;
@@ -68,16 +67,24 @@ function grid(idx, viewer, overlay) {
     function mouseCoords(options) {
         let event = options.e;
         let pointer = canvas.getPointer(event);
+        let cx = pointer.x;
+        let cy = pointer.y;
+        let x = cx / cell_size;
+        let y = cy / cell_size;
+        let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
+        let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
+
+        // Fill in the grid
         let rect = new fabric.Rect({
-            left: Math.ceil(pointer.x),
-            top: Math.ceil(pointer.y),
+            left: cellX[imoX],
+            top: cellY[imoY],
             fill: 'red',
             width: cell_size,
             height: cell_size,
             opacity: 0.5,
             selectable: false
         });
-        canvas.add(rect); // TODO: snap-to
+        canvas.add(rect);
     }
 
     // Grid marker event handler
