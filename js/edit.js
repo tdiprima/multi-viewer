@@ -119,10 +119,6 @@ function getPolygon(canvas) {
     }
 }
 
-function isRealValue(obj) {
-    return obj && obj !== 'null' && obj !== 'undefined';
-}
-
 function Edit(canvas) {
 
     let poly = getPolygon(canvas);

@@ -6,7 +6,7 @@ let pageSetup = function () {
     let options, prod;
 
     this.setup = function (num_divs1, prod1, sourceImages, options1) {
-        
+
         document.addEventListener('DOMContentLoaded', (event) => {
             num_divs = num_divs1;
             prod = prod1;
@@ -281,4 +281,8 @@ function toggleButton(btn) {
     } else {
         btn.classList.add('btnOn');
     }
+}
+
+function isRealValue(obj) {
+    return obj && obj !== 'null' && obj !== 'undefined';
 }
