@@ -34,6 +34,7 @@ function grid(idx, viewer, overlay) {
     // Grid button event handler
     btnGrid.addEventListener('click', function () {
 
+        // TODO: what about grid at max scale?
         dim_width = Math.ceil(canvas.width);
         dim_height = Math.ceil(canvas.height);
 
