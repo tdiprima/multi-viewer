@@ -153,7 +153,7 @@ function freeDrawing(idx, viewer, overlay) {
         try {
             let obj = e.target;
             let type = obj.type;
-            if (isRealValue(obj) && type !== 'line') {
+            if (isRealValue(obj) && type === 'polygon') { // no 'line', no 'rect' (grid).
 
                 // TARGET FILL
                 obj.set({
@@ -162,24 +162,7 @@ function freeDrawing(idx, viewer, overlay) {
                 });
 
                 // TEXT
-                // let pointer = canvas.getPointer(e);
                 let left = obj.left, top = obj.top;
-
-                // let json = obj.toJSON(), longText = JSON.stringify(json);
-
-                // let longText = 'PROPERTIES BLAH BLAH BLAH';
-                // points
-                // pathOffset
-                // fill
-                // stroke
-                // strokeWidth
-                // opacity
-                // cornerColor
-                // top
-                // left
-                // width
-                // height
-
                 textBox = new fabric.Text(type, {
                     fontSize: 18,
                     fontFamily: 'Courier',
