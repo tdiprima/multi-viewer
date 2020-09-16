@@ -63,8 +63,9 @@ function grid(idx, viewer, overlay) {
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
-    // Get coordinates of mouse pointer
+    // Get coordinates of mouse pointer, and fill in the square of the grid.
     function mouseCoords(options) {
+        // TODO: what makes a box disappear sometimes?
         let event = options.e;
         let pointer = canvas.getPointer(event);
         let cx = pointer.x;
