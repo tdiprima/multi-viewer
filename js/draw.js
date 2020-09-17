@@ -10,7 +10,9 @@ function freeDrawing(idx, viewer, overlay) {
 
     const btnDraw = document.getElementById('btnDraw' + idx);
     const mark = document.getElementById('mark' + idx);
-    const paintBrush = overlay.fabricCanvas().freeDrawingBrush;
+    // const paintBrush = overlay.fabricCanvas().freeDrawingBrush;
+    const paintBrush = canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas);
+    paintBrush.decimate = 20;
     paintBrush.color = mark.innerHTML;
 
     // EDIT POLYGON

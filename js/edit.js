@@ -15,16 +15,17 @@ pathToPoly = function (fabPath, canvas, paintBrush) {
         y: item[2]
     }));
 
-    // THERE ARE WAY TOO MANY POINTS; REDUCE THEM:
-    let points = _points0.reduce(
-        function (accumulator, currentValue, currentIndex) {
-            if (currentIndex % 7 === 0)
-                accumulator.push(currentValue);
-            return accumulator;
-        }, []);
+    // There are way too many points; reduce them:
+    // NOW using: paintBrush.decimate
+    // let points = _points0.reduce(
+    //     function (accumulator, currentValue, currentIndex) {
+    //         if (currentIndex % 7 === 0)
+    //             accumulator.push(currentValue);
+    //         return accumulator;
+    //     }, []);
 
     // CREATE NEW OBJECT
-    let poly = new fabric.Polygon(points, {
+    let poly = new fabric.Polygon(_points0, {
         left: fabPath.left,
         top: fabPath.top,
         fill: "",
