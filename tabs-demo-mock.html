@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Tabs Demo Mockup</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.1.0/fabric.min.js"
+        integrity="sha512-T9uV3LxV54oKVYSwORGeHdJ1Ti0WcQvDjAaTvMS6+qfrI5ZRzwxfXVzr7fqodTjfZ6wtbreT5A+65ykwbp4DOw=="
+        crossorigin="anonymous"></script>
+    <style>
+        #drawing-board {
+            height: 300px;
+            width: 500px;
+            margin: 0 auto;
+            overflow: auto;
+        }
+
+        #drawing-board>:nth-child(1) {
+            z-index: 0;
+            position: absolute !important;
+        }
+
+        #drawing-board>:nth-child(2) {
+            z-index: 1;
+            position: absolute !important;
+        }
+
+        /* https://www.educative.io/edpresso/how-to-create-tabs-in-html */
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+    <script>
+        function clickHandle(evt, animalName) {
+            let i, tabcontent, tablinks;
+
+            // This is to clear the previous clicked content.
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Set the tab to be "active".
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Display the clicked tab and set it to active.
+            document.getElementById(animalName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</head>
+
+<body>
+
+    <h3>Click on the tabs below:</h3>
+
+    <div class="tab">
+        <button class="tablinks" onclick="clickHandle(event, 'layer1')">TIL</button>
+        <button class="tablinks" onclick="clickHandle(event, 'layer2')">Cancer</button>
+        <button class="tablinks" onclick="clickHandle(event, 'layer3')">Tissue</button>
+    </div>
+
+    <div id="drawing-board">
+        <canvas id="layer1" class="tabcontent" width="400" height="200"></canvas>
+        <canvas id="layer2" class="tabcontent" width="400" height="200"></canvas>
+        <canvas id="layer3" class="tabcontent" width="400" height="200"></canvas>
+    </div>
+
+    <script>
+        let layer1 = new fabric.Canvas('layer1', { selection: false, backgroundColor: "rgba(255, 0, 0, 0.7)" });
+        let layer2 = new fabric.Canvas('layer2', { selection: false, backgroundColor: "rgba(0, 255, 0, 0.7)" });
+        let layer3 = new fabric.Canvas('layer3', { selection: false, backgroundColor: "rgba(0, 0, 255, 0.7)" });
+
+
+    </script>
+
+</body>
+
+</html>
