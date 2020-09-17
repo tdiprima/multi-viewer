@@ -165,6 +165,7 @@ function freeDrawing(idx, viewer, overlay) {
 
                 // TEXT
                 let left = obj.left, top = obj.top;
+                // JSON.stringify(canvas.toJSON())
                 textBox = new fabric.Text(type, {
                     fontSize: 18,
                     fontFamily: 'Courier',
