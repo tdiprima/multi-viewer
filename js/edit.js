@@ -111,10 +111,19 @@ function anchorWrapper(anchorIndex, fn) {
 
 function getPolygon(canvas) {
     if (canvas.getActiveObject()) {
+        // If one is selected, that's the one they wanna work on.
         return canvas.getActiveObject();
     } else {
-        if (canvas.getObjects()[0] && canvas.getObjects()[0].type === 'polygon') {
-            return canvas.getObjects()[0];
+        let x = canvas.getObjects('polygon');
+        if (x.length === 0) {
+            // No polygons
+            return 'null';
+        } if (x.length === 1) {
+            // Return the first one
+            return x[0];
+        } else {
+            // Tell me which one you want
+            return 'null';
         }
     }
 }
