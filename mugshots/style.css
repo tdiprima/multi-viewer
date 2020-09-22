@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: larger;
+    /*color: silver;
+    background-color: black;*/
+}
+
+.demoarea{
+    clear: both;
+}
+
+.demoheading {
+    color: #437AB2; 
+    padding: 0 0 0.2em 1em;
+}
+
+.openseadragon
+{
+    width:      800px;
+    height:     600px;
+    border:     1px solid black;
+    color:      #333; /* text color for messages */
+    background-color: black;
+}
+
