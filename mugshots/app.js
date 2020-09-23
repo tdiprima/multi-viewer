@@ -1,7 +1,7 @@
 (function () {
     window.addEventListener('load', function () {
 
-        // This is the image I'm using for this testing
+        // Here's the Image Information Request URI
         let imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
         let protocol = 'http://iiif.io/api/image';
         let viewer;
