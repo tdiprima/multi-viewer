@@ -16,7 +16,7 @@
 
         // Set up OSD viewer with info that we fetched
         function createViewer(data) {
-            
+
             let imgWidth = data.width, imgHeight = data.height, tiles = data.tiles[0];
             // This part usually hard-coded in examples. Let's do it the proper way.
             let tileSourceIIIF = {
@@ -46,85 +46,55 @@
         function createScroller(data) {
 
             let size = 256;
-            let left, top;
-            let rows = 1, cols = 5;
+            let left, top;  //, canvas, context;
+            let thumbnails = 5;
+            let ul, li, span;
+
             let fragment = document.createDocumentFragment();
-            let tbl = document.createElement('table');
-            fragment.appendChild(tbl);
+            ul = document.createElement('ul');
+            ul.classList.add("thumbnail-list");
+            fragment.appendChild(ul);
 
-            // Just creating a table for now, like before.
-            
-            // Rows
-            for (let i = 0; i < rows; i++) {
-                row = document.createElement('tr');
-                tbl.appendChild(row);
+            // List elements
+            for (let j = 0; j < thumbnails; j++) {
+                li = document.createElement('li');
+                ul.appendChild(li);
+                left = Math.floor(Math.random() * (data.width / 2)) + 1;
+                top = Math.floor(Math.random() * (data.height / 2)) + 1;
+                span = document.createElement('span');
 
-                // Columns
-                for (let j = 0; j < cols; j++) {
-                    left = Math.floor(Math.random() * (data.width / 2)) + 1;
-                    top = Math.floor(Math.random() * (data.height / 2)) + 1;
-                    col = document.createElement('td');
+                createImage(span, left, top, size);
 
-                    createImage(col, left, top, size);
+                li.appendChild(span);
 
-                    row.appendChild(col);
-
-                }
             }
-            document.getElementById('thumbnailsScroller').appendChild(fragment);
+
+            document.getElementById('thumbnail-container').appendChild(fragment);
         }
 
         // Create thumbnail image
-        function createImage(col, left, top, size) {
+        function createImage(span, left, top, size) {
             let x = document.createElement("IMG");
             x.alt = 'mugshot';
-            x.height = size;
-            x.width = size;
-            // x.id = '' // figure out if we even need an id.
-            
+            // x.height = size;
+            // x.width = size;
+            x.classList.add("thumbnail-image");
+
             // Here's the Image Request URI:
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
 
+            // TODO: Still needs work.
             x.addEventListener('click', function () {
                 let vpt = viewer.viewport;
                 let imagePoint = new OpenSeadragon.Point(left, top);
                 let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
                 viewer.viewport.zoomBy(5);
                 viewer.viewport.panBy(viewportPoint);
-            })
-            // console.log('iiif', x.src);
-            col.appendChild(x);
-        }
-
-        /*
-        // Create canvas if I want to draw on it
-        function createImage1(col, left, top, size) {
-            canvas = document.createElement('canvas');
-            context = canvas.getContext("2d");
-            canvas.width = size;
-            canvas.height = size;
-            col.append(canvas);
-            let x = new Image();
-            x.onload = function () {
-                context.drawImage(x, 0, 0);
-            };
-            // Here's the Image Request URI:
-            x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
-            console.log('iiif', x.src);
-            x.addEventListener('click', function () {
-                let vpt = viewer.viewport;
-                let imagePoint = new OpenSeadragon.Point(left, top);
-                let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
-                viewer.viewport.zoomBy(5);
-                viewer.viewport.panBy(viewportPoint);
-                // try segment.js or transform.js
-                // SEE: https://github.com/openseadragon/openseadragon/issues/1045
 
             })
             // console.log('iiif', x.src);
-            col.appendChild(x);
+            span.appendChild(x);
         }
-        */
 
     });
 })();
