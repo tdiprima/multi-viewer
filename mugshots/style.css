@@ -4,7 +4,7 @@ body {
 }
 
 table {
-    border-spacing: 10px;
+    border: 2px blueviolet;
 }
 
 .demoarea {
@@ -17,7 +17,30 @@ table {
 }
 
 .openseadragon {
-    width:      800px;
-    height:     600px;
-    color:      #333;
+    width: 600px;
+    height: 800px;
+    border: 1px solid blueviolet;
+    color: #333;
+}
+
+.thumbnail-container {
+    overflow-x: scroll;
+    width: 100%;
+    padding: 0 15px;
+}
+
+.thumbnail-list {
+    white-space: nowrap;
+    list-style: none;
+}
+
+.thumbnail-list li {
+    display: inline-block;
+}
+
+.thumbnail-image {
+    display: block;
+    padding: 2px;
+    max-width: 100px;
+    height: auto;
 }
