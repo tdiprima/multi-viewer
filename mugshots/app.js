@@ -4,7 +4,7 @@
         // Here's the Image Information Request URI
         let imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
         let protocol = 'http://iiif.io/api/image';
-        let viewer;
+        let viewer, canvas;
 
         // Fetch the metadata
         fetch(imgUrl + '/info.json')
@@ -39,6 +39,11 @@
                     tileSource: tileSourceIIIF
                 }]
             });
+
+            let overlay = viewer.fabricjsOverlay({
+                scale: 1000
+            });
+            canvas = this.__canvas = overlay.fabricCanvas();
 
         }
 
@@ -82,11 +87,32 @@
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
 
             x.addEventListener('click', function () {
+                // Image to viewport coordinates
                 let vpt = viewer.viewport;
                 let imagePoint = new OpenSeadragon.Point(left, top);
                 let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
                 viewer.viewport.panTo(viewportPoint);
                 viewer.viewport.zoomTo(viewer.viewport.getMaxZoom());
+
+                // Viewport to web coordinates
+                let viewportWindowPoint = vpt.viewportToWindowCoordinates(viewportPoint);
+                let x = Math.round(viewportWindowPoint.x);
+                let y = Math.round(viewportWindowPoint.y);
+                // fingers crossed
+
+                // create a rectangle object
+                let rect = new fabric.Rect({
+                    left: x,
+                    top: y,
+                    stroke: 'yellow',
+                    strokeWidth: 4,
+                    fill: '',
+                    width: size,
+                    height: size
+                });
+
+                // "add" rectangle onto canvas
+                canvas.add(rect);
 
             })
             span.appendChild(x);
