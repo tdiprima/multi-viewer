@@ -3,9 +3,10 @@ body {
     font-size: larger;
 }
 
-table {
+/* table {
     border: 2px blueviolet;
-}
+    border-spacing: 10px;
+} */
 
 .demoarea {
     clear: both;
@@ -19,7 +20,7 @@ table {
 .openseadragon {
     width: 600px;
     height: 800px;
-    border: 1px solid blueviolet;
+    /* border: 1px solid blueviolet; */
     color: #333;
 }
 
