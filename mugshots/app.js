@@ -1,10 +1,12 @@
 (function () {
     window.addEventListener('load', function () {
 
+        // This is the image I'm using for this testing
         let imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
         let protocol = 'http://iiif.io/api/image';
         let viewer;
 
+        // Fetch the metadata
         fetch(imgUrl + '/info.json')
             .then(response => response.json())
             .then(data => {
@@ -12,8 +14,11 @@
                 createScroller(data);
             });
 
+        // Set up OSD viewer with info that we fetched
         function createViewer(data) {
+            
             let imgWidth = data.width, imgHeight = data.height, tiles = data.tiles[0];
+            // This part usually hard-coded in examples. Let's do it the proper way.
             let tileSourceIIIF = {
                 "@context": protocol + "/2/context.json",
                 "@id": imgUrl,
@@ -31,29 +36,30 @@
                 id: "contentDiv",
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
                 tileSources: [{
-                    tileSource: tileSourceIIIF,
-                    width: 1,
-                    y: 0,
-                    x: 1.1
+                    tileSource: tileSourceIIIF
                 }]
             });
 
         }
 
+        // Create thumbnail scroller
         function createScroller(data) {
 
             let size = 256;
-            let left, top;  //, canvas, context;
+            let left, top;
             let rows = 1, cols = 5;
             let fragment = document.createDocumentFragment();
             let tbl = document.createElement('table');
             fragment.appendChild(tbl);
 
+            // Just creating a table for now, like before.
+            
+            // Rows
             for (let i = 0; i < rows; i++) {
                 row = document.createElement('tr');
                 tbl.appendChild(row);
 
-                // n columns
+                // Columns
                 for (let j = 0; j < cols; j++) {
                     left = Math.floor(Math.random() * (data.width / 2)) + 1;
                     top = Math.floor(Math.random() * (data.height / 2)) + 1;
@@ -68,25 +74,29 @@
             document.getElementById('thumbnailsScroller').appendChild(fragment);
         }
 
+        // Create thumbnail image
         function createImage(col, left, top, size) {
             let x = document.createElement("IMG");
             x.alt = 'mugshot';
             x.height = size;
             x.width = size;
-            // x.id = ''
+            // x.id = '' // figure out if we even need an id.
+            
+            // Here's the Image Request URI:
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
-            // TODO:
+
             x.addEventListener('click', function () {
-                // viewer.viewport.panTo(currentViewer.viewport.getCenter());
-                // viewer.viewport.zoomTo(currentViewer.viewport.getZoom());
-                // TODO: so change img coords to viewport coords
-                viewer.viewport.panBy(left, top);
-                viewer.viewport.zoomBy(2);
+                let vpt = viewer.viewport;
+                let imagePoint = new OpenSeadragon.Point(left, top);
+                let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
+                viewer.viewport.zoomBy(5);
+                viewer.viewport.panBy(viewportPoint);
             })
             // console.log('iiif', x.src);
             col.appendChild(x);
         }
 
+        /*
         // Create canvas if I wanna draw on it
         function createImage1(col, left, top, size) {
             canvas = document.createElement('canvas');
@@ -102,7 +112,7 @@
             // https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2/0,0,4096,4096/1024,/0/default.jpg
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
             console.log('iiif', x.src);
-        }
+        }*/
 
     });
 })();
