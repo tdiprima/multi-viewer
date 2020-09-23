@@ -83,13 +83,15 @@
             // Here's the Image Request URI:
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
 
-            // TODO: Still needs work.
+            // TODO: Needs work.
             x.addEventListener('click', function () {
                 let vpt = viewer.viewport;
                 let imagePoint = new OpenSeadragon.Point(left, top);
                 let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
                 viewer.viewport.zoomBy(5);
                 viewer.viewport.panBy(viewportPoint);
+                // try segment.js or transform.js
+                // SEE: https://github.com/openseadragon/openseadragon/issues/1045
 
             })
             // console.log('iiif', x.src);
