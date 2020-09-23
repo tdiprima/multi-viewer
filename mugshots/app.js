@@ -97,7 +97,7 @@
         }
 
         /*
-        // Create canvas if I wanna draw on it
+        // Create canvas if I want to draw on it
         function createImage1(col, left, top, size) {
             canvas = document.createElement('canvas');
             context = canvas.getContext("2d");
@@ -108,11 +108,23 @@
             x.onload = function () {
                 context.drawImage(x, 0, 0);
             };
-            // ...jp2 / 0, 0, 4096, 4096 / 1024, /0/default.jpg
-            // https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2/0,0,4096,4096/1024,/0/default.jpg
+            // Here's the Image Request URI:
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
             console.log('iiif', x.src);
-        }*/
+            x.addEventListener('click', function () {
+                let vpt = viewer.viewport;
+                let imagePoint = new OpenSeadragon.Point(left, top);
+                let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
+                viewer.viewport.zoomBy(5);
+                viewer.viewport.panBy(viewportPoint);
+                // try segment.js or transform.js
+                // SEE: https://github.com/openseadragon/openseadragon/issues/1045
+
+            })
+            // console.log('iiif', x.src);
+            col.appendChild(x);
+        }
+        */
 
     });
 })();
