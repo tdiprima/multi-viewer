@@ -55,33 +55,12 @@ ul {
 }
 
 
-/*
-canvas {
-    border: 1px solid blueviolet;
-}
-*/
-
-
 /*Link*/
 
 a:link {
     text-decoration: none;
 }
 
-
-/*a:visited {*/
-
-
-/*    color: #0000CC;*/
-
-
-/*    color: #000099;*/
-
-
-/*    color: #551A8B;*/
-
-
-/*}*/
 
 .btn {
     color: #0e74da;
