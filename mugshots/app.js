@@ -2,21 +2,22 @@
     window.addEventListener('load', function () {
 
         // Here's the Image Information Request URI
-        let imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
-        let protocol = 'http://iiif.io/api/image';
+        const imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
+        const size = 256;
         let viewer, canvas, vpt;
 
         // Fetch the image metadata
         fetch(imgUrl + '/info.json')
-            .then(response => response.json())
-            .then(data => {
-                createViewer(data);
-                createScroller(data);
-            });
+          .then(response => response.json())
+          .then(data => {
+              createViewer(data);
+              createScroller(data);
+          });
 
         // Set up OSD viewer with info that we fetched
         function createViewer(tileSourceIIIF) {
 
+            // Create viewer
             viewer = OpenSeadragon({
                 id: "contentDiv",
                 prefixUrl: "//openseadragon.github.io/openseadragon/images/",
@@ -25,21 +26,20 @@
                 }]
             });
 
+            // Create viewer-associated things
             vpt = viewer.viewport;
 
             let overlay = viewer.fabricjsOverlay({
                 scale: 1000
             });
-            canvas = this.__canvas = overlay.fabricCanvas();
+            canvas = overlay.fabricCanvas();
 
         }
 
         // Create thumbnail scroller
         function createScroller(imgData) {
 
-            let size = 256;
-            let left, top;  //, canvas, context;
-            let thumbnails = 5;
+            let length = 1;
             let ul, li, span;
 
             let fragment = document.createDocumentFragment();
@@ -48,63 +48,133 @@
             fragment.appendChild(ul);
 
             // List elements
-            for (let j = 0; j < thumbnails; j++) {
+            for (let j = 0; j < length; j++) {
+                // Set up unordered list, list item (magic is done in css)
                 li = document.createElement('li');
                 ul.appendChild(li);
-                left = Math.floor(Math.random() * (imgData.width / 2)) + 1;
-                top = Math.floor(Math.random() * (imgData.height / 2)) + 1;
                 span = document.createElement('span');
-
-                createImage(span, left, top, size);
-
+                // Create thumbnail
+                // createThumbnail(imgData, span);
+                createThumbnail(imgData, span, 500, 500) // TESTING
+                // Append thumbnail
                 li.appendChild(span);
 
             }
-
             document.getElementById('thumbnail-container').appendChild(fragment);
         }
 
-        // Create thumbnail image
-        function createImage(span, left, top, size) {
-            let x = document.createElement("IMG");
-            x.alt = 'mugshot';
-            x.classList.add("thumbnail-image");
+        // Generate random location points to select the thumbnail from
+        function getRandomRect(imgData) {
+            // stay within bounds
+            const left = Math.floor(Math.random() * (imgData.width / 2)) + 1;
+            const top = Math.floor(Math.random() * (imgData.height / 2)) + 1;
+
+            // let left = Math.floor(Math.random() * (imgData.width - size));
+            // let top = Math.floor(Math.random() * (imgData.height - size));
+
+            return new OpenSeadragon.Rect(left, top, size, size);
+        }
+
+        function createThumbnail(imgData, span, x, y) {
+
+            let rect; // it's a rectangle
+
+            // check x, y variables
+            if (typeof(x) !== 'undefined' && typeof(y) !== 'undefined' && x >= 0 && y >= 0) {
+                console.log('got x,y')
+                rect = new OpenSeadragon.Rect(x, y, size, size); // use them
+            } else {
+                console.log('random')
+                rect = getRandomRect(imgData); // get random
+            }
+
+            let imgElement = document.createElement("IMG");
+            imgElement.alt = 'mugshot';
+            imgElement.classList.add("thumbnail-image");
 
             // Here's the Image Request URI:
-            x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
+            imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/full/0/default.jpg';
 
-            x.addEventListener('click', function () {
+            // Append thumbnail
+            span.appendChild(imgElement);
 
-                // Image to viewport coordinates
-                let imagePoint = new OpenSeadragon.Point(left, top);
-                let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
-                vpt.panTo(viewportPoint);
-                vpt.zoomTo(vpt.getMaxZoom());
+            // Thumbnail event listener
+            imgElement.addEventListener('click', function () {
+                showThumbnailOnImage(rect);
+            });
 
-                // Viewport to web coordinates
-                let viewportWindowPoint = vpt.viewportToWindowCoordinates(viewportPoint);
-                let x = Math.round(viewportWindowPoint.x);
-                let y = Math.round(viewportWindowPoint.y);
+        }
 
-                // Scale bounding box (size x size) for hi-res
-                size = size / vpt.getMaxZoom();
+        // Show thumbnail's location in image & highlight the location
+        function showThumbnailOnImage(rect) {
+            console.log('rect', rect);
+            zoomToLocation(rect)
+            highlightLocation(rect)
+        }
 
-                // create a rectangle object
-                let rect = new fabric.Rect({
-                    left: x,
-                    top: y,
-                    stroke: 'yellow',
-                    strokeWidth: 1,
-                    fill: '',
-                    width: size,
-                    height: size
-                });
+        function zoomToLocation(rect) {
 
-                // "add" rectangle onto canvas
-                canvas.add(rect);
+            // Get the center, for panTo()
+            let center = rect.getCenter();
+            // Convert to viewport
+            let vptCenter = vpt.imageToViewportCoordinates(center);
+            // Pan there and magnify by X
+            vpt.panTo(vptCenter);
+            vpt.zoomTo(vpt.getMaxZoom());
 
-            })
-            span.appendChild(x);
+        }
+
+        function getWebPosition(rect) {
+
+            let topLeft = rect.getTopLeft(); // in image coords
+            let newPoint;
+
+            // let viewportPoint = vpt.imageToViewportCoordinates(topLeft);
+            // newPoint = vpt.viewportToWindowCoordinates(viewportPoint); // too far southeast
+            // console.log('newPoint1', newPoint);
+
+            newPoint = vpt.imageToWindowCoordinates(topLeft); // too far southeast
+            console.log('newPoint2', newPoint);
+
+            // Yeah, no:
+            // let topX = topLeft.x / vpt.getMaxZoom(); // divided by max zoom
+            // let topY = topLeft.y / vpt.getMaxZoom();
+            // newPoint = new OpenSeadragon.Point(topX, topY);
+            // // Convert image coordinates to pixel coordinates relative to the window. Note: not accurate with multi-image.
+            // newPoint = vpt.imageToWindowCoordinates(newPoint);
+            // console.log('newPoint3', newPoint);
+
+            // Yeah, really no:
+            // newPoint = new OpenSeadragon.Point(topLeft.x, topLeft.y); // just use image points
+            // console.log('newPoint4', newPoint);
+
+            // todo: well, i'm stuck. #:(
+
+            return newPoint;
+        }
+
+        // Create rectangle
+        function highlightLocation(rect) {
+
+            // 1. Coordinates.  Convert to canvas coordinates, for fabric.js
+            let newPoint = getWebPosition(rect);
+
+            // 2. Zoom. We're magnifying by X, so that square gotta be that many times smaller.
+
+            // make bounding box small for hi-res
+            let new_size = size / vpt.getMaxZoom();
+
+            // add rectangle onto canvas
+            canvas.add(new fabric.Rect({
+                left: newPoint.x,
+                top: newPoint.y,
+                stroke: 'yellow',
+                strokeWidth: 1,
+                fill: '',
+                width: new_size,
+                height: new_size
+            }));
+
         }
     });
 })();
