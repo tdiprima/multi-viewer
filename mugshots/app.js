@@ -4,9 +4,9 @@
         // Here's the Image Information Request URI
         let imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
         let protocol = 'http://iiif.io/api/image';
-        let viewer, canvas;
+        let viewer, canvas, vpt;
 
-        // Fetch the metadata
+        // Fetch the image metadata
         fetch(imgUrl + '/info.json')
             .then(response => response.json())
             .then(data => {
@@ -15,22 +15,7 @@
             });
 
         // Set up OSD viewer with info that we fetched
-        function createViewer(data) {
-
-            let imgWidth = data.width, imgHeight = data.height, tiles = data.tiles[0];
-            // This part usually hard-coded in examples. Let's do it the proper way.
-            let tileSourceIIIF = {
-                "@context": protocol + "/2/context.json",
-                "@id": imgUrl,
-                "height": imgHeight,
-                "width": imgWidth,
-                "profile": [protocol + "/2/level2.json"],
-                "protocol": protocol,
-                "tiles": [{
-                    "scaleFactors": tiles.scaleFactors,
-                    "width": tiles.width
-                }]
-            };
+        function createViewer(tileSourceIIIF) {
 
             viewer = OpenSeadragon({
                 id: "contentDiv",
@@ -40,6 +25,8 @@
                 }]
             });
 
+            vpt = viewer.viewport;
+
             let overlay = viewer.fabricjsOverlay({
                 scale: 1000
             });
@@ -48,7 +35,7 @@
         }
 
         // Create thumbnail scroller
-        function createScroller(data) {
+        function createScroller(imgData) {
 
             let size = 256;
             let left, top;  //, canvas, context;
@@ -64,8 +51,8 @@
             for (let j = 0; j < thumbnails; j++) {
                 li = document.createElement('li');
                 ul.appendChild(li);
-                left = Math.floor(Math.random() * (data.width / 2)) + 1;
-                top = Math.floor(Math.random() * (data.height / 2)) + 1;
+                left = Math.floor(Math.random() * (imgData.width / 2)) + 1;
+                top = Math.floor(Math.random() * (imgData.height / 2)) + 1;
                 span = document.createElement('span');
 
                 createImage(span, left, top, size);
@@ -87,25 +74,27 @@
             x.src = imgUrl + '/' + left + ',' + top + ',' + size + ',' + size + '/full/0/default.jpg';
 
             x.addEventListener('click', function () {
+
                 // Image to viewport coordinates
-                let vpt = viewer.viewport;
                 let imagePoint = new OpenSeadragon.Point(left, top);
                 let viewportPoint = vpt.imageToViewportCoordinates(imagePoint);
-                viewer.viewport.panTo(viewportPoint);
-                viewer.viewport.zoomTo(viewer.viewport.getMaxZoom());
+                vpt.panTo(viewportPoint);
+                vpt.zoomTo(vpt.getMaxZoom());
 
                 // Viewport to web coordinates
                 let viewportWindowPoint = vpt.viewportToWindowCoordinates(viewportPoint);
                 let x = Math.round(viewportWindowPoint.x);
                 let y = Math.round(viewportWindowPoint.y);
-                // fingers crossed
+
+                // Scale bounding box (size x size) for hi-res
+                size = size / vpt.getMaxZoom();
 
                 // create a rectangle object
                 let rect = new fabric.Rect({
                     left: x,
                     top: y,
                     stroke: 'yellow',
-                    strokeWidth: 4,
+                    strokeWidth: 1,
                     fill: '',
                     width: size,
                     height: size
@@ -119,4 +108,3 @@
         }
     });
 })();
-
