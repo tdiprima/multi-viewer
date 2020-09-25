@@ -80,7 +80,7 @@
             let rect; // it's a rectangle
 
             // check x, y variables
-            if (typeof(x) !== 'undefined' && typeof(y) !== 'undefined' && x >= 0 && y >= 0) {
+            if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
                 console.log('got x,y')
                 rect = new OpenSeadragon.Rect(x, y, size, size); // use them
             } else {
@@ -124,7 +124,7 @@
 
         }
 
-        function getWebPosition(rect) {
+        function getCanvasPosition1(rect) {
 
             let topLeft = rect.getTopLeft(); // in image coords
             let newPoint;
@@ -148,16 +148,26 @@
             // newPoint = new OpenSeadragon.Point(topLeft.x, topLeft.y); // just use image points
             // console.log('newPoint4', newPoint);
 
-            // todo: well, i'm stuck. #:(
-
             return newPoint;
+        }
+
+        function getCanvasPosition(rect) {
+            // Assuming you know the pixel width and height of the image, you can do this:
+            let topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft());
+            let bottomRight = vpt.imageToViewerElementCoordinates(rect.getBottomRight());
+            console.log('rect bounds', rect)
+            console.log('topLeft', topLeft)
+            console.log('bottomRight', bottomRight)
+
+            return topLeft;
         }
 
         // Create rectangle
         function highlightLocation(rect) {
 
             // 1. Coordinates.  Convert to canvas coordinates, for fabric.js
-            let newPoint = getWebPosition(rect);
+            // let newPoint = getCanvasPosition1(rect);
+            let newPoint = getCanvasPosition(rect);
 
             // 2. Zoom. We're magnifying by X, so that square gotta be that many times smaller.
 
