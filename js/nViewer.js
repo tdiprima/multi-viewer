@@ -2,7 +2,7 @@
  * Wrapper object for the osd viewers
  */
 class nViewer {
-    constructor(viewerDivId, sliders, options) {
+    constructor(viewerDivId, sliderElements, options) {
 
         let idx = viewerDivId.replace("viewer", "");
         let myFilter = {};
@@ -136,14 +136,15 @@ class nViewer {
 
             // Sliders event listeners
             if (options.slidersOn) {
+                console.log('sliderElements', sliderElements)
 
-                for (let i = 0; i < sliders.length; i++) {
+                for (let i = 0; i < sliderElements.length; i++) {
 
-                    sliders[i].addEventListener("input", function () {
+                    sliderElements[i].addEventListener("input", function () {
                         if (viewer.world.getItemAt(i) !== undefined) {
-                            viewer.world.getItemAt(i).setOpacity(sliders[i].value / 100);
+                            viewer.world.getItemAt(i).setOpacity(sliderElements[i].value / 100);
                         } else {
-                            sliders[i].hidden = true;
+                            sliderElements[i].hidden = true;
                         }
                     });
                 }
