@@ -22,16 +22,12 @@ class nViewer {
             return viewer;
         };
 
-        this.getChkPan = function () {
+                this.getChkPan = function () {
             if (typeof chkPan.checked !== 'undefined') {
                 return chkPan.checked; // user decision
             } else {
-                if (num_divs === 1) {
-                    return false; // nothing to synchronize
-                }
-                else {
-                    return true; // default: keep in sync
-                }
+                // If 1 div; then, nothing to synchronize.
+                return num_divs !== 1;
             }
         };
 
@@ -39,12 +35,7 @@ class nViewer {
             if (typeof chkZoom.checked !== 'undefined') {
                 return chkZoom.checked; // user decision
             } else {
-                if (num_divs === 1) {
-                    return false; // nothing to synchronize
-                }
-                else {
-                    return true; // default: keep in sync
-                }
+                return num_divs !== 1;
             }
         };
 
