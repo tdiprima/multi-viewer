@@ -155,7 +155,7 @@ function drawPolygon(idx, viewer, overlay) {
         try {
             let obj = e.target;
             let type = obj.type;
-            if (isRealValue(obj) && type === 'polygon') { // no 'line', no 'rect' (grid).
+            if (isRealValue(obj) && type === 'polygon') { // no 'line', no 'rect' (gridOverlay).
 
                 // TARGET FILL
                 obj.set({

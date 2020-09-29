@@ -6,6 +6,6 @@ function markupTools(idx, viewer) {
 
     // call this and that
     drawPolygon(idx, viewer, overlay);
-    grid(idx, viewer, overlay);
+    gridOverlay(idx, viewer, overlay);
 
 }
