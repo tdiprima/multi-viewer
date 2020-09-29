@@ -1,9 +1,4 @@
-/**
- * GRID handler
- * mouse:down
- * mouse:up
- * mouse:move
- */
+// Grid handler (and grid paint)
 function gridOverlay(idx, viewer, overlay) {
 
     const canvas = overlay.fabricCanvas();
@@ -15,13 +10,13 @@ function gridOverlay(idx, viewer, overlay) {
 
         let lineOption = { stroke: color, strokeWidth: 2, selectable: false }
 
-        // Horizontal gridOverlay lines
+        // Horizontal grid lines
         for (let y = 0; y < Math.ceil(height / cell_height); ++y) {
             canvas.add(new fabric.Line([0, y * cell_height, width, y * cell_height], lineOption));
             cellY[y + 1] = y * cell_height;
         }
 
-        // Vertical gridOverlay lines
+        // Vertical grid lines
         for (let x = 0; x < Math.ceil(width / cell_width); ++x) {
             canvas.add(new fabric.Line([x * cell_width, 0, x * cell_width, height], lineOption));
             cellX[x + 1] = x * cell_width;
@@ -34,7 +29,7 @@ function gridOverlay(idx, viewer, overlay) {
     // Grid button event handler
     btnGrid.addEventListener('click', function () {
 
-        // TODO: what about gridOverlay at max scale?
+        // TODO: grid at max scale?
         dim_width = Math.ceil(canvas.width);
         dim_height = Math.ceil(canvas.height);
 
@@ -64,7 +59,7 @@ function gridOverlay(idx, viewer, overlay) {
     let btnMarker = document.getElementById('btnMarker' + idx);
     btnMarker.addEventListener('click', markerHandler);
 
-    // Get coordinates of mouse pointer, and fill in the square of the gridOverlay.
+    // Get coordinates of mouse pointer, and fill in the square of the grid.
     function mouseCoords(options) {
         // TODO: what makes a box disappear sometimes?
         let event = options.e;
@@ -73,8 +68,8 @@ function gridOverlay(idx, viewer, overlay) {
         let cy = pointer.y;
         let x = cx / cell_size;
         let y = cy / cell_size;
-        let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on gridOverlay)
-        let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on gridOverlay)
+        let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
+        let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
 
         // Fill in the gridOverlay
         let rect = new fabric.Rect({
@@ -100,7 +95,7 @@ function gridOverlay(idx, viewer, overlay) {
         } else {
             if (!gridAdded) {
                 toggle = false;
-                alert("Please draw a gridOverlay first.");
+                alert("Please draw a grid first.");
             } else {
                 // Add listener
                 canvas.on("mouse:move", mouseCoords);
