@@ -1,9 +1,4 @@
-/**
- * FreeDrawing handler
- * mouse:down
- * mouse:up
- * path:created
- */
+// This is the free-drawing handler
 function drawPolygon(idx, viewer, overlay) {
 
     const canvas = overlay.fabricCanvas();
