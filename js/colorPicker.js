@@ -1,6 +1,6 @@
 // Attach custom color picker to toolbar
-// Color-picker repo: https://github.com/taufik-nurrohman/color-picker
-function Color(elem) {
+// colorPicker-picker repo: https://github.com/taufik-nurrohman/color-picker
+function colorPicker(elem) {
     let picker = new CP(elem);
     picker.self.classList.add('no-alpha'); // hide alpha controls (not needed)
 

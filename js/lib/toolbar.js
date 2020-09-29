@@ -76,7 +76,7 @@ function Toolbar(div, idx, sliders, options) {
 
         sliderEvt(); // Slider
 
-        colorDrawEvt(); // Color & paint
+        colorDrawEvt(); // colorPicker & draw
     };
 
 
@@ -123,8 +123,8 @@ function Toolbar(div, idx, sliders, options) {
 
 
     function colorDrawEvt() {
-        // Color picker event handler
-        new Color(document.getElementById('mark' + idx));
+        // colorPicker picker event handler
+        new colorPicker(document.getElementById('mark' + idx));
     }
 
 

@@ -132,8 +132,8 @@ let createDivs = function (idx, options) {
         // Create buttons
         createButtons(idx, buttonDiv, options);
 
-        // Color picker event handler
-        new Color(document.getElementById('mark' + idx));
+        // colorPicker picker event handler
+        new colorPicker(document.getElementById('mark' + idx));
     }
 
     // Slider button event handler
