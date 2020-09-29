@@ -124,7 +124,6 @@ class nViewer {
 
             // Sliders event listeners
             if (options.slidersOn) {
-                console.log('sliderElements', sliderElements)
 
                 for (let i = 0; i < sliderElements.length; i++) {
 
