@@ -1,11 +1,8 @@
-/**
- * Attach custom color picker to toolbar
- * @param elem
- * @constructor
- */
+// Attach custom color picker to toolbar
+// Color-picker repo: https://github.com/taufik-nurrohman/color-picker
 function Color(elem) {
     let picker = new CP(elem);
-    picker.self.classList.add('no-alpha');
+    picker.self.classList.add('no-alpha'); // hide alpha controls (not needed)
 
     // Disable the default blur and focus behavior
     picker.on('blur', function () {
