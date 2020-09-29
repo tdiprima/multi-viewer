@@ -22,7 +22,7 @@ class nViewer {
             return viewer;
         };
 
-                this.getChkPan = function () {
+        this.getChkPan = function () {
             if (typeof chkPan.checked !== 'undefined') {
                 return chkPan.checked; // user decision
             } else {
@@ -40,41 +40,40 @@ class nViewer {
         };
 
         // The url will return an image for the region specified by the given x, y, and level.
-        function getTileSourceUrl(source, level, x, y) {
-            let IIIF_ROTATION = '0';
-            let scale = Math.pow(0.5, source.maxLevel - level);
-            let levelWidth = Math.ceil(source.width * scale);
-            let levelHeight = Math.ceil(source.height * scale), tileSize;
+        function getIIIFTileUrl(source, level, x, y) {
 
-            let iiifTileSize, iiifTileSizeWidth, iiifTileSizeHeight, iiifRegion, iiifTileX, iiifTileY, iiifTileW, iiifTileH, iiifSize, iiifQuality, uri;
-            tileSize = source.getTileWidth(level);
-            iiifTileSize = Math.ceil(tileSize / scale);
-            iiifTileSizeHeight = iiifTileSize;
-            iiifTileSizeWidth = iiifTileSize;
-            iiifQuality = "default.png";
+            let calcScale = Math.pow(0.5, source.maxLevel - level);
+            let calcLevelWidth = Math.ceil(source.width * calcScale);
+            let calcLevelHeight = Math.ceil(source.height * calcScale);
+            let calcTileSize = source.getTileWidth(level);
 
-            if (levelWidth < tileSize && levelHeight < tileSize) {
-                iiifSize = levelWidth + ",";
-                iiifRegion = 'full';
+            let tileSize = Math.ceil(calcTileSize / calcScale);
+            let tileSizeHeight = tileSize; // width = height
+            let tileSizeWidth = tileSize;  // width = height
+
+            let region, tileX, tileY, tileW, tileH, size, url;
+            let quality = "default.png";
+            let ROTATION = '0';
+
+            if (calcLevelWidth < calcTileSize && calcLevelHeight < calcTileSize) {
+                size = calcLevelWidth + ",";
+                region = 'full';
             } else {
-                iiifTileX = x * iiifTileSizeWidth;
-                iiifTileY = y * iiifTileSizeHeight;
-                iiifTileW = Math.min(iiifTileSizeWidth, source.width - iiifTileX);
-                iiifTileH = Math.min(iiifTileSizeHeight, source.height - iiifTileY);
-                iiifSize = Math.ceil(iiifTileW * scale) + ",";
-                iiifRegion = [iiifTileX, iiifTileY, iiifTileW, iiifTileH].join(',');
+                tileX = x * tileSizeWidth;
+                tileY = y * tileSizeHeight;
+                tileW = Math.min(tileSizeWidth, source.width - tileX);
+                tileH = Math.min(tileSizeHeight, source.height - tileY);
+                size = Math.ceil(tileW * calcScale) + ",";
+                region = [tileX, tileY, tileW, tileH].join(',');
             }
 
-            uri = [source['@id'], iiifRegion, iiifSize, IIIF_ROTATION, iiifQuality].join('/');
-            // console.log('URI', uri);
-            return uri;
+            url = [source['@id'], region, size, ROTATION, quality].join('/');
+            console.log('URL', url);
+            return url;
 
         }
 
-        /**
-         * @param imageArray
-         * @param opacityArray
-         */
+        // Set viewer's source images
         this.setSources = function (imageArray, opacityArray) {
 
             imageArray.forEach(function (image, index) {
@@ -86,6 +85,7 @@ class nViewer {
             viewer.world.addHandler("add-item", (event) => {
 
                 if (viewer.world.getItemCount() === 2) {
+
                     // colorize layer 2
                     viewer.setFilterOptions({
                         filters: [{
@@ -96,8 +96,9 @@ class nViewer {
                         }]
                     });
 
+                    // get image tile
                     viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
-                        return getTileSourceUrl(this, level, x, y);
+                        return getIIIFTileUrl(this, level, x, y);
                     };
                 }
 
@@ -105,9 +106,7 @@ class nViewer {
 
         };
 
-        /**
-         * INITIALIZE
-         */
+        // Initialize viewer
         function setViewer(viewerDivId) {
             // console.log(viewerDivId);
 
