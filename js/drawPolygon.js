@@ -4,7 +4,7 @@
  * mouse:up
  * path:created
  */
-function freeDrawing(idx, viewer, overlay) {
+function drawPolygon(idx, viewer, overlay) {
 
     const canvas = overlay.fabricCanvas();
 

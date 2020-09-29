@@ -5,7 +5,7 @@ function markupTools(idx, viewer) {
     });
 
     // call this and that
-    freeDrawing(idx, viewer, overlay);
+    drawPolygon(idx, viewer, overlay);
     grid(idx, viewer, overlay);
 
 }
