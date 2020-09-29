@@ -1,6 +1,6 @@
 /**
  * FreeDrawing and Grid handled by markupTools.js
- * Edit polygon handled by edit.js
+ * Edit polygon handled by editPolygon.js
  * Map markers handled by locationPin.js
  */
 function Toolbar(div, idx, sliders, options) {

@@ -129,7 +129,7 @@ function getPolygon(canvas) {
     }
 }
 
-function Edit(canvas) {
+function editPolygon(canvas) {
 
     let poly = getPolygon(canvas);
 

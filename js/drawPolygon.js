@@ -18,7 +18,7 @@ function drawPolygon(idx, viewer, overlay) {
     // EDIT POLYGON
     document.getElementById('btnEdit' + idx).addEventListener('click', function () {
         toggleButton(this);
-        Edit(canvas);
+        editPolygon(canvas);
     });
 
     function addDeleteBtn(x, y, el) {
