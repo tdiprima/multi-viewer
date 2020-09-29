@@ -39,14 +39,14 @@ function gridOverlay(idx, viewer, overlay) {
             for (let i = 0; i < r.length; i++) {
                 canvas.remove(r[i]);
             }
-            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw gridOverlay';
+            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid';
             gridAdded = false;
 
         } else {
 
             // DRAW GRID
             renderGrid(dim_width, dim_height, cell_size, cell_size, 'red');
-            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove gridOverlay';
+            btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid';
             gridAdded = true;
         }
 
@@ -71,7 +71,7 @@ function gridOverlay(idx, viewer, overlay) {
         let imoX = Math.ceil(x + 0.001); // IsMouseOverX (mouse(block) position on grid)
         let imoY = Math.ceil(y + 0.001); // IsMouseOverY (mouse(block) position on grid)
 
-        // Fill in the gridOverlay
+        // Fill in the grid
         let rect = new fabric.Rect({
             left: cellX[imoX],
             top: cellY[imoY],
@@ -90,7 +90,7 @@ function gridOverlay(idx, viewer, overlay) {
         if (btnMarker.classList.contains('btnOn')) {
             // Remove mouse:move listener (we also use it for other things)
             canvas.off("mouse:move", mouseCoords);
-            btnMarker.innerHTML = "<i class=\"fa fa-paint-brush\"></i> Mark gridOverlay";
+            btnMarker.innerHTML = "<i class=\"fa fa-paint-brush\"></i> Mark grid";
 
         } else {
             if (!gridAdded) {
