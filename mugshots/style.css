@@ -18,8 +18,8 @@ body {
 }
 
 .openseadragon {
-    width: 600px;
-    height: 800px;
+    width: 480px;
+    height: 640px;
     /* border: 1px solid blueviolet; */
     color: #333;
 }
