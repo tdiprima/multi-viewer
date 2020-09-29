@@ -48,6 +48,38 @@ class nViewer {
             }
         };
 
+        // The url will return an image for the region specified by the given x, y, and level.
+        function getTileSourceUrl(source, level, x, y) {
+            let IIIF_ROTATION = '0';
+            let scale = Math.pow(0.5, source.maxLevel - level);
+            let levelWidth = Math.ceil(source.width * scale);
+            let levelHeight = Math.ceil(source.height * scale), tileSize;
+
+            let iiifTileSize, iiifTileSizeWidth, iiifTileSizeHeight, iiifRegion, iiifTileX, iiifTileY, iiifTileW, iiifTileH, iiifSize, iiifQuality, uri;
+            tileSize = source.getTileWidth(level);
+            iiifTileSize = Math.ceil(tileSize / scale);
+            iiifTileSizeHeight = iiifTileSize;
+            iiifTileSizeWidth = iiifTileSize;
+            iiifQuality = "default.png";
+
+            if (levelWidth < tileSize && levelHeight < tileSize) {
+                iiifSize = levelWidth + ",";
+                iiifRegion = 'full';
+            } else {
+                iiifTileX = x * iiifTileSizeWidth;
+                iiifTileY = y * iiifTileSizeHeight;
+                iiifTileW = Math.min(iiifTileSizeWidth, source.width - iiifTileX);
+                iiifTileH = Math.min(iiifTileSizeHeight, source.height - iiifTileY);
+                iiifSize = Math.ceil(iiifTileW * scale) + ",";
+                iiifRegion = [iiifTileX, iiifTileY, iiifTileW, iiifTileH].join(',');
+            }
+
+            uri = [source['@id'], iiifRegion, iiifSize, IIIF_ROTATION, iiifQuality].join('/');
+            // console.log('URI', uri);
+            return uri;
+
+        }
+
         /**
          * @param imageArray
          * @param opacityArray
@@ -74,28 +106,7 @@ class nViewer {
                     });
 
                     viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
-                        let IIIF_ROTATION = '0', scale = Math.pow(0.5, this.maxLevel - level),
-                            levelWidth = Math.ceil(this.width * scale), levelHeight = Math.ceil(this.height * scale), tileSize,
-                            iiifTileSize, iiifTileSizeWidth, iiifTileSizeHeight, iiifRegion, iiifTileX, iiifTileY, iiifTileW,
-                            iiifTileH, iiifSize, iiifQuality, uri;
-                        tileSize = this.getTileWidth(level);
-                        iiifTileSize = Math.ceil(tileSize / scale);
-                        iiifTileSizeHeight = iiifTileSize;
-                        iiifTileSizeWidth = iiifTileSize;
-                        iiifQuality = "default.png";
-                        if (levelWidth < tileSize && levelHeight < tileSize) {
-                            iiifSize = levelWidth + ",";
-                            iiifRegion = 'full';
-                        } else {
-                            iiifTileX = x * iiifTileSizeWidth;
-                            iiifTileY = y * iiifTileSizeHeight;
-                            iiifTileW = Math.min(iiifTileSizeWidth, this.width - iiifTileX);
-                            iiifTileH = Math.min(iiifTileSizeHeight, this.height - iiifTileY);
-                            iiifSize = Math.ceil(iiifTileW * scale) + ",";
-                            iiifRegion = [iiifTileX, iiifTileY, iiifTileW, iiifTileH].join(',');
-                        }
-                        uri = [this['@id'], iiifRegion, iiifSize, IIIF_ROTATION, iiifQuality].join('/');
-                        return uri;
+                        return getTileSourceUrl(this, level, x, y);
                     };
                 }
 
