@@ -42,35 +42,33 @@ class nViewer {
         // The url will return an image for the region specified by the given x, y, and level.
         function getIIIFTileUrl(source, level, x, y) {
 
-            let calcScale = Math.pow(0.5, source.maxLevel - level);
-            let calcLevelWidth = Math.ceil(source.width * calcScale);
-            let calcLevelHeight = Math.ceil(source.height * calcScale);
-            let calcTileSize = source.getTileWidth(level);
+            let scale = Math.pow(0.5, source.maxLevel - level);
+            let levelWidth = Math.ceil(source.width * scale);
+            let levelHeight = Math.ceil(source.height * scale);
 
-            let tileSize = Math.ceil(calcTileSize / calcScale);
-            let tileSizeHeight = tileSize; // width = height
-            let tileSizeWidth = tileSize;  // width = height
+            let tileSize = source.getTileWidth(level); // width == height
+            let tileSizeWidth;
+            let tileSizeHeight = tileSizeWidth = Math.ceil(tileSize / scale);
+
+            let ROTATION = '0';
+            let quality = "default.png";
 
             let region, tileX, tileY, tileW, tileH, size, url;
-            let quality = "default.png";
-            let ROTATION = '0';
 
-            if (calcLevelWidth < calcTileSize && calcLevelHeight < calcTileSize) {
-                size = calcLevelWidth + ",";
+            if (levelWidth < tileSize && levelHeight < tileSize) {
+                size = levelWidth + ",";
                 region = 'full';
             } else {
                 tileX = x * tileSizeWidth;
                 tileY = y * tileSizeHeight;
                 tileW = Math.min(tileSizeWidth, source.width - tileX);
                 tileH = Math.min(tileSizeHeight, source.height - tileY);
-                size = Math.ceil(tileW * calcScale) + ",";
+                size = Math.ceil(tileW * scale) + ",";
                 region = [tileX, tileY, tileW, tileH].join(',');
             }
-
             url = [source['@id'], region, size, ROTATION, quality].join('/');
-            console.log('URL', url);
+            // console.log('URL', url);
             return url;
-
         }
 
         // Set viewer's source images
