@@ -44,7 +44,7 @@ function viewerSynchronizer (viewerArray) {
     const currentViewer = nViewerObject.getViewer()
     setPanZoomOnCurrentViewer(currentViewer, handler)
 
-    locationPin(currentViewer, syncedObjects)
+    mapMarker(currentViewer, syncedObjects)
 
     function handler () {
       if (!isActive(currentViewer.id)) {
