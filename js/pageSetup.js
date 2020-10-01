@@ -54,7 +54,7 @@ function pageSetup () {
       }).then(function (v) {
         // Pan zoom controller
 
-        synchronizer(v) // Pass array of nViewers
+        viewerSynchronizer(v) // Pass array of nViewers
         return v
       }).then(function (v) {
         function test () {

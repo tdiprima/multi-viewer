@@ -1,22 +1,13 @@
-/**
- * Handles synchronization of the viewers
- */
 function synchronizer (viewerArray) {
-  // console.log('viewerArray', viewerArray);
-  // let len = viewerArray.length;
-  // viewerArray.forEach(element => element.modOptions(len));
+  const syncedViewers = []
+  let activeViewerId = null
 
-  const syncedViewers = [] // array of synchronized viewers
-  let activeViewerId = null // magic init
-
-  // Loop through array of n-viewers
   viewerArray.forEach(function (elem) {
-    // Created viewer already.
     const currentViewer = elem.getViewer()
 
-    // Add handlers
     currentViewer.addHandler('pan', handler)
     currentViewer.addHandler('zoom', handler)
+
     locationPin(currentViewer, syncedViewers)
 
     function handler (event) {
@@ -50,6 +41,6 @@ function synchronizer (viewerArray) {
       activeViewerId = null
     }
 
-    syncedViewers.push(elem) // add our [viewer] to our list
+    syncedViewers.push(elem)
   })
 }

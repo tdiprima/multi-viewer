@@ -77,9 +77,7 @@ function drawPolygon (idx, viewer, overlay) {
     }))
 
     // Set corner color for new object
-    const cornerColor = getCornerColor(pathObject)
-    console.log('pathObject', pathObject)
-    console.log('cornerColor', cornerColor)
+    const cornerColor = getACornerColorThatShowsUp(pathObject.stroke)
 
     // Create polygon object
     const poly = new fabric.Polygon(_points0, {

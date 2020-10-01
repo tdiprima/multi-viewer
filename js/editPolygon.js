@@ -94,17 +94,17 @@ function editPolygon (idx, overlay) {
 }
 
 function Edit (canvas) {
-  const poly = getPolygon(canvas)
+  const fabricPolygon = getPolygon(canvas)
 
-  if (isRealValue(poly)) {
-    // console.log("instance of Polygon:", poly instanceof fabric.Polygon);
-    canvas.setActiveObject(poly)
-    poly.edit = !poly.edit
-    if (poly.edit) {
-      let cornerColor = getCornerColor(poly)
-      const lastControl = poly.points.length - 1
-      poly.cornerStyle = 'circle'
-      poly.cornerColor = cornerColor
+  if (isRealValue(fabricPolygon)) {
+    // console.log("instance of Polygon:", fabricPolygon instanceof fabric.Polygon);
+    canvas.setActiveObject(fabricPolygon)
+    fabricPolygon.edit = !fabricPolygon.edit
+    const cornerColor = getACornerColorThatShowsUp(fabricPolygon.stroke)
+    if (fabricPolygon.edit) {
+      const lastControl = fabricPolygon.points.length - 1
+      fabricPolygon.cornerStyle = 'circle'
+      fabricPolygon.cornerColor = cornerColor
 
       // accumulator, next item, index
       const reduceFun = function (acc, point, index) {
@@ -120,14 +120,14 @@ function Edit (canvas) {
 
       // Create a control buddy [hashtable]. Point p0 = corresponding Control object.
       // function, initial value
-      poly.controls = poly.points.reduce(reduceFun, {})
+      fabricPolygon.controls = fabricPolygon.points.reduce(reduceFun, {})
     } else {
-      poly.cornerColor = cornerColor
-      poly.cornerStyle = 'rect'
+      fabricPolygon.cornerColor = cornerColor
+      fabricPolygon.cornerStyle = 'rect'
       // Default controls:
-      poly.controls = fabric.Object.prototype.controls
+      fabricPolygon.controls = fabric.Object.prototype.controls
     }
-    poly.hasBorders = !poly.edit
+    fabricPolygon.hasBorders = !fabricPolygon.edit
     canvas.requestRenderAll()
   } else {
     alertMessage('Please select a polygon for editing.')

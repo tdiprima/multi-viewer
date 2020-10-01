@@ -1,29 +1,45 @@
-// Attach custom color picker to toolbar
-// colorPicker-picker repo: https://github.com/taufik-nurrohman/color-picker
+// utilizes: https://github.com/taufik-nurrohman/color-picker
 function colorPicker (inputElement) {
-  const picker = new CP(inputElement)
-  picker.self.classList.add('no-alpha') // hide alpha control panel
+  const cp = create(inputElement)
 
-  // Disable the default blur and focus behavior
-  picker.on('blur', function () {
-  })
-  picker.on('focus', function () {
+  setColorAndStyle(cp)
+
+  handleShowHide(cp)
+
+  handleExit(cp)
+}
+
+function create (inputElement) {
+  const cp = new CP(inputElement)
+
+  cp.self.classList.add('no-alpha')
+
+  cp.on('blur', function () {
   })
 
-  // Set color value and style
-  picker.on('change', function (r, g, b) {
+  cp.on('focus', function () {
+  })
+
+  return cp
+}
+
+function setColorAndStyle (cp) {
+  cp.on('change', function (r, g, b) {
     this.source.value = this.color(r, g, b, 1)
     this.source.innerHTML = this.color(r, g, b, 1)
     this.source.style.backgroundColor = this.color(r, g, b, 1)
   })
+}
 
-  // Show and hide color picker panel with a click
-  picker.source.addEventListener('click', function (e) {
-    picker.enter()
+function handleShowHide (cp) {
+  cp.source.addEventListener('click', function (e) {
+    cp.enter()
     e.stopPropagation()
   }, false)
+}
 
+function handleExit (cp) {
   document.documentElement.addEventListener('click', function () {
-    picker.exit()
+    cp.exit()
   }, false)
 }
