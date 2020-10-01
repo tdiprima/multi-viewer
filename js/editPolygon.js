@@ -85,18 +85,6 @@ function getPolygon (canvas) {
   }
 }
 
-function getCornerColor (polygon) {
-  let cornerColor
-  const strokeColor = polygon.stroke
-  if (strokeColor.endsWith('ff') && strokeColor !== '#00ffff' && strokeColor !== '#ff00ff') {
-    // blue corners with blue paint won't show up
-    cornerColor = 'rgba(255, 255, 0, 0.5)' // so put yellow
-  } else {
-    cornerColor = 'rgba(0, 0, 255, 0.5)' // default color for handles
-  }
-  return cornerColor
-}
-
 function editPolygon (idx, overlay) {
   // Edit button event listener
   document.getElementById('btnEdit' + idx).addEventListener('click', function () {

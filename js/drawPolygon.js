@@ -68,16 +68,6 @@ function drawPolygon (idx, viewer, overlay) {
     })
   }
 
-  function setCornerColor (paintBrush) {
-    const c = paintBrush.color.toLowerCase()
-    if (c.endsWith('ff') && c !== '#00ffff' && c !== '#ff00ff') {
-      // blue corners with blue paint won't show up
-      this.cornerColor = 'rgba(255, 255, 0, 0.5)'
-    } else {
-      this.cornerColor = 'rgba(0, 0, 255, 0.5)'
-    }
-  }
-
   // Convert Path obj to Polygon obj
   function pathToPoly (pathObject, canvas, paintBrush) {
     // Convert path points
@@ -87,7 +77,9 @@ function drawPolygon (idx, viewer, overlay) {
     }))
 
     // Set corner color for new object
-    setCornerColor(paintBrush)
+    const cornerColor = getCornerColor(pathObject)
+    console.log('pathObject', pathObject)
+    console.log('cornerColor', cornerColor)
 
     // Create polygon object
     const poly = new fabric.Polygon(_points0, {
@@ -100,7 +92,7 @@ function drawPolygon (idx, viewer, overlay) {
       scaleY: pathObject.scaleY,
       objectCaching: false,
       transparentCorners: false,
-      cornerColor: this.cornerColor
+      cornerColor: cornerColor
     })
     canvas.add(poly)
     canvas.setActiveObject(poly)
