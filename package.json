@@ -15,7 +15,8 @@
   "scripts": {
     "build": "parcel build index.html",
     "dev": "parcel index.html --open",
-    "start": "npm run build && npm run dev"
+    "start": "npm run build && npm run dev",
+    "test": "standard && npx ava"
   },
   "devDependencies": {
     "ava": "^3.13.0",
