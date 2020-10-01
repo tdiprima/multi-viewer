@@ -1,4 +1,4 @@
-function synchronizer (viewerArray) {
+function viewerSynchronizer (viewerArray) {
   const syncedViewers = []
   let activeViewerId = null
 
@@ -11,15 +11,13 @@ function synchronizer (viewerArray) {
     locationPin(currentViewer, syncedViewers)
 
     function handler (event) {
-      // My viewer is clicked, I'm the active viewer
-      // start magic
-      if (activeViewerId == null) {
+      if (activeViewerId === null) {
         activeViewerId = currentViewer.id
       }
+
       if (activeViewerId !== currentViewer.id) {
         return
       }
-      // end magic
 
       // As for everybody else...
       syncedViewers.forEach(function (item) {
