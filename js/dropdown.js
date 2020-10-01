@@ -88,7 +88,7 @@ function dropdown (viewerArray, divId, dataSource) {
       })
     } else {
       // Image doesn't exist - do something else.
-      alert('Image does not exist\n' + ti)
+      alertMessage('Image does not exist\n' + ti)
       return false
     }
   }

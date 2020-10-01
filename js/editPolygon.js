@@ -41,7 +41,7 @@ function editPolygon (idx, viewer, overlay) {
       poly.hasBorders = !poly.edit
       canvas.requestRenderAll()
     } else {
-      alert('Please select a polygon for editing.')
+      alertMessage('Please select a polygon for editing.')
     }
   })
 }
@@ -118,7 +118,7 @@ function anchorWrapper (anchorIndex, fn) {
       fabricObject.calcTransformMatrix()
     )
     const actionPerformed = fn(eventData, transform, x, y)
-    // IMPORTANT! Fabric is using newDim!!
+    // IMPORTANT! Fabric is using newDim!! Do not touch!!
     const newDim = fabricObject._setPositionDimensions({})
     const polygonBaseSize = fabricObject._getNonTransformedDimensions()
     const newX =

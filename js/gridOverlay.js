@@ -86,7 +86,7 @@ function gridOverlay (idx, viewer, overlay) {
     } else {
       if (!gridAdded) {
         toggle = false
-        alert('Please draw a grid first.')
+        alertMessage('Please draw a grid first.')
       } else {
         // Add listener
         canvas.on('mouse:move', mouseCoords)
