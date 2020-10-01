@@ -9,8 +9,6 @@ standard --fix yourFile.js
 [AVA](https://github.com/avajs/ava/blob/master/docs/05-command-line.md)
 
 ```
-npm test
-# or
 npx ava
 npx ava --watch
 ```
