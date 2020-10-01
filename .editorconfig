@@ -17,4 +17,5 @@ indent_size = 2
 # Tab indentation
 tab_width = 2
 
+# Remove whitespace chars preceding newline chars
 trim_trailing_whitespace = true
