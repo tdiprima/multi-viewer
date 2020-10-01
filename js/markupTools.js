@@ -5,6 +5,6 @@ function markupTools (idx, viewer) {
 
   // call this and that
   drawPolygon(idx, viewer, overlay)
-  editPolygon(idx, viewer, overlay)
+  editPolygon(idx, overlay)
   gridOverlay(idx, viewer, overlay)
 }
