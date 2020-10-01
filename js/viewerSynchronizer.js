@@ -1,44 +1,61 @@
 function viewerSynchronizer (viewerArray) {
-  const syncedViewers = []
+  const syncedObjects = []
   let activeViewerId = null
 
-  viewerArray.forEach(function (elem) {
-    const currentViewer = elem.getViewer()
+  function init (currentId) {
+    if (!isRealValue(activeViewerId)) {
+      activeViewerId = currentId
+    }
+  }
 
-    currentViewer.addHandler('pan', handler)
-    currentViewer.addHandler('zoom', handler)
+  function isActive (currentId) {
+    init(currentId)
 
-    locationPin(currentViewer, syncedViewers)
+    if (activeViewerId !== currentId) {
+      return false
+    } else {
+      return true
+    }
+  }
 
-    function handler (event) {
-      if (activeViewerId === null) {
-        activeViewerId = currentViewer.id
-      }
-
-      if (activeViewerId !== currentViewer.id) {
+  function setPanZoomOnOthers (currentViewer, correspondingObject) {
+    syncedObjects.forEach(function (syncedObject) {
+      const syncedViewer = syncedObject.getViewer()
+      if (syncedViewer.id === currentViewer.id) {
         return
       }
 
-      // As for everybody else...
-      syncedViewers.forEach(function (item) {
-        const view = item.getViewer()
-        if (view.id === currentViewer.id) {
-          return
-        }
+      if (syncedObject.getChkPan() && correspondingObject.getChkPan()) {
+        syncedViewer.viewport.panTo(currentViewer.viewport.getCenter())
+      }
 
-        // other viewers' coords set to my coordinates
-        // EXCEPT...
-        if (item.getChkPan() && elem.getChkPan()) {
-          view.viewport.panTo(currentViewer.viewport.getCenter())
-        }
-        if (item.getChkZoom() && elem.getChkZoom()) {
-          view.viewport.zoomTo(currentViewer.viewport.getZoom())
-        }
-      })
-      // magic support
+      if (syncedObject.getChkZoom() && correspondingObject.getChkZoom()) {
+        syncedViewer.viewport.zoomTo(currentViewer.viewport.getZoom())
+      }
+    })
+  }
+
+  function setPanZoomOnCurrentViewer (currentViewer, handler) {
+    currentViewer.addHandler('pan', handler)
+    currentViewer.addHandler('zoom', handler)
+  }
+
+  viewerArray.forEach(function (nViewerObject) {
+    const currentViewer = nViewerObject.getViewer()
+    setPanZoomOnCurrentViewer(currentViewer, handler)
+
+    locationPin(currentViewer, syncedObjects)
+
+    function handler () {
+      if (!isActive(currentViewer.id)) {
+        return
+      }
+
+      setPanZoomOnOthers(currentViewer, nViewerObject)
+
       activeViewerId = null
     }
 
-    syncedViewers.push(elem)
+    syncedObjects.push(nViewerObject)
   })
 }
