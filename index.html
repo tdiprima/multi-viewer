@@ -2,39 +2,39 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>TCGA Segmentation Data</title>
-    <link href="css/quad.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/awesome-color.css" rel="stylesheet">
-    <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>TCGA Segmentation Data</title>
+  <link href="css/quad.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/awesome-color.css" rel="stylesheet">
+  <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all" rel="stylesheet">
 
 </head>
 
 <body>
 
-    <h3>TCGA Segmentation Data</h3>
+<h3>TCGA Segmentation Data</h3>
 
-    <div id="selections"></div>
-    <div><br>&nbsp;</div>
+<div id="selections"></div>
+<div><br>&nbsp;</div>
 
-    <script src="js/vendor/openseadragon/openseadragon.js"></script>
-    <script src="js/vendor/openseadragon-fabricjs-overlay.js"></script>
-    <script src="js/vendor/jquery-3.5.1.min.js"></script>
-    <script src="js/vendor/fabric.adapted.js"></script>
-    <script src="js/vendor/openseadragon-filtering.js"></script>
-    <script src="js/vendor/color-picker.min.js"></script>
-    <!-- distribution -->
-    <script src="dist/ultraviewer.min.js"></script>
+<script src="js/vendor/openseadragon/openseadragon.js"></script>
+<script src="js/vendor/openseadragon-fabricjs-overlay.js"></script>
+<script src="js/vendor/jquery-3.5.1.min.js"></script>
+<script src="js/vendor/fabric.adapted.js"></script>
+<script src="js/vendor/openseadragon-filtering.js"></script>
+<script src="js/vendor/color-picker.min.js"></script>
+<!-- distribution -->
+<script src="dist/ultraviewer.min.js"></script>
 
-    <script>
-        let arr = [
-            'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-            'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-        ];
-        new pageSetup().setup(1, true, arr);
-    </script>
+<script>
+  let arr = [
+    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  ]
+  new pageSetup().setup(1, true, arr)
+</script>
 
 </body>
 
