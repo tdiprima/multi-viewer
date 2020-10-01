@@ -1,6 +1,6 @@
 /* build: `node build.js modules=ALL exclude=gestures,accessors requirejs minifier=uglifyjs` */
 /*! Fabric.js Copyright 2008-2015, Printio (Juriy Zaytsev, Maxim Chernyak) */
-// Version 4.1.0
+/*! https://github.com/tdiprima/OpenseadragonFabricjsOverlay @version 4.1.0 */
 
 var fabric = fabric || { version: '4.1.0' };
 if (typeof exports !== 'undefined') {

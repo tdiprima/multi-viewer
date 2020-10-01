@@ -1,9 +1,7 @@
-# Mac
+node_modules
+#dist
+.cache
+.idea
+.vscode
 .DS_Store
-
-# JetBrains
-.idea/
-
-# Visual Studio Code
-.vscode/
 

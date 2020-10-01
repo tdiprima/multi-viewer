@@ -1,0 +1,25 @@
+{
+  "name": "multi-viewer",
+  "version": "2.4.4",
+  "description": "multiple openseadragon viewers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tdiprima/multi-viewer.git"
+  },
+  "keywords": [
+    "openseadragon",
+    "fabric.js"
+  ],
+  "author": "Tammy DiPrima",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "build": "parcel build index.html",
+    "dev": "parcel index.html --open",
+    "start": "npm run build && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "standard": "^14.3.4"
+  }
+}
