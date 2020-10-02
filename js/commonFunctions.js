@@ -5,7 +5,7 @@ function clearClassList (element) {
   }
 }
 
-function toggleButton (btn) {
+function toggleButtonHighlight (btn) {
   const isOn = btn.classList.contains('btnOn')
   clearClassList(btn)
   if (isOn) {

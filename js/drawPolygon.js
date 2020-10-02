@@ -99,7 +99,7 @@ function drawPolygon (idx, viewer, overlay) {
 
   // DRAW BUTTON EVENT HANDLER
   btnDraw.addEventListener('click', function () {
-    toggleButton(btnDraw)
+    toggleButtonHighlight(btnDraw)
     canvas.on('mouse:up', mouseupHandler)
     canvas.on('path:created', pathCreatedHandler)
 

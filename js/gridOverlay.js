@@ -1,77 +1,90 @@
-// Grid handler (and grid paint)
 function gridOverlay (idx, viewer, overlay) {
   const canvas = overlay.fabricCanvas()
-
-  const btnGrid = document.getElementById('btnGrid' + idx)
   const cellX = []
   const cellY = []
   const cellSize = 50
   let gridAdded = false
-  let gridWidth
-  let gridHeight
 
-  function renderGrid (width, height, cellWidth, cellHeight, color) {
-    const lineOption = { stroke: color, strokeWidth: 2, selectable: false }
+  const btnGrid = document.getElementById('btnGrid' + idx)
+  btnGrid.addEventListener('click', function () {
+    gridHandler(this)
+  })
 
-    // Horizontal grid lines
-    for (let y = 0; y < Math.ceil(height / cellHeight); ++y) {
-      canvas.add(new fabric.Line([0, y * cellHeight, width, y * cellHeight], lineOption))
-      cellY[y + 1] = y * cellHeight
+  const btnGridMarker = document.getElementById('btnGridMarker' + idx)
+  btnGridMarker.addEventListener('click', function () {
+    markerHandler(this)
+  })
+
+  function gridHandler (button) {
+    toggleButtonHighlight(button)
+
+    if (buttonIsOn(button)) {
+      const gridProperties = {
+        canvasWidth: Math.ceil(canvas.width),
+        canvasHeight: Math.ceil(canvas.height),
+        cellWidth: cellSize,
+        cellHeight: cellSize,
+        color: 'red'
+      }
+      turnGridOn(gridProperties)
+      gridAdded = true
+      button.innerHTML = '<i class="fa fa-border-all"></i> Remove grid'
     }
 
-    // Vertical grid lines
-    for (let x = 0; x < Math.ceil(width / cellWidth); ++x) {
-      canvas.add(new fabric.Line([x * cellWidth, 0, x * cellWidth, height], lineOption))
-      cellX[x + 1] = x * cellWidth
+    if (!buttonIsOn(button)) {
+      turnGridOff()
+      gridAdded = false
+      button.innerHTML = '<i class="fa fa-border-all"></i> Draw grid'
     }
+  }
+
+  function buttonIsOn (button) {
+    return button.classList.contains('btnOn')
+  }
+
+  function turnGridOff () {
+    const r = canvas.getObjects('line')
+    for (let i = 0; i < r.length; i++) {
+      canvas.remove(r[i])
+    }
+  }
+
+  function turnGridOn (gridProps) {
+    const lineProps = { stroke: gridProps.color, strokeWidth: 2, selectable: false }
+
+    createHorizontalLines(gridProps, lineProps)
+
+    createVerticalLines(gridProps, lineProps)
+
     canvas.renderAll()
     gridAdded = true
   }
 
-  // Grid button event handler
-  btnGrid.addEventListener('click', function () {
-    // TODO: grid at max scale?
-    gridWidth = Math.ceil(canvas.width)
-    gridHeight = Math.ceil(canvas.height)
-
-    if (btnGrid.classList.contains('btnOn')) {
-      // Remove only the lines
-      const r = canvas.getObjects('line')
-      for (let i = 0; i < r.length; i++) {
-        canvas.remove(r[i])
-      }
-      btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Draw grid'
-      gridAdded = false
-    } else {
-      // DRAW GRID
-      renderGrid(gridWidth, gridHeight, cellSize, cellSize, 'red')
-      btnGrid.innerHTML = '<i class="fa fa-border-all"></i> Remove grid'
-      gridAdded = true
+  function createHorizontalLines (gridProps, lineProps) {
+    for (let y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
+      canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
+      cellY[y + 1] = y * gridProps.cellHeight
     }
+  }
 
-    toggleButton(btnGrid)
-  })
+  function createVerticalLines (gridProps, lineProps) {
+    for (let x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
+      canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
+      cellX[x + 1] = x * gridProps.cellWidth
+    }
+  }
 
-  // Grid Marker
-  const btnMarker = document.getElementById('btnMarker' + idx)
-  btnMarker.addEventListener('click', markerHandler)
-
-  // Get coordinates of mouse pointer, and fill in the square of the grid.
   function mouseCoords (options) {
-    // TODO: what makes a box disappear sometimes?
-    const event = options.e
-    const pointer = canvas.getPointer(event)
-    const cx = pointer.x
-    const cy = pointer.y
-    const x = cx / cellSize
-    const y = cy / cellSize
-    const imoX = Math.ceil(x + 0.001) // IsMouseOverX (mouse(block) position on grid)
-    const imoY = Math.ceil(y + 0.001) // IsMouseOverY (mouse(block) position on grid)
+    const mousePosition = getMousePosition(options)
+    const cellPosition = getCellPosition(mousePosition)
 
-    // Fill in the grid
+    fillInGrid(cellPosition)
+  }
+
+  function fillInGrid (cellPosition) {
     const rect = new fabric.Rect({
-      left: cellX[imoX],
-      top: cellY[imoY],
+      left: cellX[cellPosition.x],
+      top: cellY[cellPosition.y],
       fill: 'red',
       width: cellSize,
       height: cellSize,
@@ -81,25 +94,35 @@ function gridOverlay (idx, viewer, overlay) {
     canvas.add(rect)
   }
 
-  // Grid marker event handler
-  function markerHandler () {
-    let toggle = true
-    if (btnMarker.classList.contains('btnOn')) {
-      // Remove mouse:move listener (we also use it for other things)
+  function getMousePosition (options) {
+    console.log(options)
+    const pointer = canvas.getPointer(options.e)
+    const positionX = pointer.x / cellSize
+    const positionY = pointer.y / cellSize
+    return { x: positionX, y: positionY }
+  }
+
+  function getCellPosition (mousePosition) {
+    const positionX = Math.ceil(mousePosition.x + 0.001)
+    const positionY = Math.ceil(mousePosition.y + 0.001)
+    return { x: positionX, y: positionY }
+  }
+
+  function markerHandler (button) {
+    toggleButtonHighlight(button)
+
+    if (!buttonIsOn(button)) {
+      // Done marking; remove mouse:move listener because we use it for other things.
       canvas.off('mouse:move', mouseCoords)
-      btnMarker.innerHTML = '<i class="fa fa-paint-brush"></i> Mark grid'
+      btnGridMarker.innerHTML = '<i class="fa fa-paint-brush"></i> Mark grid'
     } else {
-      if (!gridAdded) {
-        toggle = false
-        alertMessage('Please draw a grid first.')
-      } else {
-        // Add listener
+      if (gridAdded) {
         canvas.on('mouse:move', mouseCoords)
-        btnMarker.innerHTML = '<i class="fa fa-paint-brush"></i> Done marking'
+        btnGridMarker.innerHTML = '<i class="fa fa-paint-brush"></i> Done marking'
+      } else {
+        toggleButtonHighlight(btnGridMarker) // turn it back off
+        alertMessage('Please draw a grid first.')
       }
-    }
-    if (toggle) {
-      toggleButton(btnMarker)
     }
   }
 }

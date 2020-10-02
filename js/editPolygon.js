@@ -72,7 +72,7 @@ function getPolygon (canvas) {
 function editPolygon (idx, overlay) {
   // Edit button event listener
   document.getElementById('btnEdit' + idx).addEventListener('click', function () {
-    toggleButton(this)
+    toggleButtonHighlight(this)
     Edit(overlay.fabricCanvas())
   })
 }
