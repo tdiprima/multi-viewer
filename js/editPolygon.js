@@ -39,7 +39,7 @@ function anchorWrapper (anchorIndex, fn) {
     const actionPerformed = fn(eventData, transform, x, y)
     // IMPORTANT!  VARIABLE 'newDim' NEEDS TO EXIST.
     // (Otherwise, the bounding box gets borked):
-    const newDim = fabricObject._setPositionDimensions({})
+    const newDim = fabricObject._setPositionDimensions({}) // LEAVE IT!
     const polygonBaseSize = fabricObject._getNonTransformedDimensions()
     const newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x
     const newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y
