@@ -1,43 +1,50 @@
-// right-click, add map marker
 function mapMarker (currentViewer, syncedViewers) {
   preventModal(currentViewer.element)
 
-  currentViewer.addHandler('canvas-nonprimary-press', function (event) {
-    if (event.button === 2) { // Right mouse
-      const webPoint = event.position
-      const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint)
+  getPositionAndDisplayMarker()
 
-      const list = document.querySelectorAll('#btnMapMarker')
-      list.forEach(function (item) {
-        item.style.display = 'block'
-      })
-      displayMapMarker(viewportPoint)
-    }
-  })
-
-  const elementList = document.querySelectorAll('#btnMapMarker')
-  elementList.forEach(function (elem) {
-    let overlay = false
-    let s, h
-    elem.addEventListener('click', function () {
-      if (overlay) {
-        s = 'block'
-        h = '<i class="fa fa-map-marker"></i> Hide markers'
-      } else {
-        s = 'none'
-        h = '<i class="fa fa-map-marker"></i> Show markers'
-      }
-      this.innerHTML = h
-      document.querySelectorAll('#the-map-marker').forEach(function (thing) {
-        thing.style.display = s
-      })
-      overlay = !overlay
-    })
-  })
+  handleButtonShowHide()
 
   function preventModal (viewerDiv) {
     viewerDiv.addEventListener('contextmenu', function (event) {
       event.preventDefault()
+    })
+  }
+
+  function getPositionAndDisplayMarker () {
+    currentViewer.addHandler('canvas-nonprimary-press', function (event) {
+      if (event.button === 2) { // right-mouse click
+        const webPoint = event.position
+        const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint)
+
+        const list = document.querySelectorAll('#btnMapMarker')
+        list.forEach(function (item) {
+          item.style.display = 'block'
+        })
+        displayMapMarker(viewportPoint)
+      }
+    })
+  }
+
+  function handleButtonShowHide () {
+    const elementList = document.querySelectorAll('#btnMapMarker')
+    elementList.forEach(function (elem) {
+      let overlay = false
+      let s, h
+      elem.addEventListener('click', function () {
+        if (overlay) {
+          s = 'block'
+          h = '<i class="fa fa-map-marker"></i> Hide markers'
+        } else {
+          s = 'none'
+          h = '<i class="fa fa-map-marker"></i> Show markers'
+        }
+        this.innerHTML = h
+        document.querySelectorAll('#the-map-marker').forEach(function (thing) {
+          thing.style.display = s
+        })
+        overlay = !overlay
+      })
     })
   }
 
