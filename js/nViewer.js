@@ -5,7 +5,8 @@ function nViewer (viewerDivId, sliderElements, options) {
   let viewer = {}
 
   // Checkboxes
-  let chkPan = {}; let chkZoom = {}
+  let chkPan = {}
+  let chkZoom = {}
   if (numDivs > 1 && options.toolbarOn) {
     chkPan = document.getElementById('chkPan' + idx)
     chkZoom = document.getElementById('chkZoom' + idx)
@@ -48,7 +49,7 @@ function nViewer (viewerDivId, sliderElements, options) {
     const ROTATION = '0'
     const quality = 'default.png'
 
-    let region, tileX, tileY, tileW, tileH, size, url
+    let region, tileX, tileY, tileW, tileH, size
 
     if (levelWidth < tileSize && levelHeight < tileSize) {
       size = levelWidth + ','
@@ -61,9 +62,7 @@ function nViewer (viewerDivId, sliderElements, options) {
       size = Math.ceil(tileW * scale) + ','
       region = [tileX, tileY, tileW, tileH].join(',')
     }
-    url = [source['@id'], region, size, ROTATION, quality].join('/')
-    // console.log('URL', url);
-    return url
+    return [source['@id'], region, size, ROTATION, quality].join('/')
   }
 
   // Set viewer's source images

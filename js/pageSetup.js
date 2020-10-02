@@ -1,6 +1,7 @@
 count = 0
 numDivs = 0
 viewers = []
+
 function pageSetup () {
   let options, prod
 

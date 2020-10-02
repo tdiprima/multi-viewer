@@ -3,7 +3,12 @@ function gridOverlay (idx, viewer, overlay) {
   const canvas = overlay.fabricCanvas()
 
   const btnGrid = document.getElementById('btnGrid' + idx)
-  const cellX = []; const cellY = []; const cellSize = 50; let gridAdded = false; let gridWidth; let gridHeight
+  const cellX = []
+  const cellY = []
+  const cellSize = 50
+  let gridAdded = false
+  let gridWidth
+  let gridHeight
 
   function renderGrid (width, height, cellWidth, cellHeight, color) {
     const lineOption = { stroke: color, strokeWidth: 2, selectable: false }

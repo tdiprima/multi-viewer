@@ -161,6 +161,7 @@ function drawPolygon (idx, viewer, overlay) {
   canvas.on('mouse:out', mouseOut)
 
   let textBox
+
   function mouseOver (e) {
     try {
       const obj = e.target
@@ -173,7 +174,8 @@ function drawPolygon (idx, viewer, overlay) {
         })
 
         // TEXT
-        const left = obj.left; const top = obj.top
+        const left = obj.left
+        const top = obj.top
         // JSON.stringify(canvas.toJSON())
         textBox = new fabric.Text(type, {
           fontSize: 18,
