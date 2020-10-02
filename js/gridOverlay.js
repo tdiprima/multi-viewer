@@ -63,14 +63,14 @@ function gridOverlay (idx, viewer, overlay) {
   function createHorizontalLines (gridProps, lineProps) {
     for (let y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
       canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
-      cellY[y + 1] = y * gridProps.cellHeight
+      cellY[y + 1] = y * gridProps.cellHeight // and keep track of the y cells
     }
   }
 
   function createVerticalLines (gridProps, lineProps) {
     for (let x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
       canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
-      cellX[x + 1] = x * gridProps.cellWidth
+      cellX[x + 1] = x * gridProps.cellWidth // and keep track of the x cells
     }
   }
 
@@ -120,7 +120,7 @@ function gridOverlay (idx, viewer, overlay) {
         canvas.on('mouse:move', mouseCoords)
         btnGridMarker.innerHTML = '<i class="fa fa-paint-brush"></i> Done marking'
       } else {
-        toggleButtonHighlight(btnGridMarker) // turn it back off
+        toggleButtonHighlight(btnGridMarker) // turn it back off; we're not letting them do this
         alertMessage('Please draw a grid first.')
       }
     }
