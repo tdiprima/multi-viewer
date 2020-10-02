@@ -1,11 +1,67 @@
-// This is the free-drawing handler
 function drawPolygon (idx, viewer, overlay) {
-  const canvas = overlay.fabricCanvas()
   const btnDraw = document.getElementById('btnDraw' + idx)
   const mark = document.getElementById('mark' + idx)
+
+  const canvas = overlay.fabricCanvas()
+
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
+
+  let textBox
+
+  canvas.on('mouse:over', mouseOver)
+  canvas.on('mouse:out', mouseOut)
+
+  btnDraw.addEventListener('click', function () {
+    toggleButtonHighlight(btnDraw)
+
+    canvas.on('mouse:up', mouseupHandler)
+    canvas.on('path:created', pathCreatedHandler)
+
+    function pathCreatedHandler (options) {
+      console.log('options', options)
+      pathToPoly(options.path, canvas, paintBrush)
+
+      customizeControls(options.path)
+
+      clearClassList(btnDraw)
+
+      btnDraw.classList.add('btn')
+      canvas.off('path:created', pathCreatedHandler)
+    }
+
+    function mouseupHandler (options) {
+      console.log('options', options)
+      canvas.isDrawingMode = false
+      viewer.setMouseNavEnabled(true)
+      viewer.outerTracker.setTracking(true)
+    }
+
+    function mousedownHandler (options) {
+      console.log('options', options)
+      if (!canvas.getActiveObject()) {
+        $('.deleteBtn').remove()
+        viewer.gestureSettingsMouse.clickToZoom = true
+      } else {
+        viewer.gestureSettingsMouse.clickToZoom = false
+      }
+    }
+
+    if (canvas.isDrawingMode) {
+      canvas.isDrawingMode = false
+      canvas.off('mouse:down', mousedownHandler)
+      viewer.setMouseNavEnabled(true)
+      viewer.outerTracker.setTracking(true)
+    } else {
+      canvas.isDrawingMode = true
+      canvas.on('mouse:down', mousedownHandler)
+      paintBrush.color = mark.innerHTML
+      paintBrush.width = 10 / viewer.viewport.getZoom(true)
+      viewer.setMouseNavEnabled(false)
+      viewer.outerTracker.setTracking(false)
+    }
+  })
 
   function customizeControls (obj) {
     obj.hasControls = false
@@ -83,57 +139,6 @@ function drawPolygon (idx, viewer, overlay) {
     canvas.setActiveObject(poly)
     canvas.remove(pathObject)
   }
-
-  btnDraw.addEventListener('click', function () {
-    toggleButtonHighlight(btnDraw)
-    canvas.on('mouse:up', mouseupHandler)
-    canvas.on('path:created', pathCreatedHandler)
-
-    function pathCreatedHandler (options) {
-      pathToPoly(options.path, canvas, paintBrush)
-
-      customizeControls(options.path)
-
-      clearClassList(btnDraw)
-
-      btnDraw.classList.add('btn')
-      canvas.off('path:created', pathCreatedHandler)
-    }
-
-    function mouseupHandler (options) {
-      canvas.isDrawingMode = false
-      viewer.setMouseNavEnabled(true)
-      viewer.outerTracker.setTracking(true)
-    }
-
-    function mousedownHandler () {
-      if (!canvas.getActiveObject()) {
-        // $('.deleteBtn').remove()
-        viewer.gestureSettingsMouse.clickToZoom = true
-      } else {
-        viewer.gestureSettingsMouse.clickToZoom = false
-      }
-    }
-
-    if (canvas.isDrawingMode) {
-      canvas.isDrawingMode = false
-      canvas.off('mouse:down', mousedownHandler)
-      viewer.setMouseNavEnabled(true)
-      viewer.outerTracker.setTracking(true)
-    } else {
-      canvas.isDrawingMode = true
-      canvas.on('mouse:down', mousedownHandler)
-      paintBrush.color = mark.innerHTML
-      paintBrush.width = 10 / viewer.viewport.getZoom(true)
-      viewer.setMouseNavEnabled(false)
-      viewer.outerTracker.setTracking(false)
-    }
-  })
-
-  canvas.on('mouse:over', mouseOver)
-  canvas.on('mouse:out', mouseOut)
-
-  let textBox
 
   function mouseOver (e) {
     try {
