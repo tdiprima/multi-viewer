@@ -1,7 +1,8 @@
 // Custom position handling
 // Code borrowed from: http://fabricjs.com/custom-controls-polygon
 function polygonPositionHandler (dim, finalMatrix, fabricObject) {
-  // This function looks at the pointIndex of the control and returns the current canvas position for that particular point.
+  // This function looks at the pointIndex of the control and returns the
+  // current canvas position for that particular point.
   const x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x)
   const y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y)
   return fabric.util.transformPoint(
