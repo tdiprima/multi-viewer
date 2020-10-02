@@ -1,11 +1,30 @@
-function viewerSynchronizer (viewerArray) {
+function viewerSynchronizer (nViewerArray) {
   const syncedObjects = []
   let activeViewerId = null
 
-  function init (currentId) {
-    if (!isRealValue(activeViewerId)) {
-      activeViewerId = currentId
+  nViewerArray.forEach(function (nViewerObject) {
+    const currentViewer = nViewerObject.getViewer()
+
+    setPanZoomOnCurrentViewer(currentViewer, handler)
+
+    mapMarker(currentViewer, syncedObjects)
+
+    function handler () {
+      if (!isActive(currentViewer.id)) {
+        return
+      }
+
+      setPanZoomOnOtherViewers(currentViewer, nViewerObject)
+
+      reset()
     }
+
+    syncedObjects.push(nViewerObject)
+  })
+
+  function setPanZoomOnCurrentViewer (currentViewer, handler) {
+    currentViewer.addHandler('pan', handler)
+    currentViewer.addHandler('zoom', handler)
   }
 
   function isActive (currentId) {
@@ -18,7 +37,13 @@ function viewerSynchronizer (viewerArray) {
     }
   }
 
-  function setPanZoomOnOthers (currentViewer, correspondingObject) {
+  function init (currentId) {
+    if (!isRealValue(activeViewerId)) {
+      activeViewerId = currentId
+    }
+  }
+
+  function setPanZoomOnOtherViewers (currentViewer, correspondingObject) {
     syncedObjects.forEach(function (syncedObject) {
       const syncedViewer = syncedObject.getViewer()
       if (syncedViewer.id === currentViewer.id) {
@@ -35,27 +60,7 @@ function viewerSynchronizer (viewerArray) {
     })
   }
 
-  function setPanZoomOnCurrentViewer (currentViewer, handler) {
-    currentViewer.addHandler('pan', handler)
-    currentViewer.addHandler('zoom', handler)
+  function reset () {
+    activeViewerId = null
   }
-
-  viewerArray.forEach(function (nViewerObject) {
-    const currentViewer = nViewerObject.getViewer()
-    setPanZoomOnCurrentViewer(currentViewer, handler)
-
-    mapMarker(currentViewer, syncedObjects)
-
-    function handler () {
-      if (!isActive(currentViewer.id)) {
-        return
-      }
-
-      setPanZoomOnOthers(currentViewer, nViewerObject)
-
-      activeViewerId = null
-    }
-
-    syncedObjects.push(nViewerObject)
-  })
 }

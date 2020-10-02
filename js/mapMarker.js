@@ -1,50 +1,52 @@
-function mapMarker (currentViewer, syncedViewers) {
-  preventModal(currentViewer.element)
+function mapMarker (currentOSDViewer, syncedNViewers) {
+  preventModal(currentOSDViewer.element)
 
   getPositionAndDisplayMarker()
 
   handleButtonShowHide()
 
   function preventModal (viewerDiv) {
-    viewerDiv.addEventListener('contextmenu', function (event) {
-      event.preventDefault()
+    viewerDiv.addEventListener('contextmenu', function (mouseEvent) {
+      mouseEvent.preventDefault()
     })
   }
 
   function getPositionAndDisplayMarker () {
-    currentViewer.addHandler('canvas-nonprimary-press', function (event) {
-      if (event.button === 2) { // right-mouse click
-        const webPoint = event.position
-        const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint)
+    currentOSDViewer.addHandler('canvas-nonprimary-press', function (osdEvent) {
+      if (isRightClick(osdEvent)) {
+        const clickPosition = osdEvent.position
+        const clickPositionViewport = currentOSDViewer.viewport.pointFromPixel(clickPosition)
 
-        const list = document.querySelectorAll('#btnMapMarker')
-        list.forEach(function (item) {
+        const buttons = document.querySelectorAll('#btnMapMarker')
+        buttons.forEach(function (item) {
           item.style.display = 'block'
         })
-        displayMapMarker(viewportPoint)
+        displayMapMarker(clickPositionViewport)
       }
     })
   }
 
-  function handleButtonShowHide () {
-    const elementList = document.querySelectorAll('#btnMapMarker')
-    elementList.forEach(function (elem) {
-      let overlay = false
-      let s, h
-      elem.addEventListener('click', function () {
-        if (overlay) {
-          s = 'block'
-          h = '<i class="fa fa-map-marker"></i> Hide markers'
-        } else {
-          s = 'none'
-          h = '<i class="fa fa-map-marker"></i> Show markers'
-        }
-        this.innerHTML = h
-        document.querySelectorAll('#the-map-marker').forEach(function (thing) {
-          thing.style.display = s
-        })
-        overlay = !overlay
-      })
+  function isRightClick (evt) {
+    return (evt.button === 2)
+  }
+
+  function displayMapMarker (point) {
+    syncedNViewers.forEach(function (item) {
+      const viewer = item.getViewer()
+      if (viewer.id === currentOSDViewer.id) {
+        return
+      }
+      addMarkerToViewer(point, viewer)
+    })
+  }
+
+  function addMarkerToViewer (point, viewer) {
+    const link = createLink()
+    viewer.addOverlay({
+      element: link,
+      location: point,
+      placement: 'BOTTOM',
+      checkResize: false
     })
   }
 
@@ -61,23 +63,25 @@ function mapMarker (currentViewer, syncedViewers) {
     return link
   }
 
-  function addMarkerToViewer (point, viewer) {
-    const link = createLink()
-    viewer.addOverlay({
-      element: link,
-      location: point,
-      placement: 'BOTTOM',
-      checkResize: false
-    })
-  }
-
-  function displayMapMarker (point) {
-    syncedViewers.forEach(function (item) {
-      const viewer = item.getViewer()
-      if (viewer.id === currentViewer.id) {
-        return
-      }
-      addMarkerToViewer(point, viewer)
+  function handleButtonShowHide () {
+    const buttons = document.querySelectorAll('#btnMapMarker')
+    buttons.forEach(function (elem) {
+      let markersHaveBeenDrawn = false
+      let style, html
+      elem.addEventListener('click', function () {
+        if (markersHaveBeenDrawn) {
+          style = 'block'
+          html = '<i class="fa fa-map-marker"></i> Hide markers'
+        } else {
+          style = 'none'
+          html = '<i class="fa fa-map-marker"></i> Show markers'
+        }
+        this.innerHTML = html
+        document.querySelectorAll('#the-map-marker').forEach(function (thing) {
+          thing.style.display = style
+        })
+        markersHaveBeenDrawn = !markersHaveBeenDrawn
+      })
     })
   }
 }
