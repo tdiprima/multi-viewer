@@ -6,14 +6,16 @@ function mapMarker (currentViewer, syncedViewers) {
     if (event.button === 2) { // Right mouse
       const webPoint = event.position
       const viewportPoint = currentViewer.viewport.pointFromPixel(webPoint)
-      document.querySelectorAll('#toggle-overlay').forEach(function (item) {
+
+      const list = document.querySelectorAll('#btnMapMarker')
+      list.forEach(function (item) {
         item.style.display = 'block'
       })
       displayMapMarker(viewportPoint)
     }
   })
 
-  const elementList = document.querySelectorAll('#toggle-overlay')
+  const elementList = document.querySelectorAll('#btnMapMarker')
   elementList.forEach(function (elem) {
     let overlay = false
     let s, h
@@ -26,15 +28,15 @@ function mapMarker (currentViewer, syncedViewers) {
         h = '<i class="fa fa-map-marker"></i> Show markers'
       }
       this.innerHTML = h
-      document.querySelectorAll('#map-marker').forEach(function (thing) {
+      document.querySelectorAll('#the-map-marker').forEach(function (thing) {
         thing.style.display = s
       })
       overlay = !overlay
     })
   })
 
-  function preventModal (div) {
-    $(div).on('contextmenu', (event) => {
+  function preventModal (viewerDiv) {
+    viewerDiv.addEventListener('contextmenu', function (event) {
       event.preventDefault()
     })
   }
@@ -44,7 +46,7 @@ function mapMarker (currentViewer, syncedViewers) {
     const href = '#'
     link.href = href
     link.dataset.href = href
-    link.id = 'marker-' + Math.floor(Math.random() * 11)
+    link.id = 'the-map-marker'
     link.className = 'fa fa-map-marker'
     link.style.cssText =
       ' text-decoration: none; font-size: 22px; color: red;' +
