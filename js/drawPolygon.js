@@ -10,8 +10,8 @@ function drawPolygon (idx, viewer, overlay) {
 
   let textBox
 
-  canvas.on('mouse:over', mouseOver)
-  canvas.on('mouse:out', mouseOut)
+  canvas.on('mouse:over', fillPolygonAndShowType)
+  canvas.on('mouse:out', unfillPolygon)
 
   btnDraw.addEventListener('click', function () {
     toggleButtonHighlight(btnDraw)
@@ -65,6 +65,10 @@ function drawPolygon (idx, viewer, overlay) {
     obj.lockMovementX = true
     obj.lockMovementY = true
 
+    deleteButtonControls()
+  }
+
+  function deleteButtonControls () {
     function addDeleteBtn (x, y) {
       $('.deleteBtn').remove()
       const btnLeft = x - 10
@@ -87,7 +91,9 @@ function drawPolygon (idx, viewer, overlay) {
     })
 
     canvas.on('object:modified', function (e) {
-      addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
+      if (isRealValue(e.target.oCoords.tr)) {
+        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
+      }
     })
 
     canvas.on('object:scaling', function (e) {
@@ -137,40 +143,37 @@ function drawPolygon (idx, viewer, overlay) {
     canvas.remove(pathObject)
   }
 
-  function mouseOver (e) {
-    try {
-      const obj = e.target
+  function fillPolygonAndShowType (pointerEvent) {
+    if (weHoveredOverPolygon(pointerEvent)) {
+      const obj = pointerEvent.target
       const type = obj.type
-      if (isRealValue(obj) && type === 'polygon') { // no 'line', no 'rect' (gridOverlay).
-        obj.set({
-          fill: obj.stroke,
-          opacity: 0.5
-        })
 
-        const left = obj.left
-        const top = obj.top
+      obj.set({
+        fill: obj.stroke,
+        opacity: 0.5
+      })
 
-        textBox = new fabric.Text(type, {
-          fontSize: 18,
-          fontFamily: 'Courier',
-          backgroundColor: 'rgba(102, 102, 102, 0.7)',
-          stroke: 'rgba(255, 255, 255, 1)',
-          fill: 'rgba(255, 255, 255, 1)',
-          left: left, // pointer.x,
-          top: top // pointer.y
-        })
+      const left = obj.left
+      const top = obj.top
 
-        canvas.add(textBox)
-        canvas.renderAll()
-      }
-    } catch (e) {
-      console.error('eee', e.message);
+      textBox = new fabric.Text(type, {
+        fontSize: 18,
+        fontFamily: 'Courier',
+        backgroundColor: 'rgba(102, 102, 102, 0.7)',
+        stroke: 'rgba(255, 255, 255, 1)',
+        fill: 'rgba(255, 255, 255, 1)',
+        left: left, // pointer.x,
+        top: top // pointer.y
+      })
+
+      canvas.add(textBox)
+      canvas.renderAll()
     }
   }
 
-  function mouseOut (e) {
-    try {
-      const obj = e.target
+  function unfillPolygon (pointerEvent) {
+    if (weHoveredOverPolygon(pointerEvent)) {
+      const obj = pointerEvent.target
       if (obj !== null) {
         obj.set({
           fill: ''
@@ -179,8 +182,10 @@ function drawPolygon (idx, viewer, overlay) {
         canvas.remove(textBox)
         canvas.renderAll()
       }
-    } catch (e) {
-      console.error('eee', e.message);
     }
+  }
+
+  function weHoveredOverPolygon (pointerEvent) {
+    return (isRealValue(pointerEvent.target) && pointerEvent.target.type === 'polygon')
   }
 }
