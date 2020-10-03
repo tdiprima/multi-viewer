@@ -20,7 +20,6 @@ function drawPolygon (idx, viewer, overlay) {
     canvas.on('path:created', pathCreatedHandler)
 
     function pathCreatedHandler (options) {
-      console.log('options', options)
       pathToPoly(options.path, canvas, paintBrush)
 
       customizeControls(options.path)
@@ -32,14 +31,12 @@ function drawPolygon (idx, viewer, overlay) {
     }
 
     function mouseupHandler (options) {
-      console.log('options', options)
       canvas.isDrawingMode = false
       viewer.setMouseNavEnabled(true)
       viewer.outerTracker.setTracking(true)
     }
 
     function mousedownHandler (options) {
-      console.log('options', options)
       if (!canvas.getActiveObject()) {
         $('.deleteBtn').remove()
         viewer.gestureSettingsMouse.clickToZoom = true
@@ -167,7 +164,7 @@ function drawPolygon (idx, viewer, overlay) {
         canvas.renderAll()
       }
     } catch (e) {
-      // console.log('eee', e.message);
+      console.error('eee', e.message);
     }
   }
 
@@ -183,7 +180,7 @@ function drawPolygon (idx, viewer, overlay) {
         canvas.renderAll()
       }
     } catch (e) {
-      // console.log('eee', e.message);
+      console.error('eee', e.message);
     }
   }
 }
