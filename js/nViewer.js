@@ -1,4 +1,4 @@
-// Wrapper object for the osd viewers & their associated divs, toolbar stuff, etc.
+// Wrapper object for the osd viewers & their associated toolbar stuff, etc.
 function nViewer (viewerDivId, sliderElements, options) {
   const idx = viewerDivId.replace('viewer', '')
   let myFilter = {}
@@ -72,7 +72,7 @@ function nViewer (viewerDivId, sliderElements, options) {
       viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
     })
 
-    viewer.world.addHandler('add-item', (event) => {
+    viewer.world.addHandler('add-item', function(event) {
       if (viewer.world.getItemCount() === 2) {
         // colorize layer 2
         viewer.setFilterOptions({
