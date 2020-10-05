@@ -1,4 +1,4 @@
-// Wrapper object for the osd viewers
+// Wrapper object for the osd viewers & their associated divs, toolbar stuff, etc.
 function nViewer (viewerDivId, sliderElements, options) {
   const idx = viewerDivId.replace('viewer', '')
   let myFilter = {}
@@ -68,7 +68,6 @@ function nViewer (viewerDivId, sliderElements, options) {
   // Set viewer's source images
   this.setSources = function (imageArray, opacityArray) {
     imageArray.forEach(function (image, index) {
-      // console.log(image)
       // add images to viewer
       viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
     })
@@ -95,8 +94,6 @@ function nViewer (viewerDivId, sliderElements, options) {
 
   // Initialize viewer
   function setViewer (viewerDivId) {
-    // console.log(viewerDivId);
-
     viewer = OpenSeadragon({
       id: viewerDivId,
       prefixUrl: 'js/vendor/openseadragon/images/',
