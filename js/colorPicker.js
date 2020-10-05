@@ -1,4 +1,4 @@
-// utilizes: https://github.com/taufik-nurrohman/color-picker
+// Utilizes: https://github.com/taufik-nurrohman/color-picker
 function colorPicker (inputElement) {
   const cp = create(inputElement)
 
