@@ -76,14 +76,10 @@ function createVerticalLines (gridProps, lineProps) {
   }
 }
 
-function mouseCoords (pointerEvent, gridProps) {
+function fillInGrid (pointerEvent, gridProps) {
   const mousePosition = getMousePosition(pointerEvent, gridProps)
   const cellPosition = getCellPosition(mousePosition)
 
-  fillInGrid(cellPosition, gridProps)
-}
-
-function fillInGrid (cellPosition, gridProps) {
   const rect = new fabric.Rect({
     left: gridProps.cellX[cellPosition.x],
     top: gridProps.cellY[cellPosition.y],
@@ -111,17 +107,18 @@ function getCellPosition (mousePosition) {
 
 function markerHandler (button, gridProps) {
   toggleButtonHighlight(button)
+  const on = buttonIsOn(button)
 
-  if (!buttonIsOn(button)) {
+  if (!on) {
     // Done marking; remove mouse:move listener because we use it for other things.
-    gridProps.canvas.off('mouse:move', function (event) {
-      mouseCoords(event, gridProps)
-    })
+    gridProps.canvas.__eventListeners['mouse:move'] = []
     button.innerHTML = '<i class="fa fa-paint-brush"></i> Mark grid'
-  } else {
+  }
+
+  if (on) {
     if (gridProps.gridAdded) {
-      gridProps.canvas.on('mouse:move', function (event) {
-        mouseCoords(event, gridProps)
+      gridProps.canvas.on('mouse:move', function (pointerEvent) {
+        fillInGrid(pointerEvent, gridProps)
       })
       button.innerHTML = '<i class="fa fa-paint-brush"></i> Done marking'
     } else {
