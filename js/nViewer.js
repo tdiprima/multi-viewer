@@ -1,38 +1,87 @@
-// Wrapper object for the osd viewers & their associated toolbar stuff, etc.
-function nViewer (viewerDivId, sliderElements, options) {
+// Module
+const nViewer = function (viewerDivId, sliderElements, options) {
+  // Private variables and functions
   const idx = viewerDivId.replace('viewer', '')
-  let myFilter = {}
   let viewer = {}
+  const checkboxes = {}
+  let filter = {}
+  const sliders = sliderElements
+  // options = options || 'options'
 
-  // Checkboxes
-  let chkPan = {}
-  let chkZoom = {}
-  if (numDivs > 1 && options.toolbarOn) {
-    chkPan = document.getElementById('chkPan' + idx)
-    chkZoom = document.getElementById('chkZoom' + idx)
-  }
-
+  setCheckboxes(idx)
   setFilter()
   setViewer(viewerDivId)
+  setSliders(viewer)
 
-  this.getViewer = function () {
-    return viewer
-  }
-
-  this.getChkPan = function () {
-    if (typeof chkPan.checked !== 'undefined') {
-      return chkPan.checked // user decision
-    } else {
-      // If 1 div; then, nothing to synchronize.
-      return numDivs !== 1
+  function setCheckboxes (idx) {
+    if (numDivs > 1 && options.toolbarOn) {
+      checkboxes.checkPan = document.getElementById('chkPan' + idx)
+      checkboxes.checkZoom = document.getElementById('chkZoom' + idx)
     }
   }
 
-  this.getChkZoom = function () {
-    if (typeof chkZoom.checked !== 'undefined') {
-      return chkZoom.checked // user decision
-    } else {
-      return numDivs !== 1
+  function setFilter () {
+    filter = OpenSeadragon.Filters.GREYSCALE
+    filter.prototype.COLORIZE = function (r, g, b) {
+      return function (context, callback) {
+        const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+        const pixels = imgData.data
+        for (let i = 0; i < pixels.length; i += 4) {
+          const avg = pixels[i] / 255
+          if (pixels[i + 3] === 255) {
+            pixels[i] = r * avg
+            pixels[i + 1] = g * avg
+            pixels[i + 2] = b * avg
+            pixels[i + 3] = avg * 255
+          } else if (pixels[i] > 0) {
+            pixels[i + 3] = 0
+          }
+        }
+        context.putImageData(imgData, 0, 0)
+        callback()
+      }
+    }
+  }
+
+  function setViewer (viewerDivId) {
+    viewer = OpenSeadragon({
+      id: viewerDivId,
+      prefixUrl: 'js/vendor/openseadragon/images/',
+      showFullPageControl: options.viewerOpts.showFullPageControl,
+      showHomeControl: options.viewerOpts.showHomeControl,
+      showZoomControl: options.viewerOpts.showZoomControl,
+      crossOriginPolicy: 'Anonymous'
+    })
+
+    // Markup tools event listeners
+    if (options.toolbarOn) {
+      markupTools(idx, viewer)
+    }
+
+    // Filtering
+    if (options.filterOn) {
+      viewer.setFilterOptions({
+        filters: [{
+          items: viewer.world.getItemAt(1),
+          processors: [
+            filter.prototype.COLORIZE(0, 255, 0)
+          ]
+        }]
+      })
+    }
+  }
+
+  function setSliders () {
+    if (options.slidersOn) {
+      for (let i = 0; i < sliders.length; i++) {
+        sliders[i].addEventListener('input', function () {
+          if (viewer.world.getItemAt(i) !== undefined) {
+            viewer.world.getItemAt(i).setOpacity(sliders[i].value / 100)
+          } else {
+            sliders[i].hidden = true
+          }
+        })
+      }
     }
   }
 
@@ -65,95 +114,40 @@ function nViewer (viewerDivId, sliderElements, options) {
     return [source['@id'], region, size, ROTATION, quality].join('/')
   }
 
-  // Set viewer's source images
-  this.setSources = function (imageArray, opacityArray) {
-    imageArray.forEach(function (image, index) {
-      // add images to viewer
-      viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
-    })
+  // Public functions
+  return {
+    getViewer: function () {
+      return viewer
+    },
 
-    viewer.world.addHandler('add-item', function(event) {
-      if (viewer.world.getItemCount() === 2) {
-        // colorize layer 2
-        viewer.setFilterOptions({
-          filters: [{
-            items: viewer.world.getItemAt(1),
-            processors: [
-              myFilter.prototype.COLORIZE(0, 255, 0)
-            ]
-          }]
-        })
+    getPanZoom: function () {
+      return checkboxes
+    },
 
-        // get image tile
-        viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
-          return getIIIFTileUrl(this, level, x, y)
-        }
-      }
-    })
-  }
-
-  // Initialize viewer
-  function setViewer (viewerDivId) {
-    viewer = OpenSeadragon({
-      id: viewerDivId,
-      prefixUrl: 'js/vendor/openseadragon/images/',
-      showFullPageControl: options.viewerOpts.showFullPageControl,
-      showHomeControl: options.viewerOpts.showHomeControl,
-      showZoomControl: options.viewerOpts.showZoomControl,
-      crossOriginPolicy: 'Anonymous'
-    })
-
-    // Markup tools event listeners
-    if (options.toolbarOn) {
-      markupTools(idx, viewer)
-    }
-
-    // Sliders event listeners
-    if (options.slidersOn) {
-      for (let i = 0; i < sliderElements.length; i++) {
-        sliderElements[i].addEventListener('input', function () {
-          if (viewer.world.getItemAt(i) !== undefined) {
-            viewer.world.getItemAt(i).setOpacity(sliderElements[i].value / 100)
-          } else {
-            sliderElements[i].hidden = true
-          }
-        })
-      }
-    }
-
-    // Filtering
-    if (options.filterOn) {
-      viewer.setFilterOptions({
-        filters: [{
-          items: viewer.world.getItemAt(1),
-          processors: [
-            myFilter.prototype.COLORIZE(0, 255, 0)
-          ]
-        }]
+    setSources: function (imageArray, opacityArray) {
+      imageArray.forEach(function (image, index) {
+        // add images to viewer
+        viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
       })
-    }
-  }
 
-  function setFilter () {
-    myFilter = OpenSeadragon.Filters.GREYSCALE
-    myFilter.prototype.COLORIZE = function (r, g, b) {
-      return function (context, callback) {
-        const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-        const pixels = imgData.data
-        for (let i = 0; i < pixels.length; i += 4) {
-          const avg = pixels[i] / 255
-          if (pixels[i + 3] === 255) {
-            pixels[i] = r * avg
-            pixels[i + 1] = g * avg
-            pixels[i + 2] = b * avg
-            pixels[i + 3] = avg * 255
-          } else if (pixels[i] > 0) {
-            pixels[i + 3] = 0
+      viewer.world.addHandler('add-item', function (event) {
+        if (viewer.world.getItemCount() === 2) {
+          // colorize layer 2
+          viewer.setFilterOptions({
+            filters: [{
+              items: viewer.world.getItemAt(1),
+              processors: [
+                filter.prototype.COLORIZE(0, 255, 0)
+              ]
+            }]
+          })
+
+          // get image tile
+          viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
+            return getIIIFTileUrl(this, level, x, y)
           }
         }
-        context.putImageData(imgData, 0, 0)
-        callback()
-      }
+      })
     }
   }
 }

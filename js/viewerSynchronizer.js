@@ -40,6 +40,26 @@ function init (currentId) {
   }
 }
 
+function isPanOn (someObject) {
+  const checkboxes = someObject.getPanZoom()
+  if (typeof checkboxes.checkPan.checked !== 'undefined') {
+    return checkboxes.checkPan.checked // user decision
+  } else {
+    // If 1 div; then, nothing to synchronize.
+    return numDivs !== 1
+  }
+}
+
+function isZoomOn (someObject) {
+  const checkboxes = someObject.getPanZoom()
+  if (typeof checkboxes.checkZoom.checked !== 'undefined') {
+    return checkboxes.checkZoom.checked // user decision
+  } else {
+    // If 1 div; then, nothing to synchronize.
+    return numDivs !== 1
+  }
+}
+
 function setPanZoomOnOtherViewers (currentViewer, correspondingObject) {
   this.syncedObjects.forEach(function (syncedObject) {
     const syncedViewer = syncedObject.getViewer()
@@ -47,11 +67,11 @@ function setPanZoomOnOtherViewers (currentViewer, correspondingObject) {
       return
     }
 
-    if (syncedObject.getChkPan() && correspondingObject.getChkPan()) {
+    if (isPanOn(syncedObject) && isPanOn(correspondingObject)) {
       syncedViewer.viewport.panTo(currentViewer.viewport.getCenter())
     }
 
-    if (syncedObject.getChkZoom() && correspondingObject.getChkZoom()) {
+    if (isZoomOn(syncedObject) && isZoomOn(correspondingObject)) {
       syncedViewer.viewport.zoomTo(currentViewer.viewport.getZoom())
     }
   })
