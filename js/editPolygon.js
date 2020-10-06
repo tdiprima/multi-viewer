@@ -1,3 +1,10 @@
+function editPolygon (idx, overlay) {
+  document.getElementById('btnEdit' + idx).addEventListener('click', function () {
+    toggleButtonHighlight(this)
+    Edit(overlay.fabricCanvas())
+  })
+}
+
 // Custom position handling
 // Code borrowed from: http://fabricjs.com/custom-controls-polygon
 function polygonPositionHandler (dim, finalMatrix, fabricObject) {
@@ -69,14 +76,6 @@ function getPolygon (canvas) {
   }
 }
 
-function editPolygon (idx, overlay) {
-  // Edit button event listener
-  document.getElementById('btnEdit' + idx).addEventListener('click', function () {
-    toggleButtonHighlight(this)
-    Edit(overlay.fabricCanvas())
-  })
-}
-
 function Edit (canvas) {
   const fabricPolygon = getPolygon(canvas)
 
@@ -84,7 +83,7 @@ function Edit (canvas) {
     canvas.setActiveObject(fabricPolygon)
     fabricPolygon.edit = !fabricPolygon.edit
 
-    const cornerColor = getACornerColorThatShowsUp(fabricPolygon.stroke)
+    const cornerColor = getAColorThatShowsUp(fabricPolygon.stroke)
 
     if (fabricPolygon.edit) {
       const lastControl = fabricPolygon.points.length - 1
