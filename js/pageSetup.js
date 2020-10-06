@@ -136,7 +136,7 @@ const createDivs = function (idx, options) {
 
   container.appendChild(viewerDiv)
 
-  this.viewers.push(new nViewer('viewer' + idx, sliders, options))
+  this.viewers.push(new imageViewer('viewer' + idx, sliders, options))
 
   // Clear:both between rows
   if (idx % 2 === 0) {
