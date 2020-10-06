@@ -1,5 +1,5 @@
 // Image viewer module
-const imageViewer = function (viewerDivId, sliderElements, options) {
+const imageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   // Private variables
   const idx = viewerDivId.replace('viewer', '')
   let viewer = {}

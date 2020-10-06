@@ -2,6 +2,7 @@
 function synchronizeViewers (imageViewerArray) {
   this.syncedImageViewers = []
   this.activeViewerId = null
+  this.numViewers = imageViewerArray.length
 
   imageViewerArray.forEach(function (imageViewer) {
     const currentViewer = imageViewer.getViewer()
@@ -48,7 +49,7 @@ function isPanOn (imageViewer) {
     return checkboxes.checkPan.checked // user decision
   } else {
     // If 1 div; then, nothing to synchronize.
-    return numDivs !== 1
+    return this.numViewers !== 1
   }
 }
 
@@ -59,7 +60,7 @@ function isZoomOn (imageViewer) {
     return checkboxes.checkZoom.checked // user decision
   } else {
     // If 1 div; then, nothing to synchronize.
-    return numDivs !== 1
+    return this.numViewers !== 1
   }
 }
 

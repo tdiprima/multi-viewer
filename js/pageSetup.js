@@ -1,51 +1,44 @@
-count = 0
-numDivs = 0 // ImageViewer.js, synchronizeViewers.js, pageSetup.js
-viewers = []
+let sliderIdNum = 0
 
-function pageSetup (numDivs1, prod1, sourceImages, options1) {
+function pageSetup (numDivs, prod1, sourceImages, options1) {
   let options, prod
-  document.addEventListener('DOMContentLoaded', (event) => {
-    numDivs = numDivs1
+  let viewers = [] // eslint-disable-line prefer-const
+
+  document.addEventListener('DOMContentLoaded', function () {
     prod = prod1
 
     if (isRealValue(options1)) {
       options = options1
     } else {
-      // default
       options = {
         filterOn: true,
         slidersOn: true,
         toolbarOn: true,
         paintbrushColor: '#0ff',
         viewerOpts: {
-          showFullPageControl: false,
+          showFullPageControl: true,
           showHomeControl: true,
-          showZoomControl: false
+          showZoomControl: true
         }
       }
 
-      // default if single viewer
       if (numDivs === 1) {
-        options = {
-          filterOn: true,
-          slidersOn: true,
-          toolbarOn: false,
-          paintbrushColor: '#0ff',
-          viewerOpts: {
-            showFullPageControl: true,
-            showHomeControl: true,
-            showZoomControl: true
-          }
-        }
+        // single viewer
+        options.toolbarOn = false
+      } else {
+        // multiple viewers
+        console.log(options.viewerOpts.showFullPageControl)
+        options.viewerOpts.showFullPageControl = false
+        options.viewerOpts.showZoomControl = false
       }
     }
 
-    new Promise(function (resolve, reject) {
+    new Promise(function (resolve) {
       // Create divs
-      for (let idx = 1; idx <= this.numDivs; idx++) {
-        createDivs(idx, options)
+      for (let idx = 1; idx <= numDivs; idx++) {
+        createDivs(idx, numDivs, viewers, options)
       }
-      return resolve(this.viewers)
+      return resolve(viewers)
     }).then(function (v) {
       // Viewers created; add dropdown to page
       dropdown(v, 'selections', 'json/tcga.json')
@@ -79,25 +72,22 @@ function pageSetup (numDivs1, prod1, sourceImages, options1) {
   })
 }
 
-const createDivs = function (idx, options) {
+const createDivs = function (idx, numDivs, viewers, options) {
   let name
 
   const container = document.createElement('div')
   container.className = 'divSquare'
-  // container.innerHTML = 'container';
   document.body.appendChild(container)
 
   name = 'controls'
   const controlsDiv = document.createElement('div') // 'controls' div
   controlsDiv.id = name
   controlsDiv.className = name
-  // controlsDiv.innerHTML = name;
 
   container.appendChild(controlsDiv) // add to 'container' div
 
   name = 'range'
   const rangeDiv = document.createElement('div') // div containing 'sliders'
-  // rangeDiv.innerHTML = name;
   rangeDiv.className = name
   controlsDiv.append(rangeDiv)
 
@@ -113,16 +103,13 @@ const createDivs = function (idx, options) {
     buttonDiv.classList.add('buttons')
     controlsDiv.append(buttonDiv)
 
-    // Create buttons
-    createButtons(idx, buttonDiv, options)
+    createButtons(idx, buttonDiv, numDivs, options)
 
-    // colorPicker picker event handler
     colorPicker(document.getElementById('mark' + idx))
   }
 
-  // Slider button event handler
   if (options.slidersOn && options.toolbarOn) {
-    sliderBtnEvt(idx, sliders)
+    sliderButtonEvent(idx, sliders)
   }
 
   name = 'viewer'
@@ -133,7 +120,7 @@ const createDivs = function (idx, options) {
 
   container.appendChild(viewerDiv)
 
-  this.viewers.push(new imageViewer('viewer' + idx, sliders, options))
+  viewers.push(new imageViewer('viewer' + idx, sliders, numDivs, options))
 
   // Clear:both between rows
   if (idx % 2 === 0) {
@@ -143,7 +130,7 @@ const createDivs = function (idx, options) {
   }
 }
 
-const createButtons = function (idx, div, options) {
+const createButtons = function (idx, div, numDivs, options) {
   let color
   if (isRealValue(options.paintbrushColor)) {
     color = options.paintbrushColor
@@ -157,6 +144,7 @@ const createButtons = function (idx, div, options) {
   if (numDivs <= 1) {
     htm = ''
   }
+
   div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
         <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
         <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
@@ -167,15 +155,15 @@ const createButtons = function (idx, div, options) {
     </a>`
 }
 
-const createSliders = function (idx, div, num, options) {
+const createSliders = function (idx, div, howManyToCreate, options) {
   const sliders = []
   const d = document.createDocumentFragment()
 
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < howManyToCreate; i++) {
     const range = document.createElement('input')
     range.type = 'range'
-    this.count += 1
-    range.id = 'sliderRange' + this.count
+    sliderIdNum += 1
+    range.id = 'sliderRange' + sliderIdNum
     range.min = '0'
     range.max = '100'
     range.value = '100'
@@ -193,8 +181,7 @@ const createSliders = function (idx, div, num, options) {
   return sliders
 }
 
-const sliderBtnEvt = function (idx, sliders) {
-  // Slider button event handler
+const sliderButtonEvent = function (idx, sliders) {
   const btnSlide = document.getElementById('btnSlide' + idx)
   if (isRealValue(btnSlide)) {
     btnSlide.addEventListener('click', function () {
