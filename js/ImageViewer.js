@@ -7,12 +7,12 @@ const imageViewer = function (viewerDivId, sliderElements, options) {
   let filter = {}
   const sliders = sliderElements
 
-  // Call functions
+  // Call functions.
   setCheckboxes(idx)
   setFilter()
   setViewer(viewerDivId)
   setSliders(viewer)
-  // Call functions done.
+  // Done calling functions.
 
   // Private functions
   function setCheckboxes (idx) {
