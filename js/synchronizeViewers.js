@@ -1,4 +1,4 @@
-function viewerSynchronizer (nViewerArray) {
+function synchronizeViewers (nViewerArray) {
   this.syncedObjects = []
   this.activeViewerId = null
 
