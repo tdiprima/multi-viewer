@@ -1,17 +1,20 @@
-// Module
+// Image viewer module
 const imageViewer = function (viewerDivId, sliderElements, options) {
-  // Private variables and functions
+  // Private variables
   const idx = viewerDivId.replace('viewer', '')
   let viewer = {}
   const checkboxes = {}
   let filter = {}
   const sliders = sliderElements
 
+  // Call functions
   setCheckboxes(idx)
   setFilter()
   setViewer(viewerDivId)
   setSliders(viewer)
+  // Call functions done.
 
+  // Private functions
   function setCheckboxes (idx) {
     if (numDivs > 1 && options.toolbarOn) {
       checkboxes.checkPan = document.getElementById('chkPan' + idx)
