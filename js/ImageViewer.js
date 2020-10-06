@@ -6,7 +6,6 @@ const imageViewer = function (viewerDivId, sliderElements, options) {
   const checkboxes = {}
   let filter = {}
   const sliders = sliderElements
-  // options = options || 'options'
 
   setCheckboxes(idx)
   setFilter()
@@ -53,12 +52,10 @@ const imageViewer = function (viewerDivId, sliderElements, options) {
       crossOriginPolicy: 'Anonymous'
     })
 
-    // Markup tools event listeners
     if (options.toolbarOn) {
       markupTools(idx, viewer)
     }
 
-    // Filtering
     if (options.filterOn) {
       viewer.setFilterOptions({
         filters: [{
@@ -85,7 +82,6 @@ const imageViewer = function (viewerDivId, sliderElements, options) {
     }
   }
 
-  // The url will return an image for the region specified by the given x, y, and level.
   function getIIIFTileUrl (source, level, x, y) {
     const scale = Math.pow(0.5, source.maxLevel - level)
     const levelWidth = Math.ceil(source.width * scale)
@@ -126,13 +122,11 @@ const imageViewer = function (viewerDivId, sliderElements, options) {
 
     setSources: function (imageArray, opacityArray) {
       imageArray.forEach(function (image, index) {
-        // add images to viewer
         viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
       })
 
       viewer.world.addHandler('add-item', function (event) {
         if (viewer.world.getItemCount() === 2) {
-          // colorize layer 2
           viewer.setFilterOptions({
             filters: [{
               items: viewer.world.getItemAt(1),
@@ -142,7 +136,6 @@ const imageViewer = function (viewerDivId, sliderElements, options) {
             }]
           })
 
-          // get image tile
           viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
             return getIIIFTileUrl(this, level, x, y)
           }
