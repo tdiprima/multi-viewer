@@ -2,7 +2,7 @@
 function mapMarker (currentOSDViewer, syncedNViewers) {
   overrideRightClickMenu(currentOSDViewer.element)
 
-  getPositionAndDisplayMarker(currentOSDViewer, syncedNViewers)
+  handleMarkerDisplay(currentOSDViewer, syncedNViewers)
 
   handleButtonShowHide()
 }
@@ -13,7 +13,7 @@ function overrideRightClickMenu (viewerDiv) {
   })
 }
 
-function getPositionAndDisplayMarker (currentOSDViewer, syncedNViewers) {
+function handleMarkerDisplay (currentOSDViewer, syncedNViewers) {
   currentOSDViewer.addHandler('canvas-nonprimary-press', function (osdEvent) {
     if (isRightClick(osdEvent)) {
       const clickPosition = osdEvent.position
