@@ -1,85 +1,82 @@
 count = 0
-numDivs = 0
+numDivs = 0 // ImageViewer.js, synchronizeViewers.js, pageSetup.js
 viewers = []
 
-function pageSetup () {
+function pageSetup (numDivs1, prod1, sourceImages, options1) {
   let options, prod
+  document.addEventListener('DOMContentLoaded', (event) => {
+    numDivs = numDivs1
+    prod = prod1
 
-  this.setup = function (numDivs1, prod1, sourceImages, options1) {
-    document.addEventListener('DOMContentLoaded', (event) => {
-      numDivs = numDivs1
-      prod = prod1
-
-      if (isRealValue(options1)) {
-        options = options1
-      } else {
-        // default
-        options = {
-          filterOn: true,
-          slidersOn: true,
-          toolbarOn: true,
-          paintbrushColor: '#0ff',
-          viewerOpts: {
-            showFullPageControl: false,
-            showHomeControl: true,
-            showZoomControl: false
-          }
-        }
-
-        // default if single viewer
-        if (numDivs === 1) {
-          options = {
-            filterOn: true,
-            slidersOn: true,
-            toolbarOn: false,
-            paintbrushColor: '#0ff',
-            viewerOpts: {
-              showFullPageControl: true,
-              showHomeControl: true,
-              showZoomControl: true
-            }
-          }
+    if (isRealValue(options1)) {
+      options = options1
+    } else {
+      // default
+      options = {
+        filterOn: true,
+        slidersOn: true,
+        toolbarOn: true,
+        paintbrushColor: '#0ff',
+        viewerOpts: {
+          showFullPageControl: false,
+          showHomeControl: true,
+          showZoomControl: false
         }
       }
 
-      new Promise(function (resolve, reject) {
-        // Create divs
-        for (let idx = 1; idx <= this.numDivs; idx++) {
-          createDivs(idx, options)
+      // default if single viewer
+      if (numDivs === 1) {
+        options = {
+          filterOn: true,
+          slidersOn: true,
+          toolbarOn: false,
+          paintbrushColor: '#0ff',
+          viewerOpts: {
+            showFullPageControl: true,
+            showHomeControl: true,
+            showZoomControl: true
+          }
         }
-        return resolve(this.viewers)
-      }).then(function (v) {
-        // Viewers created; add dropdown to page
-        dropdown(v, 'selections', 'json/tcga.json')
-        return v
-      }).then(function (v) {
-        // Pan zoom controller
+      }
+    }
 
-        synchronizeViewers(v) // Pass array of nViewers
-        return v
-      }).then(function (v) {
-        function test () {
-          // TESTING
-          v.forEach(function (elem) {
-            elem.getViewer().open(sourceImages[0]) // <- open()
-          })
-        }
+    new Promise(function (resolve, reject) {
+      // Create divs
+      for (let idx = 1; idx <= this.numDivs; idx++) {
+        createDivs(idx, options)
+      }
+      return resolve(this.viewers)
+    }).then(function (v) {
+      // Viewers created; add dropdown to page
+      dropdown(v, 'selections', 'json/tcga.json')
+      return v
+    }).then(function (v) {
+      // Pan zoom controller
 
-        function live () {
-          // Set viewer source
-          v.forEach(function (elem) {
-            elem.setSources(sourceImages, [1.0, 1.0]) // <- setSources()
-          })
-        }
+      synchronizeViewers(v) // Pass array of nViewers
+      return v
+    }).then(function (v) {
+      function test () {
+        // TESTING
+        v.forEach(function (elem) {
+          elem.getViewer().open(sourceImages[0]) // <- open()
+        })
+      }
 
-        if (prod) {
-          live()
-        } else {
-          test()
-        }
-      })
+      function live () {
+        // Set viewer source
+        v.forEach(function (elem) {
+          elem.setSources(sourceImages, [1.0, 1.0]) // <- setSources()
+        })
+      }
+
+      if (prod) {
+        live()
+      } else {
+        test()
+      }
     })
-  }
+  })
 }
 
 const createDivs = function (idx, options) {
