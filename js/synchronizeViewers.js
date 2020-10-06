@@ -65,7 +65,7 @@ function isZoomOn (imageViewer) {
 }
 
 function setPanZoomOthers (imageViewer) {
-  let currentViewer = imageViewer.getViewer()
+  const currentViewer = imageViewer.getViewer()
 
   this.syncedImageViewers.forEach(function (syncedObject) {
     const syncedViewer = syncedObject.getViewer()
