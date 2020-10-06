@@ -166,7 +166,7 @@ function fillPolygon (pointerEvent, canvas) {
       opacity: 0.5
     })
 
-    // displayTextBox()
+    // displayInfo()
 
     canvas.renderAll()
   }
@@ -180,7 +180,7 @@ function unfillPolygon (pointerEvent, canvas) {
         fill: ''
       })
 
-      // canvas.remove(textBox)
+      // canvas.remove(infoText)
       canvas.renderAll()
     }
   }
@@ -190,13 +190,14 @@ function weHoveredOverPolygon (pointerEvent) {
   return (isRealValue(pointerEvent.target) && pointerEvent.target.type === 'polygon')
 }
 
-// function displayTextBox (obj, canvas) {
-//   // Show object type. TBA.
+// function displayInfo (obj, canvas) {
+//   // Display some kind of information. TBA.
+//   // Right now this displays what type of object it is. (Polygon, obviously.)
 //   const type = obj.type
 //   const left = obj.left
 //   const top = obj.top
 //
-//   const textBox = new fabric.Text(type, {
+//   const infoText = new fabric.Text(type, {
 //     fontSize: 18,
 //     fontFamily: 'Courier',
 //     backgroundColor: 'rgba(102, 102, 102, 0.7)',
@@ -205,5 +206,5 @@ function weHoveredOverPolygon (pointerEvent) {
 //     left: left, // pointer.x,
 //     top: top // pointer.y
 //   })
-//   canvas.add(textBox)
+//   canvas.add(infoText)
 // }
