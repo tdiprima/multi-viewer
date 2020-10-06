@@ -19,7 +19,7 @@ function isRealValue (obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
-function getACornerColorThatShowsUp (strokeColor) {
+function getAColorThatShowsUp (strokeColor) {
   function isBlueIsh () {
     return strokeColor.endsWith('ff')
   }
