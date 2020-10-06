@@ -1,9 +1,5 @@
-/**
- * Attach dropdowns to div
- * Select cancer type and slide
- */
+// THIS FUNCTION WILL BE GOING AWAY, EVENTUALLY.
 function dropdown (viewerArray, divId, dataSource) {
-  // console.log('viewerArray', viewerArray);
 
   const cancertypes = ['blca', 'brca', 'cesc', 'gbm', 'luad', 'lusc', 'paad', 'prad', 'skcm', 'ucec']
   const maindiv = document.getElementById(divId)
@@ -13,26 +9,16 @@ function dropdown (viewerArray, divId, dataSource) {
   let data = {}
   initialize()
 
-  // Speed up calls to hasOwnProperty
   const hasOwnProperty = Object.prototype.hasOwnProperty
 
   function isEmpty (obj) {
-    // null and undefined are "empty"
     if (obj == null) return true
 
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
     if (obj.length > 0) return false
     if (obj.length === 0) return true
 
-    // If it isn't an object at this point
-    // it is empty, but it can't be anything *but* empty
-    // Is it empty?  Depends on your application.
     if (typeof obj !== 'object') return true
 
-    // Otherwise, does it have any properties of its own?
-    // Note that this doesn't handle
-    // toString and valueOf enumeration bugs in IE < 9
     for (const key in obj) {
       if (hasOwnProperty.call(obj, key)) return false
     }
@@ -82,12 +68,10 @@ function dropdown (viewerArray, divId, dataSource) {
     const si = iiif + '/featureimages/' + cVal + '/' + iVal + '-featureimage.tif/info.json'
 
     if (imageExists(ti)) {
-      // Do something now that you know the image exists.
       viewerArray.forEach(function (elem) {
         elem.getViewer().open([ti, si])
       })
     } else {
-      // Image doesn't exist - do something else.
       alertMessage('Image does not exist\n' + ti)
       return false
     }
