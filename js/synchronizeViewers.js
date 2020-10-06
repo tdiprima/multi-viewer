@@ -1,29 +1,29 @@
-function synchronizeViewers (nViewerArray) {
-  this.syncedObjects = []
+function synchronizeViewers (imageViewerArray) {
+  this.syncedImageViewers = []
   this.activeViewerId = null
 
-  nViewerArray.forEach(function (nViewerObject) {
-    const currentViewer = nViewerObject.getViewer()
+  imageViewerArray.forEach(function (imageViewer) {
+    const currentViewer = imageViewer.getViewer()
 
-    setPanZoomOnCurrentViewer(currentViewer, handler)
+    setPanZoomCurrent(currentViewer, handler)
 
-    mapMarker(currentViewer, this.syncedObjects)
+    mapMarker(currentViewer, this.syncedImageViewers)
 
     function handler () {
       if (!isActive(currentViewer.id)) {
         return
       }
 
-      setPanZoomOnOtherViewers(currentViewer, nViewerObject)
+      setPanZoomOthers(imageViewer)
 
       resetFlag()
     }
 
-    this.syncedObjects.push(nViewerObject)
+    this.syncedImageViewers.push(imageViewer)
   })
 }
 
-function setPanZoomOnCurrentViewer (currentViewer, handler) {
+function setPanZoomCurrent (currentViewer, handler) {
   currentViewer.addHandler('pan', handler)
   currentViewer.addHandler('zoom', handler)
 }
@@ -40,8 +40,9 @@ function init (currentId) {
   }
 }
 
-function isPanOn (someObject) {
-  const checkboxes = someObject.getPanZoom()
+function isPanOn (imageViewer) {
+  const checkboxes = imageViewer.getPanZoom()
+
   if (typeof checkboxes.checkPan.checked !== 'undefined') {
     return checkboxes.checkPan.checked // user decision
   } else {
@@ -50,8 +51,9 @@ function isPanOn (someObject) {
   }
 }
 
-function isZoomOn (someObject) {
-  const checkboxes = someObject.getPanZoom()
+function isZoomOn (imageViewer) {
+  const checkboxes = imageViewer.getPanZoom()
+
   if (typeof checkboxes.checkZoom.checked !== 'undefined') {
     return checkboxes.checkZoom.checked // user decision
   } else {
@@ -60,18 +62,21 @@ function isZoomOn (someObject) {
   }
 }
 
-function setPanZoomOnOtherViewers (currentViewer, correspondingObject) {
-  this.syncedObjects.forEach(function (syncedObject) {
+function setPanZoomOthers (imageViewer) {
+  let currentViewer = imageViewer.getViewer()
+
+  this.syncedImageViewers.forEach(function (syncedObject) {
     const syncedViewer = syncedObject.getViewer()
+
     if (syncedViewer.id === currentViewer.id) {
       return
     }
 
-    if (isPanOn(syncedObject) && isPanOn(correspondingObject)) {
+    if (isPanOn(syncedObject) && isPanOn(imageViewer)) {
       syncedViewer.viewport.panTo(currentViewer.viewport.getCenter())
     }
 
-    if (isZoomOn(syncedObject) && isZoomOn(correspondingObject)) {
+    if (isZoomOn(syncedObject) && isZoomOn(imageViewer)) {
       syncedViewer.viewport.zoomTo(currentViewer.viewport.getZoom())
     }
   })
