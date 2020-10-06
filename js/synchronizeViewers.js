@@ -1,3 +1,4 @@
+// synchronize pan & zoom
 function synchronizeViewers (imageViewerArray) {
   this.syncedImageViewers = []
   this.activeViewerId = null
@@ -7,7 +8,7 @@ function synchronizeViewers (imageViewerArray) {
 
     setPanZoomCurrent(currentViewer, handler)
 
-    mapMarker(currentViewer, this.syncedImageViewers)
+    mapMarker(currentViewer, this.syncedImageViewers) // set this up while we're here
 
     function handler () {
       if (!isActive(currentViewer.id)) {
