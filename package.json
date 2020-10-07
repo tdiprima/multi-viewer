@@ -16,10 +16,10 @@
     "build": "parcel build index.html",
     "dev": "parcel index.html --open",
     "start": "npm run build && npm run dev",
-    "test": "standard && npx ava"
+    "test": "standard"
   },
   "devDependencies": {
-    "ava": "^3.13.0",
+    "jest": "^26.5.2",
     "parcel-bundler": "^1.12.4",
     "standard": "^14.3.4"
   }
