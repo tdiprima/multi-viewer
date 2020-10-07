@@ -1,9 +1,0 @@
-{
-  "overrides": [{
-    "files": ["js/*.js"],
-    "rules": {
-      "no-undef": "off",
-      "no-unused-vars": "off"
-    }
-  }]
-}
