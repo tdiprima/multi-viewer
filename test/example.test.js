@@ -8,12 +8,12 @@ import {
   queryByTestId,
   // Tip: all queries are also exposed on an object
   // called "queries" which you could import here as well
-  waitFor,
+  waitFor
 } from '@testing-library/dom'
 // adds special assertions like toHaveTextContent
 import '@testing-library/jest-dom/extend-expect'
 
-function getExampleDOM() {
+function getExampleDOM () {
   // This is just a raw example of setting up some DOM
   // that we can interact with. Swap this with your UI
   // framework of choice 😉

@@ -21,6 +21,9 @@
     "url": "https://github.com/tdiprima/multi-viewer/issues"
   },
   "homepage": "https://github.com/tdiprima/multi-viewer#readme",
+  "standard": {
+    "env": [ "jest" ]
+  },
   "dependencies": {
     "regenerator-runtime": "^0.13.7"
   },
