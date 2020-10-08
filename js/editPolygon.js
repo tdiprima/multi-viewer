@@ -5,8 +5,7 @@ function editPolygon (idx, overlay) {
   })
 }
 
-// Custom position handling
-// Code borrowed from: http://fabricjs.com/custom-controls-polygon
+// Position handling code borrowed from: http://fabricjs.com/custom-controls-polygon
 function polygonPositionHandler (dim, finalMatrix, fabricObject) {
   // This function looks at the pointIndex of the control and returns the
   // current canvas position for that particular point.
@@ -45,9 +44,8 @@ function anchorWrapper (anchorIndex, fn) {
       y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y)
     }, fabricObject.calcTransformMatrix())
     const actionPerformed = fn(eventData, transform, x, y)
-    // IMPORTANT!  VARIABLE 'newDim' NEEDS TO EXIST.
-    // (Otherwise, the bounding box gets borked):
-    const newDim = fabricObject._setPositionDimensions({}) // LEAVE IT!
+    // eslint-disable-next-line no-unused-vars
+    const newDim = fabricObject._setPositionDimensions({})
     const polygonBaseSize = fabricObject._getNonTransformedDimensions()
     const newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x
     const newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y
@@ -63,14 +61,14 @@ function getPolygon (canvas) {
   } else {
     const x = canvas.getObjects('polygon')
     if (x.length === 0) {
-      // No polygons
+      // No polygons exist on this canvas.
       return 'null'
     }
     if (x.length === 1) {
-      // Return the first one
+      // Return the first one.
       return x[0]
     } else {
-      // Tell me which one you want
+      // User needs to select which one they want.
       return 'null'
     }
   }
