@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/tdiprima/multi-viewer#readme",
   "standard": {
-    "env": [ "jest" ]
+    "env": [
+      "jest"
+    ]
   },
   "dependencies": {
     "regenerator-runtime": "^0.13.7"
@@ -34,6 +36,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "babel-jest": "^26.5.2",
     "jest": "^26.5.2",
+    "jsdom": "^16.4.0",
     "serve": "^11.3.2",
     "standard": "^14.3.4"
   }
