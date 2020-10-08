@@ -14,7 +14,7 @@
 
 <body>
 
-<h3>TCGA Segmentation Data</h3>
+<h1>TCGA Segmentation Data</h1>
 
 <div id="selections"></div>
 <div><br>&nbsp;</div>
@@ -29,11 +29,15 @@
 <script src="dist/ultraviewer.min.js"></script>
 
 <script>
-  let arr = [
-    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-  ]
-  pageSetup(1, true, arr)
+  document.addEventListener("DOMContentLoaded", function() {
+    // let arr = [
+    //   'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+    //   'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+    // ]
+    let arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] //testing
+    pageSetup(1, false, arr)
+  })
+
 </script>
 
 </body>
