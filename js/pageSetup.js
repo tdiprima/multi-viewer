@@ -1,37 +1,13 @@
 let sliderIdNum = 0
 
 function pageSetup (numDivs, prod1, sourceImages, options1) {
-  let options, prod
+  let prod
   let viewers = [] // eslint-disable-line prefer-const
 
   document.addEventListener('DOMContentLoaded', function () {
     prod = prod1
 
-    if (isRealValue(options1)) {
-      options = options1
-    } else {
-      options = {
-        filterOn: true,
-        slidersOn: true,
-        toolbarOn: true,
-        paintbrushColor: '#0ff',
-        viewerOpts: {
-          showFullPageControl: true,
-          showHomeControl: true,
-          showZoomControl: true
-        }
-      }
-
-      if (numDivs === 1) {
-        // single viewer
-        options.toolbarOn = false
-      } else {
-        // multiple viewers
-        console.log(options.viewerOpts.showFullPageControl)
-        options.viewerOpts.showFullPageControl = false
-        options.viewerOpts.showZoomControl = false
-      }
-    }
+    const options = checkOptions(options1, numDivs)
 
     new Promise(function (resolve) {
       // Create divs
@@ -206,3 +182,4 @@ const sliderButtonEvent = function (idx, sliders) {
   } else {
     console.log('slide is null')
   }
+}
