@@ -22,6 +22,6 @@
   "homepage": "https://github.com/tdiprima/multi-viewer#readme",
   "devDependencies": {
     "selenium-webdriver": "^4.0.0-alpha.7",
-    "standard": "*"
+    "standard": "^14.3.4"
   }
 }
