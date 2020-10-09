@@ -201,22 +201,8 @@ const sliderButtonEvent = function (idx, sliders) {
         // Style the button
         this.innerHTML = '<i class="fa fa-sliders"></i> Show sliders'
       }
-      toggleBtn(btnSlide)
+      toggleButtonHighlight(btnSlide)
     })
   } else {
     console.log('slide is null')
   }
-
-  function toggleBtn (btn) {
-    const isOn = btn.classList.contains('btnOn')
-    const classList = btn.classList
-    while (classList.length > 0) {
-      classList.remove(classList.item(0))
-    }
-    if (isOn) {
-      btn.classList.add('btn')
-    } else {
-      btn.classList.add('btnOn')
-    }
-  }
-}
