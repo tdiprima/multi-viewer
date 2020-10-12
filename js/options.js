@@ -18,12 +18,12 @@ function checkOptions (options, numDivs) {
 
   } else {
 
+    // Design decision:
     if (numDivs === 1) {
       // single viewer
       returnValue.toolbarOn = false
     } else {
       // multiple viewers
-      console.log(returnValue.viewerOpts.showFullPageControl)
       returnValue.viewerOpts.showFullPageControl = false
       returnValue.viewerOpts.showZoomControl = false
     }
