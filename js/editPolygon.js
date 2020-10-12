@@ -45,7 +45,7 @@ function anchorWrapper (anchorIndex, fn) {
     }, fabricObject.calcTransformMatrix())
     const actionPerformed = fn(eventData, transform, x, y)
     // eslint-disable-next-line no-unused-vars
-    const newDim = fabricObject._setPositionDimensions({})
+    const newDim = fabricObject._setPositionDimensions({}) // DO NOT TOUCH THIS VARIABLE.
     const polygonBaseSize = fabricObject._getNonTransformedDimensions()
     const newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x
     const newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y
