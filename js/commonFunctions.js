@@ -16,7 +16,7 @@ function toggleButtonHighlight (btn) {
 }
 
 function isRealValue (obj) {
-  return obj !== null && obj !== 'undefined'
+  return obj && obj !== 'null' && obj !== 'undefined'
 }
 
 function isEmpty (value) {
