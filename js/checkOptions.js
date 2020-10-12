@@ -1,7 +1,7 @@
-function checkOptions (options) {
-  // If they're missing a field, then add it.
+// eslint-disable-next-line no-unused-vars
+const checkOptions = function (options) {
   let returnValue
-  const weNeedTheseKeyValPairs = {
+  const weNeedTheseKeys = {
     filterOn: true,
     slidersOn: true,
     toolbarOn: true,
@@ -13,9 +13,10 @@ function checkOptions (options) {
     }
   }
 
+  // eslint-disable-next-line no-undef
   const empty = isEmpty(options)
   if (!empty) {
-    returnValue = makeStructuresEqual(weNeedTheseKeyValPairs, options)
+    returnValue = makeStructuresEqual(weNeedTheseKeys, options)
   } else {
     return options
   }
@@ -34,3 +35,5 @@ function makeStructuresEqual (expected, actual) {
   }
   return actual
 }
+
+module.exports = makeStructuresEqual

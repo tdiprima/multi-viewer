@@ -1,3 +1,6 @@
+const makeStructuresEqual = require('../js/checkOptions')
+let result
+
 const actual = {
   foo: 1,
   bar: 2,
@@ -15,7 +18,8 @@ const expected = {
   }
 }
 
-test(expected, actual)
+result = makeStructuresEqual(expected, actual)
+console.log(result)
 
 const obj1 = {
   brand: 'brand 1',
@@ -27,9 +31,10 @@ const obj2 = {
   navigation: { opacity: 0.5 }
 }
 
-test(obj1, obj2)
+result = makeStructuresEqual(obj1, obj2)
+console.log(result)
 
-const weNeedTheseKeyValPairs = {
+const weNeedTheseKeys = {
   filterOn: true,
   slidersOn: true,
   toolbarOn: true,
@@ -50,36 +55,5 @@ const toMatch = {
   }
 }
 
-test(weNeedTheseKeyValPairs, toMatch)
-
-function test (expected, actual) {
-  console.log('\nExpect')
-  console.log(expected)
-  console.log('to match structure')
-  console.log(actual)
-  console.log('')
-
-  makeStructuresEqual(expected, actual)
-
-  console.log('New object:')
-  console.log(actual)
-}
-
-function addKeyValue (expected, actual, key) {
-  actual[key] = expected[key]
-}
-
-function makeStructuresEqual (expected, actual) {
-  for (const key in expected) {
-    // if (!actual.hasOwnProperty(key)) {
-    if (typeof v === 'object' && v !== null) {
-      return hasEqualStructure(v, obj2[key])
-    }
-
-    if (!Object.prototype.hasOwnProperty.call(actual, key)) {
-      console.log('Key \'' + key + '\' does not exist.')
-      console.log('')
-      addKeyValue(expected, actual, key)
-    }
-  }
-}
+result = makeStructuresEqual(weNeedTheseKeys, toMatch)
+console.log(result)
