@@ -7,34 +7,33 @@ function pageSetup (numDivs, prod1, sourceImages, options1) {
   document.addEventListener('DOMContentLoaded', function () {
     prod = prod1
 
-    const options = checkOptions(options1, numDivs)
-
-    new Promise(function (resolve) {
+    new Promise(function (resolve, reject) {
+      const options = checkOptions(options1)
+      return resolve(options)
+    }).then(function (options) {
       // Create divs
       for (let idx = 1; idx <= numDivs; idx++) {
         createDivs(idx, numDivs, viewers, options)
       }
-      return resolve(viewers)
-    }).then(function (v) {
+      return viewers
+    }).then(function (viewers) {
       // Viewers created; add dropdown to page
-      dropdown(v, 'selections', 'json/tcga.json')
-      return v
-    }).then(function (v) {
+      dropdown(viewers, 'selections', 'json/tcga.json')
+      return viewers
+    }).then(function (viewers) {
       // Pan zoom controller
-
-      synchronizeViewers(v) // Pass array of nViewers
-      return v
-    }).then(function (v) {
+      synchronizeViewers(viewers)
+    }).then(function (result) {
       function test () {
         // TESTING
-        v.forEach(function (elem) {
+        viewers.forEach(function (elem) {
           elem.getViewer().open(sourceImages[0]) // <- open()
         })
       }
 
       function live () {
         // Set viewer source
-        v.forEach(function (elem) {
+        viewers.forEach(function (elem) {
           elem.setSources(sourceImages, [1.0, 1.0]) // <- setSources()
         })
       }
