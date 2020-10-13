@@ -1,13 +1,8 @@
 // Sliders Module
+// eslint-disable-next-line no-unused-vars
 const Sliders = function () {
-  // Private variables and functions that only
-  // ..other private or public functions may access
-  // ..and cannot be accessed outside this Module
   let sliderIdNum = 0
 
-  // All the properties and methods contained by
-  // ..this object being returned will be public
-  // ..and will be accessible in the global scope.
   return {
     createSliders: function (idx, div, howManyToCreate, options) {
       const sliders = []
@@ -60,29 +55,6 @@ const Sliders = function () {
       } else {
         console.log('slide is null')
       }
-    },
-
-    walk: function () {
-      if (!isAlive) {
-        alert('Dead man can\'t walk')
-        return
-      }
-
-      alert(name + ': Walking')
-      growOld()
-      loseWeight()
-    },
-
-    eat: function () {
-      if (!isAlive) {
-        alert('Dead man can\'t eat')
-      }
-      alert(name + ': Eating..')
-      gainWeight()
-    },
-
-    getInfo: function () {
-      alert('Age: ' + age + '/' + maxAge + '\nWeight: ' + weight + '/' + maxWeight)
     }
   }
 }
