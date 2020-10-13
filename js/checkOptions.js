@@ -17,7 +17,7 @@ const checkOptions = function (options) {
   if (!empty) {
     returnValue = makeStructuresEqual(weNeedTheseKeys, options)
   } else {
-    return options
+    return weNeedTheseKeys
   }
   return returnValue
 }
