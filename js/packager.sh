@@ -8,7 +8,7 @@ function manual_minify() {
 }
 
 function foo() {
-  cat colorPicker.js commonFunctions.js dropDown.js checkOptions.js rangeSliders.js createPage.js pageSetup.js editPolygon.js drawPolygon.js gridOverlay.js mapMarker.js markupTools.js ImageViewer.js synchronizeViewers.js >../dist/ultraviewer.min.js
+  cat colorPicker.js commonFunctions.js dropDown.js checkOptions.js rangeSliders.js createPage.js pageSetup.js editPolygon.js drawPolygon.js gridOverlay.js mapMarker.js markupTools.js ImageViewer.js synchronizeViewers.js >output
   #find . -type f -name '*.js' -maxdepth 1 -exec cat {} \; >output
   mv output ../dist/ultraviewer.min.js
   #minify
