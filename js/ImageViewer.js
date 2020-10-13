@@ -133,7 +133,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
           viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
         })
       }).fail(function () {
-        document.write("The document you've requested does not exist. Please check the url:<br><br>" + imageArray[0])
+        document.write("<h1>The document you've requested does not exist. Please check the url:</h1>" + imageArray[0])
       })
 
       viewer.world.addHandler('add-item', function (event) {
