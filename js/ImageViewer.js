@@ -126,8 +126,14 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     },
 
     setSources: function (imageArray, opacityArray) {
-      imageArray.forEach(function (image, index) {
-        viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
+      // Quick check url
+      // eslint-disable-next-line no-undef
+      $.get(imageArray[0]).done(function () {
+        imageArray.forEach(function (image, index) {
+          viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
+        })
+      }).fail(function () {
+        document.write("The document you've requested does not exist. Please check the url:<br><br>" + imageArray[0])
       })
 
       viewer.world.addHandler('add-item', function (event) {

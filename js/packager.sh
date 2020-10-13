@@ -2,15 +2,16 @@
 
 rm ../dist/ultraviewer.min.js
 
-cat colorPicker.js commonFunctions.js dropdown.js checkOptions.js rangeSliders.js createPage.js pageSetup.js editPolygon.js drawPolygon.js gridOverlay.js mapMarker.js markupTools.js ImageViewer.js synchronizeViewers.js >../dist/ultraviewer.min.js
+cat colorPicker.js commonFunctions.js dropDown.js checkOptions.js rangeSliders.js createPage.js pageSetup.js editPolygon.js drawPolygon.js gridOverlay.js mapMarker.js markupTools.js ImageViewer.js synchronizeViewers.js >../dist/ultraviewer.min.js
 #manual_minify
 
 function foo() {
   find . -type f -name '*.js' -maxdepth 1 -exec cat {} \; >output
   mv output ../dist/ultraviewer.min.js
   #minify
-  manual_minify
+  #manual_minify
 }
+#foo
 
 function minify() {
   $HOME/Documents/workspace/minify/bin/minifyjs ultraviewer.min.js >temp.js

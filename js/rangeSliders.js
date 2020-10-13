@@ -52,8 +52,6 @@ const Sliders = function () {
           }
           toggleButtonHighlight(btnSlide) // eslint-disable-line no-undef
         })
-      } else {
-        console.log('slide is null')
       }
     }
   }

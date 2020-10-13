@@ -7,8 +7,8 @@
   <title>TCGA Segmentation Data</title>
   <link href="css/quad.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
-  <link href="../css/color-picker.min.css" rel="stylesheet">
-  <link href="../css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/color-picker.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all" rel="stylesheet">
 
 </head>
@@ -27,18 +27,37 @@
 <script src="js/vendor/openseadragon-filtering.js"></script>
 <script src="js/vendor/color-picker.min.js"></script>
 <!-- distribution -->
-<script src="dist/ultraviewer.min.js"></script>
+<!-- <script src="dist/ultraviewer.min.js"></script> -->
+<script src="js/colorPicker.js"></script>
+<script src="js/commonFunctions.js"></script>
+<script src="js/dropDown.js"></script>
+<script src="js/checkOptions.js"></script>
+<script src="js/rangeSliders.js"></script>
+<script src="js/createPage.js"></script>
+<script src="js/pageSetup.js"></script>
+<script src="js/editPolygon.js"></script>
+<script src="js/drawPolygon.js"></script>
+<script src="js/gridOverlay.js"></script>
+<script src="js/mapMarker.js"></script>
+<script src="js/markupTools.js"></script>
+<script src="js/ImageViewer.js"></script>
+<script src="js/synchronizeViewers.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let arr = [
-      'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-      'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-    ]
-    pageSetup(1, true, arr)
-    // let arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] //testing
-    // pageSetup(1, false, arr)
-  })
+  let arr
+  arr = [
+    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  ]
+  // arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] //testing
+
+  const options = {
+    filterOn: true,
+    slidersOn: true,
+    toolbarOn: false
+  }
+
+  pageSetup(1, true, arr, options)
 
 </script>
 

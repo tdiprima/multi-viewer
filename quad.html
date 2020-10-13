@@ -7,8 +7,8 @@
   <title>Quad-Viewer</title>
   <link href="css/quad.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
-  <link href="../css/color-picker.min.css" rel="stylesheet">
-  <link href="../css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/color-picker.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all" rel="stylesheet">
 
 </head>
@@ -45,29 +45,17 @@
 
 <script>
 
-  let options = {
-    filterOn: false,
-    slidersOn: true,
-    toolbarOn: true,
-    paintbrushColor: '#0ff',
-    viewerOpts: {
-      showFullPageControl: true,
-      showHomeControl: true,
-      showZoomControl: true
-    }
-  }
-
   // Testing
-  let arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
-  pageSetup(4, false, arr, options)
+  // let arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
+  // pageSetup(4, false, arr, options)
 
   // Production
   // window.location.origin; whichever is useful
-  // let arr = [
-  //     'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-  //     'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-  // ];
-  // pageSetup(4, true, arr, options)
+  let arr = [
+      'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+      'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  ];
+  pageSetup(4, true, arr)
 
 </script>
 

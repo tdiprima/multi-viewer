@@ -1,16 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-const pageSetup = function (numDivs, prod1, sourceImages, options1) {
-  let prod
+const pageSetup = function (numDivs, prod, sourceImages, options) {
   let viewers = [] // eslint-disable-line prefer-const
   const rangeSliders = new Sliders() // eslint-disable-line no-undef
   const page = new Page() // eslint-disable-line no-undef
 
   document.addEventListener('DOMContentLoaded', function () {
-    prod = prod1
-
     new Promise(function (resolve, reject) {
-      const options = checkOptions(options1) // eslint-disable-line no-undef
-      return resolve(options)
+      // eslint-disable-next-line no-undef
+      return resolve(checkOptions(options))
     }).then(function (options) {
       // Create divs
       for (let idx = 1; idx <= numDivs; idx++) {
