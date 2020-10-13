@@ -36,4 +36,4 @@ function makeStructuresEqual (expected, actual) {
   return actual
 }
 
-module.exports = makeStructuresEqual
+// module.exports = makeStructuresEqual // FOR TESTING
