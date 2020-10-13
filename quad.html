@@ -44,8 +44,14 @@
 <script src="js/synchronizeViewers.js"></script>
 
 <script>
+  let arr
+  arr = [
+    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+    'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  ]
+  // arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] // Testing
 
-  let options = {
+  const options = {
     filterOn: true,
     slidersOn: true,
     toolbarOn: true,
@@ -57,17 +63,6 @@
     }
   }
 
-  let arr
-  // Testing
-  // arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
-  // pageSetup(4, false, arr, options)
-
-  // Production
-  // window.location.origin; whichever is useful
-  arr = [
-      'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-      'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-  ];
   pageSetup(4, true, arr, options)
 
 </script>
