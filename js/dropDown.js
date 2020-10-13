@@ -1,6 +1,7 @@
 // THIS FUNCTION WILL BE GOING AWAY, EVENTUALLY.
+// DropDown Module
 // eslint-disable-next-line no-unused-vars
-const dropdown = function (viewerArray, divId, dataSource) {
+const DropDown = function (viewerArray, divId, dataSource) {
   const cancertypes = ['blca', 'brca', 'cesc', 'gbm', 'luad', 'lusc', 'paad', 'prad', 'skcm', 'ucec']
   const maindiv = document.getElementById(divId)
   const iiif = window.location.origin + '/iiif/?iiif=/tcgaseg'
@@ -9,23 +10,6 @@ const dropdown = function (viewerArray, divId, dataSource) {
   let data = {}
   initialize()
 
-  const hasOwnProperty = Object.prototype.hasOwnProperty
-
-  function isEmpty (obj) {
-    if (obj == null) return true
-
-    if (obj.length > 0) return false
-    if (obj.length === 0) return true
-
-    if (typeof obj !== 'object') return true
-
-    for (const key in obj) {
-      if (hasOwnProperty.call(obj, key)) return false
-    }
-
-    return true
-  }
-
   function initialize () {
     const getSlideData = async function () {
       return (await fetch(dataSource)).json() // eslint-disable-line no-undef
@@ -33,6 +17,7 @@ const dropdown = function (viewerArray, divId, dataSource) {
     const x = getSlideData()
     x.then(function (result) {
       data = result
+      // eslint-disable-next-line no-undef
       if (!isEmpty(data)) {
         initTypes()
         initImages()

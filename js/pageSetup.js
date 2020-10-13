@@ -19,7 +19,8 @@ const pageSetup = function (numDivs, prod1, sourceImages, options1) {
       return viewers
     }).then(function (viewers) {
       // Viewers created; add dropdown to page
-      dropdown(viewers, 'selections', 'json/tcga.json') // eslint-disable-line no-undef
+      // eslint-disable-next-line no-new
+      new DropDown(viewers, 'selections', 'json/tcga.json') // eslint-disable-line no-undef
       return viewers
     }).then(function (viewers) {
       // Pan zoom controller
