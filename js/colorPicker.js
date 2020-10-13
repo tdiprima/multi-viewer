@@ -11,8 +11,7 @@ const colorPicker = function (inputElement) {
 }
 
 function create (inputElement) {
-  // eslint-disable-next-line no-undef
-  const cp = new CP(inputElement)
+  const cp = new CP(inputElement) // eslint-disable-line no-undef
 
   cp.self.classList.add('no-alpha')
 

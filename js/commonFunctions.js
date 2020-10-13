@@ -59,7 +59,6 @@ function getAColorThatShowsUp (strokeColor) {
 
 // eslint-disable-next-line no-unused-vars
 function alertMessage (messageObject) {
-  // eslint-disable-next-line no-undef
-  alert(messageObject)
+  alert(messageObject) // eslint-disable-line no-undef
   return true
 }

@@ -1,4 +1,5 @@
 // THIS FUNCTION WILL BE GOING AWAY, EVENTUALLY.
+// eslint-disable-next-line no-unused-vars
 const dropdown = function (viewerArray, divId, dataSource) {
   const cancertypes = ['blca', 'brca', 'cesc', 'gbm', 'luad', 'lusc', 'paad', 'prad', 'skcm', 'ucec']
   const maindiv = document.getElementById(divId)
@@ -27,7 +28,7 @@ const dropdown = function (viewerArray, divId, dataSource) {
 
   function initialize () {
     const getSlideData = async function () {
-      return (await fetch(dataSource)).json()
+      return (await fetch(dataSource)).json() // eslint-disable-line no-undef
     }
     const x = getSlideData()
     x.then(function (result) {
@@ -53,7 +54,7 @@ const dropdown = function (viewerArray, divId, dataSource) {
   }
 
   function imageExists (imageUrl) {
-    const http = new XMLHttpRequest()
+    const http = new XMLHttpRequest() // eslint-disable-line no-undef
     http.open('HEAD', imageUrl, false)
     http.send()
     return http.status !== 404
@@ -71,7 +72,7 @@ const dropdown = function (viewerArray, divId, dataSource) {
         elem.getViewer().open([ti, si])
       })
     } else {
-      alertMessage('Image does not exist\n' + ti)
+      alertMessage('Image does not exist\n' + ti) // eslint-disable-line no-undef
       return false
     }
   }

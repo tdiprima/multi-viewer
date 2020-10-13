@@ -13,8 +13,7 @@ const checkOptions = function (options) {
     }
   }
 
-  // eslint-disable-next-line no-undef
-  const empty = isEmpty(options)
+  const empty = isEmpty(options) // eslint-disable-line no-undef
   if (!empty) {
     returnValue = makeStructuresEqual(weNeedTheseKeys, options)
   } else {

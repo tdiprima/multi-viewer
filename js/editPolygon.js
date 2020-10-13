@@ -17,6 +17,7 @@ function polygonPositionHandler (dim, finalMatrix, fabricObject) {
   // eslint-disable-next-line no-undef
   return fabric.util.transformPoint(
     { x: x, y: y },
+    // eslint-disable-next-line no-undef
     fabric.util.multiplyTransformMatrices(
       fabricObject.canvas.viewportTransform,
       fabricObject.calcTransformMatrix()
@@ -28,6 +29,7 @@ function polygonPositionHandler (dim, finalMatrix, fabricObject) {
 function actionHandler (eventData, transform, x, y) {
   const polygon = transform.target
   const currentControl = polygon.controls[polygon.__corner]
+  // eslint-disable-next-line no-undef
   const mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), 'center', 'center')
   const polygonBaseSize = polygon._getNonTransformedDimensions()
   const size = polygon._getTransformedDimensions(0, 0)

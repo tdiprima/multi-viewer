@@ -130,8 +130,7 @@ function markerHandler (button, gridProps) {
     } else {
       // eslint-disable-next-line no-undef
       toggleButtonHighlight(button) // turn it back off; we're not letting them do this
-      // eslint-disable-next-line no-undef
-      alertMessage('Please draw a grid first.')
+      alertMessage('Please draw a grid first.') // eslint-disable-line no-undef
     }
   }
 }

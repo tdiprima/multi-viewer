@@ -10,8 +10,8 @@ const synchronizeViewers = function (imageViewerArray) {
 
     setPanZoomCurrent(currentViewer, handler)
 
-    // eslint-disable-next-line no-undef
-    mapMarker(currentViewer, this.syncedImageViewers) // set this up while we're here
+    // set this up while we're here
+    mapMarker(currentViewer, this.syncedImageViewers) // eslint-disable-line no-undef
 
     function handler () {
       if (!isActive(currentViewer.id)) {

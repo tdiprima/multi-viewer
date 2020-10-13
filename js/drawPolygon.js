@@ -26,8 +26,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   })
 
   btnDraw.addEventListener('click', function () {
-    // eslint-disable-next-line no-undef
-    toggleButtonHighlight(this)
+    toggleButtonHighlight(this) // eslint-disable-line no-undef
 
     if (canvas.isDrawingMode) {
       turnDrawingOff(canvas, viewer)
@@ -67,8 +66,7 @@ function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
 
   customizePolygonControls(options.path, canvas, viewer)
 
-  // eslint-disable-next-line no-undef
-  clearClassList(button)
+  clearClassList(button) // eslint-disable-line no-undef
 
   button.classList.add('btn')
 
@@ -143,8 +141,7 @@ function convertPathToPolygon (pathObject, canvas, paintBrush) {
     y: item[2]
   }))
 
-  // eslint-disable-next-line no-undef
-  const cornerColor = getAColorThatShowsUp(pathObject.stroke)
+  const cornerColor = getAColorThatShowsUp(pathObject.stroke) // eslint-disable-line no-undef
 
   // eslint-disable-next-line no-undef
   const poly = new fabric.Polygon(_points0, {

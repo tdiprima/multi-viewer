@@ -24,8 +24,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   }
 
   function setFilter () {
-    // eslint-disable-next-line no-undef
-    filter = OpenSeadragon.Filters.GREYSCALE
+    filter = OpenSeadragon.Filters.GREYSCALE // eslint-disable-line no-undef
     filter.prototype.COLORIZE = function (r, g, b) {
       return function (context, callback) {
         const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -59,8 +58,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     })
 
     if (options.toolbarOn) {
-      // eslint-disable-next-line no-undef
-      markupTools(idx, viewer)
+      markupTools(idx, viewer) // eslint-disable-line no-undef
     }
 
     if (options.filterOn) {
