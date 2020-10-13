@@ -1,4 +1,5 @@
 // Image viewer module
+// eslint-disable-next-line no-unused-vars
 const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   // Private variables
   const idx = viewerDivId.replace('viewer', '')
@@ -23,6 +24,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   }
 
   function setFilter () {
+    // eslint-disable-next-line no-undef
     filter = OpenSeadragon.Filters.GREYSCALE
     filter.prototype.COLORIZE = function (r, g, b) {
       return function (context, callback) {
@@ -46,6 +48,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   }
 
   function setViewer (viewerDivId) {
+    // eslint-disable-next-line no-undef
     viewer = OpenSeadragon({
       id: viewerDivId,
       prefixUrl: 'js/vendor/openseadragon/images/',
@@ -56,6 +59,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     })
 
     if (options.toolbarOn) {
+      // eslint-disable-next-line no-undef
       markupTools(idx, viewer)
     }
 

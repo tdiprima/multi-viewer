@@ -1,10 +1,11 @@
+// eslint-disable-next-line no-unused-vars
 const drawPolygon = function (idx, viewer, overlay) {
   const btnDraw = document.getElementById('btnDraw' + idx)
   const mark = document.getElementById('mark' + idx)
 
   const canvas = overlay.fabricCanvas()
 
-  const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
+  const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas) // eslint-disable-line no-undef
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
 
@@ -25,6 +26,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   })
 
   btnDraw.addEventListener('click', function () {
+    // eslint-disable-next-line no-undef
     toggleButtonHighlight(this)
 
     if (canvas.isDrawingMode) {
@@ -65,6 +67,7 @@ function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
 
   customizePolygonControls(options.path, canvas, viewer)
 
+  // eslint-disable-next-line no-undef
   clearClassList(button)
 
   button.classList.add('btn')
@@ -76,7 +79,7 @@ function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
 
 function setGestureSettings (canvas, viewer) {
   if (!canvas.getActiveObject()) {
-    $('.deleteBtn').remove()
+    $('.deleteBtn').remove() // eslint-disable-line no-undef
     viewer.gestureSettingsMouse.clickToZoom = true
   } else {
     viewer.gestureSettingsMouse.clickToZoom = false
@@ -93,11 +96,11 @@ function customizePolygonControls (obj, canvas, viewer) {
 
 function setupDeleteButton (canvas, viewer) {
   function addDeleteBtn (x, y) {
-    $('.deleteBtn').remove()
+    $('.deleteBtn').remove() // eslint-disable-line no-undef
     const btnLeft = x - 10
     const btnTop = y - 10
     const deleteBtn = `<img src="img/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    $('.canvas-container').append(deleteBtn)
+    $('.canvas-container').append(deleteBtn) // eslint-disable-line no-undef
   }
 
   canvas.on('selection:created', function (e) {
@@ -105,28 +108,30 @@ function setupDeleteButton (canvas, viewer) {
   })
 
   canvas.on('object:modified', function (e) {
+    // eslint-disable-next-line no-undef
     if (isRealValue(e.target.oCoords.tr)) {
       addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
     }
   })
 
   canvas.on('object:scaling', function (e) {
-    $('.deleteBtn').remove()
+    $('.deleteBtn').remove() // eslint-disable-line no-undef
   })
 
   canvas.on('object:moving', function (e) {
-    $('.deleteBtn').remove()
+    $('.deleteBtn').remove() // eslint-disable-line no-undef
   })
 
   canvas.on('object:rotating', function (e) {
-    $('.deleteBtn').remove()
+    $('.deleteBtn').remove() // eslint-disable-line no-undef
   })
 
+  // eslint-disable-next-line no-undef
   $('.canvas-container').on('click', '.deleteBtn', function () {
     viewer.gestureSettingsMouse.clickToZoom = false
     if (canvas.getActiveObject()) {
       canvas.remove(canvas.getActiveObject())
-      $('.deleteBtn').remove()
+      $('.deleteBtn').remove() // eslint-disable-line no-undef
     }
     viewer.gestureSettingsMouse.clickToZoom = true
   })
@@ -138,8 +143,10 @@ function convertPathToPolygon (pathObject, canvas, paintBrush) {
     y: item[2]
   }))
 
+  // eslint-disable-next-line no-undef
   const cornerColor = getAColorThatShowsUp(pathObject.stroke)
 
+  // eslint-disable-next-line no-undef
   const poly = new fabric.Polygon(_points0, {
     left: pathObject.left,
     top: pathObject.top,
@@ -187,6 +194,7 @@ function unfillPolygon (pointerEvent, canvas) {
 }
 
 function weHoveredOverPolygon (pointerEvent) {
+  // eslint-disable-next-line no-undef
   return (isRealValue(pointerEvent.target) && pointerEvent.target.type === 'polygon')
 }
 

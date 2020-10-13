@@ -1,5 +1,6 @@
 let sliderIdNum = 0
 
+// eslint-disable-next-line no-unused-vars
 const pageSetup = function (numDivs, prod1, sourceImages, options1) {
   let prod
   let viewers = [] // eslint-disable-line prefer-const
@@ -8,7 +9,7 @@ const pageSetup = function (numDivs, prod1, sourceImages, options1) {
     prod = prod1
 
     new Promise(function (resolve, reject) {
-      const options = checkOptions(options1)
+      const options = checkOptions(options1) // eslint-disable-line no-undef
       return resolve(options)
     }).then(function (options) {
       // Create divs
@@ -18,11 +19,11 @@ const pageSetup = function (numDivs, prod1, sourceImages, options1) {
       return viewers
     }).then(function (viewers) {
       // Viewers created; add dropdown to page
-      dropdown(viewers, 'selections', 'json/tcga.json')
+      dropdown(viewers, 'selections', 'json/tcga.json') // eslint-disable-line no-undef
       return viewers
     }).then(function (viewers) {
       // Pan zoom controller
-      synchronizeViewers(viewers)
+      synchronizeViewers(viewers) // eslint-disable-line no-undef
     }).then(function (result) {
       function test () {
         // TESTING
@@ -80,7 +81,7 @@ const createDivs = function (idx, numDivs, viewers, options) {
 
     createButtons(idx, buttonDiv, numDivs, options)
 
-    colorPicker(document.getElementById('mark' + idx))
+    colorPicker(document.getElementById('mark' + idx)) // eslint-disable-line no-undef
   }
 
   if (options.slidersOn && options.toolbarOn) {
@@ -95,7 +96,7 @@ const createDivs = function (idx, numDivs, viewers, options) {
 
   container.appendChild(viewerDiv)
 
-  viewers.push(new ImageViewer('viewer' + idx, sliders, numDivs, options))
+  viewers.push(new ImageViewer('viewer' + idx, sliders, numDivs, options)) // eslint-disable-line no-undef
 
   // Clear:both between rows
   if (idx % 2 === 0) {
@@ -107,6 +108,7 @@ const createDivs = function (idx, numDivs, viewers, options) {
 
 const createButtons = function (idx, div, numDivs, options) {
   let color
+  // eslint-disable-next-line no-undef
   if (isRealValue(options.paintbrushColor)) {
     color = options.paintbrushColor
   } else {
@@ -158,6 +160,7 @@ const createSliders = function (idx, div, howManyToCreate, options) {
 
 const sliderButtonEvent = function (idx, sliders) {
   const btnSlide = document.getElementById('btnSlide' + idx)
+  // eslint-disable-next-line no-undef
   if (isRealValue(btnSlide)) {
     btnSlide.addEventListener('click', function () {
       // (2) sliders.
@@ -176,7 +179,7 @@ const sliderButtonEvent = function (idx, sliders) {
         // Style the button
         this.innerHTML = '<i class="fa fa-sliders"></i> Show sliders'
       }
-      toggleButtonHighlight(btnSlide)
+      toggleButtonHighlight(btnSlide) // eslint-disable-line no-undef
     })
   } else {
     console.log('slide is null')

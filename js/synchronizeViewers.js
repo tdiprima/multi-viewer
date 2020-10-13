@@ -1,4 +1,5 @@
 // synchronize pan & zoom
+// eslint-disable-next-line no-unused-vars
 const synchronizeViewers = function (imageViewerArray) {
   this.syncedImageViewers = []
   this.activeViewerId = null
@@ -9,6 +10,7 @@ const synchronizeViewers = function (imageViewerArray) {
 
     setPanZoomCurrent(currentViewer, handler)
 
+    // eslint-disable-next-line no-undef
     mapMarker(currentViewer, this.syncedImageViewers) // set this up while we're here
 
     function handler () {
@@ -37,6 +39,7 @@ function isActive (currentId) {
 }
 
 function init (currentId) {
+  // eslint-disable-next-line no-undef
   if (!isRealValue(this.activeViewerId)) {
     this.activeViewerId = currentId
   }

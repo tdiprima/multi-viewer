@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 const editPolygon = function (idx, overlay) {
   document.getElementById('btnEdit' + idx).addEventListener('click', function () {
+    // eslint-disable-next-line no-undef
     toggleButtonHighlight(this)
     Edit(overlay.fabricCanvas())
   })
@@ -11,6 +13,8 @@ function polygonPositionHandler (dim, finalMatrix, fabricObject) {
   // current canvas position for that particular point.
   const x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x)
   const y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y)
+
+  // eslint-disable-next-line no-undef
   return fabric.util.transformPoint(
     { x: x, y: y },
     fabric.util.multiplyTransformMatrices(
@@ -39,6 +43,7 @@ function actionHandler (eventData, transform, x, y) {
 function anchorWrapper (anchorIndex, fn) {
   return function (eventData, transform, x, y) {
     const fabricObject = transform.target
+    // eslint-disable-next-line no-undef
     const absolutePoint = fabric.util.transformPoint({
       x: (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x),
       y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y)
@@ -77,10 +82,12 @@ function getPolygon (canvas) {
 function Edit (canvas) {
   const fabricPolygon = getPolygon(canvas)
 
+  // eslint-disable-next-line no-undef
   if (isRealValue(fabricPolygon)) {
     canvas.setActiveObject(fabricPolygon)
     fabricPolygon.edit = !fabricPolygon.edit
 
+    // eslint-disable-next-line no-undef
     const cornerColor = getAColorThatShowsUp(fabricPolygon.stroke)
 
     if (fabricPolygon.edit) {
@@ -89,6 +96,7 @@ function Edit (canvas) {
       fabricPolygon.cornerColor = cornerColor
       // Create one new control for each polygon point
       fabricPolygon.controls = fabricPolygon.points.reduce(function (acc, point, index) {
+        // eslint-disable-next-line no-undef
         acc['p' + index] = new fabric.Control({
           positionHandler: polygonPositionHandler,
           actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
@@ -100,11 +108,13 @@ function Edit (canvas) {
     } else {
       fabricPolygon.cornerColor = cornerColor
       fabricPolygon.cornerStyle = 'rect'
+      // eslint-disable-next-line no-undef
       fabricPolygon.controls = fabric.Object.prototype.controls
     }
     fabricPolygon.hasBorders = !fabricPolygon.edit
     canvas.requestRenderAll()
   } else {
+    // eslint-disable-next-line no-undef
     alertMessage('Please select a polygon for editing.')
   }
 }

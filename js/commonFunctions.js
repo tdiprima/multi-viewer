@@ -5,6 +5,7 @@ function clearClassList (element) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function toggleButtonHighlight (btn) {
   const isOn = btn.classList.contains('btnOn')
   clearClassList(btn)
@@ -15,10 +16,12 @@ function toggleButtonHighlight (btn) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function isRealValue (obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
+// eslint-disable-next-line no-unused-vars
 function isEmpty (value) {
   const isEmptyObject = function (a) {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
@@ -37,6 +40,7 @@ function isEmpty (value) {
   )
 }
 
+// eslint-disable-next-line no-unused-vars
 function getAColorThatShowsUp (strokeColor) {
   function isBlueIsh () {
     return strokeColor.endsWith('ff')
@@ -53,7 +57,9 @@ function getAColorThatShowsUp (strokeColor) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function alertMessage (messageObject) {
+  // eslint-disable-next-line no-undef
   alert(messageObject)
   return true
 }

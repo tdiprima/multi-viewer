@@ -1,4 +1,5 @@
 // On right-click in viewer, add map marker to the other viewers
+// eslint-disable-next-line no-unused-vars
 const mapMarker = function (currentOSDViewer, syncedNViewers) {
   overrideRightClickMenu(currentOSDViewer.element)
 

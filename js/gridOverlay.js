@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const gridOverlay = function (idx, overlay) {
   const cellSize = 50
 
@@ -25,6 +26,7 @@ const gridOverlay = function (idx, overlay) {
 }
 
 function gridHandler (button, gridProps) {
+  // eslint-disable-next-line no-undef
   toggleButtonHighlight(button)
 
   if (buttonIsOn(button)) {
@@ -64,6 +66,7 @@ function turnGridOn (gridProps) {
 
 function createHorizontalLines (gridProps, lineProps) {
   for (let y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
+    // eslint-disable-next-line no-undef
     gridProps.canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
     gridProps.cellY[y + 1] = y * gridProps.cellHeight // and keep track of the y cells
   }
@@ -71,6 +74,7 @@ function createHorizontalLines (gridProps, lineProps) {
 
 function createVerticalLines (gridProps, lineProps) {
   for (let x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
+    // eslint-disable-next-line no-undef
     gridProps.canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
     gridProps.cellX[x + 1] = x * gridProps.cellWidth // and keep track of the x cells
   }
@@ -80,6 +84,7 @@ function fillInGrid (pointerEvent, gridProps) {
   const mousePosition = getMousePosition(pointerEvent, gridProps)
   const cellPosition = getCellPosition(mousePosition)
 
+  // eslint-disable-next-line no-undef
   const rect = new fabric.Rect({
     left: gridProps.cellX[cellPosition.x],
     top: gridProps.cellY[cellPosition.y],
@@ -106,6 +111,7 @@ function getCellPosition (mousePosition) {
 }
 
 function markerHandler (button, gridProps) {
+  // eslint-disable-next-line no-undef
   toggleButtonHighlight(button)
   const on = buttonIsOn(button)
 
@@ -122,7 +128,9 @@ function markerHandler (button, gridProps) {
       })
       button.innerHTML = '<i class="fa fa-paint-brush"></i> Done marking'
     } else {
+      // eslint-disable-next-line no-undef
       toggleButtonHighlight(button) // turn it back off; we're not letting them do this
+      // eslint-disable-next-line no-undef
       alertMessage('Please draw a grid first.')
     }
   }
