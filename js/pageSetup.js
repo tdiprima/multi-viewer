@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const pageSetup = function (numDivs, prod, sourceImages, options) {
+const pageSetup = function (numDivs, sourceImages, options) {
   let viewers = [] // eslint-disable-line prefer-const
   const rangeSliders = new Sliders() // eslint-disable-line no-undef
   const page = new Page() // eslint-disable-line no-undef
@@ -23,24 +23,16 @@ const pageSetup = function (numDivs, prod, sourceImages, options) {
       // Pan zoom controller
       synchronizeViewers(viewers) // eslint-disable-line no-undef
     }).then(function (result) {
-      function test () {
-        // TESTING
+      if (sourceImages.length === 1) {
+        // Testing
         viewers.forEach(function (elem) {
           elem.getViewer().open(sourceImages[0]) // <- open()
         })
-      }
-
-      function live () {
+      } else {
         // Set viewer source
         viewers.forEach(function (elem) {
           elem.setSources(sourceImages, [1.0, 1.0]) // <- setSources()
         })
-      }
-
-      if (prod) {
-        live()
-      } else {
-        test()
       }
     })
   })
