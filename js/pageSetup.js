@@ -1,9 +1,8 @@
-let sliderIdNum = 0
-
 // eslint-disable-next-line no-unused-vars
 const pageSetup = function (numDivs, prod1, sourceImages, options1) {
   let prod
   let viewers = [] // eslint-disable-line prefer-const
+  const rangeSliders = new Sliders() // eslint-disable-line no-undef
 
   document.addEventListener('DOMContentLoaded', function () {
     prod = prod1
@@ -14,7 +13,7 @@ const pageSetup = function (numDivs, prod1, sourceImages, options1) {
     }).then(function (options) {
       // Create divs
       for (let idx = 1; idx <= numDivs; idx++) {
-        createDivs(idx, numDivs, viewers, options)
+        createDivs(idx, numDivs, viewers, rangeSliders, options)
       }
       return viewers
     }).then(function (viewers) {
@@ -48,7 +47,7 @@ const pageSetup = function (numDivs, prod1, sourceImages, options1) {
   })
 }
 
-const createDivs = function (idx, numDivs, viewers, options) {
+const createDivs = function (idx, numDivs, viewers, rangeSliders, options) {
   let name
 
   const container = document.createElement('div')
@@ -68,9 +67,9 @@ const createDivs = function (idx, numDivs, viewers, options) {
   controlsDiv.append(rangeDiv)
 
   // 2 sliders
-  let sliders
+  let sliderElements
   if (options.slidersOn) {
-    sliders = createSliders(idx, rangeDiv, 2, options)
+    sliderElements = rangeSliders.createSliders(idx, rangeDiv, 2, options)
   }
 
   if (options.toolbarOn) {
@@ -84,8 +83,8 @@ const createDivs = function (idx, numDivs, viewers, options) {
     colorPicker(document.getElementById('mark' + idx)) // eslint-disable-line no-undef
   }
 
-  if (options.slidersOn && options.toolbarOn) {
-    sliderButtonEvent(idx, sliders)
+  if (options.slidersOn) {
+    rangeSliders.sliderButtonEvent(idx, sliderElements)
   }
 
   name = 'viewer'
@@ -96,7 +95,7 @@ const createDivs = function (idx, numDivs, viewers, options) {
 
   container.appendChild(viewerDiv)
 
-  viewers.push(new ImageViewer('viewer' + idx, sliders, numDivs, options)) // eslint-disable-line no-undef
+  viewers.push(new ImageViewer('viewer' + idx, sliderElements, numDivs, options)) // eslint-disable-line no-undef
 
   // Clear:both between rows
   if (idx % 2 === 0) {
@@ -130,58 +129,4 @@ const createButtons = function (idx, div, numDivs, options) {
         <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;
         <button id="btnMapMarker" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
     </a>`
-}
-
-const createSliders = function (idx, div, howManyToCreate, options) {
-  const sliders = []
-  const d = document.createDocumentFragment()
-
-  for (let i = 0; i < howManyToCreate; i++) {
-    const range = document.createElement('input')
-    range.type = 'range'
-    sliderIdNum += 1
-    range.id = 'sliderRange' + sliderIdNum
-    range.min = '0'
-    range.max = '100'
-    range.value = '100'
-    range.setAttribute('class', 'slider-square')
-    if (options.toolbarOn) {
-      range.style.display = 'none'
-    } else {
-      range.style.display = 'inline' // bc we have a btn to toggle it
-    }
-
-    d.appendChild(range) // append div to fragment
-    div.appendChild(d) // append fragment to parent
-    sliders.push(range)
-  }
-  return sliders
-}
-
-const sliderButtonEvent = function (idx, sliders) {
-  const btnSlide = document.getElementById('btnSlide' + idx)
-  // eslint-disable-next-line no-undef
-  if (isRealValue(btnSlide)) {
-    btnSlide.addEventListener('click', function () {
-      // (2) sliders.
-      if (sliders[0].style.display === 'none') { // no need to check both; just the one.
-        // Show the sliders
-        sliders[0].style.display = 'inline'
-        sliders[1].style.display = 'inline'
-
-        // Style the button
-        this.innerHTML = '<i class="fa fa-sliders"></i> Hide sliders'
-      } else {
-        // Hide the sliders
-        sliders[0].style.display = 'none'
-        sliders[1].style.display = 'none'
-
-        // Style the button
-        this.innerHTML = '<i class="fa fa-sliders"></i> Show sliders'
-      }
-      toggleButtonHighlight(btnSlide) // eslint-disable-line no-undef
-    })
-  } else {
-    console.log('slide is null')
-  }
 }
