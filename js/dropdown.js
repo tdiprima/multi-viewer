@@ -1,5 +1,5 @@
 // THIS FUNCTION WILL BE GOING AWAY, EVENTUALLY.
-function dropdown (viewerArray, divId, dataSource) {
+const dropdown = function (viewerArray, divId, dataSource) {
   const cancertypes = ['blca', 'brca', 'cesc', 'gbm', 'luad', 'lusc', 'paad', 'prad', 'skcm', 'ucec']
   const maindiv = document.getElementById(divId)
   const iiif = window.location.origin + '/iiif/?iiif=/tcgaseg'

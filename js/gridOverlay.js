@@ -1,4 +1,4 @@
-function gridOverlay (idx, overlay) {
+const gridOverlay = function (idx, overlay) {
   const cellSize = 50
 
   const gridProps = {

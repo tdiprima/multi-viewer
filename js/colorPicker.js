@@ -1,5 +1,6 @@
 // Utilizes: https://github.com/taufik-nurrohman/color-picker
-function colorPicker (inputElement) {
+// eslint-disable-next-line no-unused-vars
+const colorPicker = function (inputElement) {
   const cp = create(inputElement)
 
   setColorAndStyle(cp)
@@ -10,6 +11,7 @@ function colorPicker (inputElement) {
 }
 
 function create (inputElement) {
+  // eslint-disable-next-line no-undef
   const cp = new CP(inputElement)
 
   cp.self.classList.add('no-alpha')

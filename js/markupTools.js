@@ -1,4 +1,4 @@
-function markupTools (idx, viewer) {
+const markupTools = function (idx, viewer) {
   const overlay = viewer.fabricjsOverlay({
     scale: 1000
   })

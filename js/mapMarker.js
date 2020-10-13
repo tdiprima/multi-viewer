@@ -1,5 +1,5 @@
 // On right-click in viewer, add map marker to the other viewers
-function mapMarker (currentOSDViewer, syncedNViewers) {
+const mapMarker = function (currentOSDViewer, syncedNViewers) {
   overrideRightClickMenu(currentOSDViewer.element)
 
   handleMarkerDisplay(currentOSDViewer, syncedNViewers)

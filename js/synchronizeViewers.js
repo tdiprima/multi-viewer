@@ -1,5 +1,5 @@
 // synchronize pan & zoom
-function synchronizeViewers (imageViewerArray) {
+const synchronizeViewers = function (imageViewerArray) {
   this.syncedImageViewers = []
   this.activeViewerId = null
   this.numViewers = imageViewerArray.length

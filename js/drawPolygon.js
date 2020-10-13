@@ -1,4 +1,4 @@
-function drawPolygon (idx, viewer, overlay) {
+const drawPolygon = function (idx, viewer, overlay) {
   const btnDraw = document.getElementById('btnDraw' + idx)
   const mark = document.getElementById('mark' + idx)
 

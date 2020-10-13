@@ -1,6 +1,6 @@
 let sliderIdNum = 0
 
-function pageSetup (numDivs, prod1, sourceImages, options1) {
+const pageSetup = function (numDivs, prod1, sourceImages, options1) {
   let prod
   let viewers = [] // eslint-disable-line prefer-const
 
