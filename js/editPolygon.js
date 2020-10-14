@@ -51,6 +51,7 @@ function anchorWrapper (anchorIndex, fn) {
       y: (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y)
     }, fabricObject.calcTransformMatrix())
     const actionPerformed = fn(eventData, transform, x, y)
+    // IMPORTANT!  VARIABLE 'newDim' NEEDS TO EXIST. Otherwise, the bounding box gets borked:
     // eslint-disable-next-line no-unused-vars
     const newDim = fabricObject._setPositionDimensions({}) // DO NOT TOUCH THIS VARIABLE.
     const polygonBaseSize = fabricObject._getNonTransformedDimensions()
@@ -63,19 +64,19 @@ function anchorWrapper (anchorIndex, fn) {
 
 function getPolygon (canvas) {
   if (canvas.getActiveObject()) {
-    // If one is selected, that's the one they want to work on.
+    // User selected object that they want to work on.
     return canvas.getActiveObject()
   } else {
     const x = canvas.getObjects('polygon')
     if (x.length === 0) {
-      // No polygons exist on this canvas.
+      // No polygons exist on this canvas. User will get an alert message.
       return 'null'
     }
     if (x.length === 1) {
-      // Return the first one.
+      // There's only one object; return that one.
       return x[0]
     } else {
-      // User needs to select which one they want.
+      // User will get an alert message that they need to select which one they want.
       return 'null'
     }
   }
