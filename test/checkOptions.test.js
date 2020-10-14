@@ -1,40 +1,32 @@
 const makeStructuresEqual = require('../js/checkOptions')
 let result
 
-const actual = {
-  foo: 1,
-  bar: 2,
-  bas: {
-    baz: 3
-  }
-}
-
-const expected = {
+result = makeStructuresEqual({
   foo: 1,
   bar: 2,
   zoo: 4,
   bas: {
     baz: 3
   }
-}
-
-result = makeStructuresEqual(expected, actual)
+}, {
+  foo: 1,
+  bar: 2,
+  bas: {
+    baz: 3
+  }
+})
 console.log(result)
 
-const obj1 = {
+result = makeStructuresEqual({
   brand: 'brand 1',
   navigation: { opacity: 0.2 }
-}
-
-const obj2 = {
+}, {
   brand: 'brand 2',
   navigation: { opacity: 0.5 }
-}
-
-result = makeStructuresEqual(obj1, obj2)
+})
 console.log(result)
 
-const weNeedTheseKeys = {
+result = makeStructuresEqual({
   filterOn: true,
   slidersOn: true,
   toolbarOn: true,
@@ -44,16 +36,15 @@ const weNeedTheseKeys = {
     showHomeControl: true,
     showZoomControl: true
   }
-}
-
-const toMatch = {
+}, {
   filterOn: true,
   slidersOn: true,
   toolbarOn: true,
   viewerOpts: {
     showZoomControl: true
   }
-}
+})
+console.log(result)
 
-result = makeStructuresEqual(weNeedTheseKeys, toMatch)
+result = makeStructuresEqual({ foo: 1 }, {})
 console.log(result)
