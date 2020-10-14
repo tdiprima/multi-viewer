@@ -29,15 +29,20 @@ function addKeyValue (expected, actual, key) {
 }
 
 function makeStructuresEqual (expected, actual) {
-  for (const key in expected) {
-    if (!Object.prototype.hasOwnProperty.call(actual, key)) {
-      addKeyValue(expected, actual, key)
+  if (actual === null || typeof actual === 'undefined') {
+    return expected
+  } else {
+    for (const key in expected) {
+      if (!Object.prototype.hasOwnProperty.call(actual, key)) {
+        addKeyValue(expected, actual, key)
+      }
     }
+    return actual
   }
-  return actual
 }
 
 // Uncomment lines while testing:
 // const isEmpty = require('../js/commonFunctions')
-// module.exports = checkOptions
-// OR: module.exports = makeStructuresEqual
+// Uncomment line while testing:
+// module.exports = checkOptions // <- Either THIS...
+// module.exports = makeStructuresEqual // <- OR THAT.
