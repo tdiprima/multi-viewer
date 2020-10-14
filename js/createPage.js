@@ -4,8 +4,7 @@ const Page = function () {
   return {
     createDivs: function (idx, numDivs, viewers, rangeSliders, options) {
       let name
-      // eslint-disable-next-line no-undef
-      const opts = isRealValue(options)
+      const opts = isRealValue(options) // eslint-disable-line no-undef
       if (!opts) {
         // This has been error-trapped & corrected prior to this point. But...
         console.warn('createPage.js: options is undefined; please check.', options)
