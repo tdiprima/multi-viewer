@@ -1,4 +1,3 @@
-// TODO: UNCOMMENT module.exports, etc, IN checkOptions.js AND commonFunctions.js FOR TESTING
 const checkOptions = require('../js/checkOptions')
 let result
 

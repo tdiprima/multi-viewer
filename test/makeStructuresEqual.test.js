@@ -1,4 +1,4 @@
-// TODO: Uncomment module.exports=makeStructuresEqual in checkOptions.js and module.exports=isEqual in commonFunctions.js
+// Uncomment module.exports=makeStructuresEqual in checkOptions.js and module.exports=isEqual in commonFunctions.js
 const makeStructuresEqual = require('../js/checkOptions')
 let result
 
