@@ -133,7 +133,10 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
           viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
         })
       }).fail(function () {
-        document.write("<h1>ImageViewer.js: The document you've requested does not exist. Please check the url:</h1>" + imageArray[0])
+        const url = imageArray[0]
+        const message = 'ImageViewer.js: The requested url is not good. Please check it:'
+        document.write('<h1>' + message + '</h1>' + url)
+        console.warn(message, url)
       })
 
       viewer.world.addHandler('add-item', function (event) {

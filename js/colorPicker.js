@@ -12,7 +12,7 @@ const colorPicker = function (inputElement) {
 
 function create (inputElement) {
   if (inputElement === null || typeof inputElement === 'undefined') {
-    document.write('<h1>colorPicker.js: Expected input argument, but received none.</h1>')
+    console.error('colorPicker.js: Expected input argument, but received none.')
     return false
   } else {
     const picker = new CP(inputElement) // eslint-disable-line no-undef

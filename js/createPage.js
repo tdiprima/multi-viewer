@@ -4,6 +4,12 @@ const Page = function () {
   return {
     createDivs: function (idx, numDivs, viewers, rangeSliders, options) {
       let name
+      // eslint-disable-next-line no-undef
+      const opts = isRealValue(options)
+      if (!opts) {
+        console.warn('createPage.js: options is undefined; please check.', options)
+        return false
+      }
 
       const container = document.createElement('div')
       container.className = 'divSquare'
@@ -23,11 +29,11 @@ const Page = function () {
 
       // 2 sliders
       let sliderElements
-      if (options.slidersOn) {
+      if (opts && options.slidersOn) {
         sliderElements = rangeSliders.createSliders(idx, rangeDiv, 2, options)
       }
 
-      if (options.toolbarOn) {
+      if (opts && options.toolbarOn) {
         const buttonDiv = document.createElement('div') // div containing 'buttons'
         buttonDiv.classList.add('floated')
         buttonDiv.classList.add('buttons')
@@ -38,7 +44,7 @@ const Page = function () {
         colorPicker(document.getElementById('mark' + idx)) // eslint-disable-line no-undef
       }
 
-      if (options.slidersOn) {
+      if (opts && options.slidersOn) {
         rangeSliders.sliderButtonEvent(idx, sliderElements)
       }
 
