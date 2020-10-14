@@ -87,6 +87,15 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     }
   }
 
+  function showStopperResponse (url, jqXHR) {
+    const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
+    console.warn(message)
+    console.log('jqXHR object:', jqXHR)
+    console.log('URL', url)
+    document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
+    throw new Error('Something went wrong.') // Terminates the script.
+  }
+
   function getIIIFTileUrl (source, level, x, y) {
     const scale = Math.pow(0.5, source.maxLevel - level)
     const levelWidth = Math.ceil(source.width * scale)
@@ -134,9 +143,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
         })
       }).fail(function (jqXHR, statusText) {
         const url = imageArray[0]
-        const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
-        document.write('<h1>' + message + '</h1><b>URL:</b>&nbsp;' + url + '<br><b>status:&nbsp;</b>' + jqXHR.status + '<br><b>statusText:</b>&nbsp;' + statusText)
-        throw new Error('Something went wrong.')
+        showStopperResponse(url, jqXHR, statusText)
       })
 
       viewer.world.addHandler('add-item', function (event) {
