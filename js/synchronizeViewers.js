@@ -1,38 +1,33 @@
 // Synchronize pan & zoom
 // eslint-disable-next-line no-unused-vars
 const synchronizeViewers = function (imageViewerArray) {
-  // eslint-disable-next-line no-undef
-  if (isEmpty(imageViewerArray)) {
-    console.error('synchronizeViewers.js: Expected input argument, but received none.')
-  } else {
-    if (!(imageViewerArray[0] instanceof Object)) {
-      console.error('synchronizeViewers.js: Array elements should be ImageViewer.')
-    } else {
-      this.syncedImageViewers = []
-      this.activeViewerId = null
-      this.numViewers = imageViewerArray.length
+  const isGood = checkData(imageViewerArray)
 
-      imageViewerArray.forEach(function (imageViewer) {
-        const currentViewer = imageViewer.getViewer()
+  if (isGood) {
+    this.syncedImageViewers = []
+    this.activeViewerId = null
+    this.numViewers = imageViewerArray.length
 
-        setPanZoomCurrent(currentViewer, handler)
+    imageViewerArray.forEach(function (imageViewer) {
+      const currentViewer = imageViewer.getViewer()
 
-        // set this up while we're here
-        mapMarker(currentViewer, this.syncedImageViewers) // eslint-disable-line no-undef
+      setPanZoomCurrent(currentViewer, handler)
 
-        function handler () {
-          if (!isActive(currentViewer.id)) {
-            return
-          }
+      // set this up while we're here
+      mapMarker(currentViewer, this.syncedImageViewers) // eslint-disable-line no-undef
 
-          setPanZoomOthers(imageViewer)
-
-          resetFlag()
+      function handler () {
+        if (!isActive(currentViewer.id)) {
+          return
         }
 
-        this.syncedImageViewers.push(imageViewer)
-      })
-    }
+        setPanZoomOthers(imageViewer)
+
+        resetFlag()
+      }
+
+      this.syncedImageViewers.push(imageViewer)
+    })
   }
 }
 
@@ -98,6 +93,21 @@ function setPanZoomOthers (imageViewer) {
 
 function resetFlag () {
   this.activeViewerId = null
+}
+
+function checkData (imageViewerArray) {
+  // eslint-disable-next-line no-undef
+  if (isEmpty(imageViewerArray)) {
+    console.error('synchronizeViewers.js: Expected input argument, but received none.')
+    return false
+  }
+
+  if (!(imageViewerArray[0] instanceof Object)) {
+    console.error('synchronizeViewers.js: Array elements should be ImageViewer.')
+    return false
+  }
+
+  return true
 }
 
 // const isEmpty = require('../js/commonFunctions')
