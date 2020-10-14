@@ -7,6 +7,7 @@ const Page = function () {
       // eslint-disable-next-line no-undef
       const opts = isRealValue(options)
       if (!opts) {
+        // This has been error-trapped & corrected prior to this point. But...
         console.warn('createPage.js: options is undefined; please check.', options)
         return false
       }
@@ -78,7 +79,7 @@ const Page = function () {
     <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`
 
       if (numDivs <= 1) {
-        htm = ''
+        htm = '' // There's nothing to match pan/zoom with; so leave it blank.
       }
 
       div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
