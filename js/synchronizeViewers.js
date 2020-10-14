@@ -87,11 +87,11 @@ function setPanZoomOthers (imageViewer) {
     }
 
     if (isPanOn(syncedObject) && isPanOn(imageViewer)) {
-      syncedViewer.viewport.panTo(currentViewer.viewport.getCenter(), false)
+      syncedViewer.viewport.panTo(currentViewer.viewport.getCenter(false), false)
     }
 
     if (isZoomOn(syncedObject) && isZoomOn(imageViewer)) {
-      syncedViewer.viewport.zoomTo(currentViewer.viewport.getZoom())
+      syncedViewer.viewport.zoomTo(currentViewer.viewport.getZoom(false))
     }
   })
 }
