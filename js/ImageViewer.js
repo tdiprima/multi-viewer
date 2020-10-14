@@ -132,11 +132,11 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
         imageArray.forEach(function (image, index) {
           viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
         })
-      }).fail(function () {
+      }).fail(function (jqXHR, statusText) {
         const url = imageArray[0]
-        const message = 'ImageViewer.js: The requested url is not good. Please check it:'
-        document.write('<h1>' + message + '</h1>' + url)
-        console.warn(message, url)
+        const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
+        document.write('<h1>' + message + '</h1><b>URL:</b>&nbsp;' + url + '<br><b>status:&nbsp;</b>' + jqXHR.status + '<br><b>statusText:</b>&nbsp;' + statusText)
+        throw new Error('Something went wrong.')
       })
 
       viewer.world.addHandler('add-item', function (event) {
