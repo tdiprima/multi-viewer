@@ -14,6 +14,8 @@ const checkOptions = function (options) {
   }
 
   const empty = isEmpty(options) // eslint-disable-line no-undef
+  console.log('options:', options)
+  console.log('empty?', empty)
   if (!empty) {
     returnValue = makeStructuresEqual(weNeedTheseKeys, options)
   } else {
@@ -35,5 +37,7 @@ function makeStructuresEqual (expected, actual) {
   return actual
 }
 
-// Uncomment line while testing:
-// module.exports = makeStructuresEqual
+// Uncomment lines while testing:
+// const isEmpty = require('../js/commonFunctions')
+// module.exports = checkOptions
+// OR: module.exports = makeStructuresEqual

@@ -22,7 +22,7 @@ function isRealValue (obj) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function isEmpty (value) {
+const isEmpty = function (value) {
   const isEmptyObject = function (a) {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
       const hasNonempty = Object.keys(a).some(function nonEmpty (element) {
@@ -39,6 +39,8 @@ function isEmpty (value) {
     value === false || typeof value === 'undefined' || value === null || (typeof value === 'object' && isEmptyObject(value))
   )
 }
+// Uncomment while testing:
+// module.exports = isEmpty
 
 // eslint-disable-next-line no-unused-vars
 function getAColorThatShowsUp (strokeColor) {
