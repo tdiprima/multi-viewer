@@ -8,20 +8,23 @@ const colorPicker = function (inputElement) {
   handleShowHide(cp)
 
   handleExit(cp)
+
+  return cp
 }
 
 function create (inputElement) {
-  const cp = new CP(inputElement) // eslint-disable-line no-undef
+  const picker = new CP(inputElement) // eslint-disable-line no-undef
 
-  cp.self.classList.add('no-alpha')
+  picker.self.classList.add('no-alpha')
 
-  cp.on('blur', function () {
+  picker.on('blur', function () {
   })
 
-  cp.on('focus', function () {
+  picker.on('focus', function () {
   })
 
-  return cp
+  printInfo(picker)
+  return picker
 }
 
 function setColorAndStyle (cp) {
@@ -43,4 +46,10 @@ function handleExit (cp) {
   document.documentElement.addEventListener('click', function () {
     cp.exit()
   }, false)
+}
+
+function printInfo (cp) {
+  console.log('self:', cp.self)
+  console.log('source:', cp.source)
+  console.log('state:', cp.state)
 }
