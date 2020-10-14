@@ -44,6 +44,3 @@ function handleExit (cp) {
     cp.exit()
   }, false)
 }
-
-// Uncomment line while testing:
-// module.exports = colorPicker
