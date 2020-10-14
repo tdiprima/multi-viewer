@@ -13,13 +13,16 @@
 </head>
 <body>
 <h1>Expect color picker to work in browser</h1>
-<div><mark id="mark1">#0ff</mark></div>
+<div><mark id="myMark">#0ff</mark></div>
 <script src="../js/vendor/color-picker.min.js"></script>
 <script src="../js/colorPicker.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const mark = document.getElementById('mark1')
-    colorPicker(mark)
+    const myMark = document.getElementById('myMark')
+    // Test no input argument:
+    // colorPicker() // Uncomment for testing.
+    // Test:
+    colorPicker(myMark)
   })
 </script>
 </body>

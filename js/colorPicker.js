@@ -2,29 +2,31 @@
 // eslint-disable-next-line no-unused-vars
 const colorPicker = function (inputElement) {
   const cp = create(inputElement)
-
-  setColorAndStyle(cp)
-
-  handleShowHide(cp)
-
-  handleExit(cp)
-
+  if (cp) {
+    setColorAndStyle(cp)
+    handleShowHide(cp)
+    handleExit(cp)
+  }
   return cp
 }
 
 function create (inputElement) {
-  const picker = new CP(inputElement) // eslint-disable-line no-undef
+  if (inputElement === null || typeof inputElement === 'undefined') {
+    document.write('<h1>colorPicker.js: Expected input argument, but received none.</h1>')
+    return false
+  } else {
+    const picker = new CP(inputElement) // eslint-disable-line no-undef
+    picker.self.classList.add('no-alpha')
 
-  picker.self.classList.add('no-alpha')
+    picker.on('blur', function () {
+    })
 
-  picker.on('blur', function () {
-  })
+    picker.on('focus', function () {
+    })
 
-  picker.on('focus', function () {
-  })
-
-  printInfo(picker)
-  return picker
+    // printInfo(picker)
+    return picker
+  }
 }
 
 function setColorAndStyle (cp) {
@@ -48,6 +50,7 @@ function handleExit (cp) {
   }, false)
 }
 
+// eslint-disable-next-line no-unused-vars
 function printInfo (cp) {
   console.log('self:', cp.self)
   console.log('source:', cp.source)
