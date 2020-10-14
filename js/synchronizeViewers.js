@@ -1,30 +1,39 @@
-// synchronize pan & zoom
+// Synchronize pan & zoom
 // eslint-disable-next-line no-unused-vars
 const synchronizeViewers = function (imageViewerArray) {
-  this.syncedImageViewers = []
-  this.activeViewerId = null
-  this.numViewers = imageViewerArray.length
+  // eslint-disable-next-line no-undef
+  if (isEmpty(imageViewerArray)) {
+    console.error('synchronizeViewers.js: Expected input argument, but received none.')
+  } else {
+    if (!(imageViewerArray[0] instanceof Object)) {
+      console.error('synchronizeViewers.js: Array elements should be ImageViewer.')
+    } else {
+      this.syncedImageViewers = []
+      this.activeViewerId = null
+      this.numViewers = imageViewerArray.length
 
-  imageViewerArray.forEach(function (imageViewer) {
-    const currentViewer = imageViewer.getViewer()
+      imageViewerArray.forEach(function (imageViewer) {
+        const currentViewer = imageViewer.getViewer()
 
-    setPanZoomCurrent(currentViewer, handler)
+        setPanZoomCurrent(currentViewer, handler)
 
-    // set this up while we're here
-    mapMarker(currentViewer, this.syncedImageViewers) // eslint-disable-line no-undef
+        // set this up while we're here
+        mapMarker(currentViewer, this.syncedImageViewers) // eslint-disable-line no-undef
 
-    function handler () {
-      if (!isActive(currentViewer.id)) {
-        return
-      }
+        function handler () {
+          if (!isActive(currentViewer.id)) {
+            return
+          }
 
-      setPanZoomOthers(imageViewer)
+          setPanZoomOthers(imageViewer)
 
-      resetFlag()
+          resetFlag()
+        }
+
+        this.syncedImageViewers.push(imageViewer)
+      })
     }
-
-    this.syncedImageViewers.push(imageViewer)
-  })
+  }
 }
 
 function setPanZoomCurrent (currentViewer, handler) {
@@ -78,7 +87,7 @@ function setPanZoomOthers (imageViewer) {
     }
 
     if (isPanOn(syncedObject) && isPanOn(imageViewer)) {
-      syncedViewer.viewport.panTo(currentViewer.viewport.getCenter())
+      syncedViewer.viewport.panTo(currentViewer.viewport.getCenter(), false)
     }
 
     if (isZoomOn(syncedObject) && isZoomOn(imageViewer)) {
@@ -90,3 +99,6 @@ function setPanZoomOthers (imageViewer) {
 function resetFlag () {
   this.activeViewerId = null
 }
+
+// const isEmpty = require('../js/commonFunctions')
+// module.exports = synchronizeViewers
