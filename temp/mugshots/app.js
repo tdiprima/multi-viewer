@@ -1,190 +1,139 @@
 (function () {
-    window.addEventListener('load', function () {
+  window.addEventListener('load', function () {
+    const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
+    const size = 256
+    let viewer, canvas, vpt
 
-        // Here's the Image Information Request URI
-        const imgUrl = 'https://libimages1.princeton.edu/loris/pudl0001/4609321/s42/00000001.jp2'
-        const size = 256;
-        let viewer, canvas, vpt;
+    fetch(imgUrl + '/info.json')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        let serialized = CircularJSON.stringify(data)
+        console.log('serialized"\n', serialized)
+        createViewer(data)
+        createScroller(data)
+      })
 
-        // Fetch the image metadata
-        fetch(imgUrl + '/info.json')
-          .then(response => response.json())
-          .then(data => {
-              createViewer(data);
-              createScroller(data);
-          });
+    function createViewer (tileSourceIIIF) {
+      viewer = OpenSeadragon({
+        id: 'contentDiv',
+        prefixUrl: '//openseadragon.github.io/openseadragon/images/',
+        tileSources: [{
+          tileSource: tileSourceIIIF
+        }]
+      })
 
-        // Set up OSD viewer with info that we fetched
-        function createViewer(tileSourceIIIF) {
+      vpt = viewer.viewport
 
-            // Create viewer
-            viewer = OpenSeadragon({
-                id: "contentDiv",
-                prefixUrl: "//openseadragon.github.io/openseadragon/images/",
-                tileSources: [{
-                    tileSource: tileSourceIIIF
-                }]
-            });
+      const overlay = viewer.fabricjsOverlay({
+        scale: 1000
+      })
+      canvas = overlay.fabricCanvas()
+    }
 
-            // Create viewer-associated things
-            vpt = viewer.viewport;
+    function createScroller (imgData) {
+      const length = 1
+      // const length = 5
+      let ul, li, span
 
-            let overlay = viewer.fabricjsOverlay({
-                scale: 1000
-            });
-            canvas = overlay.fabricCanvas();
+      const fragment = document.createDocumentFragment()
+      ul = document.createElement('ul')
+      ul.classList.add('thumbnail-list')
+      fragment.appendChild(ul)
 
-        }
+      for (let j = 0; j < length; j++) {
+        li = document.createElement('li')
+        ul.appendChild(li)
+        span = document.createElement('span')
+        // createThumbnail(imgData, span)
+        createThumbnail(imgData, span, 500, 500) // TESTING
+        li.appendChild(span)
+      }
+      document.getElementById('thumbnail-container').appendChild(fragment)
+    }
 
-        // Create thumbnail scroller
-        function createScroller(imgData) {
+    function getRandomRect (imgData) {
+      const left = Math.floor(Math.random() * (imgData.width / 2)) + 1
+      const top = Math.floor(Math.random() * (imgData.height / 2)) + 1
 
-            let length = 1;
-            let ul, li, span;
+      return new OpenSeadragon.Rect(left, top, size, size)
+    }
 
-            let fragment = document.createDocumentFragment();
-            ul = document.createElement('ul');
-            ul.classList.add("thumbnail-list");
-            fragment.appendChild(ul);
+    function createThumbnail (imgData, span, x, y) {
+      let rect // it's a rectangle
 
-            // List elements
-            for (let j = 0; j < length; j++) {
-                // Set up unordered list, list item (magic is done in css)
-                li = document.createElement('li');
-                ul.appendChild(li);
-                span = document.createElement('span');
-                // Create thumbnail
-                // createThumbnail(imgData, span);
-                createThumbnail(imgData, span, 500, 500) // TESTING
-                // Append thumbnail
-                li.appendChild(span);
+      if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
+        console.log('got x,y')
+        // TODO: YOU ARE HERE.
+        /*
+        quip.bmi.stonybrook.edu/:1 Failed to load resource: the server responded with a status of 500 (Server Error)
+        */
+        rect = new OpenSeadragon.Rect(x, y, size, size) // use them
+      } else {
+        console.log('random')
+        rect = getRandomRect(imgData) // get random
+      }
 
-            }
-            document.getElementById('thumbnail-container').appendChild(fragment);
-        }
+      const imgElement = document.createElement('IMG')
+      imgElement.alt = 'mugshot'
+      imgElement.classList.add('thumbnail-image')
 
-        // Generate random location points to select the thumbnail from
-        function getRandomRect(imgData) {
-            // stay within bounds
-            const left = Math.floor(Math.random() * (imgData.width / 2)) + 1;
-            const top = Math.floor(Math.random() * (imgData.height / 2)) + 1;
+      imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/full/0/default.jpg'
 
-            // let left = Math.floor(Math.random() * (imgData.width - size));
-            // let top = Math.floor(Math.random() * (imgData.height - size));
+      span.appendChild(imgElement)
 
-            return new OpenSeadragon.Rect(left, top, size, size);
-        }
+      imgElement.addEventListener('click', function () {
+        showThumbnailOnImage(rect)
+      })
+    }
 
-        function createThumbnail(imgData, span, x, y) {
+    function showThumbnailOnImage (rect) {
+      console.log('rect', rect)
+      zoomToLocation(rect)
+      highlightLocation(rect)
+    }
 
-            let rect; // it's a rectangle
+    function zoomToLocation (rect) {
+      const center = rect.getCenter()
+      const vptCenter = vpt.imageToViewportCoordinates(center)
+      vpt.panTo(vptCenter)
+      vpt.zoomTo(vpt.getMaxZoom())
+    }
 
-            // check x, y variables
-            if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
-                console.log('got x,y')
-                rect = new OpenSeadragon.Rect(x, y, size, size); // use them
-            } else {
-                console.log('random')
-                rect = getRandomRect(imgData); // get random
-            }
+    function getCanvasPosition1 (rect) {
+      const topLeft = rect.getTopLeft() // in image coords
+      let newPoint
 
-            let imgElement = document.createElement("IMG");
-            imgElement.alt = 'mugshot';
-            imgElement.classList.add("thumbnail-image");
+      newPoint = vpt.imageToWindowCoordinates(topLeft) // too far southeast
+      console.log('newPoint2', newPoint)
 
-            // Here's the Image Request URI:
-            imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/full/0/default.jpg';
+      return newPoint
+    }
 
-            // Append thumbnail
-            span.appendChild(imgElement);
+    function getCanvasPosition (rect) {
+      const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft())
+      const bottomRight = vpt.imageToViewerElementCoordinates(rect.getBottomRight())
+      console.log('rect bounds', rect)
+      console.log('topLeft', topLeft)
+      console.log('bottomRight', bottomRight)
 
-            // Thumbnail event listener
-            imgElement.addEventListener('click', function () {
-                showThumbnailOnImage(rect);
-            });
+      return topLeft
+    }
 
-        }
+    function highlightLocation (rect) {
+      const newPoint = getCanvasPosition(rect)
 
-        // Show thumbnail's location in image & highlight the location
-        function showThumbnailOnImage(rect) {
-            console.log('rect', rect);
-            zoomToLocation(rect)
-            highlightLocation(rect)
-        }
+      const new_size = size / vpt.getMaxZoom()
 
-        function zoomToLocation(rect) {
-
-            // Get the center, for panTo()
-            let center = rect.getCenter();
-            // Convert to viewport
-            let vptCenter = vpt.imageToViewportCoordinates(center);
-            // Pan there and magnify by X
-            vpt.panTo(vptCenter);
-            vpt.zoomTo(vpt.getMaxZoom());
-
-        }
-
-        function getCanvasPosition1(rect) {
-
-            let topLeft = rect.getTopLeft(); // in image coords
-            let newPoint;
-
-            // let viewportPoint = vpt.imageToViewportCoordinates(topLeft);
-            // newPoint = vpt.viewportToWindowCoordinates(viewportPoint); // too far southeast
-            // console.log('newPoint1', newPoint);
-
-            newPoint = vpt.imageToWindowCoordinates(topLeft); // too far southeast
-            console.log('newPoint2', newPoint);
-
-            // Yeah, no:
-            // let topX = topLeft.x / vpt.getMaxZoom(); // divided by max zoom
-            // let topY = topLeft.y / vpt.getMaxZoom();
-            // newPoint = new OpenSeadragon.Point(topX, topY);
-            // // Convert image coordinates to pixel coordinates relative to the window. Note: not accurate with multi-image.
-            // newPoint = vpt.imageToWindowCoordinates(newPoint);
-            // console.log('newPoint3', newPoint);
-
-            // Yeah, really no:
-            // newPoint = new OpenSeadragon.Point(topLeft.x, topLeft.y); // just use image points
-            // console.log('newPoint4', newPoint);
-
-            return newPoint;
-        }
-
-        function getCanvasPosition(rect) {
-            // Assuming you know the pixel width and height of the image, you can do this:
-            let topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft());
-            let bottomRight = vpt.imageToViewerElementCoordinates(rect.getBottomRight());
-            console.log('rect bounds', rect)
-            console.log('topLeft', topLeft)
-            console.log('bottomRight', bottomRight)
-
-            return topLeft;
-        }
-
-        // Create rectangle
-        function highlightLocation(rect) {
-
-            // 1. Coordinates.  Convert to canvas coordinates, for fabric.js
-            // let newPoint = getCanvasPosition1(rect);
-            let newPoint = getCanvasPosition(rect);
-
-            // 2. Zoom. We're magnifying by X, so that square gotta be that many times smaller.
-
-            // make bounding box small for hi-res
-            let new_size = size / vpt.getMaxZoom();
-
-            // add rectangle onto canvas
-            canvas.add(new fabric.Rect({
-                left: newPoint.x,
-                top: newPoint.y,
-                stroke: 'yellow',
-                strokeWidth: 1,
-                fill: '',
-                width: new_size,
-                height: new_size
-            }));
-
-        }
-    });
-})();
+      canvas.add(new fabric.Rect({
+        left: newPoint.x,
+        top: newPoint.y,
+        stroke: 'yellow',
+        strokeWidth: 1,
+        fill: '',
+        width: new_size,
+        height: new_size
+      }))
+    }
+  })
+})()

@@ -18,12 +18,18 @@ body {
 }
 
 .openseadragon {
-    width: 480px;
-    height: 640px;
-    /* border: 1px solid blueviolet; */
+    /* Image h > w: */
+    /* width: 480px; */
+    /* height: 640px; */
+    /* Image w > h: */
+    width: 800px;
+    height: 600px;
+    border: 1px solid lime;
     color: #333;
 }
 
+/* https://jsfiddle.net/e99wfqku/1/ */
+/* https://stackoverflow.com/questions/45065881/horizontal-scroll-css-thumbnails */
 .thumbnail-container {
     overflow-x: scroll;
     width: 100%;
