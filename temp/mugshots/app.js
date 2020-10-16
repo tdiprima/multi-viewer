@@ -89,18 +89,12 @@
       highlightLocation(rect)
     }
 
+    // This part is correct
     function zoomToLocation (rect) {
       const center = rect.getCenter()
       const vptCenter = vpt.imageToViewportCoordinates(center)
       vpt.panTo(vptCenter)
       vpt.zoomTo(vpt.getMaxZoom())
-    }
-
-    function getCanvasPosition1 (rect) {
-      const topLeft = rect.getTopLeft() // in image coords
-      const newPoint = vpt.imageToWindowCoordinates(topLeft) // too far southeast
-
-      return newPoint
     }
 
     function getCanvasPosition (rect) {
@@ -113,16 +107,17 @@
       return topLeft
     }
 
+    // TODO: This part is not correct
     function highlightLocation (rect) {
       const newPoint = getCanvasPosition(rect)
-
       const newSize = size / vpt.getMaxZoom()
 
+      // Ends up wayyy too far North.
       canvas.add(new fabric.Rect({
         left: newPoint.x,
         top: newPoint.y,
         stroke: 'yellow',
-        strokeWidth: 1,
+        strokeWidth: 0.1,
         fill: '',
         width: newSize,
         height: newSize
