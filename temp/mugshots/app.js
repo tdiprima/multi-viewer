@@ -8,7 +8,6 @@
     fetch(imgUrl + '/info.json')
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         createViewer(data)
         createScroller(data)
       })
@@ -31,8 +30,8 @@
     }
 
     function createScroller (imgData) {
-      // const length = 1
-      const length = 5
+      const length = 1
+      // const length = 5
       let li, span
 
       const fragment = document.createDocumentFragment()
@@ -44,8 +43,8 @@
         li = document.createElement('li')
         ul.appendChild(li)
         span = document.createElement('span')
-        createThumbnail(imgData, span)
-        // createThumbnail(imgData, span, 500, 500) // TESTING
+        // createThumbnail(imgData, span)
+        createThumbnail(imgData, span, 67584, 52736) // TESTING
         li.appendChild(span)
       }
       document.getElementById('thumbnail-container').appendChild(fragment)
@@ -62,11 +61,8 @@
       let rect // it's a rectangle
 
       if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
-        console.log('got x,y')
-        // TODO: YOU ARE HERE 500
-        rect = new OpenSeadragon.Rect(x, y, size, size) // use them
+        rect = new OpenSeadragon.Rect(x, y, size, size) // use the parameters
       } else {
-        console.log('random')
         rect = getRandomRect(imgData) // get random
       }
 
@@ -74,7 +70,12 @@
       imgElement.alt = 'mugshot'
       imgElement.classList.add('thumbnail-image')
 
-      imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/full/0/default.jpg'
+      let parm
+      // parm = 'full' // LATER.
+      parm = '256,'
+
+      imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/' + parm + '/0/default.jpg'
+      // console.log(imgElement.src)
 
       span.appendChild(imgElement)
 
@@ -84,7 +85,6 @@
     }
 
     function showThumbnailOnImage (rect) {
-      console.log('rect', rect)
       zoomToLocation(rect)
       highlightLocation(rect)
     }
@@ -99,7 +99,6 @@
     function getCanvasPosition1 (rect) {
       const topLeft = rect.getTopLeft() // in image coords
       const newPoint = vpt.imageToWindowCoordinates(topLeft) // too far southeast
-      console.log('newPoint2', newPoint)
 
       return newPoint
     }
@@ -107,9 +106,9 @@
     function getCanvasPosition (rect) {
       const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft())
       const bottomRight = vpt.imageToViewerElementCoordinates(rect.getBottomRight())
-      console.log('rect bounds', rect)
-      console.log('topLeft', topLeft)
-      console.log('bottomRight', bottomRight)
+      // console.log('rect bounds', rect)
+      // console.log('topLeft', topLeft)
+      // console.log('bottomRight', bottomRight)
 
       return topLeft
     }
