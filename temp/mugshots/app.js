@@ -58,8 +58,8 @@
     }
 
     function createThumbnail (imgData, span, x, y) {
+      console.log('img coord', { x: x, y: y })
       let rect // it's a rectangle
-
       if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
         rect = new OpenSeadragon.Rect(x, y, size, size) // use the parameters
       } else {
@@ -92,32 +92,22 @@
     // This part is correct
     function zoomToLocation (rect) {
       const center = rect.getCenter()
-      const vptCenter = vpt.imageToViewportCoordinates(center)
-      vpt.panTo(vptCenter)
+      console.log('Image rect', rect)
+      console.log('Image center', center)
+      vpt.panTo(vpt.imageToViewportCoordinates(center), false)
       vpt.zoomTo(vpt.getMaxZoom())
-    }
-
-    function getCanvasPosition (rect) {
-      const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft())
-      const bottomRight = vpt.imageToViewerElementCoordinates(rect.getBottomRight())
-      // console.log('rect bounds', rect)
-      // console.log('topLeft', topLeft)
-      // console.log('bottomRight', bottomRight)
-
-      return topLeft
     }
 
     // TODO: This part is not correct
     function highlightLocation (rect) {
-      const newPoint = getCanvasPosition(rect)
+      const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft()) // fabric.js is canvas coords ?
       const newSize = size / vpt.getMaxZoom()
 
-      // Ends up wayyy too far North.
       canvas.add(new fabric.Rect({
-        left: newPoint.x,
-        top: newPoint.y,
+        left: topLeft.x, // Ends up wayyy too far North.
+        top: topLeft.y,
         stroke: 'yellow',
-        strokeWidth: 0.1,
+        strokeWidth: 1, // TODO: when it's right, make it 0.1
         fill: '',
         width: newSize,
         height: newSize
