@@ -3,7 +3,9 @@
     // const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
     const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
     const size = 256
+    // eslint-disable-next-line no-unused-vars
     let viewer, canvas, vpt
+    const myPoint = { x: 67584, y: 52736 }
 
     fetch(imgUrl + '/info.json')
       .then(response => response.json())
@@ -21,12 +23,41 @@
         }]
       })
 
+      testing(myPoint)
+      console.log('viewer', viewer)
       vpt = viewer.viewport
 
       const overlay = viewer.fabricjsOverlay({
         scale: 1000
       })
       canvas = overlay.fabricCanvas()
+    }
+
+    function testing (myPoint) {
+      // var blah = rect.topLeft
+      // var c = viewer.drawer.canvas // or viewer.canvas
+      var ctx = viewer.drawer.context
+
+      // Red rectangle
+      ctx.beginPath()
+      ctx.lineWidth = 6
+      ctx.strokeStyle = 'red'
+      ctx.rect(myPoint.x, myPoint.y, 512, 512)
+      ctx.stroke()
+
+      // Green rectangle
+      ctx.beginPath()
+      ctx.lineWidth = 4
+      ctx.strokeStyle = 'green'
+      ctx.rect(myPoint.x - 100, myPoint.y - 100, 512, 512)
+      ctx.stroke()
+
+      // Blue rectangle
+      ctx.beginPath()
+      ctx.lineWidth = 10
+      ctx.strokeStyle = 'blue'
+      ctx.rect(myPoint.x + 100, myPoint.y + 100, 512, 512)
+      ctx.stroke()
     }
 
     function createScroller (imgData) {
@@ -70,9 +101,7 @@
       imgElement.alt = 'mugshot'
       imgElement.classList.add('thumbnail-image')
 
-      let parm
-      // parm = 'full' // LATER.
-      parm = '256,'
+      const parm = '256,' // 'full'
 
       imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/' + parm + '/0/default.jpg'
       // console.log(imgElement.src)
@@ -92,8 +121,8 @@
     // This part is correct
     function zoomToLocation (rect) {
       const center = rect.getCenter()
-      console.log('Image rect', rect)
-      console.log('Image center', center)
+      console.log('img rect', rect)
+      console.log('img center', center)
       vpt.panTo(vpt.imageToViewportCoordinates(center), false)
       vpt.zoomTo(vpt.getMaxZoom())
     }
@@ -102,7 +131,6 @@
     function highlightLocation (rect) {
       const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft()) // fabric.js is canvas coords ?
       const newSize = size / vpt.getMaxZoom()
-
       canvas.add(new fabric.Rect({
         left: topLeft.x, // Ends up wayyy too far North.
         top: topLeft.y,
