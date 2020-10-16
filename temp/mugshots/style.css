@@ -28,8 +28,6 @@ body {
     color: #333;
 }
 
-/* https://jsfiddle.net/e99wfqku/1/ */
-/* https://stackoverflow.com/questions/45065881/horizontal-scroll-css-thumbnails */
 .thumbnail-container {
     overflow-x: scroll;
     width: 100%;

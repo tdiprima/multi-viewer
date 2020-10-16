@@ -1,5 +1,6 @@
 (function () {
   window.addEventListener('load', function () {
+    // const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
     const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
     const size = 256
     let viewer, canvas, vpt
@@ -8,8 +9,6 @@
       .then(response => response.json())
       .then(data => {
         console.log(data)
-        let serialized = CircularJSON.stringify(data)
-        console.log('serialized"\n', serialized)
         createViewer(data)
         createScroller(data)
       })
@@ -32,12 +31,12 @@
     }
 
     function createScroller (imgData) {
-      const length = 1
-      // const length = 5
-      let ul, li, span
+      // const length = 1
+      const length = 5
+      let li, span
 
       const fragment = document.createDocumentFragment()
-      ul = document.createElement('ul')
+      const ul = document.createElement('ul')
       ul.classList.add('thumbnail-list')
       fragment.appendChild(ul)
 
@@ -45,8 +44,8 @@
         li = document.createElement('li')
         ul.appendChild(li)
         span = document.createElement('span')
-        // createThumbnail(imgData, span)
-        createThumbnail(imgData, span, 500, 500) // TESTING
+        createThumbnail(imgData, span)
+        // createThumbnail(imgData, span, 500, 500) // TESTING
         li.appendChild(span)
       }
       document.getElementById('thumbnail-container').appendChild(fragment)
@@ -64,10 +63,7 @@
 
       if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
         console.log('got x,y')
-        // TODO: YOU ARE HERE.
-        /*
-        quip.bmi.stonybrook.edu/:1 Failed to load resource: the server responded with a status of 500 (Server Error)
-        */
+        // TODO: YOU ARE HERE 500
         rect = new OpenSeadragon.Rect(x, y, size, size) // use them
       } else {
         console.log('random')
@@ -102,9 +98,7 @@
 
     function getCanvasPosition1 (rect) {
       const topLeft = rect.getTopLeft() // in image coords
-      let newPoint
-
-      newPoint = vpt.imageToWindowCoordinates(topLeft) // too far southeast
+      const newPoint = vpt.imageToWindowCoordinates(topLeft) // too far southeast
       console.log('newPoint2', newPoint)
 
       return newPoint
@@ -123,7 +117,7 @@
     function highlightLocation (rect) {
       const newPoint = getCanvasPosition(rect)
 
-      const new_size = size / vpt.getMaxZoom()
+      const newSize = size / vpt.getMaxZoom()
 
       canvas.add(new fabric.Rect({
         left: newPoint.x,
@@ -131,8 +125,8 @@
         stroke: 'yellow',
         strokeWidth: 1,
         fill: '',
-        width: new_size,
-        height: new_size
+        width: newSize,
+        height: newSize
       }))
     }
   })
