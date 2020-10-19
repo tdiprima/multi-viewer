@@ -23,8 +23,15 @@
         }]
       })
 
-      testing(myPoint)
-      console.log('viewer', viewer)
+      const myPoint = {
+        x: 0.1,
+        y: 0.1
+      }
+
+      viewer.addHandler('update-viewport', function () {
+        testing(myPoint)
+      })
+
       vpt = viewer.viewport
 
       const overlay = viewer.fabricjsOverlay({
