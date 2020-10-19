@@ -4,24 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Mugshots</title>
-    <link href="style.css" rel="stylesheet"/>
-    <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+    <title>mugshot basic</title>
+    <script src="//openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js">
+    </script>
     <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>
-    <script src="app.js"></script>
-    <!-- <script src="ui-reference-strip.js"></script> -->
 </head>
 
 <body>
 
-<h1>Run from <a href="https://quip.bmi.stonybrook.edu/tcgaseg/mugshots/index.html" target="_blank">quip</a></h1>
+<div class="openseadragon" id="seadragon" style="width: 600px; height:800px"></div>
 
-<div class="thumbnail-container" id="thumbnail-container"></div>
-<div class="demoarea">
-    <div class="openseadragon" id="contentDiv"></div>
+<div class="thumbnail-container">
+    <ul class="thumbnail-list">
+        <li><span><img alt="placehold.it" class="thumbnail-image" src="http://placehold.it/256x256"></span></li>
+    </ul>
 </div>
 
+<script>
+  // Create the viewer
+  const viewer = OpenSeadragon({
+    id: 'seadragon',
+    prefixUrl: '//openseadragon.github.io/openseadragon/images/',
+    tileSources: [{
+      '@context': 'http://iiif.io/api/image/2/context.json',
+      '@id': 'https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2',
+      'height': 7200,
+      'width': 5233,
+      'profile': ['http://iiif.io/api/image/2/level2.json'],
+      'protocol': 'http://iiif.io/api/image',
+      'tiles': [{
+        'scaleFactors': [1, 2, 4, 8, 16, 32],
+        'width': 1024
+      }]
+    }]
+  })
+
+  // Initialize overlay
+  let overlay = viewer.fabricjsOverlay({
+    scale: 1000
+  })
+  let canvas = overlay.fabricCanvas()
+  let size = 256
+  const vpt = viewer.viewport
+
+  // Thumbnail event listener
+  const thumb = document.querySelector('.thumbnail-image')
+  thumb.addEventListener('click', function () {
+    const maxZoom = vpt.getMaxZoom()
+    const adjust = size / maxZoom // once we zoom in, that 256x256 box need to be small
+
+    let r = getRandomCanvasCoordinates(adjust)
+    let topLeft = r.getTopLeft()
+    let viewportPoint = viewer.viewport.pointFromPixel(r.getCenter())
+
+    // Pan and zoom
+    vpt.panTo(viewportPoint, true)
+    vpt.zoomTo(maxZoom)
+
+    // Add fabric rectangle
+    let rect = new fabric.Rect({
+      left: topLeft.x, // canvas coordinates
+      top: topLeft.y,
+      stroke: 'yellow',
+      fill: '',
+      strokeWidth: 1,
+      width: adjust,
+      height: adjust
+    })
+    canvas.add(rect)
+  })
+
+  function getRandomCanvasCoordinates (p) {
+    const left = Math.floor(Math.random() * (canvas.width / 2)) + 1
+    const top = Math.floor(Math.random() * (canvas.height / 2)) + 1
+
+    return new OpenSeadragon.Rect(left, top, p, p)
+  }
+
+</script>
 </body>
 
 </html>
