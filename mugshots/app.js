@@ -55,8 +55,7 @@
         span = document.createElement('span')
         // Create thumbnail
         // createThumbnail(imgData, span)
-        createThumbnail(imgData, span, 500, 500) // TESTING
-        // TODO: Proper scaling conversion
+        createThumbnail(imgData, span, 300, 400) // TESTING
         // createThumbnail(imgData, span, 0, 0)
         // Append thumbnail
         li.appendChild(span)
@@ -78,7 +77,6 @@
 
     function createThumbnail (imgData, span, x, y) {
       let rect // it's a rectangle
-
       // check x, y variables
       if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
         rect = new OpenSeadragon.Rect(x, y, size, size) // use the parameters
@@ -87,6 +85,7 @@
         rect = getRandomRect(imgData) // get random
         console.log('random', rect)
       }
+      this.__rect = rect // DEBUG PURPOSES
 
       const imgElement = document.createElement('IMG')
       imgElement.alt = 'mugshot'
@@ -95,8 +94,13 @@
       // Using the iiif service for thumbnail image
       // const parm = '256,'
       // const parm = 'full,'
-      imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/full/0/default.jpg'
-      // imgElement.src = imgUrl + '/' + rect.getTopLeft().x + ',' + rect.getTopLeft().y + ',' + rect.width + ',' + rect.height + '/' + parm + '/0/default.jpg'
+      imgElement.src = imgUrl + '/' +
+          rect.getTopLeft().x + ',' +
+          rect.getTopLeft().y + ',' +
+          rect.width + ',' +
+          rect.height + '/full/0/default.jpg'
+
+      // https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/500,500,256,256/full/0/default.jpg
       // console.log(imgElement.src)
 
       // Append thumbnail
@@ -110,7 +114,6 @@
 
     // Show thumbnail's location in image & highlight the location
     function showThumbnailOnImage (rect) {
-      console.log('rect', rect)
       zoomToLocation(rect)
       highlightLocation(rect)
     }
@@ -118,31 +121,37 @@
     function zoomToLocation (rect) {
       // Get the center, for panTo()
       const center = rect.getCenter()
+      console.log('rect', rect)
+      console.log('center', center)
       // Convert to viewport
       const vptCenter = vpt.imageToViewportCoordinates(center)
       // Pan there and magnify
-      vpt.panTo(vptCenter, false) // False ok, default, right?
-      vpt.zoomTo(vpt.getMaxZoom())
+      vpt.panTo(vptCenter)
+      // vpt.zoomTo(vpt.getMaxZoom())
     }
 
     // Create rectangle
     function highlightLocation (rect) {
       // 1. Coordinates.  Convert to canvas-ish coordinates, for fabric.js
-      const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft()) // fabric.js is canvas coords ?
+      // const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft()) // Eliminating this helped.
       // 2. Zoom. We're magnifying by X, so that square gotta be that many times smaller.
+      const topLeft = rect.getTopLeft() // OK.
 
       // make bounding box small for hi-res
       const newSize = size / vpt.getMaxZoom()
       // add rectangle onto canvas
-      canvas.add(new fabric.Rect({
-        left: topLeft.x, // Still too far North?
+      const newRect = new fabric.Rect({
+        left: topLeft.x,
         top: topLeft.y,
         stroke: 'yellow',
-        strokeWidth: 1, // TODO: convert to scale.
+        strokeWidth: 1,
         fill: '',
         width: newSize,
         height: newSize
-      }))
+      })
+      this.__newRect = newRect // DEBUG PURPOSES
+      console.log('newRect', newRect)
+      canvas.add(newRect)
     }
   })
 })()
