@@ -11,7 +11,7 @@
     fetch(imgUrl + '/info.json')
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        // console.log(data)
         createViewer(data)
         createScroller(data)
       })
@@ -55,7 +55,7 @@
         span = document.createElement('span')
         // Create thumbnail
         // createThumbnail(imgData, span)
-        createThumbnail(imgData, span, 300, 400) // TESTING
+        createThumbnail(imgData, span, 512, 768) // Canvas coordinates
         // createThumbnail(imgData, span, 0, 0)
         // Append thumbnail
         li.appendChild(span)
@@ -75,15 +75,20 @@
       return new OpenSeadragon.Rect(left, top, size, size)
     }
 
+    function xyExist (x, y) {
+      // check x, y variables
+      return (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0)
+    }
+
     function createThumbnail (imgData, span, x, y) {
       let rect // it's a rectangle
-      // check x, y variables
-      if (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0) {
-        rect = new OpenSeadragon.Rect(x, y, size, size) // use the parameters
-        console.log('given x,y', rect)
+      if (xyExist) {
+        // rect = new OpenSeadragon.Rect(x, y, size, size) // use the parameters
+        rect = new OpenSeadragon.Rect(x, y, size, size)
+        // console.log('given x,y', rect)
       } else {
         rect = getRandomRect(imgData) // get random
-        console.log('random', rect)
+        // console.log('random', rect)
       }
       this.__rect = rect // DEBUG PURPOSES
 
@@ -91,17 +96,7 @@
       imgElement.alt = 'mugshot'
       imgElement.classList.add('thumbnail-image')
 
-      // Using the iiif service for thumbnail image
-      // const parm = '256,'
-      // const parm = 'full,'
-      imgElement.src = imgUrl + '/' +
-          rect.getTopLeft().x + ',' +
-          rect.getTopLeft().y + ',' +
-          rect.width + ',' +
-          rect.height + '/full/0/default.jpg'
-
-      // https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/500,500,256,256/full/0/default.jpg
-      // console.log(imgElement.src)
+      imgElement.src = getImageSrc(imgUrl, rect)
 
       // Append thumbnail
       span.appendChild(imgElement)
@@ -110,6 +105,41 @@
       imgElement.addEventListener('click', function () {
         showThumbnailOnImage(rect)
       })
+    }
+
+    function convertToImageCoordinates (rect) {
+      // position in web coordinates.
+      const webPoint = rect.getTopLeft()
+      // console.log('webPoint', webPoint)
+      // console.log('rect', rect)
+
+      // Convert that to viewport coordinates.
+      const viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+
+      // Convert from viewport coordinates to image coordinates.
+      let imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
+      console.log('imagePoint', imagePoint) // That's not image coords
+      // imagePoint = image1.windowToImageCoordinates(webPoint)
+      // Go backwards maybe imageToViewerElementCoordinates
+
+      rect.x = imagePoint.x
+      rect.y = imagePoint.y
+    }
+
+    function getImageSrc (imgUrl, rect) {
+      // Using the iiif service for thumbnail image
+      // const parm = '256,'
+      // const parm = 'full,'
+      convertToImageCoordinates(rect)
+      console.log('rect', rect)
+      return imgUrl + '/' +
+        rect.getTopLeft().x + ',' +
+        rect.getTopLeft().y + ',' +
+        rect.width + ',' +
+        rect.height + '/full/0/default.jpg'
+
+      // https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/500,500,256,256/full/0/default.jpg
+      // // console.log(imgElement.src)
     }
 
     // Show thumbnail's location in image & highlight the location
@@ -121,8 +151,8 @@
     function zoomToLocation (rect) {
       // Get the center, for panTo()
       const center = rect.getCenter()
-      console.log('rect', rect)
-      console.log('center', center)
+      // console.log('rect', rect)
+      // console.log('center', center)
       // Convert to viewport
       const vptCenter = vpt.imageToViewportCoordinates(center)
       // Pan there and magnify
@@ -150,7 +180,7 @@
         height: newSize
       })
       this.__newRect = newRect // DEBUG PURPOSES
-      console.log('newRect', newRect)
+      // console.log('newRect', newRect)
       canvas.add(newRect)
     }
   })
