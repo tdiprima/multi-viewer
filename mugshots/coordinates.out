@@ -1,0 +1,6 @@
+viewportToImageCoordinates
+viewportToWindowCoordinates
+
+imageToViewerElementCoordinates
+imageToViewportCoordinates
+imageToWindowCoordinates
