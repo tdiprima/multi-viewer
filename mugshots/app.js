@@ -1,46 +1,37 @@
 (function () {
   window.addEventListener('load', function () {
-    // Image service Loris
     const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
-    // Image service SBU
     // const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
     const size = 256
-    let viewer, canvas, vpt
+    let viewer, canvas, overlay, vpt
 
-    // Fetch image metadata
     fetch(imgUrl + '/info.json')
       .then(response => response.json())
       .then(data => {
-        // console.log(data)
+        console.log(data)
         createViewer(data)
         createScroller(data)
       })
 
-    // Set up OSD viewer with info that we fetched
-    function createViewer (tileSourceIIIF) {
-      // Create viewer
+    function createViewer (data) {
       viewer = OpenSeadragon({
         id: 'contentDiv',
         prefixUrl: '//openseadragon.github.io/openseadragon/images/',
         tileSources: [{
-          tileSource: tileSourceIIIF
+          tileSource: data
         }]
       })
 
-      // Initialize global variables
       vpt = viewer.viewport
 
-      const overlay = viewer.fabricjsOverlay({
+      overlay = viewer.fabricjsOverlay({
         scale: 1000
       })
-      // canvas = this.__canvas = overlay.fabricCanvas()
-      canvas = overlay.fabricCanvas()
+      canvas = this.__canvas = overlay.fabricCanvas()
     }
 
-    // Create thumbnail scroller
-    function createScroller (imgData) {
+    function createScroller (data) {
       const length = 1
-      // const length = 5
       let ul, li, span
 
       const fragment = document.createDocumentFragment()
@@ -48,140 +39,109 @@
       ul.classList.add('thumbnail-list')
       fragment.appendChild(ul)
 
-      // Set up unordered list (thumbnails, css magic)
       for (let j = 0; j < length; j++) {
         li = document.createElement('li')
         ul.appendChild(li)
         span = document.createElement('span')
-        // Create thumbnail
-        // createThumbnail(imgData, span)
-        createThumbnail(imgData, span, 512, 768) // Canvas coordinates
-        // createThumbnail(imgData, span, 0, 0)
-        // Append thumbnail
+        // Give it some number in the middle of the image
+        createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2))
         li.appendChild(span)
       }
       document.getElementById('thumbnail-container').appendChild(fragment)
     }
 
-    // Generate location points for random thumbnail
-    function getRandomRect (imgData) {
-      // Stay within bounds
-      const left = Math.floor(Math.random() * (imgData.width / 2)) + 1
-      const top = Math.floor(Math.random() * (imgData.height / 2)) + 1
-      // Experiment:
-      // let left = Math.floor(Math.random() * (imgData.width - size))
-      // let top = Math.floor(Math.random() * (imgData.height - size))
+    function getRandomRect (data) {
+      // Give it plenty of room from the edge
+      const padding = size * 2 // 512
+      const left = getRandomInt(padding, (data.width - padding))
+      const top = getRandomInt(padding, (data.height - padding))
 
       return new OpenSeadragon.Rect(left, top, size, size)
     }
 
+    function getRandomInt (min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+
     function xyExist (x, y) {
-      // check x, y variables
       return (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0)
     }
 
-    function createThumbnail (imgData, span, x, y) {
-      let rect // it's a rectangle
+    function createThumbnail (data, span, x, y) {
+      let imageRect // it's a rectangle
       if (xyExist) {
-        // rect = new OpenSeadragon.Rect(x, y, size, size) // use the parameters
-        rect = new OpenSeadragon.Rect(x, y, size, size)
-        // console.log('given x,y', rect)
+        imageRect = new OpenSeadragon.Rect(x, y, size, size)
       } else {
-        rect = getRandomRect(imgData) // get random
-        // console.log('random', rect)
+        imageRect = getRandomRect(data) // get random
       }
-      this.__rect = rect // DEBUG PURPOSES
+      this.__rect = imageRect // DEBUG PURPOSES
 
       const imgElement = document.createElement('IMG')
       imgElement.alt = 'mugshot'
       imgElement.classList.add('thumbnail-image')
 
-      imgElement.src = getImageSrc(imgUrl, rect)
+      imgElement.src = getImageSrc(imgUrl, imageRect)
 
-      // Append thumbnail
       span.appendChild(imgElement)
 
-      // Thumbnail event listener
       imgElement.addEventListener('click', function () {
-        showThumbnailOnImage(rect)
+        showThumbnailOnImage(imageRect)
       })
     }
 
-    function convertToImageCoordinates (rect) {
-      // position in web coordinates.
-      const webPoint = rect.getTopLeft()
-      // console.log('webPoint', webPoint)
-      // console.log('rect', rect)
-
-      // Convert that to viewport coordinates.
-      const viewportPoint = viewer.viewport.pointFromPixel(webPoint)
-
-      // Convert from viewport coordinates to image coordinates.
-      let imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
-      console.log('imagePoint', imagePoint) // That's not image coords
-      // imagePoint = image1.windowToImageCoordinates(webPoint)
-      // Go backwards maybe imageToViewerElementCoordinates
-
-      rect.x = imagePoint.x
-      rect.y = imagePoint.y
-    }
-
-    function getImageSrc (imgUrl, rect) {
-      // Using the iiif service for thumbnail image
-      // const parm = '256,'
-      // const parm = 'full,'
-      convertToImageCoordinates(rect)
-      console.log('rect', rect)
+    function getImageSrc (imgUrl, imageRect) {
       return imgUrl + '/' +
-        rect.getTopLeft().x + ',' +
-        rect.getTopLeft().y + ',' +
-        rect.width + ',' +
-        rect.height + '/full/0/default.jpg'
-
-      // https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/500,500,256,256/full/0/default.jpg
-      // // console.log(imgElement.src)
+        imageRect.getTopLeft().x + ',' +
+        imageRect.getTopLeft().y + ',' +
+        imageRect.width + ',' +
+        imageRect.height + '/full/0/default.jpg'
     }
 
-    // Show thumbnail's location in image & highlight the location
-    function showThumbnailOnImage (rect) {
-      zoomToLocation(rect)
-      highlightLocation(rect)
+    function showThumbnailOnImage (imageRect) {
+      zoomToLocation(imageRect)
+      highlightLocation(imageRect)
     }
 
-    function zoomToLocation (rect) {
-      // Get the center, for panTo()
-      const center = rect.getCenter()
-      // console.log('rect', rect)
-      // console.log('center', center)
-      // Convert to viewport
+    function zoomToLocation (imageRect) {
+      const center = imageRect.getCenter()
       const vptCenter = vpt.imageToViewportCoordinates(center)
-      // Pan there and magnify
       vpt.panTo(vptCenter)
-      // vpt.zoomTo(vpt.getMaxZoom())
     }
 
-    // Create rectangle
-    function highlightLocation (rect) {
-      // 1. Coordinates.  Convert to canvas-ish coordinates, for fabric.js
-      // const topLeft = vpt.imageToViewerElementCoordinates(rect.getTopLeft()) // Eliminating this helped.
-      // 2. Zoom. We're magnifying by X, so that square gotta be that many times smaller.
-      const topLeft = rect.getTopLeft() // OK.
+    function highlightLocation (imageRect) {
+      const image1 = viewer.world.getItemAt(0)
 
-      // make bounding box small for hi-res
-      const newSize = size / vpt.getMaxZoom()
-      // add rectangle onto canvas
+      const topLeft = imageRect.getTopLeft() // OK.
+      const bottomRight = imageRect.getBottomRight()
+
+      const osdRectOfTL = new OpenSeadragon.Point(topLeft.x, topLeft.y)
+      const osdRectOfBR = new OpenSeadragon.Point(bottomRight.x, bottomRight.y)
+
+      const imageToWindowCoordinatesTL = image1.imageToWindowCoordinates(osdRectOfTL)
+      const imageToWindowCoordinatesBR = image1.imageToWindowCoordinates(osdRectOfBR)
+
+      const width = imageToWindowCoordinatesBR.x - imageToWindowCoordinatesTL.x
+      const height = imageToWindowCoordinatesBR.y - imageToWindowCoordinatesTL.y
+
+      const canvasOffset = overlay._canvasdiv.getBoundingClientRect()
+      const origin = new OpenSeadragon.Point(0, 0)
+
+      const image1WindowPoint = image1.imageToWindowCoordinates(origin)
+      const x = Math.round(image1WindowPoint.x)
+      const y = Math.round(image1WindowPoint.y)
+      const point = new fabric.Point(canvasOffset.left - x, canvasOffset.top - y)
+      const factor = 1 / canvas.getZoom()
+
       const newRect = new fabric.Rect({
-        left: topLeft.x,
-        top: topLeft.y,
-        stroke: 'yellow',
-        strokeWidth: 1,
-        fill: '',
-        width: newSize,
-        height: newSize
+        fill: 'green',
+        left: (imageToWindowCoordinatesTL.x + point.x) * factor,
+        top: (imageToWindowCoordinatesTL.y + point.y) * factor,
+        width: width * factor,
+        height: height * factor
       })
       this.__newRect = newRect // DEBUG PURPOSES
-      // console.log('newRect', newRect)
       canvas.add(newRect)
+      canvas.renderAll()
     }
   })
 })()
