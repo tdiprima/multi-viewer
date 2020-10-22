@@ -6,7 +6,7 @@
     // const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
 
     const size = 256
-    let viewer, canvas, vpt
+    let viewer, canvas, overlay, vpt
 
     fetch(imgUrl + '/info.json')
       .then(response => response.json())
@@ -26,10 +26,10 @@
 
       vpt = viewer.viewport
 
-      const overlay = viewer.fabricjsOverlay({
+      overlay = viewer.fabricjsOverlay({
         scale: 1000
       })
-      canvas = overlay.fabricCanvas()
+      canvas = this.__canvas = overlay.fabricCanvas()
     }
 
     function createScroller (data) {
@@ -45,8 +45,7 @@
         li = document.createElement('li')
         ul.appendChild(li)
         span = document.createElement('span')
-        // createThumbnail(data, span, 512, 768) // Image coordinates
-        // Get somewhere in the middle of the image
+        // Give it some number in the middle of the image
         createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
         li.appendChild(span)
       }
@@ -54,10 +53,16 @@
     }
 
     function getRandomRect (data) {
-      const left = Math.floor(Math.random() * (data.width / 2)) + 1
-      const top = Math.floor(Math.random() * (data.height / 2)) + 1
+      // Give it plenty of room from the edge
+      const padding = size * 2 // 512
+      const left = getRandomInt(padding, (data.width - padding))
+      const top = getRandomInt(padding, (data.height - padding))
 
       return new OpenSeadragon.Rect(left, top, size, size)
+    }
+
+    function getRandomInt (min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
     function xyExist (x, y) {
@@ -65,77 +70,66 @@
     }
 
     function createThumbnail (data, span, x, y) {
-      let rect // it's a rectangle
+      let imageRect // it's a rectangle
       if (xyExist) {
-        rect = new OpenSeadragon.Rect(x, y, size, size)
+        imageRect = new OpenSeadragon.Rect(x, y, size, size)
       } else {
-        rect = getRandomRect(data) // get random
+        imageRect = getRandomRect(data) // get random
       }
-      this.__rect = rect // DEBUG PURPOSES
+      this.__rect = imageRect // DEBUG PURPOSES
 
       const imgElement = document.createElement('IMG')
       imgElement.alt = 'mugshot'
       imgElement.classList.add('thumbnail-image')
 
-      imgElement.src = getImageSrc(imgUrl, rect)
+      imgElement.src = getImageSrc(imgUrl, imageRect)
 
       span.appendChild(imgElement)
 
       imgElement.addEventListener('click', function () {
-        showThumbnailOnImage(rect)
+        showThumbnailOnImage(imageRect)
       })
     }
 
-    function convertToImageCoordinates (rect) {
-      const webPoint = rect.getTopLeft()
-
-      const viewportPoint = viewer.viewport.pointFromPixel(webPoint)
-
-      let imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
-      console.log('imagePoint', imagePoint) // That's not image coords
-
-      rect.x = imagePoint.x
-      rect.y = imagePoint.y
-    }
-
-    function getImageSrc (imgUrl, rect) {
-      convertToImageCoordinates(rect)
-      console.log('rect', rect)
+    function getImageSrc (imgUrl, imageRect) {
       return imgUrl + '/' +
-        rect.getTopLeft().x + ',' +
-        rect.getTopLeft().y + ',' +
-        rect.width + ',' +
-        rect.height + '/full/0/default.jpg'
-
+        imageRect.getTopLeft().x + ',' +
+        imageRect.getTopLeft().y + ',' +
+        imageRect.width + ',' +
+        imageRect.height + '/full/0/default.jpg'
     }
 
-    function showThumbnailOnImage (rect) {
-      zoomToLocation(rect)
-      highlightLocation(rect)
+    function showThumbnailOnImage (imageRect) {
+      zoomToLocation(imageRect)
+      highlightLocation(imageRect)
     }
 
-    function zoomToLocation (rect) {
-      const center = rect.getCenter()
+    function zoomToLocation (imageRect) {
+
+      const center = imageRect.getCenter()
       const vptCenter = vpt.imageToViewportCoordinates(center)
       vpt.panTo(vptCenter)
       vpt.zoomTo(vpt.getMaxZoom())
+
     }
 
-    function highlightLocation (rect) {
-      const topLeft = rect.getTopLeft() // OK.
+    function highlightLocation (imageRect) {
+      const topLeft = imageRect.getTopLeft()
+      const vptTL = vpt.viewportToViewerElementCoordinates(topLeft)
 
       const newSize = size / vpt.getMaxZoom()
       const newRect = new fabric.Rect({
-        left: topLeft.x,
-        top: topLeft.y,
+        left: vptTL.x,
+        top: vptTL.y,
         stroke: 'yellow',
-        strokeWidth: 1,
+        strokeWidth: 2,
         fill: '',
         width: newSize,
         height: newSize
       })
       this.__newRect = newRect // DEBUG PURPOSES
       canvas.add(newRect)
+      canvas.renderAll()
     }
   })
 })()
