@@ -1,14 +1,16 @@
 (function () {
   window.addEventListener('load', function () {
+    // Image service Loris
     const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
+    // Image service SBU
     // const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
+
     const size = 256
-    let viewer, canvas, overlay, vpt
+    let viewer, canvas, vpt
 
     fetch(imgUrl + '/info.json')
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         createViewer(data)
         createScroller(data)
       })
@@ -24,10 +26,10 @@
 
       vpt = viewer.viewport
 
-      overlay = viewer.fabricjsOverlay({
+      const overlay = viewer.fabricjsOverlay({
         scale: 1000
       })
-      canvas = this.__canvas = overlay.fabricCanvas()
+      canvas = overlay.fabricCanvas()
     }
 
     function createScroller (data) {
@@ -43,24 +45,19 @@
         li = document.createElement('li')
         ul.appendChild(li)
         span = document.createElement('span')
-        // Give it some number in the middle of the image
-        createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2))
+        // createThumbnail(data, span, 512, 768) // Image coordinates
+        // Get somewhere in the middle of the image
+        createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
         li.appendChild(span)
       }
       document.getElementById('thumbnail-container').appendChild(fragment)
     }
 
     function getRandomRect (data) {
-      // Give it plenty of room from the edge
-      const padding = size * 2 // 512
-      const left = getRandomInt(padding, (data.width - padding))
-      const top = getRandomInt(padding, (data.height - padding))
+      const left = Math.floor(Math.random() * (data.width / 2)) + 1
+      const top = Math.floor(Math.random() * (data.height / 2)) + 1
 
       return new OpenSeadragon.Rect(left, top, size, size)
-    }
-
-    function getRandomInt (min, max) {
-      return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
     function xyExist (x, y) {
@@ -68,80 +65,77 @@
     }
 
     function createThumbnail (data, span, x, y) {
-      let imageRect // it's a rectangle
+      let rect // it's a rectangle
       if (xyExist) {
-        imageRect = new OpenSeadragon.Rect(x, y, size, size)
+        rect = new OpenSeadragon.Rect(x, y, size, size)
       } else {
-        imageRect = getRandomRect(data) // get random
+        rect = getRandomRect(data) // get random
       }
-      this.__rect = imageRect // DEBUG PURPOSES
+      this.__rect = rect // DEBUG PURPOSES
 
       const imgElement = document.createElement('IMG')
       imgElement.alt = 'mugshot'
       imgElement.classList.add('thumbnail-image')
 
-      imgElement.src = getImageSrc(imgUrl, imageRect)
+      imgElement.src = getImageSrc(imgUrl, rect)
 
       span.appendChild(imgElement)
 
       imgElement.addEventListener('click', function () {
-        showThumbnailOnImage(imageRect)
+        showThumbnailOnImage(rect)
       })
     }
 
-    function getImageSrc (imgUrl, imageRect) {
+    function convertToImageCoordinates (rect) {
+      const webPoint = rect.getTopLeft()
+
+      const viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+
+      let imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
+      console.log('imagePoint', imagePoint) // That's not image coords
+
+      rect.x = imagePoint.x
+      rect.y = imagePoint.y
+    }
+
+    function getImageSrc (imgUrl, rect) {
+      convertToImageCoordinates(rect)
+      console.log('rect', rect)
       return imgUrl + '/' +
-        imageRect.getTopLeft().x + ',' +
-        imageRect.getTopLeft().y + ',' +
-        imageRect.width + ',' +
-        imageRect.height + '/full/0/default.jpg'
+        rect.getTopLeft().x + ',' +
+        rect.getTopLeft().y + ',' +
+        rect.width + ',' +
+        rect.height + '/full/0/default.jpg'
+
     }
 
-    function showThumbnailOnImage (imageRect) {
-      zoomToLocation(imageRect)
-      highlightLocation(imageRect)
+    function showThumbnailOnImage (rect) {
+      zoomToLocation(rect)
+      highlightLocation(rect)
     }
 
-    function zoomToLocation (imageRect) {
-      const center = imageRect.getCenter() // <-- convert to canvas coords here.
+    function zoomToLocation (rect) {
+      const center = rect.getCenter()
       const vptCenter = vpt.imageToViewportCoordinates(center)
       vpt.panTo(vptCenter)
+      vpt.zoomTo(vpt.getMaxZoom())
     }
 
-    function highlightLocation (imageRect) {
-      const image1 = viewer.world.getItemAt(0)
+    function highlightLocation (rect) {
+      const topLeft = rect.getTopLeft() // OK.
 
-      const topLeft = imageRect.getTopLeft() // OK.
-      const bottomRight = imageRect.getBottomRight()
-
-      const osdRectOfTL = new OpenSeadragon.Point(topLeft.x, topLeft.y)
-      const osdRectOfBR = new OpenSeadragon.Point(bottomRight.x, bottomRight.y)
-
-      const imageToWindowCoordinatesTL = image1.imageToWindowCoordinates(osdRectOfTL)
-      const imageToWindowCoordinatesBR = image1.imageToWindowCoordinates(osdRectOfBR)
-
-      const width = imageToWindowCoordinatesBR.x - imageToWindowCoordinatesTL.x
-      const height = imageToWindowCoordinatesBR.y - imageToWindowCoordinatesTL.y
-
-      const canvasOffset = overlay._canvasdiv.getBoundingClientRect()
-      const origin = new OpenSeadragon.Point(0, 0)
-
-      const image1WindowPoint = image1.imageToWindowCoordinates(origin)
-      const x = Math.round(image1WindowPoint.x)
-      const y = Math.round(image1WindowPoint.y)
-      const point = new fabric.Point(canvasOffset.left - x, canvasOffset.top - y)
-      const factor = 1 / canvas.getZoom()
-
+      const newSize = size / vpt.getMaxZoom()
       const newRect = new fabric.Rect({
-        fill: 'green',
-        left: (imageToWindowCoordinatesTL.x + point.x) * factor,
-        top: (imageToWindowCoordinatesTL.y + point.y) * factor,
-        width: width * factor,
-        height: height * factor
+        left: topLeft.x,
+        top: topLeft.y,
+        stroke: 'yellow',
+        strokeWidth: 1,
+        fill: '',
+        width: newSize,
+        height: newSize
       })
       this.__newRect = newRect // DEBUG PURPOSES
       canvas.add(newRect)
-      canvas.renderAll()
     }
   })
 })()
