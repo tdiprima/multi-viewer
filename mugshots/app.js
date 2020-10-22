@@ -105,27 +105,29 @@
     }
 
     function zoomToLocation (imageRect) {
-
       const center = imageRect.getCenter()
       const vptCenter = vpt.imageToViewportCoordinates(center)
       vpt.panTo(vptCenter)
       vpt.zoomTo(vpt.getMaxZoom())
-
     }
 
     function highlightLocation (imageRect) {
-      const topLeft = imageRect.getTopLeft()
-      const vptTL = vpt.viewportToViewerElementCoordinates(topLeft)
+      const viewportRect = vpt.imageToViewportRectangle(imageRect)
+      const canvasRect = vpt.viewportToViewerElementRectangle(viewportRect)
+      const topLeft = canvasRect.getTopLeft()
+      const bottomRight = canvasRect.getBottomRight()
 
-      const newSize = size / vpt.getMaxZoom()
+      const width = bottomRight.x - topLeft.x
+      const height = bottomRight.y - topLeft.y
+
       const newRect = new fabric.Rect({
-        left: vptTL.x,
-        top: vptTL.y,
+        left: canvasRect.x,
+        top: canvasRect.y,
         stroke: 'yellow',
-        strokeWidth: 2,
+        strokeWidth: 1,
         fill: '',
-        width: newSize,
-        height: newSize
+        width: width,
+        height: height
       })
       this.__newRect = newRect // DEBUG PURPOSES
       canvas.add(newRect)
