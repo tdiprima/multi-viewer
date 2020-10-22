@@ -103,7 +103,7 @@
     }
 
     function zoomToLocation (imageRect) {
-      const center = imageRect.getCenter()
+      const center = imageRect.getCenter() // <-- convert to canvas coords here.
       const vptCenter = vpt.imageToViewportCoordinates(center)
       vpt.panTo(vptCenter)
     }
