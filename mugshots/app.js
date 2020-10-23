@@ -151,7 +151,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
     // rectWithOffset(windowTL)
   }
 
+  function randomImageRectangle (data) {
+    // Give it plenty of room from the edge
+    const padding = thumbnailSize * 2 // 512
+    const left = getRandomInt(padding, (data.width - padding))
+    const top = getRandomInt(padding, (data.height - padding))
+
+    return new OpenSeadragon.Rect(left, top, thumbnailSize, thumbnailSize)
+  }
+
   function rectWithOffset (windowTL) {
+    // Remember what did not work.
     const canvasOffset = overlay._canvasdiv.getBoundingClientRect()
     const origin = new OpenSeadragon.Point(0, 0)
     const image1WindowPoint = vpt.imageToWindowCoordinates(origin)
@@ -171,6 +181,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function positionTest (imageRect) {
+    // Remember what did not work.
     const vptRect = vpt.imageToViewportRectangle(imageRect)
     const viewerElementRect = vpt.viewportToViewerElementRectangle(vptRect)
     console.log('viewerElementRect', viewerElementRect)
@@ -185,14 +196,5 @@ document.addEventListener('DOMContentLoaded', function (event) {
       height: viewerElementRect.height
     }))
     canvas.renderAll()
-  }
-
-  function randomImageRectangle (data) {
-    // Give it plenty of room from the edge
-    const padding = thumbnailSize * 2 // 512
-    const left = getRandomInt(padding, (data.width - padding))
-    const top = getRandomInt(padding, (data.height - padding))
-
-    return new OpenSeadragon.Rect(left, top, thumbnailSize, thumbnailSize)
   }
 })
