@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function (event) {
   // Image service Loris
-  // const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
+  const infoUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
   // Image service SBU
-  const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
+  // const infoUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
 
   const thumbnailSize = 256
   const scrollerLength = 5
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const quality = 'default'
   const format = 'jpg'
 
-  fetch(imgUrl + '/info.json')
+  fetch(infoUrl + '/info.json')
     .then(response => response.json())
     .then(data => {
       console.log('Image w,h', new OpenSeadragon.Point(data.width, data.height))
@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
       scale: 1000
     })
     canvas = this.__canvas = overlay.fabricCanvas()
+
+    viewer.addHandler('update-viewport', function () {
+      overlay.render()
+    })
   }
 
   function createScroller (data) {
@@ -74,6 +78,22 @@ document.addEventListener('DOMContentLoaded', function (event) {
     } else {
       imageRect = randomImageRectangle(data)
     }
+    checkWholeNumbers(imageRect)
+
+    const imgElement = document.createElement('IMG')
+    imgElement.alt = 'mugshot'
+    imgElement.classList.add('thumbnail-image')
+
+    imgElement.src = getImageUrl(infoUrl, imageRect)
+
+    span.appendChild(imgElement)
+
+    imgElement.addEventListener('click', function () {
+      showThumbnailOnImage(imageRect)
+    })
+  }
+
+  function checkWholeNumbers (imageRect) {
     // IIIF wants whole numbers
     const imagePoint = imageRect.getTopLeft()
     if (imagePoint.x % 1 !== 0) {
@@ -83,26 +103,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
       console.warn(imagePoint.y, 'not a whole number')
     }
     console.log('imageRect', imageRect.getTopLeft())
-
-    const imgElement = document.createElement('IMG')
-    imgElement.alt = 'mugshot'
-    imgElement.classList.add('thumbnail-image')
-
-    imgElement.src = getImageSrc(imgUrl, imageRect)
-
-    span.appendChild(imgElement)
-
-    imgElement.addEventListener('click', function () {
-      showThumbnailOnImage(imageRect)
-    })
   }
 
-  function getImageSrc (imgUrl, imageRect) {
-    return imgUrl + '/' +
+  function getImageUrl (infoUrl, imageRect) {
+    return infoUrl + '/' +
       imageRect.getTopLeft().x + ',' +
       imageRect.getTopLeft().y + ',' +
       imageRect.width + ',' +
-      imageRect.height + '/' + size + '/' + rotation + '/' + quality + '.' + format
+      imageRect.height + '/' +
+      size + '/' +
+      rotation + '/' +
+      quality + '.' + format
   }
 
   function showThumbnailOnImage (imageRect) {
@@ -117,10 +128,54 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function highlightLocation (imageRect) {
+    const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
+    const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
+
+    const windowTL = vpt.imageToWindowCoordinates(imageTL)
+    const windowBR = vpt.imageToWindowCoordinates(imageBR)
+
+    const width = windowBR.x - windowTL.x
+    const height = windowBR.y - windowTL.y
+
+    const rect1 = new fabric.Rect({
+      stroke: 'blue',
+      fill: '',
+      left: windowTL.x,
+      top: windowTL.y,
+      width: width,
+      height: height
+    })
+    canvas.add(rect1)
+    canvas.renderAll()
+
+    // rectWithOffset(windowTL)
+  }
+
+  function rectWithOffset (windowTL) {
+    const canvasOffset = overlay._canvasdiv.getBoundingClientRect()
+    const origin = new OpenSeadragon.Point(0, 0)
+    const image1WindowPoint = vpt.imageToWindowCoordinates(origin)
+    const x = Math.round(image1WindowPoint.x)
+    const y = Math.round(image1WindowPoint.y)
+    const point = new fabric.Point(canvasOffset.left - x, canvasOffset.top - y)
+    const factor = 1 / canvas.getZoom()
+    const rect1 = new fabric.Rect({
+      fill: 'blue',
+      left: (windowTL.x + point.x) * factor,
+      top: (windowTL.y + point.y) * factor,
+      width: width * factor,
+      height: height * factor
+    })
+    canvas.add(rect1)
+    canvas.renderAll()
+  }
+
+  function positionTest (imageRect) {
     const vptRect = vpt.imageToViewportRectangle(imageRect)
     const viewerElementRect = vpt.viewportToViewerElementRectangle(vptRect)
+    console.log('viewerElementRect', viewerElementRect)
 
-    const rect = new fabric.Rect({
+    canvas.add(new fabric.Rect({
       left: viewerElementRect.getTopLeft().x,
       top: viewerElementRect.getTopLeft().y,
       stroke: 'yellow',
@@ -128,8 +183,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       fill: '',
       width: viewerElementRect.width,
       height: viewerElementRect.height
-    })
-    canvas.add(rect)
+    }))
     canvas.renderAll()
   }
 
