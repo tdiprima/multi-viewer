@@ -1,9 +1,9 @@
 (function () {
   window.addEventListener('load', function () {
     // Image service Loris
-    const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
+    // const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
     // Image service SBU
-    // const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
+    const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
 
     const size = 256
     let viewer, canvas, overlay, vpt
@@ -96,7 +96,7 @@
         imageRect.getTopLeft().x + ',' +
         imageRect.getTopLeft().y + ',' +
         imageRect.width + ',' +
-        imageRect.height + '/full/0/default.jpg'
+        imageRect.height + '/256,/0/default.jpg'
     }
 
     function showThumbnailOnImage (imageRect) {
