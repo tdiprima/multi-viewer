@@ -1,6 +1,5 @@
-(function () {
-  window.addEventListener('load', function () {
-    // Image service Loris
+document.addEventListener("DOMContentLoaded", function(event) { 
+// Image service Loris
     // const imgUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
     // Image service SBU
     const imgUrl = 'https://quip.bmi.stonybrook.edu/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
@@ -132,6 +131,5 @@
       this.__newRect = newRect // DEBUG PURPOSES
       canvas.add(newRect)
       canvas.renderAll()
-    }
-  })
-})()
+    }  
+});
