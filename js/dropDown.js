@@ -8,22 +8,27 @@ const DropDown = function (viewerArray, divId, dataSource) {
   let cancerSelect = {}
   let imageSelect = {}
   let data = {}
-  initialize()
 
-  function initialize () {
-    const getSlideData = async function () {
-      return (await fetch(dataSource)).json() // eslint-disable-line no-undef
+  fetch(dataSource).then(response => {
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.indexOf('application/json') !== -1) {
+      return response.json().then(data => {
+        // Process JSON data
+        // eslint-disable-next-line no-undef
+        if (!isEmpty(data)) {
+          initTypes()
+          initImages()
+        } else {
+          throw Error('Empty JSON response; skipping...')
+        }
+      })
+    } else {
+      return response.text().then(text => {
+        console.log('text:', text)
+        throw Error('We got a response... but it was not JSON.')
+      })
     }
-    const x = getSlideData()
-    x.then(function (result) {
-      data = result
-      // eslint-disable-next-line no-undef
-      if (!isEmpty(data)) {
-        initTypes()
-        initImages()
-      }
-    })
-  }
+  })
 
   function selectCancerType () {
     const val = cancerSelect.value
