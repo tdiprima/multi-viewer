@@ -7,7 +7,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
   const iiif = window.location.origin + '/iiif/?iiif=/tcgaseg'
   let cancerSelect = {}
   let imageSelect = {}
-  let data = {}
+  let data = {} // eslint-disable-line prefer-const
 
   fetch(dataSource).then(response => {
     const contentType = response.headers.get('content-type')
