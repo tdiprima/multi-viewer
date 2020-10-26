@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
   // const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
 
   const thumbnailSize = 256
-  const scrollerLength = 5
+  // const scrollerLength = 5
+  const scrollerLength = 1
 
   let viewer, canvas, overlay, vpt
 
@@ -55,8 +56,9 @@ document.addEventListener('DOMContentLoaded', function (event) {
       ul.appendChild(li)
       span = document.createElement('span')
       // Giving it some number in the middle of the image
-      // createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
-      createThumbnail(data, span)
+      console.log(Math.round(data.width / 2), Math.round(data.height / 2))
+      createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
+      // createThumbnail(data, span)
       li.appendChild(span)
     }
     document.getElementById('thumbnail-container').appendChild(fragment)
@@ -72,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   function createThumbnail (data, span, x, y) {
     let imageRect // it's a rectangle
-    if (xyExist()) {
+    if (xyExist(x, y)) {
       // x,y,w,h
       imageRect = new OpenSeadragon.Rect(x, y, thumbnailSize, thumbnailSize)
     } else {
@@ -102,10 +104,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
     if (imagePoint.y % 1 !== 0) {
       console.warn(imagePoint.y, 'not a whole number')
     }
-    // console.log('imageRect', imageRect.getTopLeft())
   }
 
   function getImageUrl (infoUrl, imageRect) {
+    // console.log('iiif req', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
     return infoUrl + '/' +
       imageRect.getTopLeft().x + ',' +
       imageRect.getTopLeft().y + ',' +
@@ -129,24 +131,31 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   function highlightLocation (imageRect) {
     // Translate coordinates => image to viewport coordinates.
+    // TODO: Needs to be more y, less x. But we're using OpenSeadragon's coordinate translation!
+    // TODO: Test in other browsers
     const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
     const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
+    console.log('Image', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
 
+    // TRY THIS:
+    const vptRect = vpt.imageToViewportRectangle(imageRect)
+    const VER = vpt.viewportToViewerElementRectangle(vptRect)
+    console.log('Rectangle', VER.getTopLeft().x, VER.getTopLeft().y, VER.width, VER.height)
+
+    // TRY THIS:
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
-
-    const w = windowBR.x - windowTL.x
-    const h = windowBR.y - windowTL.y
+    console.log('Coordinates', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
 
     const rect = new fabric.Rect({
       stroke: 'yellow',
       fill: '',
       left: windowTL.x,
       top: windowTL.y,
-      width: w,
-      height: h
+      width: windowBR.x - windowTL.x,
+      height: windowBR.y - windowTL.y
     })
-    console.log('highlightLocation', windowTL.x, windowTL.y)
+
     canvas.add(rect)
     canvas.renderAll()
   }
