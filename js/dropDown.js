@@ -19,7 +19,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
           initTypes()
           initImages()
         } else {
-          throw Error('Empty JSON response; skipping drop-down creation...')
+          throw Error('\n    Empty JSON response.\n    Skipping drop-down creation.')
         }
       })
     } else {
