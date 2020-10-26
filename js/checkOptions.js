@@ -14,8 +14,6 @@ const checkOptions = function (options) {
   }
 
   const empty = isEmpty(options) // eslint-disable-line no-undef
-  console.log('options:', options)
-  console.log('empty?', empty)
   if (!empty) {
     returnValue = makeStructuresEqual(weNeedTheseKeys, options)
   } else {
