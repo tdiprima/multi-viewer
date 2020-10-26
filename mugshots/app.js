@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   fetch(infoUrl + '/info.json')
     .then(response => response.json())
     .then(data => {
-      console.log('Image w,h', new OpenSeadragon.Point(data.width, data.height))
+      // console.log('Image w,h', new OpenSeadragon.Point(data.width, data.height))
       createViewer(data)
       createScroller(data)
     })
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     canvas = this.__canvas = overlay.fabricCanvas()
 
     viewer.addHandler('update-viewport', function () {
-      overlay.render()
+      overlay.render() // TODO: why not rendering?
     })
   }
 
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     if (imagePoint.y % 1 !== 0) {
       console.warn(imagePoint.y, 'not a whole number')
     }
-    console.log('imageRect', imageRect.getTopLeft())
+    // console.log('imageRect', imageRect.getTopLeft())
   }
 
   function getImageUrl (infoUrl, imageRect) {
@@ -128,27 +128,27 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function highlightLocation (imageRect) {
+    // Translate coordinates => image to viewport coordinates.
     const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
     const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
 
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
 
-    const width = windowBR.x - windowTL.x
-    const height = windowBR.y - windowTL.y
+    const w = windowBR.x - windowTL.x
+    const h = windowBR.y - windowTL.y
 
-    const rect1 = new fabric.Rect({
-      stroke: 'blue',
+    const rect = new fabric.Rect({
+      stroke: 'yellow',
       fill: '',
       left: windowTL.x,
       top: windowTL.y,
-      width: width,
-      height: height
+      width: w,
+      height: h
     })
-    canvas.add(rect1)
+    console.log('highlightLocation', windowTL.x, windowTL.y)
+    canvas.add(rect)
     canvas.renderAll()
-
-    // rectWithOffset(windowTL)
   }
 
   function randomImageRectangle (data) {
@@ -160,41 +160,4 @@ document.addEventListener('DOMContentLoaded', function (event) {
     return new OpenSeadragon.Rect(left, top, thumbnailSize, thumbnailSize)
   }
 
-  function rectWithOffset (windowTL) {
-    // Remember what did not work.
-    const canvasOffset = overlay._canvasdiv.getBoundingClientRect()
-    const origin = new OpenSeadragon.Point(0, 0)
-    const image1WindowPoint = vpt.imageToWindowCoordinates(origin)
-    const x = Math.round(image1WindowPoint.x)
-    const y = Math.round(image1WindowPoint.y)
-    const point = new fabric.Point(canvasOffset.left - x, canvasOffset.top - y)
-    const factor = 1 / canvas.getZoom()
-    const rect1 = new fabric.Rect({
-      fill: 'blue',
-      left: (windowTL.x + point.x) * factor,
-      top: (windowTL.y + point.y) * factor,
-      width: width * factor,
-      height: height * factor
-    })
-    canvas.add(rect1)
-    canvas.renderAll()
-  }
-
-  function positionTest (imageRect) {
-    // Remember what did not work.
-    const vptRect = vpt.imageToViewportRectangle(imageRect)
-    const viewerElementRect = vpt.viewportToViewerElementRectangle(vptRect)
-    console.log('viewerElementRect', viewerElementRect)
-
-    canvas.add(new fabric.Rect({
-      left: viewerElementRect.getTopLeft().x,
-      top: viewerElementRect.getTopLeft().y,
-      stroke: 'yellow',
-      strokeWidth: 1,
-      fill: '',
-      width: viewerElementRect.width,
-      height: viewerElementRect.height
-    }))
-    canvas.renderAll()
-  }
 })
