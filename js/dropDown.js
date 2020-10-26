@@ -17,7 +17,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
         // eslint-disable-next-line no-undef
         if (!isEmpty(data)) {
           initTypes()
-          initImages()
+          initImages(data)
         } else {
           throw Error('\n    Empty JSON response.\n    Skipping drop-down creation.')
         }
@@ -85,7 +85,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
     maindiv.appendChild(d)
   }
 
-  function initImages () {
+  function initImages (data) {
     const images = data[cancertypes[0]]
     if (typeof images !== 'undefined') {
       const d = document.createDocumentFragment()
