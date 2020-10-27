@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function (event) {
   // Image service Loris
-  const infoUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
+  // const infoUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
   // Image service SBU
-  // const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
+  const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
 
   const thumbnailSize = 256
   // const scrollerLength = 5
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   fetch(infoUrl + '/info.json')
     .then(response => response.json())
     .then(data => {
-      // console.log('Image w,h', new OpenSeadragon.Point(data.width, data.height))
+      console.log('Image w,h:', data.width, data.height)
       createViewer(data)
       createScroller(data)
     })
@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     })
     canvas = this.__canvas = overlay.fabricCanvas()
 
+    // Added to try to force it, even though it's already being done. But still not working.
     viewer.addHandler('update-viewport', function () {
       overlay.render() // TODO: why not rendering?
     })
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       ul.appendChild(li)
       span = document.createElement('span')
       // Giving it some number in the middle of the image
-      console.log(Math.round(data.width / 2), Math.round(data.height / 2))
+      console.log('Target (upper-left):', Math.round(data.width / 2), Math.round(data.height / 2))
       createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
       // createThumbnail(data, span)
       li.appendChild(span)
@@ -107,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function getImageUrl (infoUrl, imageRect) {
-    // console.log('iiif req', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
+    console.log('iiif req', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
     return infoUrl + '/' +
       imageRect.getTopLeft().x + ',' +
       imageRect.getTopLeft().y + ',' +
@@ -135,28 +136,35 @@ document.addEventListener('DOMContentLoaded', function (event) {
     // TODO: Test in other browsers
     const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
     const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
-    console.log('Image', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
+    console.log('Image coords:', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
 
     // TRY THIS:
     const vptRect = vpt.imageToViewportRectangle(imageRect)
     const VER = vpt.viewportToViewerElementRectangle(vptRect)
-    console.log('Rectangle', VER.getTopLeft().x, VER.getTopLeft().y, VER.width, VER.height)
+    console.log('viewport rectangle coords:', VER.getTopLeft().x, VER.getTopLeft().y, VER.width, VER.height)
+
+    canvas.add(new fabric.Rect({
+      stroke: 'red', // TOO FAR NORTH.
+      fill: '',
+      left: VER.getTopLeft().x,
+      top: VER.getTopLeft().y,
+      width: VER.width,
+      height: VER.height
+    }))
 
     // TRY THIS:
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
-    console.log('Coordinates', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
+    console.log('viewport point coordinates', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
 
-    const rect = new fabric.Rect({
-      stroke: 'yellow',
+    canvas.add(new fabric.Rect({
+      stroke: 'yellow', // A LITTLE NORTH AND FAR EAST.
       fill: '',
       left: windowTL.x,
       top: windowTL.y,
       width: windowBR.x - windowTL.x,
       height: windowBR.y - windowTL.y
-    })
-
-    canvas.add(rect)
+    }))
     canvas.renderAll()
   }
 
@@ -170,3 +178,4 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
 })
+
