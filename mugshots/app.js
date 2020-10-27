@@ -37,11 +37,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
       scale: 1000
     })
     canvas = this.__canvas = overlay.fabricCanvas()
-
-    // Added to try to force it, even though it's already being done. But still not working.
-    viewer.addHandler('update-viewport', function () {
-      overlay.render() // TODO: why not rendering?
-    })
   }
 
   function createScroller (data) {
@@ -176,6 +171,4 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     return new OpenSeadragon.Rect(left, top, thumbnailSize, thumbnailSize)
   }
-
 })
-
