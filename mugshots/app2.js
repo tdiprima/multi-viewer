@@ -20,7 +20,7 @@ let oly = viewer.fabricjsOverlay({
 let canvas = oly.fabricCanvas()
 
 let image1
-// let size1 = 256 // can see from space, but we need smaller
+// let size1 = 256 // can see from outer space, but we need smaller
 let size1 = 128
 let imageTL
 let imageBR
