@@ -36,14 +36,16 @@ y = y - size
 let upLeftWeb = new OpenSeadragon.Point(x, y)
 let botRightWeb = new OpenSeadragon.Point(x + size, y + size)
 
-let upLeftVpt = viewer.viewport.pointFromPixel(upLeftWeb)
-let botRightVpt = viewer.viewport.pointFromPixel(botRightWeb)
+// USING POINT FROM PIXEL
+// let upLeftVpt = viewer.viewport.pointFromPixel(upLeftWeb)
+// let botRightVpt = viewer.viewport.pointFromPixel(botRightWeb)
+// let upLeftImg = viewer.viewport.viewportToImageCoordinates(upLeftVpt)
+// let botRightImg = viewer.viewport.viewportToImageCoordinates(botRightVpt)
 
-let upLeftImg = viewer.viewport.viewportToImageCoordinates(upLeftVpt)
-let botRightImg = viewer.viewport.viewportToImageCoordinates(botRightVpt)
-// Or we could've converted from the fabric 'rect' object
+// USING WINDOW TO IMAGE
+let upLeftImg = viewer.viewport.windowToImageCoordinates(upLeftWeb)
+let botRightImg = viewer.viewport.windowToImageCoordinates(botRightWeb)
 
-// TODO: TRY AGAIN.
 let imageRect = {
   x: upLeftImg.x,
   y: upLeftImg.y,
