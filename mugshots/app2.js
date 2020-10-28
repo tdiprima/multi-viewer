@@ -1,6 +1,6 @@
 // STARTING WITH IMAGE COORDINATES
-// let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 
+// let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 let divId = 'osd-placeholder'
 
 let viewer = OpenSeadragon({
@@ -25,33 +25,6 @@ let size1 = 128
 let imageTL
 let imageBR
 let center
-
-function getImage1() {
-  // I already have this data
-  image1 = viewer.world.getItemAt(0)
-  let imgDimensions = image1.source.dimensions
-  console.log('imgDimensions', imgDimensions)
-
-  // Get center of image
-  let x = imgDimensions.x / 2
-  let y = imgDimensions.y / 2
-  center = new OpenSeadragon.Point(x, y)
-  console.log('center', center)
-
-  // Get center
-  let size = size1 / 2
-  // Shift upper-left of box by 'size' amount
-  x = x - size
-  y = y - size
-
-  // Just guarantee that we have whole numbers
-  imageTL = new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
-  imageBR = new OpenSeadragon.Point(Math.ceil(x) + size1, Math.ceil(y) + size1)
-
-  console.log('imageTL', imageTL)
-  console.log('imageBR', imageBR)
-
-}
 
 // DRAW RECT, ZOOM, and GET MUG
 function drawRect() {
@@ -105,3 +78,31 @@ function drawRect() {
   // console.log(url)
 
 }
+
+function getImage1() {
+  // I already have this data
+  image1 = viewer.world.getItemAt(0)
+  let imgDimensions = image1.source.dimensions
+  console.log('imgDimensions', imgDimensions)
+
+  // Get center of image
+  let x = imgDimensions.x / 2
+  let y = imgDimensions.y / 2
+  center = new OpenSeadragon.Point(x, y)
+  console.log('center', center)
+
+  // Get center
+  let size = size1 / 2
+  // Shift upper-left of box by 'size' amount
+  x = x - size
+  y = y - size
+
+  // Just guarantee that we have whole numbers
+  imageTL = new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
+  imageBR = new OpenSeadragon.Point(Math.ceil(x) + size1, Math.ceil(y) + size1)
+
+  console.log('imageTL', imageTL)
+  console.log('imageBR', imageBR)
+
+}
+
