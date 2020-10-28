@@ -1,5 +1,6 @@
 // STARTING WITH WINDOW COORDINATES
-// TODO: myTiles is temporary; we have it already.
+// The improved first re-attempt
+
 // let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 let divId = 'osd-placeholder'
 
@@ -21,12 +22,12 @@ let canvas = oly.fabricCanvas()
 
 // Get center of div
 let centerWeb = getCenter(document.getElementById(divId))
-console.log('center', centerWeb)
+// console.log('center', centerWeb)
 
 let size = 24
 let topLeftWeb = shiftPoint(centerWeb, size)
 console.log('top left', topLeftWeb)
-console.log('size', size)
+// console.log('size', size)
 // let botRightWeb = new OpenSeadragon.Point(x + size, y + size)
 
 // DRAW RECT, ZOOM, and GET MUG
@@ -54,9 +55,9 @@ function drawRect() {
 
   // GET MUG
   let imgRect = vpt.viewportToImageRectangle(vptRect)
-  console.log('get this mug', imgRect)
+  // console.log('get this mug', imgRect)
 
-  // TODO: this info url is temporary - we have it already.
+  // This info url is temporary - we have it already.
   const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
   const mugSize = '256,'
   const rotation = '0'
@@ -72,7 +73,7 @@ function drawRect() {
     rotation + '/' +
     quality + '.' + format
 
-  console.log(url)
+  // console.log(url)
 
 }
 
@@ -81,12 +82,12 @@ function getCenter(div) {
   // 1. Try: Get plain old dimensions of div
   w = div.clientWidth
   h = div.clientHeight
-  console.log('client w,h', w, h)
+  // console.log('client w,h', w, h)
 
   // 2. Try: Get div with padding
   // w = div.offsetWidth
   // h = div.offsetHeight
-  // console.log('with padding w,h', w, h)
+  // // console.log('with padding w,h', w, h)
 
   // This is what we would return:
   // return new OpenSeadragon.Point(w / 2, h / 2)
@@ -95,7 +96,7 @@ function getCenter(div) {
   let offPoint = getOffset(div)
   let ww = w + offPoint.x
   let hh = h - offPoint.y
-  console.log('offset w,h', ww, hh)
+  // console.log('offset w,h', ww, hh)
 
   // Using offset, this is what we would return:
   return new OpenSeadragon.Point(ww / 2, hh / 2)
