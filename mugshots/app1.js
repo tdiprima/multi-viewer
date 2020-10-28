@@ -1,6 +1,6 @@
 // STARTING WITH WINDOW COORDINATES
 // TODO: myTiles is temporary; we have it already.
-let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
+// let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 let divId = 'osd-placeholder'
 
 let viewer = OpenSeadragon({
