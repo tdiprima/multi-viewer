@@ -1,3 +1,4 @@
+// STARTING WITH WINDOW COORDINATES
 let divId = 'osd-placeholder'
 
 let viewer = OpenSeadragon({
