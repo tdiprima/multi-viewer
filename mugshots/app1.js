@@ -1,5 +1,6 @@
-// STARTING WITH WINDOW COORDINATES
-// The improved first re-attempt
+/*
+STARTING WITH WINDOW COORDINATES
+ */
 
 // let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 let divId = 'osd-placeholder'
@@ -56,8 +57,7 @@ function drawRect() {
   // GET MUG
   let imgRect = vpt.viewportToImageRectangle(vptRect)
   // console.log('get this mug', imgRect)
-
-  // This info url is temporary - we have it already.
+  
   const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
   const mugSize = '256,'
   const rotation = '0'
