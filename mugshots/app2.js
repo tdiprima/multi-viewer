@@ -25,36 +25,34 @@ let topLeftImg
 let botRightImg
 let centerImg
 let imageRect
+let small = 256
 
 // DRAW RECT, ZOOM, and GET MUG
 function drawRect() {
 
-  // CONVERT
-  // imageToWindowCoordinates
-  // imageToViewerElementCoordinates
-  let vptRect = vpt.imageToViewportRectangle(imageRect)
-  let webRect = vpt.viewportToViewerElementRectangle(vptRect)
-  console.log('webRect', webRect)
+  // Initializing some variables
+  getImageRect()
 
-  let rect = new fabric.Rect({
-    stroke: '#8a00ff',
-    strokeWidth: 1,
-    fill: '',
-    left: webRect.x,
-    top: webRect.y,
-    width: webRect.width,
-    height: webRect.height
-  })
-  canvas.add(rect)
+  // CONVERT
+  convertWinCoords()
+  convertRectangle()
+  convertElemCoords()
+  coords()
+  coords1()
+  // Green, blue, and cyan (ToViewerElement)
+  // Red, magenta (ToWindow)
   canvas.renderAll()
 
   // PAN, ZOOM
-  vpt.panTo(vptRect.getCenter())
-  vpt.zoomTo(vpt.getMaxZoom())
+  panZoom(vpt.imageToViewportRectangle(imageRect))
 
   // GET MUG
+  // getMug()
 
-  // This info url is temporary - we have it already.
+}
+
+function getMug() {
+
   const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
   const mugSize = '256,'
   const rotation = '0'
@@ -71,11 +69,89 @@ function drawRect() {
     quality + '.' + format
 
   console.log(url)
-
 }
 
-function getImage1() {
-  // I already have this data
+function panZoom(vptRect) {
+  vpt.panTo(vptRect.getCenter())
+  vpt.zoomTo(vpt.getMaxZoom())
+}
+
+function convertWinCoords() {
+  // 1 STEP
+  let z = vpt.imageToWindowCoordinates(imageRect.getTopLeft())
+  canvas.add(new fabric.Rect({
+    stroke: '#f00',
+    strokeWidth: 1,
+    fill: '',
+    left: z.x,
+    top: z.y,
+    width: small,
+    height: small
+  }))
+}
+
+function convertRectangle() {
+  // 2 STEPS
+  let vptRect = vpt.imageToViewportRectangle(imageRect)
+  let webRect = vpt.viewportToViewerElementRectangle(vptRect)
+
+  canvas.add(rect = new fabric.Rect({
+    stroke: '#0f0',
+    strokeWidth: 1,
+    fill: '',
+    left: webRect.x,
+    top: webRect.y,
+    width: webRect.width,
+    height: webRect.height
+  }))
+}
+
+function convertElemCoords() {
+  // 1 STEP
+  let z = vpt.imageToViewerElementCoordinates(imageRect.getTopLeft())
+  canvas.add(new fabric.Rect({
+    stroke: '#00f',
+    strokeWidth: 1,
+    fill: '',
+    left: z.x,
+    top: z.y,
+    width: small,
+    height: small
+  }))
+}
+
+function coords() {
+  // 2 STEPS
+  let z = vpt.imageToViewportCoordinates(imageRect.getTopLeft())
+  let q = vpt.viewportToWindowCoordinates(z)
+  canvas.add(new fabric.Rect({
+    stroke: '#f0f',
+    strokeWidth: 1,
+    fill: '',
+    left: q.x,
+    top: q.y,
+    width: small,
+    height: small
+  }))
+}
+
+function coords1() {
+  // 2 STEPS
+  let z = vpt.imageToViewportCoordinates(imageRect.getTopLeft())
+  let q = vpt.viewportToViewerElementCoordinates(z)
+  canvas.add(new fabric.Rect({
+    stroke: '#0ff',
+    strokeWidth: 1,
+    fill: '',
+    left: q.x,
+    top: q.y,
+    width: small,
+    height: small
+  }))
+}
+
+function getImageRect() {
+
   image1 = viewer.world.getItemAt(0)
   let imgDimensions = image1.source.dimensions
 
@@ -83,7 +159,8 @@ function getImage1() {
   centerImg = getCenter(imgDimensions)
 
   // Top left of bounding box (for mug)
-  topLeftImg = shiftPoint(centerImg, size)
+  // topLeftImg = shiftPoint(centerImg, size) // skip
+  topLeftImg = centerImg
   botRightImg = new OpenSeadragon.Point(topLeftImg.x + size, topLeftImg.y + size)
   imageRect = new OpenSeadragon.Rect(topLeftImg.x, topLeftImg.y, size, size)
 
