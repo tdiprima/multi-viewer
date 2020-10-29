@@ -1,5 +1,5 @@
 /*
-STARTING WITH WINDOW COORDINATES
+STARTING WITH WEB COORDINATES
  */
 
 // let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
