@@ -1,3 +1,4 @@
+// THE MAIN APP
 document.addEventListener('DOMContentLoaded', function (event) {
   // Image service Loris
   // const infoUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
@@ -14,18 +15,26 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const rotation = '0'
   const quality = 'default'
   const format = 'jpg'
+  let dims
+  let center
+  let upperLeft
 
   fetch(infoUrl + '/info.json')
     .then(response => response.json())
     .then(data => {
-      console.log('Image w,h:', data.width, data.height)
+      dims = new OpenSeadragon.Point(data.width, data.height)
+      center = new OpenSeadragon.Point(data.width / 2, data.height / 2)
+      upperLeft = shiftPoint(center, thumbnailSize)
+      console.log('Image dims:', dims)
+      console.log('Center:', center)
+      console.log('upperLeft:', upperLeft)
       createViewer(data)
       createScroller(data)
     })
 
   function createViewer (data) {
     viewer = OpenSeadragon({
-      id: 'contentDiv',
+      id: 'osd-placeholder',
       prefixUrl: '//openseadragon.github.io/openseadragon/images/',
       tileSources: [{
         tileSource: data
@@ -52,12 +61,23 @@ document.addEventListener('DOMContentLoaded', function (event) {
       ul.appendChild(li)
       span = document.createElement('span')
       // Giving it some number in the middle of the image
-      console.log('Target (upper-left):', Math.round(data.width / 2), Math.round(data.height / 2))
-      createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
+      createThumbnail(data, span, upperLeft.x, upperLeft.y) // Image coordinates
       // createThumbnail(data, span)
       li.appendChild(span)
     }
     document.getElementById('thumbnail-container').appendChild(fragment)
+  }
+
+  function shiftPoint(centerPoint, size) {
+    // Half
+    const size1 = size / 2
+
+    // Shift upper-left of by 'size' amount
+    const x = centerPoint.x - size1
+    const y = centerPoint.y - size1
+
+    // Make sure we have whole numbers
+    return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
   }
 
   function getRandomInt (min, max) {
@@ -103,8 +123,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function getImageUrl (infoUrl, imageRect) {
-    console.log('iiif req', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
-    return infoUrl + '/' +
+    const url = infoUrl + '/' +
       imageRect.getTopLeft().x + ',' +
       imageRect.getTopLeft().y + ',' +
       imageRect.width + ',' +
@@ -112,6 +131,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
       size + '/' +
       rotation + '/' +
       quality + '.' + format
+
+    console.log(url)
+    return url
+
   }
 
   function showThumbnailOnImage (imageRect) {
@@ -121,36 +144,34 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   function zoomToLocation (imageRect) {
     const vptRect = vpt.imageToViewportRectangle(imageRect)
+    // console.log('zoom', vptRect)
     vpt.panTo(vptRect.getCenter())
     vpt.zoomTo(vpt.getMaxZoom())
   }
 
   function highlightLocation (imageRect) {
-    // Translate coordinates => image to viewport coordinates.
-    // TODO: Needs to be more y, less x. But we're using OpenSeadragon's coordinate translation!
-    // TODO: Test in other browsers
-    const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
-    const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
-    console.log('Image coords:', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
+    console.log('imageRect', imageRect)
+    console.log('getTopLeft', imageRect.getTopLeft())
+    console.log('getBottomRight', imageRect.getBottomRight())
+    const viewerElemRect = vpt.viewportToViewerElementRectangle(vpt.imageToViewportRectangle(imageRect))
+    console.log('viewer element:', viewerElemRect)
 
-    // TRY THIS:
-    const vptRect = vpt.imageToViewportRectangle(imageRect)
-    const VER = vpt.viewportToViewerElementRectangle(vptRect)
-    console.log('viewport rectangle coords:', VER.getTopLeft().x, VER.getTopLeft().y, VER.width, VER.height)
-
+    // TEST Rectangle => rectangle
     canvas.add(new fabric.Rect({
       stroke: 'red', // TOO FAR NORTH.
       fill: '',
-      left: VER.getTopLeft().x,
-      top: VER.getTopLeft().y,
-      width: VER.width,
-      height: VER.height
+      left: viewerElemRect.getTopLeft().x,
+      top: viewerElemRect.getTopLeft().y,
+      width: viewerElemRect.width,
+      height: viewerElemRect.height
     }))
 
-    // TRY THIS:
+    // TEST Point => point
+    const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
+    const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
-    console.log('viewport point coordinates', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
+    console.log('window:', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
 
     canvas.add(new fabric.Rect({
       stroke: 'yellow', // A LITTLE NORTH AND FAR EAST.
