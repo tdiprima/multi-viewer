@@ -3,13 +3,6 @@ body {
     font-size: larger;
 }
 
-.openseadragon {
-    width: 800px;
-    height: 600px;
-    border: 1px solid black;
-    color: #333;
-}
-
 .thumbnail-container {
     overflow-x: scroll;
     width: 100%;

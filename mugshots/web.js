@@ -1,9 +1,10 @@
 /*
 STARTING WITH WEB COORDINATES
  */
-
-// let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
+let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 let divId = 'osd-placeholder'
+
+document.querySelector('button').innerHTML = 'Draw Rectangle'
 
 let viewer = OpenSeadragon({
   id: divId,
@@ -21,25 +22,21 @@ let oly = viewer.fabricjsOverlay({
 })
 let canvas = oly.fabricCanvas()
 
-// Get center of div
-let centerWeb = getCenter(document.getElementById(divId))
-// console.log('center', centerWeb)
-
-let size = 24
-let topLeftWeb = shiftPoint(centerWeb, size)
-console.log('top left', topLeftWeb)
-// console.log('size', size)
-// let botRightWeb = new OpenSeadragon.Point(x + size, y + size)
+let size = 26 // In web coordinates
+let centerPoint = getCenter(document.getElementById(divId))
+let topLeft = centerPoint //shiftPoint(centerPoint, size)
+let bottomRight = new OpenSeadragon.Point(topLeft.x + size, topLeft.y + size)
+let rectangle
 
 // DRAW RECT, ZOOM, and GET MUG
-function drawRect() {
+function drawRect () {
 
   let rect = new fabric.Rect({
     stroke: '#8a00ff',
     strokeWidth: 1,
     fill: '',
-    left: topLeftWeb.x,
-    top: topLeftWeb.y,
+    left: topLeft.x,
+    top: topLeft.y,
     width: size,
     height: size
   })
@@ -47,17 +44,19 @@ function drawRect() {
   canvas.renderAll()
 
   // CONVERT
-  // let point = convertToViewport(centerWeb) // Try this.
+  // let point = convertToViewport(centerPoint)
   let rect1 = new OpenSeadragon.Rect(rect.left, rect.top, rect.width, rect.height) // Try this.
   let vptRect = vpt.viewerElementToViewportRectangle(rect1)
+
   // PAN, ZOOM
-  vpt.panTo(vptRect.getCenter())
-  vpt.zoomTo(vpt.getMaxZoom())
+  panZoom(vptRect)
 
   // GET MUG
-  let imgRect = vpt.viewportToImageRectangle(vptRect)
-  // console.log('get this mug', imgRect)
-  
+  rectangle = vpt.viewportToImageRectangle(vptRect)
+  // getMug(rectangle)
+}
+
+function getMug (rectangle) {
   const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
   const mugSize = '256,'
   const rotation = '0'
@@ -65,19 +64,45 @@ function drawRect() {
   const format = 'jpg'
 
   let url = infoUrl + '/' +
-    Math.ceil(imgRect.x) + ',' +
-    Math.ceil(imgRect.y) + ',' +
-    Math.ceil(imgRect.width) + ',' +
-    Math.ceil(imgRect.height) + '/' +
+    Math.ceil(rectangle.x) + ',' +
+    Math.ceil(rectangle.y) + ',' +
+    Math.ceil(rectangle.width) + ',' +
+    Math.ceil(rectangle.height) + '/' +
     mugSize + '/' +
     rotation + '/' +
     quality + '.' + format
 
-  // console.log(url)
-
+  console.log(url)
 }
 
-function getCenter(div) {
+function panZoom (vptRect) {
+  vpt.panTo(vptRect.getCenter())
+  vpt.zoomTo(vpt.getMaxZoom())
+}
+
+function shiftPoint (centerPoint, size) {
+  // Half
+  const size1 = size / 2
+
+  // Shift upper-left of by 'size' amount
+  const x = centerPoint.x - size1
+  const y = centerPoint.y - size1
+
+  // Make sure we have whole numbers
+  return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
+}
+
+function convertToViewport (point) {
+  return vpt.viewerElementToViewportCoordinates(point)
+}
+
+function convertToViewport1 (point) {
+  // Tried this; didn't help:
+  let image = vpt.windowToImageCoordinates(point)
+  return vpt.imageToViewportCoordinates(image)
+}
+
+function getCenter (div) {
   let w, h
   // 1. Try: Get plain old dimensions of div
   w = div.clientWidth
@@ -102,32 +127,14 @@ function getCenter(div) {
   return new OpenSeadragon.Point(ww / 2, hh / 2)
 }
 
-function getOffset(someElement) {
+function getOffset (someElement) {
   const m_getOffset = (element, horizontal = false) => {
-    if (!element) return 0;
-    return m_getOffset(element.offsetParent, horizontal) + (horizontal ? element.offsetLeft : element.offsetTop);
+    if (!element) return 0
+    return m_getOffset(element.offsetParent, horizontal) + (horizontal ? element.offsetLeft : element.offsetTop)
   }
 
-  let X = m_getOffset(someElement);
+  let X = m_getOffset(someElement)
   let Y = m_getOffset(someElement, true)
 
   return new OpenSeadragon.Point(X, Y)
-}
-
-function shiftPoint(centerPoint, size) {
-  // Half the box
-  const size1 = size / 2
-  // Shift upper-left of box by 'size' amount
-  const x = centerPoint.x - size1
-  const y = centerPoint.y - size1
-  return new OpenSeadragon.Point(x, y)
-}
-
-function convertToViewport(point) {
-  return vpt.viewerElementToViewportCoordinates(point)
-
-  // What if we did it like this?
-  // let image = vpt.windowToImageCoordinates(point)
-  // return vpt.imageToViewportCoordinates(image)
-
 }
