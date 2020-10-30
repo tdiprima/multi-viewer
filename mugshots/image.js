@@ -24,12 +24,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
   let center
   let upperLeft
 
+  // eslint-disable-next-line no-undef
   fetch(infoUrl + '/info.json')
     .then(response => response.json())
     .then(data => {
-      dims = new OpenSeadragon.Point(data.width, data.height)
-      center = new OpenSeadragon.Point(data.width / 2, data.height / 2)
-      upperLeft = shiftPoint(center, thumbnailSize)
+      dims = new OpenSeadragon.Point(data.width, data.height) // eslint-disable-line no-undef
+      center = new OpenSeadragon.Point(data.width / 2, data.height / 2) // eslint-disable-line no-undef
+      upperLeft = center // shiftPoint(center, thumbnailSize) // TODO: Shift top left from center
       console.log('Image dims:', dims)
       console.log('Center:', center)
       console.log('upperLeft:', upperLeft)
@@ -38,8 +39,9 @@ document.addEventListener('DOMContentLoaded', function (event) {
     })
 
   function createViewer (data) {
+    // eslint-disable-next-line no-undef
     viewer = OpenSeadragon({
-      id: 'osd-placeholder',
+      id: divId,
       prefixUrl: '//openseadragon.github.io/openseadragon/images/',
       tileSources: [{
         tileSource: data
@@ -57,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     let ul, li, span
 
     const fragment = document.createDocumentFragment()
+    // eslint-disable-next-line prefer-const
     ul = document.createElement('ul')
     ul.classList.add('thumbnail-list')
     fragment.appendChild(ul)
@@ -82,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const y = centerPoint.y - size1
 
     // Make sure we have whole numbers
-    return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
+    return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y)) // eslint-disable-line no-undef
   }
 
   function getRandomInt (min, max) {
@@ -94,31 +97,32 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function createThumbnail (data, span, x, y) {
-    let imageRect // it's a rectangle
+    let rectangle // it's a rectangle
     if (xyExist(x, y)) {
       // x,y,w,h
-      imageRect = new OpenSeadragon.Rect(x, y, thumbnailSize, thumbnailSize)
+      rectangle = new OpenSeadragon.Rect(x, y, thumbnailSize, thumbnailSize) // eslint-disable-line no-undef
     } else {
-      imageRect = randomImageRectangle(data)
+      rectangle = randomImageRectangle(data)
     }
-    checkWholeNumbers(imageRect)
+    console.log('draw', rectangle.x, rectangle.y)
+    checkWholeNumbers(rectangle)
 
     const imgElement = document.createElement('IMG')
     imgElement.alt = 'mugshot'
     imgElement.classList.add('thumbnail-image')
 
-    imgElement.src = getImageUrl(infoUrl, imageRect)
+    imgElement.src = getImageUrl(infoUrl, rectangle)
 
     span.appendChild(imgElement)
 
     imgElement.addEventListener('click', function () {
-      showThumbnailOnImage(imageRect)
+      showThumbnailOnImage(rectangle)
     })
   }
 
-  function checkWholeNumbers (imageRect) {
+  function checkWholeNumbers (rectangle) {
     // IIIF wants whole numbers
-    const imagePoint = imageRect.getTopLeft()
+    const imagePoint = rectangle.getTopLeft()
     if (imagePoint.x % 1 !== 0) {
       console.warn(imagePoint.x, 'not a whole number')
     }
@@ -127,12 +131,12 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
   }
 
-  function getImageUrl (infoUrl, imageRect) {
+  function getImageUrl (infoUrl, rectangle) {
     const url = infoUrl + '/' +
-      imageRect.getTopLeft().x + ',' +
-      imageRect.getTopLeft().y + ',' +
-      imageRect.width + ',' +
-      imageRect.height + '/' +
+      rectangle.getTopLeft().x + ',' +
+      rectangle.getTopLeft().y + ',' +
+      rectangle.width + ',' +
+      rectangle.height + '/' +
       size + '/' +
       rotation + '/' +
       quality + '.' + format
@@ -141,26 +145,27 @@ document.addEventListener('DOMContentLoaded', function (event) {
     return url
   }
 
-  function showThumbnailOnImage (imageRect) {
-    zoomToLocation(imageRect)
-    highlightLocation(imageRect)
+  function showThumbnailOnImage (rectangle) {
+    zoomToLocation(rectangle)
+    highlightLocation(rectangle)
   }
 
-  function zoomToLocation (imageRect) {
-    const vptRect = vpt.imageToViewportRectangle(imageRect)
+  function zoomToLocation (rectangle) {
+    const vptRect = vpt.imageToViewportRectangle(rectangle)
     // console.log('zoom', vptRect)
     vpt.panTo(vptRect.getCenter())
     vpt.zoomTo(vpt.getMaxZoom())
   }
 
-  function highlightLocation (imageRect) {
-    console.log('imageRect', imageRect)
-    console.log('getTopLeft', imageRect.getTopLeft())
-    console.log('getBottomRight', imageRect.getBottomRight())
-    const viewerElemRect = vpt.viewportToViewerElementRectangle(vpt.imageToViewportRectangle(imageRect))
-    console.log('viewer element:', viewerElemRect)
+  function highlightLocation (rectangle) {
+    // console.log('rectangle', rectangle)
+    // console.log('getTopLeft', rectangle.getTopLeft())
+    // console.log('getBottomRight', rectangle.getBottomRight())
+    const viewerElemRect = vpt.viewportToViewerElementRectangle(vpt.imageToViewportRectangle(rectangle))
+    // console.log('viewer element:', viewerElemRect)
 
     // TEST Rectangle => rectangle
+    // eslint-disable-next-line no-undef
     canvas.add(new fabric.Rect({
       stroke: 'red', // TOO FAR NORTH.
       fill: '',
@@ -171,12 +176,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }))
 
     // TEST Point => point
-    const imageTL = new OpenSeadragon.Point(imageRect.getTopLeft().x, imageRect.getTopLeft().y)
-    const imageBR = new OpenSeadragon.Point(imageRect.getBottomRight().x, imageRect.getBottomRight().y)
+    const imageTL = new OpenSeadragon.Point(rectangle.getTopLeft().x, rectangle.getTopLeft().y) // eslint-disable-line no-undef
+    const imageBR = new OpenSeadragon.Point(rectangle.getBottomRight().x, rectangle.getBottomRight().y)  // eslint-disable-line no-undef
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
-    console.log('window:', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
+    // console.log('window:', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
 
+    // eslint-disable-next-line no-undef
     canvas.add(new fabric.Rect({
       stroke: 'yellow', // A LITTLE NORTH AND FAR EAST.
       fill: '',
@@ -190,10 +196,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   function randomImageRectangle (data) {
     // Give it plenty of room from the edge
-    const padding = thumbnailSize * 2 // 512
+    const padding = thumbnailSize * 2
     const left = getRandomInt(padding, (data.width - padding))
     const top = getRandomInt(padding, (data.height - padding))
 
-    return new OpenSeadragon.Rect(left, top, thumbnailSize, thumbnailSize)
+    return new OpenSeadragon.Rect(left, top, thumbnailSize, thumbnailSize) // eslint-disable-line no-undef
   }
 })

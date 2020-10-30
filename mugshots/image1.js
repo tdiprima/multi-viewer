@@ -1,10 +1,11 @@
 /*
 STARTING WITH IMAGE COORDINATES
  */
-let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
-let divId = 'osd-placeholder'
+const myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
+const divId = 'osd-placeholder'
 
-let viewer = OpenSeadragon({
+// eslint-disable-next-line no-undef
+const viewer = OpenSeadragon({
   id: divId,
   prefixUrl: '//openseadragon.github.io/openseadragon/images/',
   showNavigator: true,
@@ -13,44 +14,45 @@ let viewer = OpenSeadragon({
   ]
 })
 
-let vpt = viewer.viewport
+const vpt = viewer.viewport
 
-let oly = viewer.fabricjsOverlay({
+const oly = viewer.fabricjsOverlay({
   scale: 1000
 })
-let canvas = oly.fabricCanvas()
+const canvas = oly.fabricCanvas()
 
-let size = 256 // In image coordinates
+const size = 256 // In image coordinates
 let topLeft
-let bottomRight
+let bottomRight // eslint-disable-line no-unused-vars
 let centerPoint
 let image1
 let rectangle
-let small = 15
+const small = 15
 
 // DRAW RECT, ZOOM, and GET MUG
+// eslint-disable-next-line no-unused-vars
 function drawRect () {
-
   // Initializing some variables
   getImageRect()
 
   // CONVERT
-  convertWinCoords()
-  convertRectangle()
-  convertElemCoords()
-  coords()
-  coords1()
-  // Green, blue, and cyan (ToViewerElement)
-  // Red, magenta (ToWindow)
+  imageToWindow()
+  viewportToElementR()
+  imageToElementC()
+  viewportToWindow()
+  viewportToElementC()
+  // Green, blue, and cyan (toViewerElement)
+  // Red, magenta (toWindow)
   canvas.renderAll()
 
   // PAN, ZOOM
   panZoom(vpt.imageToViewportRectangle(rectangle))
 
   // GET MUG
-  // getMug()
+  getMug()
 }
 
+// eslint-disable-next-line no-unused-vars
 function getMug () {
   const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
   const mugSize = '256,'
@@ -58,7 +60,7 @@ function getMug () {
   const quality = 'default'
   const format = 'jpg'
 
-  let url = infoUrl + '/' +
+  const url = infoUrl + '/' +
     Math.ceil(rectangle.x) + ',' +
     Math.ceil(rectangle.y) + ',' +
     Math.ceil(rectangle.width) + ',' +
@@ -75,6 +77,7 @@ function panZoom (vptRect) {
   vpt.zoomTo(vpt.getMaxZoom())
 }
 
+// eslint-disable-next-line no-unused-vars
 function shiftPoint (centerPoint, size) {
   // Half
   const size1 = size / 2
@@ -84,105 +87,116 @@ function shiftPoint (centerPoint, size) {
   const y = centerPoint.y - size1
 
   // Make sure we have whole numbers
-  return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
+  return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y)) // eslint-disable-line no-undef
 }
 
+// eslint-disable-next-line no-unused-vars
 function convertToViewport (point) {
   return vpt.viewerElementToViewportCoordinates(point)
 }
 
-function convertWinCoords () {
+function imageToWindow () {
   // 1 STEP
-  let z = vpt.imageToWindowCoordinates(rectangle.getTopLeft())
+  const point = vpt.imageToWindowCoordinates(rectangle.getTopLeft())
+  // eslint-disable-next-line no-undef
   canvas.add(new fabric.Rect({
     stroke: '#f00',
     strokeWidth: 1,
     fill: '',
-    left: z.x,
-    top: z.y,
+    left: point.x,
+    top: point.y,
     width: small,
     height: small
   }))
+  console.log('to win', point.x, point.y)
 }
 
-function convertRectangle () {
+function viewportToElementR () {
   // 2 STEPS
-  let vptRect = vpt.imageToViewportRectangle(rectangle)
-  let webRect = vpt.viewportToViewerElementRectangle(vptRect)
-
-  canvas.add(rect = new fabric.Rect({
+  const rect1 = vpt.imageToViewportRectangle(rectangle)
+  const rect = vpt.viewportToViewerElementRectangle(rect1)
+  // eslint-disable-next-line no-undef
+  canvas.add(new fabric.Rect({
     stroke: '#0f0',
     strokeWidth: 1,
     fill: '',
-    left: webRect.x,
-    top: webRect.y,
-    width: webRect.width,
-    height: webRect.height
+    left: rect.x,
+    top: rect.y,
+    width: rect.width,
+    height: rect.height
   }))
+  console.log('elem r', rect.x, rect.y)
 }
 
-function convertElemCoords () {
+function imageToElementC () {
   // 1 STEP
-  let z = vpt.imageToViewerElementCoordinates(rectangle.getTopLeft())
+  const point = vpt.imageToViewerElementCoordinates(rectangle.getTopLeft())
+  // eslint-disable-next-line no-undef
   canvas.add(new fabric.Rect({
     stroke: '#00f',
     strokeWidth: 1,
     fill: '',
-    left: z.x,
-    top: z.y,
+    left: point.x,
+    top: point.y,
     width: small,
     height: small
   }))
+  console.log('elem c', point.x, point.y)
 }
 
-function coords () {
+function viewportToWindow () {
   // 2 STEPS
-  let z = vpt.imageToViewportCoordinates(rectangle.getTopLeft())
-  let q = vpt.viewportToWindowCoordinates(z)
+  const point1 = vpt.imageToViewportCoordinates(rectangle.getTopLeft())
+  const point = vpt.viewportToWindowCoordinates(point1)
+  // eslint-disable-next-line no-undef
   canvas.add(new fabric.Rect({
     stroke: '#f0f',
     strokeWidth: 1,
     fill: '',
-    left: q.x,
-    top: q.y,
+    left: point.x,
+    top: point.y,
     width: small,
     height: small
   }))
+  console.log('win c', point.x, point.y)
 }
 
-function coords1 () {
+function viewportToElementC () {
   // 2 STEPS
-  let z = vpt.imageToViewportCoordinates(rectangle.getTopLeft())
-  let q = vpt.viewportToViewerElementCoordinates(z)
+  const point1 = vpt.imageToViewportCoordinates(rectangle.getTopLeft())
+  const point = vpt.viewportToViewerElementCoordinates(point1)
+  // eslint-disable-next-line no-undef
   canvas.add(new fabric.Rect({
     stroke: '#0ff',
     strokeWidth: 1,
     fill: '',
-    left: q.x,
-    top: q.y,
+    left: point.x,
+    top: point.y,
     width: small,
     height: small
   }))
+  console.log('elem cc', point.x, point.y)
 }
 
 function getImageRect () {
   image1 = viewer.world.getItemAt(0)
-  let imgDimensions = image1.source.dimensions
+  const imgDimensions = image1.source.dimensions
+  console.log('start', imgDimensions)
 
   // Center of image
   centerPoint = getCenter(imgDimensions)
 
   // Top left of bounding box (for mug)
-  // topLeft = shiftPoint(centerPoint, size) // skip
+  // topLeft = shiftPoint(centerPoint, size) // TODO: Shift top left from center
   topLeft = centerPoint
-  bottomRight = new OpenSeadragon.Point(topLeft.x + size, topLeft.y + size)
-  rectangle = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size)
+  bottomRight = new OpenSeadragon.Point(topLeft.x + size, topLeft.y + size) // eslint-disable-line no-undef
+  rectangle = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
 }
 
 function getCenter (dims) {
   // Get centerPoint of image
-  let x = dims.x / 2
-  let y = dims.y / 2
+  const x = dims.x / 2
+  const y = dims.y / 2
 
-  return new OpenSeadragon.Point(x, y)
+  return new OpenSeadragon.Point(x, y) // eslint-disable-line no-undef
 }

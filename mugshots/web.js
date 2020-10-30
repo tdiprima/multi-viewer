@@ -1,12 +1,13 @@
 /*
 STARTING WITH WEB COORDINATES
  */
-let myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
-let divId = 'osd-placeholder'
+const myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
+const divId = 'osd-placeholder'
 
 document.querySelector('button').innerHTML = 'Draw Rectangle'
 
-let viewer = OpenSeadragon({
+// eslint-disable-next-line no-undef
+const viewer = OpenSeadragon({
   id: divId,
   prefixUrl: '//openseadragon.github.io/openseadragon/images/',
   showNavigator: true,
@@ -15,45 +16,61 @@ let viewer = OpenSeadragon({
   ]
 })
 
-let vpt = viewer.viewport
+const vpt = viewer.viewport
 
-let oly = viewer.fabricjsOverlay({
+const oly = viewer.fabricjsOverlay({
   scale: 1000
 })
-let canvas = oly.fabricCanvas()
+const canvas = oly.fabricCanvas()
 
-let size = 26 // In web coordinates
-let centerPoint = getCenter(document.getElementById(divId))
-let topLeft = centerPoint //shiftPoint(centerPoint, size)
-let bottomRight = new OpenSeadragon.Point(topLeft.x + size, topLeft.y + size)
-let rectangle
+const size = 26 // In web coordinates
 
 // DRAW RECT, ZOOM, and GET MUG
+// eslint-disable-next-line no-unused-vars
 function drawRect () {
+  const div = document.getElementById(divId)
+  const centerPoint = getCenter1(div)
+  let topLeft = centerPoint // shiftPoint(centerPoint, size) // TODO: Shift top left from center
+  let rect = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
+  draw(rect, 'red')
+  console.log('draw1', rect.x, rect.y)
 
-  let rect = new fabric.Rect({
-    stroke: '#8a00ff',
-    strokeWidth: 1,
-    fill: '',
-    left: topLeft.x,
-    top: topLeft.y,
-    width: size,
-    height: size
-  })
-  canvas.add(rect)
-  canvas.renderAll()
+  topLeft = getCenter2(div)
+  rect = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
+  draw(rect, 'green')
+  console.log('draw2', rect.x, rect.y)
+
+  topLeft = getCenter3(div)
+  rect = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
+  draw(rect, 'blue')
+  console.log('draw3', rect.x, rect.y)
 
   // CONVERT
-  // let point = convertToViewport(centerPoint)
-  let rect1 = new OpenSeadragon.Rect(rect.left, rect.top, rect.width, rect.height) // Try this.
-  let vptRect = vpt.viewerElementToViewportRectangle(rect1)
+  // const point = convertToViewport(centerPoint) // This...
+  // eslint-disable-next-line no-undef
+  const vptRect = vpt.viewerElementToViewportRectangle(rect)
 
   // PAN, ZOOM
   panZoom(vptRect)
 
   // GET MUG
-  rectangle = vpt.viewportToImageRectangle(vptRect)
-  // getMug(rectangle)
+  const rectangle = vpt.viewportToImageRectangle(vptRect)
+  getMug(rectangle)
+}
+
+// eslint-disable-next-line no-unused-vars
+function draw (rect, color) {
+  // eslint-disable-next-line no-undef
+  canvas.add(new fabric.Rect({
+    stroke: color,
+    strokeWidth: 1,
+    fill: '',
+    left: rect.getTopLeft().x,
+    top: rect.getTopLeft().y,
+    width: rect.width,
+    height: rect.height
+  }))
+  canvas.renderAll()
 }
 
 function getMug (rectangle) {
@@ -63,7 +80,7 @@ function getMug (rectangle) {
   const quality = 'default'
   const format = 'jpg'
 
-  let url = infoUrl + '/' +
+  const url = infoUrl + '/' +
     Math.ceil(rectangle.x) + ',' +
     Math.ceil(rectangle.y) + ',' +
     Math.ceil(rectangle.width) + ',' +
@@ -80,6 +97,7 @@ function panZoom (vptRect) {
   vpt.zoomTo(vpt.getMaxZoom())
 }
 
+// eslint-disable-next-line no-unused-vars
 function shiftPoint (centerPoint, size) {
   // Half
   const size1 = size / 2
@@ -89,52 +107,62 @@ function shiftPoint (centerPoint, size) {
   const y = centerPoint.y - size1
 
   // Make sure we have whole numbers
-  return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y))
+  return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y)) // eslint-disable-line no-undef
 }
 
+// eslint-disable-next-line no-unused-vars
 function convertToViewport (point) {
   return vpt.viewerElementToViewportCoordinates(point)
 }
 
+// eslint-disable-next-line no-unused-vars
 function convertToViewport1 (point) {
   // Tried this; didn't help:
-  let image = vpt.windowToImageCoordinates(point)
+  const image = vpt.windowToImageCoordinates(point)
   return vpt.imageToViewportCoordinates(image)
 }
 
-function getCenter (div) {
-  let w, h
+// eslint-disable-next-line no-unused-vars
+function getCenter1 (div) {
   // 1. Try: Get plain old dimensions of div
-  w = div.clientWidth
-  h = div.clientHeight
-  // console.log('client w,h', w, h)
+  const w = div.clientWidth
+  const h = div.clientHeight
+  console.log('start1', w, h)
 
+  return new OpenSeadragon.Point(w / 2, h / 2) // eslint-disable-line no-undef
+}
+
+// eslint-disable-next-line no-unused-vars
+function getCenter2 (div) {
   // 2. Try: Get div with padding
-  // w = div.offsetWidth
-  // h = div.offsetHeight
-  // // console.log('with padding w,h', w, h)
+  const w = div.offsetWidth
+  const h = div.offsetHeight
+  console.log('start2', w, h)
 
-  // This is what we would return:
-  // return new OpenSeadragon.Point(w / 2, h / 2)
+  return new OpenSeadragon.Point(w / 2, h / 2) // eslint-disable-line no-undef
+}
 
+// eslint-disable-next-line no-unused-vars
+function getCenter3 (div) {
   // 3. Try: Offset with parent element
-  let offPoint = getOffset(div)
-  let ww = w + offPoint.x
-  let hh = h - offPoint.y
-  // console.log('offset w,h', ww, hh)
+  const w = div.clientWidth
+  const h = div.clientHeight
+  const offPoint = getOffset(div)
+  const ww = w + offPoint.x
+  const hh = h - offPoint.y
+  console.log('start3', ww, hh)
 
-  // Using offset, this is what we would return:
-  return new OpenSeadragon.Point(ww / 2, hh / 2)
+  return new OpenSeadragon.Point(ww / 2, hh / 2) // eslint-disable-line no-undef
 }
 
 function getOffset (someElement) {
-  const m_getOffset = (element, horizontal = false) => {
+  const mgm = (element, horizontal = false) => {
     if (!element) return 0
-    return m_getOffset(element.offsetParent, horizontal) + (horizontal ? element.offsetLeft : element.offsetTop)
+    return mgm(element.offsetParent, horizontal) + (horizontal ? element.offsetLeft : element.offsetTop)
   }
 
-  let X = m_getOffset(someElement)
-  let Y = m_getOffset(someElement, true)
+  const X = mgm(someElement)
+  const Y = mgm(someElement, true)
 
-  return new OpenSeadragon.Point(X, Y)
+  return new OpenSeadragon.Point(X, Y) // eslint-disable-line no-undef
 }
