@@ -1,7 +1,6 @@
 /*
 STARTING WITH WEB COORDINATES
  */
-const myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 const divId = 'osd-placeholder'
 
 document.querySelector('button').innerHTML = 'Draw Rectangle'
@@ -33,17 +32,17 @@ function drawRect () {
   let topLeft = centerPoint // shiftPoint(centerPoint, size) // TODO: Shift top left from center
   let rect = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
   draw(rect, 'red')
-  console.log('draw1', rect.x, rect.y)
+  console.log('red', rect.x, rect.y)
 
   topLeft = getCenter2(div)
   rect = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
   draw(rect, 'green')
-  console.log('draw2', rect.x, rect.y)
+  console.log('green', rect.x, rect.y)
 
   topLeft = getCenter3(div)
   rect = new OpenSeadragon.Rect(topLeft.x, topLeft.y, size, size) // eslint-disable-line no-undef
   draw(rect, 'blue')
-  console.log('draw3', rect.x, rect.y)
+  console.log('blue', rect.x, rect.y)
 
   // CONVERT
   // const point = convertToViewport(centerPoint) // This...
@@ -51,7 +50,7 @@ function drawRect () {
   const vptRect = vpt.viewerElementToViewportRectangle(rect)
 
   // PAN, ZOOM
-  panZoom(vptRect)
+  panZoom(vpt, vptRect)
 
   // GET MUG
   const rectangle = vpt.viewportToImageRectangle(vptRect)
@@ -92,11 +91,6 @@ function getMug (rectangle) {
   console.log(url)
 }
 
-function panZoom (vptRect) {
-  vpt.panTo(vptRect.getCenter())
-  vpt.zoomTo(vpt.getMaxZoom())
-}
-
 // eslint-disable-next-line no-unused-vars
 function shiftPoint (centerPoint, size) {
   // Half
@@ -127,7 +121,7 @@ function getCenter1 (div) {
   // 1. Try: Get plain old dimensions of div
   const w = div.clientWidth
   const h = div.clientHeight
-  console.log('start1', w, h)
+  console.log('client w,h', w, h)
 
   return new OpenSeadragon.Point(w / 2, h / 2) // eslint-disable-line no-undef
 }
@@ -137,7 +131,7 @@ function getCenter2 (div) {
   // 2. Try: Get div with padding
   const w = div.offsetWidth
   const h = div.offsetHeight
-  console.log('start2', w, h)
+  console.log('offset w,h', w, h)
 
   return new OpenSeadragon.Point(w / 2, h / 2) // eslint-disable-line no-undef
 }
@@ -150,7 +144,7 @@ function getCenter3 (div) {
   const offPoint = getOffset(div)
   const ww = w + offPoint.x
   const hh = h - offPoint.y
-  console.log('start3', ww, hh)
+  console.log('offsetP w,h', ww, hh)
 
   return new OpenSeadragon.Point(ww / 2, hh / 2) // eslint-disable-line no-undef
 }

@@ -1,7 +1,6 @@
 /*
 STARTING WITH IMAGE COORDINATES
  */
-const myTiles = 'https://openseadragon.github.io/example-images/duomo/duomo.dzi'
 const divId = 'osd-placeholder'
 
 // eslint-disable-next-line no-undef
@@ -46,7 +45,7 @@ function drawRect () {
   canvas.renderAll()
 
   // PAN, ZOOM
-  panZoom(vpt.imageToViewportRectangle(rectangle))
+  panZoom(vpt, vpt.imageToViewportRectangle(rectangle))
 
   // GET MUG
   getMug()
@@ -70,11 +69,6 @@ function getMug () {
     quality + '.' + format
 
   console.log(url)
-}
-
-function panZoom (vptRect) {
-  vpt.panTo(vptRect.getCenter())
-  vpt.zoomTo(vpt.getMaxZoom())
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -108,7 +102,7 @@ function imageToWindow () {
     width: small,
     height: small
   }))
-  console.log('to win', point.x, point.y)
+  console.log('to win, R', point.x, point.y)
 }
 
 function viewportToElementR () {
@@ -125,7 +119,7 @@ function viewportToElementR () {
     width: rect.width,
     height: rect.height
   }))
-  console.log('elem r', rect.x, rect.y)
+  console.log('elem r, G', rect.x, rect.y)
 }
 
 function imageToElementC () {
@@ -141,7 +135,7 @@ function imageToElementC () {
     width: small,
     height: small
   }))
-  console.log('elem c', point.x, point.y)
+  console.log('elem c, B', point.x, point.y)
 }
 
 function viewportToWindow () {
@@ -158,7 +152,7 @@ function viewportToWindow () {
     width: small,
     height: small
   }))
-  console.log('win c', point.x, point.y)
+  console.log('win c, M', point.x, point.y)
 }
 
 function viewportToElementC () {
@@ -175,13 +169,13 @@ function viewportToElementC () {
     width: small,
     height: small
   }))
-  console.log('elem cc', point.x, point.y)
+  console.log('elem cc, C', point.x, point.y)
 }
 
 function getImageRect () {
   image1 = viewer.world.getItemAt(0)
   const imgDimensions = image1.source.dimensions
-  console.log('start', imgDimensions)
+  console.log('image dims', imgDimensions)
 
   // Center of image
   centerPoint = getCenter(imgDimensions)

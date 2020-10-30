@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       dims = new OpenSeadragon.Point(data.width, data.height) // eslint-disable-line no-undef
       center = new OpenSeadragon.Point(data.width / 2, data.height / 2) // eslint-disable-line no-undef
       topLeft = center // shiftPoint(center, thumbnailSize) // TODO: Shift top left from center
-      console.log('start', dims)
+      console.log('image dims', dims)
       createViewer(data)
       createScroller(data)
     })
@@ -67,9 +67,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
       li = document.createElement('li')
       ul.appendChild(li)
       span = document.createElement('span')
-      // Giving it some number in the middle of the image
-      createThumbnail(data, span, topLeft.x, topLeft.y) // Image coordinates
-      // createThumbnail(data, span)
+      createThumbnail(data, span, topLeft.x, topLeft.y) // Center
+      // createThumbnail(data, span) // Random
       li.appendChild(span)
     }
     document.getElementById('thumbnail-container').appendChild(fragment)
@@ -98,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   function createThumbnail (data, span, x, y) {
     if (xyExist(x, y)) {
-      // x,y,w,h
       rectangle = new OpenSeadragon.Rect(x, y, thumbnailSize, thumbnailSize) // eslint-disable-line no-undef
     } else {
       rectangle = randomImageRectangle(data)
@@ -133,54 +131,47 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function showThumbnailOnImage (rectangle) {
-    zoomToLocation(rectangle)
-    highlightLocation(rectangle)
+    panZoom(vpt, vpt.imageToViewportRectangle(rectangle))
+    drawRect(rectangle)
   }
 
-  function zoomToLocation (rectangle) {
-    const vptRect = vpt.imageToViewportRectangle(rectangle)
-    // console.log('zoom', vptRect)
-    vpt.panTo(vptRect.getCenter())
-    vpt.zoomTo(vpt.getMaxZoom())
+  function drawRect (rectangle) {
+    imageToWindow(rectangle)
+    viewportToElementR(rectangle)
+    canvas.renderAll()
   }
 
-  function highlightLocation (rectangle) {
-    // console.log('rectangle', rectangle)
-    // console.log('getTopLeft', rectangle.getTopLeft())
-    // console.log('getBottomRight', rectangle.getBottomRight())
-    const viewerElemRect = vpt.viewportToViewerElementRectangle(vpt.imageToViewportRectangle(rectangle))
-    // console.log('viewer element:', viewerElemRect)
-
-    // TEST Rectangle => rectangle
-    // eslint-disable-next-line no-undef
-    canvas.add(new fabric.Rect({
-      stroke: 'red', // TOO FAR NORTH.
-      fill: '',
-      left: viewerElemRect.getTopLeft().x,
-      top: viewerElemRect.getTopLeft().y,
-      width: viewerElemRect.width,
-      height: viewerElemRect.height
-    }))
-    console.log('draw1', viewerElemRect.getTopLeft().x, viewerElemRect.getTopLeft().y)
-
+  function imageToWindow (rectangle) {
     // TEST Point => point
     const imageTL = new OpenSeadragon.Point(rectangle.getTopLeft().x, rectangle.getTopLeft().y) // eslint-disable-line no-undef
     const imageBR = new OpenSeadragon.Point(rectangle.getBottomRight().x, rectangle.getBottomRight().y) // eslint-disable-line no-undef
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
-    // console.log('window:', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
-
     // eslint-disable-next-line no-undef
     canvas.add(new fabric.Rect({
-      stroke: 'yellow', // A LITTLE NORTH AND FAR EAST.
+      stroke: '#f00',
       fill: '',
       left: windowTL.x,
       top: windowTL.y,
       width: windowBR.x - windowTL.x,
       height: windowBR.y - windowTL.y
     }))
-    console.log('draw2', windowTL.x, windowTL.y)
-    canvas.renderAll()
+    console.log('to win, R', windowTL.x, windowTL.y)
+  }
+
+  function viewportToElementR (rectangle) {
+    // TEST Rectangle => rectangle
+    const viewerElemRect = vpt.viewportToViewerElementRectangle(vpt.imageToViewportRectangle(rectangle))
+    // eslint-disable-next-line no-undef
+    canvas.add(new fabric.Rect({
+      stroke: '#0f0',
+      fill: '',
+      left: viewerElemRect.getTopLeft().x,
+      top: viewerElemRect.getTopLeft().y,
+      width: viewerElemRect.width,
+      height: viewerElemRect.height
+    }))
+    console.log('elem r, G', viewerElemRect.getTopLeft().x, viewerElemRect.getTopLeft().y)
   }
 
   function randomImageRectangle (data) {
