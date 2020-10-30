@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       width: windowBR.x - windowTL.x,
       height: windowBR.y - windowTL.y
     }))
-    console.log('draw1', windowTL.x, windowTL.y)
+    console.log('draw2', windowTL.x, windowTL.y)
     canvas.renderAll()
   }
 
