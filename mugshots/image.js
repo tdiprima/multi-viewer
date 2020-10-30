@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const format = 'jpg'
   let dims
   let center
-  let upperLeft
+  let topLeft
+  let rectangle
 
   // eslint-disable-next-line no-undef
   fetch(infoUrl + '/info.json')
@@ -30,10 +31,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
     .then(data => {
       dims = new OpenSeadragon.Point(data.width, data.height) // eslint-disable-line no-undef
       center = new OpenSeadragon.Point(data.width / 2, data.height / 2) // eslint-disable-line no-undef
-      upperLeft = center // shiftPoint(center, thumbnailSize) // TODO: Shift top left from center
-      console.log('Image dims:', dims)
-      console.log('Center:', center)
-      console.log('upperLeft:', upperLeft)
+      topLeft = center // shiftPoint(center, thumbnailSize) // TODO: Shift top left from center
+      console.log('start', dims)
       createViewer(data)
       createScroller(data)
     })
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       ul.appendChild(li)
       span = document.createElement('span')
       // Giving it some number in the middle of the image
-      createThumbnail(data, span, upperLeft.x, upperLeft.y) // Image coordinates
+      createThumbnail(data, span, topLeft.x, topLeft.y) // Image coordinates
       // createThumbnail(data, span)
       li.appendChild(span)
     }
@@ -97,15 +96,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function createThumbnail (data, span, x, y) {
-    let rectangle // it's a rectangle
+
     if (xyExist(x, y)) {
       // x,y,w,h
       rectangle = new OpenSeadragon.Rect(x, y, thumbnailSize, thumbnailSize) // eslint-disable-line no-undef
     } else {
       rectangle = randomImageRectangle(data)
     }
-    console.log('draw', rectangle.x, rectangle.y)
-    checkWholeNumbers(rectangle)
 
     const imgElement = document.createElement('IMG')
     imgElement.alt = 'mugshot'
@@ -120,28 +117,18 @@ document.addEventListener('DOMContentLoaded', function (event) {
     })
   }
 
-  function checkWholeNumbers (rectangle) {
-    // IIIF wants whole numbers
-    const imagePoint = rectangle.getTopLeft()
-    if (imagePoint.x % 1 !== 0) {
-      console.warn(imagePoint.x, 'not a whole number')
-    }
-    if (imagePoint.y % 1 !== 0) {
-      console.warn(imagePoint.y, 'not a whole number')
-    }
-  }
-
   function getImageUrl (infoUrl, rectangle) {
+    // IIIF wants whole numbers
     const url = infoUrl + '/' +
-      rectangle.getTopLeft().x + ',' +
-      rectangle.getTopLeft().y + ',' +
-      rectangle.width + ',' +
-      rectangle.height + '/' +
+      Math.ceil(rectangle.getTopLeft().x) + ',' +
+      Math.ceil(rectangle.getTopLeft().y) + ',' +
+      Math.ceil(rectangle.width) + ',' +
+      Math.ceil(rectangle.height) + '/' +
       size + '/' +
       rotation + '/' +
       quality + '.' + format
 
-    console.log(url)
+    // console.log(url)
     return url
   }
 
@@ -174,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       width: viewerElemRect.width,
       height: viewerElemRect.height
     }))
+    console.log('draw1', viewerElemRect.getTopLeft().x, viewerElemRect.getTopLeft().y)
 
     // TEST Point => point
     const imageTL = new OpenSeadragon.Point(rectangle.getTopLeft().x, rectangle.getTopLeft().y) // eslint-disable-line no-undef
@@ -191,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       width: windowBR.x - windowTL.x,
       height: windowBR.y - windowTL.y
     }))
+    console.log('draw1', windowTL.x, windowTL.y)
     canvas.renderAll()
   }
 
