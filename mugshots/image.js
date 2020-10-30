@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     document.getElementById('thumbnail-container').appendChild(fragment)
   }
 
+  // eslint-disable-next-line no-unused-vars
   function shiftPoint (centerPoint, size) {
     // Half
     const size1 = size / 2
@@ -96,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function createThumbnail (data, span, x, y) {
-
     if (xyExist(x, y)) {
       // x,y,w,h
       rectangle = new OpenSeadragon.Rect(x, y, thumbnailSize, thumbnailSize) // eslint-disable-line no-undef
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     // TEST Point => point
     const imageTL = new OpenSeadragon.Point(rectangle.getTopLeft().x, rectangle.getTopLeft().y) // eslint-disable-line no-undef
-    const imageBR = new OpenSeadragon.Point(rectangle.getBottomRight().x, rectangle.getBottomRight().y)  // eslint-disable-line no-undef
+    const imageBR = new OpenSeadragon.Point(rectangle.getBottomRight().x, rectangle.getBottomRight().y) // eslint-disable-line no-undef
     const windowTL = vpt.imageToWindowCoordinates(imageTL)
     const windowBR = vpt.imageToWindowCoordinates(imageBR)
     // console.log('window:', windowTL.x, windowTL.y, windowBR.x - windowTL.x, windowBR.y - windowTL.y)
