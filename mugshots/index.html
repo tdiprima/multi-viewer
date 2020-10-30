@@ -9,15 +9,19 @@
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>
-    <!-- <script src="image.js"></script> -->
-    <script src="image1.js"></script>
-    <!-- <script src="web.js"></script> -->
 </head>
 
 <body>
 
-<div class="openseadragon" id="contentDiv"></div>
+<div class="openseadragon" id="osd-placeholder"></div>
+<div style="float:left;">
+  <button onclick="drawRect()">Draw rectangles for comparison</button>
+</div>
 <div class="thumbnail-container" id="thumbnail-container"></div>
+
+<!-- <script src="image.js"></script> -->
+<script src="image1.js"></script>
+<!-- <script src="web.js"></script> -->
 
 </body>
 
