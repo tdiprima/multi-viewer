@@ -7,7 +7,7 @@ const divId = 'osd-placeholder'
 const viewer = OpenSeadragon({
   id: divId,
   prefixUrl: '//openseadragon.github.io/openseadragon/images/',
-  showNavigator: true,
+  // showNavigator: true,
   tileSources: [
     myTiles
   ]

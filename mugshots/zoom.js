@@ -1,8 +1,6 @@
 const panZoom = function (vpt, rectangle) {
   vpt.panTo(rectangle.getCenter())
-  // const zoom = vpt.getMaxZoom()
-  // const zoom = 165
-  const zoom = 15
-  console.log('zoomTo', zoom)
-  vpt.zoomTo(zoom)
+  console.log('zoomTo:', vpt.getMaxZoom())
+  vpt.zoomTo(vpt.getMaxZoom()) // wsi 165
+  // vpt.zoomTo(15) // 15 semi-works with WSI but not with Duomo
 }
