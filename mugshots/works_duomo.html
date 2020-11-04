@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to web coordinates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openseadragon/openseadragon.github.com/css/style.css">
+  <script src="https://openseadragon.github.io/openseadragon/openseadragon.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+</head>
+
+<body>
+
+  <div class="demoarea">
+    <div class="demoheading">
+      <button onclick="drawRect()">Draw Rectangles</button>
+      <span id='consolelog'></span>
+    </div>
+    <div id="contentDiv" class="openseadragon front-page"></div>
+  </div>
+  <script src="myTiles.js"></script>
+
+  <script>
+    // https://codepen.io/tdiprima1/pen/LYZdYmd
+    const divId = 'contentDiv'
+    myTiles = "https://openseadragon.github.io/example-images/duomo/duomo.dzi"
+
+    const viewer = OpenSeadragon({
+      id: divId,
+      prefixUrl: '//openseadragon.github.io/openseadragon/images/',
+      tileSources: myTiles
+    })
+
+    const vpt = viewer.viewport
+
+    const oly = viewer.fabricjsOverlay({
+      scale: 1000
+    })
+    const canvas = oly.fabricCanvas()
+
+    let image1
+    const size = 256 // In image coordinates
+    let topLeftImg
+    let botRightImg
+    let centerImg
+    let imageRect
+    const small = 15
+
+    // DRAW RECT, ZOOM
+    function drawRect() {
+      // Initializing some variables
+      getImageRect()
+
+      // CONVERT
+      convertRectangle()
+      convertCoords()
+      convertCoords1()
+      canvas.renderAll()
+
+      // PAN, ZOOM
+      panZoom(vpt.imageToViewportRectangle(imageRect))
+    }
+
+    function panZoom(vptRect) {
+      vpt.panTo(vptRect.getCenter())
+      vpt.zoomTo(vpt.getMaxZoom())
+    }
+
+
+    function convertRectangle() {
+      const vptRect = vpt.imageToViewportRectangle(imageRect)
+      const webRect = vpt.viewportToViewerElementRectangle(vptRect)
+
+      canvas.add(
+        (rect = new fabric.Rect({
+          stroke: '#0f0',
+          strokeWidth: 1,
+          fill: '',
+          left: webRect.x,
+          top: webRect.y,
+          width: webRect.width,
+          height: webRect.height
+        }))
+      )
+    }
+
+    function convertCoords() {
+      const point = vpt.imageToViewerElementCoordinates(imageRect.getTopLeft())
+      canvas.add(
+        new fabric.Rect({
+          stroke: '#00f',
+          strokeWidth: 1,
+          fill: '',
+          left: point.x,
+          top: point.y,
+          width: small,
+          height: small
+        })
+      )
+    }
+
+
+    function convertCoords1() {
+      const p1 = vpt.imageToViewportCoordinates(imageRect.getTopLeft())
+      const point = vpt.viewportToViewerElementCoordinates(p1)
+      canvas.add(
+        new fabric.Rect({
+          stroke: '#0ff',
+          strokeWidth: 1,
+          fill: '',
+          left: point.x,
+          top: point.y,
+          width: small,
+          height: small
+        })
+      )
+    }
+
+    function getCenter(dims) {
+      const x = dims.x / 2
+      const y = dims.y / 2
+
+      return new OpenSeadragon.Point(x, y)
+    }
+
+    function shiftPoint(centerPoint, size) {
+      // Half
+      const size1 = size / 2
+
+      // Shift upper-left of by 'size' amount
+      const x = centerPoint.x - size1
+      const y = centerPoint.y - size1
+
+      // Make sure we have whole numbers
+      return new OpenSeadragon.Point(Math.ceil(x), Math.ceil(y)) // eslint-disable-line no-undef
+    }
+
+    function getImageRect() {
+      image1 = viewer.world.getItemAt(0)
+      const imgDimensions = image1.source.dimensions
+
+      // Center of image
+      centerImg = getCenter(imgDimensions)
+
+      // Top left of bounding box (for mug)
+      // topLeftImg = shiftPoint(centerImg, size) // TODO: skipping for now
+      topLeftImg = centerImg
+      botRightImg = new OpenSeadragon.Point(
+        topLeftImg.x + size,
+        topLeftImg.y + size
+      )
+      imageRect = new OpenSeadragon.Rect(topLeftImg.x, topLeftImg.y, size, size)
+    }
+
+  </script>
+
+</body>
+
+</html>
