@@ -1,26 +1,42 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: larger;
+  /* margin: 0; */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.openseadragon {
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+}
+
+.openseadragon.front-page {
+  height: 586px;
+}
+
+.openseadragon-small {
+  width: 100px;
+  height: 80px;
+  border: 1px solid black;
 }
 
 .thumbnail-container {
-    overflow-x: scroll;
-    width: 100%;
-    padding: 0 15px;
+  overflow-x: scroll;
+  width: 100%;
+  padding: 0 15px;
 }
 
 .thumbnail-list {
-    white-space: nowrap;
-    list-style: none;
+  white-space: nowrap;
+  list-style: none;
 }
 
 .thumbnail-list li {
-    display: inline-block;
+  display: inline-block;
 }
 
 .thumbnail-image {
-    display: block;
-    padding: 2px;
-    max-width: 100px;
-    height: auto;
+  display: block;
+  padding: 2px;
+  max-width: 100px;
+  height: auto;
 }
