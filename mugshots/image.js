@@ -1,14 +1,11 @@
 // THE MAIN APP
 document.addEventListener('DOMContentLoaded', function (event) {
   // Image service Loris
-  const infoUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
+  // const infoUrl = 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2'
   const divId = 'osd-placeholder'
 
   // Image service SBU
-  // const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
-
-  // For testing
-  document.getElementById('btnDiv').style.display = 'none'
+  const infoUrl = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs'
 
   const thumbnailSize = 256
   // const scrollerLength = 5
