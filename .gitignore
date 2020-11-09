@@ -1,7 +1,7 @@
-json
-node_modules
-dist
+json/
+node_modules/
+build/
+.idea/
+.vscode/
 .cache
-.idea
-.vscode
 .DS_Store
