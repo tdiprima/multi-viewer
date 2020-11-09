@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/tdiprima/multi-viewer#readme",
   "devDependencies": {
+    "grunt": "^1.3.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-watch": "^1.1.0",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "standard": "^14.3.4"
   }
