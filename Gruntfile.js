@@ -8,17 +8,26 @@ module.exports = function (grunt) {
         dest: 'build/js/ultraviewer.js'
       }
     },
-    watch: {
-      js: {
-        files: ['js/*.js'],
-        tasks: ['concat'],
-        options: {
-          spawn: false
+    uglify: {
+      my_target: {
+        files: {
+          'build/js/ultraviewer.min.js': ['js/*.js']
+          // 'build/js/ultraviewer.min.js': ['build/js/ultraviewer.js']
         }
       }
     }
+    //, watch: {
+    //   js: {
+    //     files: ['js/*.js'],
+    //     tasks: ['concat'],
+    //     options: {
+    //       spawn: false
+    //     }
+    //   }
+    // }
   })
   grunt.loadNpmTasks('grunt-contrib-concat')
-  grunt.loadNpmTasks('grunt-contrib-watch')
-  grunt.registerTask('default', ['concat', 'watch'])
+  grunt.loadNpmTasks('grunt-contrib-uglify')
+  // grunt.loadNpmTasks('grunt-contrib-watch')
+  // grunt.registerTask('default', ['concat', 'watch'])
 }
