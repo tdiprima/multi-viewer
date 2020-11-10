@@ -1,20 +1,18 @@
 // THIS FUNCTION WILL BE GOING AWAY, EVENTUALLY.
 // DropDown Module
-// eslint-disable-next-line no-unused-vars
 const DropDown = function (viewerArray, divId, dataSource) {
   const cancertypes = ['blca', 'brca', 'cesc', 'gbm', 'luad', 'lusc', 'paad', 'prad', 'skcm', 'ucec']
   const maindiv = document.getElementById(divId)
   const iiif = window.location.origin + '/iiif/?iiif=/tcgaseg'
   let cancerSelect = {}
   let imageSelect = {}
-  let data = {} // eslint-disable-line prefer-const
+  let data = {}
 
   fetch(dataSource).then(response => {
     const contentType = response.headers.get('content-type')
     if (contentType && contentType.indexOf('application/json') !== -1) {
       return response.json().then(data => {
         // Process JSON data
-        // eslint-disable-next-line no-undef
         if (!isEmpty(data)) {
           initTypes()
           initImages(data)
@@ -30,7 +28,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
     }
   })
 
-  function selectCancerType () {
+  function selectCancerType() {
     const val = cancerSelect.value
     imageSelect.options.length = 0
     const nl = data[val]
@@ -43,14 +41,14 @@ const DropDown = function (viewerArray, divId, dataSource) {
     selectImage()
   }
 
-  function imageExists (imageUrl) {
-    const http = new XMLHttpRequest() // eslint-disable-line no-undef
+  function imageExists(imageUrl) {
+    const http = new XMLHttpRequest()
     http.open('HEAD', imageUrl, false)
     http.send()
     return http.status !== 404
   }
 
-  function selectImage () {
+  function selectImage() {
     const cVal = cancerSelect.value
     const iVal = imageSelect.value
     console.log('setting viewer to image : ' + iVal)
@@ -62,12 +60,12 @@ const DropDown = function (viewerArray, divId, dataSource) {
         elem.getViewer().open([ti, si])
       })
     } else {
-      alertMessage('Image does not exist\n' + ti) // eslint-disable-line no-undef
+      alertMessage('Image does not exist\n' + ti)
       return false
     }
   }
 
-  function initTypes () {
+  function initTypes() {
     const d = document.createDocumentFragment()
     const newDiv = document.createElement('div')
     newDiv.innerHTML = 'Type&nbsp;'
@@ -85,7 +83,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
     maindiv.appendChild(d)
   }
 
-  function initImages (data) {
+  function initImages(data) {
     const images = data[cancertypes[0]]
     if (typeof images !== 'undefined') {
       const d = document.createDocumentFragment()

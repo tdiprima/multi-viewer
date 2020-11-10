@@ -1,5 +1,4 @@
 // Sliders Module
-// eslint-disable-next-line no-unused-vars
 const Sliders = function () {
   let sliderIdNum = 0
 
@@ -31,7 +30,7 @@ const Sliders = function () {
     },
     sliderButtonEvent: function (idx, sliders) {
       const btnSlide = document.getElementById('btnSlide' + idx)
-      // eslint-disable-next-line no-undef
+
       if (isRealValue(btnSlide)) {
         btnSlide.addEventListener('click', function () {
           // (2) sliders.
@@ -50,7 +49,7 @@ const Sliders = function () {
             // Style the button
             this.innerHTML = '<i class="fa fa-sliders"></i> Show sliders'
           }
-          toggleButtonHighlight(btnSlide) // eslint-disable-line no-undef
+          toggleButtonHighlight(btnSlide)
         })
       }
     }

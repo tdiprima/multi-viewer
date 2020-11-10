@@ -1,7 +1,6 @@
 // Image viewer module
-// eslint-disable-next-line no-unused-vars
 const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
-  // Private variables
+// Private variables
   const idx = viewerDivId.replace('viewer', '')
   let viewer = {}
   const checkboxes = {}
@@ -16,15 +15,15 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   // Done calling functions.
 
   // Private functions
-  function setCheckboxes (idx) {
+  function setCheckboxes(idx) {
     if (numDivs > 1 && options.toolbarOn) {
       checkboxes.checkPan = document.getElementById('chkPan' + idx)
       checkboxes.checkZoom = document.getElementById('chkZoom' + idx)
     }
   }
 
-  function setFilter () {
-    filter = OpenSeadragon.Filters.GREYSCALE // eslint-disable-line no-undef
+  function setFilter() {
+    filter = OpenSeadragon.Filters.GREYSCALE
     filter.prototype.COLORIZE = function (r, g, b) {
       return function (context, callback) {
         const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -46,8 +45,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     }
   }
 
-  function setViewer (viewerDivId) {
-    // eslint-disable-next-line no-undef
+  function setViewer(viewerDivId) {
     viewer = OpenSeadragon({
       id: viewerDivId,
       prefixUrl: 'js/vendor/openseadragon/images/',
@@ -58,7 +56,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     })
 
     if (options.toolbarOn) {
-      markupTools(idx, viewer) // eslint-disable-line no-undef
+      markupTools(idx, viewer)
     }
 
     if (options.filterOn) {
@@ -73,7 +71,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     }
   }
 
-  function setSliders () {
+  function setSliders() {
     if (options.slidersOn) {
       for (let i = 0; i < sliders.length; i++) {
         sliders[i].addEventListener('input', function () {
@@ -87,7 +85,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     }
   }
 
-  function showStopperResponse (url, jqXHR) {
+  function showStopperResponse(url, jqXHR) {
     const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
     console.warn(message)
     console.log('jqXHR object:', jqXHR)
@@ -96,7 +94,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     throw new Error('Something went wrong.') // Terminates the script.
   }
 
-  function getIIIFTileUrl (source, level, x, y) {
+  function getIIIFTileUrl(source, level, x, y) {
     const scale = Math.pow(0.5, source.maxLevel - level)
     const levelWidth = Math.ceil(source.width * scale)
     const levelHeight = Math.ceil(source.height * scale)
@@ -136,10 +134,9 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
 
     setSources: function (imageArray, opacityArray) {
       // Quick check url
-      // eslint-disable-next-line no-undef
       $.get(imageArray[0]).done(function () {
         imageArray.forEach(function (image, index) {
-          viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
+          viewer.addTiledImage({tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0})
         })
       }).fail(function (jqXHR, statusText) {
         const url = imageArray[0]

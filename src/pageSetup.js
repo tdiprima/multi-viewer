@@ -1,12 +1,11 @@
-// eslint-disable-next-line no-unused-vars
 const pageSetup = function (numDivs, sourceImages, options) {
   let viewers = [] // eslint-disable-line prefer-const
-  const rangeSliders = new Sliders() // eslint-disable-line no-undef
-  const page = new Page() // eslint-disable-line no-undef
+  const rangeSliders = new Sliders()
+  const page = new Page()
 
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
-      // eslint-disable-next-line no-undef
+
       return resolve(checkOptions(options))
     }).then(function (options) {
       // Create divs
@@ -17,11 +16,11 @@ const pageSetup = function (numDivs, sourceImages, options) {
     }).then(function (viewers) {
       // Viewers created; add dropdown to page
       // eslint-disable-next-line no-new
-      new DropDown(viewers, 'selections', 'json/tcga.json') // eslint-disable-line no-undef
+      new DropDown(viewers, 'selections', 'json/tcga.json')
       return viewers
     }).then(function (viewers) {
       // Pan zoom controller
-      synchronizeViewers(viewers) // eslint-disable-line no-undef
+      synchronizeViewers(viewers)
     }).then(function (result) {
       if (sourceImages.length === 1) {
         // Testing

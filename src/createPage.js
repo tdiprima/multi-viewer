@@ -1,10 +1,9 @@
 // Page Module
-// eslint-disable-next-line no-unused-vars
 const Page = function () {
   return {
     createDivs: function (idx, numDivs, viewers, rangeSliders, options) {
       let name
-      const opts = isRealValue(options) // eslint-disable-line no-undef
+      const opts = isRealValue(options)
       if (!opts) {
         // This has been error-trapped & corrected prior to this point. But...
         console.warn('createPage.js: options is undefined; please check.', options)
@@ -41,7 +40,7 @@ const Page = function () {
 
         this.createButtons(idx, buttonDiv, numDivs, options)
 
-        colorPicker(document.getElementById('mark' + idx)) // eslint-disable-line no-undef
+        colorPicker(document.getElementById('mark' + idx))
       }
 
       if (opts && options.slidersOn) {
@@ -56,7 +55,7 @@ const Page = function () {
 
       container.appendChild(viewerDiv)
 
-      viewers.push(new ImageViewer('viewer' + idx, sliderElements, numDivs, options)) // eslint-disable-line no-undef
+      viewers.push(new ImageViewer('viewer' + idx, sliderElements, numDivs, options))
 
       // Clear:both between rows
       if (idx % 2 === 0) {
@@ -67,7 +66,6 @@ const Page = function () {
     },
     createButtons: function (idx, div, numDivs, options) {
       let color
-      // eslint-disable-next-line no-undef
       if (isRealValue(options.paintbrushColor)) {
         color = options.paintbrushColor
       } else {

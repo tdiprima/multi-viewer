@@ -1,5 +1,4 @@
 // On right-click in viewer, add map marker to the other viewers
-// eslint-disable-next-line no-unused-vars
 const mapMarker = function (currentOSDViewer, syncedNViewers) {
   overrideRightClickMenu(currentOSDViewer.element)
 
@@ -8,13 +7,13 @@ const mapMarker = function (currentOSDViewer, syncedNViewers) {
   handleButtonShowHide()
 }
 
-function overrideRightClickMenu (viewerDiv) {
+function overrideRightClickMenu(viewerDiv) {
   viewerDiv.addEventListener('contextmenu', function (mouseEvent) {
     mouseEvent.preventDefault()
   })
 }
 
-function handleMarkerDisplay (currentOSDViewer, syncedNViewers) {
+function handleMarkerDisplay(currentOSDViewer, syncedNViewers) {
   currentOSDViewer.addHandler('canvas-nonprimary-press', function (osdEvent) {
     if (isRightClick(osdEvent)) {
       const clickPosition = osdEvent.position
@@ -29,11 +28,11 @@ function handleMarkerDisplay (currentOSDViewer, syncedNViewers) {
   })
 }
 
-function isRightClick (evt) {
+function isRightClick(evt) {
   return (evt.button === 2)
 }
 
-function displayMapMarker (point, currentOSDViewer, syncedNViewers) {
+function displayMapMarker(point, currentOSDViewer, syncedNViewers) {
   syncedNViewers.forEach(function (item) {
     const viewer = item.getViewer()
     if (viewer.id === currentOSDViewer.id) {
@@ -43,7 +42,7 @@ function displayMapMarker (point, currentOSDViewer, syncedNViewers) {
   })
 }
 
-function addMarkerToViewer (point, viewer) {
+function addMarkerToViewer(point, viewer) {
   const link = createLink()
   viewer.addOverlay({
     element: link,
@@ -53,7 +52,7 @@ function addMarkerToViewer (point, viewer) {
   })
 }
 
-function createLink () {
+function createLink() {
   const link = document.createElement('a')
   const href = '#'
   link.href = href
@@ -66,7 +65,7 @@ function createLink () {
   return link
 }
 
-function handleButtonShowHide () {
+function handleButtonShowHide() {
   const buttons = document.querySelectorAll('#btnMapMarker')
   buttons.forEach(function (elem) {
     let markersHaveBeenDrawn = false

@@ -1,12 +1,11 @@
-function clearClassList (element) {
+function clearClassList(element) {
   const classList = element.classList
   while (classList.length > 0) {
     classList.remove(classList.item(0))
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-function toggleButtonHighlight (btn) {
+function toggleButtonHighlight(btn) {
   const isOn = btn.classList.contains('btnOn')
   clearClassList(btn)
   if (isOn) {
@@ -16,22 +15,20 @@ function toggleButtonHighlight (btn) {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-function isRealValue (obj) {
+function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
-// eslint-disable-next-line no-unused-vars
 const isEmpty = function (value) {
   const isEmptyObject = function (a) {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
-      const hasNonempty = Object.keys(a).some(function nonEmpty (element) {
+      const hasNonempty = Object.keys(a).some(function nonEmpty(element) {
         return !isEmpty(a[element])
       })
       return hasNonempty ? false : isEmptyObject(Object.keys(a))
     }
 
-    return !a.some(function nonEmpty (element) { // check if array is really not empty as JS thinks
+    return !a.some(function nonEmpty(element) { // check if array is really not empty as JS thinks
       return !isEmpty(element) // at least one element should be non-empty
     })
   }
@@ -42,13 +39,12 @@ const isEmpty = function (value) {
 // Uncomment while testing:
 // module.exports = isEmpty
 
-// eslint-disable-next-line no-unused-vars
-function getAColorThatShowsUp (strokeColor) {
-  function isBlueIsh () {
+function getAColorThatShowsUp(strokeColor) {
+  function isBlueIsh() {
     return strokeColor.endsWith('ff')
   }
 
-  function isCyanOrMagenta () {
+  function isCyanOrMagenta() {
     return strokeColor === '#00ffff' || strokeColor === '#ff00ff'
   }
 
@@ -59,8 +55,7 @@ function getAColorThatShowsUp (strokeColor) {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
-function alertMessage (messageObject) {
-  alert(messageObject) // eslint-disable-line no-undef
+function alertMessage(messageObject) {
+  alert(messageObject)
   return true
 }

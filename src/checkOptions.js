@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 const checkOptions = function (options) {
   let returnValue
   const weNeedTheseKeys = {
@@ -13,7 +12,7 @@ const checkOptions = function (options) {
     }
   }
 
-  const empty = isEmpty(options) // eslint-disable-line no-undef
+  const empty = isEmpty(options)
   if (!empty) {
     returnValue = makeStructuresEqual(weNeedTheseKeys, options)
   } else {
@@ -22,11 +21,11 @@ const checkOptions = function (options) {
   return returnValue
 }
 
-function addKeyValue (expected, actual, key) {
+function addKeyValue(expected, actual, key) {
   actual[key] = expected[key]
 }
 
-function makeStructuresEqual (expected, actual) {
+function makeStructuresEqual(expected, actual) {
   if (actual === null || typeof actual === 'undefined') {
     return expected
   } else {

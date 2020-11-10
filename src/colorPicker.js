@@ -1,5 +1,5 @@
 // Utilizes: https://github.com/taufik-nurrohman/color-picker
-// eslint-disable-next-line no-unused-vars
+
 const colorPicker = function (inputElement) {
   const cp = create(inputElement)
   if (cp) {
@@ -10,12 +10,12 @@ const colorPicker = function (inputElement) {
   return cp
 }
 
-function create (inputElement) {
+function create(inputElement) {
   if (inputElement === null || typeof inputElement === 'undefined') {
     console.error('colorPicker.js: Expected input argument, but received none.')
     return false
   } else {
-    const picker = new CP(inputElement) // eslint-disable-line no-undef
+    const picker = new CP(inputElement)
     picker.self.classList.add('no-alpha')
 
     picker.on('blur', function () {
@@ -29,7 +29,7 @@ function create (inputElement) {
   }
 }
 
-function setColorAndStyle (cp) {
+function setColorAndStyle(cp) {
   cp.on('change', function (r, g, b) {
     this.source.value = this.color(r, g, b, 1)
     this.source.innerHTML = this.color(r, g, b, 1)
@@ -37,21 +37,20 @@ function setColorAndStyle (cp) {
   })
 }
 
-function handleShowHide (cp) {
+function handleShowHide(cp) {
   cp.source.addEventListener('click', function (e) {
     cp.enter()
     e.stopPropagation()
   }, false)
 }
 
-function handleExit (cp) {
+function handleExit(cp) {
   document.documentElement.addEventListener('click', function () {
     cp.exit()
   }, false)
 }
 
-// eslint-disable-next-line no-unused-vars
-function printInfo (cp) {
+function printInfo(cp) {
   console.log('self:', cp.self)
   console.log('source:', cp.source)
   console.log('state:', cp.state)

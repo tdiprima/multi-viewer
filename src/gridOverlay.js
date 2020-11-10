@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 const gridOverlay = function (idx, overlay) {
   const cellSize = 50
 
@@ -25,8 +24,7 @@ const gridOverlay = function (idx, overlay) {
   })
 }
 
-function gridHandler (button, gridProps) {
-  // eslint-disable-next-line no-undef
+function gridHandler(button, gridProps) {
   toggleButtonHighlight(button)
 
   if (buttonIsOn(button)) {
@@ -42,49 +40,45 @@ function gridHandler (button, gridProps) {
   }
 }
 
-function buttonIsOn (button) {
+function buttonIsOn(button) {
   return button.classList.contains('btnOn')
 }
 
-function turnGridOff (gridProps) {
+function turnGridOff(gridProps) {
   const r = gridProps.canvas.getObjects('line')
   for (let i = 0; i < r.length; i++) {
     gridProps.canvas.remove(r[i])
   }
 }
 
-function turnGridOn (gridProps) {
-  const lineProps = { stroke: gridProps.color, strokeWidth: 2, selectable: false }
+function turnGridOn(gridProps) {
+  const lineProps = {stroke: gridProps.color, strokeWidth: 2, selectable: false}
 
   createHorizontalLines(gridProps, lineProps)
-
   createVerticalLines(gridProps, lineProps)
 
   gridProps.canvas.renderAll()
   gridProps.gridAdded = true
 }
 
-function createHorizontalLines (gridProps, lineProps) {
+function createHorizontalLines(gridProps, lineProps) {
   for (let y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
-    // eslint-disable-next-line no-undef
     gridProps.canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
     gridProps.cellY[y + 1] = y * gridProps.cellHeight // and keep track of the y cells
   }
 }
 
-function createVerticalLines (gridProps, lineProps) {
+function createVerticalLines(gridProps, lineProps) {
   for (let x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
-    // eslint-disable-next-line no-undef
     gridProps.canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
     gridProps.cellX[x + 1] = x * gridProps.cellWidth // and keep track of the x cells
   }
 }
 
-function fillInGrid (pointerEvent, gridProps) {
+function fillInGrid(pointerEvent, gridProps) {
   const mousePosition = getMousePosition(pointerEvent, gridProps)
   const cellPosition = getCellPosition(mousePosition)
 
-  // eslint-disable-next-line no-undef
   const rect = new fabric.Rect({
     left: gridProps.cellX[cellPosition.x],
     top: gridProps.cellY[cellPosition.y],
@@ -97,21 +91,20 @@ function fillInGrid (pointerEvent, gridProps) {
   gridProps.canvas.add(rect)
 }
 
-function getMousePosition (pointerEvent, gridProps) {
+function getMousePosition(pointerEvent, gridProps) {
   const pointer = gridProps.canvas.getPointer(pointerEvent.e)
   const positionX = pointer.x / gridProps.cellWidth
   const positionY = pointer.y / gridProps.cellHeight
-  return { x: positionX, y: positionY }
+  return {x: positionX, y: positionY}
 }
 
-function getCellPosition (mousePosition) {
+function getCellPosition(mousePosition) {
   const positionX = Math.ceil(mousePosition.x + 0.001)
   const positionY = Math.ceil(mousePosition.y + 0.001)
-  return { x: positionX, y: positionY }
+  return {x: positionX, y: positionY}
 }
 
-function markerHandler (button, gridProps) {
-  // eslint-disable-next-line no-undef
+function markerHandler(button, gridProps) {
   toggleButtonHighlight(button)
   const on = buttonIsOn(button)
 
@@ -128,9 +121,8 @@ function markerHandler (button, gridProps) {
       })
       button.innerHTML = '<i class="fa fa-paint-brush"></i> Done marking'
     } else {
-      // eslint-disable-next-line no-undef
       toggleButtonHighlight(button) // turn it back off; we're not letting them do this
-      alertMessage('Please draw a grid first.') // eslint-disable-line no-undef
+      alertMessage('Please draw a grid first.')
     }
   }
 }
