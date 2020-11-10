@@ -28,7 +28,8 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
       return function (context, callback) {
         const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
         const pixels = imgData.data
-        for (let i = 0; i < pixels.length; i += 4) {
+        let i
+        for (i = 0; i < pixels.length; i += 4) {
           const avg = pixels[i] / 255
           if (pixels[i + 3] === 255) {
             pixels[i] = r * avg
@@ -73,7 +74,8 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
 
   function setSliders() {
     if (options.slidersOn) {
-      for (let i = 0; i < sliders.length; i++) {
+      let i
+      for (i = 0; i < sliders.length; i++) {
         sliders[i].addEventListener('input', function () {
           if (viewer.world.getItemAt(i) !== undefined) {
             viewer.world.getItemAt(i).setOpacity(sliders[i].value / 100)
@@ -90,7 +92,9 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     console.warn(message)
     console.log('jqXHR object:', jqXHR)
     console.log('URL', url)
-    document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
+    // uglify X template literal
+    // document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
+    document.write("<h1>" + message + "</h1><b>URL:</b>&nbsp;" + url + "<br><br><b>Check the console for any clues.")
     throw new Error('Something went wrong.') // Terminates the script.
   }
 

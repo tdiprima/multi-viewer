@@ -6,7 +6,7 @@ module.exports = function (grunt) {
       options: {
         stripBanners: true,
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-          '<%= grunt.template.today("yyyy-mm-dd") %> */'
+          '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       dist: {
         src: ['src/*.js'],
@@ -15,7 +15,8 @@ module.exports = function (grunt) {
     },
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> */'
       },
       build: {
         src: 'build/<%= pkg.name %>.js',
@@ -29,5 +30,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify')
 
   // Default task(s).
-  grunt.registerTask('default', ['concat'])
+  grunt.registerTask('default', ['concat', 'uglify'])
 }

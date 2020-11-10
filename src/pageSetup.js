@@ -9,7 +9,8 @@ const pageSetup = function (numDivs, sourceImages, options) {
       return resolve(checkOptions(options))
     }).then(function (options) {
       // Create divs
-      for (let idx = 1; idx <= numDivs; idx++) {
+      let idx
+      for (idx = 1; idx <= numDivs; idx++) {
         page.createDivs(idx, numDivs, viewers, rangeSliders, options)
       }
       return viewers

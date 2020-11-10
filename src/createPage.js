@@ -72,13 +72,17 @@ const Page = function () {
         color = '#00f'
       }
 
-      let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
-    <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`
+      // Uglification doesn't accept template literals
+      //   let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
+      // <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`
+      let htm = "<input type='checkbox' id='chkPan" + idx + "' checked=''><label for='chkPan" + idx + "'>Match Pan</label>&nbsp;<input type='checkbox' id='chkZoom" + idx + "' checked=''><label for='chkZoom" + idx + "'>Match Zoom</label>&nbsp;"
 
       if (numDivs <= 1) {
         htm = '' // There's nothing to match pan/zoom with; so leave it blank.
       }
 
+      // Uglification doesn't accept template literals
+      /*
       div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
         <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
         <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
@@ -86,7 +90,16 @@ const Page = function () {
         <button id="btnGridMarker${idx}" class="btn"><i class="fa fa-paint-brush"></i> Mark grid</button>&nbsp;
         <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;
         <button id="btnMapMarker" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
-    </a>`
+    </a>`*/
+      div.innerHTML = htm + "<mark id='mark" + idx + "'>" + color + "</mark>&nbsp;" +
+        "<button id='btnDraw" + idx + "' class='btn'><i class='fa fa-pencil-alt'></i> Draw polygon</button>&nbsp;" +
+        "<button id='btnEdit" + idx + "' class='btn'><i class='fa fa-draw-polygon'></i> Edit polygon</button>&nbsp;" +
+        "<button id='btnGrid" + idx + "' class='btn'><i class='fa fa-border-all'></i> Draw grid</button>&nbsp;" +
+        "<button id='btnGridMarker" + idx + "' class='btn'><i class='fa fa-paint-brush'></i> Mark grid</button>&nbsp;" +
+        "<button id='btnSlide" + idx + "' class='btn'><i class='fa fa-sliders'></i> Show sliders</button>&nbsp;" +
+        "<button id='btnMapMarker' class='btn' style='display: none'><i class='fa fa-map-marker-alt'></i> Hide markers</button>"
+      // "</a>"
+
     }
   }
 }

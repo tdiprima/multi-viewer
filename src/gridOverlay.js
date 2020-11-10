@@ -46,7 +46,8 @@ function buttonIsOn(button) {
 
 function turnGridOff(gridProps) {
   const r = gridProps.canvas.getObjects('line')
-  for (let i = 0; i < r.length; i++) {
+  let i
+  for (i = 0; i < r.length; i++) {
     gridProps.canvas.remove(r[i])
   }
 }
@@ -62,14 +63,16 @@ function turnGridOn(gridProps) {
 }
 
 function createHorizontalLines(gridProps, lineProps) {
-  for (let y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
+  let y
+  for (y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
     gridProps.canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
     gridProps.cellY[y + 1] = y * gridProps.cellHeight // and keep track of the y cells
   }
 }
 
 function createVerticalLines(gridProps, lineProps) {
-  for (let x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
+  let x
+  for (x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
     gridProps.canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
     gridProps.cellX[x + 1] = x * gridProps.cellWidth // and keep track of the x cells
   }

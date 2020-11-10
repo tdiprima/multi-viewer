@@ -29,7 +29,8 @@ function makeStructuresEqual(expected, actual) {
   if (actual === null || typeof actual === 'undefined') {
     return expected
   } else {
-    for (const key in expected) {
+    let key
+    for (key in expected) {
       if (!Object.prototype.hasOwnProperty.call(actual, key)) {
         addKeyValue(expected, actual, key)
       }

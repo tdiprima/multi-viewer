@@ -7,7 +7,8 @@ const Sliders = function () {
       const sliders = []
       const d = document.createDocumentFragment()
 
-      for (let i = 0; i < howManyToCreate; i++) {
+      let i
+      for (i = 0; i < howManyToCreate; i++) {
         const range = document.createElement('input')
         range.type = 'range'
         sliderIdNum += 1

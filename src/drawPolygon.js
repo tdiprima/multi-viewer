@@ -96,7 +96,9 @@ function setupDeleteButton(canvas, viewer) {
     $('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
-    const deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    // Uglification doesn't accept template literals
+    // const deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    const deleteBtn = "<img src='images/delete-icon.png' class='deleteBtn' style='position:absolute;top:" + btnTop + "px;left:" + btnLeft + "px;cursor:pointer;width:20px;height:20px;'/>"
     $('.canvas-container').append(deleteBtn)
   }
 
@@ -134,10 +136,17 @@ function setupDeleteButton(canvas, viewer) {
 }
 
 function convertPathToPolygon(pathObject, canvas, paintBrush) {
-  const _points0 = pathObject.path.map(item => ({
-    x: item[1],
-    y: item[2]
-  }))
+  // uglification and es6 don't mix :(
+  // const _points0 = pathObject.path.map(item => ({
+  //   x: item[1],
+  //   y: item[2]
+  // }))
+  const _points0 = pathObject.path.map(function (item) {
+    return {
+      x: item[1],
+      y: item[2]
+    }
+  })
 
   const cornerColor = getAColorThatShowsUp(pathObject.stroke)
 

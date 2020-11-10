@@ -8,10 +8,30 @@ const DropDown = function (viewerArray, divId, dataSource) {
   let imageSelect = {}
   let data = {}
 
-  fetch(dataSource).then(response => {
+  // Uglification fail
+  // fetch(dataSource).then(response => {
+  //   const contentType = response.headers.get('content-type')
+  //   if (contentType && contentType.indexOf('application/json') !== -1) {
+  //     return response.json().then(data => {
+  //       // Process JSON data
+  //       if (!isEmpty(data)) {
+  //         initTypes()
+  //         initImages(data)
+  //       } else {
+  //         throw Error('\n    Empty JSON response.\n    Skipping drop-down creation.')
+  //       }
+  //     })
+  //   } else {
+  //     return response.text().then(text => {
+  //       console.log('text:', text)
+  //       throw Error('We got a response... but it was not JSON.')
+  //     })
+  //   }
+  // })
+  fetch(dataSource).then(function (response) {
     const contentType = response.headers.get('content-type')
     if (contentType && contentType.indexOf('application/json') !== -1) {
-      return response.json().then(data => {
+      return response.json().then(function (data) {
         // Process JSON data
         if (!isEmpty(data)) {
           initTypes()
@@ -21,7 +41,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
         }
       })
     } else {
-      return response.text().then(text => {
+      return response.text().then(function (text) {
         console.log('text:', text)
         throw Error('We got a response... but it was not JSON.')
       })
@@ -32,7 +52,8 @@ const DropDown = function (viewerArray, divId, dataSource) {
     const val = cancerSelect.value
     imageSelect.options.length = 0
     const nl = data[val]
-    for (let i = 0; i < nl.length; i++) {
+    let i
+    for (i = 0; i < nl.length; i++) {
       const option = document.createElement('option')
       option.text = nl[i].id
       imageSelect.add(option)
