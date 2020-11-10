@@ -24,7 +24,7 @@ module.exports = function (grunt) {
     }
   })
 
-  // Load plugins
+  // Load npm plugins to provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-contrib-uglify')
 
