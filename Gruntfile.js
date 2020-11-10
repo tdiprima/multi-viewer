@@ -7,11 +7,16 @@ module.exports = function (grunt) {
     concat: {
       options: {
         banner: '<%= banner %>\n',
-        stripBanners: true
+        stripBanners: true,
+        separator: ';'
       },
-      dist: {
+      basic: {
         src: ['src/*.js'],
         dest: 'build/<%= pkg.name %>.js'
+      },
+      extras: {
+        src: ['vendor/**/*.js'],
+        dest: 'build/vendor.min.js'
       }
     },
     uglify: {
