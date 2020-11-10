@@ -1,6 +1,6 @@
 //! openseadragon 2.4.2
-//! Built on 2020-03-05
-//! Git commit: v2.4.2-0-c450749
+//! Built on 2020-11-09
+//! Git commit: v2.4.2-37-4ab8cc7-dirty
 //! http://openseadragon.github.io
 //! License: http://openseadragon.github.io/license/
 
@@ -1339,7 +1339,7 @@ function OpenSeadragon( options ){
          * @returns {Element} The element with the given id, null, or the element itself.
          */
         getElement: function( element ) {
-            if ( typeof ( element ) == "string" ) {
+            if ( typeof ( element ) === "string" ) {
                 element = document.getElementById( element );
             }
             return element;
@@ -1358,7 +1358,7 @@ function OpenSeadragon( options ){
                 offsetParent;
 
             element      = $.getElement( element );
-            isFixed      = $.getElementStyle( element ).position == "fixed";
+            isFixed      = $.getElementStyle( element ).position === "fixed";
             offsetParent = getOffsetParent( element, isFixed );
 
             while ( offsetParent ) {
@@ -1371,7 +1371,7 @@ function OpenSeadragon( options ){
                 }
 
                 element = offsetParent;
-                isFixed = $.getElementStyle( element ).position == "fixed";
+                isFixed = $.getElementStyle( element ).position === "fixed";
                 offsetParent = getOffsetParent( element, isFixed );
             }
 
@@ -1403,7 +1403,7 @@ function OpenSeadragon( options ){
                 boundingRect = element.getBoundingClientRect();
             }
 
-            win = ( doc == doc.window ) ?
+            win = ( doc === doc.window ) ?
                 doc :
                 ( doc.nodeType === 9 ) ?
                     doc.defaultView || doc.parentWindow :
@@ -1554,7 +1554,7 @@ function OpenSeadragon( options ){
          */
         getMousePosition: function( event ) {
 
-            if ( typeof ( event.pageX ) == "number" ) {
+            if ( typeof ( event.pageX ) === "number" ) {
                 $.getMousePosition = function( event ){
                     var result = new $.Point();
 
@@ -1564,7 +1564,7 @@ function OpenSeadragon( options ){
 
                     return result;
                 };
-            } else if ( typeof ( event.clientX ) == "number" ) {
+            } else if ( typeof ( event.clientX ) === "number" ) {
                 $.getMousePosition = function( event ){
                     var result = new $.Point();
 
@@ -1599,7 +1599,7 @@ function OpenSeadragon( options ){
             var docElement  = document.documentElement || {},
                 body        = document.body || {};
 
-            if ( typeof ( window.pageXOffset ) == "number" ) {
+            if ( typeof ( window.pageXOffset ) === "number" ) {
                 $.getPageScroll = function(){
                     return new $.Point(
                         window.pageXOffset,
@@ -1676,7 +1676,7 @@ function OpenSeadragon( options ){
                 };
             }
 
-            return $.setPageScroll( scroll );
+            $.setPageScroll( scroll );
         },
 
         /**
@@ -1688,7 +1688,7 @@ function OpenSeadragon( options ){
             var docElement = document.documentElement || {},
                 body    = document.body || {};
 
-            if ( typeof ( window.innerWidth ) == 'number' ) {
+            if ( typeof ( window.innerWidth ) === 'number' ) {
                 $.getWindowSize = function(){
                     return new $.Point(
                         window.innerWidth,
@@ -1820,7 +1820,7 @@ function OpenSeadragon( options ){
                 return img;
             };
 
-            if ( $.Browser.vendor == $.BROWSERS.IE && $.Browser.version < 7 ) {
+            if ( $.Browser.vendor === $.BROWSERS.IE && $.Browser.version < 7 ) {
 
                 $.makeTransparentImage = function( src ){
                     var img     = $.makeNeutralElement( "img" ),
@@ -2233,7 +2233,7 @@ function OpenSeadragon( options ){
 
             request.onreadystatechange = function() {
                 // 4 = DONE (https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#Properties)
-                if ( request.readyState == 4 ) {
+                if ( request.readyState === 4 ) {
                     request.onreadystatechange = function(){};
 
                     // With protocols other than http/https, a successful request status is in
@@ -2287,8 +2287,8 @@ function OpenSeadragon( options ){
                     to point developers in the right direction. We test the exception number because IE's
                     error messages are localized.
                 */
-                var oldIE = $.Browser.vendor == $.BROWSERS.IE && $.Browser.version < 10;
-                if ( oldIE && typeof ( e.number ) != "undefined" && e.number == -2147024891 ) {
+                var oldIE = $.Browser.vendor === $.BROWSERS.IE && $.Browser.version < 10;
+                if ( oldIE && typeof ( e.number ) !== "undefined" && e.number === -2147024891 ) {
                     msg += "\nSee http://msdn.microsoft.com/en-us/library/ms537505(v=vs.85).aspx#xdomain";
                 }
 
@@ -2359,7 +2359,7 @@ function OpenSeadragon( options ){
                 callbackParam = options.param || 'callback',
                 callback      = options.callback;
 
-            url = url.replace( /(\=)\?(&|$)|\?\?/i, replace );
+            url = url.replace( /(=)\?(&|$)|\?\?/i, replace );
             // Add callback manually
             url += (/\?/.test( url ) ? "&" : "?") + callbackParam + "=" + jsonpCallback;
 
@@ -2540,12 +2540,12 @@ function OpenSeadragon( options ){
 
 
     var FILEFORMATS = {
-            "bmp":  false,
-            "jpeg": true,
-            "jpg":  true,
-            "png":  true,
-            "tif":  false,
-            "wdp":  false
+            bmp:  false,
+            jpeg: true,
+            jpg:  true,
+            png:  true,
+            tif:  false,
+            wdp:  false
         },
         URLPARAMS = {};
 
@@ -2630,17 +2630,17 @@ function OpenSeadragon( options ){
         //determine if this browser supports image alpha transparency
         $.Browser.alpha = !(
             (
-                $.Browser.vendor == $.BROWSERS.IE &&
+                $.Browser.vendor === $.BROWSERS.IE &&
                 $.Browser.version < 9
             ) || (
-                $.Browser.vendor == $.BROWSERS.CHROME &&
+                $.Browser.vendor === $.BROWSERS.CHROME &&
                 $.Browser.version < 2
             )
         );
 
         //determine if this browser supports element.style.opacity
         $.Browser.opacity = !(
-            $.Browser.vendor == $.BROWSERS.IE &&
+            $.Browser.vendor === $.BROWSERS.IE &&
             $.Browser.version < 9
         );
 
@@ -2742,7 +2742,7 @@ function OpenSeadragon( options ){
      * @returns {Element}
      */
     function getOffsetParent( element, isFixed ) {
-        if ( isFixed && element != document.body ) {
+        if ( isFixed && element !== document.body ) {
             return document.body;
         } else {
             return element.offsetParent;
@@ -4103,7 +4103,7 @@ $.EventSource.prototype = {
     /**
      * Detect available mouse wheel event name.
      */
-    $.MouseTracker.wheelEventName = ( $.Browser.vendor == $.BROWSERS.IE && $.Browser.version > 8 ) ||
+    $.MouseTracker.wheelEventName = ( $.Browser.vendor === $.BROWSERS.IE && $.Browser.version > 8 ) ||
                                                 ( 'onwheel' in document.createElement( 'div' ) ) ? 'wheel' : // Modern browsers support 'wheel'
                                     document.onmousewheel !== undefined ? 'mousewheel' :                     // Webkit and IE support at least 'mousewheel'
                                     'DOMMouseScroll';                                                        // Assume old Firefox
@@ -4121,7 +4121,7 @@ $.EventSource.prototype = {
      */
     $.MouseTracker.subscribeEvents = [ "click", "dblclick", "keydown", "keyup", "keypress", "focus", "blur", $.MouseTracker.wheelEventName ];
 
-    if( $.MouseTracker.wheelEventName == "DOMMouseScroll" ) {
+    if( $.MouseTracker.wheelEventName === "DOMMouseScroll" ) {
         // Older Firefox
         $.MouseTracker.subscribeEvents.push( "MozMousePixelScroll" );
     }
@@ -4866,13 +4866,13 @@ $.EventSource.prototype = {
             clientY:    event.clientY,
             pageX:      event.pageX ? event.pageX : event.clientX,
             pageY:      event.pageY ? event.pageY : event.clientY,
-            deltaMode:  event.type == "MozMousePixelScroll" ? 0 : 1, // 0=pixel, 1=line, 2=page
+            deltaMode:  event.type === "MozMousePixelScroll" ? 0 : 1, // 0=pixel, 1=line, 2=page
             deltaX:     0,
             deltaZ:     0
         };
 
         // Calculate deltaY
-        if ( $.MouseTracker.wheelEventName == "mousewheel" ) {
+        if ( $.MouseTracker.wheelEventName === "mousewheel" ) {
             simulatedEvent.deltaY = -event.wheelDelta / $.DEFAULT_SETTINGS.pixelsPerWheelLine;
         } else {
             simulatedEvent.deltaY = event.detail;
@@ -6390,7 +6390,7 @@ $.EventSource.prototype = {
             // Pinch
             if ( tracker.pinchHandler && gPoints[ 0 ].type === 'touch' ) {
                 delta = delegate.pinchGPoints[ 0 ].currentPos.distanceTo( delegate.pinchGPoints[ 1 ].currentPos );
-                if ( delta != delegate.currentPinchDist ) {
+                if ( delta !== delegate.currentPinchDist ) {
                     delegate.lastPinchDist = delegate.currentPinchDist;
                     delegate.currentPinchDist = delta;
                     delegate.lastPinchCenter = delegate.currentPinchCenter;
@@ -6599,13 +6599,13 @@ $.Control = function ( element, options, container ) {
      * @member {Element} wrapper
      * @memberof OpenSeadragon.Control#
      */
-    if ( this.anchor == $.ControlAnchor.ABSOLUTE ) {
+    if ( this.anchor === $.ControlAnchor.ABSOLUTE ) {
         this.wrapper    = $.makeNeutralElement( "div" );
         this.wrapper.style.position = "absolute";
-        this.wrapper.style.top = typeof (options.top) == "number" ? (options.top + 'px') : options.top;
-        this.wrapper.style.left  = typeof (options.left) == "number" ? (options.left + 'px') : options.left;
-        this.wrapper.style.height = typeof (options.height) == "number" ? (options.height + 'px') : options.height;
-        this.wrapper.style.width  = typeof (options.width) == "number" ? (options.width + 'px') : options.width;
+        this.wrapper.style.top = typeof (options.top) === "number" ? (options.top + 'px') : options.top;
+        this.wrapper.style.left  = typeof (options.left) === "number" ? (options.left + 'px') : options.left;
+        this.wrapper.style.height = typeof (options.height) === "number" ? (options.height + 'px') : options.height;
+        this.wrapper.style.width  = typeof (options.width) === "number" ? (options.width + 'px') : options.width;
         this.wrapper.style.margin = "0px";
         this.wrapper.style.padding = "0px";
 
@@ -6617,7 +6617,7 @@ $.Control = function ( element, options, container ) {
     } else {
         this.wrapper    = $.makeNeutralElement( "div" );
         this.wrapper.style.display = "inline-block";
-        if ( this.anchor == $.ControlAnchor.NONE ) {
+        if ( this.anchor === $.ControlAnchor.NONE ) {
             // IE6 fix
             this.wrapper.style.width = this.wrapper.style.height = "100%";
         }
@@ -6625,8 +6625,8 @@ $.Control = function ( element, options, container ) {
     this.wrapper.appendChild( this.element );
 
     if (options.attachToViewer ) {
-        if ( this.anchor == $.ControlAnchor.TOP_RIGHT ||
-             this.anchor == $.ControlAnchor.BOTTOM_RIGHT ) {
+        if ( this.anchor === $.ControlAnchor.TOP_RIGHT ||
+             this.anchor === $.ControlAnchor.BOTTOM_RIGHT ) {
             this.container.insertBefore(
                 this.wrapper,
                 this.container.firstChild
@@ -6657,7 +6657,7 @@ $.Control.prototype = {
      * @return {Boolean} true if currently visible, false otherwise.
      */
     isVisible: function() {
-        return this.wrapper.style.display != "none";
+        return this.wrapper.style.display !== "none";
     },
 
     /**
@@ -6667,7 +6667,7 @@ $.Control.prototype = {
      */
     setVisible: function( visible ) {
         this.wrapper.style.display = visible ?
-            ( this.anchor == $.ControlAnchor.ABSOLUTE ? 'block' : 'inline-block' ) :
+            ( this.anchor === $.ControlAnchor.ABSOLUTE ? 'block' : 'inline-block' ) :
             "none";
     },
 
@@ -6677,7 +6677,7 @@ $.Control.prototype = {
      * @param {Number} opactiy - a value between 1 and 0 inclusively.
      */
     setOpacity: function( opacity ) {
-        if ( this.element[ $.SIGNAL ] && $.Browser.vendor == $.BROWSERS.IE ) {
+        if ( this.element[ $.SIGNAL ] && $.Browser.vendor === $.BROWSERS.IE ) {
             $.setElementOpacity( this.element, opacity, true );
         } else {
             $.setElementOpacity( this.wrapper, opacity, true );
@@ -6907,7 +6907,7 @@ $.Control.prototype = {
             i;
 
         for ( i = controls.length - 1; i >= 0; i-- ) {
-            if ( controls[ i ].element == element ) {
+            if ( controls[ i ].element === element ) {
                 return i;
             }
         }
@@ -7258,19 +7258,19 @@ $.Viewer = function( options ) {
 
     //Private state properties
     THIS[ this.hash ] = {
-        "fsBoundsDelta":     new $.Point( 1, 1 ),
-        "prevContainerSize": null,
-        "animating":         false,
-        "forceRedraw":       false,
-        "mouseInside":       false,
-        "group":             null,
+        fsBoundsDelta:     new $.Point( 1, 1 ),
+        prevContainerSize: null,
+        animating:         false,
+        forceRedraw:       false,
+        mouseInside:       false,
+        group:             null,
         // whether we should be continuously zooming
-        "zooming":           false,
+        zooming:           false,
         // how much we should be continuously zooming by
-        "zoomFactor":        null,
-        "lastZoomTime":      null,
-        "fullPage":          false,
-        "onfullscreenchange": null
+        zoomFactor:        null,
+        lastZoomTime:      null,
+        fullPage:          false,
+        onfullscreenchange: null
     };
 
     this._sequenceIndex = 0;
@@ -7579,7 +7579,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
         this.close();
 
         if (!tileSources) {
-            return;
+            return this;
         }
 
         if (this.sequenceMode && $.isArray(tileSources)) {
@@ -7588,7 +7588,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
                 this.referenceStrip = null;
             }
 
-            if (typeof initialPage != 'undefined' && !isNaN(initialPage)) {
+            if (typeof initialPage !== 'undefined' && !isNaN(initialPage)) {
               this.initialPage = initialPage;
             }
 
@@ -7603,7 +7603,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
             }
 
             this._updateSequenceButtons( this._sequenceIndex );
-            return;
+            return this;
         }
 
         if (!$.isArray(tileSources)) {
@@ -7611,7 +7611,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
         }
 
         if (!tileSources.length) {
-            return;
+            return this;
         }
 
         this._opening = true;
@@ -7823,7 +7823,22 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
             this.drawer.destroy();
         }
 
+        if ( this.navigator ) {
+            this.navigator.destroy();
+            THIS[ this.navigator.hash ] = null;
+            delete THIS[ this.navigator.hash ];
+            this.navigator = null;
+        }
+
         this.removeAllHandlers();
+
+        if (this.buttons) {
+            this.buttons.destroy();
+        }
+
+        if (this.paging) {
+            this.paging.destroy();
+        }
 
         // Go through top element (passed to us) and remove all children
         // Use removeChild to make sure it handles SVG or any non-html
@@ -7833,6 +7848,9 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
                 this.element.removeChild(this.element.firstChild);
             }
         }
+
+        this.container.onsubmit = null;
+        this.clearControls();
 
         // destroy the mouse trackers
         if (this.innerTracker){
@@ -7971,7 +7989,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
             i;
 
         //don't bother modifying the DOM if we are already in full page mode.
-        if ( fullPage == this.isFullPage() ) {
+        if ( fullPage === this.isFullPage() ) {
             return this;
         }
 
@@ -8265,7 +8283,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
      * @return {Boolean}
      */
     isVisible: function () {
-        return this.container.style.visibility != "hidden";
+        return this.container.style.visibility !== "hidden";
     },
 
 
@@ -8469,7 +8487,7 @@ $.extend( $.Viewer.prototype, $.EventSource.prototype, $.ControlDock.prototype, 
 
                 if (queueItem.options.replace) {
                     var newIndex = _this.world.getIndexOfItem(queueItem.options.replaceItem);
-                    if (newIndex != -1) {
+                    if (newIndex !== -1) {
                         queueItem.options.index = newIndex;
                     }
                     _this.world.removeItem(queueItem.options.replaceItem);
@@ -9323,12 +9341,12 @@ function getTileSourceImplementation( viewer, tileSource, imgOptions, successCal
     var _this = viewer;
 
     //allow plain xml strings or json strings to be parsed here
-    if ( $.type( tileSource ) == 'string' ) {
+    if ( $.type( tileSource ) === 'string' ) {
         //xml should start with "<" and end with ">"
         if ( tileSource.match( /^\s*<.*>\s*$/ ) ) {
             tileSource = $.parseXml( tileSource );
         //json should start with "{" or "[" and end with "}" or "]"
-        } else if ( tileSource.match(/^\s*[\{\[].*[\}\]]\s*$/ ) ) {
+        } else if ( tileSource.match(/^\s*[{[].*[}\]]\s*$/ ) ) {
             try {
               var tileSourceJ = $.parseJSON(tileSource);
               tileSource = tileSourceJ;
@@ -9355,7 +9373,7 @@ function getTileSourceImplementation( viewer, tileSource, imgOptions, successCal
     }
 
     setTimeout( function() {
-        if ( $.type( tileSource ) == 'string' ) {
+        if ( $.type( tileSource ) === 'string' ) {
             //If its still a string it means it must be a url at this point
             tileSource = new $.TileSource({
                 url: tileSource,
@@ -9730,7 +9748,7 @@ function onCanvasKeyPress( event ) {
 function onCanvasClick( event ) {
     var gestureSettings;
 
-    var haveKeyboardFocus = document.activeElement == this.canvas;
+    var haveKeyboardFocus = document.activeElement === this.canvas;
 
     // If we don't have keyboard focus, request it.
     if ( !haveKeyboardFocus ) {
@@ -9874,11 +9892,11 @@ function onCanvasDrag( event ) {
             this.viewport.centerSpringX.target.value -= delta.x;
             this.viewport.centerSpringY.target.value -= delta.y;
 
-            if (bounds.x != constrainedBounds.x) {
+            if (bounds.x !== constrainedBounds.x) {
                 event.delta.x = 0;
             }
 
-            if (bounds.y != constrainedBounds.y) {
+            if (bounds.y !== constrainedBounds.y) {
                 event.delta.y = 0;
             }
         }
@@ -9967,7 +9985,7 @@ function onCanvasEnter( event ) {
 
 function onCanvasExit( event ) {
 
-    if (window.location != window.parent.location){
+    if (window.location !== window.parent.location){
         $.MouseTracker.resetAllMouseTrackers();
     }
 
@@ -10233,6 +10251,8 @@ function onCanvasScroll( event ) {
             return false;   // We are swallowing this event
         }
     }
+
+    return undefined;
 }
 
 function onContainerEnter( event ) {
@@ -10319,7 +10339,7 @@ function updateOnce( viewer ) {
 
     //viewer.profiler.beginUpdate();
 
-    if (viewer._opening) {
+    if (viewer._opening || !THIS[viewer.hash]) {
         return;
     }
 
@@ -10669,15 +10689,15 @@ $.Navigator = function( options ){
         };
 
         if( options.position ){
-            if( 'BOTTOM_RIGHT' == options.position ){
+            if( 'BOTTOM_RIGHT' === options.position ){
                options.controlOptions.anchor = $.ControlAnchor.BOTTOM_RIGHT;
-            } else if( 'BOTTOM_LEFT' == options.position ){
+            } else if( 'BOTTOM_LEFT' === options.position ){
                options.controlOptions.anchor = $.ControlAnchor.BOTTOM_LEFT;
-            } else if( 'TOP_RIGHT' == options.position ){
+            } else if( 'TOP_RIGHT' === options.position ){
                options.controlOptions.anchor = $.ControlAnchor.TOP_RIGHT;
-            } else if( 'TOP_LEFT' == options.position ){
+            } else if( 'TOP_LEFT' === options.position ){
                options.controlOptions.anchor = $.ControlAnchor.TOP_LEFT;
-            } else if( 'ABSOLUTE' == options.position ){
+            } else if( 'ABSOLUTE' === options.position ){
                options.controlOptions.anchor = $.ControlAnchor.ABSOLUTE;
                options.controlOptions.top = options.top;
                options.controlOptions.left = options.left;
@@ -10731,7 +10751,7 @@ $.Navigator = function( options ){
     this.totalBorderWidths = new $.Point(this.borderWidth * 2, this.borderWidth * 2).minus(this.fudge);
 
 
-    if ( options.controlOptions.anchor != $.ControlAnchor.NONE ) {
+    if ( options.controlOptions.anchor !== $.ControlAnchor.NONE ) {
         (function( style, borderWidth ){
             style.margin        = '0px';
             style.border        = borderWidth + 'px solid ' + options.borderColor;
@@ -10782,8 +10802,8 @@ $.Navigator = function( options ){
         options.controlOptions
     );
 
-    this._resizeWithViewer = options.controlOptions.anchor != $.ControlAnchor.ABSOLUTE &&
-        options.controlOptions.anchor != $.ControlAnchor.NONE;
+    this._resizeWithViewer = options.controlOptions.anchor !== $.ControlAnchor.ABSOLUTE &&
+        options.controlOptions.anchor !== $.ControlAnchor.NONE;
 
     if (options.width && options.height) {
         this.setWidth(options.width);
@@ -10885,7 +10905,7 @@ $.extend( $.Navigator.prototype, $.EventSource.prototype, $.Viewer.prototype, /*
      */
     setWidth: function(width) {
         this.width = width;
-        this.element.style.width = typeof (width) == "number" ? (width + 'px') : width;
+        this.element.style.width = typeof (width) === "number" ? (width + 'px') : width;
         this._resizeWithViewer = false;
     },
 
@@ -10895,7 +10915,7 @@ $.extend( $.Navigator.prototype, $.EventSource.prototype, $.Viewer.prototype, /*
      */
     setHeight: function(height) {
         this.height = height;
-        this.element.style.height = typeof (height) == "number" ? (height + 'px') : height;
+        this.element.style.height = typeof (height) === "number" ? (height + 'px') : height;
         this._resizeWithViewer = false;
     },
 
@@ -11007,6 +11027,10 @@ $.extend( $.Navigator.prototype, $.EventSource.prototype, $.Viewer.prototype, /*
         });
 
         return $.Viewer.prototype.addTiledImage.apply(this, [optionsClone]);
+    },
+
+    destroy: function() {
+        return $.Viewer.prototype.destroy.apply(this);
     },
 
     // private
@@ -11302,7 +11326,7 @@ $.extend( $, /** @lends OpenSeadragon */{
         }
         string = container[ props[ i ] ];
 
-        if ( typeof ( string ) != "string" ) {
+        if ( typeof ( string ) !== "string" ) {
             $.console.log( "Untranslated source string:", prop );
             string = ""; // FIXME: this breaks gettext()-style convention, which would return source
         }
@@ -11392,13 +11416,13 @@ $.Point = function( x, y ) {
      * @member {Number} x
      * @memberof OpenSeadragon.Point#
      */
-    this.x = typeof ( x ) == "number" ? x : 0;
+    this.x = typeof ( x ) === "number" ? x : 0;
     /**
      * The vector component 'y'.
      * @member {Number} y
      * @memberof OpenSeadragon.Point#
      */
-    this.y = typeof ( y ) == "number" ? y : 0;
+    this.y = typeof ( y ) === "number" ? y : 0;
 };
 
 /** @lends OpenSeadragon.Point.prototype */
@@ -11755,7 +11779,7 @@ $.TileSource = function( width, height, tileSize, tileOverlap, minLevel, maxLeve
      * @memberof OpenSeadragon.TileSource#
      */
 
-    if( 'string' == $.type( arguments[ 0 ] ) ){
+    if( 'string' === $.type( arguments[ 0 ] ) ){
         this.url = arguments[0];
     }
 
@@ -12088,7 +12112,7 @@ $.TileSource.prototype = {
                         msg = "HTTP " + xhr.status + " attempting to load TileSource";
                     } catch ( e ) {
                         var formattedExc;
-                        if ( typeof ( exc ) == "undefined" || !exc.toString ) {
+                        if ( typeof ( exc ) === "undefined" || !exc.toString ) {
                             formattedExc = "Unknown error";
                         } else {
                             formattedExc = exc.toString();
@@ -12228,7 +12252,7 @@ function processResponse( xhr ){
         throw new Error( $.getString( "Errors.Security" ) );
     } else if ( xhr.status !== 200 && xhr.status !== 0 ) {
         status     = xhr.status;
-        statusText = ( status == 404 ) ?
+        statusText = ( status === 404 ) ?
             "Not Found" :
             xhr.statusText;
         throw new Error( $.getString( "Errors.Status", status, statusText ) );
@@ -12242,7 +12266,7 @@ function processResponse( xhr ){
         } catch (e){
             data = xhr.responseText;
         }
-    }else if( responseText.match(/\s*[\{\[].*/) ){
+    }else if( responseText.match(/\s*[{[].*/) ){
         try{
           data = $.parseJSON(responseText);
         } catch(e){
@@ -12278,6 +12302,8 @@ $.TileSource.determineType = function( tileSource, data, url ){
     }
 
     $.console.error( "No TileSource was able to open %s %s", url, data );
+
+    return null;
 };
 
 
@@ -12393,7 +12419,7 @@ $.extend( $.DziTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
         if ( data.Image ) {
             ns = data.Image.xmlns;
         } else if ( data.documentElement) {
-            if ("Image" == data.documentElement.localName || "Image" == data.documentElement.tagName) {
+            if ("Image" === data.documentElement.localName || "Image" === data.documentElement.tagName) {
                 ns = data.documentElement.namespaceURI;
             }
         }
@@ -12427,9 +12453,9 @@ $.extend( $.DziTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
 
         if (url && !options.tilesUrl) {
             options.tilesUrl = url.replace(
-                    /([^\/]+?)(\.(dzi|xml|js)?(\?[^\/]*)?)?\/?$/, '$1_files/');
+                    /([^/]+?)(\.(dzi|xml|js)?(\?[^/]*)?)?\/?$/, '$1_files/');
 
-            if (url.search(/\.(dzi|xml|js)\?/) != -1) {
+            if (url.search(/\.(dzi|xml|js)\?/) !== -1) {
                 options.queryParams = url.match(/\?.*/);
             }else{
                 options.queryParams = '';
@@ -12525,7 +12551,7 @@ function configureFromXML( tileSource, xmlDoc ){
         sizeNode,
         i;
 
-    if ( rootName == "Image" ) {
+    if ( rootName === "Image" ) {
 
         try {
             sizeNode = root.getElementsByTagName("Size" )[ 0 ];
@@ -12589,9 +12615,9 @@ function configureFromXML( tileSource, xmlDoc ){
                 e :
                 new Error( $.getString("Errors.Dzi") );
         }
-    } else if ( rootName == "Collection" ) {
+    } else if ( rootName === "Collection" ) {
         throw new Error( $.getString( "Errors.Dzc" ) );
-    } else if ( rootName == "Error" ) {
+    } else if ( rootName === "Error" ) {
         var messageNode = root.getElementsByTagName("Message")[0];
         var message = messageNode.firstChild.nodeValue;
         throw new Error(message);
@@ -12734,7 +12760,7 @@ $.IIIFTileSource = function( options ){
         options.tileSize = this.tile_height;
     } else if ( this.tiles ) {
         // Version 2.0 forwards
-        if ( this.tiles.length == 1 ) {
+        if ( this.tiles.length === 1 ) {
             options.tileWidth  = this.tiles[0].width;
             // Use height if provided, otherwise assume square tiles and use width.
             options.tileHeight = this.tiles[0].height || this.tiles[0].width;
@@ -12815,12 +12841,12 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
 
     supports: function( data, url ) {
         // Version 2.0 and forwards
-        if (data.protocol && data.protocol == 'http://iiif.io/api/image') {
+        if (data.protocol && data.protocol === 'http://iiif.io/api/image') {
             return true;
         // Version 1.1
         } else if ( data['@context'] && (
-            data['@context'] == "http://library.stanford.edu/iiif/image-api/1.1/context.json" ||
-            data['@context'] == "http://iiif.io/api/image/1/context.json") ) {
+            data['@context'] === "http://library.stanford.edu/iiif/image-api/1.1/context.json" ||
+            data['@context'] === "http://iiif.io/api/image/1/context.json") ) {
             // N.B. the iiif.io context is wrong, but where the representation lives so likely to be used
             return true;
 
@@ -12831,8 +12857,8 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
         } else if ( data.identifier && data.width && data.height ) {
             return true;
         } else if ( data.documentElement &&
-            "info" == data.documentElement.tagName &&
-            "http://library.stanford.edu/iiif/image-api/ns/" ==
+            "info" === data.documentElement.tagName &&
+            "http://library.stanford.edu/iiif/image-api/ns/" ===
                 data.documentElement.namespaceURI) {
             return true;
 
@@ -13061,7 +13087,7 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
         }
         if ( levelWidth < tileWidth && levelHeight < tileHeight ){
             if ( this.version === 2 && levelWidth === this.width ) {
-                iiifSize = "max";
+                iiifSize = "full";
             } else if ( this.version === 3 && levelWidth === this.width && levelHeight === this.height ) {
                 iiifSize = "max";
             } else if ( this.version === 3 ) {
@@ -13083,7 +13109,7 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
             iiifSizeW = Math.ceil( iiifTileW * scale );
             iiifSizeH = Math.ceil( iiifTileH * scale );
             if ( this.version === 2 && iiifSizeW === this.width ) {
-                iiifSize = "max";
+                iiifSize = "full";
             } else if ( this.version === 3 && iiifSizeW === this.width && iiifSizeH === this.height ) {
                 iiifSize = "max";
             } else if (this.version === 3) {
@@ -13163,7 +13189,7 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
             rootName        = root.tagName,
             configuration   = null;
 
-        if ( rootName == "info" ) {
+        if ( rootName === "info" ) {
             try {
                 configuration = {};
                 parseXML10( root, configuration );
@@ -13181,7 +13207,7 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
     function parseXML10( node, configuration, property ) {
         var i,
             value;
-        if ( node.nodeType == 3 && property ) {//text node
+        if ( node.nodeType === 3 && property ) {//text node
             value = node.nodeValue.trim();
             if( value.match(/^\d*$/)){
                 value = Number( value );
@@ -13194,7 +13220,7 @@ $.extend( $.IIIFTileSource.prototype, $.TileSource.prototype, /** @lends OpenSea
                 }
                 configuration[ property ].push( value );
             }
-        } else if( node.nodeType == 1 ){
+        } else if( node.nodeType === 1 ){
             for( i = 0; i < node.childNodes.length; i++ ){
                 parseXML10( node.childNodes[ i ], configuration, node.nodeName );
             }
@@ -13320,7 +13346,7 @@ $.extend( $.OsmTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
     supports: function( data, url ){
         return (
             data.type &&
-            "openstreetmaps" == data.type
+            "openstreetmaps" === data.type
         );
     },
 
@@ -13456,7 +13482,7 @@ $.extend( $.TmsTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
      * @param {String} optional - url
      */
     supports: function( data, url ){
-        return ( data.type && "tiledmapservice" == data.type );
+        return ( data.type && "tiledmapservice" === data.type );
     },
 
     /**
@@ -13509,7 +13535,7 @@ $.extend( $.TmsTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
      *      tilesUrl: "/test/data/zoomify/"
      * }
      *
-     * The tileSize is currently hardcoded to 256 (the usual Zoomify default). The tileUrl must the path to the image _directory_.
+     * The tileSize is set to 256 (the usual Zoomify default) when it is not defined. The tileUrl must the path to the image _directory_.
      *
      * 2) Loading image metadata from xml file: (CURRENTLY NOT SUPPORTED)
      *
@@ -13535,7 +13561,9 @@ $.extend( $.TmsTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
      * @param {String} tilesUrl
      */
     $.ZoomifyTileSource = function(options) {
-        options.tileSize = 256;
+        if(typeof options.tileSize === 'undefined'){
+            options.tileSize = 256;
+        }
 
         var currentImageSize = {
             x: options.width,
@@ -13598,7 +13626,7 @@ $.extend( $.TmsTileSource.prototype, $.TileSource.prototype, /** @lends OpenSead
          * @param {String} optional - url
          */
         supports: function(data, url) {
-            return (data.type && "zoomifytileservice" == data.type);
+            return (data.type && "zoomifytileservice" === data.type);
         },
 
         /**
@@ -13743,10 +13771,10 @@ $.extend( $.LegacyTileSource.prototype, $.TileSource.prototype, /** @lends OpenS
     supports: function( data, url ){
         return (
             data.type &&
-            "legacy-image-pyramid" == data.type
+            "legacy-image-pyramid" === data.type
         ) || (
             data.documentElement &&
-            "legacy-image-pyramid" == data.documentElement.getAttribute('type')
+            "legacy-image-pyramid" === data.documentElement.getAttribute('type')
         );
     },
 
@@ -13875,7 +13903,7 @@ function configureFromXML( tileSource, xmlDoc ){
         level,
         i;
 
-    if ( rootName == "image" ) {
+    if ( rootName === "image" ) {
 
         try {
             conf = {
@@ -13901,9 +13929,9 @@ function configureFromXML( tileSource, xmlDoc ){
                 e :
                 new Error( 'Unknown error parsing Legacy Image Pyramid XML.' );
         }
-    } else if ( rootName == "collection" ) {
+    } else if ( rootName === "collection" ) {
         throw new Error( 'Legacy Image Pyramid Collections not yet supported.' );
-    } else if ( rootName == "error" ) {
+    } else if ( rootName === "error" ) {
         throw new Error( 'Error: ' + xmlDoc );
     }
 
@@ -14120,6 +14148,13 @@ function configureFromObject( tileSource, configuration ){
             }
             return context;
         },
+        /**
+         * Destroys ImageTileSource
+         * @function
+         */
+        destroy: function () {
+            this._freeupCanvasMemory();
+        },
 
         // private
         //
@@ -14183,7 +14218,19 @@ function configureFromObject( tileSource, configuration ){
                 bigContext = smallContext;
             }
             return levels;
-        }
+        },
+        /**
+         * Free up canvas memory
+         * (iOS 12 or higher on 2GB RAM device has only 224MB canvas memory,
+         * and Safari keeps canvas until its height and width will be set to 0).
+         * @function
+         */
+        _freeupCanvasMemory: function () {
+            for (var i = 0; i < this.levels.length; i++) {
+                this.levels[i].context2D.canvas.height = 0;
+                this.levels[i].context2D.canvas.width = 0;
+            }
+        },
     });
 
 }(OpenSeadragon));
@@ -14391,7 +14438,7 @@ $.Button = function( options ) {
         this.imgDown.style.visibility  =
             "hidden";
 
-        if ($.Browser.vendor == $.BROWSERS.FIREFOX && $.Browser.version < 3) {
+        if ($.Browser.vendor === $.BROWSERS.FIREFOX && $.Browser.version < 3) {
             this.imgGroup.style.top =
             this.imgHover.style.top =
             this.imgDown.style.top  =
@@ -14629,6 +14676,20 @@ $.extend( $.Button.prototype, $.EventSource.prototype, /** @lends OpenSeadragon.
         this.element.disabled = false;
         $.setElementOpacity( this.element, 1.0, true );
         this.notifyGroupEnter();
+    },
+
+    destroy: function() {
+        this.element.removeChild(this.imgRest);
+        this.imgRest = null;
+        this.element.removeChild(this.imgGroup);
+        this.imgGroup = null;
+        this.element.removeChild(this.imgHover);
+        this.imgHover = null;
+        this.element.removeChild(this.imgDown);
+        this.imgDown = null;
+        this.removeAllHandlers();
+        this.tracker.destroy();
+        this.element = null;
     }
 
 });
@@ -14684,13 +14745,13 @@ function inTo( button, newState ) {
     }
 
     if ( newState >= $.ButtonState.GROUP &&
-         button.currentState == $.ButtonState.REST ) {
+         button.currentState === $.ButtonState.REST ) {
         stopFading( button );
         button.currentState = $.ButtonState.GROUP;
     }
 
     if ( newState >= $.ButtonState.HOVER &&
-         button.currentState == $.ButtonState.GROUP ) {
+         button.currentState === $.ButtonState.GROUP ) {
         if( button.imgHover ){
             button.imgHover.style.visibility = "";
         }
@@ -14698,7 +14759,7 @@ function inTo( button, newState ) {
     }
 
     if ( newState >= $.ButtonState.DOWN &&
-         button.currentState == $.ButtonState.HOVER ) {
+         button.currentState === $.ButtonState.HOVER ) {
         if( button.imgDown ){
             button.imgDown.style.visibility = "";
         }
@@ -14714,7 +14775,7 @@ function outTo( button, newState ) {
     }
 
     if ( newState <= $.ButtonState.HOVER &&
-         button.currentState == $.ButtonState.DOWN ) {
+         button.currentState === $.ButtonState.DOWN ) {
         if( button.imgDown ){
             button.imgDown.style.visibility = "hidden";
         }
@@ -14722,7 +14783,7 @@ function outTo( button, newState ) {
     }
 
     if ( newState <= $.ButtonState.GROUP &&
-         button.currentState == $.ButtonState.HOVER ) {
+         button.currentState === $.ButtonState.HOVER ) {
         if( button.imgHover ){
             button.imgHover.style.visibility = "hidden";
         }
@@ -14730,7 +14791,7 @@ function outTo( button, newState ) {
     }
 
     if ( newState <= $.ButtonState.REST &&
-         button.currentState == $.ButtonState.GROUP ) {
+         button.currentState === $.ButtonState.GROUP ) {
         beginFading( button );
         button.currentState = $.ButtonState.REST;
     }
@@ -14871,6 +14932,16 @@ $.ButtonGroup.prototype = {
      */
     emulateExit: function() {
         this.tracker.exitHandler( { eventSource: this.tracker } );
+    },
+
+    destroy: function() {
+        while (this.buttons.length) {
+            var button = this.buttons.pop();
+            this.element.removeChild(button.element);
+            button.destroy();
+        }
+        this.tracker.destroy();
+        this.element = null;
     }
 };
 
@@ -15541,7 +15612,7 @@ $.ReferenceStrip = function ( options ) {
     $.extend( this, options );
     //Private state properties
     THIS[this.id] = {
-        "animating":           false
+        animating:           false
     };
 
     this.minPixelRatio = this.viewer.minPixelRatio;
@@ -15582,7 +15653,7 @@ $.ReferenceStrip = function ( options ) {
             { anchor: $.ControlAnchor.BOTTOM_LEFT }
         );
     } else {
-        if ( "horizontal" == options.scroll ) {
+        if ( "horizontal" === options.scroll ) {
             this.element.style.width = (
                 viewerSize.x *
                 options.sizeRatio *
@@ -15668,7 +15739,7 @@ $.ReferenceStrip = function ( options ) {
         this.panels.push( element );
 
     }
-    loadPanels( this, this.scroll == 'vertical' ? viewerSize.y : viewerSize.x, 0 );
+    loadPanels( this, this.scroll === 'vertical' ? viewerSize.y : viewerSize.x, 0 );
     this.setFocus( 0 );
 
 };
@@ -15694,7 +15765,7 @@ $.extend( $.ReferenceStrip.prototype, $.EventSource.prototype, $.Viewer.prototyp
             this.currentSelected = element;
             this.currentSelected.style.background = '#999';
 
-            if ( 'horizontal' == this.scroll ) {
+            if ( 'horizontal' === this.scroll ) {
                 //right left
                 offset = ( Number( page ) ) * ( this.panelWidth + 3 );
                 if ( offset > offsetLeft + viewerSize.x - this.panelWidth ) {
@@ -15767,7 +15838,7 @@ function onStripDrag( event ) {
         viewerSize   = $.getElementSize( this.viewer.canvas );
     this.dragging = true;
     if ( this.element ) {
-        if ( 'horizontal' == this.scroll ) {
+        if ( 'horizontal' === this.scroll ) {
             if ( -event.delta.x > 0 ) {
                 //forward
                 if ( offsetLeft > -( scrollWidth - viewerSize.x ) ) {
@@ -15815,7 +15886,7 @@ function onStripScroll( event ) {
         scrollHeight = Number( this.element.style.height.replace( 'px', '' ) ),
         viewerSize   = $.getElementSize( this.viewer.canvas );
     if ( this.element ) {
-        if ( 'horizontal' == this.scroll ) {
+        if ( 'horizontal' === this.scroll ) {
             if ( event.scroll > 0 ) {
                 //forward
                 if ( offsetLeft > -( scrollWidth - viewerSize.x ) ) {
@@ -15858,7 +15929,7 @@ function loadPanels( strip, viewerSize, scroll ) {
         style,
         i,
         element;
-    if ( 'horizontal' == strip.scroll ) {
+    if ( 'horizontal' === strip.scroll ) {
         panelSize = strip.panelWidth;
     } else {
         panelSize = strip.panelHeight;
@@ -15947,7 +16018,7 @@ function onStripEnter( event ) {
     //element.style.border = '1px solid #555';
     //element.style.background = '#000';
 
-    if ( 'horizontal' == this.scroll ) {
+    if ( 'horizontal' === this.scroll ) {
 
         //element.style.paddingTop = "0px";
         element.style.marginBottom = "0px";
@@ -15970,7 +16041,7 @@ function onStripEnter( event ) {
 function onStripExit( event ) {
     var element = event.eventSource.element;
 
-    if ( 'horizontal' == this.scroll ) {
+    if ( 'horizontal' === this.scroll ) {
 
         //element.style.paddingTop = "10px";
         element.style.marginBottom = "-" + ( $.getElementSize( element ).y / 2 ) + "px";
@@ -16183,11 +16254,11 @@ $.extend( $.DisplayRect.prototype, $.Rect.prototype );
 $.Spring = function( options ) {
     var args = arguments;
 
-    if( typeof ( options ) != 'object' ){
+    if( typeof ( options ) !== 'object' ){
         //allows backward compatible use of ( initialValue, config ) as
         //constructor parameters
         options = {
-            initial: args.length && typeof ( args[ 0 ] ) == "number" ?
+            initial: args.length && typeof ( args[ 0 ] ) === "number" ?
                 args[ 0 ] :
                 undefined,
             /**
@@ -16229,7 +16300,7 @@ $.Spring = function( options ) {
      * @property {Number} time
      */
     this.current = {
-        value: typeof ( this.initial ) == "number" ?
+        value: typeof ( this.initial ) === "number" ?
             this.initial :
             (this._exponential ? 0 : 1),
         time:  $.now() // always work in milliseconds
@@ -16370,7 +16441,7 @@ $.Spring.prototype = {
             this.current.value = currentValue;
         }
 
-        return oldValue != this.current.value;
+        return oldValue !== this.current.value;
     },
 
     /**
@@ -16948,10 +17019,10 @@ $.Tile.prototype = {
             this.style                     = this.element.style;
             this.style.position            = "absolute";
         }
-        if ( this.element.parentNode != container ) {
+        if ( this.element.parentNode !== container ) {
             container.appendChild( this.element );
         }
-        if ( this.imgElement.parentNode != this.element ) {
+        if ( this.imgElement.parentNode !== this.element ) {
             this.element.appendChild( this.imgElement );
         }
 
@@ -17785,7 +17856,7 @@ $.Drawer.prototype = {
     /**
      * This function will create multiple polygon paths on the drawing context by provided polygons,
      * then clip the context to the paths.
-     * @param {(OpenSeadragon.Point[])[]} polygons - an array of polygons. A polygon is an array of OpenSeadragon.Point
+     * @param {OpenSeadragon.Point[][]} polygons - an array of polygons. A polygon is an array of OpenSeadragon.Point
      * @param {Boolean} useSketch - Whether to use the sketch canvas or not.
      */
     clipWithPolygons: function (polygons, useSketch) {
@@ -17885,8 +17956,8 @@ $.Drawer.prototype = {
         this.canvas.innerHTML = "";
         if ( this.useCanvas ) {
             var viewportSize = this._calculateCanvasSize();
-            if( this.canvas.width != viewportSize.x ||
-                this.canvas.height != viewportSize.y ) {
+            if( this.canvas.width !== viewportSize.x ||
+                this.canvas.height !== viewportSize.y ) {
                 this.canvas.width = viewportSize.x;
                 this.canvas.height = viewportSize.y;
                 this._updateImageSmoothingEnabled(this.context);
@@ -19256,7 +19327,7 @@ $.Viewport.prototype = {
          * @property {Number} degrees - The number of degrees the rotation was set to.
          * @property {?Object} userData - Arbitrary subscriber-defined object.
          */
-        this.viewer.raiseEvent('rotate', {"degrees": degrees});
+        this.viewer.raiseEvent('rotate', {degrees: degrees});
         return this;
     },
 
@@ -19925,7 +19996,7 @@ $.Viewport.prototype = {
        * @property {Number} flipped - The flip state after this change.
        * @property {?Object} userData - Arbitrary subscriber-defined object.
        */
-      this.viewer.raiseEvent('flip', {"flipped": state});
+      this.viewer.raiseEvent('flip', {flipped: state});
       return this;
     }
 
@@ -20261,6 +20332,10 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
      */
     destroy: function() {
         this.reset();
+
+        if (this.source.destroy) {
+            this.source.destroy();
+        }
     },
 
     /**
@@ -20612,7 +20687,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
     /**
      * Sets an array of polygons to crop the TiledImage during draw tiles.
      * The render function will use the default non-zero winding rule.
-     * @param Polygons represented in an array of point object in image coordinates.
+     * @param {OpenSeadragon.Point[][]} polygons - represented in an array of point object in image coordinates.
      * Example format: [
      *  [{x: 197, y:172}, {x: 226, y:172}, {x: 226, y:198}, {x: 197, y:198}], // First polygon
      *  [{x: 328, y:200}, {x: 330, y:199}, {x: 332, y:201}, {x: 329, y:202}]  // Second polygon
@@ -21560,7 +21635,7 @@ function setTileLoaded(tiledImage, tile, image, cutoff, tileRequest) {
      * @property {Image} image - The image of the tile.
      * @property {OpenSeadragon.TiledImage} tiledImage - The tiled image of the loaded tile.
      * @property {OpenSeadragon.Tile} tile - The tile which has been loaded.
-     * @property {XMLHttpRequest} tiledImage - The AJAX request that loaded this tile (if applicable).
+     * @property {XMLHttpRequest} tileRequest - The AJAX request that loaded this tile (if applicable).
      * @property {function} getCompletionCallback - A function giving a callback to call
      * when the asynchronous processing of the image is done. The image will be
      * marked as entirely loaded when the callback has been called once for each
@@ -21805,7 +21880,7 @@ function compareTiles( previousBest, tile ) {
 
     if ( tile.visibility > previousBest.visibility ) {
         return tile;
-    } else if ( tile.visibility == previousBest.visibility ) {
+    } else if ( tile.visibility === previousBest.visibility ) {
         if ( tile.squaredDistance < previousBest.squaredDistance ) {
             return tile;
         }
@@ -22265,7 +22340,7 @@ $.TileCache.prototype = {
                 worstLevel  = worstTile.level;
 
                 if ( prevTime < worstTime ||
-                   ( prevTime == worstTime && prevLevel > worstLevel ) ) {
+                   ( prevTime === worstTime && prevLevel > worstLevel ) ) {
                     worstTile       = prevTile;
                     worstTileIndex  = i;
                     worstTileRecord = prevTileRecord;
