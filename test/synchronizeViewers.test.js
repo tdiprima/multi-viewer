@@ -1,4 +1,4 @@
-const synchronizeViewers = require('../js/synchronizeViewers')
+const synchronizeViewers = require('../src/synchronizeViewers')
 
 console.log('Test empty array')
 synchronizeViewers([])

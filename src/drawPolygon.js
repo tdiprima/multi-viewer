@@ -97,7 +97,7 @@ function setupDeleteButton (canvas, viewer) {
     $('.deleteBtn').remove() // eslint-disable-line no-undef
     const btnLeft = x - 10
     const btnTop = y - 10
-    const deleteBtn = `<img src="img/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    const deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
     $('.canvas-container').append(deleteBtn) // eslint-disable-line no-undef
   }
 
