@@ -49,7 +49,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   function setViewer(viewerDivId) {
     viewer = OpenSeadragon({
       id: viewerDivId,
-      prefixUrl: 'js/vendor/openseadragon/images/',
+      prefixUrl: 'vendor/openseadragon/images/',
       showFullPageControl: options.viewerOpts.showFullPageControl,
       showHomeControl: options.viewerOpts.showHomeControl,
       showZoomControl: options.viewerOpts.showZoomControl,
