@@ -27,8 +27,8 @@
 <script src="js/vendor/openseadragon-filtering.js"></script>
 <script src="js/vendor/color-picker.min.js"></script>
 <!-- distribution -->
-<!-- <script src="dist/ultraviewer.min.js"></script> -->
-<script src="js/colorPicker.js"></script>
+<script src="build/js/ultraviewer.js"></script>
+<!-- <script src="js/colorPicker.js"></script>
 <script src="js/commonFunctions.js"></script>
 <script src="js/dropDown.js"></script>
 <script src="js/checkOptions.js"></script>
@@ -41,15 +41,15 @@
 <script src="js/mapMarker.js"></script>
 <script src="js/markupTools.js"></script>
 <script src="js/ImageViewer.js"></script>
-<script src="js/synchronizeViewers.js"></script>
+<script src="js/synchronizeViewers.js"></script> -->
 
 <script>
   let arr
-  // arr = [
-  //   window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-  //   window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-  // ]
-  arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] //testing
+  arr = [
+    window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+    window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  ]
+  // arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] //testing
 
   const options = {
     filterOn: true,
