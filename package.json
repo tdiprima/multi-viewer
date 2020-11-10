@@ -1,6 +1,6 @@
 {
   "name": "multi-viewer",
-  "version": "1.0.0",
+  "version": "2.4.8",
   "description": "Multiple synchronized OpenSeadragon viewers",
   "main": "Gruntfile.js",
   "directories": {
