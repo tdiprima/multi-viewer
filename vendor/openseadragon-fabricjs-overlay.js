@@ -1,6 +1,6 @@
 /**
- * OpenSeadragon canvas Overlay plugin based on svg overlay plugin and fabric.js
- * @version 0.0.2
+ * OpenSeadragon canvas overlay plugin based on svg overlay plugin and fabric.js
+ * @version 0.6.0
  */
 (function () {
   if (!window.OpenSeadragon) {
@@ -21,7 +21,7 @@
     this._fabricjsOverlayInfo = new Overlay(this)
     this._fabricjsOverlayInfo._scale = 1000
 
-    // Set if options
+    // Set options
     if (options) {
       if (options.static) {
         this._fabricjsOverlayInfo = new Overlay(this, options.static)
@@ -72,7 +72,7 @@
     this._canvasdiv.appendChild(this._canvas)
     this.resize()
 
-    // make the canvas static if specified, ordinary otherwise
+    // Make the canvas static if specified, ordinary otherwise
     if (staticCanvas) {
       this._fabricCanvas = new fabric.StaticCanvas(this._canvas)
     } else {
@@ -91,7 +91,6 @@
       }
     })
 
-    // Prevent OSD mouseup on fabric objects
     this._fabricCanvas.on('mouse:up', function (options) {
       if (options.target) {
         options.e.preventDefaultAction = true
@@ -100,22 +99,24 @@
       }
     })
 
-    // Update viewport
+    // Resize the fabric.js overlay
     this._viewer.addHandler('update-viewport', function () {
+      // called on 'open', when the viewer or window changes size, ...
       self.resize()
       self.resizeCanvas()
       self.render()
     })
 
-    // Resize the fabric.js overlay when the viewer or window changes size
     this._viewer.addHandler('open', function () {
       self.resize()
       self.resizeCanvas()
+      self.render()
     })
 
     window.addEventListener('resize', function () {
       self.resize()
       self.resizeCanvas()
+      self.render()
     })
   }
 
@@ -138,6 +139,7 @@
     },
     // ----------
     resize: function () {
+      // Resize OSD container
       if (this._containerWidth !== this._viewer.container.clientWidth) {
         this._containerWidth = this._viewer.container.clientWidth
         this._canvasdiv.setAttribute('width', this._containerWidth)
@@ -150,6 +152,7 @@
       }
     },
     resizeCanvas: function () {
+      // Resize overlay canvas
       const origin = new OpenSeadragon.Point(0, 0)
       const viewportZoom = this._viewer.viewport.getZoom(true)
       this._fabricCanvas.setWidth(this._containerWidth)
