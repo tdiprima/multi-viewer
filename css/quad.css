@@ -1,3 +1,4 @@
+/* quad */
 .divSquare {
     /* border: 1px solid blueviolet; */
     width: 48%;
@@ -32,4 +33,27 @@
 .floated {
     float: left;
     margin-right: 5px;
+}
+
+/* thumbnail */
+.thumbnail-container {
+    overflow-x: scroll;
+    width: 100%;
+    padding: 0 15px;
+}
+
+.thumbnail-list {
+    white-space: nowrap;
+    list-style: none;
+}
+
+.thumbnail-list li {
+    display: inline-block;
+}
+
+.thumbnail-image {
+    display: block;
+    padding: 2px;
+    max-width: 100px;
+    height: auto;
 }
