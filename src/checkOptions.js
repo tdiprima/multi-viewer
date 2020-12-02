@@ -38,9 +38,3 @@ function makeStructuresEqual(expected, actual) {
     return actual
   }
 }
-
-// Uncomment lines while testing:
-// const isEmpty = require('../js/commonFunctions')
-// Uncomment line while testing:
-// module.exports = checkOptions // <- Either THIS...
-// module.exports = makeStructuresEqual // <- OR THAT.

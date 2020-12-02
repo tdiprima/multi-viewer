@@ -105,6 +105,3 @@ function checkData(imageViewerArray) {
 
   return true
 }
-
-// const isEmpty = require('../js/commonFunctions')
-// module.exports = synchronizeViewers

@@ -36,8 +36,6 @@ const isEmpty = function (value) {
     value === false || typeof value === 'undefined' || value === null || (typeof value === 'object' && isEmptyObject(value))
   )
 }
-// Uncomment while testing:
-// module.exports = isEmpty
 
 function getAColorThatShowsUp(strokeColor) {
   function isBlueIsh() {
