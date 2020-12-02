@@ -26,16 +26,16 @@ module.exports = function (grunt) {
           'src/ImageViewer.js',
           'src/synchronizeViewers.js'],
         dest: 'build/<%= pkg.name %>.js'
+      },
+      extras: {
+        src: ['vendor/openseadragon/openseadragon.min.js',
+          'vendor/openseadragon-fabricjs-overlay.js',
+          'vendor/jquery-3.5.1.min.js',
+          // 'vendor/fabric.adapted.js',
+          // 'vendor/openseadragon-filtering.js',
+          'vendor/color-picker.min.js'],
+        dest: 'build/vendor.min.js'
       }
-      //, extras: {
-      //   src: ['vendor/openseadragon/openseadragon.min.js',
-      //     'vendor/openseadragon-fabricjs-overlay.js',
-      //     'vendor/jquery-3.5.1.min.js',
-      //     'vendor/fabric.adapted.js',
-      //     'vendor/openseadragon-filtering.js',
-      //     'vendor/color-picker.min.js'],
-      //   dest: 'build/vendor.min.js'
-      // }
     },
     uglify: {
       options: {
