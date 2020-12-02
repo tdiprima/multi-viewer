@@ -4,20 +4,38 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
       '<%= grunt.template.today("yyyy-mm-dd") %> */',
-    concat: {
+    concat_in_order: {
       options: {
         banner: '<%= banner %>\n',
         stripBanners: true,
         separator: ';'
       },
       basic: {
-        src: ['src/*.js'],
+        src: ['src/colorPicker.js',
+          'src/commonFunctions.js',
+          'src/dropDown.js',
+          'src/checkOptions.js',
+          'src/rangeSliders.js',
+          'src/createPage.js',
+          'src/pageSetup.js',
+          'src/editPolygon.js',
+          'src/drawPolygon.js',
+          'src/gridOverlay.js',
+          'src/mapMarker.js',
+          'src/markupTools.js',
+          'src/ImageViewer.js',
+          'src/synchronizeViewers.js'],
         dest: 'build/<%= pkg.name %>.js'
-      },
-      extras: {
-        src: ['vendor/**/*.js'],
-        dest: 'build/vendor.min.js'
       }
+      //, extras: {
+      //   src: ['vendor/openseadragon/openseadragon.min.js',
+      //     'vendor/openseadragon-fabricjs-overlay.js',
+      //     'vendor/jquery-3.5.1.min.js',
+      //     'vendor/fabric.adapted.js',
+      //     'vendor/openseadragon-filtering.js',
+      //     'vendor/color-picker.min.js'],
+      //   dest: 'build/vendor.min.js'
+      // }
     },
     uglify: {
       options: {
@@ -32,17 +50,18 @@ module.exports = function (grunt) {
     cssmin: {
       target: {
         files: {
-          'build/main.min.css': ['css/quad.css', 'css/main.css']
+          'build/main.min.css': ['css/*.css']
         }
       }
     }
   })
 
   // Load npm plugins to provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-concat')
+  grunt.loadNpmTasks('grunt-concat-in-order')
+  // grunt.loadNpmTasks('grunt-contrib-concat')
   grunt.loadNpmTasks('grunt-contrib-uglify')
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-cssmin')
 
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify', 'cssmin'])
+  grunt.registerTask('default', ['concat_in_order', 'uglify', 'cssmin'])
 }
