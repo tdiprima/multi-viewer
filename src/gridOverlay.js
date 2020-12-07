@@ -24,7 +24,7 @@ const gridOverlay = function (idx, overlay) {
   })
 }
 
-function gridHandler(button, gridProps) {
+function gridHandler (button, gridProps) {
   toggleButtonHighlight(button)
 
   if (buttonIsOn(button)) {
@@ -40,11 +40,11 @@ function gridHandler(button, gridProps) {
   }
 }
 
-function buttonIsOn(button) {
+function buttonIsOn (button) {
   return button.classList.contains('btnOn')
 }
 
-function turnGridOff(gridProps) {
+function turnGridOff (gridProps) {
   const r = gridProps.canvas.getObjects('line')
   let i
   for (i = 0; i < r.length; i++) {
@@ -52,8 +52,8 @@ function turnGridOff(gridProps) {
   }
 }
 
-function turnGridOn(gridProps) {
-  const lineProps = {stroke: gridProps.color, strokeWidth: 2, selectable: false}
+function turnGridOn (gridProps) {
+  const lineProps = { stroke: gridProps.color, strokeWidth: 2, selectable: false }
 
   createHorizontalLines(gridProps, lineProps)
   createVerticalLines(gridProps, lineProps)
@@ -62,7 +62,7 @@ function turnGridOn(gridProps) {
   gridProps.gridAdded = true
 }
 
-function createHorizontalLines(gridProps, lineProps) {
+function createHorizontalLines (gridProps, lineProps) {
   let y
   for (y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
     gridProps.canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
@@ -70,7 +70,7 @@ function createHorizontalLines(gridProps, lineProps) {
   }
 }
 
-function createVerticalLines(gridProps, lineProps) {
+function createVerticalLines (gridProps, lineProps) {
   let x
   for (x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
     gridProps.canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
@@ -78,7 +78,7 @@ function createVerticalLines(gridProps, lineProps) {
   }
 }
 
-function fillInGrid(pointerEvent, gridProps) {
+function fillInGrid (pointerEvent, gridProps) {
   const mousePosition = getMousePosition(pointerEvent, gridProps)
   const cellPosition = getCellPosition(mousePosition)
 
@@ -94,20 +94,20 @@ function fillInGrid(pointerEvent, gridProps) {
   gridProps.canvas.add(rect)
 }
 
-function getMousePosition(pointerEvent, gridProps) {
+function getMousePosition (pointerEvent, gridProps) {
   const pointer = gridProps.canvas.getPointer(pointerEvent.e)
   const positionX = pointer.x / gridProps.cellWidth
   const positionY = pointer.y / gridProps.cellHeight
-  return {x: positionX, y: positionY}
+  return { x: positionX, y: positionY }
 }
 
-function getCellPosition(mousePosition) {
+function getCellPosition (mousePosition) {
   const positionX = Math.ceil(mousePosition.x + 0.001)
   const positionY = Math.ceil(mousePosition.y + 0.001)
-  return {x: positionX, y: positionY}
+  return { x: positionX, y: positionY }
 }
 
-function markerHandler(button, gridProps) {
+function markerHandler (button, gridProps) {
   toggleButtonHighlight(button)
   const on = buttonIsOn(button)
 

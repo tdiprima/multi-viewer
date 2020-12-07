@@ -90,8 +90,8 @@ const Page = function () {
         <button id="btnGridMarker${idx}" class="btn"><i class="fa fa-paint-brush"></i> Mark grid</button>&nbsp;
         <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;
         <button id="btnMapMarker" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
-    </a>`*/
-      div.innerHTML = htm + "<mark id='mark" + idx + "'>" + color + "</mark>&nbsp;" +
+    </a>` */
+      div.innerHTML = htm + "<mark id='mark" + idx + "'>" + color + '</mark>&nbsp;' +
         "<button id='btnDraw" + idx + "' class='btn'><i class='fa fa-pencil-alt'></i> Draw polygon</button>&nbsp;" +
         "<button id='btnEdit" + idx + "' class='btn'><i class='fa fa-draw-polygon'></i> Edit polygon</button>&nbsp;" +
         "<button id='btnGrid" + idx + "' class='btn'><i class='fa fa-border-all'></i> Draw grid</button>&nbsp;" +
@@ -99,7 +99,6 @@ const Page = function () {
         "<button id='btnSlide" + idx + "' class='btn'><i class='fa fa-sliders'></i> Show sliders</button>&nbsp;" +
         "<button id='btnMapMarker' class='btn' style='display: none'><i class='fa fa-map-marker-alt'></i> Hide markers</button>"
       // "</a>"
-
     }
   }
 }

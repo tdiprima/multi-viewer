@@ -5,7 +5,6 @@ const pageSetup = function (numDivs, sourceImages, options) {
 
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
-
       return resolve(checkOptions(options))
     }).then(function (options) {
       // Create divs
