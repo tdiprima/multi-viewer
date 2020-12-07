@@ -2,6 +2,11 @@
 // Combination and customization of: color-picker.alpha-channel + color-picker.color + color-picker.events
 
 const colorPicker = function (inputElement) {
+  // Check
+  if (inputElement === null || typeof inputElement === 'undefined') {
+    throw Error('colorPicker.js: Expected input argument, but received none.')
+  }
+  // Construct
   const picker = new CP(inputElement)
   picker.self.classList.add('no-alpha')
   picker.on('change', function (r, g, b) {
