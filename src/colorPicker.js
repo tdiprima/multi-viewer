@@ -1,57 +1,33 @@
 // Utilizes: https://github.com/taufik-nurrohman/color-picker
+// Combination and customization of: color-picker.alpha-channel + color-picker.color + color-picker.events
 
 const colorPicker = function (inputElement) {
-  const cp = create(inputElement)
-  if (cp) {
-    setColorAndStyle(cp)
-    handleShowHide(cp)
-    handleExit(cp)
-  }
-  return cp
-}
-
-function create(inputElement) {
-  if (inputElement === null || typeof inputElement === 'undefined') {
-    console.error('colorPicker.js: Expected input argument, but received none.')
-    return false
-  } else {
-    const picker = new CP(inputElement)
-    picker.self.classList.add('no-alpha')
-
-    picker.on('blur', function () {
-    })
-
-    picker.on('focus', function () {
-    })
-
-    // printInfo(picker)
-    return picker
-  }
-}
-
-function setColorAndStyle(cp) {
-  cp.on('change', function (r, g, b) {
+  const picker = new CP(inputElement)
+  picker.self.classList.add('no-alpha')
+  picker.on('change', function (r, g, b) {
     this.source.value = this.color(r, g, b, 1)
     this.source.innerHTML = this.color(r, g, b, 1)
     this.source.style.backgroundColor = this.color(r, g, b, 1)
   })
-}
 
-function handleShowHide(cp) {
-  cp.source.addEventListener('click', function (e) {
-    cp.enter()
+  // Toggle by click event
+  // Disable the default blur and focus behavior
+  picker.on('blur', function () {})
+  picker.on('focus', function () {})
+
+  document.documentElement.addEventListener('click', function () {
+    picker.exit()
+  }, false)
+
+  picker.source.addEventListener('click', function (e) {
+    picker.enter()
     e.stopPropagation()
   }, false)
-}
 
-function handleExit(cp) {
-  document.documentElement.addEventListener('click', function () {
-    cp.exit()
-  }, false)
-}
+  // DEBUG
+  // console.log('self:', picker.self)
+  // console.log('source:', picker.source)
+  // console.log('state:', picker.state)
 
-function printInfo(cp) {
-  console.log('self:', cp.self)
-  console.log('source:', cp.source)
-  console.log('state:', cp.state)
+  return picker
 }
