@@ -6,7 +6,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
   const iiif = window.location.origin + '/iiif/?iiif=/tcgaseg'
   let cancerSelect = {}
   let imageSelect = {}
-  const data = {}
+  let data = {}
 
   // Uglification fail
   // fetch(dataSource).then(response => {
