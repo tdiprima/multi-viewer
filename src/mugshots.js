@@ -1,5 +1,4 @@
 const mugshots = function (options) {
-
   // Expect options:
   // {
   //   divId: options.divId,
@@ -24,7 +23,7 @@ const mugshots = function (options) {
 
   createScroller(options.imgDims)
 
-  function createScroller(data) {
+  function createScroller (data) {
     let ul, li, span
 
     const fragment = document.createDocumentFragment()
@@ -32,7 +31,8 @@ const mugshots = function (options) {
     ul.classList.add('thumbnail-list')
     fragment.appendChild(ul)
 
-    for (let j = 0; j < options.scrollerLength; j++) {
+    let j
+    for (j = 0; j < options.scrollerLength; j++) {
       li = document.createElement('li')
       ul.appendChild(li)
       span = document.createElement('span')
@@ -45,15 +45,15 @@ const mugshots = function (options) {
     document.getElementById(options.thumbId).appendChild(fragment)
   }
 
-  function getRandomInt(min, max) {
+  function getRandomInt (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
 
-  function xyExist(x, y) {
+  function xyExist (x, y) {
     return (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0)
   }
 
-  function createThumbnail(data, span, x, y) {
+  function createThumbnail (data, span, x, y) {
     let imageRect // it's a rectangle
     if (xyExist(x, y)) {
       // x,y,w,h
@@ -78,7 +78,7 @@ const mugshots = function (options) {
     })
   }
 
-  function checkWholeNumbers(imageRect) {
+  function checkWholeNumbers (imageRect) {
     // IIIF wants whole numbers
     const imagePoint = imageRect.getTopLeft()
     if (imagePoint.x % 1 !== 0) {
@@ -90,7 +90,7 @@ const mugshots = function (options) {
     // console.log('imageRect', imageRect.getTopLeft())
   }
 
-  function getImageUrl(infoUrl, imageRect) {
+  function getImageUrl (infoUrl, imageRect) {
     // console.log('iiif req', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
     return infoUrl + '/' +
       imageRect.getTopLeft().x + ',' +
@@ -102,39 +102,38 @@ const mugshots = function (options) {
       quality + '.' + format
   }
 
-  function showThumbnailOnImage(imageRect) {
+  function showThumbnailOnImage (imageRect) {
     zoomToLocation(imageRect)
     highlightLocation(imageRect)
   }
 
-  function zoomToLocation(imageRect) {
+  function zoomToLocation (imageRect) {
     const vptRect = vpt.imageToViewportRectangle(imageRect)
     vpt.panTo(vptRect.getCenter())
     vpt.zoomTo(vpt.getMaxZoom())
   }
 
-  function highlightLocation(imageRect) {
+  function highlightLocation (imageRect) {
     // Translate coordinates => image to viewport coordinates.
-    let vptRect = vpt.imageToViewportRectangle(imageRect)
-    let webRect = vpt.viewportToViewerElementRectangle(vptRect)
+    const vptRect = vpt.imageToViewportRectangle(imageRect)
+    const webRect = vpt.viewportToViewerElementRectangle(vptRect)
 
     canvas.add(
       new fabric.Rect({
-        stroke: "#0f0",
+        stroke: '#0f0',
         strokeWidth: 1,
-        fill: "",
+        fill: '',
         left: webRect.x,
         top: webRect.y,
         width: webRect.width,
         height: webRect.height
       })
-    );
+    )
 
     canvas.renderAll()
-
   }
 
-  function randomImageRectangle(data) {
+  function randomImageRectangle (data) {
     // Give it plenty of room from the edge
     const padding = options.thumbnailSize * 2 // 512
     const left = getRandomInt(padding, (data.width - padding))
@@ -142,5 +141,4 @@ const mugshots = function (options) {
 
     return new OpenSeadragon.Rect(left, top, options.thumbnailSize, options.thumbnailSize)
   }
-
 }

@@ -20,6 +20,7 @@ module.exports = function (grunt) {
           'src/pageSetup.js',
           'src/editPolygon.js',
           'src/drawPolygon.js',
+          'src/mugshots.js',
           'src/gridOverlay.js',
           'src/mapMarker.js',
           'src/markupTools.js',
