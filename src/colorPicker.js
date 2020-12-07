@@ -24,5 +24,10 @@ const colorPicker = function (inputElement) {
     e.stopPropagation()
   }, false)
 
+  // DEBUG
+  // console.log('self:', picker.self)
+  // console.log('source:', picker.source)
+  // console.log('state:', picker.state)
+
   return picker
 }
