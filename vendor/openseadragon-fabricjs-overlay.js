@@ -1,6 +1,6 @@
 /**
  * OpenSeadragon canvas overlay plugin based on svg overlay plugin and fabric.js
- * @version 0.6.0
+ * @version 1.0.0
  */
 (function () {
   if (!window.OpenSeadragon) {
@@ -10,32 +10,20 @@
 
   /**
    * Adds fabric.js overlay capability to your OpenSeadragon Viewer
+   *
    * @param {Object} options
    *     Allows configurable properties to be entirely specified by passing
    *     an options object to the constructor.
+   *
    * @param {Number} options.scale
    *     Fabric 'virtual' canvas size, for creating objects
+   *
+   * @returns {Overlay}
    */
   OpenSeadragon.Viewer.prototype.fabricjsOverlay = function (options) {
-    // Default
-    this._fabricjsOverlayInfo = new Overlay(this)
-    this._fabricjsOverlayInfo._scale = 1000
+    options = checkOptions(options)
 
-    // Set options
-    if (options) {
-      if (options.static) {
-        this._fabricjsOverlayInfo = new Overlay(this, options.static)
-      } else {
-        this._fabricjsOverlayInfo = new Overlay(this, false)
-      }
-
-      if (options.scale) {
-        this._fabricjsOverlayInfo._scale = options.scale // arbitrary scale for created fabric canvas
-      } else {
-        this._fabricjsOverlayInfo._scale = 1000
-      }
-    }
-
+    this._fabricjsOverlayInfo = new Overlay(this, options.static)
     return this._fabricjsOverlayInfo
   }
 
@@ -48,7 +36,25 @@
     }
   })()
 
+  const checkOptions = function (options) {
+    if (typeof options === 'undefined') {
+      options = {
+        static: false,
+        scale: 1000
+      }
+    } else {
+      if (typeof options.static === 'undefined') {
+        options.static = false
+      }
+      if (typeof options.scale === 'undefined') {
+        options.scale = 1000
+      }
+    }
+    return options
+  }
+
   // ----------
+  // Constructor
   const Overlay = function (viewer, staticCanvas) {
     const self = this
 
@@ -82,7 +88,7 @@
     // Disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false
 
-    // Prevent OSD click elements on fabric objects
+    // Prevent OSD click events on fabric objects
     this._fabricCanvas.on('mouse:down', function (options) {
       if (options.target) {
         options.e.preventDefaultAction = true
@@ -99,6 +105,8 @@
       }
     })
 
+    // Callback functions:
+
     // Resize the fabric.js overlay
     this._viewer.addHandler('update-viewport', function () {
       // called on 'open', when the viewer or window changes size, ...
@@ -110,13 +118,12 @@
     this._viewer.addHandler('open', function () {
       self.resize()
       self.resizeCanvas()
-      self.render()
+      self.render() //
     })
-
     window.addEventListener('resize', function () {
       self.resize()
       self.resizeCanvas()
-      self.render()
+      self.render() //
     })
   }
 
@@ -132,6 +139,7 @@
     },
     // ----------
     clear: function () {
+      // this._fabricCanvas.clearAll()
       this._fabricCanvas.clear()
     },
     render: function () {
