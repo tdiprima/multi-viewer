@@ -15,26 +15,29 @@
 <div class="element">
   <div id="osd" style="width: 800px; height: 600px; border: 1px solid blueviolet;"></div>
 </div>
+<div class="element">
+  width x height<br>
+  <button id="btn1" onclick="myViewer.updateViewerSize(800, 600)">800 x 600</button>
+  <br>
+  <button id="btn2" onclick="myViewer.updateViewerSize(640, 480)">640 x 480</button>
+  <br>
+  <button id="btn3" onclick="myViewer.updateViewerSize(200, 200)">200 x 200</button>
+  <br><br>
+  <button id="btn4" onclick="myViewer.updateViewerSize(100, 100)">100 x 100</button>
+  <br><br>
+  <button id="btnZoom" onclick="myViewer.zoom()">zoom to center</button>
+</div>
 <script>
-  // let arr
-  // arr = [
-  //   window.location.origin +
-  //   '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
-  //   window.location.origin +
-  //   '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-  // ]
-  arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] // Testing
-
   const options = {
     viewerOpts: {
-      showFullPageControl: true,
+      showFullPageControl: false,
       showHomeControl: true,
-      showZoomControl: true
+      showZoomControl: false
     }
   }
 
-  let MV = new SmallViewer('osd', options, [])
-  MV.setSources(arr, [1.0, 1.0])
+  tileSources = '//openseadragon.github.io/example-images/duomo/duomo.dzi'
+  let myViewer = new SmallViewer('osd', options, tileSources)
 
 </script>
 </body>

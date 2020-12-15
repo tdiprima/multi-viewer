@@ -1,89 +1,63 @@
-/**
- * Duplicate of ImageViewer. Just fleshing things out for now.
- * TODO: get rid of duplicate code
- * @param viewerDivId
- * @param options
- * @param data = ????
- * @constructor
- */
 const SmallViewer = function (viewerDivId, options, data) {
   let viewer = {}
-  setViewer(viewerDivId)
+  viewer = OpenSeadragon({
+    id: viewerDivId,
+    // prefixUrl: 'vendor/openseadragon/images/',
+    prefixUrl: '//openseadragon.github.io/openseadragon/images/',
+    showFullPageControl: options.viewerOpts.showFullPageControl,
+    showHomeControl: options.viewerOpts.showHomeControl,
+    showZoomControl: options.viewerOpts.showZoomControl,
+    crossOriginPolicy: 'Anonymous',
+    tileSources: data
+  })
 
-  // Private functions
-  function setViewer (viewerDivId) {
-    viewer = OpenSeadragon({
-      id: viewerDivId,
-      prefixUrl: 'vendor/openseadragon/images/',
-      showFullPageControl: options.viewerOpts.showFullPageControl,
-      showHomeControl: options.viewerOpts.showHomeControl,
-      showZoomControl: options.viewerOpts.showZoomControl,
-      crossOriginPolicy: 'Anonymous'
-    })
+  let srcWidth, srcHeight
+  let updateViewerSize = function (maxWidth, maxHeight) {
+    let fit = calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight)
+    let div = document.getElementById(viewerDivId)
+    div.style.width = fit.width + 'px'
+    div.style.height = fit.height + 'px'
+    // TODO:
+    // if (maxWidth < 500) {
+    // }
   }
 
-  function getIIIFTileUrl (source, level, x, y) {
-    const scale = Math.pow(0.5, source.maxLevel - level)
-    const levelWidth = Math.ceil(source.width * scale)
-    const levelHeight = Math.ceil(source.height * scale)
+  viewer.addHandler('open', function () {
+    srcHeight = (viewer.world.getItemAt(0).source.dimensions.y / window.devicePixelRatio)
+    srcWidth = (viewer.world.getItemAt(0).source.dimensions.x / window.devicePixelRatio)
+    let div = document.getElementById(viewerDivId)
+    console.log(div.clientWidth, div.clientHeight)
+    updateViewerSize(div.clientWidth, div.clientHeight)
+  })
 
-    const tileSize = source.getTileWidth(level) // width == height
-    let tileSizeWidth
-    const tileSizeHeight = tileSizeWidth = Math.ceil(tileSize / scale)
-
-    const ROTATION = '0'
-    const quality = 'default.png'
-
-    let region, tileX, tileY, tileW, tileH, size
-
-    if (levelWidth < tileSize && levelHeight < tileSize) {
-      size = levelWidth + ','
-      region = 'full'
-    } else {
-      tileX = x * tileSizeWidth
-      tileY = y * tileSizeHeight
-      tileW = Math.min(tileSizeWidth, source.width - tileX)
-      tileH = Math.min(tileSizeHeight, source.height - tileY)
-      size = Math.ceil(tileW * scale) + ','
-      region = [tileX, tileY, tileW, tileH].join(',')
+  function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
+    let ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
+    return {
+      width: Math.round(srcWidth * ratio),
+      height: Math.round(srcHeight * ratio)
     }
-    return [source['@id'], region, size, ROTATION, quality].join('/')
-  }
-
-  function showStopperResponse (url, jqXHR) {
-    const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
-    console.warn(message)
-    console.log('jqXHR object:', jqXHR)
-    console.log('URL', url)
-    // uglify X template literal
-    // document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
-    document.write('<h1>' + message + '</h1><b>URL:</b>&nbsp;' + url + '<br><br><b>Check the console for any clues.')
-    throw new Error('Something went wrong.') // Terminates the script.
   }
 
   // Public functions
   return {
+    getImageDims: function () {
+      return {width: srcWidth, height: srcHeight}
+    },
     getViewer: function () {
       return viewer
     },
-    setSources: function (imageArray, opacityArray) {
-      // Quick check url
-      $.get(imageArray[0]).done(function () {
-        imageArray.forEach(function (image, index) {
-          viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
-        })
-      }).fail(function (jqXHR, statusText) {
-        const url = imageArray[0]
-        showStopperResponse(url, jqXHR, statusText)
-      })
-
-      viewer.world.addHandler('add-item', function () {
-        if (viewer.world.getItemCount() === 2) {
-          viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
-            return getIIIFTileUrl(this, level, x, y)
-          }
-        }
-      })
+    zoom: function () {
+      let center = new OpenSeadragon.Point(srcWidth / 2, srcHeight / 2)
+      console.log('center', center)
+      let point = viewer.viewport.imageToViewportCoordinates(center)
+      viewer.viewport.panTo(new OpenSeadragon.Point(point.x, point.y))
+      viewer.viewport.zoomTo(viewer.viewport.getMaxZoom())
+    },
+    updateViewerSize: function (maxWidth, maxHeight) {
+      let fit = calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight)
+      let div = document.getElementById(viewerDivId)
+      div.style.width = fit.width + 'px'
+      div.style.height = fit.height + 'px'
     }
   }
 }
