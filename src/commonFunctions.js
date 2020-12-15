@@ -57,3 +57,11 @@ function alertMessage (messageObject) {
   alert(messageObject)
   return true
 }
+
+function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
+  const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
+  return {
+    width: Math.round(srcWidth * ratio),
+    height: Math.round(srcHeight * ratio)
+  }
+}

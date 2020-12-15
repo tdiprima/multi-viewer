@@ -1,6 +1,6 @@
 // Image viewer module
 const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
-// Private variables
+  // Private variables
   const idx = viewerDivId.replace('viewer', '')
   let viewer = {}
   const checkboxes = {}

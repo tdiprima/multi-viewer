@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Small Test 1</title>
+  <script crossorigin="anonymous" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+          src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://openseadragon.github.io/openseadragon/openseadragon.js"></script>
+  <script src="src/SmallViewer.js"></script>
+</head>
+
+<body>
+<div class="element">
+  <div id="osd" style="width: 800px; height: 600px; border: 1px solid blueviolet;"></div>
+</div>
+<script>
+  // let arr
+  // arr = [
+  //   window.location.origin +
+  //   '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json',
+  //   window.location.origin +
+  //   '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  // ]
+  arr = ['//openseadragon.github.io/example-images/duomo/duomo.dzi'] // Testing
+
+  const options = {
+    viewerOpts: {
+      showFullPageControl: true,
+      showHomeControl: true,
+      showZoomControl: true
+    }
+  }
+
+  let MV = new SmallViewer('osd', options, [])
+  MV.setSources(arr, [1.0, 1.0])
+
+</script>
+</body>
+
+</html>
