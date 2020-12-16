@@ -1,5 +1,6 @@
 const SmallViewer = function (viewerDivId, options, data) {
   let viewer = {}
+  let self = this
   viewer = OpenSeadragon({
     id: viewerDivId,
     // prefixUrl: 'vendor/openseadragon/images/',
@@ -12,7 +13,7 @@ const SmallViewer = function (viewerDivId, options, data) {
   })
 
   let srcWidth, srcHeight
-  let updateViewerSize = function (maxWidth, maxHeight) {
+  updateViewerSize = function (maxWidth, maxHeight) {
     const fit = calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight)
     const div = document.getElementById(viewerDivId)
     div.style.width = fit.width + 'px'
@@ -61,21 +62,6 @@ const SmallViewer = function (viewerDivId, options, data) {
       const point = viewer.viewport.imageToViewportCoordinates(center)
       viewer.viewport.panTo(new OpenSeadragon.Point(point.x, point.y))
       viewer.viewport.zoomTo(viewer.viewport.getMaxZoom())
-    },
-    updateViewerSize: function (maxWidth, maxHeight) {
-      const fit = calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight)
-      const div = document.getElementById(viewerDivId)
-      div.style.width = fit.width + 'px'
-      div.style.height = fit.height + 'px'
-      if (maxWidth < 500) {
-        const buttons = viewer.navControl.childNodes
-        let i
-        for (i = 0; i < buttons.length; i++) {
-          if (buttons[i].innerHTML.indexOf('home') === -1) {
-            buttons[i].style.display = 'none'
-          }
-        }
-      }
     }
   }
 }
