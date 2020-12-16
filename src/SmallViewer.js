@@ -1,6 +1,5 @@
 const SmallViewer = function (viewerDivId, options, data) {
   let viewer = {}
-  let self = this
   viewer = OpenSeadragon({
     id: viewerDivId,
     // prefixUrl: 'vendor/openseadragon/images/',
