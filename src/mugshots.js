@@ -7,33 +7,26 @@ const mugshots = function (options) {
   //   imgDims: options.imgDims,
   //   thumbnailSize: options.thumbnailSize,
   //   scrollerLength: options.scrollerLength,
-  //   viewerIndex: options.viewerIndex,
   //   mugshotArray: options.mugshotArray,
+  //   roiColor: options.roiColor,
   //   overlay: options.overlay,
   //   viewer: options.viewer
   // }
 
   const canvas = this.__canvas = options.overlay.fabricCanvas()
   options.overlay.resizeCanvas = function () {
-    // console.log('This is from overridden function')
-    // Resize overlay canvas
-    var origin = new OpenSeadragon.Point(0, 0)
-    var viewportZoom = this._viewer.viewport.getZoom(true)
-    var image1 = this._viewer.world.getItemAt(0)
-    var zoom = image1.viewportToImageZoom(viewportZoom)
+    // Function override: Resize overlay canvas
+    const image1 = this._viewer.world.getItemAt(0)
 
     this._fabricCanvas.setWidth(this._containerWidth)
     this._fabricCanvas.setHeight(this._containerHeight)
-    this._fabricCanvas.setZoom(zoom)
+    this._fabricCanvas.setZoom(image1.viewportToImageZoom(this._viewer.viewport.getZoom(true)))
 
-    var image1WindowPoint = image1.imageToWindowCoordinates(origin)
-    var x = Math.round(image1WindowPoint.x)
-    var y = Math.round(image1WindowPoint.y)
-    var canvasOffset = this._canvasdiv.getBoundingClientRect()
+    const image1WindowPoint = image1.imageToWindowCoordinates(new OpenSeadragon.Point(0, 0))
+    const canvasOffset = this._canvasdiv.getBoundingClientRect()
+    const pageScroll = OpenSeadragon.getPageScroll()
 
-    var pageScroll = OpenSeadragon.getPageScroll()
-
-    this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - x + pageScroll.x, canvasOffset.top - y + pageScroll.y))
+    this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - Math.round(image1WindowPoint.x) + pageScroll.x, canvasOffset.top - Math.round(image1WindowPoint.y) + pageScroll.y))
   }
 
   const vpt = options.viewer.viewport
@@ -141,7 +134,7 @@ const mugshots = function (options) {
     // const webRect = vpt.viewportToViewerElementRectangle(vptRect)
     // canvas.add(
     //   new fabric.Rect({
-    //     stroke: '#0f0',
+    //     stroke: options.roiColor,
     //     strokeWidth: 1,
     //     fill: '',
     //     left: webRect.x,
@@ -154,7 +147,7 @@ const mugshots = function (options) {
     // TODO: NOTE: With resizeCanvas override, use imageRect
     canvas.add(
       new fabric.Rect({
-        stroke: '#0f0',
+        stroke: options.roiColor,
         strokeWidth: 2,
         fill: '',
         left: imageRect.x,
