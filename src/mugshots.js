@@ -14,6 +14,28 @@ const mugshots = function (options) {
   // }
 
   const canvas = this.__canvas = options.overlay.fabricCanvas()
+  options.overlay.resizeCanvas = function () {
+    // console.log('This is from overridden function')
+    // Resize overlay canvas
+    var origin = new OpenSeadragon.Point(0, 0)
+    var viewportZoom = this._viewer.viewport.getZoom(true)
+    var image1 = this._viewer.world.getItemAt(0)
+    var zoom = image1.viewportToImageZoom(viewportZoom)
+
+    this._fabricCanvas.setWidth(this._containerWidth)
+    this._fabricCanvas.setHeight(this._containerHeight)
+    this._fabricCanvas.setZoom(zoom)
+
+    var image1WindowPoint = image1.imageToWindowCoordinates(origin)
+    var x = Math.round(image1WindowPoint.x)
+    var y = Math.round(image1WindowPoint.y)
+    var canvasOffset = this._canvasdiv.getBoundingClientRect()
+
+    var pageScroll = OpenSeadragon.getPageScroll()
+
+    this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - x + pageScroll.x, canvasOffset.top - y + pageScroll.y))
+  }
+
   const vpt = options.viewer.viewport
 
   const size = '256,'
@@ -115,18 +137,30 @@ const mugshots = function (options) {
 
   function highlightLocation (imageRect) {
     // Translate coordinates => image to viewport coordinates.
-    const vptRect = vpt.imageToViewportRectangle(imageRect)
-    const webRect = vpt.viewportToViewerElementRectangle(vptRect)
+    // const vptRect = vpt.imageToViewportRectangle(imageRect)
+    // const webRect = vpt.viewportToViewerElementRectangle(vptRect)
+    // canvas.add(
+    //   new fabric.Rect({
+    //     stroke: '#0f0',
+    //     strokeWidth: 1,
+    //     fill: '',
+    //     left: webRect.x,
+    //     top: webRect.y,
+    //     width: webRect.width,
+    //     height: webRect.height
+    //   })
+    // )
 
+    // TODO: NOTE: With resizeCanvas override, use imageRect
     canvas.add(
       new fabric.Rect({
         stroke: '#0f0',
-        strokeWidth: 1,
+        strokeWidth: 2,
         fill: '',
-        left: webRect.x,
-        top: webRect.y,
-        width: webRect.width,
-        height: webRect.height
+        left: imageRect.x,
+        top: imageRect.y,
+        width: imageRect.width,
+        height: imageRect.height
       })
     )
 
