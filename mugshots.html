@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>MOCKUP</title>
+  <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>
+  <script src="src/mugshots.js"></script>
+  <!-- <link href="build/main.min.css" rel="stylesheet"/> -->
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: larger;
+    }
+
+    .openseadragon {
+      width: 600px;
+      height: 800px;
+      border: 1px solid black;
+      color: #333;
+    }
+
+    /* thumbnail container */
+    .thumbnail-container {
+      overflow-x: scroll;
+      width: 100%;
+      padding: 0 15px;
+    }
+
+    .thumbnail-list {
+      white-space: nowrap;
+      list-style: none;
+    }
+
+    .thumbnail-list li {
+      display: inline-block;
+    }
+
+    .thumbnail-image {
+      display: block;
+      padding: 2px;
+      max-width: 100px;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+<!-- Mugshots Testing -->
+<div class="openseadragon" id="contentDiv"></div>
+<div class="thumbnail-container" id="thumbnail-container"></div>
+<script>
+  document.addEventListener('DOMContentLoaded', function (event) {
+    // MOCK SETUP
+    fetch('https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/info.json')
+      .then(response => response.json())
+      .then(data => {
+        // console.log('Image w,h', new OpenSeadragon.Point(data.width, data.height))
+        const viewer = OpenSeadragon({
+          id: 'contentDiv',
+          prefixUrl: '//openseadragon.github.io/openseadragon/images/',
+          tileSources: [{
+            tileSource: data
+          }]
+        })
+
+        const overlay = viewer.fabricjsOverlay({
+          scale: 1000
+        })
+
+        const opts = {
+          divId: 'contentDiv',
+          thumbId: 'thumbnail-container',
+          infoUrl: 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2',
+          imgDims: data,
+          thumbnailSize: 256, // In image coordinates
+          scrollerLength: 10,
+          viewerIndex: 0,
+          mugshotArray: [],
+          viewer: viewer,
+          overlay: overlay,
+        }
+
+        mugshots(opts)
+
+      })
+  })
+
+</script>
+
+</body>
+
+</html>
