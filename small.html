@@ -16,14 +16,14 @@
         let smallViewer = new SmallViewer('contentDiv')
         smallViewer.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
 
-        let Croc = function (viewerDivId) {
+        let Tam = function (viewerDivId) {
           SmallViewer.call(this, viewerDivId)
         }
 
-        Croc.prototype = Object.create(SmallViewer.prototype)
+        Tam.prototype = Object.create(SmallViewer.prototype)
 
-        let crocObj = new Croc('tamtam')
-        crocObj.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
+        let tamObj = new Tam('tamtam')
+        tamObj.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
 
     </script>
 </body>
