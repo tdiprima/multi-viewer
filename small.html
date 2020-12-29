@@ -14,7 +14,7 @@
     <div id="tamtam" style="width: 640px; height: 480px;"></div>
     <script>
         let smallViewer = new SmallViewer('contentDiv')
-        smallViewer.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
+        smallViewer.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
 
         let Tam = function (viewerDivId) {
           SmallViewer.call(this, viewerDivId)
@@ -23,7 +23,7 @@
         Tam.prototype = Object.create(SmallViewer.prototype)
 
         let tamObj = new Tam('tamtam')
-        tamObj.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
+        tamObj.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
 
     </script>
 </body>
