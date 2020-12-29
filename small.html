@@ -11,9 +11,20 @@
 </head>
 <body>
     <div id="contentDiv" style="width: 640px; height: 480px;"></div>
+    <div id="tamtam" style="width: 640px; height: 480px;"></div>
     <script>
         let smallViewer = new SmallViewer('contentDiv')
         smallViewer.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
+
+        let Croc = function (viewerDivId) {
+          SmallViewer.call(this, viewerDivId)
+        }
+
+        Croc.prototype = Object.create(SmallViewer.prototype)
+
+        let crocObj = new Croc('tamtam')
+        crocObj.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0, 1.0])
+
     </script>
 </body>
 </html>

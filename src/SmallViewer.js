@@ -1,15 +1,11 @@
 // Image viewer module
 const SmallViewer = function (viewerDivId) {
-  // Private variables
   let viewer = {}
   let filter = {}
 
-  // Call functions.
   setFilter()
   setViewer(viewerDivId)
-  // Done calling functions.
 
-  // Private functions
   function setFilter () {
     filter = OpenSeadragon.Filters.GREYSCALE
     filter.prototype.COLORIZE = function (r, g, b) {
@@ -81,39 +77,41 @@ const SmallViewer = function (viewerDivId) {
     return [source['@id'], region, size, ROTATION, quality].join('/')
   }
 
-  // Public functions
-  return {
-    getViewer: function () {
-      return viewer
-    },
+  SmallViewer.prototype.getViewer = function () {
+    return viewer
+  }
 
-    setSources: function (imageArray, opacityArray) {
-      // Quick check url
-      $.get(imageArray[0]).done(function () {
-        imageArray.forEach(function (image, index) {
-          viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
+  SmallViewer.prototype.setSources = function (imageArray, opacityArray) {
+    // Quick check url
+    $.get(imageArray[0]).done(function () {
+      imageArray.forEach(function (image, index) {
+        viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
+      })
+    }).fail(function (jqXHR, statusText) {
+      const url = imageArray[0]
+      dataCheck(url, jqXHR, statusText)
+    })
+
+    viewer.world.addHandler('add-item', function (event) {
+      if (viewer.world.getItemCount() === 2) {
+        viewer.setFilterOptions({
+          filters: [{
+            items: viewer.world.getItemAt(1),
+            processors: [
+              filter.prototype.COLORIZE(0, 255, 0)
+            ]
+          }]
         })
-      }).fail(function (jqXHR, statusText) {
-        const url = imageArray[0]
-        dataCheck(url, jqXHR, statusText)
-      })
 
-      viewer.world.addHandler('add-item', function (event) {
-        if (viewer.world.getItemCount() === 2) {
-          viewer.setFilterOptions({
-            filters: [{
-              items: viewer.world.getItemAt(1),
-              processors: [
-                filter.prototype.COLORIZE(0, 255, 0)
-              ]
-            }]
-          })
-
-          viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
-            return getIIIFTileUrl(this, level, x, y)
-          }
+        viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
+          return getIIIFTileUrl(this, level, x, y)
         }
-      })
-    }
+      }
+    })
+  }
+
+  return {
+    getViewer: this.getViewer,
+    setSources: this.setSources
   }
 }
