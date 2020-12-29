@@ -59,17 +59,6 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     if (options.toolbarOn) {
       markupTools(idx, viewer)
     }
-
-    if (options.filterOn) {
-      viewer.setFilterOptions({
-        filters: [{
-          items: viewer.world.getItemAt(1),
-          processors: [
-            filter.prototype.COLORIZE(0, 255, 0)
-          ]
-        }]
-      })
-    }
   }
 
   function setSliders () {
@@ -87,7 +76,7 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
     }
   }
 
-  function showStopperResponse (url, jqXHR) {
+  function dataCheck (url, jqXHR) {
     const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
     console.warn(message)
     console.log('jqXHR object:', jqXHR)
@@ -144,19 +133,21 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
         })
       }).fail(function (jqXHR, statusText) {
         const url = imageArray[0]
-        showStopperResponse(url, jqXHR, statusText)
+        dataCheck(url, jqXHR, statusText)
       })
 
       viewer.world.addHandler('add-item', function (event) {
         if (viewer.world.getItemCount() === 2) {
-          viewer.setFilterOptions({
-            filters: [{
-              items: viewer.world.getItemAt(1),
-              processors: [
-                filter.prototype.COLORIZE(0, 255, 0)
-              ]
-            }]
-          })
+          if (options.filterOn) {
+            viewer.setFilterOptions({
+              filters: [{
+                items: viewer.world.getItemAt(1),
+                processors: [
+                  filter.prototype.COLORIZE(0, 255, 0)
+                ]
+              }]
+            })
+          }
 
           viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
             return getIIIFTileUrl(this, level, x, y)
