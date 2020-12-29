@@ -40,15 +40,6 @@ const SmallViewer = function (viewerDivId) {
       prefixUrl: 'vendor/openseadragon/images/',
       crossOriginPolicy: 'Anonymous'
     })
-
-    viewer.setFilterOptions({
-      filters: [{
-        items: viewer.world.getItemAt(1),
-        processors: [
-          filter.prototype.COLORIZE(0, 255, 0)
-        ]
-      }]
-    })
   }
 
   function dataCheck (url, jqXHR) {
