@@ -3,7 +3,10 @@ const ImageViewer = function (viewerDivId, sliderElements, numDivs, options) {
   // Private variables
   const idx = viewerDivId.replace('viewer', '')
   let viewer = {}
-  const checkboxes = {}
+  const checkboxes = {
+    checkPan: true,
+    checkZoom: true
+  }
   let filter = {}
   const sliders = sliderElements
 
