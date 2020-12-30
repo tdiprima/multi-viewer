@@ -8,23 +8,13 @@
     <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/usnistgov/OpenSeadragonFiltering/openseadragon-filtering.js"></script>
     <script src="src/SmallViewer.js"></script>
+    <script src="src/ImageViewer.js"></script>
 </head>
 <body>
     <div id="contentDiv" style="width: 640px; height: 480px;"></div>
     <div id="tamtam" style="width: 640px; height: 480px;"></div>
     <script>
-        let smallViewer = new SmallViewer('contentDiv')
-        smallViewer.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
-
-        let Tam = function (viewerDivId) {
-          SmallViewer.call(this, viewerDivId)
-        }
-
-        Tam.prototype = Object.create(SmallViewer.prototype)
-
-        let tamObj = new Tam('tamtam')
-        tamObj.setSources(['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
-
+        let smallViewer = new ImageViewer('contentDiv', ['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
     </script>
 </body>
 </html>
