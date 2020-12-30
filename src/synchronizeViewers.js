@@ -8,7 +8,6 @@ const synchronizeViewers = function (imageViewerArray) {
     this.numViewers = imageViewerArray.length
 
     imageViewerArray.forEach(function (imageViewer) {
-      console.log(imageViewer)
       const currentViewer = imageViewer.getViewer()
 
       setPanZoomCurrent(currentViewer, handler)
@@ -100,7 +99,7 @@ function checkData (imageViewerArray) {
   }
 
   if (!(imageViewerArray[0] instanceof Object)) {
-    console.error('synchronizeViewers.js: Array elements should be ImageViewer.')
+    console.error('synchronizeViewers.js: Array elements should be MultiViewer objects.')
     return false
   }
 

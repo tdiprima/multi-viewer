@@ -1,7 +1,7 @@
 // Page Module
 const Page = function () {
   return {
-    createDivs: function (idx, numDivs, viewers, rangeSliders, options) {
+    createDivs: function (idx, numDivs, viewersArray, sourceImages, rangeSliders, options) {
       let name
       const opts = isRealValue(options)
       if (!opts) {
@@ -55,7 +55,7 @@ const Page = function () {
 
       container.appendChild(viewerDiv)
 
-      viewers.push(new ImageViewer('viewer' + idx, sliderElements, numDivs, options))
+      viewersArray.push(new MultiViewer('viewer' + idx, sourceImages, [1.0, 1.0], sliderElements, numDivs, options))
 
       // Clear:both between rows
       if (idx % 2 === 0) {

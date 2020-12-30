@@ -10,7 +10,7 @@ const pageSetup = function (numDivs, sourceImages, options) {
       // Create divs
       let idx
       for (idx = 1; idx <= numDivs; idx++) {
-        page.createDivs(idx, numDivs, viewers, rangeSliders, options)
+        page.createDivs(idx, numDivs, viewers, sourceImages, rangeSliders, options)
       }
       return viewers
     }).then(function (viewers) {
@@ -21,18 +21,6 @@ const pageSetup = function (numDivs, sourceImages, options) {
     }).then(function (viewers) {
       // Pan zoom controller
       synchronizeViewers(viewers)
-    }).then(function (result) {
-      if (sourceImages.length === 1) {
-        // Testing
-        viewers.forEach(function (elem) {
-          elem.getViewer().open(sourceImages[0]) // <- open()
-        })
-      } else {
-        // Set viewer source
-        viewers.forEach(function (elem) {
-          elem.setSources(sourceImages, [1.0, 1.0]) // <- setSources()
-        })
-      }
     })
   })
 }
