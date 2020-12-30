@@ -8,6 +8,7 @@ const synchronizeViewers = function (imageViewerArray) {
     this.numViewers = imageViewerArray.length
 
     imageViewerArray.forEach(function (imageViewer) {
+      console.log(imageViewer)
       const currentViewer = imageViewer.getViewer()
 
       setPanZoomCurrent(currentViewer, handler)

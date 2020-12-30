@@ -1,12 +1,13 @@
 // Image viewer module
-const SmallViewer = function (viewerDivId) {
-  let viewer = {}
-  let filter = {}
+function SmallViewer (viewerDivId) {
+  var viewer = {}
+  var filter = {}
 
   setFilter()
   setViewer(viewerDivId)
 
   function setFilter () {
+    console.log('setFilter')
     filter = OpenSeadragon.Filters.GREYSCALE
     filter.prototype.COLORIZE = function (r, g, b) {
       return function (context, callback) {
@@ -31,6 +32,7 @@ const SmallViewer = function (viewerDivId) {
   }
 
   function setViewer (viewerDivId) {
+    console.log('setViewer')
     viewer = OpenSeadragon({
       id: viewerDivId,
       prefixUrl: 'vendor/openseadragon/images/',
@@ -77,10 +79,6 @@ const SmallViewer = function (viewerDivId) {
     return [source['@id'], region, size, ROTATION, quality].join('/')
   }
 
-  SmallViewer.prototype.getViewer = function () {
-    return viewer
-  }
-
   SmallViewer.prototype.setSources = function (imageArray, opacityArray) {
     // Quick check url
     $.get(imageArray[0]).done(function () {
@@ -109,9 +107,8 @@ const SmallViewer = function (viewerDivId) {
       }
     })
   }
+}
 
-  return {
-    getViewer: this.getViewer,
-    setSources: this.setSources
-  }
+SmallViewer.prototype.getViewer = function () {
+  return this.viewer
 }
