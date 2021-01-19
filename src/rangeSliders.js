@@ -41,14 +41,14 @@ const Sliders = function () {
             sliders[1].style.display = 'inline'
 
             // Style the button
-            this.innerHTML = '<i class="fa fa-sliders"></i> Hide sliders'
+            this.innerHTML = '<i class="fas fa-sliders-h"></i> Hide sliders'
           } else {
             // Hide the sliders
             sliders[0].style.display = 'none'
             sliders[1].style.display = 'none'
 
             // Style the button
-            this.innerHTML = '<i class="fa fa-sliders"></i> Show sliders'
+            this.innerHTML = '<i class="fas fa-sliders-h"></i> Show sliders'
           }
           toggleButtonHighlight(btnSlide)
         })

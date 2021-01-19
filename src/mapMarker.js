@@ -58,7 +58,7 @@ function createLink () {
   link.href = href
   link.dataset.href = href
   link.id = 'the-map-marker'
-  link.className = 'fa fa-map-marker'
+  link.className = 'fas fa-map-marker'
   link.style.cssText =
     ' text-decoration: none; font-size: 22px; color: red;' +
     ' cursor: pointer'
@@ -73,10 +73,10 @@ function handleButtonShowHide () {
     elem.addEventListener('click', function () {
       if (markersHaveBeenDrawn) {
         style = 'block'
-        html = '<i class="fa fa-map-marker"></i> Hide markers'
+        html = '<i class="fas fa-map-marker"></i> Hide markers'
       } else {
         style = 'none'
-        html = '<i class="fa fa-map-marker"></i> Show markers'
+        html = '<i class="fas fa-map-marker"></i> Show markers'
       }
       this.innerHTML = html
       document.querySelectorAll('#the-map-marker').forEach(function (thing) {

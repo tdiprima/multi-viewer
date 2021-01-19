@@ -84,20 +84,20 @@ const Page = function () {
       // Uglification doesn't accept template literals
       /*
       div.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
-        <button id="btnDraw${idx}" class="btn"><i class="fa fa-pencil-alt"></i> Draw polygon</button>&nbsp;
-        <button id="btnEdit${idx}" class="btn"><i class="fa fa-draw-polygon"></i> Edit polygon</button>&nbsp;
-        <button id="btnGrid${idx}" class="btn"><i class="fa fa-border-all"></i> Draw grid</button>&nbsp;
-        <button id="btnGridMarker${idx}" class="btn"><i class="fa fa-paint-brush"></i> Mark grid</button>&nbsp;
-        <button id="btnSlide${idx}" class="btn"><i class="fa fa-sliders"></i> Show sliders</button>&nbsp;
-        <button id="btnMapMarker" class="btn" style="display: none"><i class="fa fa-map-marker-alt"></i> Hide markers</button>
+        <button id="btnDraw${idx}" class="btn"><i class="fas fa-pencil-alt"></i> Draw polygon</button>&nbsp;
+        <button id="btnEdit${idx}" class="btn"><i class="fas fa-draw-polygon"></i> Edit polygon</button>&nbsp;
+        <button id="btnGrid${idx}" class="btn"><i class="fas fa-border-all"></i> Draw grid</button>&nbsp;
+        <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
+        <button id="btnSlide${idx}" class="btn"><i class="fas fa-sliders-h"></i> Show sliders</button>&nbsp;
+        <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
     </a>` */
       div.innerHTML = htm + "<mark id='mark" + idx + "'>" + color + '</mark>&nbsp;' +
-        "<button id='btnDraw" + idx + "' class='btn'><i class='fa fa-pencil-alt'></i> Draw polygon</button>&nbsp;" +
-        "<button id='btnEdit" + idx + "' class='btn'><i class='fa fa-draw-polygon'></i> Edit polygon</button>&nbsp;" +
-        "<button id='btnGrid" + idx + "' class='btn'><i class='fa fa-border-all'></i> Draw grid</button>&nbsp;" +
-        "<button id='btnGridMarker" + idx + "' class='btn'><i class='fa fa-paint-brush'></i> Mark grid</button>&nbsp;" +
-        "<button id='btnSlide" + idx + "' class='btn'><i class='fa fa-sliders'></i> Show sliders</button>&nbsp;" +
-        "<button id='btnMapMarker' class='btn' style='display: none'><i class='fa fa-map-marker-alt'></i> Hide markers</button>"
+        "<button id='btnDraw" + idx + "' class='btn'><i class='fas fa-pencil-alt'></i> Draw polygon</button>&nbsp;" +
+        "<button id='btnEdit" + idx + "' class='btn'><i class='fas fa-draw-polygon'></i> Edit polygon</button>&nbsp;" +
+        "<button id='btnGrid" + idx + "' class='btn'><i class='fas fa-border-all'></i> Draw grid</button>&nbsp;" +
+        "<button id='btnGridMarker" + idx + "' class='btn'><i class='fas fa-paint-brush'></i> Mark grid</button>&nbsp;" +
+        "<button id='btnSlide" + idx + "' class='btn'><i class='fas fa-sliders-h'></i> Show sliders</button>&nbsp;" +
+        "<button id='btnMapMarker' class='btn' style='display: none'><i class='fas fa-map-marker-alt'></i> Hide markers</button>"
       // "</a>"
     }
   }
