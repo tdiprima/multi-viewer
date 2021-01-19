@@ -76,9 +76,7 @@ class ImageViewer {
       console.warn(message)
       console.log('jqXHR object:', jqXHR)
       console.log('URL', url)
-      // uglify X template literal
-      // document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
-      document.write('<h1>' + message + '</h1><b>URL:</b>&nbsp;' + url + '<br><br><b>Check the console for any clues.')
+      document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
       throw new Error('Something went wrong.') // Terminates the script.
     }
 

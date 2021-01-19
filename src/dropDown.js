@@ -8,30 +8,10 @@ const DropDown = function (viewerArray, divId, dataSource) {
   let imageSelect = {}
   let data = {}
 
-  // Uglification fail
-  // fetch(dataSource).then(response => {
-  //   const contentType = response.headers.get('content-type')
-  //   if (contentType && contentType.indexOf('application/json') !== -1) {
-  //     return response.json().then(data => {
-  //       // Process JSON data
-  //       if (!isEmpty(data)) {
-  //         initTypes()
-  //         initImages(data)
-  //       } else {
-  //         throw Error('\n    Empty JSON response.\n    Skipping drop-down creation.')
-  //       }
-  //     })
-  //   } else {
-  //     return response.text().then(text => {
-  //       console.log('text:', text)
-  //       throw Error('We got a response... but it was not JSON.')
-  //     })
-  //   }
-  // })
-  fetch(dataSource).then(function (response) {
+  fetch(dataSource).then(response => {
     const contentType = response.headers.get('content-type')
     if (contentType && contentType.indexOf('application/json') !== -1) {
-      return response.json().then(function (data) {
+      return response.json().then(data => {
         // Process JSON data
         if (!isEmpty(data)) {
           initTypes()
@@ -41,7 +21,7 @@ const DropDown = function (viewerArray, divId, dataSource) {
         }
       })
     } else {
-      return response.text().then(function (text) {
+      return response.text().then(text => {
         console.log('text:', text)
         throw Error('We got a response... but it was not JSON.')
       })
