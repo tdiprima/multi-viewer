@@ -15,7 +15,6 @@
     .highlight {
       background: black;
     }
-
   </style>
 </head>
 
@@ -23,6 +22,16 @@
 <div id="contentDiv" style="width: 640px; height: 480px;"></div>
 <script>
   const images = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
+
+  function testImageViewer(images) {
+    let imageViewer = new ImageViewer('contentDiv', images, [1.0])
+  }
+  // testImageViewer(images)
+
+  function testMultiViewer(images) {
+    let multiViewer = new MultiViewer('contentDiv', ['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
+  }
+  // testMultiViewer(images)
 
   function fit_to_viewport(image) {
 
@@ -50,17 +59,7 @@
   }
   fit_to_viewport(images[0])
 
-  function testImageViewer(images) {
-    let imageViewer = new ImageViewer('contentDiv', images, [1.0])
-  }
-  // testImageViewer(images)
-
-  function testMultiViewer(images) {
-    let multiViewer = new MultiViewer('contentDiv', ['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
-  }
-  // testMultiViewer(images)
-
-</script>
+  </script>
 </body>
 
 </html>
