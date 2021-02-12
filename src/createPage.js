@@ -86,6 +86,7 @@ const Page = function () {
         <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
         <button id="btnSlide${idx}" class="btn"><i class="fas fa-sliders-h"></i> Show sliders</button>&nbsp;
         <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>`
+        // <button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Measure</button>&nbsp;
     }
   }
 }

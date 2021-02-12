@@ -40,10 +40,6 @@ function gridHandler (button, gridProps) {
   }
 }
 
-function buttonIsOn (button) {
-  return button.classList.contains('btnOn')
-}
-
 function turnGridOff (gridProps) {
   const r = gridProps.canvas.getObjects('line')
   let i

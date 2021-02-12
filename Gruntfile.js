@@ -23,6 +23,7 @@ module.exports = function (grunt) {
           // 'src/mugshots.js',
           'src/gridOverlay.js',
           'src/mapMarker.js',
+          // 'src/ruler.js',
           'src/markupTools.js',
           'src/ImageViewer.js',
           'src/synchronizeViewers.js'],
