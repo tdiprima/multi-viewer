@@ -1,4 +1,5 @@
-// Based on: https://github.com/NCSU-Libraries/iiif_url/
+// JavaScript IIIF URL Parser
+// Based on the Ruby script: https://github.com/NCSU-Libraries/iiif_url/blob/master/lib/iiif_url.rb
 function parse(url) {
   let w, h, identifier
   let url_parts = url.split('/')
@@ -58,16 +59,3 @@ function parse(url) {
   return {identifier, region, size, rotation, quality, format}
 
 }
-
-// TEST PARSING
-// Testing based on "expected": https://github.com/NCSU-Libraries/iiif_url/blob/master/test/iiif_url_parser_test.rb
-let params
-params = parse('http://example.org/prefix/abc/full/full/0/default.png') // simple url
-// params = parse('/abc/full/full/0/default.png') // simple path with identifier
-// params = parse('/full/full/0/default.png') // simple path without identifier
-// params = parse('/full/full/!180/default.png') // mirror
-// params = parse('/0,100,200,300/75,/0/default.jpg') // parameterized path without identifier
-// params = parse('/full/,76/0/default.jpg') // just height size
-// params = parse('/pct:0,100,200,300/pct:75/0/default.jpg') // pcts
-// params = parse('/full/!225,100/0/default.jpg') // confined size
-console.log('params', params)
