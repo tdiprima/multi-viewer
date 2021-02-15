@@ -1,5 +1,6 @@
 // JavaScript IIIF URL Parser
-// Based on the Ruby script: https://github.com/NCSU-Libraries/iiif_url/blob/master/lib/iiif_url.rb
+// Adapted from: https://github.com/NCSU-Libraries/iiif_url/blob/master/lib/iiif_url.rb
+// IIIF Image API: https://iiif.io/api/image/3.0/
 function parse(url) {
   let w, h, identifier
   let url_parts = url.split('/')
@@ -13,7 +14,7 @@ function parse(url) {
     return true
   })() : false
 
-  rotation.degrees = Number.isInteger(rotation_string) ? parseInt(rotation_string) : rotation_string
+  rotation.degrees = isNumeric(rotation_string) ? parseInt(rotation_string) : rotation_string
 
   let size_string = url_parts.pop()
   let size = {}
@@ -59,3 +60,10 @@ function parse(url) {
   return {identifier, region, size, rotation, quality, format}
 
 }
+
+function isNumeric(str) {
+  if (typeof str != "string") return false
+  return !isNaN(str) && !isNaN(parseFloat(str))
+}
+
+// module.exports = parse
