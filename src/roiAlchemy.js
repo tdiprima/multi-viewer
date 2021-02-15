@@ -36,25 +36,32 @@ const roiAlchemy = function (divId, image, rois, rows, columns, width, height) {
       prefixUrl: 'vendor/openseadragon/images/',
       crossOriginPolicy: 'Anonymous'
     })
-    viewer.addHandler('open', function () {
-      // PARSE URIs, CREATE OSD RECT
-      // rois[i]
-      let r = parse(rois[0])
-      const rect = new OpenSeadragon.Rect(r.region.x, r.region.y, r.region.w, r.region.h)
-      const vRect = viewer.viewport.imageToViewportRectangle(rect)
 
-      const elt = document.createElement('div')
-      elt.id = 'runtime-overlay'
-      // elt.style.background = 'black'
-      viewer.addOverlay({
-        element: elt,
-        location: vRect
-      })
-      setTimeout(function () {
-        viewer.viewport.fitBounds(vRect)
-      }, 1000)
-    })
+    // ADD HANDLER (ONLY WAY TO FIT BOUNDS)
+    addHandler(viewer, rois, i)
+
   }
+}
+
+function addHandler(viewer, rois, i) {
+  console.log(i, rois[i])
+  viewer.addHandler('open', function () {
+    // PARSE URIs, CREATE OSD RECT
+    let r = parse(rois[i])
+    const rect = new OpenSeadragon.Rect(r.region.x, r.region.y, r.region.w, r.region.h)
+    const vRect = viewer.viewport.imageToViewportRectangle(rect)
+
+    const elt = document.createElement('div')
+    elt.id = 'runtime-overlay'
+    // elt.style.background = 'black'
+    viewer.addOverlay({
+      element: elt,
+      location: vRect
+    })
+    setTimeout(function () {
+      viewer.viewport.fitBounds(vRect)
+    }, 1000)
+  })
 }
 
 function makeId(length) {

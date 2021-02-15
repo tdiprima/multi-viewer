@@ -20,7 +20,12 @@
   const images = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
 
   function alchemy(images) {
-    roiAlchemy('contentDiv', images[0], ['/2784,2784,2784,2784/max/0/default.jpg'], 2, 2, 500, 300)
+    // ['/2784,2784,2784,2784/max/0/default.jpg']
+    const regions = ['/0,0,2784,2784/max/0/default.jpg',
+      '/2784,2784,2784,2784/max/0/default.jpg',
+      '/2000,2000,2000,2000/max/0/default.jpg',
+      '/4000,4000,4000,4000/max/0/default.jpg']
+    roiAlchemy('contentDiv', images[0], regions, 2, 2, 500, 300)
   }
   alchemy(images)
 
