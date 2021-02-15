@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/gh/usnistgov/OpenSeadragonFiltering/openseadragon-filtering.js"></script>
   <script src="src/ImageViewer.js"></script>
   <script src="src/MultiViewer.js"></script>
+  <script src="src/iiifUrlParser.js"></script>
   <script src="src/roiAlchemy.js"></script>
 </head>
 
@@ -19,7 +20,7 @@
   const images = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
 
   function alchemy(images) {
-    roiAlchemy('contentDiv', images[0], ['temporary'], 2, 2, 500, 300)
+    roiAlchemy('contentDiv', images[0], ['/2784,2784,2784,2784/max/0/default.jpg'], 2, 2, 500, 300)
   }
   alchemy(images)
 
@@ -46,7 +47,8 @@
       let rect = new OpenSeadragon.Rect(0.2, 0.2, 0.2, 0.2)
       let elt = document.createElement("div")
       elt.id = "runtime-overlay"
-      elt.className = "highlight"
+      // elt.className = "highlight"
+      elt.style.background = 'black'
       viewer.addOverlay({
         element: elt,
         location: rect

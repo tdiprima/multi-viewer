@@ -39,16 +39,19 @@ const roiAlchemy = function (divId, image, rois, rows, columns, width, height) {
     viewer.addHandler('open', function () {
       // PARSE URIs, CREATE OSD RECT
       // rois[i]
-      const rect = new OpenSeadragon.Rect(0.2, 0.2, 0.2, 0.2)
+      let r = parse(rois[0])
+      const rect = new OpenSeadragon.Rect(r.region.x, r.region.y, r.region.w, r.region.h)
+      const vRect = viewer.viewport.imageToViewportRectangle(rect)
+
       const elt = document.createElement('div')
       elt.id = 'runtime-overlay'
-      elt.style.background = 'black'
+      // elt.style.background = 'black'
       viewer.addOverlay({
         element: elt,
-        location: rect
+        location: vRect
       })
       setTimeout(function () {
-        viewer.viewport.fitBounds(rect)
+        viewer.viewport.fitBounds(vRect)
       }, 1000)
     })
   }
