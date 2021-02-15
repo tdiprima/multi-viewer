@@ -1,7 +1,7 @@
 /**
  * @param divId = where you want to put these viewers
  * @param image = what's the base image
- * @param rois = array of rois (assume we're highlighting 1 per image)
+ * @param rois = array of rois (the roi we will zoom in on)
  * @param rows = how many rows of viewers
  * @param columns = how many columns
  * @param width = width of viewers
@@ -50,17 +50,7 @@ function addHandler(viewer, rois, i) {
     let r = parse(rois[i])
     const rect = new OpenSeadragon.Rect(r.region.x, r.region.y, r.region.w, r.region.h)
     const vRect = viewer.viewport.imageToViewportRectangle(rect)
-
-    const elt = document.createElement('div')
-    elt.id = 'runtime-overlay'
-    // elt.style.background = 'black'
-    viewer.addOverlay({
-      element: elt,
-      location: vRect
-    })
-    setTimeout(function () {
-      viewer.viewport.fitBounds(vRect)
-    }, 1000)
+    viewer.viewport.fitBounds(vRect)
   })
 }
 
