@@ -1,4 +1,4 @@
-const checkOptions = require('../js/checkOptions')
+const checkOptions = require('../src/checkOptions')
 let result
 
 console.debug('\nTest non-empty:')

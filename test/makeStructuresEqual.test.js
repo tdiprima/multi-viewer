@@ -1,5 +1,5 @@
 // Uncomment module.exports=makeStructuresEqual in checkOptions.js and module.exports=isEqual in commonFunctions.js
-const makeStructuresEqual = require('../js/checkOptions')
+const makeStructuresEqual = require('../src/checkOptions')
 let result
 
 console.log('\nTest missing (1) field:')
