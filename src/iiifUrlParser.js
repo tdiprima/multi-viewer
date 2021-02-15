@@ -1,6 +1,11 @@
 // JavaScript IIIF URL Parser
 // Adapted from: https://github.com/NCSU-Libraries/iiif_url/blob/master/lib/iiif_url.rb
 // IIIF Image API: https://iiif.io/api/image/3.0/
+function isNumeric(str) {
+  if (typeof str != "string") return false
+  return !isNaN(str) && !isNaN(parseFloat(str))
+}
+
 function parse(url) {
   let w, h, identifier
   let url_parts = url.split('/')
@@ -59,11 +64,6 @@ function parse(url) {
 
   return {identifier, region, size, rotation, quality, format}
 
-}
-
-function isNumeric(str) {
-  if (typeof str != "string") return false
-  return !isNaN(str) && !isNaN(parseFloat(str))
 }
 
 // module.exports = parse
