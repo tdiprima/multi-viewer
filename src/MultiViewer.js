@@ -21,16 +21,7 @@ class MultiViewer extends ImageViewer {
     }
 
     if (options.slidersOn) {
-      let i
-      for (i = 0; i < this.sliders.length; i++) {
-        this.sliders[i].addEventListener('input', function () {
-          if (this.viewer1.world.getItemAt(i) !== undefined) {
-            this.viewer1.world.getItemAt(i).setOpacity(this.sliders[i].value / 100)
-          } else {
-            this.sliders[i].hidden = true
-          }
-        })
-      }
+      addInputHandler(this.sliders, this.viewer1)
     }
 
     if (options.toolbarOn) {
@@ -44,5 +35,20 @@ class MultiViewer extends ImageViewer {
 
   getPanZoom () {
     return this.checkboxes
+  }
+
+}
+
+function addInputHandler (sliderElem, viewerElem) {
+  let i
+  for (i = 0; i < sliderElem.length; i++) {
+    // Sliders change opacity of slide
+    sliderElem[i].addEventListener('input', function () {
+      if (viewerElem.world.getItemAt(i) !== undefined) {
+        viewerElem.world.getItemAt(i).setOpacity(this.value / 100)
+      } else {
+        this.hidden = true
+      }
+    })
   }
 }
