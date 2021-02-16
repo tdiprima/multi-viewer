@@ -20,7 +20,6 @@
   const images = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
 
   function alchemy(images) {
-    // ['/2784,2784,2784,2784/max/0/default.jpg']
     const regions = ['/0,0,2784,2784/max/0/default.jpg',
       '/2784,2784,2784,2784/max/0/default.jpg',
       '/2000,2000,2000,2000/max/0/default.jpg',
@@ -35,7 +34,7 @@
   // testImageViewer(images)
 
   function testMultiViewer(images) {
-    let multiViewer = new MultiViewer('contentDiv', ['//openseadragon.github.io/example-images/duomo/duomo.dzi'], [1.0])
+    let multiViewer = new MultiViewer('contentDiv', images, [1.0])
   }
   // testMultiViewer(images)
 
