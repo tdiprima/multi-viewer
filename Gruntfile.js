@@ -26,6 +26,7 @@ module.exports = function (grunt) {
           // 'src/ruler.js',
           'src/markupTools.js',
           'src/ImageViewer.js',
+          'src/MultiViewer.js',
           'src/synchronizeViewers.js'],
         dest: 'build/<%= pkg.name %>.js'
       },
