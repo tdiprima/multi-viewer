@@ -12,6 +12,9 @@ class MultiViewer extends ImageViewer {
     }
 
     this.viewer1 = super.getViewer()
+    // if (this.viewer1) {
+    //   console.warn('Yay, viewer1', this.viewer1)
+    // }
     this.idx = viewerDivId.replace('viewer', '')
     this.sliders = sliderElements
 
@@ -40,12 +43,18 @@ class MultiViewer extends ImageViewer {
 }
 
 function addInputHandler (sliderElem, viewerElem) {
+  // console.log(sliderElem, viewerElem)
   let i
   for (i = 0; i < sliderElem.length; i++) {
+    // console.log('sliderElem[i]', i, sliderElem[i])
     // Sliders change opacity of slide
     sliderElem[i].addEventListener('input', function () {
-      if (viewerElem.world.getItemAt(i) !== undefined) {
-        viewerElem.world.getItemAt(i).setOpacity(this.value / 100)
+      let idx = this.id.replace('sliderRange', '') - 1
+      // console.log('this', idx, this.id)
+      let w = viewerElem.world.getItemAt(idx)
+      // console.log('world item', idx, w)
+      if (viewerElem.world.getItemAt(idx) !== undefined) {
+        viewerElem.world.getItemAt(idx).setOpacity(this.value / 100)
       } else {
         this.hidden = true
       }
