@@ -49,12 +49,18 @@ function addInputHandler (sliderElem, viewerElem) {
     // console.log('sliderElem[i]', i, sliderElem[i])
     // Sliders change opacity of slide
     sliderElem[i].addEventListener('input', function () {
-      let idx = this.id.replace('sliderRange', '') - 1
+      let idx
+      const num = this.id.replace('sliderRange', '') - 1
+      if (num % 2 === 0) {
+        idx = 0
+      } else {
+        idx = 1
+      }
       // console.log('this', idx, this.id)
-      let w = viewerElem.world.getItemAt(idx)
-      // console.log('world item', idx, w)
-      if (viewerElem.world.getItemAt(idx) !== undefined) {
-        viewerElem.world.getItemAt(idx).setOpacity(this.value / 100)
+      const worldItem = viewerElem.world.getItemAt(idx)
+      // console.log('world item', idx, worldItem)
+      if (worldItem !== undefined) {
+        worldItem.setOpacity(this.value / 100)
       } else {
         this.hidden = true
       }
