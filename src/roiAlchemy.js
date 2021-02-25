@@ -1,5 +1,6 @@
 /**
  * roiAlchemy
+ * Alchemy. Transforming normal OSD into a beautiful ROI showcase :)
  *
  * @param divId = where you want to put these viewers
  * @param image = what's the base image
