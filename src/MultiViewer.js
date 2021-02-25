@@ -1,15 +1,17 @@
+/**
+ * MultiViewer
+ * Set up 2 or more OSD viewers.
+ *
+ * @param viewerDivId: (viewer1, viewer2...)
+ * @param srcImgPair: Source image pair (array of base image + layer image)
+ * @param opacityPair: Opacity for the image pair.
+ * @param sliderElements
+ * @param numViewers: Total number of viewers.
+ * @param options: Filters, paintbrush, sliders, etc.
+ */
 class MultiViewer extends ImageViewer {
-  /**
-   *
-   * @param viewerDivId: (viewer1, viewer2...)
-   * @param srcImgPair: Source image pair (array of base image + layer image)
-   * @param opacityArray: Opacity for the image pair.
-   * @param sliderElements
-   * @param numViewers: Total number of viewers.
-   * @param options: Filters, paintbrush, sliders, etc.
-   */
-  constructor(viewerDivId, srcImgPair, opacityArray, sliderElements, numViewers, options) {
-    super(viewerDivId, srcImgPair, opacityArray)
+  constructor(viewerDivId, srcImgPair, opacityPair, sliderElements, numViewers, options) {
+    super(viewerDivId, srcImgPair, opacityPair)
     // console.log('viewerDivId', viewerDivId, 'sliderElements', sliderElements)
 
     if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {

@@ -1,5 +1,7 @@
 /**
+ * pageSetup
  * Set up web page for multi-viewer.
+ *
  * @param numViewers: Total number of viewers.
  * @param srcImgPair: Source image pair (array of base image + layer image)
  * @param options: Filters, paintbrush, sliders, etc.

@@ -1,13 +1,21 @@
+/**
+ * ImageViewer
+ * Set up 1 basic OSD viewer.
+ *
+ * @param viewerDivId: (viewer1, viewer2...)
+ * @param srcImgPair: Source image pair (array of base image + layer image)
+ * @param opacityPair: Opacity for the image pair.
+ */
 class ImageViewer {
-  constructor (viewerDivId, srcImgPair, opacityArray) {
+  constructor(viewerDivId, srcImgPair, opacityPair) {
     this.viewer = {}
     this.filter = {}
     this.setFilter()
     this.setViewer(viewerDivId)
-    this.setSources(srcImgPair, opacityArray, this.viewer)
+    this.setSources(srcImgPair, opacityPair, this.viewer)
   }
 
-  setFilter () {
+  setFilter() {
     this.filter = OpenSeadragon.Filters.GREYSCALE
     this.filter.prototype.COLORIZE = function (r, g, b) {
       return function (context, callback) {
@@ -31,7 +39,7 @@ class ImageViewer {
     }
   }
 
-  setViewer (viewerDivId) {
+  setViewer(viewerDivId) {
     this.viewer = OpenSeadragon({
       id: viewerDivId,
       prefixUrl: 'vendor/openseadragon/images/',
@@ -39,15 +47,15 @@ class ImageViewer {
     })
   }
 
-  getViewer () {
+  getViewer() {
     return this.viewer
   }
 
-  setSources (srcImgPair, opacityArray, viewer) {
+  setSources(srcImgPair, opacityPair, viewer) {
     // Quick check url
     $.get(srcImgPair[0]).done(function () {
       srcImgPair.forEach(function (image, index) {
-        viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
+        viewer.addTiledImage({tileSource: image, opacity: opacityPair ? opacityPair[index] : 0, x: 0, y: 0})
       })
     }).fail(function (jqXHR, statusText) {
       const url = srcImgPair[0]
@@ -71,7 +79,7 @@ class ImageViewer {
       }
     })
 
-    function dataCheck (url, jqXHR) {
+    function dataCheck(url, jqXHR) {
       const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
       console.warn(message)
       console.log('jqXHR object:', jqXHR)
@@ -80,7 +88,7 @@ class ImageViewer {
       throw new Error('Something went wrong.') // Terminates the script.
     }
 
-    function getIIIFTileUrl (source, level, x, y) {
+    function getIIIFTileUrl(source, level, x, y) {
       const scale = Math.pow(0.5, source.maxLevel - level)
       const levelWidth = Math.ceil(source.width * scale)
       const levelHeight = Math.ceil(source.height * scale)

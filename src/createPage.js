@@ -4,7 +4,9 @@
 const Page = function () {
   return {
     /**
+     * createDivs
      * Create osd viewer divs.
+     *
      * @param idx: Viewer index.
      * @param numViewers: Total number of viewers.
      * @param viewersArray: (we need to pass this information back & forth)
@@ -77,6 +79,8 @@ const Page = function () {
       }
     },
     /**
+     * createButtons
+     * Functionality for each viewer.
      *
      * @param idx: The current div index number.
      * @param div: The div element object.
