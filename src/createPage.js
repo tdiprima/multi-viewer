@@ -7,7 +7,7 @@ const Page = function () {
      * createDivs
      * Create osd viewer divs.
      *
-     * @param idx: Viewer index.
+     * @param idx: Current viewer index.
      * @param numViewers: Total number of viewers.
      * @param viewersArray: (we need to pass this information back & forth)
      * @param srcImgPair: Source image pair (array of base image + layer image).
@@ -82,7 +82,7 @@ const Page = function () {
      * createButtons
      * Functionality for each viewer.
      *
-     * @param idx: The current div index number.
+     * @param idx: The current viewer index.
      * @param div: The div element object.
      * @param numViewers: Total number of viewers.
      * @param options: Filters, paintbrush, sliders, etc.

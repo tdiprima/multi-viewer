@@ -1,4 +1,12 @@
+/**
+ * Allow user to draw a polygon on the image.
+ *
+ * @param idx: Current viewer index.
+ * @param viewer: OSD viewer object.
+ * @param overlay: fabric overlay object.
+ */
 const drawPolygon = function (idx, viewer, overlay) {
+  // console.log('idx', idx, 'viewer', viewer, 'overlay', overlay)
   const btnDraw = document.getElementById('btnDraw' + idx)
   const mark = document.getElementById('mark' + idx)
 
