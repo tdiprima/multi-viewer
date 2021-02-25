@@ -1,8 +1,18 @@
 class MultiViewer extends ImageViewer {
-  constructor (viewerDivId, imageArray, opacityArray, sliderElements, numDivs, options) {
-    super(viewerDivId, imageArray, opacityArray)
+  /**
+   *
+   * @param viewerDivId: (viewer1, viewer2...)
+   * @param srcImgPair: Source image pair (array of base image + layer image)
+   * @param opacityArray: Opacity for the image pair.
+   * @param sliderElements
+   * @param numViewers: Total number of viewers.
+   * @param options: Filters, paintbrush, sliders, etc.
+   */
+  constructor(viewerDivId, srcImgPair, opacityArray, sliderElements, numViewers, options) {
+    super(viewerDivId, srcImgPair, opacityArray)
+    // console.log('viewerDivId', viewerDivId, 'sliderElements', sliderElements)
 
-    if (typeof sliderElements === 'undefined' || typeof numDivs === 'undefined' || typeof options === 'undefined') {
+    if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {
       throw 'Wrong construction. Did you mean to use ImageViewer?'
     }
 
@@ -18,7 +28,7 @@ class MultiViewer extends ImageViewer {
     this.idx = viewerDivId.replace('viewer', '')
     this.sliders = sliderElements
 
-    if (numDivs > 1 && options.toolbarOn) {
+    if (numViewers > 1 && options.toolbarOn) {
       this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
       this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
     }
@@ -32,17 +42,17 @@ class MultiViewer extends ImageViewer {
     }
   }
 
-  getViewer () {
+  getViewer() {
     return this.viewer1
   }
 
-  getPanZoom () {
+  getPanZoom() {
     return this.checkboxes
   }
 
 }
 
-function addInputHandler (sliderElem, viewerElem) {
+function addInputHandler(sliderElem, viewerElem) {
   // console.log(sliderElem, viewerElem)
   let i
   for (i = 0; i < sliderElem.length; i++) {

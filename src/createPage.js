@@ -1,7 +1,19 @@
-// Page Module
+/**
+ * Page module: Functions that create divs and buttons on web page
+ */
 const Page = function () {
   return {
-    createDivs: function (idx, numDivs, viewersArray, sourceImages, rangeSliders, options) {
+    /**
+     * Create osd viewer divs.
+     * @param idx: Viewer index.
+     * @param numViewers: Total number of viewers.
+     * @param viewersArray: (we need to pass this information back & forth)
+     * @param srcImgPair: Source image pair (array of base image + layer image).
+     * @param rangeSliders:
+     * @param options: Filters, paintbrush, sliders, etc.
+     */
+    createDivs: function (idx, numViewers, viewersArray, srcImgPair, rangeSliders, options) {
+      // console.log('numViewers', numViewers, 'viewersArray', viewersArray.length, 'srcImgPair', srcImgPair.length)
       let name
       const opts = isRealValue(options)
       if (!opts) {
@@ -38,7 +50,7 @@ const Page = function () {
         buttonDiv.classList.add('buttons')
         controlsDiv.append(buttonDiv)
 
-        this.createButtons(idx, buttonDiv, numDivs, options)
+        this.createButtons(idx, buttonDiv, numViewers, options)
 
         colorPicker(document.getElementById('mark' + idx))
       }
@@ -55,7 +67,7 @@ const Page = function () {
 
       container.appendChild(viewerDiv)
 
-      viewersArray.push(new MultiViewer('viewer' + idx, sourceImages, [1.0, 1.0], sliderElements, numDivs, options))
+      viewersArray.push(new MultiViewer('viewer' + idx, srcImgPair, [1.0, 1.0], sliderElements, numViewers, options))
 
       // Clear:both between rows
       if (idx % 2 === 0) {
@@ -64,7 +76,15 @@ const Page = function () {
         document.body.appendChild(div)
       }
     },
-    createButtons: function (idx, div, numDivs, options) {
+    /**
+     *
+     * @param idx: The current div index number.
+     * @param div: The div element object.
+     * @param numViewers: Total number of viewers.
+     * @param options: Filters, paintbrush, sliders, etc.
+     */
+    createButtons: function (idx, div, numViewers, options) {
+      // console.log(idx, div, numViewers, options)
       let color
       if (isRealValue(options.paintbrushColor)) {
         color = options.paintbrushColor
@@ -75,7 +95,7 @@ const Page = function () {
       let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
       <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`
 
-      if (numDivs <= 1) {
+      if (numViewers <= 1) {
         htm = '' // There's nothing to match pan/zoom with; so leave it blank.
       }
 
@@ -86,7 +106,7 @@ const Page = function () {
         <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
         <button id="btnSlide${idx}" class="btn"><i class="fas fa-sliders-h"></i> Show sliders</button>&nbsp;
         <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>`
-        // <button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Measure</button>&nbsp;
+      // <button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Measure</button>&nbsp;
     }
   }
 }

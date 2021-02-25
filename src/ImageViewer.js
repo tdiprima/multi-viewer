@@ -1,10 +1,10 @@
 class ImageViewer {
-  constructor (viewerDivId, imageArray, opacityArray) {
+  constructor (viewerDivId, srcImgPair, opacityArray) {
     this.viewer = {}
     this.filter = {}
     this.setFilter()
     this.setViewer(viewerDivId)
-    this.setSources(imageArray, opacityArray, this.viewer)
+    this.setSources(srcImgPair, opacityArray, this.viewer)
   }
 
   setFilter () {
@@ -43,14 +43,14 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources (imageArray, opacityArray, viewer) {
+  setSources (srcImgPair, opacityArray, viewer) {
     // Quick check url
-    $.get(imageArray[0]).done(function () {
-      imageArray.forEach(function (image, index) {
+    $.get(srcImgPair[0]).done(function () {
+      srcImgPair.forEach(function (image, index) {
         viewer.addTiledImage({ tileSource: image, opacity: opacityArray ? opacityArray[index] : 0, x: 0, y: 0 })
       })
     }).fail(function (jqXHR, statusText) {
-      const url = imageArray[0]
+      const url = srcImgPair[0]
       dataCheck(url, jqXHR, statusText)
     })
 
