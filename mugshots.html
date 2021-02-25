@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>MOCKUP</title>
+  <title>Mugshots</title>
   <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
   <script
     src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
@@ -22,12 +22,11 @@
 </head>
 
 <body>
-<!-- Mugshots Testing -->
+<!-- Mugshots Demo -->
 <div class="thumbnail-container" id="thumbnail-container"></div>
 <div class="openseadragon" id="contentDiv"></div>
 <script>
   document.addEventListener('DOMContentLoaded', function (event) {
-    // MOCK SETUP
     fetch('https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/info.json')
       .then(response => response.json())
       .then(data => {

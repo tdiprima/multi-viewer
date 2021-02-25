@@ -1,18 +1,22 @@
+/**
+ * mugshots.js
+ * Create an array of rois; onClick: image will zoom to area, and draw a box around the ROI.
+ *
+ * @param options:
+  {
+    'divId': options.divId,
+    'thumbId': options.thumbId,
+    'infoUrl': options.infoUrl,
+    'imgDims': options.imgDims,
+    'thumbnailSize': options.thumbnailSize,
+    'scrollerLength': options.scrollerLength,
+    'mugshotArray': options.mugshotArray,
+    'roiColor': options.roiColor,
+    'overlay': options.overlay,
+    'viewer': options.viewer
+  }
+ */
 const mugshots = function (options) {
-  // Expect options:
-  // {
-  //   divId: options.divId,
-  //   thumbId: options.thumbId,
-  //   infoUrl: options.infoUrl,
-  //   imgDims: options.imgDims,
-  //   thumbnailSize: options.thumbnailSize,
-  //   scrollerLength: options.scrollerLength,
-  //   mugshotArray: options.mugshotArray,
-  //   roiColor: options.roiColor,
-  //   overlay: options.overlay,
-  //   viewer: options.viewer
-  // }
-
   const canvas = this.__canvas = options.overlay.fabricCanvas()
   options.overlay.resizeCanvas = function () {
     // Function override: Resize overlay canvas
