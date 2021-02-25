@@ -1,6 +1,6 @@
 /**
  * MultiViewer
- * Set up 2 or more OSD viewers.
+ * Set up OSD viewer to allow for multiple viewer control.
  *
  * @param viewerDivId: (viewer1, viewer2...)
  * @param srcImgPair: Source image pair (array of base image + layer image)

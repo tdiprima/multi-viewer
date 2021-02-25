@@ -1,4 +1,6 @@
 /**
+ * roiAlchemy
+ *
  * @param divId = where you want to put these viewers
  * @param image = what's the base image
  * @param rois = array of rois (the roi we will zoom in on)
