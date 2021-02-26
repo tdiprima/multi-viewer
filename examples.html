@@ -15,13 +15,16 @@
 </head>
 
 <body>
+<h3 id="info"></h3>
 <div id="contentDiv" style="width: 640px; height: 480px;"></div>
 <script>
+  let info = document.getElementById('info')
   let image
   // image = '//openseadragon.github.io/example-images/duomo/duomo.dzi'
   image = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
 
   function zoomInOnRegionsOfInterst(image) {
+    info.innerHTML = 'Zoom in on Different Regions of Interest'
     const regions = ['/0,0,2784,2784/max/0/default.jpg',
       '/2784,2784,2784,2784/max/0/default.jpg',
       '/2000,2000,2000,2000/max/0/default.jpg',
@@ -31,7 +34,7 @@
   zoomInOnRegionsOfInterst(image)
 
   function fit_roi_to_viewport(image) {
-
+    info.innerHTML = 'Fit ROI to Viewport'
     let viewer = OpenSeadragon({
       id: 'contentDiv',
       tileSources: image,
@@ -59,17 +62,19 @@
 
   // NOTE! YOU CAN GIVE A PAIR (base + layer) OR YOU CAN GIVE ONE IMAGE.
   let imageSourcePair
-  // imageSourcePair = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
-  imageSourcePair = [window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json']
+  imageSourcePair = ['//openseadragon.github.io/example-images/duomo/duomo.dzi']
+  // imageSourcePair = [window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json']
 
   // Display one OSD viewer
   function testImageViewer(imageSourcePair) {
+    info.innerHTML = 'Display an Image Using ImageViewer'
     new ImageViewer('contentDiv', imageSourcePair, [1.0])
   }
   // testImageViewer(imageSourcePair)
 
   // Testing ONE viewer, using MultiViewer.
   function testMultiViewer(imageSourcePair) {
+    info.innerHTML = 'Display an Image Using MultiViewer'
     new MultiViewer('contentDiv', imageSourcePair, [1.0])
   }
   // testMultiViewer(imageSourcePair)
