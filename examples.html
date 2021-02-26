@@ -23,7 +23,7 @@
   // image = '//openseadragon.github.io/example-images/duomo/duomo.dzi'
   image = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
 
-  function zoomInOnRegionsOfInterst(image) {
+  function zoomInOnRegionsOfInterest(image) {
     info.innerHTML = 'Zoom in on Different Regions of Interest'
     const regions = ['/0,0,2784,2784/max/0/default.jpg',
       '/2784,2784,2784,2784/max/0/default.jpg',
@@ -31,7 +31,7 @@
       '/4000,4000,4000,4000/max/0/default.jpg']
     roiAlchemy('contentDiv', image, regions, 2, 2, 500, 300)
   }
-  zoomInOnRegionsOfInterst(image)
+  zoomInOnRegionsOfInterest(image)
 
   function fit_roi_to_viewport(image) {
     info.innerHTML = 'Fit ROI to Viewport'
