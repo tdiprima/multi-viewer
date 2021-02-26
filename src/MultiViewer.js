@@ -5,7 +5,7 @@
  * @param viewerDivId: (viewer1, viewer2...)
  * @param srcImgPair: Source image pair (array of base image + layer image)
  * @param opacityPair: Opacity for the image pair.
- * @param sliderElements: 2 slides per image viewer.
+ * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
