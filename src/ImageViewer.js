@@ -7,12 +7,12 @@
  * @param featureLayers
  */
 class ImageViewer {
-  constructor(viewerDivId, baseImage, featureLayers) {
+  constructor(viewerIndex, viewerDivId, baseImage, featureLayers) {
     this.viewer = {}
     this.filter = {}
     this.setFilter()
     this.setViewer(viewerDivId)
-    this.setSources(baseImage, featureLayers, this.filter, this.viewer)
+    this.setSources(viewerIndex, baseImage, featureLayers, this.filter, this.viewer)
   }
 
   setFilter() {
@@ -53,11 +53,13 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(baseImage, featureLayers, filter, viewer) {
+  setSources(viewerIndex, baseImage, featureLayers, filter, viewer) {
     // Quick check url
     $.get(baseImage).done(function () {
+      // Add base image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
-      if (typeof featureLayers !== 'undefined' && featureLayers.length > 0) {
+      // Add feature images to viewer
+      if (arrayCheck(viewerIndex, featureLayers)) {
         featureLayers.forEach(function (image, index) {
           viewer.addTiledImage({tileSource: image, opacity: 1.0, x: 0, y: 0})
         })
@@ -91,6 +93,25 @@ class ImageViewer {
       console.log('URL', url)
       document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
       throw new Error('Something went wrong.') // Terminates the script.
+    }
+
+    function arrayCheck(viewerIndex, featureLayers) {
+      // Do we have an array of features?
+      if (typeof featureLayers === 'undefined') {
+        return false
+      }
+      if (featureLayers.length === 0) {
+        return false
+      }
+      // Do we have an array of features, for this viewer?
+      if (typeof featureLayers[viewerIndex] === 'undefined') {
+        return false
+      }
+      if (featureLayers[viewerIndex].length === 0) {
+        return false
+      }
+      // All checks were successful
+      return true
     }
 
     function getIIIFTileUrl(source, level, x, y) {
@@ -147,8 +168,8 @@ class ImageViewer {
           rtnColor = [251, 154, 153]
           break
         case 6:
-          // red, #e31a1c
-          rtnColor = [227, 26, 28]
+          // yellow
+          rtnColor = [255, 255, 0]
           break
         case 7:
           // light orange, #fdbf6f

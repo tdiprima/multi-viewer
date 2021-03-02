@@ -69,7 +69,7 @@ const Page = function () {
 
       container.appendChild(viewerDiv)
 
-      viewersArray.push(new MultiViewer('viewer' + idx, baseImage, featureLayers, sliderElements, numViewers, options))
+      viewersArray.push(new MultiViewer(idx, viewerDiv.id, baseImage, featureLayers, sliderElements, numViewers, options))
 
       // Clear:both between rows
       if (idx % 2 === 0) {

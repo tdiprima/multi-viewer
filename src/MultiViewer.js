@@ -10,8 +10,8 @@
  * @param options: Filters, paintbrush, sliders, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
-    super(viewerDivId, baseImage, featureLayers)
+  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
+    super(viewerIndex, viewerDivId, baseImage, featureLayers)
     // console.log('viewerDivId', viewerDivId, 'sliderElements', sliderElements)
 
     if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {
