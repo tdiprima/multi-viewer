@@ -20,7 +20,8 @@
 <script>
   let info = document.getElementById('info')
   // let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi'
-  let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+  // let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+  let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-4Z-AA7N-01Z-00-DX1.10AA3499-6678-4DB2-9466-9CB3EA25CBB6.svs/info.json'
 
   function zoomInOnRegionsOfInterest(image) {
     info.innerHTML = 'Zoom in on Different Regions of Interest'
@@ -30,7 +31,7 @@
       '/4000,4000,4000,4000/max/0/default.jpg']
     roiAlchemy('contentDiv', image, regions, 2, 2, 500, 300)
   }
-  zoomInOnRegionsOfInterest(baseImage)
+  // zoomInOnRegionsOfInterest(baseImage)
 
   function fit_roi_to_viewport(image) {
     info.innerHTML = 'Fit ROI to Viewport'
@@ -64,7 +65,7 @@
     info.innerHTML = 'Display an Image Using ImageViewer'
     new ImageViewer('contentDiv', baseImage)
   }
-  // testImageViewer(baseImage)
+  testImageViewer(baseImage)
 
   // Testing ONE viewer, using MultiViewer.
   function testMultiViewer(baseImage) {
