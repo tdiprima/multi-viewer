@@ -68,7 +68,7 @@ class ImageViewer {
 
     viewer.world.addHandler('add-item', function (event) {
       if (viewer.world.getItemCount() >= 2) {
-        let color = getColor(Math.floor(Math.random() * 12) + 1)
+        let color = viewer.world.getItemCount() === 2 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 12) + 1)
         viewer.setFilterOptions({
           filters: [{
             items: viewer.world.getItemAt(1),
