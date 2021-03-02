@@ -3,16 +3,16 @@
  * Set up 1 basic OSD viewer.
  *
  * @param viewerDivId: (viewer1, viewer2...)
- * @param srcImgPair: Source image pair (array of base image + layer image)
- * @param opacityPair: Opacity for the image pair.
+ * @param baseImage
+ * @param featureLayers
  */
 class ImageViewer {
-  constructor(viewerDivId, srcImgPair, opacityPair) {
+  constructor(viewerDivId, baseImage, featureLayers) {
     this.viewer = {}
     this.filter = {}
     this.setFilter()
     this.setViewer(viewerDivId)
-    this.setSources(srcImgPair, opacityPair, this.viewer)
+    this.setSources(baseImage, featureLayers, this.filter, this.viewer)
   }
 
   setFilter() {
@@ -51,24 +51,26 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(srcImgPair, opacityPair, viewer) {
+  setSources(baseImage, featureLayers, filter, viewer) {
     // Quick check url
-    $.get(srcImgPair[0]).done(function () {
-      srcImgPair.forEach(function (image, index) {
-        viewer.addTiledImage({tileSource: image, opacity: opacityPair ? opacityPair[index] : 0, x: 0, y: 0})
-      })
+    $.get(baseImage).done(function () {
+      viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
+      if (featureLayers.length > 0) {
+        featureLayers.forEach(function (image, index) {
+          viewer.addTiledImage({tileSource: image, opacity: 1.0, x: 0, y: 0})
+        })
+      }
     }).fail(function (jqXHR, statusText) {
-      const url = srcImgPair[0]
-      dataCheck(url, jqXHR, statusText)
+      dataCheck(baseImage, jqXHR, statusText)
     })
 
     viewer.world.addHandler('add-item', function (event) {
-      if (viewer.world.getItemCount() === 2) {
+      if (viewer.world.getItemCount() >= 2) {
         viewer.setFilterOptions({
           filters: [{
             items: viewer.world.getItemAt(1),
             processors: [
-              this.filter.prototype.COLORIZE(0, 255, 0)
+              filter.prototype.COLORIZE(0, 255, 0)
             ]
           }]
         })

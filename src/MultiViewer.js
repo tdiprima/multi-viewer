@@ -3,15 +3,15 @@
  * Set up OSD viewer to allow for multiple viewer control.
  *
  * @param viewerDivId: (viewer1, viewer2...)
- * @param srcImgPair: Source image pair (array of base image + layer image)
- * @param opacityPair: Opacity for the image pair.
+ * @param baseImage
+ * @param layers
  * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerDivId, srcImgPair, opacityPair, sliderElements, numViewers, options) {
-    super(viewerDivId, srcImgPair, opacityPair)
+  constructor(viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
+    super(viewerDivId, baseImage, featureLayers)
     // console.log('viewerDivId', viewerDivId, 'sliderElements', sliderElements)
 
     if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {

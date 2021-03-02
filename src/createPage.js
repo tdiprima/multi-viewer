@@ -10,12 +10,12 @@ const Page = function () {
      * @param idx: Current viewer index.
      * @param numViewers: Total number of viewers.
      * @param viewersArray: (we need to pass this information back & forth)
-     * @param srcImgPair: Source image pair (array of base image + layer image).
+     * @param baseImage
+     * @param featureLayers
      * @param rangeSliders:
      * @param options: Filters, paintbrush, sliders, etc.
      */
-    createDivs: function (idx, numViewers, viewersArray, srcImgPair, rangeSliders, options) {
-      // console.log('numViewers', numViewers, 'viewersArray', viewersArray.length, 'srcImgPair', srcImgPair.length)
+    createDivs: function (idx, numViewers, viewersArray, baseImage, featureLayers, rangeSliders, options) {
       let name
       const opts = isRealValue(options)
       if (!opts) {
@@ -69,7 +69,7 @@ const Page = function () {
 
       container.appendChild(viewerDiv)
 
-      viewersArray.push(new MultiViewer('viewer' + idx, srcImgPair, [1.0, 1.0], sliderElements, numViewers, options))
+      viewersArray.push(new MultiViewer('viewer' + idx, baseImage, featureLayers, sliderElements, numViewers, options))
 
       // Clear:both between rows
       if (idx % 2 === 0) {
