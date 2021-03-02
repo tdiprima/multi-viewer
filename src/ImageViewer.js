@@ -24,12 +24,14 @@ class ImageViewer {
         let i
         for (i = 0; i < pixels.length; i += 4) {
           const avg = pixels[i] / 255
+          // If the alpha is set to 255 ("opaque"), the FeatureImage has nuclear material.
           if (pixels[i + 3] === 255) {
             pixels[i] = r * avg
             pixels[i + 1] = g * avg
             pixels[i + 2] = b * avg
             pixels[i + 3] = avg * 255
           } else if (pixels[i] > 0) {
+            // If no nuclear material, set to 0 ("transparent").
             pixels[i + 3] = 0
           }
         }
