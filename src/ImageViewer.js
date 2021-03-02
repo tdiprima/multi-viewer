@@ -57,7 +57,7 @@ class ImageViewer {
     // Quick check url
     $.get(baseImage).done(function () {
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
-      if (featureLayers.length > 0) {
+      if (typeof featureLayers !== 'undefined' && featureLayers.length > 0) {
         featureLayers.forEach(function (image, index) {
           viewer.addTiledImage({tileSource: image, opacity: 1.0, x: 0, y: 0})
         })
