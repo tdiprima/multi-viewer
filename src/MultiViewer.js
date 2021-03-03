@@ -62,8 +62,8 @@ function addInputHandler(sliderElem, viewerElem) {
     // Sliders change opacity of slide
     sliderElem[i].addEventListener('input', function () {
       let idx
-      const num = this.id.replace('sliderRange', '') - 1
-      if (num % 2 === 0) {
+      const num = this.id.replace('sliderRange', '') - 1  // sliderRange1, sliderRange2, ...
+      if (num % 2 === 0) { // They're paired.
         idx = 0
       } else {
         idx = 1
