@@ -24,9 +24,6 @@ class MultiViewer extends ImageViewer {
       }
 
       this.viewer1 = super.getViewer()
-      if (this.viewer1) {
-        console.warn('Yay, viewer1', this.viewer1)
-      }
       this.idx = viewerIndex
       this.sliders = sliderElements
 
