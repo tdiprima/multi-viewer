@@ -27,7 +27,7 @@ class MultiViewer extends ImageViewer {
     // if (this.viewer1) {
     //   console.warn('Yay, viewer1', this.viewer1)
     // }
-    this.idx = viewerDivId.replace('viewer', '')
+    this.idx = viewerIndex
     this.sliders = sliderElements
 
     if (numViewers > 1 && options.toolbarOn) {
