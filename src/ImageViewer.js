@@ -43,13 +43,14 @@ class ImageViewer {
 
   setViewer(viewerDivId) {
     try {
+      console.log('this.viewer', this.viewer)
       this.viewer = OpenSeadragon({
         id: viewerDivId,
         prefixUrl: 'vendor/openseadragon/images/',
         crossOriginPolicy: 'Anonymous'
       })
     } catch (e) {
-      console.log(e, e.stack, e.line, e.lineNumber)
+      console.log(e)
     }
 
   }
@@ -150,30 +151,31 @@ class ImageViewer {
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
 
+    // TODO: Note to self.
     function getColor(num) {
 
       let rtnColor
 
       switch (num) {
         case 1:
-          // light blue, #a6cee3
-          rtnColor = [166, 206, 227]
+          // aqua
+          rtnColor = [0, 255, 255]
           break
         case 2:
-          // strong blue, #1f78b4
-          rtnColor = [31, 120, 180]
+          // blue
+          rtnColor = [0, 0, 255]
           break
         case 3:
-          // light green, #b2df8a
-          rtnColor = [178, 223, 138]
+          // lime
+          rtnColor = [0, 255, 0]
           break
         case 4:
-          // green, #33a02c
-          rtnColor = [51, 160, 44]
+          // yellow
+          rtnColor = [255, 255, 0]
           break
         case 5:
-          // pink, #fb9a99
-          rtnColor = [251, 154, 153]
+          // magenta
+          rtnColor = [255, 0, 255]
           break
         case 6:
           // yellow
@@ -195,16 +197,8 @@ class ImageViewer {
           // violet, #6a3d9a
           rtnColor = [106, 61, 154]
           break
-        case 11:
-          // light yellow, #ffff99
-          rtnColor = [255, 255, 153]
-          break;
-        case 12:
-          // sienna, #b15928
-          rtnColor = [177, 89, 40]
-          break
         default:
-          // green
+          // lime
           rtnColor = [0, 255, 0]
       }
       return rtnColor

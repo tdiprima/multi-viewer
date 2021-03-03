@@ -43,7 +43,7 @@ class MultiViewer extends ImageViewer {
         markupTools(this.idx, this.viewer1)
       }
     } catch (e) {
-      console.log(e, e.stack, e.line, e.lineNumber)
+      console.log(e)
     }
 
   }
