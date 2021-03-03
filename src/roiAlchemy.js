@@ -47,7 +47,7 @@ const roiAlchemy = function (divId, image, rois, rows, columns, width, height) {
 }
 
 function addHandler(viewer, rois, i) {
-  console.log(i, rois[i])
+  // console.log(i, rois[i])
   viewer.addHandler('open', function () {
     // PARSE URIs, CREATE OSD RECT
     let r = parse(rois[i])

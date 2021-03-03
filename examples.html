@@ -63,16 +63,16 @@
   // Display one OSD viewer
   function testImageViewer(baseImage) {
     info.innerHTML = 'Display an Image Using ImageViewer'
-    new ImageViewer('contentDiv', baseImage)
+    new ImageViewer(1, 'contentDiv', baseImage)
   }
-  testImageViewer(baseImage)
+  // testImageViewer(baseImage)
 
   // Testing ONE viewer, using MultiViewer.
   function testMultiViewer(baseImage) {
     info.innerHTML = 'Display an Image Using MultiViewer'
-    new MultiViewer('contentDiv', baseImage)
+    new MultiViewer(1, 'contentDiv', baseImage)
   }
-  // testMultiViewer(baseImage)
+  testMultiViewer(baseImage)
 
   </script>
 </body>
