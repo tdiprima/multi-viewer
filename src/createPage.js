@@ -7,6 +7,7 @@ const Page = function () {
      * createDivs
      * Create osd viewer divs.
      *
+     * @param mainDivId:
      * @param idx: Current viewer index.
      * @param numViewers: Total number of viewers.
      * @param viewersArray: (we need to pass this information back & forth)
@@ -15,7 +16,7 @@ const Page = function () {
      * @param rangeSliders:
      * @param options: Filters, paintbrush, sliders, etc.
      */
-    createDivs: function (idx, numViewers, viewersArray, baseImage, featureLayers, rangeSliders, options) {
+    createDivs: function (mainDivId, idx, numViewers, viewersArray, baseImage, featureLayers, rangeSliders, options) {
       let name
       const opts = isRealValue(options)
       if (!opts) {
@@ -24,9 +25,21 @@ const Page = function () {
         return false
       }
 
-      const container = document.createElement('div')
-      container.className = 'divSquare'
-      document.body.appendChild(container)
+      let container
+      try {
+        // container = document.createElement('div')
+        container = document.getElementById(mainDivId)
+        if (typeof container === 'undefined') {
+          console.warn('main div container = ?')
+          container = document.createElement('div')
+          console.log('container', container)
+          document.body.appendChild(container)
+        }
+        container.className = 'divSquare'
+      }
+      catch(err) {
+        console.log(err.message)
+      }
 
       name = 'controls'
       const controlsDiv = document.createElement('div') // 'controls' div
