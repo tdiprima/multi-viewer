@@ -42,11 +42,16 @@ class ImageViewer {
   }
 
   setViewer(viewerDivId) {
-    this.viewer = OpenSeadragon({
-      id: viewerDivId,
-      prefixUrl: 'vendor/openseadragon/images/',
-      crossOriginPolicy: 'Anonymous'
-    })
+    try {
+      this.viewer = OpenSeadragon({
+        id: viewerDivId,
+        prefixUrl: 'vendor/openseadragon/images/',
+        crossOriginPolicy: 'Anonymous'
+      })
+    } catch (e) {
+      console.log(e, e.stack, e.line, e.lineNumber)
+    }
+
   }
 
   getViewer() {
@@ -60,8 +65,9 @@ class ImageViewer {
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
       // Add feature images to viewer
       if (arrayCheck(viewerIndex, featureLayers)) {
-        featureLayers.forEach(function (image, index) {
-          viewer.addTiledImage({tileSource: image, opacity: 1.0, x: 0, y: 0})
+        featureLayers[viewerIndex].forEach(function (feature, index) {
+          console.log(index, feature)
+          viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
         })
       }
     }).fail(function (jqXHR, statusText) {
@@ -69,11 +75,13 @@ class ImageViewer {
     })
 
     viewer.world.addHandler('add-item', function (event) {
+      console.log('viewer.world.getItemCount()', viewer.world.getItemCount())
       if (viewer.world.getItemCount() >= 2) {
         let color = viewer.world.getItemCount() === 2 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 12) + 1)
+        console.log('color', color)
         viewer.setFilterOptions({
           filters: [{
-            items: viewer.world.getItemAt(1),
+            items: viewer.world.getItemAt(1), // TODO: Index
             processors: [
               filter.prototype.COLORIZE(color[0], color[1], color[2])
             ]

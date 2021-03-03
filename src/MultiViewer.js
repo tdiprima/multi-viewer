@@ -12,36 +12,40 @@
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, featureLayers)
-    // console.log('viewerDivId', viewerDivId, 'sliderElements', sliderElements)
+    try {
 
-    if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {
-      throw 'Wrong construction. Did you mean to use ImageViewer?'
+      if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {
+        throw 'Wrong construction. Did you mean to use ImageViewer?'
+      }
+
+      this.checkboxes = {
+        checkPan: true,
+        checkZoom: true
+      }
+
+      this.viewer1 = super.getViewer()
+      if (this.viewer1) {
+        console.warn('Yay, viewer1', this.viewer1)
+      }
+      this.idx = viewerIndex
+      this.sliders = sliderElements
+
+      if (numViewers > 1 && options.toolbarOn) {
+        this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
+        this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
+      }
+
+      if (options.slidersOn) {
+        addInputHandler(this.sliders, this.viewer1)
+      }
+
+      if (options.toolbarOn) {
+        markupTools(this.idx, this.viewer1)
+      }
+    } catch (e) {
+      console.log(e, e.stack, e.line, e.lineNumber)
     }
 
-    this.checkboxes = {
-      checkPan: true,
-      checkZoom: true
-    }
-
-    this.viewer1 = super.getViewer()
-    // if (this.viewer1) {
-    //   console.warn('Yay, viewer1', this.viewer1)
-    // }
-    this.idx = viewerIndex
-    this.sliders = sliderElements
-
-    if (numViewers > 1 && options.toolbarOn) {
-      this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
-      this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
-    }
-
-    if (options.slidersOn) {
-      addInputHandler(this.sliders, this.viewer1)
-    }
-
-    if (options.toolbarOn) {
-      markupTools(this.idx, this.viewer1)
-    }
   }
 
   getViewer() {

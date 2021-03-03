@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>EXAMPLES</title>
-  <script crossorigin="anonymous" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script crossorigin="anonymous"
+          integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/usnistgov/OpenSeadragonFiltering/openseadragon-filtering.js"></script>
   <script src="src/ImageViewer.js"></script>
@@ -31,6 +32,7 @@
       '/4000,4000,4000,4000/max/0/default.jpg']
     roiAlchemy('contentDiv', image, regions, 2, 2, 500, 300)
   }
+
   // zoomInOnRegionsOfInterest(baseImage)
 
   function fit_roi_to_viewport(image) {
@@ -58,23 +60,55 @@
     })
 
   }
+
   // fit_roi_to_viewport(baseImage)
 
   // Display one OSD viewer
   function testImageViewer(baseImage) {
     info.innerHTML = 'Display an Image Using ImageViewer'
-    new ImageViewer(1, 'contentDiv', baseImage)
+    new ImageViewer(0, 'contentDiv', baseImage)
   }
+
   // testImageViewer(baseImage)
 
   // Testing ONE viewer, using MultiViewer.
   function testMultiViewer(baseImage) {
     info.innerHTML = 'Display an Image Using MultiViewer'
-    new MultiViewer(1, 'contentDiv', baseImage)
+    new MultiViewer(0, 'contentDiv', baseImage)
   }
-  testMultiViewer(baseImage)
 
-  </script>
+  // testMultiViewer(baseImage)
+
+  // Testing multiple layers, using MultiViewer.
+  function multiFeatures() {
+    // BRCA
+    let s = 'TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291'
+    let s1 = 'TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96'
+    let s2 = 'TCGA-3C-AALJ-01Z-00-DX2.62DFE56B-B84C-40F9-9625-FCB55767B70D'
+    let f1 = buildAUrl('feature', 'brca', s1)
+    let f2 = buildAUrl('feature', 'brca', s2)
+    let base = buildAUrl('image', 'brca', s)
+    let features = [[f1, f2]]
+    info.innerHTML = 'Display Multiple Features'
+    // new MultiViewer(0, 'contentDiv', base, features)
+    new ImageViewer(0, 'contentDiv', base, features)
+  }
+
+  multiFeatures()
+
+  function buildAUrl(type, cType, img) {
+
+    if (type === 'image') {
+      return window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/' + cType + '/' + img + '.svs/info.json'
+    } else if (type === 'feature') {
+      return window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/' + cType + '/' + img + '-featureimage.tif/info.json'
+    } else {
+      return ''
+    }
+
+  }
+
+</script>
 </body>
 
 </html>
