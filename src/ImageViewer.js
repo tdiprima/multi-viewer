@@ -43,7 +43,6 @@ class ImageViewer {
 
   setViewer(viewerDivId) {
     try {
-      console.log('this.viewer', this.viewer)
       this.viewer = OpenSeadragon({
         id: viewerDivId,
         prefixUrl: 'vendor/openseadragon/images/',
@@ -76,20 +75,20 @@ class ImageViewer {
     })
 
     viewer.world.addHandler('add-item', function (event) {
-      console.log('viewer.world.getItemCount()', viewer.world.getItemCount())
+      let newIndex = viewer.world.getIndexOfItem(event.item)
       if (viewer.world.getItemCount() >= 2) {
-        let color = viewer.world.getItemCount() === 2 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 12) + 1)
-        console.log('color', color)
+        let color = viewer.world.getItemCount() === 2 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 15) + 1)
+        console.log(newIndex, color)
         viewer.setFilterOptions({
           filters: [{
-            items: viewer.world.getItemAt(1), // TODO: Index
+            items: viewer.world.getItemAt(newIndex),
             processors: [
               filter.prototype.COLORIZE(color[0], color[1], color[2])
             ]
           }]
         })
 
-        viewer.world.getItemAt(1).source.getTileUrl = function (level, x, y) {
+        viewer.world.getItemAt(newIndex).source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }
       }
@@ -151,51 +150,66 @@ class ImageViewer {
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
 
-    // TODO: Note to self.
     function getColor(num) {
-
       let rtnColor
 
       switch (num) {
-        case 1:
-          // aqua
-          rtnColor = [0, 255, 255]
-          break
+        // case 1: //Base; should not be here.
         case 2:
-          // blue
-          rtnColor = [0, 0, 255]
-          break
-        case 3:
           // lime
           rtnColor = [0, 255, 0]
           break
-        case 4:
+        case 3:
           // yellow
           rtnColor = [255, 255, 0]
           break
-        case 5:
+        case 4:
           // magenta
           rtnColor = [255, 0, 255]
           break
-        case 6:
-          // yellow
-          rtnColor = [255, 255, 0]
-          break
-        case 7:
+        case 5:
           // light orange, #fdbf6f
           rtnColor = [253, 191, 111]
           break
-        case 8:
+        case 6:
           // orange, #ff7f00
           rtnColor = [255, 127, 0]
           break
-        case 9:
+        case 7:
           // light violet, #cab2d6
           rtnColor = [202, 178, 214]
           break
-        case 10:
+        case 8:
           // violet, #6a3d9a
           rtnColor = [106, 61, 154]
+          break
+        case 9:
+          // light blue, #a6cee3
+          rtnColor = [166, 206, 227]
+          break
+        case 10:
+          // strong blue, #1f78b4
+          rtnColor = [31, 120, 180]
+          break
+        case 11:
+          // light green, #b2df8a
+          rtnColor = [178, 223, 138]
+          break
+        case 12:
+          // green, #33a02c
+          rtnColor = [51, 160, 44]
+          break
+        case 13:
+          // pink, #fb9a99
+          rtnColor = [251, 154, 153]
+          break
+        case 14:
+          // light yellow, #ffff99
+          rtnColor = [255, 255, 153]
+          break;
+        case 15:
+          // sienna, #b15928
+          rtnColor = [177, 89, 40]
           break
         default:
           // lime
