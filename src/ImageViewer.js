@@ -65,8 +65,8 @@ class ImageViewer {
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
       // Add feature images to viewer
       if (arrayCheck(viewerIndex, featureLayers)) {
-        featureLayers[viewerIndex].forEach(function (feature, index) {
-          console.log(index, feature)
+        // todo: Does the sequence start with zero or 1 (or ...)
+        featureLayers[viewerIndex - 1].forEach(function (feature, index) {
           viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
         })
       }
@@ -77,7 +77,7 @@ class ImageViewer {
     viewer.world.addHandler('add-item', function (event) {
       let newIndex = viewer.world.getIndexOfItem(event.item)
       if (viewer.world.getItemCount() >= 2) {
-        let color = viewer.world.getItemCount() === 2 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 15) + 1)
+        let color = newIndex === 1 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 14) + 1)
         console.log(newIndex, color)
         viewer.setFilterOptions({
           filters: [{
@@ -112,10 +112,10 @@ class ImageViewer {
         return false
       }
       // Do we have an array of features, for this viewer?
-      if (typeof featureLayers[viewerIndex] === 'undefined') {
+      if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
         return false
       }
-      if (featureLayers[viewerIndex].length === 0) {
+      if (featureLayers[viewerIndex - 1].length === 0) {
         return false
       }
       // All checks were successful
@@ -164,50 +164,46 @@ class ImageViewer {
           rtnColor = [255, 255, 0]
           break
         case 4:
-          // magenta
-          rtnColor = [255, 0, 255]
-          break
-        case 5:
           // light orange, #fdbf6f
           rtnColor = [253, 191, 111]
           break
-        case 6:
+        case 5:
           // orange, #ff7f00
           rtnColor = [255, 127, 0]
           break
-        case 7:
+        case 6:
           // light violet, #cab2d6
           rtnColor = [202, 178, 214]
           break
-        case 8:
+        case 7:
           // violet, #6a3d9a
           rtnColor = [106, 61, 154]
           break
-        case 9:
+        case 8:
           // light blue, #a6cee3
           rtnColor = [166, 206, 227]
           break
-        case 10:
+        case 9:
           // strong blue, #1f78b4
           rtnColor = [31, 120, 180]
           break
-        case 11:
+        case 10:
           // light green, #b2df8a
           rtnColor = [178, 223, 138]
           break
-        case 12:
+        case 11:
           // green, #33a02c
           rtnColor = [51, 160, 44]
           break
-        case 13:
+        case 12:
           // pink, #fb9a99
           rtnColor = [251, 154, 153]
           break
-        case 14:
+        case 13:
           // light yellow, #ffff99
           rtnColor = [255, 255, 153]
           break;
-        case 15:
+        case 14:
           // sienna, #b15928
           rtnColor = [177, 89, 40]
           break

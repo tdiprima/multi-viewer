@@ -12,12 +12,8 @@
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, featureLayers)
+
     try {
-
-      if (typeof sliderElements === 'undefined' || typeof numViewers === 'undefined' || typeof options === 'undefined') {
-        throw 'Wrong construction. Did you mean to use ImageViewer?'
-      }
-
       this.checkboxes = {
         checkPan: true,
         checkZoom: true
