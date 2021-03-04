@@ -1,6 +1,6 @@
 const coloredImageFiltering = function () {
 
-  const getFilter = function () {
+  getFilter = function () {
     let filter = {}
     filter = OpenSeadragon.Filters.GREYSCALE
     filter.prototype.COLORIZE = function (r, g, b) {
@@ -28,7 +28,7 @@ const coloredImageFiltering = function () {
     return filter
   }
 
-  const getFilterColor = function (num) {
+  getFilterColor = function (num) {
     let rtnColor
 
     switch (num) {
