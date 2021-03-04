@@ -25,21 +25,10 @@ const Page = function () {
         return false
       }
 
-      let container
-      try {
-        // container = document.createElement('div')
-        container = document.getElementById(mainDivId)
-        if (typeof container === 'undefined') {
-          console.warn('main div container = ?')
-          container = document.createElement('div')
-          console.log('container', container)
-          document.body.appendChild(container)
-        }
-        container.className = 'divSquare'
-      }
-      catch(err) {
-        console.log(err.message)
-      }
+      let main = document.getElementById(mainDivId)
+      let container = document.createElement('div')
+      container.className = 'divSquare'
+      main.appendChild(container)
 
       name = 'controls'
       const controlsDiv = document.createElement('div') // 'controls' div
