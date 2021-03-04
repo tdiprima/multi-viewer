@@ -9,36 +9,9 @@
 class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers) {
     this.viewer = {}
-    this.filter = {}
-    this.setFilter()
+    this.filter = getFilter()
     this.setViewer(viewerDivId)
     this.setSources(viewerIndex, baseImage, featureLayers, this.filter, this.viewer)
-  }
-
-  setFilter() {
-    this.filter = OpenSeadragon.Filters.GREYSCALE
-    this.filter.prototype.COLORIZE = function (r, g, b) {
-      return function (context, callback) {
-        const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-        const pixels = imgData.data
-        let i
-        for (i = 0; i < pixels.length; i += 4) {
-          const avg = pixels[i] / 255
-          // If the alpha is set to 255 ("opaque"), the FeatureImage has nuclear material.
-          if (pixels[i + 3] === 255) {
-            pixels[i] = r * avg
-            pixels[i + 1] = g * avg
-            pixels[i + 2] = b * avg
-            pixels[i + 3] = avg * 255
-          } else if (pixels[i] > 0) {
-            // If no nuclear material, set to 0 ("transparent").
-            pixels[i + 3] = 0
-          }
-        }
-        context.putImageData(imgData, 0, 0)
-        callback()
-      }
-    }
   }
 
   setViewer(viewerDivId) {
@@ -77,7 +50,7 @@ class ImageViewer {
     viewer.world.addHandler('add-item', function (event) {
       let newIndex = viewer.world.getIndexOfItem(event.item)
       if (viewer.world.getItemCount() >= 2) {
-        let color = newIndex === 1 ? [0, 255, 0] : getColor(Math.floor(Math.random() * 14) + 1)
+        let color = newIndex === 1 ? [0, 255, 0] : getFilterColor(Math.floor(Math.random() * 14) + 1)
         console.log(newIndex, color)
         viewer.setFilterOptions({
           filters: [{

@@ -25,7 +25,7 @@ module.exports = function (grunt) {
           'src/mapMarker.js',
           // 'src/ruler.js',
           'src/markupTools.js',
-          'src/Colors.js',
+          'src/coloredImageFiltering.js',
           'src/ImageViewer.js',
           'src/MultiViewer.js',
           'src/synchronizeViewers.js'],
