@@ -9,19 +9,18 @@ const imageFiltering = function () {
   }
 
   let filters = []
-  filters.push(new filterColors(0, 255, 0)) // lime
-  filters.push(new filterColors(255, 255, 0)) // yellow
-  filters.push(new filterColors(253, 191, 111)) // light orange, #fdbf6f
-  filters.push(new filterColors(255, 127, 0)) // orange, #ff7f00
-  filters.push(new filterColors(202, 178, 214)) // light violet, #cab2d6
-  filters.push(new filterColors(106, 61, 154)) // violet, #6a3d9a
-  filters.push(new filterColors(166, 206, 227)) // light blue, #a6cee3
+  filters.push(new filterColors(0, 255, 0)) // lime #00ff00
+  filters.push(new filterColors(255, 255, 0)) // yellow #ffff00
+  filters.push(new filterColors(28,28,28)) // dark gray #1c1c1c
+  filters.push(new filterColors(251,38,8)) // bright red/orange #fb2608
+  filters.push(new filterColors(255,121,30)) // orange #ff791e
+  filters.push(new filterColors(167,226,46)) // leaf green #a7e22e
+  filters.push(new filterColors(102,217,238)) // light blue #66d9ee
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
-  filters.push(new filterColors(178, 223, 138)) // light green, #b2df8a
+  filters.push(new filterColors(255,210,4)) // goldenrod #ffd204
+  filters.push(new filterColors(0, 190, 184)) // teal #00beb8
+  filters.push(new filterColors(178, 223, 138)) // mint green, #b2df8a
   filters.push(new filterColors(51, 160, 44)) // green, #33a02c
-  filters.push(new filterColors(251, 154, 153)) // pink, #fb9a99
-  filters.push(new filterColors(255, 255, 153)) // light yellow, #ffff99
-  filters.push(new filterColors(177, 89, 40)) // sienna, #b15928
 
   return {
     getFilter: function () {
