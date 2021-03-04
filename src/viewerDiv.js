@@ -1,7 +1,7 @@
 /**
- * Page module: Functions that create divs and buttons on web page
+ * viewerDiv module: Functions that create divs and buttons for each viewer.
  */
-const Page = function () {
+const viewerDiv = function () {
   return {
     /**
      * createDivs
@@ -21,7 +21,7 @@ const Page = function () {
       const opts = isRealValue(options)
       if (!opts) {
         // This has been error-trapped & corrected prior to this point. But...
-        console.warn('createPage.js: options is undefined; please check.', options)
+        console.warn('viewerDiv.js: options is undefined; please check.', options)
         return false
       }
 

@@ -16,7 +16,7 @@ module.exports = function (grunt) {
           'src/dropDown.js',
           'src/checkOptions.js',
           'src/rangeSliders.js',
-          'src/createPage.js',
+          'src/viewerDiv.js',
           'src/pageSetup.js',
           'src/editPolygon.js',
           'src/drawPolygon.js',
