@@ -19,7 +19,6 @@ const imageFiltering = function () {
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255,210,4)) // goldenrod #ffd204
   filters.push(new filterColors(0, 190, 184)) // teal #00beb8
-  filters.push(new filterColors(178, 223, 138)) // mint green, #b2df8a
   filters.push(new filterColors(51, 160, 44)) // green, #33a02c
 
   return {
