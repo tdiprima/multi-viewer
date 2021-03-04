@@ -52,13 +52,14 @@ class ImageViewer {
     viewer.world.addHandler('add-item', function (event) {
       let newIndex = viewer.world.getIndexOfItem(event.item)
       if (viewer.world.getItemCount() >= 2) {
+        // first layer green, otherwise choose color
         let color = newIndex === 1 ? {r: 0, g: 255, b: 0} : imf.getColor(0)
         console.log(newIndex, color)
         viewer.setFilterOptions({
           filters: [{
             items: viewer.world.getItemAt(newIndex),
             processors: [
-              filter.prototype.COLORIZE(color.r, color.g, color.b)
+              filter.prototype.COLORIZE(color)
             ]
           }]
         })
