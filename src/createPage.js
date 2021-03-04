@@ -43,7 +43,6 @@ const Page = function () {
 
       name = 'controls'
       const controlsDiv = document.createElement('div') // 'controls' div
-      controlsDiv.id = name
       controlsDiv.className = name
 
       container.appendChild(controlsDiv) // add to 'container' div
