@@ -88,7 +88,7 @@ const Page = function () {
       if (idx % 2 === 0) {
         const div = document.createElement('div')
         div.style.clear = 'both'
-        document.body.appendChild(div)
+        container.appendChild(div)
       }
     },
     /**
