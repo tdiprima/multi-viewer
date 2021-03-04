@@ -2,6 +2,27 @@
  * Image filtering
  */
 const imageFiltering = function () {
+  function filterColors(r, g, b) {
+    this.r = r
+    this.g = g
+    this.b = b
+  }
+
+  let filters = []
+  filters.push(new filterColors(0, 255, 0)) // lime
+  filters.push(new filterColors(255, 255, 0)) // yellow
+  filters.push(new filterColors(253, 191, 111)) // light orange, #fdbf6f
+  filters.push(new filterColors(255, 127, 0)) // orange, #ff7f00
+  filters.push(new filterColors(202, 178, 214)) // light violet, #cab2d6
+  filters.push(new filterColors(106, 61, 154)) // violet, #6a3d9a
+  filters.push(new filterColors(166, 206, 227)) // light blue, #a6cee3
+  filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
+  filters.push(new filterColors(178, 223, 138)) // light green, #b2df8a
+  filters.push(new filterColors(51, 160, 44)) // green, #33a02c
+  filters.push(new filterColors(251, 154, 153)) // pink, #fb9a99
+  filters.push(new filterColors(255, 255, 153)) // light yellow, #ffff99
+  filters.push(new filterColors(177, 89, 40)) // sienna, #b15928
+
   return {
     getFilter: function () {
       let filter = {}
@@ -31,67 +52,12 @@ const imageFiltering = function () {
       return filter
     },
     getColor: function (num) {
-      let rtnColor
-
-      switch (num) {
-        // case 1: //Base; should not be here.
-        case 2:
-          // lime
-          rtnColor = [0, 255, 0]
-          break
-        case 3:
-          // yellow
-          rtnColor = [255, 255, 0]
-          break
-        case 4:
-          // light orange, #fdbf6f
-          rtnColor = [253, 191, 111]
-          break
-        case 5:
-          // orange, #ff7f00
-          rtnColor = [255, 127, 0]
-          break
-        case 6:
-          // light violet, #cab2d6
-          rtnColor = [202, 178, 214]
-          break
-        case 7:
-          // violet, #6a3d9a
-          rtnColor = [106, 61, 154]
-          break
-        case 8:
-          // light blue, #a6cee3
-          rtnColor = [166, 206, 227]
-          break
-        case 9:
-          // strong blue, #1f78b4
-          rtnColor = [31, 120, 180]
-          break
-        case 10:
-          // light green, #b2df8a
-          rtnColor = [178, 223, 138]
-          break
-        case 11:
-          // green, #33a02c
-          rtnColor = [51, 160, 44]
-          break
-        case 12:
-          // pink, #fb9a99
-          rtnColor = [251, 154, 153]
-          break
-        case 13:
-          // light yellow, #ffff99
-          rtnColor = [255, 255, 153]
-          break;
-        case 14:
-          // sienna, #b15928
-          rtnColor = [177, 89, 40]
-          break
-        default:
-          // lime
-          rtnColor = [0, 255, 0]
+      if (num === 0 || num >= filters.length) {
+        // random 0 - N
+        return filters[Math.floor(Math.random() * filters.length - 1)]
+      } else {
+        return filters[num]
       }
-      return rtnColor
     }
   }
 }
