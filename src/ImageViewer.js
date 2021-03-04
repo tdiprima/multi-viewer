@@ -9,9 +9,8 @@
 class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers) {
     this.viewer = {}
-    this.filter = coloredImageFiltering.getFilter()
     this.setViewer(viewerDivId)
-    this.setSources(viewerIndex, baseImage, featureLayers, this.filter, this.viewer)
+    this.setSources(viewerIndex, baseImage, featureLayers, this.viewer)
   }
 
   setViewer(viewerDivId) {
@@ -31,7 +30,10 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, featureLayers, filter, viewer) {
+  setSources(viewerIndex, baseImage, featureLayers, viewer) {
+    let imf = new imageFiltering()
+    let filter = imf.getFilter()
+
     // Quick check url
     $.get(baseImage).done(function () {
       // Add base image to viewer
@@ -50,7 +52,7 @@ class ImageViewer {
     viewer.world.addHandler('add-item', function (event) {
       let newIndex = viewer.world.getIndexOfItem(event.item)
       if (viewer.world.getItemCount() >= 2) {
-        let color = newIndex === 1 ? [0, 255, 0] : coloredImageFiltering.getColor(Math.floor(Math.random() * 14) + 1)
+        let color = newIndex === 1 ? [0, 255, 0] : imf.getColor(Math.floor(Math.random() * 14) + 1)
         console.log(newIndex, color)
         viewer.setFilterOptions({
           filters: [{

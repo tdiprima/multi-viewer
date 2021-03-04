@@ -1,4 +1,7 @@
-const coloredImageFiltering = function () {
+/**
+ * Image filtering
+ */
+const imageFiltering = function () {
   return {
     getFilter: function () {
       let filter = {}
