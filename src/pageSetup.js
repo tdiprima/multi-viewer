@@ -99,8 +99,8 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           const viewerDiv = document.createElement('div') // 'viewer' div
           viewerDiv.id = id
-          // viewerDiv.style.width = width
-          // viewerDiv.style.height = height
+          viewerDiv.style.width = width + 'px'
+          viewerDiv.style.height = height + 'px'
           viewerDiv.className = 'viewer'
 
           container.appendChild(viewerDiv)
@@ -108,7 +108,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           ////// END
 
           if (numViewers < num && (count - 1 === numViewers) ) {
-            // we've done the last viewer; now exit
+            // we've done our last viewer; now exit
             break
           }
         }
