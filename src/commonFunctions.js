@@ -69,3 +69,14 @@ function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
     height: Math.round(srcHeight * ratio)
   }
 }
+
+function makeId(length) {
+  let result = ''
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  let i
+  for (i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
+}
