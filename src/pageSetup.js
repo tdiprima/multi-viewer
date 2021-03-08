@@ -106,7 +106,8 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           container.appendChild(viewerDiv)
           viewers.push(new MultiViewer(idx, viewerDiv.id, baseImage, featureLayers, sliderElements, numViewers, options))
           ////// END
-          if (numViewers < num && (c * r === numViewers) ) {
+
+          if (numViewers < num && (count - 1 === numViewers) ) {
             // we've done the last viewer; now exit
             break
           }
