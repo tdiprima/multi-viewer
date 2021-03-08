@@ -17,7 +17,7 @@ const pageSetup = function (numViewers, mainDivId, baseImage, featureLayers, opt
     new Promise(function (resolve, reject) {
       return resolve(checkOptions(options))
     }).then(function (options) {
-      // Create divs for osd viewers
+      // Create div for each osd viewer
       let idx
       for (idx = 1; idx <= numViewers; idx++) {
         d.createDiv(mainDivId, idx, numViewers, viewers, baseImage, featureLayers, rangeSliders, options)
