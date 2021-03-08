@@ -4,7 +4,7 @@
 const viewerDiv = function () {
   return {
     /**
-     * createDivs
+     * createDiv
      * Create osd viewer divs.
      *
      * @param mainDivId:
@@ -16,7 +16,7 @@ const viewerDiv = function () {
      * @param rangeSliders:
      * @param options: Filters, paintbrush, sliders, etc.
      */
-    createDivs: function (mainDivId, idx, numViewers, viewersArray, baseImage, featureLayers, rangeSliders, options) {
+    createDiv: function (mainDivId, idx, numViewers, viewersArray, baseImage, featureLayers, rangeSliders, options) {
       let name
       const opts = isRealValue(options)
       if (!opts) {

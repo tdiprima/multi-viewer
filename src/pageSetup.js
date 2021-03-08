@@ -20,7 +20,7 @@ const pageSetup = function (numViewers, mainDivId, baseImage, featureLayers, opt
       // Create divs for osd viewers
       let idx
       for (idx = 1; idx <= numViewers; idx++) {
-        d.createDivs(mainDivId, idx, numViewers, viewers, baseImage, featureLayers, rangeSliders, options)
+        d.createDiv(mainDivId, idx, numViewers, viewers, baseImage, featureLayers, rangeSliders, options)
       }
       return viewers
     }).then(function (viewers) {
