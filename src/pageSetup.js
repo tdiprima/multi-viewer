@@ -99,6 +99,8 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           const viewerDiv = document.createElement('div') // 'viewer' div
           viewerDiv.id = id
+          // viewerDiv.style.width = width
+          // viewerDiv.style.height = height
           viewerDiv.className = 'viewer'
 
           container.appendChild(viewerDiv)
