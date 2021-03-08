@@ -36,7 +36,6 @@
 <script src="src/dropDown.js"></script>
 <script src="src/checkOptions.js"></script>
 <script src="src/rangeSliders.js"></script>
-<script src="src/viewerDiv.js"></script>
 <script src="src/pageSetup.js"></script>
 <script src="src/editPolygon.js"></script>
 <script src="src/drawPolygon.js"></script>
@@ -70,7 +69,8 @@
     }
   }
 
-  pageSetup(4, 'contentDiv', baseImage, featureLayers, options)
+  // divId, image, features, numViewers, rows, columns, width, height, opts
+  pageSetup('contentDiv', baseImage, featureLayers, 4, 2, 2, 500, 300, options)
 
 </script>
 
