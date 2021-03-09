@@ -40,7 +40,7 @@ const imageFiltering = function () {
               pixels[i + 2] = color.b
               pixels[i + 3] = 255
             } else {
-              // Set to transparent.
+              // No nuclear material: set to transparent.
               pixels[i + 3] = 0
             }
           }
