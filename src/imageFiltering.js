@@ -27,9 +27,11 @@ const imageFiltering = function () {
       filter = OpenSeadragon.Filters.GREYSCALE
       filter.prototype.COLORIZE = function (color) {
         return function (context, callback) {
+          // Read the canvas pixels
           const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
           const pixels = imgData.data
           let i
+          // Run the filter on them
           for (i = 0; i < pixels.length; i += 4) {
             if (pixels[i + 3] === 255) {
               // Alpha channel = 255 ("opaque"): nuclear material here.
@@ -42,6 +44,7 @@ const imageFiltering = function () {
               pixels[i + 3] = 0
             }
           }
+          // Write the result back onto the canvas
           context.putImageData(imgData, 0, 0)
           callback()
         }
