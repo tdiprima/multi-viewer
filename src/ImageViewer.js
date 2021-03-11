@@ -31,6 +31,7 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, featureLayers, viewer) {
+    // console.log('viewerIndex', viewerIndex)
     let imf = new imageFiltering()
     let filter = imf.getFilter()
 
@@ -50,21 +51,24 @@ class ImageViewer {
     })
 
     viewer.world.addHandler('add-item', function (event) {
-      let newIndex = viewer.world.getIndexOfItem(event.item)
-      if (viewer.world.getItemCount() >= 2) {
-        // first layer green, otherwise choose color
-        let color = newIndex === 1 ? {r: 0, g: 255, b: 0} : imf.getColor(0)
-        console.log(newIndex, color)
+      let itemIndex = viewer.world.getIndexOfItem(event.item)
+      let itemCount = viewer.world.getItemCount()
+      // console.log('\nitemIndex:', itemIndex, 'itemCount:', itemCount)
+      // Index zero is base image
+      if (itemIndex > 0) {
+        // Color array starts with zero, so
+        let color = imf.getColor(itemIndex - 1)
+        console.log(itemIndex, color)
         viewer.setFilterOptions({
           filters: [{
-            items: viewer.world.getItemAt(newIndex),
+            items: viewer.world.getItemAt(itemIndex),
             processors: [
               filter.prototype.COLORIZE(color)
             ]
           }]
         })
 
-        viewer.world.getItemAt(newIndex).source.getTileUrl = function (level, x, y) {
+        viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }
       }
