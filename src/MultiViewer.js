@@ -12,6 +12,10 @@
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, featureLayers)
+    
+    if (typeof options === 'undefined') {
+      options = {}
+    }
 
     try {
       this.checkboxes = {
