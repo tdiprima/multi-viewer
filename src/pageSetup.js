@@ -40,6 +40,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           ////// CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
+          console.log('idx', idx)
           let container = document.createElement('div')
           container.className = 'divSquare'
           y.appendChild(container)
@@ -55,11 +56,11 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           // 2 sliders
           let sliderElements
-          if (opts && options.slidersOn) {
-            sliderElements = rangeSliders.createSliders(idx, rangeDiv, 2, options)
+          if (opts && opts.slidersOn) {
+            sliderElements = rangeSliders.createSliders(idx, rangeDiv, 2, opts)
           }
 
-          if (opts && options.toolbarOn) {
+          if (opts && opts.toolbarOn) {
             const buttonDiv = document.createElement('div') // div containing 'buttons'
             buttonDiv.classList.add('floated')
             buttonDiv.classList.add('buttons')
@@ -67,8 +68,8 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
             //// CREATE BUTTONS
             let color
-            if (isRealValue(options.paintbrushColor)) {
-              color = options.paintbrushColor
+            if (isRealValue(opts.paintbrushColor)) {
+              color = opts.paintbrushColor
             } else {
               color = '#00f'
             }
@@ -93,7 +94,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
             colorPicker(document.getElementById('mark' + idx))
           }
 
-          if (opts && options.slidersOn) {
+          if (opts && opts.slidersOn) {
             rangeSliders.sliderButtonEvent(idx, sliderElements)
           }
 
@@ -104,7 +105,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           viewerDiv.className = 'viewer'
 
           container.appendChild(viewerDiv)
-          viewers.push(new MultiViewer(idx, viewerDiv.id, baseImage, featureLayers, sliderElements, numViewers, options))
+          viewers.push(new MultiViewer(idx, viewerDiv.id, image, features, sliderElements, numViewers, opts))
           ////// END
 
           if (numViewers < num && (count - 1 === numViewers) ) {

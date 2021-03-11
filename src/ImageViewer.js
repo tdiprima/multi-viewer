@@ -31,7 +31,7 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, featureLayers, viewer) {
-    // console.log('viewerIndex', viewerIndex)
+    console.log('viewerIndex', viewerIndex)
     let imf = new imageFiltering()
     let filter = imf.getFilter()
 
@@ -53,7 +53,7 @@ class ImageViewer {
     viewer.world.addHandler('add-item', function (event) {
       let itemIndex = viewer.world.getIndexOfItem(event.item)
       let itemCount = viewer.world.getItemCount()
-      // console.log('\nitemIndex:', itemIndex, 'itemCount:', itemCount)
+      console.log('\nitemIndex:', itemIndex, 'itemCount:', itemCount)
       // Index zero is base image
       if (itemIndex > 0) {
         // Color array starts with zero, so
