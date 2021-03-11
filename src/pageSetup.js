@@ -28,7 +28,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
       mainDiv.appendChild(table)
       let r
       const num = rows * columns
-      let count = 1
+      let count = 0
 
       for (r = 0; r < rows; r++) {
         const x = table.insertRow(r)
