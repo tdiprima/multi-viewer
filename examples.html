@@ -69,7 +69,7 @@
   // Display one OSD viewer
   function testImageViewer(baseImage) {
     info.innerHTML = 'Display an Image Using ImageViewer'
-    new ImageViewer(0, 'contentDiv', baseImage)
+    new ImageViewer(1, 'contentDiv', baseImage)
   }
 
   // testImageViewer(baseImage)
@@ -82,8 +82,8 @@
 
   // testMultiViewer(baseImage)
 
-  // Testing multiple layers, using MultiViewer.
-  // NOTE! We do not currently have > 1 overlay, so I'm using an overlay from a different slide as the 2nd overlay.
+  // Testing multiple layers
+  // NOTE! We do not currently have > 1 overlay, so I'm using an overlay from a DIFFERENT slide as the 2nd overlay.
   function multiFeatures() {
     // BLCA
     let s1 = 'TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E'
