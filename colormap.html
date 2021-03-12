@@ -6,8 +6,7 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Colormap</title>
-  <script src="//openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-  <!-- <script src="../openseadragon-filtering.js"></script> -->
+  <script src="vendor/openseadragon/openseadragon.min.js"></script>
   <script src="vendor/openseadragon-filtering.js"></script>
   <style>
     body,
@@ -58,7 +57,6 @@
   <script>
     let viewer = new OpenSeadragon({
       id: 'openseadragon',
-      // prefixUrl: 'images/',
       prefixUrl: 'vendor/openseadragon/images/',
       tileSources: window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json',
       // tileSources: '//openseadragon.github.io/example-images/highsmith/highsmith.dzi',
@@ -84,7 +82,7 @@
 
     function cmapFun() {
       let val = document.getElementById('cmapSelect').value
-      console.log('You selected: ' + val)
+      // console.log('You selected: ' + val)
       // console.log(cmaps[val])
       viewer.setFilterOptions({
         filters: {
@@ -172,25 +170,6 @@
         })
       }
 
-    }
-
-    // Specify on which items (TiledImage) to apply the filters
-    // Increase the brightness on item 0 and invert items 1 and 2:
-    function bonus() {
-      // let viewer = new OpenSeadragon.Viewer(...)
-      viewer.setFilterOptions({
-        filters: [{
-          items: viewer.world.getItemAt(0),
-          processors: [
-            OpenSeadragon.Filters.BRIGHTNESS(50)
-          ]
-        }, {
-          items: [viewer.world.getItemAt(1), viewer.world.getItemAt(2)],
-          processors: [
-            OpenSeadragon.Filters.INVERT()
-          ]
-        }]
-      })
     }
 
   </script>
