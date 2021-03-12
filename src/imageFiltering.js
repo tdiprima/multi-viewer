@@ -27,7 +27,7 @@ const imageFiltering = function () {
       let filter = {}
       filter = OpenSeadragon.Filters.GREYSCALE
       filter.prototype.COLORIZE = function (color) {
-        console.log('color', color)
+        // console.log('color', color)
         return function (context, callback) {
           // Read the canvas pixels
           const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -55,7 +55,7 @@ const imageFiltering = function () {
     },
     getColor: function (num) {
       if (num >= filters.length) {
-        console.log('here', num)
+        // console.log('here', num)
         // random 0 - N
         return filters[Math.floor(Math.random() * filters.length - 1)]
       } else {
