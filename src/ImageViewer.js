@@ -31,7 +31,7 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, featureLayers, viewer) {
-    console.log('viewerIndex', viewerIndex)
+    // console.log('viewerIndex', viewerIndex)
     let imf = new imageFiltering()
     let filter = imf.getFilter()
 
