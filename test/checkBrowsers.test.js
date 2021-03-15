@@ -1,5 +1,4 @@
 // const happy = require('selenium-webdriver')
-// console.log(happy)
 
 const { Builder, By, Key } = require('selenium-webdriver')
 

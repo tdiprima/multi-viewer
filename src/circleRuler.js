@@ -124,7 +124,6 @@ const ruler = function (idx, viewer, overlay) {
   })
 
   canvas.on('mouse:up', function (o) {
-    // console.log('o', o)
     let pointer = canvas.getPointer(o.e)
     isDown = false
     // mode = ''
@@ -153,7 +152,6 @@ const ruler = function (idx, viewer, overlay) {
 
   let Calculate = {
     lineLength: function (x1, y1, x2, y2) {
-      // console.log(x1 + ', ' + y1 + ', ' + x2 + ', ' + y2)
       return Math.sqrt(Math.pow(x2 * 1 - x1 * 1, 2) + Math.pow(y2 * 1 - y1 * 1, 2))
     }
   }

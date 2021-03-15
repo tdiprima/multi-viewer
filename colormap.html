@@ -82,8 +82,6 @@
 
     function cmapFun() {
       let val = document.getElementById('cmapSelect').value
-      // console.log('You selected: ' + val)
-      // console.log(cmaps[val])
       viewer.setFilterOptions({
         filters: {
           processors: OpenSeadragon.Filters.COLORMAP(cmaps[val], 128)

@@ -56,7 +56,6 @@ const mugshots = function (options) {
       ul.appendChild(li)
       span = document.createElement('span')
       // Giving it some number in the middle of the image
-      // console.log('Target (upper-left):', Math.round(data.width / 2), Math.round(data.height / 2))
       // createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
       createThumbnail(data, span)
       li.appendChild(span)
@@ -106,11 +105,9 @@ const mugshots = function (options) {
     if (imagePoint.y % 1 !== 0) {
       console.warn(imagePoint.y, 'not a whole number')
     }
-    // console.log('imageRect', imageRect.getTopLeft())
   }
 
   function getImageUrl (infoUrl, imageRect) {
-    // console.log('iiif req', imageRect.getTopLeft().x, imageRect.getTopLeft().y, imageRect.width, imageRect.height)
     return infoUrl + '/' +
       imageRect.getTopLeft().x + ',' +
       imageRect.getTopLeft().y + ',' +

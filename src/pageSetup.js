@@ -40,7 +40,6 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           ////// CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
-          // console.log('idx', idx)
           let container = document.createElement('div')
           container.className = 'divSquare'
           y.appendChild(container)

@@ -55,11 +55,9 @@ const imageFiltering = function () {
     },
     getColor: function (num) {
       if (num >= filters.length) {
-        // console.log('here', num)
         // random 0 - N
         return filters[Math.floor(Math.random() * filters.length - 1)]
       } else {
-        // console.log(num, filters[num])
         return filters[num]
       }
     },

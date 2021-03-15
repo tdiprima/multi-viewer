@@ -30,7 +30,6 @@
     fetch('https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/info.json')
       .then(response => response.json())
       .then(data => {
-        // console.log('Image w,h', new OpenSeadragon.Point(data.width, data.height))
         const viewer = OpenSeadragon({
           id: 'contentDiv',
           prefixUrl: '//openseadragon.github.io/openseadragon/images/',

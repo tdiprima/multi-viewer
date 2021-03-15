@@ -12,7 +12,7 @@
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, featureLayers)
-    
+
     if (typeof options === 'undefined') {
       options = {}
     }
@@ -56,10 +56,8 @@ class MultiViewer extends ImageViewer {
 }
 
 function addInputHandler(sliderElem, viewerElem) {
-  // console.log(sliderElem, viewerElem)
   let i
   for (i = 0; i < sliderElem.length; i++) {
-    // console.log('sliderElem[i]', i, sliderElem[i])
     // Sliders change opacity of slide
     sliderElem[i].addEventListener('input', function () {
       let idx
@@ -69,9 +67,7 @@ function addInputHandler(sliderElem, viewerElem) {
       } else {
         idx = 1
       }
-      // console.log('this', idx, this.id)
       const worldItem = viewerElem.world.getItemAt(idx)
-      // console.log('world item', idx, worldItem)
       if (worldItem !== undefined) {
         worldItem.setOpacity(this.value / 100)
       } else {

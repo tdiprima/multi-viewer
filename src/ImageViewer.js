@@ -31,7 +31,6 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, featureLayers, viewer) {
-    // console.log('viewerIndex', viewerIndex)
     let imf = new imageFiltering()
     let filter = imf.getFilter()
 
@@ -40,37 +39,35 @@ class ImageViewer {
       // Add base image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
-      // Check array before proceeding
-      if (arrayCheck(viewerIndex, featureLayers)) {
-        // Add feature images to viewer
-        viewer.world.addHandler('add-item', function (event) {
-          let itemIndex = viewer.world.getIndexOfItem(event.item)
-          let itemCount = viewer.world.getItemCount()
-          console.log('\nitemIndex:', itemIndex, 'itemCount:', itemCount)
-          // Index zero is base image
-          if (itemIndex > 0) {
-            // Color array starts with zero, so
-            let color = imf.getColor(itemIndex - 1)
-            console.log(itemIndex, color)
-            viewer.setFilterOptions({
-              filters: [{
-                items: viewer.world.getItemAt(itemIndex),
-                processors: [
-                  filter.prototype.COLORIZE(color)
-                ]
-              }]
-            })
+      // Add feature images to viewer
+      featureLayers[viewerIndex - 1].forEach(function (feature) {
+        viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
+      })
 
-            viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
-              return getIIIFTileUrl(this, level, x, y)
-            }
+      viewer.world.addHandler('add-item', function (event) {
+        let itemIndex = viewer.world.getIndexOfItem(event.item)
+        let itemCount = viewer.world.getItemCount()
+        console.log('\nitemIndex:', itemIndex, 'itemCount:', itemCount)
+        // Index zero is base image
+        if (itemIndex > 0) {
+          // Color array starts with zero, so
+          let color = imf.getColor(itemIndex - 1)
+          console.log(itemIndex, color)
+          viewer.setFilterOptions({
+            filters: [{
+              items: viewer.world.getItemAt(itemIndex),
+              processors: [
+                filter.prototype.COLORIZE(color)
+              ]
+            }]
+          })
+
+          viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
+            return getIIIFTileUrl(this, level, x, y)
           }
-        })
+        }
+      })
 
-        featureLayers[viewerIndex - 1].forEach(function (feature, index) {
-          viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
-        })
-      }
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
@@ -82,25 +79,6 @@ class ImageViewer {
       console.log('URL', url)
       document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
       throw new Error('Something went wrong.') // Terminates the script.
-    }
-
-    function arrayCheck(viewerIndex, featureLayers) {
-      // Do we have an array of features?
-      if (typeof featureLayers === 'undefined') {
-        return false
-      }
-      if (featureLayers.length === 0) {
-        return false
-      }
-      // Do we have an array of features, for this viewer?
-      if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
-        return false
-      }
-      if (featureLayers[viewerIndex - 1].length === 0) {
-        return false
-      }
-      // All checks were successful
-      return true
     }
 
     function getIIIFTileUrl(source, level, x, y) {
