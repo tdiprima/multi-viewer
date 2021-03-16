@@ -34,9 +34,6 @@
 
     // Quick check url
     $.get(baseImage).done(function () {
-      let imf = new imageFiltering()
-      let filter = imf.getFilter()
-
       // Add base image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
@@ -46,23 +43,15 @@
       })
 
       setTimeout(function () {
-        viewer.world.getItemAt(0).source.getTileUrl = function (level, x, y) {
-          return getIIIFTileUrl(this, level, x, y)
-        }
+        // Give the above a second to kick in
+        let imf = new imageFiltering()
+        let filter = imf.getFilter()
 
-        featureLayers[viewerIndex - 1].forEach(function (feature, index) {
-          viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-            return getIIIFTileUrl(this, level, x, y)
-          }
-        })
-
-      }, 2000)
-
-      setTimeout(function () {
+        // Set filter options
         let itemCount = viewer.world.getItemCount()
-
         let i
         let filterOpts = []
+
         for (i = 0; i < itemCount; i++) {
           if (i > 0) {
             filterOpts.push({
@@ -78,7 +67,18 @@
           filters: filterOpts
         })
 
-      }, 3000)
+      }, 1000)
+
+      setTimeout(function () {
+
+        // getTileUrl - layers
+        featureLayers[viewerIndex - 1].forEach(function (feature, index) {
+          viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+            return getIIIFTileUrl(this, level, x, y)
+          }
+        })
+
+      }, 2000)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
