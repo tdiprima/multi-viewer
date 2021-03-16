@@ -68,7 +68,7 @@
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
-                filter.prototype.COLORIZE(imf.getColor(i)) // RED
+                filter.prototype.COLORIZE(imf.getColor(i - 1))
               ]
             })
           }
