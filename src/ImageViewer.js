@@ -6,7 +6,7 @@
  * @param baseImage
  * @param featureLayers
  */
-class ImageViewer {
+ class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers) {
     this.viewer = {}
     this.setViewer(viewerDivId)
@@ -31,11 +31,12 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, featureLayers, viewer) {
-    let imf = new imageFiltering()
-    let filter = imf.getFilter()
 
     // Quick check url
     $.get(baseImage).done(function () {
+      let imf = new imageFiltering()
+      let filter = imf.getFilter()
+
       // Add base image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
@@ -44,29 +45,40 @@ class ImageViewer {
         viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
       })
 
-      viewer.world.addHandler('add-item', function (event) {
-        let itemIndex = viewer.world.getIndexOfItem(event.item)
-        let itemCount = viewer.world.getItemCount()
-        console.log('\nitemIndex:', itemIndex, 'itemCount:', itemCount)
-        // Index zero is base image
-        if (itemIndex > 0) {
-          // Color array starts with zero, so
-          let color = imf.getColor(itemIndex - 1)
-          console.log(itemIndex, color)
-          viewer.setFilterOptions({
-            filters: [{
-              items: viewer.world.getItemAt(itemIndex),
-              processors: [
-                filter.prototype.COLORIZE(color)
-              ]
-            }]
-          })
+      setTimeout(function () {
+        viewer.world.getItemAt(0).source.getTileUrl = function (level, x, y) {
+          return getIIIFTileUrl(this, level, x, y)
+        }
 
-          viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
+        featureLayers[viewerIndex - 1].forEach(function (feature, index) {
+          viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
             return getIIIFTileUrl(this, level, x, y)
           }
+        })
+
+      }, 2000)
+
+      setTimeout(function () {
+        let itemCount = viewer.world.getItemCount()
+
+        let i
+        let filterOpts = []
+        for (i = 0; i < itemCount; i++) {
+          if (i > 0) {
+            filterOpts.push({
+              items: viewer.world.getItemAt(i),
+              processors: [
+                filter.prototype.COLORIZE(imf.getColor(i)) // RED
+              ]
+            })
+          }
         }
-      })
+
+        viewer.setFilterOptions({
+          filters: filterOpts
+        })
+
+      }, 3000)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
