@@ -36,34 +36,6 @@
 
   // zoomInOnRegionsOfInterest(baseImage)
 
-  function fit_roi_to_viewport(image) {
-    info.innerHTML = 'Fit ROI to Viewport'
-    let viewer = OpenSeadragon({
-      id: 'contentDiv',
-      tileSources: image,
-      prefixUrl: 'vendor/openseadragon/images/',
-      crossOriginPolicy: 'Anonymous'
-    })
-
-    viewer.addHandler('open', function () {
-      let rect = new OpenSeadragon.Rect(0.2, 0.2, 0.2, 0.2)
-      let elt = document.createElement("div")
-      elt.id = "runtime-overlay"
-      // elt.className = "highlight"
-      elt.style.background = 'black'
-      viewer.addOverlay({
-        element: elt,
-        location: rect
-      })
-      setTimeout(function () {
-        viewer.viewport.fitBounds(rect)
-      }, 1000)
-    })
-
-  }
-
-  // fit_roi_to_viewport(baseImage)
-
   // Display one OSD viewer
   function testImageViewer(baseImage) {
     info.innerHTML = 'Display an Image Using ImageViewer'
@@ -72,7 +44,7 @@
 
   // testImageViewer(baseImage)
 
-  // Testing ONE viewer, using MultiViewer.
+  // Testing one viewer, using MultiViewer.
   function testMultiViewer(baseImage) {
     info.innerHTML = 'Display an Image Using MultiViewer'
     new MultiViewer(1, 'contentDiv', baseImage)
@@ -80,7 +52,7 @@
 
   // testMultiViewer(baseImage)
 
-  // Testing multiple layers
+    // Testing multiple layers
   // NOTE! We do not currently have > 1 overlay, so I'm using an overlay from a DIFFERENT slide as the 2nd overlay.
   function multiFeatures() {
     // BLCA
@@ -89,16 +61,21 @@
     let base = buildAUrl('image', 'blca', s1)
     let f1 = buildAUrl('feature', 'blca', s1)
     let f2 = buildAUrl('feature', 'blca', s2)
+
     // BRCA
     // let s1 = 'TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291'
     // let s2 = 'TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96'
     // let base = buildAUrl('image', 'brca', s1)
+    // console.log(base)
     // let f1 = buildAUrl('feature', 'brca', s1)
     // let f2 = buildAUrl('feature', 'brca', s2)
-    let features = [[f1, f2]]
+    // let features = [[f1, f2]]
+    // console.log(features)
+
     info.innerHTML = 'Display Multiple Features'
     new ImageViewer(1, 'contentDiv', base, features)
   }
+
 
   multiFeatures()
 
