@@ -1,6 +1,6 @@
 /* quad */
+
 .divSquare {
-    /* border: 1px solid blueviolet; */
     width: 48%;
     height: 560px;
     margin: 4px;
@@ -8,23 +8,19 @@
 }
 
 .controls {
-    /* border: 1px solid red; */
     width: 640px;
     height: 70px;
 }
 
 .range {
-    /* border: 1px solid blue; */
     width: 100%;
 }
 
 .buttons {
-    /* border: 1px solid cornflowerblue; */
     width: 100%;
 }
 
 .viewer {
-    /* border: 1px solid lawngreen; */
     /*width: 640px;*/
     /*height: 480px;*/
     width: 100%;
@@ -35,7 +31,8 @@
     margin-right: 5px;
 }
 
-/* thumbnail */
+/* mugshots */
+
 .thumbnail-container {
     overflow-x: scroll;
     width: 100%;
