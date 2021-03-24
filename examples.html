@@ -66,11 +66,10 @@
     // let s1 = 'TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291'
     // let s2 = 'TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96'
     // let base = buildAUrl('image', 'brca', s1)
-    // console.log(base)
     // let f1 = buildAUrl('feature', 'brca', s1)
     // let f2 = buildAUrl('feature', 'brca', s2)
-    // let features = [[f1, f2]]
-    // console.log(features)
+
+    let features = [[f1, f2]]
 
     info.innerHTML = 'Display Multiple Features'
     new ImageViewer(1, 'contentDiv', base, features)
