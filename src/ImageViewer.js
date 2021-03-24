@@ -6,7 +6,7 @@
  * @param baseImage
  * @param featureLayers
  */
- class ImageViewer {
+class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers) {
     this.viewer = {}
     this.setViewer(viewerDivId)
@@ -38,9 +38,14 @@
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
       // Add feature images to viewer
-      featureLayers[viewerIndex - 1].forEach(function (feature) {
-        viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
-      })
+      try {
+        featureLayers[viewerIndex - 1].forEach(function (feature) {
+          viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
+        })
+      } catch (error) {
+        // console.error(error)
+      }
+
 
       setTimeout(function () {
         // Give the above a second to kick in
@@ -72,11 +77,15 @@
       setTimeout(function () {
 
         // getTileUrl - layers
-        featureLayers[viewerIndex - 1].forEach(function (feature, index) {
-          viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-            return getIIIFTileUrl(this, level, x, y)
-          }
-        })
+        try {
+          featureLayers[viewerIndex - 1].forEach(function (feature, index) {
+            viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+              return getIIIFTileUrl(this, level, x, y)
+            }
+          })
+        } catch (error) {
+          // console.error(error)
+        }
 
       }, 2000)
 

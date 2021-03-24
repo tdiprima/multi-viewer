@@ -117,11 +117,6 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
       return viewers
     }).then(function (viewers) {
-      // VIEWERS CREATED; ADD DROPDOWN TO PAGE.
-      // eslint-disable-next-line no-new
-      new DropDown(viewers, 'selections', 'json/tcga.json')
-      return viewers
-    }).then(function (viewers) {
       // MULTI-VIEWER PAN/ZOOM CONTROLLER
       synchronizeViewers(viewers)
     })
