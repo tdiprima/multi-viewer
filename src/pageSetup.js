@@ -50,10 +50,14 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           y.appendChild(container)
 
           // Start
-          let htm
-          if (opts && opts.toolbarOn) {
+          let htm = ''
+          if (numViewers >= 1) {
+            htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
+<input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;&nbsp;`
+          }
 
-            htm = `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer; font-size:small;">[+] </span><BR>
+          if (opts && opts.toolbarOn) {
+            htm += `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] </span><BR>
 <span id="tools${idx}" hidden=true>`
 
             if (opts && opts.slidersOn) {
@@ -67,10 +71,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
             }
 
             htm += `<span class="floated buttons">`
-            if (numViewers >= 1) {
-              htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
-<input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`
-            }
+
 
             if (opts && opts.paintbrushColor) {
               htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
