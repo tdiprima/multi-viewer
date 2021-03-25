@@ -14,7 +14,6 @@ module.exports = function (grunt) {
         src: ['src/colorPicker.js',
           'src/commonFunctions.js',
           'src/checkOptions.js',
-          'src/rangeSliders.js',
           'src/pageSetup.js',
           'src/editPolygon.js',
           'src/drawPolygon.js',

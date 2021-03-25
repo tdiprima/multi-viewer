@@ -15,21 +15,25 @@
 const pageSetup = function (divId, image, features, numViewers, rows, columns, width, height, opts) {
 
   let viewers = [] // eslint-disable-line prefer-const
-  const rangeSliders = new Sliders()
+  let sliderIdNum = 0
 
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
+      // Check/fix the options we were given
       return resolve(checkOptions(opts))
+
     }).then(function (opts) {
-      // Create table
+      // Create table for viewers
       const mainDiv = document.getElementById(divId)
       const table = document.createElement('table')
       table.id = 'myTable'
       mainDiv.appendChild(table)
+      let slider1, slider2
+
+      // Create rows & columns
       let r
       const num = rows * columns
       let count = 0
-
       for (r = 0; r < rows; r++) {
         const x = table.insertRow(r)
         let c
@@ -40,74 +44,86 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           ////// CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
-          let container = document.createElement('div')
+          let container = document.createElement('div') // Viewer + tools
           container.className = 'divSquare'
+          container.style.width = width + 'px'
           y.appendChild(container)
 
-          const controlsDiv = document.createElement('div') // 'controls' div
-          controlsDiv.className = 'controls'
-
-          container.appendChild(controlsDiv) // add to 'container' div
-
-          const rangeDiv = document.createElement('div') // div containing 'sliders'
-          rangeDiv.className = 'range'
-          controlsDiv.append(rangeDiv)
-
-          // 2 sliders
-          let sliderElements
-          if (opts && opts.slidersOn) {
-            sliderElements = rangeSliders.createSliders(idx, rangeDiv, 2, opts)
-          }
-
+          // Start
+          let htm
           if (opts && opts.toolbarOn) {
-            const buttonDiv = document.createElement('div') // div containing 'buttons'
-            buttonDiv.classList.add('floated')
-            buttonDiv.classList.add('buttons')
-            controlsDiv.append(buttonDiv)
 
-            //// CREATE BUTTONS
-            let color
-            if (isRealValue(opts.paintbrushColor)) {
-              color = opts.paintbrushColor
+            htm = `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer; font-size:small;">[+] </span><BR>
+<span id="tools${idx}" hidden=true>`
+
+            if (opts && opts.slidersOn) {
+              slider1 = sliderIdNum += 1
+              slider2 = sliderIdNum += 1
+
+              htm += `<span class="range">
+<input type="range" id="sliderRange${slider1}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
+<input type="range" id="sliderRange${slider2}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
+</span>`
+            }
+
+            htm += `<span class="floated buttons">`
+            if (numViewers >= 1) {
+              htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan1">Match Pan</label>&nbsp;
+<input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom1">Match Zoom</label>&nbsp;`
+            }
+
+            if (opts && opts.paintbrushColor) {
+              htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
             } else {
-              color = '#00f'
+              htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`
             }
 
-            let htm = `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
-      <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;`
+            htm += `<button id="btnDraw${idx}" class="btn"><i class="fas fa-pencil-alt"></i> Draw polygon</button>&nbsp;
+<button id="btnEdit${idx}" class="btn"><i class="fas fa-draw-polygon"></i> Edit polygon</button>&nbsp;
+<button id="btnGrid${idx}" class="btn"><i class="fas fa-border-all"></i> Draw grid</button>&nbsp;
+<button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
+<button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
-            if (numViewers <= 1) {
-              htm = '' // There's nothing to match pan/zoom with; so leave it blank.
+            // End div, class controls
+            htm += `</span></span>`
+          }
+          // End
+
+          // Create viewer
+          htm += `<div id="${id}" className="viewer" style="width: ${width}px; height: ${height}px;"></div>`
+
+          // Add to the 'container'
+          container.innerHTML = htm
+
+          // Show/hide event handler
+          let toggle = document.getElementById('hideTools' + idx)
+          let tools = document.getElementById('tools' + idx)
+          toggle.addEventListener('click', function () {
+            if (tools.hidden) {
+              tools.hidden = false
+              this.textContent = '[-] '
+              this.style.color = "maroon"
+            } else {
+              tools.hidden = true
+              this.textContent = '[+] '
+              this.style.color = "blue"
             }
+          })
 
-            buttonDiv.innerHTML = htm + `<mark id="mark${idx}">${color}</mark>&nbsp;
-        <button id="btnDraw${idx}" class="btn"><i class="fas fa-pencil-alt"></i> Draw polygon</button>&nbsp;
-        <button id="btnEdit${idx}" class="btn"><i class="fas fa-draw-polygon"></i> Edit polygon</button>&nbsp;
-        <button id="btnGrid${idx}" class="btn"><i class="fas fa-border-all"></i> Draw grid</button>&nbsp;
-        <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
-        <button id="btnSlide${idx}" class="btn"><i class="fas fa-sliders-h"></i> Show sliders</button>&nbsp;
-        <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>`
-            // <button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Measure</button>&nbsp;
-            //// END CREATE BUTTONS
+          // Now that our widget is on the page, create colorPicker
+          colorPicker(document.getElementById('mark' + idx))
 
-            colorPicker(document.getElementById('mark' + idx))
+          let sliderElements = []
+          try {
+            sliderElements.push(document.getElementById('sliderRange' + slider1))
+            sliderElements.push(document.getElementById('sliderRange' + slider2))
+          } catch (e) {
+            console.log(e)
           }
 
-          if (opts && opts.slidersOn) {
-            rangeSliders.sliderButtonEvent(idx, sliderElements)
-          }
+          viewers.push(new MultiViewer(idx, id, image, features, sliderElements, numViewers, opts))
 
-          const viewerDiv = document.createElement('div') // 'viewer' div
-          viewerDiv.id = id
-          viewerDiv.style.width = width + 'px'
-          viewerDiv.style.height = height + 'px'
-          viewerDiv.className = 'viewer'
-
-          container.appendChild(viewerDiv)
-          viewers.push(new MultiViewer(idx, viewerDiv.id, image, features, sliderElements, numViewers, opts))
-          ////// END
-
-          if (numViewers < num && (count - 1 === numViewers) ) {
+          if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer; now exit
             break
           }

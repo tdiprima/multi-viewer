@@ -69,8 +69,9 @@ function addInputHandler(sliderElem, viewerElem) {
       }
       const worldItem = viewerElem.world.getItemAt(idx)
       if (worldItem !== undefined) {
-        worldItem.setOpacity(this.value / 100)
+        worldItem.setOpacity(this.value / 100) // SET OPACITY
       } else {
+        // in the case of 2 sliders, 1 layer - hide slide
         this.hidden = true
       }
     })
