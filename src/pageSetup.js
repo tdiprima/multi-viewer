@@ -49,7 +49,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           container.style.width = width + 'px'
           y.appendChild(container)
 
-          // Start
+          // Start building html
           let htm = ''
           if (numViewers >= 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
@@ -88,7 +88,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
             // End div, class controls
             htm += `</span></span>`
           }
-          // End
+          // End toolbar
 
           // Create viewer
           htm += `<div id="${id}" className="viewer" style="width: ${width}px; height: ${height}px;"></div>`

@@ -69,3 +69,96 @@ a:link {
 .color-picker.no-alpha .color-picker\:a {
     display: none;
 }
+
+/* quad */
+
+.divSquare {
+  width: 48%;
+  height: 560px;
+  margin: 4px;
+  float: left;
+}
+
+.controls {
+  width: 640px;
+  height: 70px;
+}
+
+.range {
+  width: 100%;
+}
+
+.buttons {
+  width: 100%;
+}
+
+.viewer {
+  /*width: 640px;*/
+  /*height: 480px;*/
+  width: 100%;
+}
+
+.floated {
+  float: left;
+  margin-right: 5px;
+}
+
+/* mugshots */
+
+.thumbnail-container {
+  overflow-x: scroll;
+  width: 100%;
+  padding: 0 15px;
+}
+
+.thumbnail-list {
+  white-space: nowrap;
+  list-style: none;
+}
+
+.thumbnail-list li {
+  display: inline-block;
+}
+
+.thumbnail-image {
+  display: block;
+  padding: 2px;
+  max-width: 100px;
+  height: auto;
+}
+
+/* TABS */
+.inlineDiv {
+  display: inline-block;
+  width: 510px;
+  height: 400px;
+}
+
+button {
+  cursor: move;
+  border-radius: 5px;
+  outline-color: #f1f1f1;
+  border-color: #f1f1f1;
+}
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  cursor: move;
+  background-color: inherit;
+  float: left;
+  border: 1px solid darkgray;
+  outline: none;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Class to represent elements that are drop targets: */
+.tab.over {
+  border: 3px dotted #00FF00;
+}
