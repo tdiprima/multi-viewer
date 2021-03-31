@@ -91,7 +91,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           // End toolbar
 
           // Create viewer
-          htm += `<div id="${id}" className="viewer" style="width: ${width}px; height: ${height}px;"></div>`
+          htm += `<div id="${id}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
 
           // Add to the 'container'
           container.innerHTML = htm
