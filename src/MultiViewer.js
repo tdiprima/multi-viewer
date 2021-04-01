@@ -61,14 +61,14 @@ function addInputHandler(sliderElem, viewerElem) {
   for (i = 0; i < sliderElem.length; i++) {
     // SLIDER EVENT LISTENER
     sliderElem[i].addEventListener('input', function () {
-      let idx
+      let layerNum
       const num = this.id.replace('sliderRange', '') - 1  // sliderRange1, sliderRange2, ...
       if (num % 2 === 0) { // They're paired.
-        idx = 0 // 1st slider affects the base layer
+        layerNum = 0 // 1st slider affects the base layer
       } else {
-        idx = 1 // 2nd slider affects the first layer
+        layerNum = 1 // 2nd slider affects the first layer
       }
-      const worldItem = viewerElem.world.getItemAt(idx)
+      const worldItem = viewerElem.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
         worldItem.setOpacity(this.value / 100) // SET OPACITY
       } else {
