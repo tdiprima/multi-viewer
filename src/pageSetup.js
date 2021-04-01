@@ -40,7 +40,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
         for (c = 0; c < columns; c++) {
           count++
           const y = x.insertCell(c)
-          const id = makeId(11) // DIV ID REQUIRED FOR OSD
+          const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
 
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
@@ -92,7 +92,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           }
 
           // CREATE VIEWER
-          htm += `<div id="${id}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
+          htm += `<div id="${osdId}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
@@ -125,7 +125,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           }
 
           // ADD A MultiViewer OBJECT TO ARRAY
-          viewers.push(new MultiViewer(idx, id, image, features, sliderElements, numViewers, opts))
+          viewers.push(new MultiViewer(idx, osdId, image, features, sliderElements, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer

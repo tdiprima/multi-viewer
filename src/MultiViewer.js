@@ -56,22 +56,23 @@ class MultiViewer extends ImageViewer {
 }
 
 function addInputHandler(sliderElem, viewerElem) {
+  // 2 x numViewers = total number of sliders
   let i
   for (i = 0; i < sliderElem.length; i++) {
-    // Sliders change opacity of slide
+    // SLIDER EVENT LISTENER
     sliderElem[i].addEventListener('input', function () {
       let idx
       const num = this.id.replace('sliderRange', '') - 1  // sliderRange1, sliderRange2, ...
       if (num % 2 === 0) { // They're paired.
-        idx = 0
+        idx = 0 // 1st slider affects the base layer
       } else {
-        idx = 1
+        idx = 1 // 2nd slider affects the first layer
       }
       const worldItem = viewerElem.world.getItemAt(idx)
       if (worldItem !== undefined) {
         worldItem.setOpacity(this.value / 100) // SET OPACITY
       } else {
-        // in the case of 2 sliders, 1 layer - hide slide
+        // In case of 2 sliders with only 1 layer - hide the slide.
         this.hidden = true
       }
     })
