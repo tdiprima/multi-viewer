@@ -23,14 +23,14 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
       return resolve(checkOptions(opts))
 
     }).then(function (opts) {
-      // Create table for viewers
+      // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
       const table = document.createElement('table')
       table.id = 'myTable'
-      mainDiv.appendChild(table)
+      mainDiv.appendChild(table) // TABLE ADDED TO PAGE
       let slider1, slider2
 
-      // Create rows & columns
+      // CREATE ROWS & COLUMNS
       let r
       const num = rows * columns
       let count = 0
@@ -42,14 +42,14 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           const y = x.insertCell(c)
           const id = makeId(11) // DIV ID REQUIRED FOR OSD
 
-          ////// CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
+          // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
           let container = document.createElement('div') // Viewer + tools
           container.className = 'divSquare'
           container.style.width = width + 'px'
-          y.appendChild(container)
+          y.appendChild(container) // ADD CONTAINER TO CELL
 
-          // Start building html
+          // NAVIGATION TOOLS
           let htm = ''
           if (numViewers >= 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
@@ -57,9 +57,11 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           }
 
           if (opts && opts.toolbarOn) {
+            // SHOW / HIDE TOOLBAR
             htm += `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] </span><BR>
 <span id="tools${idx}" hidden=true>`
 
+            // SLIDERS
             if (opts && opts.slidersOn) {
               slider1 = sliderIdNum += 1
               slider2 = sliderIdNum += 1
@@ -70,8 +72,8 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 </span>`
             }
 
+            // ANNOTATION TOOLS
             htm += `<span class="floated buttons">`
-
 
             if (opts && opts.paintbrushColor) {
               htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
@@ -85,18 +87,17 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
-            // End div, class controls
+            // END
             htm += `</span></span>`
           }
-          // End toolbar
 
-          // Create viewer
+          // CREATE VIEWER
           htm += `<div id="${id}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
 
-          // Add to the 'container'
+          // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
 
-          // Show/hide event handler
+          // EVENT HANDLER - Show / Hide
           let toggle = document.getElementById('hideTools' + idx)
           let tools = document.getElementById('tools' + idx)
           toggle.addEventListener('click', function () {
@@ -111,9 +112,10 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
             }
           })
 
-          // Now that our widget is on the page, create colorPicker
+          // ADD FUNCTIONALITY - colorPicker
           colorPicker(document.getElementById('mark' + idx))
 
+          // NEED TO PASS THESE TO VIEWER
           let sliderElements = []
           try {
             sliderElements.push(document.getElementById('sliderRange' + slider1))
@@ -122,19 +124,19 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
             console.log(e)
           }
 
+          // ADD A MultiViewer OBJECT TO ARRAY
           viewers.push(new MultiViewer(idx, id, image, features, sliderElements, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
-            // we've done our last viewer; now exit
+            // we've done our last viewer
             break
           }
         }
       }
-      mainDiv.appendChild(table)
 
       return viewers
     }).then(function (viewers) {
-      // MULTI-VIEWER PAN/ZOOM CONTROLLER
+      // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
       synchronizeViewers(viewers)
     })
   })
