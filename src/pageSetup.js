@@ -35,11 +35,11 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
       const num = rows * columns
       let count = 0
       for (r = 0; r < rows; r++) {
-        const x = table.insertRow(r)
+        const tr = table.insertRow(r)
         let c
         for (c = 0; c < columns; c++) {
           count++
-          const y = x.insertCell(c)
+          const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
 
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
@@ -47,7 +47,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           let container = document.createElement('div') // Viewer + tools
           container.className = 'divSquare'
           container.style.width = width + 'px'
-          y.appendChild(container) // ADD CONTAINER TO CELL
+          td.appendChild(container) // ADD CONTAINER TO CELL
 
           // NAVIGATION TOOLS
           let htm = ''
