@@ -51,7 +51,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
 
           // NAVIGATION TOOLS
           let htm = ''
-          if (numViewers >= 1) {
+          if (numViewers > 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
 <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;&nbsp;`
           }
