@@ -8,65 +8,68 @@
   <!-- <link href="build/main.min.css" rel="stylesheet"> -->
   <link href="css/main.css" rel="stylesheet">
   <link href="css/color-picker.min.css" rel="stylesheet">
-  <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" rel="stylesheet" />
+  <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+        rel="stylesheet"/>
 </head>
 
 <body>
 
-  <h1>TCGA Segmentation Data</h1>
+<h1>TCGA Segmentation Data</h1>
+<div id="contentDiv"></div>
 
-  <div id="contentDiv"></div>
-  <!-- <script src="build/vendor.min.js"></script> -->
-  <script src="vendor/openseadragon/openseadragon.min.js"></script>
-  <script src="vendor/openseadragon-fabricjs-overlay.js"></script>
-  <script src="vendor/jquery-3.5.1.min.js"></script>
-  <script src="vendor/fabric.adapted.js"></script>
-  <script src="vendor/openseadragon-filtering.js"></script>
-  <script src="vendor/color-picker.min.js"></script>
-  <!-- distribution -->
-  <!-- <script src="build/multi-viewer.min.js"></script> -->
-  <script src="src/iiifUrlParser.js"></script>
-  <script src="src/colorPicker.js"></script>
-  <script src="src/commonFunctions.js"></script>
-  <script src="src/checkOptions.js"></script>
-  <script src="src/pageSetup.js"></script>
-  <script src="src/editPolygon.js"></script>
-  <script src="src/drawPolygon.js"></script>
-  <script src="src/gridOverlay.js"></script>
-  <script src="src/mapMarker.js"></script>
-  <!-- <script src="src/ruler.js"></script> -->
-  <script src="src/markupTools.js"></script>
-  <script src="src/imageFiltering.js"></script>
-  <script src="src/ImageViewer.js"></script>
-  <script src="src/MultiViewer.js"></script>
-  <script src="src/synchronizeViewers.js"></script>
+<!-- <script src="build/vendor.min.js"></script> -->
+<script src="vendor/openseadragon/openseadragon.min.js"></script>
+<script src="vendor/openseadragon-fabricjs-overlay.js"></script>
+<script src="vendor/jquery-3.5.1.min.js"></script>
+<script src="vendor/fabric.adapted.js"></script>
+<script src="vendor/openseadragon-filtering.js"></script>
+<script src="vendor/color-picker.min.js"></script>
+<!-- distribution -->
+<!-- <script src="build/multi-viewer.min.js"></script> -->
+<script src="src/iiifUrlParser.js"></script>
+<script src="src/colorPicker.js"></script>
+<script src="src/commonFunctions.js"></script>
+<script src="src/checkOptions.js"></script>
+<script src="src/pageSetup.js"></script>
+<script src="src/editPolygon.js"></script>
+<script src="src/drawPolygon.js"></script>
+<script src="src/gridOverlay.js"></script>
+<script src="src/mapMarker.js"></script>
+<!-- <script src="src/ruler.js"></script> -->
+<script src="src/markupTools.js"></script>
+<script src="src/imageFiltering.js"></script>
+<script src="src/ImageViewer.js"></script>
+<script src="src/MultiViewer.js"></script>
+<script src="src/synchronizeViewers.js"></script>
 
-  <script>
-    let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json';
-    let featureLayers = [[window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
-      [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
-      [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
-      [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json']]
+<script>
+  let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json';
+  let featureLayers = [[window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
+    [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
+    [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
+    [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json']]
 
-    // let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-    // let featureLayers = [[baseImage]] // Testing
+  // let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
+  // let featureLayers = [[baseImage]] // Testing
 
-    const options = {
-      filterOn: true,
-      slidersOn: true,
-      toolbarOn: true,
-      paintbrushColor: '#0ff',
-      viewerOpts: {
-        showFullPageControl: true,
-        showHomeControl: true,
-        showZoomControl: true
-      }
+  let opacities = [[1.0], [1.0], [1.0], [1.0]]
+
+  const options = {
+    filterOn: true,
+    slidersOn: true,
+    toolbarOn: true,
+    paintbrushColor: '#0ff',
+    viewerOpts: {
+      showFullPageControl: true,
+      showHomeControl: true,
+      showZoomControl: true
     }
+  }
 
-    // divId, image, features, numViewers, rows, columns, width, height, opts
-    pageSetup('contentDiv', baseImage, featureLayers, 4, 2, 2, 640, 480, options)
-
-  </script>
+  // divId, image, features, opacity, numViewers, rows, columns, width, height, opts
+  pageSetup('contentDiv', baseImage, featureLayers, opacities, 4, 2, 2, 640, 480, options)
+</script>
 
 </body>
 
