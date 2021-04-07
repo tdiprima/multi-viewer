@@ -27,12 +27,12 @@ class MultiViewer extends ImageViewer {
       this.idx = viewerIndex
       this.sliders = sliderElements
 
-      if (numViewers > 1 && options.toolbarOn) {
+      if (numViewers > 1) {
         this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
         this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
       }
 
-      if (options.slidersOn) {
+      if (options.slidersOn && options.toolbarOn) {
         addInputHandler(this.sliders, this.viewer1)
       }
 
@@ -44,7 +44,7 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
     } catch (e) {
-      // console.warn(e)
+      console.log(e)
     }
 
   }

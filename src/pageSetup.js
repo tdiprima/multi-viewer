@@ -20,8 +20,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
 
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
-      // Check/fix the options we were given
-      return resolve(checkOptions(opts))
+      return resolve(opts)
 
     }).then(function (opts) {
       // CREATE TABLE FOR VIEWERS
@@ -107,13 +106,6 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
               htm += `<button class="tab_links" id="feat${f3}" draggable="true">Feat 3</button>
           <button class="tab_links" id="feat${f4}" draggable="true">Feat 4</button>`
             }
-
-            /*
-            features.forEach(function (feat, ind) {
-              // (as long as it's not hidden)
-              htm += `<button class="tab_links" id="feat${ind}" draggable="true">${getRandomName()}</button>`
-              // htm += `<button class="tab_links" id="feat${ind}" draggable="true">Feat ${ind}</button>`
-            })*/
 
             htm += `&nbsp;</div>`
           }

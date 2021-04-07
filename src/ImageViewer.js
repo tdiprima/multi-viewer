@@ -40,9 +40,8 @@ class ImageViewer {
 
       try {
         // Add FEATURE images to viewer
-        let f = featureLayers[viewerIndex - 1]
-
-        if (typeof f !== 'undefined') {
+        if (typeof featureLayers[viewerIndex - 1] !== 'undefined') {
+          let f = featureLayers[viewerIndex - 1]
           let o = opacity[viewerIndex - 1]
           // console.log('opacity', o, 'viewerIndex', viewerIndex)
           f.forEach(function (feature, index) {

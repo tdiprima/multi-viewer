@@ -8,12 +8,6 @@ Had to remove comments because package manager decided to READ the comments #:(
 
 So add...
 
-checkOptions.js:
-const isEmpty = require('../src/commonFunctions')
-// Uncomment line while testing:
-// module.exports = checkOptions // <- Either THIS...
-// module.exports = makeStructuresEqual // <- OR THAT.
-
 synchronizeViewers.js:
 const isEmpty = require('../src/commonFunctions')
 module.exports = synchronizeViewers
