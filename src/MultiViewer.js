@@ -44,7 +44,7 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
     } catch (e) {
-      console.warn(e)
+      // console.warn(e)
     }
 
   }

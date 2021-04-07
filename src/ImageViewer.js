@@ -38,52 +38,57 @@ class ImageViewer {
       // Add BASE image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
-      // Add FEATURE images to viewer
-      let f = featureLayers[viewerIndex - 1]
-      let o = opacity[viewerIndex - 1]
+      try {
+        // Add FEATURE images to viewer
+        let f = featureLayers[viewerIndex - 1]
 
-      if (typeof f !== 'undefined') {
-        f.forEach(function (feature, index) {
-          viewer.addTiledImage({tileSource: feature, opacity: o[index], x: 0, y: 0})
-        })
-
-        setTimeout(function () {
-          // Give the above a second to kick in
-          let imf = new imageFiltering()
-          let filter = imf.getFilter()
-
-          // Set filter options
-          let itemCount = viewer.world.getItemCount()
-          let i
-          let filterOpts = []
-
-          for (i = 0; i < itemCount; i++) {
-            if (i > 0) {
-              filterOpts.push({
-                items: viewer.world.getItemAt(i),
-                processors: [
-                  filter.prototype.COLORIZE(imf.getColor(i - 1))
-                ]
-              })
-            }
-          }
-
-          viewer.setFilterOptions({
-            filters: filterOpts
-          })
-
-        }, 1500)
-
-        setTimeout(function () {
-
-          // getTileUrl - layers
+        if (typeof f !== 'undefined') {
+          let o = opacity[viewerIndex - 1]
+          // console.log('opacity', o, 'viewerIndex', viewerIndex)
           f.forEach(function (feature, index) {
-            viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-              return getIIIFTileUrl(this, level, x, y)
-            }
+            viewer.addTiledImage({tileSource: feature, opacity: o[index], x: 0, y: 0})
           })
 
-        }, 2000)
+          setTimeout(function () {
+            // Give the above a second to kick in
+            let imf = new imageFiltering()
+            let filter = imf.getFilter()
+
+            // Set filter options
+            let itemCount = viewer.world.getItemCount()
+            let i
+            let filterOpts = []
+
+            for (i = 0; i < itemCount; i++) {
+              if (i > 0) {
+                filterOpts.push({
+                  items: viewer.world.getItemAt(i),
+                  processors: [
+                    filter.prototype.COLORIZE(imf.getColor(i - 1))
+                  ]
+                })
+              }
+            }
+
+            viewer.setFilterOptions({
+              filters: filterOpts
+            })
+
+          }, 1500)
+
+          setTimeout(function () {
+
+            // getTileUrl - layers
+            f.forEach(function (feature, index) {
+              viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+                return getIIIFTileUrl(this, level, x, y)
+              }
+            })
+
+          }, 2000)
+        }
+      } catch (e) {
+        console.error('feature images problem', e)
       }
 
     }).fail(function (jqXHR, statusText) {

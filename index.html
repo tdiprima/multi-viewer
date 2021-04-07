@@ -13,6 +13,7 @@
 <body>
 
 <h1>TCGA Segmentation Data</h1>
+<div id="contentDiv"></div>
 
 <script src="build/vendor.min.js"></script>
 <script src="vendor/fabric.adapted.js"></script>
@@ -21,10 +22,10 @@
 <script src="build/multi-viewer.min.js"></script>
 
 <script>
-  let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json';
-  let featureLayers = [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json']
-  // let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-  // let featureLayers = [] // Testing
+  // let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json';
+  // let featureLayers = [[window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json']]
+  let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
+  let featureLayers = [] // Testing
 
   const options = {
     filterOn: true,
@@ -32,7 +33,8 @@
     toolbarOn: false
   }
 
-  pageSetup(1, baseImage, featureLayers, options)
+  // divId, image, features, opacity, numViewers, rows, columns, width, height, opts
+  pageSetup('contentDiv', baseImage, featureLayers, [[1.0]], 1, 1, 1, 640, 480, options)
 
 </script>
 

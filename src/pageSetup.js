@@ -98,7 +98,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           // DRAGGABLE LAYERS
           if (opts && opts.draggableLayers) {
             htm += `<div class="tab" id="tabBox${idx}">`
-            
+
             if (idx === 1) {
               // TODO: DEV ONLY; ELSE USE something else
               htm += `<button class="tab_links" id="feat${f1}" draggable="true">Feat 1</button>
@@ -125,22 +125,24 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           container.innerHTML = htm
 
           // EVENT HANDLER - Show / Hide
-          let toggle = document.getElementById('hideTools' + idx)
-          let tools = document.getElementById('tools' + idx)
-          toggle.addEventListener('click', function () {
-            if (tools.hidden) {
-              tools.hidden = false
-              this.textContent = '[-] '
-              this.style.color = "maroon"
-            } else {
-              tools.hidden = true
-              this.textContent = '[+] '
-              this.style.color = "blue"
-            }
-          })
+          if (opts && opts.toolbarOn) {
+            let toggle = document.getElementById('hideTools' + idx)
+            let tools = document.getElementById('tools' + idx)
+            toggle.addEventListener('click', function () {
+              if (tools.hidden) {
+                tools.hidden = false
+                this.textContent = '[-] '
+                this.style.color = "maroon"
+              } else {
+                tools.hidden = true
+                this.textContent = '[+] '
+                this.style.color = "blue"
+              }
+            })
 
-          // ADD FUNCTIONALITY - colorPicker
-          colorPicker(document.getElementById('mark' + idx))
+            // ADD FUNCTIONALITY - colorPicker
+            colorPicker(document.getElementById('mark' + idx))
+          }
 
           // NEED TO PASS THESE TO VIEWER
           let sliderElements = []
