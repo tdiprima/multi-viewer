@@ -21,9 +21,9 @@
 <div id="contentDiv" style="width: 640px; height: 480px;"></div>
 <script>
   let info = document.getElementById('info')
-  // let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi'
-  // let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
-  let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-4Z-AA7N-01Z-00-DX1.10AA3499-6678-4DB2-9466-9CB3EA25CBB6.svs/info.json'
+  // let base = '//openseadragon.github.io/example-images/duomo/duomo.dzi'
+  // let base = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+  let base = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-4Z-AA7N-01Z-00-DX1.10AA3499-6678-4DB2-9466-9CB3EA25CBB6.svs/info.json'
 
   function zoomInOnRegionsOfInterest(image) {
     info.innerHTML = 'Zoom in on Different Regions of Interest'
@@ -34,25 +34,25 @@
     roiAlchemy('contentDiv', image, regions, 2, 2, 500, 300)
   }
 
-  // zoomInOnRegionsOfInterest(baseImage)
+  // zoomInOnRegionsOfInterest(base)
 
   // Display one OSD viewer
-  function testImageViewer(baseImage) {
+  function testImageViewer(base) {
     info.innerHTML = 'Display an Image Using ImageViewer'
-    new ImageViewer(1, 'contentDiv', baseImage)
+    new ImageViewer(1, 'contentDiv', base)
   }
 
-  // testImageViewer(baseImage)
+  // testImageViewer(base)
 
   // Testing one viewer, using MultiViewer.
-  function testMultiViewer(baseImage) {
+  function testMultiViewer(base) {
     info.innerHTML = 'Display an Image Using MultiViewer'
-    new MultiViewer(1, 'contentDiv', baseImage)
+    new MultiViewer(1, 'contentDiv', base)
   }
 
-  // testMultiViewer(baseImage)
+  // testMultiViewer(base)
 
-    // Testing multiple layers
+  // Testing multiple layers
   // NOTE! We do not currently have > 1 overlay, so I'm using an overlay from a DIFFERENT slide as the 2nd overlay.
   function multiFeatures() {
     // BLCA
@@ -69,12 +69,13 @@
     // let f1 = buildAUrl('feature', 'brca', s1)
     // let f2 = buildAUrl('feature', 'brca', s2)
 
+    // let features = [[]]
     let features = [[f1, f2]]
+    let opacities = [[1.0, 1.0]]
 
     info.innerHTML = 'Display Multiple Features'
-    new ImageViewer(1, 'contentDiv', base, features)
+    new ImageViewer(1, 'contentDiv', base, features, opacities)
   }
-
 
   multiFeatures()
 
