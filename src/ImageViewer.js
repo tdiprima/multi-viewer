@@ -5,12 +5,13 @@
  * @param viewerDivId: (viewer1, viewer2...)
  * @param baseImage
  * @param featureLayers
+ * @param opacity
  */
 class ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers) {
+  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity) {
     this.viewer = {}
     this.setViewer(viewerDivId)
-    this.setSources(viewerIndex, baseImage, featureLayers, this.viewer)
+    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.viewer)
   }
 
   setViewer(viewerDivId) {
@@ -21,7 +22,7 @@ class ImageViewer {
         crossOriginPolicy: 'Anonymous'
       })
     } catch (e) {
-      console.log(e)
+      console.warn(e)
     }
 
   }
@@ -30,64 +31,60 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, featureLayers, viewer) {
+  setSources(viewerIndex, baseImage, featureLayers, opacity, viewer) {
 
     // Quick check url
     $.get(baseImage).done(function () {
-      // Add base image to viewer
+      // Add BASE image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
-      // Add feature images to viewer
-      try {
-        featureLayers[viewerIndex - 1].forEach(function (feature) {
-          viewer.addTiledImage({tileSource: feature, opacity: 1.0, x: 0, y: 0})
+      // Add FEATURE images to viewer
+      let f = featureLayers[viewerIndex - 1]
+      let o = opacity[viewerIndex - 1]
+
+      if (typeof f !== 'undefined') {
+        f.forEach(function (feature, index) {
+          viewer.addTiledImage({tileSource: feature, opacity: o[index], x: 0, y: 0})
         })
-      } catch (error) {
-        // console.error(error)
-      }
 
+        setTimeout(function () {
+          // Give the above a second to kick in
+          let imf = new imageFiltering()
+          let filter = imf.getFilter()
 
-      setTimeout(function () {
-        // Give the above a second to kick in
-        let imf = new imageFiltering()
-        let filter = imf.getFilter()
+          // Set filter options
+          let itemCount = viewer.world.getItemCount()
+          let i
+          let filterOpts = []
 
-        // Set filter options
-        let itemCount = viewer.world.getItemCount()
-        let i
-        let filterOpts = []
-
-        for (i = 0; i < itemCount; i++) {
-          if (i > 0) {
-            filterOpts.push({
-              items: viewer.world.getItemAt(i),
-              processors: [
-                filter.prototype.COLORIZE(imf.getColor(i - 1))
-              ]
-            })
+          for (i = 0; i < itemCount; i++) {
+            if (i > 0) {
+              filterOpts.push({
+                items: viewer.world.getItemAt(i),
+                processors: [
+                  filter.prototype.COLORIZE(imf.getColor(i - 1))
+                ]
+              })
+            }
           }
-        }
 
-        viewer.setFilterOptions({
-          filters: filterOpts
-        })
+          viewer.setFilterOptions({
+            filters: filterOpts
+          })
 
-      }, 1000)
+        }, 1500)
 
-      setTimeout(function () {
+        setTimeout(function () {
 
-        // getTileUrl - layers
-        try {
-          featureLayers[viewerIndex - 1].forEach(function (feature, index) {
+          // getTileUrl - layers
+          f.forEach(function (feature, index) {
             viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
               return getIIIFTileUrl(this, level, x, y)
             }
           })
-        } catch (error) {
-          // console.error(error)
-        }
 
-      }, 2000)
+        }, 2000)
+      }
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)

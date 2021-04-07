@@ -128,12 +128,6 @@ a:link {
 }
 
 /* TABS */
-.inlineDiv {
-  display: inline-block;
-  width: 510px;
-  height: 400px;
-}
-
 button {
   cursor: move;
   border-radius: 5px;

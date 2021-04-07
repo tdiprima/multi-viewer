@@ -5,6 +5,7 @@
  * @param divId: Main div id.
  * @param image: Base image.
  * @param features: Array of features (feature layers).
+ * @param opacity: Array of features opacities.
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
  * @param columns: LAYOUT: Number of columns (of viewers)
@@ -12,7 +13,7 @@
  * @param height: Viewer height
  * @param opts: Multi-viewer options; filters, paintbrush, sliders, etc.
  */
-const pageSetup = function (divId, image, features, numViewers, rows, columns, width, height, opts) {
+const pageSetup = function (divId, image, features, opacity, numViewers, rows, columns, width, height, opts) {
 
   let viewers = [] // eslint-disable-line prefer-const
   let sliderIdNum = 0
@@ -41,7 +42,10 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           count++
           const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
-
+          let f1 = makeId(5)
+          let f2 = makeId(5)
+          let f3 = makeId(5)
+          let f4 = makeId(5)
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
           let container = document.createElement('div') // Viewer + tools
@@ -91,6 +95,29 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
             htm += `</span></span>`
           }
 
+          // DRAGGABLE LAYERS
+          if (opts && opts.draggableLayers) {
+            htm += `<div class="tab" id="tabBox${idx}">`
+            
+            if (idx === 1) {
+              // TODO: DEV ONLY; ELSE USE something else
+              htm += `<button class="tab_links" id="feat${f1}" draggable="true">Feat 1</button>
+          <button class="tab_links" id="feat${f2}" draggable="true">Feat 2</button>`
+            } else {
+              htm += `<button class="tab_links" id="feat${f3}" draggable="true">Feat 3</button>
+          <button class="tab_links" id="feat${f4}" draggable="true">Feat 4</button>`
+            }
+
+            /*
+            features.forEach(function (feat, ind) {
+              // (as long as it's not hidden)
+              htm += `<button class="tab_links" id="feat${ind}" draggable="true">${getRandomName()}</button>`
+              // htm += `<button class="tab_links" id="feat${ind}" draggable="true">Feat ${ind}</button>`
+            })*/
+
+            htm += `&nbsp;</div>`
+          }
+
           // CREATE VIEWER
           htm += `<div id="${osdId}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
 
@@ -125,7 +152,7 @@ const pageSetup = function (divId, image, features, numViewers, rows, columns, w
           }
 
           // ADD A MultiViewer OBJECT TO ARRAY
-          viewers.push(new MultiViewer(idx, osdId, image, features, sliderElements, numViewers, opts))
+          viewers.push(new MultiViewer(idx, osdId, image, features, opacity, sliderElements, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer
