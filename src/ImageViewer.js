@@ -42,7 +42,13 @@ class ImageViewer {
         // Add FEATURE images to viewer
         if (typeof featureLayers[viewerIndex - 1] !== 'undefined') {
           let f = featureLayers[viewerIndex - 1]
-          let o = opacity[viewerIndex - 1]
+          let o
+          if (typeof opacity[viewerIndex - 1] !== 'undefined') {
+            o = opacity[viewerIndex - 1]
+          } else {
+            o = 1.0
+          }
+
           // console.log('opacity', o, 'viewerIndex', viewerIndex)
           f.forEach(function (feature, index) {
             viewer.addTiledImage({tileSource: feature, opacity: o[index], x: 0, y: 0})
