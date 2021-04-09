@@ -40,18 +40,32 @@ class ImageViewer {
 
       try {
         // Add FEATURE images to viewer
-        if (typeof featureLayers[viewerIndex - 1] !== 'undefined') {
-          let f = featureLayers[viewerIndex - 1]
-          let o
+        if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
+          console.log('No features for this viewer', viewerIndex)
+        } else {
+          let currentViewerFeatures = featureLayers[viewerIndex - 1] // Array starts with 0; viewer indices start with 1
+          // console.log('currentViewerFeatures', currentViewerFeatures)
+
+          let currentFeatureOpacity
           if (typeof opacity[viewerIndex - 1] !== 'undefined') {
-            o = opacity[viewerIndex - 1]
+            currentFeatureOpacity = opacity[viewerIndex - 1]
+            // console.log(currentFeatureOpacity)
           } else {
-            o = 1.0
+            // Error trapping the case where the number of opacities passed in was wrong.
+            let numFeat = featureLayers[viewerIndex - 1].length
+            let newArray = []
+            let j
+            for (j = 0; j < numFeat; j++) {
+              newArray[j] = 1.0
+            }
+            // console.log('newArray', newArray)
+            currentFeatureOpacity = newArray
+            console.warn('Setting default opacity for viewer', viewerIndex)
           }
 
-          // console.log('opacity', o, 'viewerIndex', viewerIndex)
-          f.forEach(function (feature, index) {
-            viewer.addTiledImage({tileSource: feature, opacity: o[index], x: 0, y: 0})
+          // console.log('opacity', currentFeatureOpacity, 'viewerIndex', viewerIndex)
+          currentViewerFeatures.forEach(function (feature, index) {
+            viewer.addTiledImage({tileSource: feature, opacity: currentFeatureOpacity[index], x: 0, y: 0})
           })
 
           setTimeout(function () {
@@ -83,12 +97,17 @@ class ImageViewer {
 
           setTimeout(function () {
 
-            // getTileUrl - layers
-            f.forEach(function (feature, index) {
-              viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-                return getIIIFTileUrl(this, level, x, y)
-              }
-            })
+            try {
+              // getTileUrl - layers
+              currentViewerFeatures.forEach(function (feature, index) {
+                viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+                  return getIIIFTileUrl(this, level, x, y)
+                }
+              })
+            } catch (err) {
+              document.getElementById("demo").innerHTML = err.message;
+            }
+
 
           }, 2000)
         }
