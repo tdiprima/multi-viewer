@@ -93,12 +93,15 @@ class ImageViewer {
           })
 
           try {
-            // getTileUrl - layers
-            currentViewerFeatures.forEach(function (feature, index) {
-              viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-                return getIIIFTileUrl(this, level, x, y)
-              }
-            })
+            setTimeout(function () {
+              // getTileUrl - layers
+              currentViewerFeatures.forEach(function (feature, index) {
+                viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+                  return getIIIFTileUrl(this, level, x, y)
+                }
+              })
+            }, 3000)
+
           } catch (err) {
             console.error('HEY!', err.message)
           }
