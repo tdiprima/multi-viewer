@@ -53,7 +53,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           td.appendChild(container) // ADD CONTAINER TO CELL
 
           // NAVIGATION TOOLS
-          let htm = ''
+          let htm = `<div><i id="colors${idx}" style="cursor: pointer;" class="fa fa-globe"></i></div>`
           if (numViewers > 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
 <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;&nbsp;`
@@ -134,6 +134,95 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
 
             // ADD FUNCTIONALITY - colorPicker
             colorPicker(document.getElementById('mark' + idx))
+          }
+
+          // COLOR RANGE POPUP
+          let myDiv
+          document.getElementById('colors' + idx).addEventListener('click', function (event) {
+            myDiv = document.createElement('div')
+            myDiv.id = 'myDiv'
+      
+            const img = document.createElement('img')
+            img.src = 'images/close_icon.png'
+            img.width = '25'
+            img.height = '25'
+            img.style = 'float: left'
+            img.addEventListener('click', function () {
+              this.parentNode.remove()
+            })
+            myDiv.appendChild(img)
+      
+            const myDivHeader = document.createElement('div')
+            myDivHeader.id = 'myDivHeader'
+            myDivHeader.innerHTML = 'Move this DIV'
+            myDiv.appendChild(myDivHeader)
+      
+            const colors = ['#FF0000', '#FFC801', '#FFFF00', '#01B9F5', '#0000FF', '#8713AC', '#FFFFFF00']
+            const numbers = [200, 170, 140, 100, 75, 30, 0]
+            colors.forEach(function (color, index) {
+
+              const div = document.createElement('div')
+              div.id = 'color' + index
+              div.style.backgroundColor = color
+              div.style.width = '20px'
+              div.style.height = '20px'
+              div.innerHTML = numbers[index]
+              myDiv.appendChild(div)
+              myDiv.appendChild(document.createElement('BR'))
+            })
+      
+            myDiv.style.left = event.clientX + 'px'
+            myDiv.style.top = event.clientY + 'px'
+      
+            document.body.appendChild(myDiv)
+      
+            // Make the DIV element draggable:
+            dragElement(myDiv)
+          })
+
+          function dragElement(elmnt) {
+            var pos1 = 0
+            var pos2 = 0
+            var pos3 = 0
+            var pos4 = 0
+      
+            if (document.getElementById(elmnt.id + 'Header')) {
+              // if present, the header is where you move the DIV from:
+              document.getElementById(elmnt.id + 'Header').onmousedown = dragMouseDown
+            } else {
+              // otherwise, move the DIV from anywhere inside the DIV:
+              elmnt.onmousedown = dragMouseDown
+            }
+      
+            function dragMouseDown(e) {
+              e = e || window.event
+              e.preventDefault()
+              // get the mouse cursor position at startup:
+              pos3 = e.clientX
+              pos4 = e.clientY
+              document.onmouseup = closeDragElement
+              // call a function whenever the cursor moves:
+              document.onmousemove = elementDrag
+            }
+      
+            function elementDrag(e) {
+              e = e || window.event
+              e.preventDefault()
+              // calculate the new cursor position:
+              pos1 = pos3 - e.clientX
+              pos2 = pos4 - e.clientY
+              pos3 = e.clientX
+              pos4 = e.clientY
+              // set the element's new position:
+              elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
+              elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
+            }
+      
+            function closeDragElement() {
+              // stop moving when mouse button is released:
+              document.onmouseup = null
+              document.onmousemove = null
+            }
           }
 
           // NEED TO PASS THESE TO VIEWER
