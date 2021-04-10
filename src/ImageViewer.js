@@ -68,32 +68,32 @@ class ImageViewer {
             viewer.addTiledImage({ tileSource: feature, opacity: currentFeatureOpacity[index], x: 0, y: 0 })
           })
 
-          let imf = new imageFiltering()
-          let filter = imf.getFilter()
-
-          // Set filter options
-          let itemCount = viewer.world.getItemCount()
-          let i
-          let filterOpts = []
-
-          for (i = 0; i < itemCount; i++) {
-            if (i > 0) {
-              filterOpts.push({
-                items: viewer.world.getItemAt(i),
-                processors: [
-                  //filter.prototype.COLORIZE(imf.getColor(i - 1))
-                  filter.prototype.COLORIZE({r: 0, g: 255, b: 0})
-                ]
-              })
-            }
-          }
-
-          viewer.setFilterOptions({
-            filters: filterOpts
-          })
-
           try {
             setTimeout(function () {
+              let imf = new imageFiltering()
+              let filter = imf.getFilter()
+
+              // Set filter options
+              let itemCount = viewer.world.getItemCount()
+              let i
+              let filterOpts = []
+
+              for (i = 0; i < itemCount; i++) {
+                if (i > 0) {
+                  filterOpts.push({
+                    items: viewer.world.getItemAt(i),
+                    processors: [
+                      filter.prototype.COLORIZE(imf.getColor(i - 1))
+                      //filter.prototype.COLORIZE({r: 0, g: 255, b: 0})
+                    ]
+                  })
+                }
+              }
+
+              viewer.setFilterOptions({
+                filters: filterOpts
+              })
+
               // getTileUrl - layers
               currentViewerFeatures.forEach(function (feature, index) {
                 viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
