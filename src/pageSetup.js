@@ -136,50 +136,6 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             colorPicker(document.getElementById('mark' + idx))
           }
 
-          // COLOR RANGE POPUP
-          let myDiv
-          document.getElementById('colors' + idx).addEventListener('click', function (event) {
-            myDiv = document.createElement('div')
-            myDiv.id = 'myDiv'
-      
-            const img = document.createElement('img')
-            img.src = 'images/close_icon.png'
-            img.width = '25'
-            img.height = '25'
-            img.style = 'float: left'
-            img.addEventListener('click', function () {
-              this.parentNode.remove()
-            })
-            myDiv.appendChild(img)
-      
-            const myDivHeader = document.createElement('div')
-            myDivHeader.id = 'myDivHeader'
-            myDivHeader.innerHTML = 'Move this DIV'
-            myDiv.appendChild(myDivHeader)
-      
-            const colors = ['#FF0000', '#FFC801', '#FFFF00', '#01B9F5', '#0000FF', '#8713AC', '#FFFFFF00']
-            const numbers = [200, 170, 140, 100, 75, 30, 0]
-            colors.forEach(function (color, index) {
-
-              const div = document.createElement('div')
-              div.id = 'color' + index
-              div.style.backgroundColor = color
-              div.style.width = '20px'
-              div.style.height = '20px'
-              div.innerHTML = numbers[index]
-              myDiv.appendChild(div)
-              myDiv.appendChild(document.createElement('BR'))
-            })
-      
-            myDiv.style.left = event.clientX + 'px'
-            myDiv.style.top = event.clientY + 'px'
-      
-            document.body.appendChild(myDiv)
-      
-            // Make the DIV element draggable:
-            dragElement(myDiv)
-          })
-
           // NEED TO PASS THESE TO VIEWER
           let sliderElements = []
           try {
