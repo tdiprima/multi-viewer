@@ -68,7 +68,6 @@ class ImageViewer {
             viewer.addTiledImage({ tileSource: feature, opacity: currentFeatureOpacity[index], x: 0, y: 0 })
           })
 
-          // Give the above a second to kick in
           let imf = new imageFiltering()
           let filter = imf.getFilter()
 
@@ -82,7 +81,8 @@ class ImageViewer {
               filterOpts.push({
                 items: viewer.world.getItemAt(i),
                 processors: [
-                  filter.prototype.COLORIZE(imf.getColor(i - 1))
+                  //filter.prototype.COLORIZE(imf.getColor(i - 1))
+                  filter.prototype.COLORIZE({r: 0, g: 255, b: 0})
                 ]
               })
             }
@@ -100,7 +100,7 @@ class ImageViewer {
                   return getIIIFTileUrl(this, level, x, y)
                 }
               })
-            }, 3000)
+            }, 2000)
 
           } catch (err) {
             console.error('HEY!', err.message)
