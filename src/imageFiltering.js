@@ -17,10 +17,32 @@ const imageFiltering = function () {
   filters.push(new filterColors(0, 128, 0)) // dark green 008000
   filters.push(new filterColors(0, 0, 255)) // blue 0000ff
   filters.push(new filterColors(75, 0, 130)) // indigo 4b0082
-  filters.push(new filterColors(28,28,28)) // dark gray #1c1c1c
-  filters.push(new filterColors(167,226,46)) // leaf green #a7e22e
+  filters.push(new filterColors(28, 28, 28)) // dark gray #1c1c1c
+  filters.push(new filterColors(167, 226, 46)) // leaf green #a7e22e
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
-  filters.push(new filterColors(255,210,4)) // goldenrod #ffd204
+  filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
+
+  // EXPERIMENTAL
+  OpenSeadragon.Filters.GREYSCALE.prototype.COLORLEVELS = function (r, g, b) {
+    return function (context, callback) {
+      const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+      const pixels = imgData.data
+      let i
+      for (i = 0; i < pixels.length; i += 4) {
+        if (pixels[i + 3] === 255) {
+          pixels[i] = r
+          pixels[i + 1] = g
+          pixels[i + 2] = b
+          pixels[i + 3] = 255
+        } else {
+          pixels[i + 3] = 0
+        }
+      }
+      context.putImageData(imgData, 0, 0)
+      callback()
+    }
+  }
+
 
   return {
     getFilter: function () {

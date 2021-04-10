@@ -84,14 +84,15 @@ class MultiViewer extends ImageViewer {
 
         document.body.appendChild(myDiv)
 
-        // viewer.setFilterOptions({
-        //   filters: [{
-        //     items: viewer.world.getItemAt(1),
-        //     processors: [
-        //       myColor.prototype.COLORIZE2(0, 255, 0)
-        //     ]
-        //   }]
-        // })
+        // TODO! Which layer??
+        viewer.setFilterOptions({
+          filters: [{
+            items: viewer.world.getItemAt(1),
+            processors: [
+              myColor.prototype.COLORLEVELS(255, 0, 0)
+            ]
+          }]
+        })
 
         // Make the DIV element draggable:
         dragElement(myDiv)
