@@ -100,7 +100,7 @@ class ImageViewer {
                   return getIIIFTileUrl(this, level, x, y)
                 }
               })
-            }, 2000)
+            }, 3000)
 
           } catch (err) {
             console.error('HEY!', err.message)

@@ -84,7 +84,7 @@ function handleColorLevels(idx, viewer) {
     myDivHeader.innerHTML = 'Move this DIV'
     myDiv.appendChild(myDivHeader)
 
-    const colors = ['#FF0000', '#FFC801', '#FFFF00', '#01B9F5', '#0000FF', '#8713AC', '#FFFFFF00']
+    const colors = ['#FF0000', '#FF9900', '#FFFF00', '#01B9F5', '#0000FF', '#8713AC', '#FFFFFF00']
     const numbers = [200, 170, 140, 100, 75, 30, 0]
     colors.forEach(function (color, index) {
 

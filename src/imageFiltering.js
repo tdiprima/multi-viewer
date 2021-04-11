@@ -22,21 +22,54 @@ const imageFiltering = function () {
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
-  // EXPERIMENTAL
-  OpenSeadragon.Filters.GREYSCALE.prototype.COLORLEVELS = function (r, g, b) {
+  // EXPERIMENTAL!!!
+  OpenSeadragon.Filters.GREYSCALE.prototype.COLORLEVELS = function (some_object) {
     return function (context, callback) {
       const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-      const pixels = imgData.data
+      const pxl = imgData.data
       let i
-      for (i = 0; i < pixels.length; i += 4) {
-        if (pixels[i + 3] === 255) {
-          pixels[i] = r
-          pixels[i + 1] = g
-          pixels[i + 2] = b
-          pixels[i + 3] = 255
+      for (i = 0; i < pxl.length; i += 4) {
+        if (pxl[i + 3] === 255) {
+          // PRETEND!!!
+          var v = (pxl[i] + pxl[i + 1] + pxl[i + 2]) / 3 | 0
+          let rgba = levels(v)
+          pxl[i] = rgba.r
+          pxl[i + 1] = rgba.g
+          pxl[i + 2] = rgba.b
+          pxl[i + 3] = rgba.a
         } else {
-          pixels[i + 3] = 0
+          pxl[i + 3] = 0
         }
+      }
+      function levels(val) {
+        if (val > 0 && val <= 30) {
+          return { r: 255, g: 255, b: 255, a: 0 }
+        }
+
+        if (val > 30 && val <= 75) {
+          return { r: 135, g: 19, b: 172, a: 255 }
+        }
+
+        if (val > 75 && val <= 100) {
+          return { r: 0, g: 0, b: 255, a: 255 }
+        }
+
+        if (val > 100 && val <= 140) {
+          return { r: 1, g: 185, b: 245, a: 255 }
+        }
+
+        if (val > 140 && val <= 170) {
+          return { r: 255, g: 255, b: 0, a: 255 }
+        }
+
+        if (val > 170 && val <= 200) {
+          return { r: 255, g: 153, b: 0, a: 255 }
+        }
+
+        if (val > 200) {
+          return { r: 255, g: 0, b: 0, a: 255 }
+        }
+
       }
       context.putImageData(imgData, 0, 0)
       callback()
