@@ -42,7 +42,7 @@ const imageFiltering = function () {
         }
       }
       function levels(val) {
-        if (val > 0 && val <= 30) {
+        if (val >= 0 && val <= 30) {
           return { r: 255, g: 255, b: 255, a: 0 }
         }
 
