@@ -113,7 +113,7 @@ function handleColorLevels(idx, viewer) {
 
     let imf1 = new imageFiltering()
     let filter1 = imf1.getFilter1()
-    console.log(filter1)
+    // console.log(filter1)
     // TODO! Layer #!
     viewer.setFilterOptions({
       filters: [{
