@@ -22,61 +22,6 @@ const imageFiltering = function () {
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
-  // EXPERIMENTAL!!!
-  OpenSeadragon.Filters.GREYSCALE.prototype.COLORLEVELS = function (some_object) {
-    return function (context, callback) {
-      const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-      const pxl = imgData.data
-      let i
-      for (i = 0; i < pxl.length; i += 4) {
-        if (pxl[i + 3] === 255) {
-          // PRETEND!!!
-          var v = (pxl[i] + pxl[i + 1] + pxl[i + 2]) / 3 | 0
-          let rgba = levels(v)
-          pxl[i] = rgba.r
-          pxl[i + 1] = rgba.g
-          pxl[i + 2] = rgba.b
-          pxl[i + 3] = rgba.a
-        } else {
-          pxl[i + 3] = 0
-        }
-      }
-      function levels(val) {
-        if (val >= 0 && val <= 30) {
-          return { r: 255, g: 255, b: 255, a: 0 }
-        }
-
-        if (val > 30 && val <= 75) {
-          return { r: 135, g: 19, b: 172, a: 255 }
-        }
-
-        if (val > 75 && val <= 100) {
-          return { r: 0, g: 0, b: 255, a: 255 }
-        }
-
-        if (val > 100 && val <= 140) {
-          return { r: 1, g: 185, b: 245, a: 255 }
-        }
-
-        if (val > 140 && val <= 170) {
-          return { r: 255, g: 255, b: 0, a: 255 }
-        }
-
-        if (val > 170 && val <= 200) {
-          return { r: 255, g: 153, b: 0, a: 255 }
-        }
-
-        if (val > 200) {
-          return { r: 255, g: 0, b: 0, a: 255 }
-        }
-
-      }
-      context.putImageData(imgData, 0, 0)
-      callback()
-    }
-  }
-
-
   return {
     getFilter: function () {
       let filter = {}
@@ -85,7 +30,14 @@ const imageFiltering = function () {
         // console.log('color', color)
         return function (context, callback) {
           // Read the canvas pixels
-          const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+          let imgData
+          try {
+            // w x h: 256 x 256
+            imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+          }
+          catch (err) {
+            console.error('COLORIZE:', err.message)
+          }
           const pixels = imgData.data
           let i
           // Run the filter on them
@@ -102,11 +54,90 @@ const imageFiltering = function () {
             }
           }
           // Write the result back onto the canvas
-          context.putImageData(imgData, 0, 0)
-          callback()
+          try {
+            // console.log('imgData', imgData)
+            context.putImageData(imgData, 0, 0)
+            callback()
+          }
+          catch (err) {
+            console.error('COLORIZE:', err.message)
+          }
+
         }
       }
       return filter
+    },
+    getFilter1: function () {
+      // WORK IN PROGRESS!!!
+      let filter1 = {}
+      filter1 = OpenSeadragon.Filters.GREYSCALE
+      filter1.prototype.COLORLEVELS = function (placeholder) {
+        return function (context, callback) {
+          let imgData
+          try {
+            imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+          }
+          catch (err) {
+            console.error('COLORLEVELS:', err.message)
+          }
+          const pxl = imgData.data
+          let j
+          for (j = 0; j < pxl.length; j += 4) {
+            if (pxl[j + 3] === 255) {
+              // PRETEND!!!
+              var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
+              let rgba = levels(v)
+              pxl[j] = rgba.r
+              pxl[j + 1] = rgba.g
+              pxl[j + 2] = rgba.b
+              pxl[j + 3] = rgba.a
+            } else {
+              pxl[j + 3] = 0
+            }
+          }
+          function levels(val) {
+            if (val >= 0 && val <= 30) {
+              return { r: 255, g: 255, b: 255, a: 0 }
+            }
+
+            if (val > 30 && val <= 75) {
+              return { r: 135, g: 19, b: 172, a: 255 }
+            }
+
+            if (val > 75 && val <= 100) {
+              return { r: 0, g: 0, b: 255, a: 255 }
+            }
+
+            if (val > 100 && val <= 140) {
+              return { r: 1, g: 185, b: 245, a: 255 }
+            }
+
+            if (val > 140 && val <= 170) {
+              return { r: 255, g: 255, b: 0, a: 255 }
+            }
+
+            if (val > 170 && val <= 200) {
+              return { r: 255, g: 153, b: 0, a: 255 }
+            }
+
+            if (val > 200) {
+              return { r: 255, g: 0, b: 0, a: 255 }
+            }
+
+          }
+
+          try {
+            // console.log('imgData', imgData)
+            context.putImageData(imgData, 0, 0)
+            callback()
+          }
+          catch (err) {
+            console.error('COLORLEVELS:', err.message)
+          }
+
+        }
+      }
+      return filter1
     },
     getColor: function (num) {
       if (num >= filters.length) {
