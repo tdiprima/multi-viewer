@@ -45,7 +45,7 @@ class MultiViewer extends ImageViewer {
       }
 
       handleColorLevels(this.idx, this.viewer1)
-      
+
     } catch (e) {
       console.log(e)
     }
@@ -66,6 +66,15 @@ function handleColorLevels(idx, viewer) {
   // COLOR RANGE POPUP
   let myDiv
   document.getElementById('colors' + idx).addEventListener('click', function (event) {
+    event = event || window.event
+    try {
+      console.log('X:', event.clientX, event.layerX, event.pageX)
+      console.log('Y:', event.clientY, event.layerY, event.pageY)
+    }
+    catch (err) {
+      console.log('EVENT:', err.message)
+    }
+
     myDiv = document.createElement('div')
     myDiv.id = 'myDiv'
 
@@ -87,7 +96,6 @@ function handleColorLevels(idx, viewer) {
     const colors = ['#FF0000', '#FF9900', '#FFFF00', '#01B9F5', '#0000FF', '#8713AC', '#FFFFFF00']
     const numbers = [200, 170, 140, 100, 75, 30, 0]
     colors.forEach(function (color, index) {
-
       const div = document.createElement('div')
       div.id = 'color' + index
       div.style.backgroundColor = color
@@ -103,12 +111,15 @@ function handleColorLevels(idx, viewer) {
 
     document.body.appendChild(myDiv)
 
-    // TODO! Which layer??
+    let imf1 = new imageFiltering()
+    let filter1 = imf1.getFilter1()
+    console.log(filter1)
+    // TODO! Layer #!
     viewer.setFilterOptions({
       filters: [{
         items: viewer.world.getItemAt(1),
         processors: [
-          OpenSeadragon.Filters.GREYSCALE.prototype.COLORLEVELS(255, 0, 0)
+          filter1.prototype.COLORLEVELS({})
         ]
       }]
     })
