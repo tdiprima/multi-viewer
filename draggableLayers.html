@@ -5,16 +5,15 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Draggable Layers</title>
-  <link href="css/main.css" rel="stylesheet">
-  <link href="css/color-picker.min.css" rel="stylesheet">
-  <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
-        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
-        rel="stylesheet"/>
+  <link href="css/main.css" rel="stylesheet"/>
+  <link href="css/color-picker.min.css" rel="stylesheet"/>
+  <link href="vendor/fontawesome-free-5.15.2-web/css/all.min.css" rel="stylesheet"/>
   <style>
     *[draggable=true] {
       -khtml-user-drag: element;
       cursor: move;
     }
+
   </style>
 </head>
 
@@ -49,9 +48,12 @@
   let loc = window.location.origin
 
   function blca() {
-    base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
-    let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-    let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA-featureimage.tif/info.json'
+    base = loc +
+      '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+    let f1 = loc +
+      '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+    let f2 = loc +
+      '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA-featureimage.tif/info.json'
     features = [
       [f1, f2],
       [f1, f2]
@@ -59,17 +61,26 @@
   }
 
   function brca() {
-    base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
-    let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
-    let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
-    features = [[f1, f2], [f1, f2]]
+    base = loc +
+      '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
+    let f1 = loc +
+      '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
+    let f2 = loc +
+      '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
+    features = [
+      [f1, f2],
+      [f1, f2]
+    ]
   }
 
   // brca()
   // blca()
 
   base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-  features = [[base], [base]] // Testing
+  features = [
+    [base],
+    [base]
+  ] // Testing
 
   const options = {
     draggableLayers: true,
@@ -85,7 +96,10 @@
   }
 
   // divId, image, features, opacity, numViewers, rows, columns, width, height, opts
-  pageSetup('contentDiv', base, features, [[1.0, 0.0], [1.0, 1.0]], 2, 1, 2, 640, 480, options)
+  pageSetup('contentDiv', base, features, [
+    [1.0, 0.0],
+    [1.0, 1.0]
+  ], 2, 1, 2, 640, 480, options)
 
 </script>
 

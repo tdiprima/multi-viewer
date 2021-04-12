@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>TCGA Segmentation Data</title>
-  <link href="build/main.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+  <link href="build/main.min.css" rel="stylesheet"/>
+  <link href="vendor/fontawesome-free-5.15.2-web/css/all.min.css" rel="stylesheet"/>
 
 </head>
 
@@ -34,7 +34,9 @@
   }
 
   // divId, image, features, opacity, numViewers, rows, columns, width, height, opts
-  pageSetup('contentDiv', baseImage, featureLayers, [[1.0]], 1, 1, 1, 640, 480, options)
+  pageSetup('contentDiv', baseImage, featureLayers, [
+    [1.0]
+  ], 1, 1, 1, 640, 480, options)
 
 </script>
 
