@@ -54,8 +54,7 @@ const imageFiltering = function () {
               context.putImageData(imgData, 0, 0)
               callback()
             }
-          }
-          catch (err) {
+          } catch (err) {
             console.error('COLORIZE:', err.message)
           }
 
@@ -79,50 +78,43 @@ const imageFiltering = function () {
               for (j = 0; j < pxl.length; j += 4) {
                 if (pxl[j + 3] === 255) {
                   // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
-                  let rgba = levels(pxl[j]) // r = g = b
-                  pxl[j] = rgba.r
-                  pxl[j + 1] = rgba.g
-                  pxl[j + 2] = rgba.b
-                  pxl[j + 3] = rgba.a
+                  let rgba = levels(pxl[j], colorRanges) // r = g = b
+                  pxl[j] = rgba[0]
+                  pxl[j + 1] = rgba[1]
+                  pxl[j + 2] = rgba[2]
+                  pxl[j + 3] = rgba[3]
                 } else {
                   pxl[j + 3] = 0
                 }
               }
-              function levels(val) {
-                if (val >= 0 && val <= 30) {
-                  return { r: 255, g: 255, b: 255, a: 0 }
-                }
 
-                if (val > 30 && val <= 75) {
-                  return { r: 135, g: 19, b: 172, a: 255 }
-                }
+              function levels(val, cr) {
+                let i
+                for (i = 0; i < cr.length; i++) {
+                  let low = cr[i].low
+                  let hi = cr[i].hi
+                  let color = cr[i].color
 
-                if (val > 75 && val <= 100) {
-                  return { r: 0, g: 0, b: 255, a: 255 }
+                  if (low === 1) {
+                    if (val >= 0 && val <= hi) {
+                      return parseColor(color)
+                    }
+                  } else {
+                    if (val >= low && val <= hi) {
+                      return parseColor(color)
+                    }
+                  }
                 }
-
-                if (val > 100 && val <= 140) {
-                  return { r: 1, g: 185, b: 245, a: 255 }
-                }
-
-                if (val > 140 && val <= 170) {
-                  return { r: 255, g: 255, b: 0, a: 255 }
-                }
-
-                if (val > 170 && val <= 200) {
-                  return { r: 255, g: 153, b: 0, a: 255 }
-                }
-
-                if (val > 200) {
-                  return { r: 255, g: 0, b: 0, a: 255 }
-                }
-
               }
+
+              function parseColor(input) {
+                return input.replace(/[a-z%\s\(\)]/g,'').split(',')
+              }
+
               context.putImageData(imgData, 0, 0)
               callback()
             }
-          }
-          catch (err) {
+          } catch (err) {
             console.error('COLORLEVELS:', err.message)
           }
 
