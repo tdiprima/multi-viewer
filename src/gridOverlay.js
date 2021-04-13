@@ -1,5 +1,5 @@
 const gridOverlay = function (idx, overlay) {
-  const cellSize = 50
+  const cellSize = 25
 
   const gridProps = {
     canvas: overlay.fabricCanvas(),
@@ -7,7 +7,7 @@ const gridOverlay = function (idx, overlay) {
     canvasHeight: Math.ceil(overlay.fabricCanvas().height),
     cellWidth: cellSize,
     cellHeight: cellSize,
-    color: 'red',
+    color: '#C0C0C0',
     cellX: [],
     cellY: [],
     gridAdded: false
