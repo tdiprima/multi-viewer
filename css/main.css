@@ -157,14 +157,17 @@ button {
   border: 3px dotted #00FF00;
 }
 
-/* floating div*/
+/* floating color function div */
 
 #myDiv {
   position: absolute;
   z-index: 9;
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;
-  /* text-align: center; */
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px; 
+  border-radius: 5px;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 #myDivHeader {

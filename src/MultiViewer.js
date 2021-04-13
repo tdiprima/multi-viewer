@@ -67,21 +67,20 @@ function handleColorLevels(idx, viewer) {
   let myDiv
   document.getElementById('colors' + idx).addEventListener('click', function (event) {
     event = event || window.event
-    try {
-      console.log('X:', event.clientX, event.layerX, event.pageX)
-      console.log('Y:', event.clientY, event.layerY, event.pageY)
-    }
-    catch (err) {
-      console.log('EVENT:', err.message)
-    }
+    // try {
+    //   console.log('X:', event.clientX, event.layerX, event.pageX)
+    //   console.log('Y:', event.clientY, event.layerY, event.pageY)
+    // } catch (err) {
+    //   console.log('EVENT:', err.message)
+    // }
 
     myDiv = document.createElement('div')
     myDiv.id = 'myDiv'
 
     const img = document.createElement('img')
     img.src = 'images/close_icon.png'
-    img.width = '25'
-    img.height = '25'
+    img.width = 25
+    img.height = 25
     img.style = 'float: left'
     img.addEventListener('click', function () {
       this.parentNode.remove()
@@ -93,15 +92,26 @@ function handleColorLevels(idx, viewer) {
     myDivHeader.innerHTML = 'Color Levels'
     myDiv.appendChild(myDivHeader)
 
-    const colors = ['#FF0000', '#FF9900', '#FFFF00', '#01B9F5', '#0000FF', '#8713AC', '#FFFFFF00']
-    const numbers = [200, 170, 140, 100, 75, 30, 0]
-    colors.forEach(function (color, index) {
-      const div = document.createElement('div')
+    // RAINBOW
+    // let colorRanges = [{ color: '#FF0000', low: 201, hi: 255 },
+    // { color: '#FF9900', low: 171, hi: 200 },
+    // { color: '#FFFF00', low: 141, hi: 170 },
+    // { color: '#01B9F5', low: 101, hi: 140 },
+    // { color: '#0000FF', low: 76, hi: 100 },
+    // { color: '#8713AC', low: 31, hi: 75 },
+    // { color: '#FFFFFF00', low: 0, hi: 30 }]
+
+    // WASHED-OUT, LIKE CAMIC
+    let colorRanges = [{ color: '#d83f2a', low: 201, hi: 255 }, { color: '#f6ad60', low: 151, hi: 200 },
+      { color: '#fefbbf', low: 101, hi: 150 }, { color: '#abdda4', low: 51, hi: 100 }, { color: '#2c83ba', low: 0, hi: 50 }]
+
+    colorRanges.forEach(function (cr, index) {
+      let div = document.createElement('div')
       div.id = 'color' + index
-      div.style.backgroundColor = color
+      div.style.backgroundColor = cr.color
       div.style.width = '20px'
       div.style.height = '20px'
-      div.innerHTML = numbers[index]
+      div.innerHTML = cr.low + ' - ' + cr.hi
       myDiv.appendChild(div)
       myDiv.appendChild(document.createElement('BR'))
     })
@@ -119,7 +129,7 @@ function handleColorLevels(idx, viewer) {
       filters: [{
         items: viewer.world.getItemAt(1),
         processors: [
-          filter1.prototype.COLORLEVELS({})
+          filter1.prototype.COLORLEVELS(colorRanges)
         ]
       }]
     })

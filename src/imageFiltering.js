@@ -67,7 +67,7 @@ const imageFiltering = function () {
       // WORK IN PROGRESS!
       let filter1 = {}
       filter1 = OpenSeadragon.Filters.GREYSCALE
-      filter1.prototype.COLORLEVELS = function (placeholder) {
+      filter1.prototype.COLORLEVELS = function (colorRanges) {
         return function (context, callback) {
           let imgData
           try {
