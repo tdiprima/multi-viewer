@@ -58,16 +58,16 @@
     // BLCA
     let s1 = 'TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E'
     let s2 = 'TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA'
-    let base = buildAUrl('image', 'blca', s1)
-    let f1 = buildAUrl('feature', 'blca', s1)
-    let f2 = buildAUrl('feature', 'blca', s2)
+    let base = buildUrl('image', 'blca', s1)
+    let f1 = buildUrl('feature', 'blca', s1)
+    let f2 = buildUrl('feature', 'blca', s2)
 
     // BRCA
     // let s1 = 'TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291'
     // let s2 = 'TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96'
-    // let base = buildAUrl('image', 'brca', s1)
-    // let f1 = buildAUrl('feature', 'brca', s1)
-    // let f2 = buildAUrl('feature', 'brca', s2)
+    // let base = buildUrl('image', 'brca', s1)
+    // let f1 = buildUrl('feature', 'brca', s1)
+    // let f2 = buildUrl('feature', 'brca', s2)
 
     // let features = [[]]
     let features = [[f1, f2]]
@@ -79,7 +79,7 @@
 
   multiFeatures()
 
-  function buildAUrl(type, cType, img) {
+  function buildUrl(type, cType, img) {
 
     if (type === 'image') {
       return window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/' + cType + '/' + img + '.svs/info.json'
