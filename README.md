@@ -1,6 +1,7 @@
 # multi-viewer
 
 Multiple synchronized OpenSeadragon viewers
+
 Renders colorized segmentations, heatmaps, etc.
 
 Segmentation layer color ordering:<br>
