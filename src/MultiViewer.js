@@ -191,7 +191,7 @@ function handleDraggable() {
   let items = document.querySelectorAll('.tab_links')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
-    item.addEventListener('click', handleDragStart) // will this fix it?
+    // item.addEventListener('click', handleDragStart) // will this fix it?
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
   })
