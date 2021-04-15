@@ -98,13 +98,15 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           if (opts && opts.draggableLayers) {
             htm += `<div class="tab" id="tabBox${idx}">`
 
+            const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
+
             if (idx === 1) {
-              // TODO: DEV ONLY; ELSE USE something else
-              htm += `<button class="tab_links" id="feat${f1}" draggable="true">Feat 1</button>
-          <button class="tab_links" id="feat${f2}" draggable="true">Feat 2</button>`
+              // TODO: This is a hack.
+              htm += `<button class="tab_links" id="feat${f1}" draggable="true">${features[0][0] ? features[0][0].match(regex) : 'Feat n'}</button>
+          <button class="tab_links" id="feat${f2}" draggable="true">${features[1][0] ? features[1][0].match(regex) : 'Feat n'}</button>`
             } else {
-              htm += `<button class="tab_links" id="feat${f3}" draggable="true">Feat 3</button>
-          <button class="tab_links" id="feat${f4}" draggable="true">Feat 4</button>`
+              htm += `<button class="tab_links" id="feat${f3}" draggable="true">${features[0][0] ? features[0][0].match(regex) : 'Feat n'}</button>
+          <button class="tab_links" id="feat${f4}" draggable="true">${features[1][0] ? features[1][0].match(regex) : 'Feat n'}</button>`
             }
 
             htm += `&nbsp;</div>`
