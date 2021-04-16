@@ -44,7 +44,10 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
 
-      handleColorLevels(this.idx, this.viewer1)
+      let popup = document.getElementById('colors' + idx)
+      if (popup) {
+        handleColorLevels(popup, this.viewer1)
+      }
 
     } catch (e) {
       console.log(e)
@@ -62,10 +65,11 @@ class MultiViewer extends ImageViewer {
 
 }
 
-function handleColorLevels(idx, viewer) {
+function handleColorLevels(popup, viewer) {
   // COLOR RANGE POPUP
   let myDiv
-  document.getElementById('colors' + idx).addEventListener('click', function (event) {
+
+  popup.addEventListener('click', function (event) {
     event = event || window.event
 
     myDiv = document.createElement('div')
@@ -98,10 +102,13 @@ function handleColorLevels(idx, viewer) {
     // { color: 'rgba(255, 255, 255, 0)', low: 0, hi: 30 }]
 
     // WASHED-OUT, LIKE CAMIC
-    let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
-      { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
-      { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
-
+    let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255}, {
+      color: 'rgba(246, 173, 96, 255)',
+      low: 151,
+      hi: 200
+    },
+      {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150}, {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
+      {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
     colorRanges.forEach(function (cr, index) {
       let div = document.createElement('div')
@@ -134,6 +141,7 @@ function handleColorLevels(idx, viewer) {
     // Make the DIV element draggable:
     dragElement(myDiv)
   })
+
 }
 
 function dragElement(elmnt) {
