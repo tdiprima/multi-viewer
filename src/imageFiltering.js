@@ -63,7 +63,6 @@ const imageFiltering = function () {
       return filter
     },
     getFilter1: function () {
-      // WORK IN PROGRESS!
       let filter1 = {}
       filter1 = OpenSeadragon.Filters.GREYSCALE
       filter1.prototype.COLORLEVELS = function (colorRanges) {

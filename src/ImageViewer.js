@@ -71,7 +71,7 @@ class ImageViewer {
           try {
             setTimeout(function () {
               let imf = new imageFiltering()
-              // TODO: TEMPORARY FOR DEMO!!!
+              // TODO: TEMPORARY FOR DEMO!
               let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
                 { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
                 { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
@@ -85,7 +85,7 @@ class ImageViewer {
                 }]
               })
 
-              // TODO: TEMPORARY FOR DEMO!!!
+              // TODO: TEMPORARY FOR DEMO!
               // Set filter options
               // let filter = imf.getFilter()
               // let itemCount = viewer.world.getItemCount()
