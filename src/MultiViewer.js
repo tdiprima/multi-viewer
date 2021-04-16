@@ -44,7 +44,7 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
 
-      let popup = document.getElementById('colors' + idx)
+      let popup = document.getElementById('colors' + this.idx)
       if (popup) {
         handleColorLevels(popup, this.viewer1)
       }
