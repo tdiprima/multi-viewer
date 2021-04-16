@@ -49,7 +49,7 @@
   // Display one OSD viewer
   function testImageViewer(base) {
     info.innerHTML = 'Display an Image Using ImageViewer'
-    new ImageViewer(1, 'contentDiv', base)
+    new ImageViewer(1, 'contentDiv', base, [], [])
   }
 
   // testImageViewer(base)
@@ -60,7 +60,7 @@
     new MultiViewer(1, 'contentDiv', base, [], [])
   }
 
-  testMultiViewer(base)
+  // testMultiViewer(base)
 
   // Testing multiple layers
   // NOTE! We do not currently have > 1 overlay, so I'm using an overlay from a DIFFERENT slide as the 2nd overlay.
@@ -87,7 +87,7 @@
     new ImageViewer(1, 'contentDiv', base, features, opacities)
   }
 
-  // multiFeatures()
+  multiFeatures()
 
   function buildUrl(type, cType, img) {
 
