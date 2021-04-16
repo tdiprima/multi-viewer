@@ -145,10 +145,10 @@ function handleColorLevels(popup, viewer) {
 }
 
 function dragElement(elmnt) {
-  var pos1 = 0
-  var pos2 = 0
-  var pos3 = 0
-  var pos4 = 0
+  let pos1 = 0
+  let pos2 = 0
+  let pos3 = 0
+  let pos4 = 0
 
   if (document.getElementById(elmnt.id + 'Header')) {
     // if present, the header is where you move the DIV from:
