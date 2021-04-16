@@ -67,12 +67,6 @@ function handleColorLevels(idx, viewer) {
   let myDiv
   document.getElementById('colors' + idx).addEventListener('click', function (event) {
     event = event || window.event
-    // try {
-    //   console.log('X:', event.clientX, event.layerX, event.pageX)
-    //   console.log('Y:', event.clientY, event.layerY, event.pageY)
-    // } catch (err) {
-    //   console.log('EVENT:', err.message)
-    // }
 
     myDiv = document.createElement('div')
     myDiv.id = 'myDiv'
@@ -91,6 +85,8 @@ function handleColorLevels(idx, viewer) {
     myDivHeader.id = 'myDivHeader'
     myDivHeader.innerHTML = 'Color Levels'
     myDiv.appendChild(myDivHeader)
+
+    console.log('FILTERS')
 
     // RAINBOW
     // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
@@ -125,11 +121,10 @@ function handleColorLevels(idx, viewer) {
 
     let imf1 = new imageFiltering()
     let filter1 = imf1.getFilter1()
-    // console.log(filter1)
-    // TODO! Layer #!
+    // TODO: Which one fires?
     viewer.setFilterOptions({
       filters: [{
-        items: viewer.world.getItemAt(1),
+        items: viewer.world.getItemAt(1), // TODO: Layer #
         processors: [
           filter1.prototype.COLORLEVELS(colorRanges)
         ]

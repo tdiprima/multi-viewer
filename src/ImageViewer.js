@@ -71,41 +71,42 @@ class ImageViewer {
           try {
             setTimeout(function () {
               let imf = new imageFiltering()
-              // TODO: TEMPORARY FOR DEMO!
-              let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
-                { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
-                { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
-              let filter = imf.getFilter1()
+              console.log('FILTERS')
+
+              // TODO: MAKE DECISION ON TYPE OF FILTER
+
+              // Set filter options
+              let filter = imf.getFilter()
+              let itemCount = viewer.world.getItemCount()
+              let i
+              let filterOpts = []
+              for (i = 0; i < itemCount; i++) {
+                if (i > 0) {
+                  filterOpts.push({
+                    items: viewer.world.getItemAt(i),
+                    processors: [
+                      filter.prototype.COLORIZE(imf.getColor(i - 1))
+                    ]
+                  })
+                }
+              }
               viewer.setFilterOptions({
-                filters: [{
-                  items: viewer.world.getItemAt(1),
-                  processors: [
-                    filter.prototype.COLORLEVELS(colorRanges)
-                  ]
-                }]
+                filters: filterOpts
               })
 
-              // TODO: TEMPORARY FOR DEMO!
-              // Set filter options
-              // let filter = imf.getFilter()
-              // let itemCount = viewer.world.getItemCount()
-              // let i
-              // let filterOpts = []
-              // for (i = 0; i < itemCount; i++) {
-              //   if (i > 0) {
-              //     filterOpts.push({
-              //       items: viewer.world.getItemAt(i),
-              //       processors: [
-              //         filter.prototype.COLORIZE(imf.getColor(i - 1))
-              //         //filter.prototype.COLORIZE({r: 0, g: 255, b: 0})
-              //       ]
-              //     })
-              //   }
-              // }
+              // Probability filter
+              // let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
+              //   { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
+              //   { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
+              // let filter = imf.getFilter1()
               // viewer.setFilterOptions({
-              //   filters: filterOpts
+              //   filters: [{
+              //     items: viewer.world.getItemAt(1), // TODO: what layer
+              //     processors: [
+              //       filter.prototype.COLORLEVELS(colorRanges)
+              //     ]
+              //   }]
               // })
-
 
               // getTileUrl - layers
               currentViewerFeatures.forEach(function (feature, index) {
@@ -116,7 +117,7 @@ class ImageViewer {
             }, 3000)
 
           } catch (err) {
-            console.error('HEY!', err.message)
+            console.error('Filters:', err.message)
           }
 
         }
