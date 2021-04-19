@@ -74,9 +74,11 @@ class ImageViewer {
               // console.log('FILTERS')
 
               // TODO: MAKE DECISION ON TYPE OF FILTER
+              // Get JSON - if it's segmentation, use 'filter'
+              // If it's anything else (like a heatmap), use 'filter1'
 
               // Set filter options
-              let filter = imf.getFilter()
+              let filter = imf.getFilter1() // TODO: HERE!
               let itemCount = viewer.world.getItemCount()
               let i
               let filterOpts = []
