@@ -5,7 +5,7 @@
  * @param viewerDivId: (viewer1, viewer2...)
  * @param baseImage
  * @param featureLayers
- * @param opacity
+ * @param opacity - feature opacity
  */
 class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity) {
