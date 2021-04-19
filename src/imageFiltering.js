@@ -238,7 +238,6 @@ const imageFiltering = function () {
 
         let imf1 = new imageFiltering()
         let filter1 = imf1.getFilter1()
-        // TODO: Which one fires?
         viewer.setFilterOptions({
           filters: [{
             items: viewer.world.getItemAt(1), // TODO: Layer #
