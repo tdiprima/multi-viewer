@@ -71,15 +71,14 @@ class ImageViewer {
           try {
             setTimeout(function () {
               let imf = new imageFiltering()
-              // console.log('FILTERS')
 
               // TODO: MAKE DECISION ON TYPE OF FILTER
               // Get JSON - if it's segmentation, use 'filter'
               // If it's anything else (like a heatmap), use 'filter1'
 
               // Set filter options
-              let filter = imf.getFilter() // TODO: HERE!
-              // let filter = imf.getFilter1() // todo: here!
+              // let filter = imf.getFilter() // TODO: HERE!
+              let filter = imf.getFilter1() // todo: here!
 
               // Probability filter
               let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
@@ -94,8 +93,8 @@ class ImageViewer {
                   filterOpts.push({
                     items: viewer.world.getItemAt(i),
                     processors: [
-                      // filter.prototype.COLORLEVELS(colorRanges) // TODO: AND HERE!
-                      filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
+                      filter.prototype.COLORLEVELS(colorRanges) // TODO: AND HERE!
+                      // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
                     ]
                   })
                 }
