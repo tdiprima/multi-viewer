@@ -78,7 +78,14 @@ class ImageViewer {
               // If it's anything else (like a heatmap), use 'filter1'
 
               // Set filter options
-              let filter = imf.getFilter1() // TODO: HERE!
+              // let filter = imf.getFilter() // TODO: HERE!
+              let filter = imf.getFilter1()   // TODO: HERE!
+
+              // Probability filter
+              let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
+                { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
+                { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
+
               let itemCount = viewer.world.getItemCount()
               let i
               let filterOpts = []
@@ -87,7 +94,8 @@ class ImageViewer {
                   filterOpts.push({
                     items: viewer.world.getItemAt(i),
                     processors: [
-                      filter.prototype.COLORIZE(imf.getColor(i - 1))
+                      filter.prototype.COLORLEVELS(colorRanges)         // TODO: AND HERE!
+                      // filter.prototype.COLORIZE(imf.getColor(i - 1)) // TODO: AND HERE!
                     ]
                   })
                 }
@@ -95,20 +103,6 @@ class ImageViewer {
               viewer.setFilterOptions({
                 filters: filterOpts
               })
-
-              // Probability filter
-              // let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
-              //   { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
-              //   { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
-              // let filter = imf.getFilter1()
-              // viewer.setFilterOptions({
-              //   filters: [{
-              //     items: viewer.world.getItemAt(1), // TODO: what layer
-              //     processors: [
-              //       filter.prototype.COLORLEVELS(colorRanges)
-              //     ]
-              //   }]
-              // })
 
               // getTileUrl - layers
               currentViewerFeatures.forEach(function (feature, index) {
