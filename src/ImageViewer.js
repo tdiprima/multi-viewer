@@ -109,7 +109,7 @@ class ImageViewer {
                   return getIIIFTileUrl(this, level, x, y)
                 }
               })
-            }, 500)
+            }, 1500)
 
           } catch (err) {
             console.error('Filters:', err.message)
