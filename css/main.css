@@ -1,74 +1,78 @@
 /* main style */
 
 body {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 a:link {
-    text-decoration: none;
+  text-decoration: none;
 }
+
 
 /* user controls */
 
 .btn {
-    color: #0e74da;
-    border: 1px solid #0e74da;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
+  color: #0e74da;
+  border: 1px solid #0e74da;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
 }
 
 .btnOn {
-    color: #74f272;
-    border: 1px solid #74f272;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
+  color: #74f272;
+  border: 1px solid #74f272;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
 }
+
 
 /* range sliders */
 
 .slider-square {
-    -webkit-appearance: none;
-    width: 90%;
-    height: 12px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: opacity .15s ease-in-out;
-    transition: opacity .15s ease-in-out;
+  -webkit-appearance: none;
+  width: 90%;
+  height: 12px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: opacity .15s ease-in-out;
+  transition: opacity .15s ease-in-out;
 }
 
 .slider-square:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 .slider-square::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    background: #8ac1ef;
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #8ac1ef;
+  cursor: pointer;
 }
 
 .slider-square::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    border: 0;
-    background: #8ac1ef;
-    cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border: 0;
+  background: #8ac1ef;
+  cursor: pointer;
 }
+
 
 /* color-picker */
 
 .color-picker.no-alpha .color-picker\:a {
-    display: none;
+  display: none;
 }
+
 
 /* quad */
 
@@ -103,6 +107,7 @@ a:link {
   margin-right: 5px;
 }
 
+
 /* mugshots */
 
 .thumbnail-container {
@@ -127,35 +132,40 @@ a:link {
   height: auto;
 }
 
+
 /* TABS */
+
 button {
-  cursor: move;
-  border-radius: 5px;
-  outline-color: #f1f1f1;
-  border-color: #f1f1f1;
+  cursor: move !important;
+  border-radius: 5px !important;
+  outline-color: #f1f1f1 !important;
+  border-color: #f1f1f1 !important;
 }
 
 .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+  overflow: hidden !important;
+  border: 1px solid #ccc !important;
+  background-color: #f1f1f1 !important;
 }
 
 .tab button {
-  cursor: move;
-  background-color: inherit;
-  float: left;
-  border: 1px solid darkgray;
-  outline: none;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
+  cursor: move !important;
+  background-color: inherit !important;
+  float: left !important;
+  border: 1px solid darkgray !important;
+  outline: none !important;
+  padding: 14px 16px !important;
+  transition: 0.3s !important;
+  font-size: 17px !important;
 }
 
+
 /* Class to represent elements that are drop targets: */
+
 .tab.over {
-  border: 3px dotted #00FF00;
+  border: 3px dotted #00FF00 !important;
 }
+
 
 /* floating color function div */
 
@@ -164,7 +174,7 @@ button {
   z-index: 9;
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px; 
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px;
   border-radius: 5px;
   display: inline-block;
   white-space: nowrap;
