@@ -71,7 +71,7 @@ class ImageViewer {
           try {
             setTimeout(function () {
               let imf = new imageFiltering()
-              console.log('FILTERS')
+              // console.log('FILTERS')
 
               // TODO: MAKE DECISION ON TYPE OF FILTER
 
