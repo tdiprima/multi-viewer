@@ -191,7 +191,7 @@ const imageFiltering = function () {
         img.src = 'images/close_icon.png'
         img.width = 25
         img.height = 25
-        img.style.cssFloat = 'left';
+        img.style.cssFloat = 'left'
         img.addEventListener('click', function () {
           this.parentNode.remove()
         })
