@@ -90,7 +90,7 @@ function handleColorLevels(popup, viewer) {
     myDivHeader.innerHTML = 'Color Levels'
     myDiv.appendChild(myDivHeader)
 
-    console.log('FILTERS')
+    // console.log('FILTERS')
 
     // RAINBOW
     // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
