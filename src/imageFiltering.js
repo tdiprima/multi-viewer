@@ -152,7 +152,7 @@ const imageFiltering = function () {
               }
 
               function parseColor(input) {
-                return input.replace(/[a-z%\s\(\)]/g,'').split(',')
+                return input.replace(/[a-z%\s\(\)]/g, '').split(',')
               }
 
               context.putImageData(imgData, 0, 0)
@@ -191,7 +191,7 @@ const imageFiltering = function () {
         img.src = 'images/close_icon.png'
         img.width = 25
         img.height = 25
-        img.style = 'float: left'
+        img.style.cssFloat = 'left';
         img.addEventListener('click', function () {
           this.parentNode.remove()
         })
@@ -214,12 +214,10 @@ const imageFiltering = function () {
         // { color: 'rgba(255, 255, 255, 0)', low: 0, hi: 30 }]
 
         // WASHED-OUT, LIKE CAMIC
-        let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255}, {
-          color: 'rgba(246, 173, 96, 255)',
-          low: 151,
-          hi: 200
-        },
-          {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150}, {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
+        let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255},
+          {color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200},
+          {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150},
+          {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
           {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
         colorRanges.forEach(function (cr, index) {
