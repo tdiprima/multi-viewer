@@ -2,9 +2,11 @@
  * MultiViewer
  * Set up OSD viewer to allow for multiple viewer control.
  *
+ * @param viewerIndex
  * @param viewerDivId: (viewer1, viewer2...)
  * @param baseImage
- * @param layers
+ * @param featureLayers
+ * @param opacity - feature opacity
  * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
@@ -44,9 +46,9 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
 
-      let popup = document.getElementById('colors' + this.idx)
-      if (popup) {
-        handleColorLevels(popup, this.viewer1)
+      let globeBtn = document.getElementById('colors' + this.idx)
+      if (globeBtn) {
+        new imageFiltering().handleColorLevels(globeBtn, this.viewer1)
       }
 
     } catch (e) {
@@ -63,130 +65,6 @@ class MultiViewer extends ImageViewer {
     return this.checkboxes
   }
 
-}
-
-function handleColorLevels(popup, viewer) {
-  // COLOR RANGE POPUP
-  let myDiv
-
-  popup.addEventListener('click', function (event) {
-    event = event || window.event
-
-    myDiv = document.createElement('div')
-    myDiv.id = 'myDiv'
-
-    const img = document.createElement('img')
-    img.src = 'images/close_icon.png'
-    img.width = 25
-    img.height = 25
-    img.style = 'float: left'
-    img.addEventListener('click', function () {
-      this.parentNode.remove()
-    })
-    myDiv.appendChild(img)
-
-    const myDivHeader = document.createElement('div')
-    myDivHeader.id = 'myDivHeader'
-    myDivHeader.innerHTML = 'Color Levels'
-    myDiv.appendChild(myDivHeader)
-
-    // console.log('FILTERS')
-
-    // RAINBOW
-    // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
-    // { color: 'rgba(255, 153, 0, 255)', low: 171, hi: 200 },
-    // { color: 'rgba(255, 255, 0, 255)', low: 141, hi: 170 },
-    // { color: 'rgba(1, 185, 245, 255)', low: 101, hi: 140 },
-    // { color: 'rgba(0, 0, 255, 255)', low: 76, hi: 100 },
-    // { color: 'rgba(135, 19, 172, 255)', low: 31, hi: 75 },
-    // { color: 'rgba(255, 255, 255, 0)', low: 0, hi: 30 }]
-
-    // WASHED-OUT, LIKE CAMIC
-    let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255}, {
-      color: 'rgba(246, 173, 96, 255)',
-      low: 151,
-      hi: 200
-    },
-      {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150}, {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
-      {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
-
-    colorRanges.forEach(function (cr, index) {
-      let div = document.createElement('div')
-      div.id = 'color' + index
-      div.style.backgroundColor = cr.color
-      div.style.width = '20px'
-      div.style.height = '20px'
-      div.innerHTML = cr.low + ' - ' + cr.hi
-      myDiv.appendChild(div)
-      myDiv.appendChild(document.createElement('BR'))
-    })
-
-    myDiv.style.left = event.clientX + 'px'
-    myDiv.style.top = event.clientY + 'px'
-
-    document.body.appendChild(myDiv)
-
-    let imf1 = new imageFiltering()
-    let filter1 = imf1.getFilter1()
-    // TODO: Which one fires?
-    viewer.setFilterOptions({
-      filters: [{
-        items: viewer.world.getItemAt(1), // TODO: Layer #
-        processors: [
-          filter1.prototype.COLORLEVELS(colorRanges)
-        ]
-      }]
-    })
-
-    // Make the DIV element draggable:
-    dragElement(myDiv)
-  })
-
-}
-
-function dragElement(elmnt) {
-  let pos1 = 0
-  let pos2 = 0
-  let pos3 = 0
-  let pos4 = 0
-
-  if (document.getElementById(elmnt.id + 'Header')) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + 'Header').onmousedown = dragMouseDown
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event
-    e.preventDefault()
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX
-    pos4 = e.clientY
-    document.onmouseup = closeDragElement
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag
-  }
-
-  function elementDrag(e) {
-    e = e || window.event
-    e.preventDefault()
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX
-    pos2 = pos4 - e.clientY
-    pos3 = e.clientX
-    pos4 = e.clientY
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null
-    document.onmousemove = null
-  }
 }
 
 // DRAGGABLE LAYER TABS
