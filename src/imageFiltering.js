@@ -166,13 +166,8 @@ const imageFiltering = function () {
       }
       return filter1
     },
-    getColor: function (num) {
-      if (num >= filters.length) {
-        // random 0 - N
-        return filters[Math.floor(Math.random() * filters.length - 1)]
-      } else {
-        return filters[num]
-      }
+    getHtml: function (idx) {
+      return `<div><i id="colors${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i></div>`
     },
     getLength: function () {
       return filters.length
@@ -250,6 +245,14 @@ const imageFiltering = function () {
         // Make the DIV element draggable:
         dragElement(myDiv)
       })
+    },
+    getColor: function (num) {
+      if (num >= filters.length) {
+        // random 0 - N
+        return filters[Math.floor(Math.random() * filters.length - 1)]
+      } else {
+        return filters[num]
+      }
     }
   }
 }

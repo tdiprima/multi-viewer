@@ -52,9 +52,10 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           container.style.width = width + 'px'
           td.appendChild(container) // ADD CONTAINER TO CELL
 
+          // LAYERS BUTTON
+          let htm = imageFiltering().getHtml(idx)
+
           // NAVIGATION TOOLS
-          // let htm = `<div><i id="colors${idx}"></i></div>`
-          let htm = `<div><i id="colors${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i></div>`
           if (numViewers > 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
 <input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;&nbsp;`

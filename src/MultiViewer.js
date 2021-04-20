@@ -46,9 +46,9 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
 
-      let globeBtn = document.getElementById('colors' + this.idx)
-      if (globeBtn) {
-        new imageFiltering().handleColorLevels(globeBtn, this.viewer1)
+      let layersBtn = document.getElementById('colors' + this.idx)
+      if (layersBtn) {
+        imageFiltering().handleColorLevels(layersBtn, this.viewer1)
       }
 
     } catch (e) {
