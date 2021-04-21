@@ -194,28 +194,32 @@ const imageFiltering = function () {
       // COLOR RANGE POPUP
       let myDiv
 
+      // Layers button clicked
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
+        // Main container
         myDiv = document.createElement('div')
         myDiv.id = 'myDiv'
+        myDiv.className = 'grid-container'
 
+        // Close button
         const img = document.createElement('img')
         img.src = 'images/close_icon.png'
         img.width = 25
         img.height = 25
         img.style.cssFloat = 'left'
+        // Remove div on click
         img.addEventListener('click', function () {
           this.parentNode.remove()
         })
         myDiv.appendChild(img)
 
+        // Header to drag around screen
         const myDivHeader = document.createElement('div')
         myDivHeader.id = 'myDivHeader'
         myDivHeader.innerHTML = 'Color Levels'
         myDiv.appendChild(myDivHeader)
-
-        // console.log('FILTERS')
 
         // RAINBOW
         // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
@@ -233,15 +237,28 @@ const imageFiltering = function () {
           {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
           {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
+        // Display colors and low/high values
         colorRanges.forEach(function (cr, index) {
-          let div = document.createElement('div')
-          div.id = 'color' + index
-          div.style.backgroundColor = cr.color
-          div.style.width = '20px'
-          div.style.height = '20px'
-          div.innerHTML = cr.low + ' - ' + cr.hi
-          myDiv.appendChild(div)
-          myDiv.appendChild(document.createElement('BR'))
+          // COLOR DIV
+          let colorDiv = document.createElement('div')
+          colorDiv.id = 'color' + index
+          colorDiv.style.backgroundColor = cr.color
+          colorDiv.style.width = '20px'
+          colorDiv.style.height = '20px'
+          colorDiv.innerHTML = cr.low + ' - ' + cr.hi
+
+          // LOW
+          let lowDiv = document.createElement('div')
+          lowDiv.appendChild(createInput('low' + index))
+
+          // HIGH
+          let hiDiv = document.createElement('div')
+          hiDiv.appendChild(createInput('hi' + index))
+
+          // ADD TO CONTAINER DIV
+          myDiv.appendChild(colorDiv)
+          myDiv.appendChild(lowDiv)
+          myDiv.appendChild(hiDiv)
         })
 
         myDiv.style.left = event.clientX + 'px'
