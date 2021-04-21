@@ -146,6 +146,7 @@ function whichViewer(element) {
     if (el.classList.contains('viewer')) {
       try {
         // It's this viewer. Retrieve the viewer object.
+        // syncedImageViewers = global variable set in synchronizeViewers.js
         for (j = 0; j < syncedImageViewers.length; j++) {
           if (syncedImageViewers[j].getViewer().id === el.id) {
             retVal = syncedImageViewers[j].getViewer()
