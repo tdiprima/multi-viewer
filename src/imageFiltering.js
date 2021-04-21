@@ -90,23 +90,39 @@ const imageFiltering = function () {
   }
 
   // NUMBER INPUT to let user set threshold values
-  function createInput(id, val) {
+  function createInput(data, viewer) {
+    // console.log('data', data)
     let x = document.createElement('input')
-    x.id = id
+    x.id = data.id
     x.setAttribute('type', 'number')
     x.min = '0'
     x.max = '255'
     x.step = '1'
-    x.value = val.toString()
+    x.value = data.val.toString()
     x.size = 5
 
     // this event happens whenever the value changes
     x.addEventListener('input', function () {
-      let intVal = parseInt(x.value)
+      let intVal = parseInt(this.value)
       // If they set it to something silly like 888, reset it to 255
       if (intVal > 255) {
-        x.value = '255'
+        this.value = '255'
       }
+
+      if (this.id.startsWith('low')) {
+        colorRanges[data.index].low = this.value
+      } else {
+        colorRanges[data.index].hi = this.value
+      }
+
+      viewer.setFilterOptions({
+        filters: [{
+          // items: viewer.world.getItemAt(1), // TODO: what layer?
+          processors: [
+            imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
+          ]
+        }]
+      })
     })
 
     return x
@@ -179,11 +195,13 @@ const imageFiltering = function () {
 
       // LOW
       let lowDiv = document.createElement('div')
-      lowDiv.appendChild(createInput('low' + index, cr.low))
+      let d = {id: 'low' + index, val: cr.low, cr, index}
+      lowDiv.appendChild(createInput(d, viewer))
 
       // HIGH
       let hiDiv = document.createElement('div')
-      hiDiv.appendChild(createInput('hi' + index, cr.hi))
+      d = {id: 'hi' + index, val: cr.hi, cr, index}
+      hiDiv.appendChild(createInput(d, viewer))
 
       // ADD TO CONTAINER DIV
       colorPopup.appendChild(colorDiv)
