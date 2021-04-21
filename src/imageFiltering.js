@@ -8,6 +8,7 @@ const imageFiltering = function () {
     this.b = b
   }
 
+  // List of colors so segmentation overlays don't clash
   let filters = []
   filters.push(new filterColors(0, 255, 0)) // lime 00ff00
   filters.push(new filterColors(255, 255, 0)) // yellow ffff00
@@ -22,20 +23,22 @@ const imageFiltering = function () {
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
+  // Function to help drag popup around screen
   function dragElement(elmnt) {
     let pos1 = 0
     let pos2 = 0
     let pos3 = 0
     let pos4 = 0
 
-    if (document.getElementById(elmnt.id + 'Header')) {
+    if (document.getElementById('popupHeader')) {
       // if present, the header is where you move the DIV from:
-      document.getElementById(elmnt.id + 'Header').onmousedown = dragMouseDown
+      document.getElementById('popupHeader').onmousedown = dragMouseDown
     } else {
       // otherwise, move the DIV from anywhere inside the DIV:
       elmnt.onmousedown = dragMouseDown
     }
 
+    // Mousedown handler
     function dragMouseDown(e) {
       e = e || window.event
       e.preventDefault()
@@ -47,6 +50,7 @@ const imageFiltering = function () {
       document.onmousemove = elementDrag
     }
 
+    // Mouse-move handler
     function elementDrag(e) {
       e = e || window.event
       e.preventDefault()
@@ -60,11 +64,25 @@ const imageFiltering = function () {
       elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
     }
 
+    // Done handler
     function closeDragElement() {
       // stop moving when mouse button is released:
       document.onmouseup = null
       document.onmousemove = null
     }
+  }
+
+  // Number input to let user set low/high values
+  function createInput(id) {
+    let x = document.createElement('input')
+    x.id = id
+    x.setAttribute('type', 'number')
+    x.min = '0'
+    x.max = '255'
+    x.step = '1'
+    x.value = '3'
+    x.size = 20
+    return x
   }
 
   return {
@@ -108,9 +126,9 @@ const imageFiltering = function () {
       return filter
     },
     getFilter1: function () {
-      let filter1 = {}
-      filter1 = OpenSeadragon.Filters.GREYSCALE
+      let filter1 = OpenSeadragon.Filters.GREYSCALE
       filter1.prototype.COLORLEVELS = function (colorRanges) {
+        // colorRanges = [{color, low, high}, {...}, etc]
         return function (context, callback) {
           let imgData
           try {
@@ -172,11 +190,11 @@ const imageFiltering = function () {
     getLength: function () {
       return filters.length
     },
-    handleColorLevels: function (popup, viewer) {
+    handleColorLevels: function (layersBtn, viewer) {
       // COLOR RANGE POPUP
       let myDiv
 
-      popup.addEventListener('click', function (event) {
+      layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
         myDiv = document.createElement('div')
