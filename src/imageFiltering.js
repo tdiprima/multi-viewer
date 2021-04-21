@@ -23,6 +23,22 @@ const imageFiltering = function () {
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
+  // DEFAULT RANGES
+  let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255},
+    {color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200},
+    {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150},
+    {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
+    {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
+
+  // RAINBOW
+  // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
+  // { color: 'rgba(255, 153, 0, 255)', low: 171, hi: 200 },
+  // { color: 'rgba(255, 255, 0, 255)', low: 141, hi: 170 },
+  // { color: 'rgba(1, 185, 245, 255)', low: 101, hi: 140 },
+  // { color: 'rgba(0, 0, 255, 255)', low: 76, hi: 100 },
+  // { color: 'rgba(135, 19, 172, 255)', low: 31, hi: 75 },
+  // { color: 'rgba(255, 255, 255, 0)', low: 0, hi: 30 }]
+
   // Function to help drag popup around screen
   function dragElement(elmnt) {
     let pos1 = 0
@@ -30,13 +46,8 @@ const imageFiltering = function () {
     let pos3 = 0
     let pos4 = 0
 
-    if (document.getElementById('popupHeader')) {
-      // if present, the header is where you move the DIV from:
-      document.getElementById('popupHeader').onmousedown = dragMouseDown
-    } else {
-      // otherwise, move the DIV from anywhere inside the DIV:
-      elmnt.onmousedown = dragMouseDown
-    }
+    // Move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown
 
     // Mousedown handler
     function dragMouseDown(e) {
@@ -81,8 +92,25 @@ const imageFiltering = function () {
     x.max = '255'
     x.step = '1'
     x.value = val.toString()
-    x.size = 20
+    x.size = 5
+    x.addEventListener('change', function () {
+      if (parseInt(x.value) > 255) {
+        x.value = '255'
+      }
+    })
     return x
+  }
+
+  function buttonToggle(color, cursor) {
+    jQuery("*").each(function() {
+      if (this.id.startsWith('osd-overlaycanvas')) {
+        let num = this.id.slice(-1)
+        let z = document.getElementById('colors' + num)
+        z.style.color = color
+        z.style.cursor = cursor
+        // TODO: or hide if disabled
+      }
+    })
   }
 
   return {
@@ -127,8 +155,8 @@ const imageFiltering = function () {
     },
     getFilter1: function () {
       let filter1 = OpenSeadragon.Filters.GREYSCALE
+      // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
       filter1.prototype.COLORLEVELS = function (colorRanges) {
-        // colorRanges = [{color, low, high}, {...}, etc]
         return function (context, callback) {
           let imgData
           try {
@@ -198,6 +226,13 @@ const imageFiltering = function () {
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
+        // Disable buttons
+        buttonToggle('#ccc', 'not-allowed')
+
+        // Highlight button
+        layersBtn.style.color = '#0f0'
+        layersBtn.style.cursor = 'pointer'
+
         // Main container
         colorPopup = document.createElement('div')
         colorPopup.id = 'colorPopup'
@@ -216,35 +251,21 @@ const imageFiltering = function () {
 
         // Remove div on click
         img.addEventListener('click', function () {
+          layersBtn.style.color = '#000'
+          // Re-enable buttons
+          buttonToggle('#000', 'pointer')
           this.parentNode.parentNode.remove()
         })
         colorPopup.appendChild(d)
 
         // Header to drag around screen
         const popupHeader = document.createElement('div')
-        popupHeader.id = 'popupHeader'
         popupHeader.className = 'popupHeader'
         popupHeader.innerHTML = 'Color Levels'
         colorPopup.appendChild(popupHeader)
         let t = document.createElement('div')
         t.className = 'popupHeader'
         colorPopup.appendChild(t)
-
-        // RAINBOW
-        // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
-        // { color: 'rgba(255, 153, 0, 255)', low: 171, hi: 200 },
-        // { color: 'rgba(255, 255, 0, 255)', low: 141, hi: 170 },
-        // { color: 'rgba(1, 185, 245, 255)', low: 101, hi: 140 },
-        // { color: 'rgba(0, 0, 255, 255)', low: 76, hi: 100 },
-        // { color: 'rgba(135, 19, 172, 255)', low: 31, hi: 75 },
-        // { color: 'rgba(255, 255, 255, 0)', low: 0, hi: 30 }]
-
-        // WASHED-OUT, LIKE CAMIC
-        let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255},
-          {color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200},
-          {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150},
-          {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
-          {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
         // CREATE USER INPUT PER COLOR
         // Display colors and low/high values
