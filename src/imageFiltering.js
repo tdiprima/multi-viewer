@@ -46,8 +46,14 @@ const imageFiltering = function () {
     let pos3 = 0
     let pos4 = 0
 
-    // Move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown
+    let header = document.getElementsByClassName('popupHeader')
+    if (header) {
+      // if present, the header is where you move the DIV from:
+      let n
+      for (n = 0; n < header.length; n++) {
+        header[n].onmousedown = dragMouseDown
+      }
+    }
 
     // Mousedown handler
     function dragMouseDown(e) {
@@ -83,7 +89,7 @@ const imageFiltering = function () {
     }
   }
 
-  // Number input to let user set low/high values
+  // NUMBER INPUT to let user set threshold values
   function createInput(id, val) {
     let x = document.createElement('input')
     x.id = id
@@ -93,22 +99,28 @@ const imageFiltering = function () {
     x.step = '1'
     x.value = val.toString()
     x.size = 5
-    x.addEventListener('change', function () {
-      if (parseInt(x.value) > 255) {
+
+    // this event happens whenever the value changes
+    x.addEventListener('input', function () {
+      let intVal = parseInt(x.value)
+      // If they set it to something silly like 888, reset it to 255
+      if (intVal > 255) {
         x.value = '255'
       }
     })
+
     return x
   }
 
   function buttonToggle(color, cursor) {
-    jQuery("*").each(function() {
+    jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
         let num = this.id.slice(-1)
         let z = document.getElementById('colors' + num)
         z.style.color = color
         z.style.cursor = cursor
-        // TODO: or hide if disabled
+        // TODO: or hide if disabled:
+        // z.style.display = 'none'
       }
     })
   }
@@ -229,7 +241,7 @@ const imageFiltering = function () {
         // Disable buttons
         buttonToggle('#ccc', 'not-allowed')
 
-        // Highlight button
+        // Highlight this button
         layersBtn.style.color = '#0f0'
         layersBtn.style.cursor = 'pointer'
 
