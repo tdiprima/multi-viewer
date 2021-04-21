@@ -248,11 +248,10 @@ const imageFiltering = function () {
 
         // CREATE USER INPUT PER COLOR
         // Display colors and low/high values
+        // {color: "rgba(r, g, b, a)", hi: n, low: n}
         colorRanges.forEach(function (cr, index) {
-          console.log(cr)
           // COLOR DIV
           let colorDiv = document.createElement('div')
-          colorDiv.id = 'color' + index
           colorDiv.style.backgroundColor = cr.color
           colorDiv.style.width = '20px'
           colorDiv.style.height = '20px'
