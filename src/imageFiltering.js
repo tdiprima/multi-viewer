@@ -30,9 +30,9 @@ const imageFiltering = function () {
     let pos3 = 0
     let pos4 = 0
 
-    if (document.getElementById('popupHeader')) {
+    if (document.getElementById('myDivHeader')) {
       // if present, the header is where you move the DIV from:
-      document.getElementById('popupHeader').onmousedown = dragMouseDown
+      document.getElementById('myDivHeader').onmousedown = dragMouseDown
     } else {
       // otherwise, move the DIV from anywhere inside the DIV:
       elmnt.onmousedown = dragMouseDown
@@ -73,14 +73,14 @@ const imageFiltering = function () {
   }
 
   // Number input to let user set low/high values
-  function createInput(id) {
+  function createInput(id, val) {
     let x = document.createElement('input')
     x.id = id
     x.setAttribute('type', 'number')
     x.min = '0'
     x.max = '255'
     x.step = '1'
-    x.value = '3'
+    x.value = val.toString()
     x.size = 20
     return x
   }
@@ -220,6 +220,7 @@ const imageFiltering = function () {
         myDivHeader.id = 'myDivHeader'
         myDivHeader.innerHTML = 'Color Levels'
         myDiv.appendChild(myDivHeader)
+        myDiv.appendChild(document.createElement('div'))
 
         // RAINBOW
         // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
@@ -237,23 +238,24 @@ const imageFiltering = function () {
           {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
           {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
+        // CREATE USER INPUT PER COLOR
         // Display colors and low/high values
         colorRanges.forEach(function (cr, index) {
+          console.log(cr)
           // COLOR DIV
           let colorDiv = document.createElement('div')
           colorDiv.id = 'color' + index
           colorDiv.style.backgroundColor = cr.color
           colorDiv.style.width = '20px'
           colorDiv.style.height = '20px'
-          colorDiv.innerHTML = cr.low + ' - ' + cr.hi
 
           // LOW
           let lowDiv = document.createElement('div')
-          lowDiv.appendChild(createInput('low' + index))
+          lowDiv.appendChild(createInput('low' + index, cr.low))
 
           // HIGH
           let hiDiv = document.createElement('div')
-          hiDiv.appendChild(createInput('hi' + index))
+          hiDiv.appendChild(createInput('hi' + index, cr.hi))
 
           // ADD TO CONTAINER DIV
           myDiv.appendChild(colorDiv)
