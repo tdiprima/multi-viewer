@@ -187,3 +187,11 @@ button {
   background-color: #2196F3;
   color: #fff;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0 0;
+  grid-template-areas: ". . ." ". . ." ". . ." ". . ." ". . .";
+}
