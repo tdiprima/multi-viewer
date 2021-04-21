@@ -117,7 +117,7 @@ const imageFiltering = function () {
 
       viewer.setFilterOptions({
         filters: [{
-          // items: viewer.world.getItemAt(1), // TODO: what layer?
+          items: viewer.world.getItemAt(1), // TODO: what layer?
           processors: [
             imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
           ]
