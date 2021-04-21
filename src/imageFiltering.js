@@ -30,9 +30,9 @@ const imageFiltering = function () {
     let pos3 = 0
     let pos4 = 0
 
-    if (document.getElementById('myDivHeader')) {
+    if (document.getElementById('popupHeader')) {
       // if present, the header is where you move the DIV from:
-      document.getElementById('myDivHeader').onmousedown = dragMouseDown
+      document.getElementById('popupHeader').onmousedown = dragMouseDown
     } else {
       // otherwise, move the DIV from anywhere inside the DIV:
       elmnt.onmousedown = dragMouseDown
@@ -192,35 +192,43 @@ const imageFiltering = function () {
     },
     handleColorLevels: function (layersBtn, viewer) {
       // COLOR RANGE POPUP
-      let myDiv
+      let colorPopup
 
       // Layers button clicked
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
         // Main container
-        myDiv = document.createElement('div')
-        myDiv.id = 'myDiv'
-        myDiv.className = 'grid-container'
+        colorPopup = document.createElement('div')
+        colorPopup.id = 'colorPopup'
+        colorPopup.classList.add('grid-container')
+        colorPopup.classList.add('colorPopup')
 
         // Close button
+        let d = document.createElement('div')
+        d.className = 'popupHeader'
         const img = document.createElement('img')
         img.src = 'images/close_icon.png'
         img.width = 25
         img.height = 25
         img.style.cssFloat = 'left'
+        d.appendChild(img)
+
         // Remove div on click
         img.addEventListener('click', function () {
-          this.parentNode.remove()
+          this.parentNode.parentNode.remove()
         })
-        myDiv.appendChild(img)
+        colorPopup.appendChild(d)
 
         // Header to drag around screen
-        const myDivHeader = document.createElement('div')
-        myDivHeader.id = 'myDivHeader'
-        myDivHeader.innerHTML = 'Color Levels'
-        myDiv.appendChild(myDivHeader)
-        myDiv.appendChild(document.createElement('div'))
+        const popupHeader = document.createElement('div')
+        popupHeader.id = 'popupHeader'
+        popupHeader.className = 'popupHeader'
+        popupHeader.innerHTML = 'Color Levels'
+        colorPopup.appendChild(popupHeader)
+        let t = document.createElement('div')
+        t.className = 'popupHeader'
+        colorPopup.appendChild(t)
 
         // RAINBOW
         // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
@@ -258,15 +266,15 @@ const imageFiltering = function () {
           hiDiv.appendChild(createInput('hi' + index, cr.hi))
 
           // ADD TO CONTAINER DIV
-          myDiv.appendChild(colorDiv)
-          myDiv.appendChild(lowDiv)
-          myDiv.appendChild(hiDiv)
+          colorPopup.appendChild(colorDiv)
+          colorPopup.appendChild(lowDiv)
+          colorPopup.appendChild(hiDiv)
         })
 
-        myDiv.style.left = event.clientX + 'px'
-        myDiv.style.top = event.clientY + 'px'
+        colorPopup.style.left = event.clientX + 'px'
+        colorPopup.style.top = event.clientY + 'px'
 
-        document.body.appendChild(myDiv)
+        document.body.appendChild(colorPopup)
 
         let imf1 = new imageFiltering()
         let filter1 = imf1.getFilter1()
@@ -280,7 +288,7 @@ const imageFiltering = function () {
         })
 
         // Make the DIV element draggable:
-        dragElement(myDiv)
+        dragElement(colorPopup)
       })
     },
     getColor: function (num) {

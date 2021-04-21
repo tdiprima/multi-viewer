@@ -169,7 +169,7 @@ button {
 
 /* floating color function div */
 
-#myDiv {
+.colorPopup {
   position: absolute;
   z-index: 9;
   background-color: #f1f1f1;
@@ -180,7 +180,7 @@ button {
   white-space: nowrap;
 }
 
-#myDivHeader {
+.popupHeader {
   padding: 10px;
   cursor: move;
   z-index: 10;
