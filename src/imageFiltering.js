@@ -81,7 +81,6 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer, colorRanges) {
-    console.log(colorRanges)
     viewer.setFilterOptions({
       filters: [{
         items: viewer.world.getItemAt(1), // TODO: what layer?
