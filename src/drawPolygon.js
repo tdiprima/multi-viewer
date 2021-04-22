@@ -100,11 +100,11 @@ function customizePolygonControls (obj, canvas, viewer) {
 
 function setupDeleteButton (canvas, viewer) {
   function addDeleteBtn (x, y) {
-    $('.deleteBtn').remove()
+    jQuery('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
     const deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    $('.canvas-container').append(deleteBtn)
+    jQuery('.canvas-container').append(deleteBtn)
   }
 
   canvas.on('selection:created', function (e) {
@@ -118,22 +118,22 @@ function setupDeleteButton (canvas, viewer) {
   })
 
   canvas.on('object:scaling', function (e) {
-    $('.deleteBtn').remove()
+    jQuery('.deleteBtn').remove()
   })
 
   canvas.on('object:moving', function (e) {
-    $('.deleteBtn').remove()
+    jQuery('.deleteBtn').remove()
   })
 
   canvas.on('object:rotating', function (e) {
-    $('.deleteBtn').remove()
+    jQuery('.deleteBtn').remove()
   })
 
-  $('.canvas-container').on('click', '.deleteBtn', function () {
+  jQuery('.canvas-container').on('click', '.deleteBtn', function () {
     viewer.gestureSettingsMouse.clickToZoom = false
     if (canvas.getActiveObject()) {
       canvas.remove(canvas.getActiveObject())
-      $('.deleteBtn').remove()
+      jQuery('.deleteBtn').remove()
     }
     viewer.gestureSettingsMouse.clickToZoom = true
   })

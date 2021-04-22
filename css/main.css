@@ -19,7 +19,7 @@ a:link {
   border: 1px solid #0e74da;
   border-radius: 5px;
   text-align: center;
-  cursor: pointer;
+  cursor: default !important;
 }
 
 .btnOn {
@@ -27,7 +27,7 @@ a:link {
   border: 1px solid #74f272;
   border-radius: 5px;
   text-align: center;
-  cursor: pointer;
+  cursor: default !important;
 }
 
 /* range sliders */
