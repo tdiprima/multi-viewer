@@ -141,6 +141,28 @@ const imageFiltering = function () {
     })
   }
 
+  function rgba2hex(orig) {
+    let a,
+      rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+      alpha = (rgb && rgb[4] || "").trim(),
+      hex = rgb ?
+        (rgb[1] | 1 << 8).toString(16).slice(1) +
+        (rgb[2] | 1 << 8).toString(16).slice(1) +
+        (rgb[3] | 1 << 8).toString(16).slice(1) : orig
+
+    // if (alpha !== "") {
+    //   a = alpha
+    // } else {
+    //   a = 0o1
+    // }
+    // // multiply before convert to HEX (a * 255)
+    // a = (a | 1 << 8).toString(16).slice(1)
+    // hex = hex + a
+    hex = '#' + hex
+
+    return hex
+  }
+
   function createPopup(event, layersBtn, viewer) {
     // Disable buttons
     buttonToggle('#ccc', 'not-allowed')
@@ -189,9 +211,17 @@ const imageFiltering = function () {
     colorRanges.forEach(function (cr, index) {
       // COLOR DIV
       let colorDiv = document.createElement('div')
-      colorDiv.style.backgroundColor = cr.color
-      colorDiv.style.width = '20px'
-      colorDiv.style.height = '20px'
+      let colorCode = cr.color
+      // colorDiv.style.backgroundColor = colorCode
+      // colorDiv.style.width = '20px'
+      // colorDiv.style.height = '20px'
+
+      // COLOR PICKER
+      let m = document.createElement('mark')
+      m.id = 'marker' + index
+      m.innerHTML = rgba2hex(colorCode)
+      colorPicker(m)
+      colorDiv.appendChild(m)
 
       // LOW
       let lowDiv = document.createElement('div')
