@@ -313,6 +313,7 @@ const imageFiltering = function () {
                 }
               }
 
+              // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
               function parseColor(input) {
                 return input.replace(/[a-z%\s\(\)]/g, '').split(',')
               }
