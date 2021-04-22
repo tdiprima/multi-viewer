@@ -66,7 +66,7 @@ function getPolygon (canvas) {
   } else {
     const x = canvas.getObjects('polygon')
     if (x.length === 0) {
-    // No polygons exist on this canvas. User will get an alert message.
+      // No polygons exist on this canvas. User will get an alert message.
       return 'null'
     }
     if (x.length === 1) {
