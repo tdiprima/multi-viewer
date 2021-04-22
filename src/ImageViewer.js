@@ -34,7 +34,7 @@ class ImageViewer {
   setSources(viewerIndex, baseImage, featureLayers, opacity, viewer) {
 
     // Quick check url
-    $.get(baseImage).done(function () {
+    jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
@@ -81,8 +81,10 @@ class ImageViewer {
               let filter = imf.getFilter1() // todo: here!
 
               // Probability filter
-              let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 }, { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
-                { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 }, { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
+              let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 },
+                { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
+                { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 },
+                { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
                 { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
 
               let itemCount = viewer.world.getItemCount()
