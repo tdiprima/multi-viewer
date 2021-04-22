@@ -53,7 +53,8 @@ module.exports = function (grunt) {
     cssmin: {
       target: {
         files: {
-          'build/main.min.css': ['css/main.css', 'css/color-picker.min.css']
+          'build/main.min.css': ['css/*.css']
+          // 'build/main.min.css': ['css/main.css', 'css/color-picker.min.css']
         }
       }
     }
