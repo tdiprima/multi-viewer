@@ -30,15 +30,6 @@ const imageFiltering = function () {
     {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
     {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
-  // RAINBOW
-  // let colorRanges = [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 },
-  // { color: 'rgba(255, 153, 0, 255)', low: 171, hi: 200 },
-  // { color: 'rgba(255, 255, 0, 255)', low: 141, hi: 170 },
-  // { color: 'rgba(1, 185, 245, 255)', low: 101, hi: 140 },
-  // { color: 'rgba(0, 0, 255, 255)', low: 76, hi: 100 },
-  // { color: 'rgba(135, 19, 172, 255)', low: 31, hi: 75 },
-  // { color: 'rgba(255, 255, 255, 0)', low: 0, hi: 30 }]
-
   // Function to help drag popup around screen
   function dragElement(elmnt) {
     let pos1 = 0
@@ -89,6 +80,18 @@ const imageFiltering = function () {
     }
   }
 
+  function setViewerFilter(viewer, colorRanges) {
+    console.log(colorRanges)
+    viewer.setFilterOptions({
+      filters: [{
+        items: viewer.world.getItemAt(1), // TODO: what layer?
+        processors: [
+          imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
+        ]
+      }]
+    })
+  }
+
   // NUMBER INPUT to let user set threshold values
   function createInput(data, viewer) {
     // console.log('data', data)
@@ -115,14 +118,7 @@ const imageFiltering = function () {
         colorRanges[data.index].hi = this.value
       }
 
-      viewer.setFilterOptions({
-        filters: [{
-          items: viewer.world.getItemAt(1), // TODO: what layer?
-          processors: [
-            imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
-          ]
-        }]
-      })
+      setViewerFilter(viewer, colorRanges)
     })
 
     return x
@@ -142,22 +138,12 @@ const imageFiltering = function () {
   }
 
   function rgba2hex(orig) {
-    let a,
-      rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
-      alpha = (rgb && rgb[4] || "").trim(),
-      hex = rgb ?
+    let rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
+    let hex = rgb ?
         (rgb[1] | 1 << 8).toString(16).slice(1) +
         (rgb[2] | 1 << 8).toString(16).slice(1) +
         (rgb[3] | 1 << 8).toString(16).slice(1) : orig
 
-    // if (alpha !== "") {
-    //   a = alpha
-    // } else {
-    //   a = 0o1
-    // }
-    // // multiply before convert to HEX (a * 255)
-    // a = (a | 1 << 8).toString(16).slice(1)
-    // hex = hex + a
     hex = '#' + hex
 
     return hex
@@ -212,15 +198,16 @@ const imageFiltering = function () {
       // COLOR DIV
       let colorDiv = document.createElement('div')
       let colorCode = cr.color
-      // colorDiv.style.backgroundColor = colorCode
-      // colorDiv.style.width = '20px'
-      // colorDiv.style.height = '20px'
 
       // COLOR PICKER
       let m = document.createElement('mark')
       m.id = 'marker' + index
       m.innerHTML = rgba2hex(colorCode)
-      colorPicker(m)
+      let cp = colorPicker(m)
+      cp.on('change', function (r, g, b) {
+        colorRanges[index].color = `rgba(${r}, ${g}, ${b}, 255)`
+        setViewerFilter(viewer, colorRanges)
+      })
       colorDiv.appendChild(m)
 
       // LOW
