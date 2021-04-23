@@ -201,6 +201,7 @@ const imageFiltering = function () {
       let m = document.createElement('mark')
       m.id = 'marker' + index
       m.innerHTML = rgba2hex(colorCode)
+      // m.innerHTML = colorCode // <= color-picker does not allow this; it has to be hex
       let cp = colorPicker(m)
       cp.on('change', function (r, g, b) {
         colorRanges[index].color = `rgba(${r}, ${g}, ${b}, 255)`
