@@ -8,10 +8,10 @@
  * @param opacity - feature opacity
  */
 class ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity) {
+  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     this.viewer = {}
     this.setViewer(viewerDivId)
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.viewer)
+    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.viewer, options)
   }
 
   setViewer(viewerDivId) {
@@ -44,12 +44,10 @@ class ImageViewer {
           console.log('No features for this viewer', viewerIndex)
         } else {
           let currentViewerFeatures = featureLayers[viewerIndex - 1] // Array starts with 0; viewer indices start with 1
-          // console.log('currentViewerFeatures', currentViewerFeatures)
 
           let currentFeatureOpacity
           if (typeof opacity[viewerIndex - 1] !== 'undefined') {
             currentFeatureOpacity = opacity[viewerIndex - 1]
-            // console.log(currentFeatureOpacity)
           } else {
             // Error trapping the case where the number of opacities passed in was wrong.
             let numFeat = featureLayers[viewerIndex - 1].length
@@ -58,12 +56,10 @@ class ImageViewer {
             for (j = 0; j < numFeat; j++) {
               newArray[j] = 1.0
             }
-            // console.log('newArray', newArray)
             currentFeatureOpacity = newArray
             console.warn('Setting default opacity for viewer', viewerIndex)
           }
 
-          // console.log('opacity', currentFeatureOpacity, 'viewerIndex', viewerIndex)
           currentViewerFeatures.forEach(function (feature, index) {
             viewer.addTiledImage({tileSource: feature, opacity: currentFeatureOpacity[index], x: 0, y: 0})
           })
@@ -71,6 +67,9 @@ class ImageViewer {
           try {
             setTimeout(function () {
               let imf = new imageFiltering()
+              if (options.colorRanges) {
+                imf.setColorRanges(options.colorRanges)
+              }
 
               // TODO: MAKE DECISION ON TYPE OF FILTER
               // Get JSON - if it's segmentation, use 'filter'
@@ -80,13 +79,6 @@ class ImageViewer {
               // let filter = imf.getFilter() // TODO: HERE!
               let filter = imf.getFilter1() // todo: here!
 
-              // Probability filter
-              let colorRanges = [{ color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255 },
-                { color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200 },
-                { color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150 },
-                { color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100 },
-                { color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50 }]
-
               let itemCount = viewer.world.getItemCount()
               let i
               let filterOpts = []
@@ -95,7 +87,7 @@ class ImageViewer {
                   filterOpts.push({
                     items: viewer.world.getItemAt(i),
                     processors: [
-                      filter.prototype.COLORLEVELS(colorRanges) // TODO: AND HERE!
+                      filter.prototype.COLORLEVELS(options.colorRanges) // TODO: AND HERE!
                       // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
                     ]
                   })

@@ -2,6 +2,12 @@
  * Image filtering
  */
 const imageFiltering = function () {
+  this.colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255},
+    {color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200},
+    {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150},
+    {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
+    {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
+
   function filterColors(r, g, b) {
     this.r = r
     this.g = g
@@ -22,13 +28,6 @@ const imageFiltering = function () {
   filters.push(new filterColors(167, 226, 46)) // leaf green #a7e22e
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
-
-  // DEFAULT RANGES
-  let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255},
-    {color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200},
-    {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150},
-    {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
-    {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
 
   // Function to help drag popup around screen
   function dragElement(elmnt) {
@@ -316,7 +315,7 @@ const imageFiltering = function () {
                   let low = cr[i].low
                   let hi = cr[i].hi
                   let color = cr[i].color
-                  
+
                   if (val >= low && val <= hi) {
                     return parseColor(color)
                   } else {
@@ -368,6 +367,11 @@ const imageFiltering = function () {
         return filters[Math.floor(Math.random() * filters.length - 1)]
       } else {
         return filters[num]
+      }
+    },
+    setColorRanges: function (cr) {
+      if (typeof cr !== 'undefined' && cr !== null) {
+        this.colorRanges = cr // and it better be right.
       }
     }
   }

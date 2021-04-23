@@ -13,7 +13,7 @@
  */
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
-    super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity)
+    super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options)
 
     if (typeof options === 'undefined') {
       options = {}
