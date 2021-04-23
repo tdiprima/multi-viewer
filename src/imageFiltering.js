@@ -316,16 +316,13 @@ const imageFiltering = function () {
                   let low = cr[i].low
                   let hi = cr[i].hi
                   let color = cr[i].color
-
-                  if (low === 1) {
-                    if (val >= 0 && val <= hi) {
-                      return parseColor(color)
-                    }
+                  
+                  if (val >= low && val <= hi) {
+                    return parseColor(color)
                   } else {
-                    if (val >= low && val <= hi) {
-                      return parseColor(color)
-                    }
+                    return [0, 0, 0, 0]
                   }
+
                 }
               }
 
