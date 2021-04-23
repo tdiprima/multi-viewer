@@ -215,7 +215,7 @@ const imageFiltering = function () {
       let cp = colorPicker(m)
       // Event Handler!
       cp.on('change', function (r, g, b, a) {
-        colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a})`
+        colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
         setViewerFilter(viewer, colorRanges)
       })
       colorDiv.appendChild(m)
