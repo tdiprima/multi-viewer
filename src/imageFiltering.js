@@ -135,17 +135,27 @@ const imageFiltering = function () {
     })
   }
 
-  function rgba2hex(orig) {
-    let rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
-    let hex = rgb ?
-        (rgb[1] | 1 << 8).toString(16).slice(1) +
+ function rgba2hex (orig) {
+  let a
+  const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
+  const alpha = (rgb && rgb[4] || '').trim()
+  let hex = rgb
+    ? (rgb[1] | 1 << 8).toString(16).slice(1) +
         (rgb[2] | 1 << 8).toString(16).slice(1) +
         (rgb[3] | 1 << 8).toString(16).slice(1) : orig
 
-    hex = '#' + hex
-
-    return hex
+  if (alpha !== '') {
+    a = alpha
+  } else {
+    a = 0o1
   }
+  // multiply before convert to HEX (a * 255)
+  a = (a | 1 << 8).toString(16).slice(1)
+  hex = hex + a
+  hex = '#' + hex
+
+  return hex
+}
 
   function createPopup(event, layersBtn, viewer) {
     // Disable buttons
