@@ -8,11 +8,11 @@ const colorPicker = function (inputElement) {
   }
   // Construct
   const picker = new CP(inputElement)
-  picker.self.classList.add('no-alpha')
-  picker.on('change', function (r, g, b) {
-    this.source.value = this.color(r, g, b, 1)
-    this.source.innerHTML = this.color(r, g, b, 1)
-    this.source.style.backgroundColor = this.color(r, g, b, 1)
+  // picker.self.classList.add('no-alpha')
+  picker.on('change', function (r, g, b, a) {
+    this.source.value = this.color(r, g, b, a)
+    this.source.innerHTML = this.color(r, g, b, a)
+    this.source.style.backgroundColor = this.color(r, g, b, a)
   })
 
   // Toggle by click event
