@@ -213,8 +213,9 @@ const imageFiltering = function () {
       m.innerHTML = rgba2hex(colorCode)
       // m.innerHTML = colorCode // <= color-picker does not allow this; it has to be hex
       let cp = colorPicker(m)
-      cp.on('change', function (r, g, b) {
-        colorRanges[index].color = `rgba(${r}, ${g}, ${b}, 255)`
+      // Event Handler!
+      cp.on('change', function (r, g, b, a) {
+        colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a})`
         setViewerFilter(viewer, colorRanges)
       })
       colorDiv.appendChild(m)
