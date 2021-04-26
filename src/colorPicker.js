@@ -36,3 +36,12 @@ const colorPicker = function (inputElement) {
 
   return picker
 }
+
+// In case we want to remove the alpha, keep code separate
+function disableAlphaChannel (picker) {
+  picker.self.classList.add('no-alpha')
+  picker.on('change', function (r, g, b) {
+    this.source.value = this.color(r, g, b, 1)
+  })
+}
+
