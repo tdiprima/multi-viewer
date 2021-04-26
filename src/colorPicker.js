@@ -40,7 +40,7 @@ const colorPicker = function (inputElement) {
 function disableAlphaChannel (picker) {
   picker.self.classList.add('no-alpha')
   picker.on('change', function (r, g, b) {
-    this.source.value = this.color(r, g, b, 1)
+    this.source.value = this.color(r, g, b, 255)
   })
 }
 
