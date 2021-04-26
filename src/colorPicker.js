@@ -8,7 +8,6 @@ const colorPicker = function (inputElement) {
   }
   // Construct
   const picker = new CP(inputElement)
-  // picker.self.classList.add('no-alpha')
   picker.on('change', function (r, g, b, a) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
