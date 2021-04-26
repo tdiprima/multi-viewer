@@ -91,7 +91,7 @@ const imageFiltering = function () {
   }
 
   // NUMBER INPUT to let user set threshold values
-  function createInput(data, viewer) {
+  function createNumericInput(data, viewer) {
     // console.log('data', data)
     let x = document.createElement('input')
     x.id = data.id
@@ -122,15 +122,13 @@ const imageFiltering = function () {
     return x
   }
 
-  function buttonToggle(color, cursor) {
+  function layerButtonToggle(color, cursor) {
     jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
-        let num = this.id.slice(-1)
+        let num = this.id.slice(-1) // hack to get the id #
         let z = document.getElementById('colors' + num)
         z.style.color = color
         z.style.cursor = cursor
-        // TODO: or hide if disabled:
-        // z.style.display = 'none'
       }
     })
   }
@@ -159,7 +157,7 @@ const imageFiltering = function () {
 
   function createPopup(event, layersBtn, viewer) {
     // Disable buttons
-    buttonToggle('#ccc', 'not-allowed')
+    layerButtonToggle('#ccc', 'not-allowed')
 
     // Highlight this button
     layersBtn.style.color = '#0f0'
@@ -185,7 +183,7 @@ const imageFiltering = function () {
     img.addEventListener('click', function () {
       layersBtn.style.color = '#000'
       // Re-enable buttons
-      buttonToggle('#000', 'pointer')
+      layerButtonToggle('#000', 'pointer')
       this.parentNode.parentNode.remove()
     })
     colorPopup.appendChild(d)
@@ -223,12 +221,12 @@ const imageFiltering = function () {
       // LOW
       let lowDiv = document.createElement('div')
       let d = {id: 'low' + index, val: cr.low, cr, index}
-      lowDiv.appendChild(createInput(d, viewer))
+      lowDiv.appendChild(createNumericInput(d, viewer))
 
       // HIGH
       let hiDiv = document.createElement('div')
       d = {id: 'hi' + index, val: cr.hi, cr, index}
-      hiDiv.appendChild(createInput(d, viewer))
+      hiDiv.appendChild(createNumericInput(d, viewer))
 
       // ADD TO CONTAINER DIV
       colorPopup.appendChild(colorDiv)
@@ -367,6 +365,7 @@ const imageFiltering = function () {
         // Let there be only one
         let el = document.getElementById('colorPopup')
         if (el) {
+          // already exists
           console.log('colorPopup')
         } else {
           createPopup(event, layersBtn, viewer)
