@@ -239,17 +239,6 @@ const imageFiltering = function () {
 
     document.body.appendChild(colorPopup)
 
-    let imf1 = new imageFiltering()
-    let filter1 = imf1.getFilter1()
-    viewer.setFilterOptions({
-      filters: [{
-        items: viewer.world.getItemAt(1), // TODO: Layer #
-        processors: [
-          filter1.prototype.COLORLEVELS(colorRanges)
-        ]
-      }]
-    })
-
     // Make the DIV element draggable:
     dragElement(colorPopup)
   }
