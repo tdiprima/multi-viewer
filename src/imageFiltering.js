@@ -91,7 +91,7 @@ const imageFiltering = function () {
 
   // NUMBER INPUT to let user set threshold values
   function createNumericInput(data, viewer) {
-    // console.log('data', data)
+    console.log('data', data)
     let x = document.createElement('input')
     x.id = data.id
     x.setAttribute('type', 'number')
@@ -125,6 +125,7 @@ const imageFiltering = function () {
   }
 
   function layerButtonToggle(color, cursor) {
+    console.log('layerButtonToggle')
     jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
         let num = this.id.slice(-1) // hack to get the id #
@@ -202,7 +203,11 @@ const imageFiltering = function () {
     // CREATE USER INPUT PER COLOR
     // Display colors and low/high values
     // {color: "rgba(r, g, b, a)", hi: n, low: n}
+    if (!isRealValue(colorRanges)) {
+      console.warn('No colorRanges?', colorRanges)
+    }
     colorRanges.forEach(function (cr, index) {
+      console.log(cr)
       // COLOR DIV
       let colorDiv = document.createElement('div')
       let colorCode = cr.color
