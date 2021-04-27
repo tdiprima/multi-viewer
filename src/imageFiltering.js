@@ -109,6 +109,10 @@ const imageFiltering = function () {
         this.value = '255'
       }
 
+      if (intVal < 0) {
+        this.value = '0'
+      }
+
       if (this.id.startsWith('low')) {
         colorRanges[data.index].low = this.value
       } else {
