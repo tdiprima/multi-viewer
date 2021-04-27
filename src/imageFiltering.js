@@ -222,7 +222,6 @@ const imageFiltering = function () {
       m.id = 'marker' + index
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
-      console.log('innerHTML', m.innerHTML)
       console.warn("Here's the element:", m)
       let cp = colorPicker(m)
       console.warn('cp', cp)
