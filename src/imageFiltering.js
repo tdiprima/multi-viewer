@@ -220,13 +220,26 @@ const imageFiltering = function () {
       let m = document.createElement('mark')
       m.id = 'marker' + index
       m.innerHTML = rgba2hex(colorCode)
+      colorDiv.appendChild(m)
+      console.log('innerHTML', m.innerHTML)
+      console.warn("Here's the element:", m)
       let cp = colorPicker(m)
+      console.warn('cp', cp)
+
       // Event Handler
       cp.on('change', function (r, g, b, a) {
-        colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-        setViewerFilter(viewer)
+        try {
+          console.log('index', index)
+          console.log('colorRanges[index]', colorRanges[index])
+          console.log('colorRanges', colorRanges)
+          colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+          setViewerFilter(viewer)
+        } catch(err) {
+          console.error('caught exception', err.message)
+        }
+        
       })
-      colorDiv.appendChild(m)
+      // colorDiv.appendChild(m)
 
       // LOW
       let lowDiv = document.createElement('div')
