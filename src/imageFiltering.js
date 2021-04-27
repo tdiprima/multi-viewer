@@ -205,6 +205,8 @@ const imageFiltering = function () {
     // {color: "rgba(r, g, b, a)", hi: n, low: n}
     if (!isRealValue(colorRanges)) {
       console.warn('No colorRanges?', colorRanges)
+    } else {
+      console.warn("It's good!", colorRanges)
     }
     colorRanges.forEach(function (cr, index) {
       console.log(cr)
