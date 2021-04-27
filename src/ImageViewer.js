@@ -68,34 +68,34 @@ class ImageViewer {
             setTimeout(function () {
               let imf = new imageFiltering()
               if (options.colorRanges) {
+                console.log('Got colorRanges; setting filters...')
                 imf.setColorRanges(options.colorRanges)
-              }
+                // TODO: MAKE DECISION ON TYPE OF FILTER
+                // Get JSON - if it's segmentation, use 'filter'
+                // If it's anything else (like a heatmap), use 'filter1'
 
-              // TODO: MAKE DECISION ON TYPE OF FILTER
-              // Get JSON - if it's segmentation, use 'filter'
-              // If it's anything else (like a heatmap), use 'filter1'
+                // Set filter options
+                // let filter = imf.getFilter() // TODO: HERE!
+                let filter = imf.getFilter1() // todo: here!
 
-              // Set filter options
-              // let filter = imf.getFilter() // TODO: HERE!
-              let filter = imf.getFilter1() // todo: here!
-
-              let itemCount = viewer.world.getItemCount()
-              let i
-              let filterOpts = []
-              for (i = 0; i < itemCount; i++) {
-                if (i > 0) {
-                  filterOpts.push({
-                    items: viewer.world.getItemAt(i),
-                    processors: [
-                      filter.prototype.COLORLEVELS(options.colorRanges) // TODO: AND HERE!
-                      // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
-                    ]
-                  })
+                let itemCount = viewer.world.getItemCount()
+                let i
+                let filterOpts = []
+                for (i = 0; i < itemCount; i++) {
+                  if (i > 0) {
+                    filterOpts.push({
+                      items: viewer.world.getItemAt(i),
+                      processors: [
+                        filter.prototype.COLORLEVELS(options.colorRanges) // TODO: AND HERE!
+                        // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
+                      ]
+                    })
+                  }
                 }
+                viewer.setFilterOptions({
+                  filters: filterOpts
+                })
               }
-              viewer.setFilterOptions({
-                filters: filterOpts
-              })
 
               // getTileUrl - layers
               currentViewerFeatures.forEach(function (feature, index) {
