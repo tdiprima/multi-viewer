@@ -15,11 +15,7 @@ const colorPicker = function (inputElement) {
     try {
       console.warn('r, g, b, a', r, g, b, a)
       this.source.value = this.color(r, g, b, a)
-
-      console.warn('this.source.value', this.source.value)
       this.source.innerHTML = this.color(r, g, b, a)
-
-      console.warn('this.source.innerHTML', this.source.innerHTML)
       this.source.style.backgroundColor = this.color(r, g, b, a)
     }
     catch (err) {
