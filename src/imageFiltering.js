@@ -80,7 +80,7 @@ const imageFiltering = function () {
     if (isEmpty(colorRanges)) {
       console.warn('empty', colorRanges)
     } else {
-      console.log('all good', colorRanges)
+      console.warn('all good', colorRanges)
     }
 
     viewer.setFilterOptions({
