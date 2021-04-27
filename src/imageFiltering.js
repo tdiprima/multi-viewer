@@ -114,9 +114,8 @@ const imageFiltering = function () {
         colorRanges[data.index].low = this.value
       } else {
         colorRanges[data.index].hi = this.value
+        setViewerFilter(viewer, colorRanges) // triggered by high value input
       }
-
-      setViewerFilter(viewer, colorRanges)
     })
 
     return x
@@ -133,27 +132,27 @@ const imageFiltering = function () {
     })
   }
 
- function rgba2hex (orig) {
-  let a
-  const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
-  const alpha = (rgb && rgb[4] || '').trim()
-  let hex = rgb
-    ? (rgb[1] | 1 << 8).toString(16).slice(1) +
-        (rgb[2] | 1 << 8).toString(16).slice(1) +
-        (rgb[3] | 1 << 8).toString(16).slice(1) : orig
+  function rgba2hex(orig) {
+    let a
+    const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
+    const alpha = (rgb && rgb[4] || '').trim()
+    let hex = rgb
+      ? (rgb[1] | 1 << 8).toString(16).slice(1) +
+      (rgb[2] | 1 << 8).toString(16).slice(1) +
+      (rgb[3] | 1 << 8).toString(16).slice(1) : orig
 
-  if (alpha !== '') {
-    a = alpha
-  } else {
-    a = 0o1
+    if (alpha !== '') {
+      a = alpha
+    } else {
+      a = 0o1
+    }
+    // multiply before convert to HEX (a * 255)
+    a = (a | 1 << 8).toString(16).slice(1)
+    hex = hex + a
+    hex = '#' + hex
+
+    return hex
   }
-  // multiply before convert to HEX (a * 255)
-  a = (a | 1 << 8).toString(16).slice(1)
-  hex = hex + a
-  hex = '#' + hex
-
-  return hex
-}
 
   function createPopup(event, layersBtn, viewer) {
     // Disable buttons
@@ -299,6 +298,9 @@ const imageFiltering = function () {
                 if (pxl[j + 3] === 255) {
                   // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
                   let rgba = levels(pxl[j], colorRanges) // r = g = b
+                  if (typeof rgba === 'undefined') {
+                    console.warn('rgba undefined', pxl[j])
+                  }
                   pxl[j] = rgba[0]
                   pxl[j + 1] = rgba[1]
                   pxl[j + 2] = rgba[2]
@@ -315,12 +317,16 @@ const imageFiltering = function () {
                   let low = cr[i].low
                   let hi = cr[i].hi
                   let color = cr[i].color
-
                   if (val >= low && val <= hi) {
                     retVal = parseColor(color)
                   }
                 }
-                return retVal
+
+                if (typeof retVal === 'undefined') {
+                  return val
+                } else {
+                  return retVal
+                }
               }
 
               // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
