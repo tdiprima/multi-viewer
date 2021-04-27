@@ -78,7 +78,10 @@ const imageFiltering = function () {
   function setViewerFilter(viewer, colorRanges) {
     if (isEmpty(colorRanges)) {
       console.warn('empty?', colorRanges)
+    } else {
+      console.warn('good', colorRanges)
     }
+      
     viewer.setFilterOptions({
       filters: [{
         items: viewer.world.getItemAt(1), // TODO: what layer?
