@@ -96,7 +96,7 @@ class ImageViewer {
                   filters: filterOpts
                 })
               } else {
-                console.log('No options.colorRanges. Skipping...')
+                console.warn('No options.colorRanges. Skipping...')
               }
 
               // getTileUrl - layers
