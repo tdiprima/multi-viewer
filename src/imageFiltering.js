@@ -209,7 +209,7 @@ const imageFiltering = function () {
     if (isEmpty(colorRanges)) {
       console.warn('No colorRanges', colorRanges)
     } else {
-      console.log("It's good", colorRanges)
+      console.warn("It's good", colorRanges)
     }
 
     colorRanges.forEach(function (color, index) {
