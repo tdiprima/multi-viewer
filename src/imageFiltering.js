@@ -75,18 +75,13 @@ const imageFiltering = function () {
     }
   }
 
-  function setViewerFilter(viewer, colorRanges) {
+  function setViewerFilter(viewer) {
     if (isEmpty(colorRanges)) {
-      console.warn('empty?', colorRanges)
-      if (isEmpty(this.colorRanges)) {
-        console.warn('both', this.colorRanges)
-      } else {
-        colorRanges = this.colorRanges
-      }
+      console.warn('empty', colorRanges)
     } else {
-      console.warn('good', colorRanges)
+      console.log('all good', colorRanges)
     }
-      
+
     viewer.setFilterOptions({
       filters: [{
         items: viewer.world.getItemAt(1), // TODO: what layer?
@@ -124,7 +119,7 @@ const imageFiltering = function () {
         colorRanges[data.index].low = this.value
       } else {
         colorRanges[data.index].hi = this.value
-        setViewerFilter(viewer, colorRanges) // triggered by high value input
+        setViewerFilter(viewer) // triggered by high value input
       }
     })
 
@@ -209,38 +204,38 @@ const imageFiltering = function () {
     // CREATE USER INPUT PER COLOR
     // Display colors and low/high values
     // {color: "rgba(r, g, b, a)", hi: n, low: n}
+
     if (isEmpty(colorRanges)) {
-      console.warn('No colorRanges?', colorRanges)
+      console.warn('No colorRanges', colorRanges)
     } else {
-      console.warn("It's good.", colorRanges)
+      console.log("It's good", colorRanges)
     }
 
-    colorRanges.forEach(function (cr, index) {
+    colorRanges.forEach(function (color, index) {
       // COLOR DIV
       let colorDiv = document.createElement('div')
-      let colorCode = cr.color
+      let colorCode = color.color
 
       // COLOR PICKER
       let m = document.createElement('mark')
       m.id = 'marker' + index
       m.innerHTML = rgba2hex(colorCode)
-      // m.innerHTML = colorCode // <= color-picker does not allow this; it has to be hex
       let cp = colorPicker(m)
-      // Event Handler!
+      // Event Handler
       cp.on('change', function (r, g, b, a) {
         colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-        setViewerFilter(viewer, colorRanges)
+        setViewerFilter(viewer)
       })
       colorDiv.appendChild(m)
 
       // LOW
       let lowDiv = document.createElement('div')
-      let d = {id: 'low' + index, val: cr.low, cr, index}
+      let d = {id: 'low' + index, val: color.low, color, index}
       lowDiv.appendChild(createNumericInput(d, viewer))
 
       // HIGH
       let hiDiv = document.createElement('div')
-      d = {id: 'hi' + index, val: cr.hi, cr, index}
+      d = {id: 'hi' + index, val: color.hi, color, index}
       hiDiv.appendChild(createNumericInput(d, viewer))
 
       // ADD TO CONTAINER DIV
@@ -326,20 +321,20 @@ const imageFiltering = function () {
                 }
               }
 
-              function levels(val, cr) {
+              function levels(value, colors) {
                 let i
                 let retVal
-                for (i = 0; i < cr.length; i++) {
-                  let low = cr[i].low
-                  let hi = cr[i].hi
-                  let color = cr[i].color
-                  if (val >= low && val <= hi) {
+                for (i = 0; i < colors.length; i++) {
+                  let low = colors[i].low
+                  let hi = colors[i].hi
+                  let color = colors[i].color
+                  if (value >= low && value <= hi) {
                     retVal = parseColor(color)
                   }
                 }
 
                 if (typeof retVal === 'undefined') {
-                  return val
+                  return value
                 } else {
                   return retVal
                 }
@@ -387,9 +382,11 @@ const imageFiltering = function () {
         return filters[num]
       }
     },
-    setColorRanges: function (cr) {
-      this.colorRanges = cr
-      console.log('this.colorRanges', this.colorRanges)
+    getColorRanges: function () {
+      return colorRanges
+    },
+    setColorRanges: function (colors) {
+      colorRanges = colors
     }
   }
 }

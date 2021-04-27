@@ -66,10 +66,11 @@ class ImageViewer {
 
           try {
             setTimeout(function () {
-              let imf = new imageFiltering()
+
               if (options.colorRanges) {
-                console.log('Got colorRanges; setting filters...')
+                let imf = new imageFiltering()
                 imf.setColorRanges(options.colorRanges)
+
                 // TODO: MAKE DECISION ON TYPE OF FILTER
                 // Get JSON - if it's segmentation, use 'filter'
                 // If it's anything else (like a heatmap), use 'filter1'
