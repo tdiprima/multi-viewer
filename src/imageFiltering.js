@@ -76,21 +76,24 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer) {
-    console.log('setViewerFilter')
     if (isEmpty(colorRanges)) {
       console.warn('empty', colorRanges)
     } else {
       console.warn('all good', colorRanges)
     }
 
-    viewer.setFilterOptions({
-      filters: [{
-        items: viewer.world.getItemAt(1), // TODO: what layer?
-        processors: [
-          imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
-        ]
-      }]
-    })
+    try {
+      viewer.setFilterOptions({
+        filters: [{
+          items: viewer.world.getItemAt(1), // TODO: what layer?
+          processors: [
+            imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
+          ]
+        }]
+      })
+    } catch(err) {
+      console.log('OK')
+    }
   }
 
   // NUMBER INPUT to let user set threshold values
