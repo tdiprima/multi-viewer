@@ -1,6 +1,6 @@
 // Utilizes: https://github.com/taufik-nurrohman/color-picker
 const colorPicker = function (inputElement) {
-  console.warn('colorPicker', inputElement)
+  console.log('colorPicker', inputElement)
 
   // Check
   if (!isRealValue(inputElement)) {
@@ -10,10 +10,10 @@ const colorPicker = function (inputElement) {
 
   // Construct
   const picker = new CP(inputElement)
-  console.warn('CP', picker)
+  console.log('CP', picker)
   picker.on('change', function (r, g, b, a) {
     try {
-      console.warn('r, g, b, a', r, g, b, a)
+      console.log('r, g, b, a', r, g, b, a)
       this.source.value = this.color(r, g, b, a)
       this.source.innerHTML = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
