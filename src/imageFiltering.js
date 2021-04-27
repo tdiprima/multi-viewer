@@ -78,6 +78,11 @@ const imageFiltering = function () {
   function setViewerFilter(viewer, colorRanges) {
     if (isEmpty(colorRanges)) {
       console.warn('empty?', colorRanges)
+      if (isEmpty(this.colorRanges)) {
+        console.warn('both', this.colorRanges)
+      } else {
+        colorRanges = this.colorRanges
+      }
     } else {
       console.warn('good', colorRanges)
     }
@@ -94,7 +99,6 @@ const imageFiltering = function () {
 
   // NUMBER INPUT to let user set threshold values
   function createNumericInput(data, viewer) {
-    console.log('data', data)
     let x = document.createElement('input')
     x.id = data.id
     x.setAttribute('type', 'number')
@@ -128,7 +132,6 @@ const imageFiltering = function () {
   }
 
   function layerButtonToggle(color, cursor) {
-    console.log('layerButtonToggle')
     jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
         let num = this.id.slice(-1) // hack to get the id #
@@ -206,13 +209,13 @@ const imageFiltering = function () {
     // CREATE USER INPUT PER COLOR
     // Display colors and low/high values
     // {color: "rgba(r, g, b, a)", hi: n, low: n}
-    if (!isRealValue(colorRanges)) {
+    if (isEmpty(colorRanges)) {
       console.warn('No colorRanges?', colorRanges)
     } else {
-      console.warn("It's good!", colorRanges)
+      console.warn("It's good.", colorRanges)
     }
+
     colorRanges.forEach(function (cr, index) {
-      console.log(cr)
       // COLOR DIV
       let colorDiv = document.createElement('div')
       let colorCode = cr.color
@@ -385,8 +388,8 @@ const imageFiltering = function () {
       }
     },
     setColorRanges: function (cr) {
-      console.log('setting color ranges', cr)
       this.colorRanges = cr
+      console.log('this.colorRanges', this.colorRanges)
     }
   }
 }
