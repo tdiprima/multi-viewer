@@ -76,6 +76,7 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer) {
+    console.log('setViewerFilter')
     if (isEmpty(colorRanges)) {
       console.warn('empty', colorRanges)
     } else {
