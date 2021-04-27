@@ -310,18 +310,17 @@ const imageFiltering = function () {
 
               function levels(val, cr) {
                 let i
+                let retVal
                 for (i = 0; i < cr.length; i++) {
                   let low = cr[i].low
                   let hi = cr[i].hi
                   let color = cr[i].color
 
                   if (val >= low && val <= hi) {
-                    return parseColor(color)
-                  } else {
-                    return [0, 0, 0, 0]
+                    retVal = parseColor(color)
                   }
-
                 }
+                return retVal
               }
 
               // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
