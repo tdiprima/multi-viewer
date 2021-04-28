@@ -76,12 +76,6 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer) {
-    if (isEmpty(colorRanges)) {
-      console.warn('empty', colorRanges)
-    } else {
-      console.warn('all good', colorRanges)
-    }
-
     try {
       viewer.setFilterOptions({
         filters: [{
@@ -209,12 +203,6 @@ const imageFiltering = function () {
     // Display colors and low/high values
     // {color: "rgba(r, g, b, a)", hi: n, low: n}
 
-    if (isEmpty(colorRanges)) {
-      console.warn('No colorRanges', colorRanges)
-    } else {
-      console.warn("It's good", colorRanges)
-    }
-
     colorRanges.forEach(function (color, index) {
       // COLOR DIV
       let colorDiv = document.createElement('div')
@@ -225,22 +213,18 @@ const imageFiltering = function () {
       m.id = 'marker' + index
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
-      console.warn("Here's the element:", m)
-      let cp = colorPicker(m)
-      console.warn('cp', cp)
 
-      // Event Handler
+      const cp = new CP(m)
       cp.on('change', function (r, g, b, a) {
         try {
-          console.log('index', index)
-          console.log('colorRanges[index]', colorRanges[index])
-          console.log('colorRanges', colorRanges)
+          this.source.value = this.color(r, g, b, a)
+          this.source.innerHTML = this.color(r, g, b, a)
+          this.source.style.backgroundColor = this.color(r, g, b, a)
           colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
           setViewerFilter(viewer)
         } catch(err) {
-          console.error('caught exception', err.message)
+          console.error('Caught exception', err.message)
         }
-        
       })
       // colorDiv.appendChild(m)
 
