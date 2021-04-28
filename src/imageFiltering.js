@@ -218,7 +218,7 @@ const imageFiltering = function () {
 
       const cp = new CP(m)
       cp.on('change', function (r, g, b, a) {
-        console.log('color was clicked', colorRanges ? colorRanges.length : 'n')
+        console.log('color evt setup OR color selected', colorRanges ? colorRanges.length : 'n')
         try {
           this.source.value = this.color(r, g, b, a)
           this.source.innerHTML = this.color(r, g, b, a)
