@@ -2,7 +2,7 @@
  * Image filtering
  */
 const imageFiltering = function () {
-  this.colorRanges = []
+  this.colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
 
   function filterColors(r, g, b) {
     this.r = r
@@ -158,6 +158,7 @@ const imageFiltering = function () {
   }
 
   function createPopup(event, layersBtn, viewer) {
+    console.log('createPopup', colorRanges ? colorRanges.length : 'n')
     // Disable buttons
     layerButtonToggle('#ccc', 'not-allowed')
 
@@ -211,11 +212,13 @@ const imageFiltering = function () {
       // COLOR PICKER
       let m = document.createElement('mark')
       m.id = 'marker' + index
+      console.log('index', index)
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
 
       const cp = new CP(m)
       cp.on('change', function (r, g, b, a) {
+        console.log('color was clicked', colorRanges ? colorRanges.length : 'n')
         try {
           this.source.value = this.color(r, g, b, a)
           this.source.innerHTML = this.color(r, g, b, a)
@@ -223,7 +226,11 @@ const imageFiltering = function () {
           colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
           setViewerFilter(viewer)
         } catch(err) {
-          console.error('Caught exception', err.message)
+          console.log('HERE!')
+          if (index < 7) {
+            colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+            setViewerFilter(viewer)
+          }
         }
       })
       // colorDiv.appendChild(m)
@@ -364,6 +371,7 @@ const imageFiltering = function () {
     },
     handleColorLevels: function (layersBtn, viewer) {
       // Layers button clicked
+      console.log('Layers button clicked', colorRanges ? colorRanges.length : 'n')
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
