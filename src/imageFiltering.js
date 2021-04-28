@@ -370,8 +370,8 @@ const imageFiltering = function () {
       return filters.length
     },
     handleColorLevels: function (layersBtn, viewer) {
-      // Layers button clicked
-      console.log('Layers button clicked', colorRanges ? colorRanges.length : 'n')
+      // Event handler for the layers button
+      console.log('Setting up layers button evt', colorRanges ? colorRanges.length : 'n')
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
