@@ -76,6 +76,7 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer) {
+    console.log('set', colorRanges ? colorRanges.length : 'n')
     try {
       viewer.setFilterOptions({
         filters: [{
