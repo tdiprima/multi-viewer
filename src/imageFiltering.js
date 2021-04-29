@@ -2,6 +2,7 @@
  * Image filtering
  */
 const imageFiltering = function () {
+  console.log('imageFiltering.js')
   this.colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
 
   function filterColors(r, g, b) {

@@ -9,6 +9,7 @@
  */
 class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
+    console.log('ImageViewer.js')
     this.viewer = {}
     this.setViewer(viewerDivId)
     this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.viewer, options)

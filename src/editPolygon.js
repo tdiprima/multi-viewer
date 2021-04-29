@@ -1,4 +1,5 @@
 const editPolygon = function (idx, overlay) {
+  console.log('editPolygon.js')
   document.getElementById('btnEdit' + idx).addEventListener('click', function () {
     toggleButtonHighlight(this)
     Edit(overlay.fabricCanvas())

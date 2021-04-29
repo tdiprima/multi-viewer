@@ -1,5 +1,6 @@
 // Synchronize pan & zoom
 const synchronizeViewers = function (imageViewerArray) {
+  console.log('synchronizeViewers.js')
   const isGood = checkData(imageViewerArray)
 
   if (isGood) {

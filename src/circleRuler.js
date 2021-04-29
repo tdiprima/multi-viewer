@@ -1,4 +1,5 @@
 const ruler = function (idx, viewer, overlay) {
+  console.log('ruler.js')
   // TODO: FIX so that the straight line goes across diameter of circle instead of just the radius.
   let circle, line, text, isDown, origX, origY
   let startx = []

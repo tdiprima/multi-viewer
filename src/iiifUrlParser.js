@@ -1,6 +1,7 @@
 // JavaScript IIIF URL Parser
 // Adapted from: https://github.com/NCSU-Libraries/iiif_url/blob/master/lib/iiif_url.rb
 // IIIF Image API: https://iiif.io/api/image/3.0/
+console.log('iiifUrlParser.js')
 function isNumeric(str) {
   if (typeof str != "string") return false
   return !isNaN(str) && !isNaN(parseFloat(str))
