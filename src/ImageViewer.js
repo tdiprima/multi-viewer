@@ -132,7 +132,6 @@ class ImageViewer {
             }
 
             setTimeout(checkVariable, 250)
-            // setTimeout(checkVariable, 1000)
 
           } catch (err) {
             console.error('Filters:', err.message)
