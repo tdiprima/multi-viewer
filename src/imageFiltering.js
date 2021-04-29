@@ -179,9 +179,10 @@ const imageFiltering = function () {
       }
     })
   }
+
   // CREATE USER INPUT PER COLOR
-// Display colors and low/high values
-// {color: "rgba(r, g, b, a)", hi: n, low: n}
+  // Display colors and low/high values
+  // {color: "rgba(r, g, b, a)", hi: n, low: n}
   function createUserInput(colorPopup, viewer) {
     let i
     for (i = 0; i < colorRanges.length; i++) {
@@ -324,10 +325,15 @@ const imageFiltering = function () {
       filter1.prototype.COLORLEVELS = function (colorRanges) {
         return function (context, callback) {
           let imgData
+          let ok = true
           try {
             imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-
-            if (typeof imgData !== undefined) {
+          } catch (err) {
+            ok = false
+            console.log('A:', err.message)
+          }
+          if (ok && typeof imgData !== undefined) {
+            try {
               const pxl = imgData.data
               let j
               for (j = 0; j < pxl.length; j += 4) {
@@ -345,8 +351,12 @@ const imageFiltering = function () {
                   pxl[j + 3] = 0
                 }
               }
+            } catch (err) {
+              console.log('1:', err.message)
+            }
 
-              function levels(value, colors) {
+            function levels(value, colors) {
+              try {
                 let i
                 let retVal
                 for (i = 0; i < colors.length; i++) {
@@ -363,18 +373,22 @@ const imageFiltering = function () {
                 } else {
                   return retVal
                 }
+              } catch (err) {
+                console.log('2:', err.message)
               }
+            }
 
-              // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
-              function parseColor(input) {
-                return input.replace(/[a-z%\s\(\)]/g, '').split(',')
-              }
+            // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
+            function parseColor(input) {
+              return input.replace(/[a-z%\s\(\)]/g, '').split(',')
+            }
 
+            try {
               context.putImageData(imgData, 0, 0)
               callback()
+            } catch (err) {
+              console.log('3:', err.message)
             }
-          } catch (err) {
-            console.error('COLORLEVELS:', err.message)
           }
 
         }
