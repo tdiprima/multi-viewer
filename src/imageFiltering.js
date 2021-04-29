@@ -86,7 +86,7 @@ const imageFiltering = function () {
           ]
         }]
       })
-    } catch(err) {
+    } catch (err) {
       console.log('OK')
     }
   }
@@ -158,8 +158,73 @@ const imageFiltering = function () {
     return hex
   }
 
+  function colorPickerEvent(colorRanges, m, i, viewer) {
+    const cp = new CP(m)
+    cp.on('change', function (r, g, b, a) {
+      console.log('color evt setup OR color selected', viewer.id, colorRanges ? colorRanges.length : 'n')
+      try {
+        cp.source.value = cp.color(r, g, b, a)
+        cp.source.innerHTML = cp.color(r, g, b, a)
+        cp.source.style.backgroundColor = cp.color(r, g, b, a)
+        colorRanges[i].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+        setViewerFilter(viewer)
+      } catch (err) {
+        console.log('HERE!', err)
+        console.log('viewer', viewer.id)
+        if (i < 5) {
+          colorRanges[i].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+          setViewerFilter(viewer)
+        }
+      }
+    })
+  }
+  // CREATE USER INPUT PER COLOR
+// Display colors and low/high values
+// {color: "rgba(r, g, b, a)", hi: n, low: n}
+  function createUserInput(colorPopup, viewer) {
+    let i
+    for (i = 0; i < colorRanges.length; i++) {
+      // COLOR DIV
+      let colorDiv = document.createElement('div')
+      let colorCode = colorRanges[i].color
+
+      // COLOR PICKER
+      let m = document.createElement('mark')
+      m.id = 'marker' + i
+      console.log('index', i)
+      m.innerHTML = rgba2hex(colorCode)
+      colorDiv.appendChild(m)
+      colorPickerEvent(colorRanges, m, i, viewer)
+
+      // LOW
+      let lowDiv = document.createElement('div')
+      let d = {
+        id: 'low' + i,
+        val: colorRanges[i].hi,
+        // color: colorRanges[i],
+        index: i
+      }
+      lowDiv.appendChild(createNumericInput(d, viewer))
+
+      // HIGH
+      let hiDiv = document.createElement('div')
+      d = {
+        id: 'hi' + i,
+        val: colorRanges[i].hi,
+        // color: colorRanges[i],
+        index: i
+      }
+      hiDiv.appendChild(createNumericInput(d, viewer))
+
+      // ADD TO CONTAINER DIV
+      colorPopup.appendChild(colorDiv)
+      colorPopup.appendChild(lowDiv)
+      colorPopup.appendChild(hiDiv)
+    }
+  }
+
   function createPopup(event, layersBtn, viewer) {
-    console.log('createPopup', colorRanges ? colorRanges.length : 'n')
+    console.log('createPopup', viewer.id, colorRanges ? colorRanges.length : 'n')
     // Disable buttons
     layerButtonToggle('#ccc', 'not-allowed')
 
@@ -201,56 +266,7 @@ const imageFiltering = function () {
     t.className = 'popupHeader'
     colorPopup.appendChild(t)
 
-    // CREATE USER INPUT PER COLOR
-    // Display colors and low/high values
-    // {color: "rgba(r, g, b, a)", hi: n, low: n}
-
-    colorRanges.forEach(function (color, index) {
-      // COLOR DIV
-      let colorDiv = document.createElement('div')
-      let colorCode = color.color
-
-      // COLOR PICKER
-      let m = document.createElement('mark')
-      m.id = 'marker' + index
-      console.log('index', index)
-      m.innerHTML = rgba2hex(colorCode)
-      colorDiv.appendChild(m)
-
-      const cp = new CP(m)
-      cp.on('change', function (r, g, b, a) {
-        console.log('color evt setup OR color selected', colorRanges ? colorRanges.length : 'n')
-        try {
-          this.source.value = this.color(r, g, b, a)
-          this.source.innerHTML = this.color(r, g, b, a)
-          this.source.style.backgroundColor = this.color(r, g, b, a)
-          colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-          setViewerFilter(viewer)
-        } catch(err) {
-          console.log('HERE!')
-          if (index < 7) {
-            colorRanges[index].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-            setViewerFilter(viewer)
-          }
-        }
-      })
-      // colorDiv.appendChild(m)
-
-      // LOW
-      let lowDiv = document.createElement('div')
-      let d = {id: 'low' + index, val: color.low, color, index}
-      lowDiv.appendChild(createNumericInput(d, viewer))
-
-      // HIGH
-      let hiDiv = document.createElement('div')
-      d = {id: 'hi' + index, val: color.hi, color, index}
-      hiDiv.appendChild(createNumericInput(d, viewer))
-
-      // ADD TO CONTAINER DIV
-      colorPopup.appendChild(colorDiv)
-      colorPopup.appendChild(lowDiv)
-      colorPopup.appendChild(hiDiv)
-    })
+    createUserInput(colorPopup, viewer)
 
     colorPopup.style.left = event.clientX + 'px'
     colorPopup.style.top = event.clientY + 'px'
@@ -371,8 +387,10 @@ const imageFiltering = function () {
       return filters.length
     },
     handleColorLevels: function (layersBtn, viewer) {
-      // Event handler for the layers button
       console.log('Setting up layers button evt', colorRanges ? colorRanges.length : 'n')
+      console.warn('For viewer', viewer.id)
+
+      // Event handler for the layers button
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
 
