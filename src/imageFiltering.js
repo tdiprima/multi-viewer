@@ -280,8 +280,8 @@ const imageFiltering = function () {
 
   return {
     getFilter: function () {
-      let filter = {}
-      filter = OpenSeadragon.Filters.GREYSCALE
+      console.log('Here in getFilter')
+      let filter = OpenSeadragon.Filters.GREYSCALE
       filter.prototype.COLORIZE = function (color) {
         // console.log('color', color)
         return function (context, callback) {
@@ -316,9 +316,11 @@ const imageFiltering = function () {
 
         }
       }
+      console.log('There.')
       return filter
     },
     getFilter1: function () {
+      console.log('Here in getFilter1')
       let filter1 = OpenSeadragon.Filters.GREYSCALE
       // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
       filter1.prototype.COLORLEVELS = function (colorRanges) {
@@ -390,6 +392,7 @@ const imageFiltering = function () {
           }
         }
       }
+      console.log('There.')
       return filter1
     },
     getLength: function () {

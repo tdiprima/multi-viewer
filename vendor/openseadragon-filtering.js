@@ -157,28 +157,30 @@
             } else {
               try {
                 rendered._originalImageData = rendered.getImageData(0, 0, rendered.canvas.width, rendered.canvas.height);
-              } catch (error) {
-                // DOMException: Index or size is negative or greater than the allowed amount
-                console.warn('TD', rendered.canvas.width, rendered.canvas.height)
-              }
-            }
-
-            if (tile._renderedContext) {
-                if (tile._filterIncrement === self.filterIncrement) {
+                if (tile._renderedContext) {
+                  if (tile._filterIncrement === self.filterIncrement) {
                     var imgData = tile._renderedContext.getImageData(0, 0,
-                        tile._renderedContext.canvas.width,
-                        tile._renderedContext.canvas.height);
+                      tile._renderedContext.canvas.width,
+                      tile._renderedContext.canvas.height);
                     rendered.putImageData(imgData, 0, 0);
                     delete tile._renderedContext;
                     delete tile._filterIncrement;
                     rendered._filterIncrement = self.filterIncrement;
                     return;
+                  }
+                  delete tile._renderedContext;
+                  delete tile._filterIncrement;
                 }
-                delete tile._renderedContext;
-                delete tile._filterIncrement;
+                applyFilters(rendered, processors);
+                rendered._filterIncrement = self.filterIncrement;
+              } catch (error) {
+                // DOMException: Index or size is negative or greater than the allowed amount
+                // Then OSD: Uncaught DOMException: CanvasRenderingContext2D.drawImage: Passed-in canvas is empty
+                console.warn('TD', rendered.canvas.width, rendered.canvas.height)
+              }
             }
-            applyFilters(rendered, processors);
-            rendered._filterIncrement = self.filterIncrement;
+
+
         }
     };
 

@@ -76,7 +76,6 @@ class ImageViewer {
               zzz = zzz + 1
               console.log(zzz)
 
-              // if (viewer.context) {
               if (viewer.world) {
                 console.log('YAY!')
                 if (options.colorRanges) {
