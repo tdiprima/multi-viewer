@@ -151,8 +151,13 @@
                 // restore it first.
                 rendered.putImageData(rendered._originalImageData, 0, 0);
             } else {
-                rendered._originalImageData = rendered.getImageData(
-                    0, 0, rendered.canvas.width, rendered.canvas.height);
+              try {
+                rendered._originalImageData = rendered.getImageData(0, 0, rendered.canvas.width, rendered.canvas.height);
+              } catch (error) {
+                console.log(error, ", but don't worry about it.");
+                console.log(rendered.canvas.width)
+                console.log(rendered.canvas.height)
+              }
             }
 
             if (tile._renderedContext) {
