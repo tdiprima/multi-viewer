@@ -391,9 +391,6 @@ const imageFiltering = function () {
       }
       return filter1
     },
-    getHtml: function (idx) {
-      return `<div><i id="colors${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i></div>`
-    },
     getLength: function () {
       return filters.length
     },

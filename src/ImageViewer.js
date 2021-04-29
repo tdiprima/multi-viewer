@@ -11,20 +11,23 @@ class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     console.log('ImageViewer.js')
     this.viewer = {}
-    this.setViewer(viewerDivId)
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.viewer, options)
+    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), options)
   }
 
   setViewer(viewerDivId) {
+    let viewer
     try {
-      this.viewer = OpenSeadragon({
+      viewer = OpenSeadragon({
         id: viewerDivId,
         prefixUrl: 'vendor/openseadragon/images/',
         crossOriginPolicy: 'Anonymous'
       })
     } catch (e) {
-      console.warn(e)
+      console.warn('setViewer', e)
+      viewer = null
     }
+    this.viewer = viewer
+    return viewer
 
   }
 
