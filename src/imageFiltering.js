@@ -2,7 +2,6 @@
  * Image filtering
  */
 const imageFiltering = function () {
-  console.log('imageFiltering.js')
   this.colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
 
   function filterColors(r, g, b) {
@@ -385,9 +384,10 @@ const imageFiltering = function () {
               console.log('3:', err.message)
             }
           }
-          // else {
-          //   console.log('context.canvas', context.canvas)
-          // }
+          else {
+            filter1 = null
+            // console.log('context.canvas', context.canvas)
+          }
         }
       }
       return filter1
@@ -397,7 +397,7 @@ const imageFiltering = function () {
     },
     handleColorLevels: function (layersBtn, viewer) {
       console.log('Setting up layers button evt', colorRanges ? colorRanges.length : 'n')
-      console.warn('For viewer', viewer.id)
+      console.log('For viewer', viewer.id)
 
       // Event handler for the layers button
       layersBtn.addEventListener('click', function (event) {
@@ -419,10 +419,28 @@ const imageFiltering = function () {
       }
     },
     getColorRanges: function () {
-      return colorRanges
+      if (typeof colorRanges !== 'undefined') {
+        console.log('A')
+        return colorRanges
+      } else if (typeof this.colorRanges !== 'undefined') {
+        console.log('B')
+        return this.colorRanges
+      } else {
+        console.error('getColorRanges')
+        return [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
+      }
+
     },
     setColorRanges: function (colors) {
-      colorRanges = colors
+      if (typeof colorRanges !== 'undefined') {
+        console.log('A')
+        colorRanges = colors
+      } else if (typeof this.colorRanges !== 'undefined') {
+        console.log('B')
+        this.colorRanges = colors
+      } else {
+        console.error('setColorRanges')
+      }
     }
   }
 }

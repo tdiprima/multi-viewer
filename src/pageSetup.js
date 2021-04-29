@@ -14,8 +14,6 @@
  * @param opts: Multi-viewer options; filters, paintbrush, sliders, etc.
  */
 const pageSetup = function (divId, image, features, opacity, numViewers, rows, columns, width, height, opts) {
-  console.log('pageSetup.js')
-
   let viewers = [] // eslint-disable-line prefer-const
   let sliderIdNum = 0
 

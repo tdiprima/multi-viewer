@@ -1,7 +1,5 @@
 // Utilizes: https://github.com/taufik-nurrohman/color-picker
 const colorPicker = function (inputElement) {
-  console.log('colorPicker.js')
-
   // Check
   if (!isRealValue(inputElement)) {
     throw Error('colorPicker.js: Expected input argument, but received none.')

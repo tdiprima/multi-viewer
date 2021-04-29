@@ -17,7 +17,6 @@
   }
  */
 const mugshots = function (options) {
-  console.log('mugshots.js')
   const canvas = this.__canvas = options.overlay.fabricCanvas()
   options.overlay.resizeCanvas = function () {
     // Function override: Resize overlay canvas

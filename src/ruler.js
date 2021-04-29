@@ -1,5 +1,4 @@
 const ruler = function (idx, viewer, overlay) {
-  console.log('ruler.js')
   // TODO: turn off event handlers, to not collide with others.
   let line, isDown, mode
   let startx = []

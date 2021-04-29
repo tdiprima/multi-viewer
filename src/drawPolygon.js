@@ -6,7 +6,6 @@
  * @param overlay: fabric overlay object.
  */
 const drawPolygon = function (idx, viewer, overlay) {
-  console.log('drawPolygon.js')
   const btnDraw = document.getElementById('btnDraw' + idx)
   const mark = document.getElementById('mark' + idx)
 

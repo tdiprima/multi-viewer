@@ -14,7 +14,6 @@
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options)
-    console.log('MultiViewer.js')
 
     if (typeof options === 'undefined') {
       options = {}

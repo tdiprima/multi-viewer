@@ -1,5 +1,4 @@
 const gridOverlay = function (idx, overlay) {
-  console.log('gridOverlay.js')
   const cellSize = 25
 
   const gridProps = {

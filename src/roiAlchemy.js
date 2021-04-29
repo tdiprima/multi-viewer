@@ -11,7 +11,6 @@
  * @param height = height of viewers
  */
 const roiAlchemy = function (divId, image, rois, rows, columns, width, height) {
-  console.log('roiAlchemy.js')
   // BUILD TABLE
   const div = document.getElementById(divId)
   const element = document.createElement('table')

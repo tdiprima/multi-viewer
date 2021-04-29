@@ -8,8 +8,8 @@
  * @param opacity - feature opacity
  */
 class ImageViewer {
+
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
-    console.log('ImageViewer.js')
     this.viewer = {}
     this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), options)
   }
@@ -69,48 +69,63 @@ class ImageViewer {
           })
 
           try {
-            setTimeout(function () {
 
-              if (options.colorRanges) {
-                let imf = new imageFiltering()
-                imf.setColorRanges(options.colorRanges)
+            let zzz = 0
+            function checkVariable() {
+              zzz = zzz + 1
+              console.log('z', zzz)
 
-                // TODO: MAKE DECISION ON TYPE OF FILTER
-                // Get JSON - if it's segmentation, use 'filter'
-                // If it's anything else (like a heatmap), use 'filter1'
+              // if (viewer.context) {
+              if (viewer.world) {
+                console.log('YAY!')
+                if (options.colorRanges) {
+                  let imf = new imageFiltering()
+                  imf.setColorRanges(options.colorRanges)
 
-                // Set filter options
-                // let filter = imf.getFilter() // TODO: HERE!
-                let filter = imf.getFilter1() // todo: here!
+                  // TODO: MAKE DECISION ON TYPE OF FILTER
+                  // Get JSON - if it's segmentation, use 'filter'
+                  // If it's anything else (like a heatmap), use 'filter1'
 
-                let itemCount = viewer.world.getItemCount()
-                let i
-                let filterOpts = []
-                for (i = 0; i < itemCount; i++) {
-                  if (i > 0) {
-                    filterOpts.push({
-                      items: viewer.world.getItemAt(i),
-                      processors: [
-                        filter.prototype.COLORLEVELS(options.colorRanges) // TODO: AND HERE!
-                        // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
-                      ]
+                  // Set filter options
+                  // let filter = imf.getFilter() // TODO: HERE!
+                  let filter = imf.getFilter1() // todo: here!
+                  if (filter !== null) {
+                    let itemCount = viewer.world.getItemCount()
+                    let i
+                    let filterOpts = []
+
+                    for (i = 0; i < itemCount; i++) {
+                      if (i > 0) {
+                        filterOpts.push({
+                          items: viewer.world.getItemAt(i),
+                          processors: [
+                            filter.prototype.COLORLEVELS(options.colorRanges) // TODO: AND HERE!
+                            // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
+                          ]
+                        })
+                      }
+                    }
+
+                    viewer.setFilterOptions({
+                      filters: filterOpts
                     })
                   }
-                }
-                viewer.setFilterOptions({
-                  filters: filterOpts
-                })
-              } else {
-                console.warn('No options.colorRanges. Skipping...')
-              }
 
-              // getTileUrl - layers
-              currentViewerFeatures.forEach(function (feature, index) {
-                viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-                  return getIIIFTileUrl(this, level, x, y)
+                } else {
+                  console.warn('No options.colorRanges. Skipping...')
                 }
-              })
-            }, 2000)
+
+                // getTileUrl - layers
+                currentViewerFeatures.forEach(function (feature, index) {
+                  viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+                    return getIIIFTileUrl(this, level, x, y)
+                  }
+                })
+              }
+            }
+
+            setTimeout(checkVariable, 250)
+            // setTimeout(checkVariable, 1000)
 
           } catch (err) {
             console.error('Filters:', err.message)
@@ -162,4 +177,5 @@ class ImageViewer {
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
   }
+
 }

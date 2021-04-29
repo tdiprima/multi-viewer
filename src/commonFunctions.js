@@ -1,4 +1,3 @@
-console.log('commonFunctions.js')
 function clearClassList (element) {
   const classList = element.classList
   while (classList.length > 0) {
