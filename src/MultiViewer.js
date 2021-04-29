@@ -26,6 +26,8 @@ class MultiViewer extends ImageViewer {
       }
 
       this.viewer1 = super.getViewer()
+      // console.log('viewer', this.viewer1)
+
       this.idx = viewerIndex
       this.sliders = sliderElements
 
@@ -49,11 +51,7 @@ class MultiViewer extends ImageViewer {
       let layersBtn = document.getElementById('colors' + this.idx)
       if (layersBtn) {
         if (options.colorRanges) {
-          let imf = new imageFiltering()
-          if (isEmpty(imf.getColorRanges())) {
-            imf.setColorRanges(options.colorRanges)
-          }
-          imf.handleColorLevels(layersBtn, this.viewer1)
+          imageFiltering().setColorRanges(options.colorRanges)
         } else {
           console.warn("There's a button but no colors.")
         }

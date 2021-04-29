@@ -71,9 +71,10 @@ class ImageViewer {
           try {
 
             let zzz = 0
+
             function checkVariable() {
               zzz = zzz + 1
-              console.log('z', zzz)
+              console.log(zzz)
 
               // if (viewer.context) {
               if (viewer.world) {
@@ -111,16 +112,22 @@ class ImageViewer {
                     })
                   }
 
+                  // getTileUrl - layers
+                  currentViewerFeatures.forEach(function (feature, index) {
+                    try {
+                      viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+                        return getIIIFTileUrl(this, level, x, y)
+                      }
+                    } catch (e) {
+                      console.warn('undefined: viewer.world.getItemAt', index + 1)
+                    }
+
+                  })
+
                 } else {
                   console.warn('No options.colorRanges. Skipping...')
                 }
 
-                // getTileUrl - layers
-                currentViewerFeatures.forEach(function (feature, index) {
-                  viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-                    return getIIIFTileUrl(this, level, x, y)
-                  }
-                })
               }
             }
 
