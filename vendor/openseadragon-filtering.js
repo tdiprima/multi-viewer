@@ -82,7 +82,8 @@
             }
             var tile = event.tile;
             var image = event.image;
-            if (image !== null && image !== undefined) {
+            try {
+              if (image !== null && image !== undefined) {
                 var canvas = window.document.createElement('canvas');
                 canvas.width = image.width;
                 canvas.height = image.height;
@@ -92,6 +93,9 @@
                 var callback = event.getCompletionCallback();
                 applyFilters(context, processors, callback);
                 tile._filterIncrement = self.filterIncrement;
+              }
+            } catch (e) {
+              console.error('TD', e)
             }
         }
 
@@ -154,9 +158,9 @@
               try {
                 rendered._originalImageData = rendered.getImageData(0, 0, rendered.canvas.width, rendered.canvas.height);
               } catch (error) {
-                console.log(error, ", but don't worry about it.");
-                console.log(rendered.canvas.width)
-                console.log(rendered.canvas.height)
+                console.error('TD', error)
+                console.error(rendered.canvas.width)
+                console.error(rendered.canvas.height)
               }
             }
 
