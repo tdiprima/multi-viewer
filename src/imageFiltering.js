@@ -325,14 +325,9 @@ const imageFiltering = function () {
       filter1.prototype.COLORLEVELS = function (colorRanges) {
         return function (context, callback) {
           let imgData
-          let ok = true
-          try {
+
+          if (context.canvas.width > 0 && context.canvas.height > 0) {
             imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-          } catch (err) {
-            ok = false
-            console.log('A:', err.message)
-          }
-          if (ok && typeof imgData !== undefined) {
             try {
               const pxl = imgData.data
               let j
@@ -389,8 +384,9 @@ const imageFiltering = function () {
             } catch (err) {
               console.log('3:', err.message)
             }
+          } else {
+            console.log('context.canvas', context.canvas)
           }
-
         }
       }
       return filter1

@@ -95,7 +95,7 @@
                 tile._filterIncrement = self.filterIncrement;
               }
             } catch (e) {
-              console.error('TD', e)
+              console.warn('TD', e)
             }
         }
 
@@ -158,9 +158,8 @@
               try {
                 rendered._originalImageData = rendered.getImageData(0, 0, rendered.canvas.width, rendered.canvas.height);
               } catch (error) {
-                console.error('TD', error)
-                console.error(rendered.canvas.width)
-                console.error(rendered.canvas.height)
+                // DOMException: Index or size is negative or greater than the allowed amount
+                console.warn('TD', rendered.canvas.width, rendered.canvas.height)
               }
             }
 
