@@ -384,9 +384,10 @@ const imageFiltering = function () {
             } catch (err) {
               console.log('3:', err.message)
             }
-          } else {
-            console.log('context.canvas', context.canvas)
           }
+          // else {
+          //   console.log('context.canvas', context.canvas)
+          // }
         }
       }
       return filter1
