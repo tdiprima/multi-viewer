@@ -36,45 +36,46 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, featureLayers, opacity, viewer, options) {
-    console.log('options', options)
+  setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, options) {
 
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
+      let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
 
       try {
         // Add FEATURE images to viewer
-        if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
+        if (typeof allFeatures[idx] === 'undefined') {
           console.log('No features for this viewer', viewerIndex)
         } else {
-          let currentViewerFeatures = featureLayers[viewerIndex - 1] // Array starts with 0; viewer indices start with 1
+          let features = allFeatures[idx]
 
-          let currentFeatureOpacity
-          if (typeof opacity[viewerIndex - 1] !== 'undefined') {
-            currentFeatureOpacity = opacity[viewerIndex - 1]
+          let opacity
+          if (typeof allOpacity[idx] !== 'undefined') {
+            opacity = allOpacity[idx]
           } else {
             // Error trapping the case where the number of opacities passed in was wrong.
-            let numFeat = featureLayers[viewerIndex - 1].length
+            let numFeat = allFeatures[idx].length
             let newArray = []
             let j
             for (j = 0; j < numFeat; j++) {
               newArray[j] = 1.0
             }
-            currentFeatureOpacity = newArray
+            opacity = newArray
             console.warn('Setting default opacity for viewer', viewerIndex)
           }
 
-          currentViewerFeatures.forEach(function (feature, index) {
-            viewer.addTiledImage({tileSource: feature, opacity: currentFeatureOpacity[index], x: 0, y: 0})
+          features.forEach(function (featureUrl, index) {
+            viewer.addTiledImage({tileSource: featureUrl, opacity: (opacity[index]).toFixed(1), x: 0, y: 0})
           })
 
           try {
 
             function checkVariable(options) {
+              let pos = features.length - 1
 
-              if (viewer.world) {
+              if (viewer.world.getItemAt(pos)) {
 
                 let imf = new imageFiltering()
                 if (options.colorRanges) {
@@ -121,14 +122,15 @@ class ImageViewer {
                     })
                   }
 
-                  // getTileUrl - layers
-                  currentViewerFeatures.forEach(function (feature, index) {
+                  // getTileUrl - layers TODO CHECK
+                  features.forEach(function (featureUrl, index) {
                     try {
+                      // index + 1 because skipping idx=0 (base image)
                       viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
                         return getIIIFTileUrl(this, level, x, y)
                       }
                     } catch (e) {
-                      console.warn('undefined: viewer.world.getItemAt', index + 1)
+                      console.error('undefined: viewer.world.getItemAt', index + 1)
                     }
 
                   })

@@ -280,127 +280,141 @@ const imageFiltering = function () {
 
   return {
     getFilter: function () {
-      console.log('Here in getFilter')
       let filter = OpenSeadragon.Filters.GREYSCALE
       filter.prototype.COLORIZE = function (color) {
-        // console.log('color', color)
         return function (context, callback) {
-          // Read the canvas pixels
-          let imgData
-          try {
-            // w x h: 256 x 256
-            imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-            if (typeof imgData !== undefined) {
-              const pixels = imgData.data
-              // Run the filter on them
-              let i
-              for (i = 0; i < pixels.length; i += 4) {
-                if (pixels[i + 3] === 255) {
-                  // Alpha channel = 255 ("opaque"): nuclear material here.
-                  pixels[i] = color.r
-                  pixels[i + 1] = color.g
-                  pixels[i + 2] = color.b
-                  pixels[i + 3] = 255
-                } else {
-                  // No nuclear material: set to transparent.
-                  pixels[i + 3] = 0
-                }
-              }
-              // Write the result back onto the canvas
-              context.putImageData(imgData, 0, 0)
-              callback()
-            }
-          } catch (err) {
-            console.error('COLORIZE:', err.message)
-          }
-
-        }
-      }
-      console.log('There.')
-      return filter
-    },
-    getFilter1: function () {
-      console.log('Here in getFilter1')
-      let filter1 = OpenSeadragon.Filters.GREYSCALE
-      // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
-      filter1.prototype.COLORLEVELS = function (colorRanges) {
-        return function (context, callback) {
-          let imgData
-
+          // w x h: 256 x 256
+          console.log('w/h', context.canvas.width, context.canvas.height)
           if (context.canvas.width > 0 && context.canvas.height > 0) {
-            imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-            try {
-              const pxl = imgData.data
-              let j
-              for (j = 0; j < pxl.length; j += 4) {
-                if (pxl[j + 3] === 255) {
-                  // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
-                  let rgba = levels(pxl[j], colorRanges) // r = g = b
-                  if (typeof rgba === 'undefined') {
-                    console.warn('rgba undefined', pxl[j])
-                  }
-                  pxl[j] = rgba[0]
-                  pxl[j + 1] = rgba[1]
-                  pxl[j + 2] = rgba[2]
-                  pxl[j + 3] = rgba[3]
-                } else {
-                  pxl[j + 3] = 0
-                }
-              }
-            } catch (err) {
-              console.log('1:', err.message)
-            }
-
-            function levels(value, colors) {
+            // Read the canvas pixels
+            let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+            if (typeof imgData !== undefined) {
               try {
+                const pixels = imgData.data
+                // Run the filter on them
                 let i
-                let retVal
-                for (i = 0; i < colors.length; i++) {
-                  let low = colors[i].low
-                  let hi = colors[i].hi
-                  let color = colors[i].color
-                  if (value >= low && value <= hi) {
-                    retVal = parseColor(color)
+                for (i = 0; i < pixels.length; i += 4) {
+                  if (pixels[i + 3] === 255) {
+                    // Alpha channel = 255 ("opaque"): nuclear material here.
+                    pixels[i] = color.r
+                    pixels[i + 1] = color.g
+                    pixels[i + 2] = color.b
+                    pixels[i + 3] = 255
+                  } else {
+                    // No nuclear material: set to transparent.
+                    pixels[i + 3] = 0
                   }
-                }
-
-                if (typeof retVal === 'undefined') {
-                  return value
-                } else {
-                  return retVal
                 }
               } catch (err) {
-                console.log('2:', err.message)
+                console.warn('1:', err.message)
               }
-            }
 
-            // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
-            function parseColor(input) {
-              return input.replace(/[a-z%\s\(\)]/g, '').split(',')
+              try {
+                // Write the result back onto the canvas
+                context.putImageData(imgData, 0, 0)
+                callback()
+              } catch (err) {
+                console.warn('2:', err.message)
+              }
+            } else {
+              console.warn('imgData undefined')
             }
-
-            try {
-              context.putImageData(imgData, 0, 0)
-              callback()
-            } catch (err) {
-              console.log('3:', err.message)
-            }
-          }
-          else {
-            filter1 = null
+          } else {
+            filter = null
+            console.warn('Canvas w/h=0; setting filter to null')
             // console.log('context.canvas', context.canvas)
           }
         }
       }
-      console.log('There.')
+      return filter
+    },
+    getFilter1: function () {
+      // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
+      let filter1 = OpenSeadragon.Filters.GREYSCALE
+      filter1.prototype.COLORLEVELS = function (colorRanges) {
+        return function (context, callback) {
+          console.log('w/h', context.canvas.width, context.canvas.height)
+          if (context.canvas.width > 0 && context.canvas.height > 0) {
+            // Read the canvas pixels
+            let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+            if (typeof imgData !== undefined) {
+              try {
+                const pxl = imgData.data
+                let j
+                for (j = 0; j < pxl.length; j += 4) {
+                  if (pxl[j + 3] === 255) {
+                    // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
+                    let rgba = levels(pxl[j], colorRanges) // r = g = b
+                    if (typeof rgba === 'undefined') {
+                      console.warn('rgba undefined', pxl[j])
+                    }
+                    pxl[j] = rgba[0]
+                    pxl[j + 1] = rgba[1]
+                    pxl[j + 2] = rgba[2]
+                    pxl[j + 3] = rgba[3]
+                  } else {
+                    // No nuclear material: set to transparent.
+                    pxl[j + 3] = 0
+                  }
+                }
+              } catch (err) {
+                console.warn('1:', err.message)
+              }
+
+              function levels(value, colors) {
+                try {
+                  let i
+                  let retVal
+                  for (i = 0; i < colors.length; i++) {
+                    let low = colors[i].low
+                    let hi = colors[i].hi
+                    let color = colors[i].color
+                    if (value >= low && value <= hi) {
+                      retVal = parseColor(color)
+                    }
+                  }
+
+                  if (typeof retVal === 'undefined') {
+                    return value
+                  } else {
+                    return retVal
+                  }
+                } catch (err) {
+                  console.warn('2:', err.message)
+                }
+              }
+
+              function parseColor(input) {
+                // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
+                return input.replace(/[a-z%\s\(\)]/g, '').split(',')
+              }
+
+              try {
+                context.putImageData(imgData, 0, 0)
+                callback()
+              } catch (err) {
+                console.warn('3:', err.message)
+              }
+
+
+            } else {
+              console.warn('imgData undefined')
+            }
+          } else {
+            filter1 = null
+            console.warn('Canvas w/h=0; setting filter to null')
+            // console.log('context.canvas', context.canvas)
+          }
+        }
+      }
       return filter1
     },
     getLength: function () {
       return filters.length
     },
     handleColorLevels: function (layersBtn, viewer) {
-      console.log('Setting up layers button evt', colorRanges ? colorRanges.length : 'n')
-      console.log('For viewer', viewer.id)
+      console.log('layers event', colorRanges ? colorRanges.length : 'n')
+      console.log('viewer', viewer.id)
 
       // Event handler for the layers button
       layersBtn.addEventListener('click', function (event) {
@@ -412,7 +426,8 @@ const imageFiltering = function () {
           createPopup(event, layersBtn, viewer)
         }
       })
-    },
+    }
+    ,
     getColor: function (num) {
       if (num >= filters.length) {
         // random 0 - N
@@ -420,29 +435,31 @@ const imageFiltering = function () {
       } else {
         return filters[num]
       }
-    },
+    }
+    ,
     getColorRanges: function () {
       if (typeof colorRanges !== 'undefined') {
-        console.log('A')
+        console.warn('Got colorRanges')
         return colorRanges
       } else if (typeof this.colorRanges !== 'undefined') {
-        console.log('B')
+        console.warn('Using this.colorRanges')
         return this.colorRanges
       } else {
-        console.error('getColorRanges')
+        console.warn('Default color')
         return [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
       }
 
-    },
+    }
+    ,
     setColorRanges: function (colors) {
       if (typeof colorRanges !== 'undefined') {
-        console.log('A')
+        console.warn('Got colorRanges')
         colorRanges = colors
       } else if (typeof this.colorRanges !== 'undefined') {
-        console.log('B')
+        console.warn('Using this.colorRanges')
         this.colorRanges = colors
       } else {
-        console.error('setColorRanges')
+        console.warn('Instance variable colorRanges undefined')
       }
     }
   }
