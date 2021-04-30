@@ -45,28 +45,36 @@ class ImageViewer {
       // Add FEATURE layers to viewer
       viewerAddFeatures(viewerIndex, allFeatures, allOpacity)
 
-      // Make sure we have world.getItemAt(...) before proceeding
-      function checkWorld(viewer, features, cr) {
-        let pos = features.length - 1
-        if (viewer.world.getItemAt(pos)) {
-          // do this
-          setTileUrl(viewer, features)
-          // and that
+      let features = allFeatures[viewerIndex - 1]
+      setTimeout(function () {
+        checkWorld(viewer, features, function () {
+          overlayFeatures(viewer, features)
+        })
+      }, 250)
+
+      let cr = options.colorRanges
+      setTimeout(function () {
+        checkWorld(viewer, features, function () {
           if (cr) {
             setUpFilter(cr, viewer)
           } else {
             console.warn('No options.colorRanges. Skipping...')
           }
-        }
-      }
-
-      setTimeout(function() {
-        checkWorld(viewer, allFeatures[viewerIndex - 1], options.colorRanges)
+        })
       }, 250)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
+
+    function checkWorld(viewer, features, callback) {
+      console.log(callback)
+      // Make sure we have world.getItemAt(...)
+      let pos = features.length - 1
+      if (viewer.world.getItemAt(pos)) {
+        callback()
+      }
+    }
 
     function viewerAddFeatures(viewerIndex, allFeatures, allOpacity) {
       let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
@@ -97,8 +105,7 @@ class ImageViewer {
       }
     }
 
-    function setTileUrl(viewer, features) {
-      // getTileUrl - layers
+    function overlayFeatures(viewer, features) {
       features.forEach(function (featureUrl, index) {
         try {
           // index + 1 because skipping idx=0 (base image)
@@ -126,6 +133,7 @@ class ImageViewer {
     }
 
     function setUpFilter(cr, viewer) {
+      console.log('HERE!!!')
       let itemCount = viewer.world.getItemCount()
       let filterOpts = []
       let imf = new imageFiltering()
