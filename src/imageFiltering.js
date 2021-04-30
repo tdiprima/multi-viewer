@@ -284,7 +284,7 @@ const imageFiltering = function () {
       filter.prototype.COLORIZE = function (color) {
         return function (context, callback) {
           // w x h: 256 x 256
-          console.log('w/h', context.canvas.width, context.canvas.height)
+          // console.log('w/h', context.canvas.width, context.canvas.height)
           if (context.canvas.width > 0 && context.canvas.height > 0) {
             // Read the canvas pixels
             let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -333,7 +333,7 @@ const imageFiltering = function () {
       let filter1 = OpenSeadragon.Filters.GREYSCALE
       filter1.prototype.COLORLEVELS = function (colorRanges) {
         return function (context, callback) {
-          console.log('w/h', context.canvas.width, context.canvas.height)
+          // console.log('w/h', context.canvas.width, context.canvas.height)
           if (context.canvas.width > 0 && context.canvas.height > 0) {
             // Read the canvas pixels
             let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)

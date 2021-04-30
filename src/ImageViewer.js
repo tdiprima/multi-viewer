@@ -37,127 +37,131 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, options) {
-
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
-      let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
 
-      try {
-        // Add FEATURE images to viewer
-        if (typeof allFeatures[idx] === 'undefined') {
-          console.log('No features for this viewer', viewerIndex)
-        } else {
-          let features = allFeatures[idx]
+      // Add FEATURE layers to viewer
+      viewerAddFeatures(viewerIndex, allFeatures, allOpacity)
 
-          let opacity
-          if (typeof allOpacity[idx] !== 'undefined') {
-            opacity = allOpacity[idx]
+      // Make sure we have world.getItemAt(...) before proceeding
+      function checkWorld(viewer, features, cr) {
+        let pos = features.length - 1
+        if (viewer.world.getItemAt(pos)) {
+          // do this
+          setTileUrl(viewer, features)
+          // and that
+          if (cr) {
+            setUpFilter(cr, viewer)
           } else {
-            // Error trapping the case where the number of opacities passed in was wrong.
-            let numFeat = allFeatures[idx].length
-            let newArray = []
-            let j
-            for (j = 0; j < numFeat; j++) {
-              newArray[j] = 1.0
-            }
-            opacity = newArray
-            console.warn('Setting default opacity for viewer', viewerIndex)
+            console.warn('No options.colorRanges. Skipping...')
           }
-
-          features.forEach(function (featureUrl, index) {
-            viewer.addTiledImage({tileSource: featureUrl, opacity: (opacity[index]).toFixed(1), x: 0, y: 0})
-          })
-
-          try {
-
-            function checkVariable(options) {
-              let pos = features.length - 1
-
-              if (viewer.world.getItemAt(pos)) {
-
-                let imf = new imageFiltering()
-                if (options.colorRanges) {
-
-                  // MAKE DECISION ON TYPE OF FILTER
-                  let ranges = options.colorRanges.length > 0
-                  let filter
-                  if (ranges) {
-                    imf.setColorRanges(options.colorRanges)
-                    filter = imf.getFilter1()
-                  } else {
-                    filter = imf.getFilter()
-                  }
-
-                  let itemCount = viewer.world.getItemCount()
-                  let i
-                  let filterOpts = []
-
-                  // Set filter options
-                  if (filter !== null) {
-
-                    for (i = 0; i < itemCount; i++) {
-                      if (i > 0) {
-                        if (ranges) {
-                          filterOpts.push({
-                            items: viewer.world.getItemAt(i),
-                            processors: [
-                              filter.prototype.COLORLEVELS(options.colorRanges)
-                            ]
-                          })
-                        } else {
-                          filterOpts.push({
-                            items: viewer.world.getItemAt(i),
-                            processors: [
-                              filter.prototype.COLORIZE(imf.getColor(i - 1))
-                            ]
-                          })
-                        }
-                      }
-                    }
-
-                    viewer.setFilterOptions({
-                      filters: filterOpts
-                    })
-                  }
-
-                  // getTileUrl - layers TODO CHECK
-                  features.forEach(function (featureUrl, index) {
-                    try {
-                      // index + 1 because skipping idx=0 (base image)
-                      viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-                        return getIIIFTileUrl(this, level, x, y)
-                      }
-                    } catch (e) {
-                      console.error('undefined: viewer.world.getItemAt', index + 1)
-                    }
-
-                  })
-
-                } else {
-                  console.warn('No options.colorRanges. Skipping...')
-                }
-
-              }
-            }
-
-            setTimeout(function() {
-              checkVariable(options)
-            }, 250)
-
-          } catch (err) {
-            console.error('Filters:', err.message)
-          }
-
         }
-      } catch (e) {
-        console.error('feature images problem', e)
       }
+
+      setTimeout(function() {
+        checkWorld(viewer, allFeatures[viewerIndex - 1], options.colorRanges)
+      }, 250)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
+
+    function viewerAddFeatures(viewerIndex, allFeatures, allOpacity) {
+      let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
+
+      if (typeof allFeatures[idx] === 'undefined') {
+        console.log('No features for this viewer', viewerIndex)
+      } else {
+        let features = allFeatures[idx]
+        let opacity
+        if (typeof allOpacity[idx] !== 'undefined') {
+          opacity = allOpacity[idx]
+        } else {
+          // Error trapping the case where the number of opacities passed in was wrong.
+          let numFeat = allFeatures[idx].length
+          let newArray = []
+          let j
+          for (j = 0; j < numFeat; j++) {
+            newArray[j] = 1.0
+          }
+          opacity = newArray
+          console.warn('Setting default opacity for viewer', viewerIndex)
+        }
+
+        features.forEach(function (featureUrl, index) {
+          viewer.addTiledImage({tileSource: featureUrl, opacity: (opacity[index]).toFixed(1), x: 0, y: 0})
+        })
+
+      }
+    }
+
+    function setTileUrl(viewer, features) {
+      // getTileUrl - layers
+      features.forEach(function (featureUrl, index) {
+        try {
+          // index + 1 because skipping idx=0 (base image)
+          viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
+            return getIIIFTileUrl(this, level, x, y)
+          }
+        } catch (e) {
+          console.error(e.message)
+          // console.error('undefined: viewer.world.getItemAt', index + 1)
+        }
+      })
+    }
+
+    function fetchFilter(imf, cr) {
+      // MAKE DECISION ON TYPE OF FILTER
+      let ranges = cr.length > 0
+      let filter
+      if (ranges) {
+        imf.setColorRanges(cr)
+        filter = imf.getFilter1()
+      } else {
+        filter = imf.getFilter()
+      }
+      return filter
+    }
+
+    function setUpFilter(cr, viewer) {
+      let itemCount = viewer.world.getItemCount()
+      let filterOpts = []
+      let imf = new imageFiltering()
+      let filter = fetchFilter(imf, cr)
+      if (filter !== null) {
+        let i
+        for (i = 0; i < itemCount; i++) {
+          // Skip base
+          if (i > 0) {
+            // Use COLORLEVELS if we have it
+            if (options.colorRanges.length > 0) {
+              filterOpts.push({
+                items: viewer.world.getItemAt(i),
+                processors: [
+                  filter.prototype.COLORLEVELS(options.colorRanges)
+                ]
+              })
+            } else {
+              // Use COLORIZE
+              filterOpts.push({
+                items: viewer.world.getItemAt(i),
+                processors: [
+                  filter.prototype.COLORIZE(imf.getColor(i - 1)) // each layer different color
+                ]
+              })
+            }
+          }
+        }
+
+        // setFilterOptions
+        viewer.setFilterOptions({
+          filters: filterOpts
+        })
+
+      }
+    }
 
     function dataCheck(url, jqXHR) {
       const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
