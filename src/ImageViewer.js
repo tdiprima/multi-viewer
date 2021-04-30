@@ -11,7 +11,8 @@ class ImageViewer {
 
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     this.viewer = {}
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), options)
+    this.options = options
+    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.options)
   }
 
   setViewer(viewerDivId) {
@@ -35,7 +36,8 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, featureLayers, opacity, viewer) {
+  setSources(viewerIndex, baseImage, featureLayers, opacity, viewer, options) {
+    console.log('options', options)
 
     // Quick check url
     jQuery.get(baseImage).done(function () {
@@ -70,39 +72,47 @@ class ImageViewer {
 
           try {
 
-            let zzz = 0
-
-            function checkVariable() {
-              zzz = zzz + 1
-              console.log(zzz)
+            function checkVariable(options) {
 
               if (viewer.world) {
-                console.log('YAY!')
-                if (options.colorRanges) {
-                  let imf = new imageFiltering()
-                  imf.setColorRanges(options.colorRanges)
 
-                  // TODO: MAKE DECISION ON TYPE OF FILTER
-                  // Get JSON - if it's segmentation, use 'filter'
-                  // If it's anything else (like a heatmap), use 'filter1'
+                let imf = new imageFiltering()
+                if (options.colorRanges) {
+
+                  // MAKE DECISION ON TYPE OF FILTER
+                  let ranges = options.colorRanges.length > 0
+                  let filter
+                  if (ranges) {
+                    imf.setColorRanges(options.colorRanges)
+                    filter = imf.getFilter1()
+                  } else {
+                    filter = imf.getFilter()
+                  }
+
+                  let itemCount = viewer.world.getItemCount()
+                  let i
+                  let filterOpts = []
 
                   // Set filter options
-                  // let filter = imf.getFilter() // TODO: HERE!
-                  let filter = imf.getFilter1() // todo: here!
                   if (filter !== null) {
-                    let itemCount = viewer.world.getItemCount()
-                    let i
-                    let filterOpts = []
 
                     for (i = 0; i < itemCount; i++) {
                       if (i > 0) {
-                        filterOpts.push({
-                          items: viewer.world.getItemAt(i),
-                          processors: [
-                            filter.prototype.COLORLEVELS(options.colorRanges) // TODO: AND HERE!
-                            // filter.prototype.COLORIZE(imf.getColor(i - 1)) // todo: and here!
-                          ]
-                        })
+                        if (ranges) {
+                          filterOpts.push({
+                            items: viewer.world.getItemAt(i),
+                            processors: [
+                              filter.prototype.COLORLEVELS(options.colorRanges)
+                            ]
+                          })
+                        } else {
+                          filterOpts.push({
+                            items: viewer.world.getItemAt(i),
+                            processors: [
+                              filter.prototype.COLORIZE(imf.getColor(i - 1))
+                            ]
+                          })
+                        }
                       }
                     }
 
@@ -130,7 +140,9 @@ class ImageViewer {
               }
             }
 
-            setTimeout(checkVariable, 250)
+            setTimeout(function() {
+              checkVariable(options)
+            }, 250)
 
           } catch (err) {
             console.error('Filters:', err.message)

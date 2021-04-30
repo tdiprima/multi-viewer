@@ -13,7 +13,7 @@
   <script src="src/imageFiltering.js"></script>
   <script src="src/ImageViewer.js"></script>
   <script src="src/MultiViewer.js"></script>
-  <!-- <script src="src/iiifUrlParser.js"></script> -->
+  <script src="src/iiifUrlParser.js"></script>
   <script src="src/roiAlchemy.js"></script>
   <style>
     body {
@@ -42,33 +42,34 @@
   let base = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-4Z-AA7N-01Z-00-DX1.10AA3499-6678-4DB2-9466-9CB3EA25CBB6.svs/info.json'
 
   let rois = document.getElementById('rois')
-  let imv = document.getElementById('imv')
-  let multiv = document.getElementById('multiv')
+  // let imv = document.getElementById('imv')
+  // let multiv = document.getElementById('multiv')
   let multilay = document.getElementById('multilay')
 
   // Testing multiple layers
   // NOTE! We do not currently have > 1 overlay, so I'm using an overlay from a DIFFERENT slide as the 2nd overlay.
+  // AND!
   multilay.addEventListener('click', function () {
     // BLCA
-    let s1 = 'TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E'
-    let s2 = 'TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA'
-    let base = buildUrl('image', 'blca', s1)
-    let f1 = buildUrl('feature', 'blca', s1)
-    let f2 = buildUrl('feature', 'blca', s2)
+    // let s1 = 'TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E'
+    // let s2 = 'TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA'
+    // let base = buildUrl('image', 'blca', s1)
+    // let f1 = buildUrl('feature', 'blca', s1)
+    // let f2 = buildUrl('feature', 'blca', s2)
 
     // BRCA
-    // let s1 = 'TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291'
-    // let s2 = 'TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96'
-    // let base = buildUrl('image', 'brca', s1)
-    // let f1 = buildUrl('feature', 'brca', s1)
-    // let f2 = buildUrl('feature', 'brca', s2)
+    let s1 = 'TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291'
+    let s2 = 'TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96'
+    let base = buildUrl('image', 'brca', s1)
+    let f1 = buildUrl('feature', 'brca', s1)
+    let f2 = buildUrl('feature', 'brca', s2)
 
     // let features = [[]]
     let features = [[f1, f2]]
     let opacities = [[1.0, 1.0]]
 
     info.innerHTML = 'Display Multiple Features'
-    new ImageViewer(1, 'contentDiv', base, features, opacities)
+    new ImageViewer(1, 'contentDiv', base, features, opacities, {colorRanges:[]})
   })
 
   // Zoom to different ROIs
@@ -82,16 +83,16 @@
   })
 
   // Display one OSD viewer
-  imv.addEventListener('click', function () {
-    info.innerHTML = 'Display an Image Using ImageViewer'
-    new ImageViewer(1, 'contentDiv', base, [], [])
-  })
+  // imv.addEventListener('click', function () {
+  //   info.innerHTML = 'Display an Image Using ImageViewer'
+  //   new ImageViewer(1, 'contentDiv', base, [], [])
+  // })
 
   // Testing one viewer, using MultiViewer.
-  multiv.addEventListener('click', function () {
-    info.innerHTML = 'Display an Image Using MultiViewer'
-    new MultiViewer(1, 'contentDiv', base, [], [])
-  })
+  // multiv.addEventListener('click', function () {
+  //   info.innerHTML = 'Display an Image Using MultiViewer'
+  //   new MultiViewer(1, 'contentDiv', base, [], [])
+  // })
 
   function buildUrl(type, cType, img) {
     if (type === 'image') {
