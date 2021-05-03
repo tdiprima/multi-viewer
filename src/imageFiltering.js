@@ -76,7 +76,6 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer) {
-    console.log('set', colorRanges ? colorRanges.length : 'n')
     try {
       viewer.setFilterOptions({
         filters: [{
@@ -161,7 +160,6 @@ const imageFiltering = function () {
   function colorPickerEvent(colorRanges, m, i, viewer) {
     const cp = new CP(m)
     cp.on('change', function (r, g, b, a) {
-      console.log('color evt setup OR color selected', viewer.id, colorRanges ? colorRanges.length : 'n')
       try {
         cp.source.value = cp.color(r, g, b, a)
         cp.source.innerHTML = cp.color(r, g, b, a)
@@ -169,8 +167,6 @@ const imageFiltering = function () {
         colorRanges[i].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
         setViewerFilter(viewer)
       } catch (err) {
-        console.log('HERE!', err)
-        console.log('viewer', viewer.id)
         if (i < 5) {
           colorRanges[i].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
           setViewerFilter(viewer)
@@ -192,7 +188,6 @@ const imageFiltering = function () {
       // COLOR PICKER
       let m = document.createElement('mark')
       m.id = 'marker' + i
-      console.log('index', i)
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
       colorPickerEvent(colorRanges, m, i, viewer)
@@ -225,7 +220,6 @@ const imageFiltering = function () {
   }
 
   function createPopup(event, layersBtn, viewer) {
-    console.log('createPopup', viewer.id, colorRanges ? colorRanges.length : 'n')
     // Disable buttons
     layerButtonToggle('#ccc', 'not-allowed')
 
@@ -413,9 +407,6 @@ const imageFiltering = function () {
       return filters.length
     },
     handleColorLevels: function (layersBtn, viewer) {
-      console.log('layers event', colorRanges ? colorRanges.length : 'n')
-      console.log('viewer', viewer.id)
-
       // Event handler for the layers button
       layersBtn.addEventListener('click', function (event) {
         event = event || window.event
@@ -439,13 +430,10 @@ const imageFiltering = function () {
     ,
     getColorRanges: function () {
       if (typeof colorRanges !== 'undefined') {
-        console.warn('Got colorRanges')
         return colorRanges
       } else if (typeof this.colorRanges !== 'undefined') {
-        console.warn('Using this.colorRanges')
         return this.colorRanges
       } else {
-        console.warn('Default color')
         return [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
       }
 
@@ -453,13 +441,13 @@ const imageFiltering = function () {
     ,
     setColorRanges: function (colors) {
       if (typeof colorRanges !== 'undefined') {
-        console.warn('Got colorRanges')
+        console.log('Got colorRanges')
         colorRanges = colors
       } else if (typeof this.colorRanges !== 'undefined') {
-        console.warn('Using this.colorRanges')
+        console.log('Using this.colorRanges')
         this.colorRanges = colors
       } else {
-        console.warn('Instance variable colorRanges undefined')
+        console.log('Instance variable colorRanges undefined')
       }
     }
   }

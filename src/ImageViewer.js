@@ -68,7 +68,6 @@ class ImageViewer {
     })
 
     function checkWorld(viewer, features, callback) {
-      console.log(callback)
       // Make sure we have world.getItemAt(...)
       let pos = features.length - 1
       if (viewer.world.getItemAt(pos)) {
@@ -133,7 +132,6 @@ class ImageViewer {
     }
 
     function setUpFilter(cr, viewer) {
-      console.log('HERE!!!')
       let itemCount = viewer.world.getItemCount()
       let filterOpts = []
       let imf = new imageFiltering()
