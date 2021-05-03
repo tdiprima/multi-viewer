@@ -37,35 +37,47 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, options) {
+    let imf = new imageFiltering()
+    let filter = imf.getFilter()
+    let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
+    let opacity = allOpacity[idx]
+
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
       // Add FEATURE layers to viewer
-      viewerAddFeatures(viewerIndex, allFeatures, allOpacity)
-
-      let features = allFeatures[viewerIndex - 1]
-      setTimeout(function () {
-        checkWorld(viewer, features, function () {
-          overlayFeatures(viewer, features)
+      if (arrayCheck(viewerIndex, allFeatures)) {
+        allFeatures[idx].forEach(function (feature, index) {
+          viewer.addTiledImage({tileSource: feature, opacity: (opacity[index]).toFixed(1), x: 0, y: 0})
         })
-      }, 250)
+      }
 
-      let cr = options.colorRanges
-      setTimeout(function () {
-        checkWorld(viewer, features, function () {
-          if (cr) {
-            setUpFilter(cr, viewer)
-          } else {
-            console.warn('No options.colorRanges. Skipping...')
-          }
-        })
-      }, 250)
+      overlayFeatures(viewer, options.colorRanges)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
+
+    function arrayCheck(viewerIndex, featureLayers) {
+      // Do we have an array of features?
+      if (typeof featureLayers === 'undefined') {
+        return false
+      }
+      if (featureLayers.length === 0) {
+        return false
+      }
+      // Do we have an array of features, for this viewer?
+      if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
+        return false
+      }
+      if (featureLayers[viewerIndex - 1].length === 0) {
+        return false
+      }
+      // All checks were successful
+      return true
+    }
 
     function checkWorld(viewer, features, callback) {
       // Make sure we have world.getItemAt(...)
@@ -104,23 +116,49 @@ class ImageViewer {
       }
     }
 
-    function overlayFeatures(viewer, features) {
-      features.forEach(function (featureUrl, index) {
-        try {
-          // index + 1 because skipping idx=0 (base image)
-          viewer.world.getItemAt(index + 1).source.getTileUrl = function (level, x, y) {
-            return getIIIFTileUrl(this, level, x, y)
+    function overlayFeatures(viewer, colorRanges) {
+
+      try {
+        viewer.world.addHandler('add-item', function (event) {
+          let itemIndex = viewer.world.getIndexOfItem(event.item)
+          // let itemCount = viewer.world.getItemCount()
+          let filter = fetchFilter(imf, colorRanges)
+          if (filter !== null && itemIndex > 0) {
+            if (typeof colorRanges !== 'undefined' && colorRanges.length > 0) {
+              viewer.setFilterOptions({
+                filters: [{
+                  items: viewer.world.getItemAt(itemIndex),
+                  processors: [
+                    filter.prototype.COLORLEVELS(colorRanges)
+                  ]
+                }]
+              })
+            } else {
+              // Use COLORIZE
+              viewer.setFilterOptions({
+                filters: [{
+                  items: viewer.world.getItemAt(itemIndex),
+                  processors: [
+                    filter.prototype.COLORIZE(imf.getColor(itemIndex - 1))
+                  ]
+                }]
+              })
+            }
+            viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
+              return getIIIFTileUrl(this, level, x, y)
+            }
           }
-        } catch (e) {
-          console.error(e.message)
-          // console.error('undefined: viewer.world.getItemAt', index + 1)
-        }
-      })
+
+        })
+      } catch (e) {
+        console.error('Here we are', e.message)
+      }
+
     }
 
     function fetchFilter(imf, cr) {
       // MAKE DECISION ON TYPE OF FILTER
-      let ranges = cr.length > 0
+      let ranges = cr && cr.length > 0
       let filter
       if (ranges) {
         imf.setColorRanges(cr)
@@ -131,43 +169,43 @@ class ImageViewer {
       return filter
     }
 
-    function setUpFilter(cr, viewer) {
-      let itemCount = viewer.world.getItemCount()
-      let filterOpts = []
-      let imf = new imageFiltering()
-      let filter = fetchFilter(imf, cr)
-      if (filter !== null) {
-        let i
-        for (i = 0; i < itemCount; i++) {
-          // Skip base
-          if (i > 0) {
-            // Use COLORLEVELS if we have it
-            if (options.colorRanges.length > 0) {
-              filterOpts.push({
-                items: viewer.world.getItemAt(i),
-                processors: [
-                  filter.prototype.COLORLEVELS(options.colorRanges)
-                ]
-              })
-            } else {
-              // Use COLORIZE
-              filterOpts.push({
-                items: viewer.world.getItemAt(i),
-                processors: [
-                  filter.prototype.COLORIZE(imf.getColor(i - 1)) // each layer different color
-                ]
-              })
-            }
-          }
-        }
-
-        // setFilterOptions
-        viewer.setFilterOptions({
-          filters: filterOpts
-        })
-
-      }
-    }
+    // function setUpFilter(cr, viewer) {
+    //   let itemCount = viewer.world.getItemCount()
+    //   let filterOpts = []
+    //   let imf = new imageFiltering()
+    //   let filter = fetchFilter(imf, cr)
+    //   if (filter !== null) {
+    //     let i
+    //     for (i = 0; i < itemCount; i++) {
+    //       // Skip base
+    //       if (i > 0) {
+    //         // Use COLORLEVELS if we have it
+    //         if (options.colorRanges.length > 0) {
+    //           filterOpts.push({
+    //             items: viewer.world.getItemAt(i),
+    //             processors: [
+    //               filter.prototype.COLORLEVELS(options.colorRanges)
+    //             ]
+    //           })
+    //         } else {
+    //           // Use COLORIZE
+    //           filterOpts.push({
+    //             items: viewer.world.getItemAt(i),
+    //             processors: [
+    //               filter.prototype.COLORIZE(imf.getColor(i - 1)) // each layer different color
+    //             ]
+    //           })
+    //         }
+    //       }
+    //     }
+    //
+    //     // setFilterOptions
+    //     viewer.setFilterOptions({
+    //       filters: filterOpts
+    //     })
+    //
+    //   }
+    // }
 
     function dataCheck(url, jqXHR) {
       const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
