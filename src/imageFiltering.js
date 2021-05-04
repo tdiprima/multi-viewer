@@ -3,6 +3,7 @@
  */
 const imageFiltering = function () {
   this.colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
+  this.layerNumber = 0
 
   function filterColors(r, g, b) {
     this.r = r
@@ -11,23 +12,23 @@ const imageFiltering = function () {
   }
 
   // List of colors so segmentation overlays don't clash
-  let filters = []
-  filters.push(new filterColors(0, 255, 0)) // lime 00ff00
-  filters.push(new filterColors(255, 255, 0)) // yellow ffff00
-  filters.push(new filterColors(0, 255, 255)) // cyan 00ffff
-  filters.push(new filterColors(255, 0, 0)) // red ff0000
-  filters.push(new filterColors(255, 165, 0)) // orange ffa500
-  filters.push(new filterColors(0, 128, 0)) // dark green 008000
-  filters.push(new filterColors(0, 0, 255)) // blue 0000ff
-  filters.push(new filterColors(75, 0, 130)) // indigo 4b0082
-  filters.push(new filterColors(28, 28, 28)) // dark gray #1c1c1c
-  filters.push(new filterColors(167, 226, 46)) // leaf green #a7e22e
-  filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
-  filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
+  let colors = []
+  colors.push(new filterColors(0, 255, 0)) // lime 00ff00
+  colors.push(new filterColors(255, 255, 0)) // yellow ffff00
+  colors.push(new filterColors(0, 255, 255)) // cyan 00ffff
+  colors.push(new filterColors(255, 0, 0)) // red ff0000
+  colors.push(new filterColors(255, 165, 0)) // orange ffa500
+  colors.push(new filterColors(0, 128, 0)) // dark green 008000
+  colors.push(new filterColors(0, 0, 255)) // blue 0000ff
+  colors.push(new filterColors(75, 0, 130)) // indigo 4b0082
+  colors.push(new filterColors(28, 28, 28)) // dark gray #1c1c1c
+  colors.push(new filterColors(167, 226, 46)) // leaf green #a7e22e
+  colors.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
+  colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
   function sortIt(cr) {
     // sort by low, desc
-    cr.sort((a,b)=> (b.low - a.low))
+    cr.sort((a, b) => (b.low - a.low))
   }
 
   // Function to help drag popup around screen
@@ -80,11 +81,11 @@ const imageFiltering = function () {
     }
   }
 
-  function setViewerFilter(viewer) {
+  function setViewerFilter(viewer, layerNumber) {
     try {
       viewer.setFilterOptions({
         filters: [{
-          items: viewer.world.getItemAt(1), // TODO: what layer?
+          items: viewer.world.getItemAt(layerNumber),
           processors: [
             imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
           ]
@@ -109,20 +110,18 @@ const imageFiltering = function () {
     // this event happens whenever the value changes
     x.addEventListener('input', function () {
       let intVal = parseInt(this.value)
-      // If they set it to something silly like 888, reset it to 255
-      if (intVal > 255) {
-        this.value = '255'
-      }
 
-      if (intVal < 0) {
-        this.value = '0'
-      }
+      // If they set it to something outside of 0-255, reset it
+      if (intVal > 255) this.value = '255'
+      if (intVal < 0) this.value = '0'
 
       if (this.id.startsWith('low')) {
         colorRanges[data.index].low = this.value
       } else {
         colorRanges[data.index].hi = this.value
-        setViewerFilter(viewer) // triggered by high value input
+        console.log(layerNumber)
+        // TODO: Temporary 1; instead of layerNumber
+        setViewerFilter(viewer, 1) // triggered by high value input
       }
     })
 
@@ -162,19 +161,20 @@ const imageFiltering = function () {
     return hex
   }
 
-  function colorPickerEvent(colorRanges, m, i, viewer) {
-    const cp = new CP(m)
+  function colorPickerEvent(colorRanges, mark, idx, viewer, layerNumber) {
+    const cp = new CP(mark)
     cp.on('change', function (r, g, b, a) {
       try {
         cp.source.value = cp.color(r, g, b, a)
         cp.source.innerHTML = cp.color(r, g, b, a)
         cp.source.style.backgroundColor = cp.color(r, g, b, a)
-        colorRanges[i].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-        setViewerFilter(viewer)
+        colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+        setViewerFilter(viewer, layerNumber)
       } catch (err) {
-        if (i < 5) {
-          colorRanges[i].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-          setViewerFilter(viewer)
+        console.warn('check this', err.message)
+        if (idx < 5) {
+          colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+          setViewerFilter(viewer, layerNumber)
         }
       }
     })
@@ -183,7 +183,7 @@ const imageFiltering = function () {
   // CREATE USER INPUT PER COLOR
   // Display colors and low/high values
   // {color: "rgba(r, g, b, a)", hi: n, low: n}
-  function createUserInput(colorPopup, viewer) {
+  function createUserInput(colorPopup, colorRanges, viewer) {
     let i
     for (i = 0; i < colorRanges.length; i++) {
       // COLOR DIV
@@ -195,7 +195,7 @@ const imageFiltering = function () {
       m.id = 'marker' + i
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
-      colorPickerEvent(colorRanges, m, i, viewer)
+      colorPickerEvent(colorRanges, m, i, viewer, layerNumber)
 
       // LOW
       let lowDiv = document.createElement('div')
@@ -270,7 +270,7 @@ const imageFiltering = function () {
     sortIt(colorRanges)
 
     // UI
-    createUserInput(colorPopup, viewer)
+    createUserInput(colorPopup, colorRanges, viewer)
 
     // put it where user clicked
     colorPopup.style.left = event.clientX + 'px'
@@ -365,14 +365,14 @@ const imageFiltering = function () {
                 console.warn('1:', err.message)
               }
 
-              function levels(value, colors) {
+              function levels(value, _colors) {
                 try {
                   let i
                   let retVal
-                  for (i = 0; i < colors.length; i++) {
-                    let low = colors[i].low
-                    let hi = colors[i].hi
-                    let color = colors[i].color
+                  for (i = 0; i < _colors.length; i++) {
+                    let low = _colors[i].low
+                    let hi = _colors[i].hi
+                    let color = _colors[i].color
                     if (value >= low && value <= hi) {
                       retVal = parseColor(color)
                     }
@@ -413,9 +413,6 @@ const imageFiltering = function () {
       }
       return filter1
     },
-    getLength: function () {
-      return filters.length
-    },
     handleColorLevels: function (layersBtn, viewer) {
       // Event handler for the layers button
       layersBtn.addEventListener('click', function (event) {
@@ -427,8 +424,7 @@ const imageFiltering = function () {
           createPopup(event, layersBtn, viewer)
         }
       })
-    }
-    ,
+    },
     getColor: function (num) {
       if (num >= filters.length) {
         // random 0 - N
@@ -436,29 +432,18 @@ const imageFiltering = function () {
       } else {
         return filters[num]
       }
-    }
-    ,
+    },
     getColorRanges: function () {
-      if (typeof colorRanges !== 'undefined') {
-        return colorRanges
-      } else if (typeof this.colorRanges !== 'undefined') {
-        return this.colorRanges
-      } else {
-        return [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
-      }
-
-    }
-    ,
-    setColorRanges: function (colors) {
-      if (typeof colorRanges !== 'undefined') {
-        console.log('Got colorRanges')
-        colorRanges = colors
-      } else if (typeof this.colorRanges !== 'undefined') {
-        console.log('Using this.colorRanges')
-        this.colorRanges = colors
-      } else {
-        console.log('Instance variable colorRanges undefined')
-      }
+      return colorRanges
+    },
+    setColorRanges: function (cr) {
+      colorRanges = cr
+    },
+    getLayerNum: function () {
+      return layerNumber
+    },
+    setLayerNum: function (num) {
+      layerNumber = num
     }
   }
 }
