@@ -25,6 +25,16 @@ const imageFiltering = function () {
   filters.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
+  function sortIt(cr) {
+    cr.sort(function (c1, c2) {
+      // Sort by cr
+      // If the first item has a higher number, move it down
+      // If the first item has a lower number, move it up
+      if (c1.low > c2.low) return -1
+      if (c1.low < c2.low) return 1
+    })
+  }
+
   // Function to help drag popup around screen
   function dragElement(elmnt) {
     let pos1 = 0
@@ -261,14 +271,19 @@ const imageFiltering = function () {
     t.className = 'popupHeader'
     colorPopup.appendChild(t)
 
+    // Sort
+    sortIt(colorRanges)
+
+    // UI
     createUserInput(colorPopup, viewer)
 
+    // put it where user clicked
     colorPopup.style.left = event.clientX + 'px'
     colorPopup.style.top = event.clientY + 'px'
 
     document.body.appendChild(colorPopup)
 
-    // Make the DIV element draggable:
+    // Make DIV element draggable:
     dragElement(colorPopup)
   }
 
