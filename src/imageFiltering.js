@@ -26,13 +26,8 @@ const imageFiltering = function () {
   filters.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
 
   function sortIt(cr) {
-    cr.sort(function (c1, c2) {
-      // Sort by cr
-      // If the first item has a higher number, move it down
-      // If the first item has a lower number, move it up
-      if (c1.low > c2.low) return -1
-      if (c1.low < c2.low) return 1
-    })
+    // sort by low, desc
+    cr.sort((a,b)=> (b.low - a.low))
   }
 
   // Function to help drag popup around screen
