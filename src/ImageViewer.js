@@ -12,7 +12,8 @@ class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     this.viewer = {}
     this.options = options
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.options)
+    this.imf = new imageFiltering()
+    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.imf, this.options)
   }
 
   setViewer(viewerDivId) {
@@ -36,8 +37,12 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, options) {
-    let imf = new imageFiltering()
+  getImF() {
+    // Image Filter
+    return this.imf
+  }
+
+  setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, imf, options) {
     let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
     let opacity = allOpacity[idx]
 

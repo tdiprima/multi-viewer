@@ -28,7 +28,10 @@ const imageFiltering = function () {
 
   function sortIt(cr) {
     // sort by low, desc
-    cr.sort((a, b) => (b.low - a.low))
+    cr.sort(function (c1, c2) {
+      if (c1.low > c2.low) return -1
+      if (c1.low < c2.low) return 1
+    })
   }
 
   // Function to help drag popup around screen
@@ -82,10 +85,11 @@ const imageFiltering = function () {
   }
 
   function setViewerFilter(viewer, layerNumber) {
+    console.log('layerNumber', layerNumber)
     try {
       viewer.setFilterOptions({
         filters: [{
-          items: viewer.world.getItemAt(layerNumber),
+          items: viewer.world.getItemAt(layerNumber === 0 ? 1 : layerNumber),
           processors: [
             imageFiltering().getFilter1().prototype.COLORLEVELS(colorRanges)
           ]
@@ -116,12 +120,11 @@ const imageFiltering = function () {
       if (intVal < 0) this.value = '0'
 
       if (this.id.startsWith('low')) {
+        console.log(colorRanges[data.index])
         colorRanges[data.index].low = this.value
       } else {
         colorRanges[data.index].hi = this.value
-        console.log(layerNumber)
-        // TODO: Temporary 1; instead of layerNumber
-        setViewerFilter(viewer, 1) // triggered by high value input
+        setViewerFilter(viewer, layerNumber) // triggered by high value input
       }
     })
 
@@ -183,7 +186,7 @@ const imageFiltering = function () {
   // CREATE USER INPUT PER COLOR
   // Display colors and low/high values
   // {color: "rgba(r, g, b, a)", hi: n, low: n}
-  function createUserInput(colorPopup, colorRanges, viewer) {
+  function createUserInput(colorPopup, colorRanges, layerNumber, viewer) {
     let i
     for (i = 0; i < colorRanges.length; i++) {
       // COLOR DIV
@@ -201,7 +204,7 @@ const imageFiltering = function () {
       let lowDiv = document.createElement('div')
       let d = {
         id: 'low' + i,
-        val: colorRanges[i].hi,
+        val: colorRanges[i].low,
         // color: colorRanges[i],
         index: i
       }
@@ -267,10 +270,10 @@ const imageFiltering = function () {
     colorPopup.appendChild(t)
 
     // Sort
-    sortIt(colorRanges)
+    // sortIt(colorRanges)
 
     // UI
-    createUserInput(colorPopup, colorRanges, viewer)
+    createUserInput(colorPopup, colorRanges, layerNumber, viewer)
 
     // put it where user clicked
     colorPopup.style.left = event.clientX + 'px'
@@ -412,6 +415,9 @@ const imageFiltering = function () {
         }
       }
       return filter1
+    },
+    getColors: function () {
+      return colors
     },
     handleColorLevels: function (layersBtn, viewer) {
       // Event handler for the layers button

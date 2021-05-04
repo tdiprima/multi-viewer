@@ -26,10 +26,9 @@ class MultiViewer extends ImageViewer {
       }
 
       this.viewer1 = super.getViewer()
-      // console.log('viewer', this.viewer1)
-
       this.idx = viewerIndex
       this.sliders = sliderElements
+      this.imf = super.getImF()
 
       if (numViewers > 1) {
         this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
@@ -51,12 +50,11 @@ class MultiViewer extends ImageViewer {
       let layersBtn = document.getElementById('colors' + this.idx)
       if (layersBtn) {
         if (options.colorRanges) {
-          let imf = imageFiltering()
-          let x = imf.getColorRanges()
+          let x = this.imf.getColorRanges()
           if (isEmpty(x)) {
-            imf.setColorRanges(options.colorRanges)
+            this.imf.setColorRanges(options.colorRanges)
           }
-          imf.handleColorLevels(layersBtn, this.viewer1)
+          this.imf.handleColorLevels(layersBtn, this.viewer1)
 
         } else {
           console.warn("No colors, no button for you.")
