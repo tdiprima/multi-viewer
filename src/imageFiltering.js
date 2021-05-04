@@ -121,9 +121,9 @@ const imageFiltering = function () {
 
       if (this.id.startsWith('low')) {
         console.log(colorRanges[data.index])
-        colorRanges[data.index].low = this.value
+        colorRanges[data.index].low = parseInt(this.value)
       } else {
-        colorRanges[data.index].hi = this.value
+        colorRanges[data.index].hi = parseInt(this.value)
         setViewerFilter(viewer, layerNumber) // triggered by high value input
       }
     })
@@ -440,16 +440,36 @@ const imageFiltering = function () {
       }
     },
     getColorRanges: function () {
+      console.log('getColorRanges', colorRanges)
       return colorRanges
     },
     setColorRanges: function (cr) {
-      colorRanges = cr
+      if (typeof colorRanges !== 'undefined') {
+        console.log('Got colorRanges')
+        colorRanges = cr
+      } else if (typeof this.colorRanges !== 'undefined') {
+        console.log('Using this.colorRanges')
+        this.colorRanges = colors
+      } else {
+        console.log('Instance variable colorRanges undefined')
+      }
     },
-    getLayerNum: function () {
+    getLayerNumber: function () {
+      console.log('getLayerNum', layerNumber)
       return layerNumber
     },
-    setLayerNum: function (num) {
-      layerNumber = num
+    setLayerNumber: function (num) {
+      // Testing...
+      if (typeof layerNumber !== 'undefined') {
+        console.log('Got layerNumber')
+        layerNumber = num
+      } else if (typeof this.layerNumber !== 'undefined') {
+        console.log('Using this.layerNumber')
+        this.layerNumber = num
+      } else {
+        console.log('Instance variable layerNumber undefined')
+      }
+
     }
   }
 }

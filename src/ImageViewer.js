@@ -91,7 +91,7 @@ class ImageViewer {
           // let itemCount = viewer.world.getItemCount()
           let filter = fetchFilter(imf, colorRanges)
           if (filter !== null && itemIndex > 0) {
-            imf.setLayerNum(itemIndex)
+            imf.setLayerNumber(itemIndex)
             if (colorRanges.length > 0) {
               viewer.setFilterOptions({
                 filters: [{
@@ -116,12 +116,10 @@ class ImageViewer {
               return getIIIFTileUrl(this, level, x, y)
             }
           }
-
         })
       } catch (e) {
         console.error('Here we are', e.message)
       }
-
     }
 
     function fetchFilter(imf, cr) {
