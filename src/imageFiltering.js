@@ -415,7 +415,7 @@ const imageFiltering = function () {
     getColors() {
       return colors
     },
-    handleColorLevels(layersBtn, v) {
+    handleColorLevels(layersBtn, viewer) {
       // Event handler for the layers button
       layersBtn.addEventListener('click', event => {
         event = event || window.event
