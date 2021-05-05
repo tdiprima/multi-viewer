@@ -2,8 +2,8 @@
  * Image filtering
  */
 const imageFiltering = function () {
-  this.colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
-  this.layerNumber = 0
+  colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
+  layerNumber = 0
 
   function filterColors(r, g, b) {
     this.r = r
@@ -443,9 +443,6 @@ const imageFiltering = function () {
       if (typeof colorRanges !== 'undefined') {
         console.log('Got colorRanges')
         colorRanges = cr
-      } else if (typeof this.colorRanges !== 'undefined') {
-        console.log('Using this.colorRanges')
-        this.colorRanges = colors
       } else {
         console.log('Instance variable colorRanges undefined')
       }
@@ -459,9 +456,6 @@ const imageFiltering = function () {
       if (typeof layerNumber !== 'undefined') {
         console.log('Got layerNumber')
         layerNumber = num
-      } else if (typeof this.layerNumber !== 'undefined') {
-        console.log('Using this.layerNumber')
-        this.layerNumber = num
       } else {
         console.log('Instance variable layerNumber undefined')
       }
