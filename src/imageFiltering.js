@@ -35,7 +35,7 @@ const imageFiltering = function () {
   }
 
   // Function to help drag popup around screen
-  function dragElement(elmnt) {
+  function dragElement({style, offsetTop, offsetLeft}) {
     let pos1 = 0
     let pos2 = 0
     let pos3 = 0
@@ -72,8 +72,8 @@ const imageFiltering = function () {
       pos3 = e.clientX
       pos4 = e.clientY
       // set the element's new position:
-      elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
-      elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
+      style.top = `${offsetTop - pos2}px`
+      style.left = `${offsetLeft - pos1}px`
     }
 
     // Done handler
@@ -101,14 +101,14 @@ const imageFiltering = function () {
   }
 
   // NUMBER INPUT to let user set threshold values
-  function createNumericInput(data, viewer) {
+  function createNumericInput({id, val, index}, viewer) {
     let x = document.createElement('input')
-    x.id = data.id
+    x.id = id
     x.setAttribute('type', 'number')
     x.min = '0'
     x.max = '255'
     x.step = '1'
-    x.value = data.val.toString()
+    x.value = val.toString()
     x.size = 5
 
     // this event happens whenever the value changes
@@ -120,10 +120,10 @@ const imageFiltering = function () {
       if (intVal < 0) this.value = '0'
 
       if (this.id.startsWith('low')) {
-        console.log(colorRanges[data.index])
-        colorRanges[data.index].low = parseInt(this.value)
+        console.log(colorRanges[index])
+        colorRanges[index].low = parseInt(this.value)
       } else {
-        colorRanges[data.index].hi = parseInt(this.value)
+        colorRanges[index].hi = parseInt(this.value)
         setViewerFilter(viewer, layerNumber) // triggered by high value input
       }
     })
@@ -135,7 +135,7 @@ const imageFiltering = function () {
     jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
         let num = this.id.slice(-1) // hack to get the id #
-        let z = document.getElementById('colors' + num)
+        let z = document.getElementById(`colors${num}`)
         z.style.color = color
         z.style.cursor = cursor
       }
@@ -159,14 +159,14 @@ const imageFiltering = function () {
     // multiply before convert to HEX (a * 255)
     a = (a | 1 << 8).toString(16).slice(1)
     hex = hex + a
-    hex = '#' + hex
+    hex = `#${hex}`
 
     return hex
   }
 
   function colorPickerEvent(colorRanges, mark, idx, viewer, layerNumber) {
     const cp = new CP(mark)
-    cp.on('change', function (r, g, b, a) {
+    cp.on('change', (r, g, b, a) => {
       try {
         cp.source.value = cp.color(r, g, b, a)
         cp.source.innerHTML = cp.color(r, g, b, a)
@@ -195,7 +195,7 @@ const imageFiltering = function () {
 
       // COLOR PICKER
       let m = document.createElement('mark')
-      m.id = 'marker' + i
+      m.id = `marker${i}`
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
       colorPickerEvent(colorRanges, m, i, viewer, layerNumber)
@@ -203,7 +203,7 @@ const imageFiltering = function () {
       // LOW
       let lowDiv = document.createElement('div')
       let d = {
-        id: 'low' + i,
+        id: `low${i}`,
         val: colorRanges[i].low,
         // color: colorRanges[i],
         index: i
@@ -213,7 +213,7 @@ const imageFiltering = function () {
       // HIGH
       let hiDiv = document.createElement('div')
       d = {
-        id: 'hi' + i,
+        id: `hi${i}`,
         val: colorRanges[i].hi,
         // color: colorRanges[i],
         index: i
@@ -227,13 +227,13 @@ const imageFiltering = function () {
     }
   }
 
-  function createPopup(event, layersBtn, viewer) {
+  function createPopup({clientX, clientY}, {style}, viewer) {
     // Disable buttons
     layerButtonToggle('#ccc', 'not-allowed')
 
     // Highlight this button
-    layersBtn.style.color = '#0f0'
-    layersBtn.style.cursor = 'pointer'
+    style.color = '#0f0'
+    style.cursor = 'pointer'
 
     // Main container
     let colorPopup = document.createElement('div')
@@ -253,7 +253,7 @@ const imageFiltering = function () {
 
     // Remove div on click
     img.addEventListener('click', function () {
-      layersBtn.style.color = '#000'
+      style.color = '#000'
       // Re-enable buttons
       layerButtonToggle('#000', 'pointer')
       this.parentNode.parentNode.remove()
@@ -276,8 +276,8 @@ const imageFiltering = function () {
     createUserInput(colorPopup, colorRanges, layerNumber, viewer)
 
     // put it where user clicked
-    colorPopup.style.left = event.clientX + 'px'
-    colorPopup.style.top = event.clientY + 'px'
+    colorPopup.style.left = `${clientX}px`
+    colorPopup.style.top = `${clientY}px`
 
     document.body.appendChild(colorPopup)
 
@@ -286,142 +286,138 @@ const imageFiltering = function () {
   }
 
   return {
-    getFilter: function () {
+    getFilter() {
       let filter = OpenSeadragon.Filters.GREYSCALE
-      filter.prototype.COLORIZE = function (color) {
-        return function (context, callback) {
-          // w x h: 256 x 256
-          // console.log('w/h', context.canvas.width, context.canvas.height)
-          if (context.canvas.width > 0 && context.canvas.height > 0) {
-            // Read the canvas pixels
-            let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-            if (typeof imgData !== undefined) {
-              try {
-                const pixels = imgData.data
-                // Run the filter on them
-                let i
-                for (i = 0; i < pixels.length; i += 4) {
-                  if (pixels[i + 3] === 255) {
-                    // Alpha channel = 255 ("opaque"): nuclear material here.
-                    pixels[i] = color.r
-                    pixels[i + 1] = color.g
-                    pixels[i + 2] = color.b
-                    pixels[i + 3] = 255
-                  } else {
-                    // No nuclear material: set to transparent.
-                    pixels[i + 3] = 0
-                  }
+      filter.prototype.COLORIZE = ({r, g, b}) => (context, callback) => {
+        // w x h: 256 x 256
+        // console.log('w/h', context.canvas.width, context.canvas.height)
+        if (context.canvas.width > 0 && context.canvas.height > 0) {
+          // Read the canvas pixels
+          let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+          if (typeof imgData !== undefined) {
+            try {
+              const pixels = imgData.data
+              // Run the filter on them
+              let i
+              for (i = 0; i < pixels.length; i += 4) {
+                if (pixels[i + 3] === 255) {
+                  // Alpha channel = 255 ("opaque"): nuclear material here.
+                  pixels[i] = r
+                  pixels[i + 1] = g
+                  pixels[i + 2] = b
+                  pixels[i + 3] = 255
+                } else {
+                  // No nuclear material: set to transparent.
+                  pixels[i + 3] = 0
                 }
-              } catch (err) {
-                console.warn('1:', err.message)
               }
+            } catch (err) {
+              console.warn('1:', err.message)
+            }
 
-              try {
-                // Write the result back onto the canvas
-                context.putImageData(imgData, 0, 0)
-                callback()
-              } catch (err) {
-                console.warn('2:', err.message)
-              }
-            } else {
-              console.warn('imgData undefined')
+            try {
+              // Write the result back onto the canvas
+              context.putImageData(imgData, 0, 0)
+              callback()
+            } catch (err) {
+              console.warn('2:', err.message)
             }
           } else {
-            filter = null
-            console.warn('Canvas w/h=0; setting filter to null')
-            // console.log('context.canvas', context.canvas)
+            console.warn('imgData undefined')
           }
+        } else {
+          filter = null
+          console.warn('Canvas w/h=0; setting filter to null')
+          // console.log('context.canvas', context.canvas)
         }
       }
       return filter
     },
-    getFilter1: function () {
+    getFilter1() {
       // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
       let filter1 = OpenSeadragon.Filters.GREYSCALE
-      filter1.prototype.COLORLEVELS = function (colorRanges) {
-        return function (context, callback) {
-          // console.log('w/h', context.canvas.width, context.canvas.height)
-          if (context.canvas.width > 0 && context.canvas.height > 0) {
-            // Read the canvas pixels
-            let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-            if (typeof imgData !== undefined) {
-              try {
-                const pxl = imgData.data
-                let j
-                for (j = 0; j < pxl.length; j += 4) {
-                  if (pxl[j + 3] === 255) {
-                    // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
-                    let rgba = levels(pxl[j], colorRanges) // r = g = b
-                    if (typeof rgba === 'undefined') {
-                      console.warn('rgba undefined', pxl[j])
-                    }
-                    pxl[j] = rgba[0]
-                    pxl[j + 1] = rgba[1]
-                    pxl[j + 2] = rgba[2]
-                    pxl[j + 3] = rgba[3]
-                  } else {
-                    // No nuclear material: set to transparent.
-                    pxl[j + 3] = 0
+      filter1.prototype.COLORLEVELS = colorRanges => (context, callback) => {
+        // console.log('w/h', context.canvas.width, context.canvas.height)
+        if (context.canvas.width > 0 && context.canvas.height > 0) {
+          // Read the canvas pixels
+          let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+          if (typeof imgData !== undefined) {
+            try {
+              const pxl = imgData.data
+              let j
+              for (j = 0; j < pxl.length; j += 4) {
+                if (pxl[j + 3] === 255) {
+                  // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
+                  let rgba = levels(pxl[j], colorRanges) // r = g = b
+                  if (typeof rgba === 'undefined') {
+                    console.warn('rgba undefined', pxl[j])
                   }
-                }
-              } catch (err) {
-                console.warn('1:', err.message)
-              }
-
-              function levels(value, _colors) {
-                try {
-                  let i
-                  let retVal
-                  for (i = 0; i < _colors.length; i++) {
-                    let low = _colors[i].low
-                    let hi = _colors[i].hi
-                    let color = _colors[i].color
-                    if (value >= low && value <= hi) {
-                      retVal = parseColor(color)
-                    }
-                  }
-
-                  if (typeof retVal === 'undefined') {
-                    return value
-                  } else {
-                    return retVal
-                  }
-                } catch (err) {
-                  console.warn('2:', err.message)
+                  pxl[j] = rgba[0]
+                  pxl[j + 1] = rgba[1]
+                  pxl[j + 2] = rgba[2]
+                  pxl[j + 3] = rgba[3]
+                } else {
+                  // No nuclear material: set to transparent.
+                  pxl[j + 3] = 0
                 }
               }
-
-              function parseColor(input) {
-                // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
-                return input.replace(/[a-z%\s\(\)]/g, '').split(',')
-              }
-
-              try {
-                context.putImageData(imgData, 0, 0)
-                callback()
-              } catch (err) {
-                console.warn('3:', err.message)
-              }
-
-
-            } else {
-              console.warn('imgData undefined')
+            } catch (err) {
+              console.warn('1:', err.message)
             }
+
+            function levels(value, _colors) {
+              try {
+                let i
+                let retVal
+                for (i = 0; i < _colors.length; i++) {
+                  let low = _colors[i].low
+                  let hi = _colors[i].hi
+                  let color = _colors[i].color
+                  if (value >= low && value <= hi) {
+                    retVal = parseColor(color)
+                  }
+                }
+
+                if (typeof retVal === 'undefined') {
+                  return value
+                } else {
+                  return retVal
+                }
+              } catch (err) {
+                console.warn('2:', err.message)
+              }
+            }
+
+            function parseColor(input) {
+              // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
+              return input.replace(/[a-z%\s\(\)]/g, '').split(',')
+            }
+
+            try {
+              context.putImageData(imgData, 0, 0)
+              callback()
+            } catch (err) {
+              console.warn('3:', err.message)
+            }
+
+
           } else {
-            filter1 = null
-            console.warn('Canvas w/h=0; setting filter to null')
-            // console.log('context.canvas', context.canvas)
+            console.warn('imgData undefined')
           }
+        } else {
+          filter1 = null
+          console.warn('Canvas w/h=0; setting filter to null')
+          // console.log('context.canvas', context.canvas)
         }
       }
       return filter1
     },
-    getColors: function () {
+    getColors() {
       return colors
     },
-    handleColorLevels: function (layersBtn, viewer) {
+    handleColorLevels(layersBtn, viewer) {
       // Event handler for the layers button
-      layersBtn.addEventListener('click', function (event) {
+      layersBtn.addEventListener('click', event => {
         event = event || window.event
 
         // Let there be only one
@@ -431,7 +427,7 @@ const imageFiltering = function () {
         }
       })
     },
-    getColor: function (num) {
+    getColor(num) {
       if (num >= filters.length) {
         // random 0 - N
         return filters[Math.floor(Math.random() * filters.length - 1)]
@@ -439,11 +435,11 @@ const imageFiltering = function () {
         return filters[num]
       }
     },
-    getColorRanges: function () {
+    getColorRanges() {
       console.log('getColorRanges', colorRanges)
       return colorRanges
     },
-    setColorRanges: function (cr) {
+    setColorRanges(cr) {
       if (typeof colorRanges !== 'undefined') {
         console.log('Got colorRanges')
         colorRanges = cr
@@ -454,11 +450,11 @@ const imageFiltering = function () {
         console.log('Instance variable colorRanges undefined')
       }
     },
-    getLayerNumber: function () {
+    getLayerNumber() {
       console.log('getLayerNum', layerNumber)
       return layerNumber
     },
-    setLayerNumber: function (num) {
+    setLayerNumber(num) {
       // Testing...
       if (typeof layerNumber !== 'undefined') {
         console.log('Got layerNumber')
@@ -471,5 +467,6 @@ const imageFiltering = function () {
       }
 
     }
-  }
+  };
 }
+
