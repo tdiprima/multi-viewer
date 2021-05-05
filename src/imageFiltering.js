@@ -2,8 +2,11 @@
  * Image filtering
  */
 const imageFiltering = function () {
-  colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
-  layerNumber = 0
+  let colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
+  let layerNumber = 1
+  // TODO: FOR DEBUG:
+  // let layerNumber = 0
+  let viewer = {}
 
   function filterColors(r, g, b) {
     this.r = r
@@ -35,7 +38,7 @@ const imageFiltering = function () {
   }
 
   // Function to help drag popup around screen
-  function dragElement({style, offsetTop, offsetLeft}) {
+  function dragElement(elmnt) {
     let pos1 = 0
     let pos2 = 0
     let pos3 = 0
@@ -72,8 +75,8 @@ const imageFiltering = function () {
       pos3 = e.clientX
       pos4 = e.clientY
       // set the element's new position:
-      style.top = `${offsetTop - pos2}px`
-      style.left = `${offsetLeft - pos1}px`
+      elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
     }
 
     // Done handler
@@ -84,8 +87,8 @@ const imageFiltering = function () {
     }
   }
 
-  function setViewerFilter(viewer, layerNumber) {
-    console.log('layerNumber', layerNumber)
+  function setViewerFilter(viewer) {
+    console.log('layer:', layerNumber)
     try {
       viewer.setFilterOptions({
         filters: [{
@@ -120,11 +123,10 @@ const imageFiltering = function () {
       if (intVal < 0) this.value = '0'
 
       if (this.id.startsWith('low')) {
-        console.log(colorRanges[index])
         colorRanges[index].low = parseInt(this.value)
       } else {
         colorRanges[index].hi = parseInt(this.value)
-        setViewerFilter(viewer, layerNumber) // triggered by high value input
+        setViewerFilter(viewer) // triggered by high value input
       }
     })
 
@@ -164,21 +166,21 @@ const imageFiltering = function () {
     return hex
   }
 
-  function colorPickerEvent(colorRanges, mark, idx, viewer, layerNumber) {
+  function colorPickerEvent(mark, idx, viewer) {
     const cp = new CP(mark)
+
     cp.on('change', (r, g, b, a) => {
       try {
         cp.source.value = cp.color(r, g, b, a)
         cp.source.innerHTML = cp.color(r, g, b, a)
         cp.source.style.backgroundColor = cp.color(r, g, b, a)
+        // console.log('colorRanges', colorRanges)
+        // console.log('idx', idx)
+        // console.log('colorRanges[idx]', colorRanges[idx])
         colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-        setViewerFilter(viewer, layerNumber)
+        setViewerFilter(viewer)
       } catch (err) {
-        console.warn('check this', err.message)
-        if (idx < 5) {
-          colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-          setViewerFilter(viewer, layerNumber)
-        }
+        console.warn('check this:', err.message)
       }
     })
   }
@@ -186,7 +188,7 @@ const imageFiltering = function () {
   // CREATE USER INPUT PER COLOR
   // Display colors and low/high values
   // {color: "rgba(r, g, b, a)", hi: n, low: n}
-  function createUserInput(colorPopup, colorRanges, layerNumber, viewer) {
+  function createUserInput(colorPopup, viewer) {
     let i
     for (i = 0; i < colorRanges.length; i++) {
       // COLOR DIV
@@ -198,7 +200,7 @@ const imageFiltering = function () {
       m.id = `marker${i}`
       m.innerHTML = rgba2hex(colorCode)
       colorDiv.appendChild(m)
-      colorPickerEvent(colorRanges, m, i, viewer, layerNumber)
+      colorPickerEvent(m, i, viewer)
 
       // LOW
       let lowDiv = document.createElement('div')
@@ -273,7 +275,7 @@ const imageFiltering = function () {
     // sortIt(colorRanges)
 
     // UI
-    createUserInput(colorPopup, colorRanges, layerNumber, viewer)
+    createUserInput(colorPopup, viewer)
 
     // put it where user clicked
     colorPopup.style.left = `${clientX}px`
@@ -400,7 +402,6 @@ const imageFiltering = function () {
               console.warn('3:', err.message)
             }
 
-
           } else {
             console.warn('imgData undefined')
           }
@@ -415,7 +416,8 @@ const imageFiltering = function () {
     getColors() {
       return colors
     },
-    handleColorLevels(layersBtn, viewer) {
+    handleColorLevels(layersBtn, v) {
+      viewer = v
       // Event handler for the layers button
       layersBtn.addEventListener('click', event => {
         event = event || window.event
@@ -436,30 +438,24 @@ const imageFiltering = function () {
       }
     },
     getColorRanges() {
-      console.log('getColorRanges', colorRanges)
       return colorRanges
     },
     setColorRanges(cr) {
       if (typeof colorRanges !== 'undefined') {
-        console.log('Got colorRanges')
         colorRanges = cr
       } else {
-        console.log('Instance variable colorRanges undefined')
+        console.warn('Instance variable colorRanges undefined')
       }
     },
     getLayerNumber() {
-      console.log('getLayerNum', layerNumber)
       return layerNumber
     },
     setLayerNumber(num) {
-      // Testing...
       if (typeof layerNumber !== 'undefined') {
-        console.log('Got layerNumber')
         layerNumber = num
       } else {
-        console.log('Instance variable layerNumber undefined')
+        console.warn('Instance variable layerNumber undefined')
       }
-
     }
   };
 }
