@@ -6,7 +6,6 @@ const imageFiltering = function () {
   let layerNumber = 1
   // TODO: FOR DEBUG:
   // let layerNumber = 0
-  let viewer = {}
 
   function filterColors(r, g, b) {
     this.r = r
@@ -417,7 +416,6 @@ const imageFiltering = function () {
       return colors
     },
     handleColorLevels(layersBtn, v) {
-      viewer = v
       // Event handler for the layers button
       layersBtn.addEventListener('click', event => {
         event = event || window.event
@@ -441,21 +439,13 @@ const imageFiltering = function () {
       return colorRanges
     },
     setColorRanges(cr) {
-      if (typeof colorRanges !== 'undefined') {
-        colorRanges = cr
-      } else {
-        console.warn('Instance variable colorRanges undefined')
-      }
+      colorRanges = cr
     },
     getLayerNumber() {
       return layerNumber
     },
     setLayerNumber(num) {
-      if (typeof layerNumber !== 'undefined') {
-        layerNumber = num
-      } else {
-        console.warn('Instance variable layerNumber undefined')
-      }
+      layerNumber = num
     }
   };
 }
