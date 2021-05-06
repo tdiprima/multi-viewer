@@ -12,7 +12,7 @@ class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     this.viewer = {}
     this.options = options
-    this.imf = imageFiltering()
+    this.imf = new Filters()
     this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.imf, this.options)
   }
 
