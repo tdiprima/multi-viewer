@@ -15,6 +15,7 @@ const imageFiltering = function () {
 
   // List of colors so segmentation overlays don't clash
   let colors = []
+  colors.push(new filterColors(0, 255, 0)) // we skip the first layer, so colors[0] doesn't count
   colors.push(new filterColors(0, 255, 0)) // lime 00ff00
   colors.push(new filterColors(255, 255, 0)) // yellow ffff00
   colors.push(new filterColors(0, 255, 255)) // cyan 00ffff
@@ -173,9 +174,6 @@ const imageFiltering = function () {
         cp.source.value = cp.color(r, g, b, a)
         cp.source.innerHTML = cp.color(r, g, b, a)
         cp.source.style.backgroundColor = cp.color(r, g, b, a)
-        // console.log('colorRanges', colorRanges)
-        // console.log('idx', idx)
-        // console.log('colorRanges[idx]', colorRanges[idx])
         colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
         setViewerFilter(viewer)
       } catch (err) {
@@ -206,7 +204,6 @@ const imageFiltering = function () {
       let d = {
         id: `low${i}`,
         val: colorRanges[i].low,
-        // color: colorRanges[i],
         index: i
       }
       lowDiv.appendChild(createNumericInput(d, viewer))
@@ -216,7 +213,6 @@ const imageFiltering = function () {
       d = {
         id: `hi${i}`,
         val: colorRanges[i].hi,
-        // color: colorRanges[i],
         index: i
       }
       hiDiv.appendChild(createNumericInput(d, viewer))
@@ -271,7 +267,7 @@ const imageFiltering = function () {
     colorPopup.appendChild(t)
 
     // Sort
-    // sortIt(colorRanges)
+    sortIt(colorRanges)
 
     // UI
     createUserInput(colorPopup, viewer)
@@ -291,7 +287,6 @@ const imageFiltering = function () {
       let filter = OpenSeadragon.Filters.GREYSCALE
       filter.prototype.COLORIZE = ({r, g, b}) => (context, callback) => {
         // w x h: 256 x 256
-        // console.log('w/h', context.canvas.width, context.canvas.height)
         if (context.canvas.width > 0 && context.canvas.height > 0) {
           // Read the canvas pixels
           let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -328,8 +323,7 @@ const imageFiltering = function () {
           }
         } else {
           filter = null
-          console.warn('Canvas w/h=0; setting filter to null')
-          // console.log('context.canvas', context.canvas)
+          console.warn('Canvas width and height are 0. Setting filter to null')
         }
       }
       return filter
@@ -338,7 +332,6 @@ const imageFiltering = function () {
       // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
       let filter1 = OpenSeadragon.Filters.GREYSCALE
       filter1.prototype.COLORLEVELS = colorRanges => (context, callback) => {
-        // console.log('w/h', context.canvas.width, context.canvas.height)
         if (context.canvas.width > 0 && context.canvas.height > 0) {
           // Read the canvas pixels
           let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -348,7 +341,6 @@ const imageFiltering = function () {
               let j
               for (j = 0; j < pxl.length; j += 4) {
                 if (pxl[j + 3] === 255) {
-                  // var v = (pxl[j] + pxl[j + 1] + pxl[j + 2]) / 3 | 0
                   let rgba = levels(pxl[j], colorRanges) // r = g = b
                   if (typeof rgba === 'undefined') {
                     console.warn('rgba undefined', pxl[j])
@@ -406,13 +398,13 @@ const imageFiltering = function () {
           }
         } else {
           filter1 = null
-          console.warn('Canvas w/h=0; setting filter to null')
-          // console.log('context.canvas', context.canvas)
+          console.warn('Canvas width and height are 0. Setting filter to null')
         }
       }
       return filter1
     },
     getColors() {
+      // Return color array defined at top of script
       return colors
     },
     handleColorLevels(layersBtn, viewer) {
@@ -428,23 +420,26 @@ const imageFiltering = function () {
       })
     },
     getColor(num) {
-      if (num >= filters.length) {
+      // Get color per layer num
+      if (num >= colors.length) {
         // random 0 - N
-        return filters[Math.floor(Math.random() * filters.length - 1)]
+        return colors[Math.floor(Math.random() * colors.length - 1)]
       } else {
-        return filters[num]
+        return colors[num]
       }
     },
     getColorRanges() {
       return colorRanges
     },
     setColorRanges(cr) {
+      /* USER DEFINES WHICH COLORS GO WITH WHAT NUMERIC RANGES OF PIXEL VALUES */
       colorRanges = cr
     },
     getLayerNumber() {
       return layerNumber
     },
     setLayerNumber(num) {
+      /* PGM SETS CURRENT LAYER */
       layerNumber = num
     }
   };
