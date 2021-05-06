@@ -128,9 +128,9 @@ class ImageViewer {
       let filter
       if (ranges) {
         imf.setColorRanges(cr)
-        filter = imf.getFilter1()
+        filter = getFilter1()
       } else {
-        filter = imf.getFilter()
+        filter = getFilter()
       }
       return filter
     }
