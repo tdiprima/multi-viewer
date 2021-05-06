@@ -12,7 +12,7 @@ class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     this.viewer = {}
     this.options = options
-    this.imf = new imageFiltering()
+    this.imf = imageFiltering()
     this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.imf, this.options)
   }
 
@@ -107,7 +107,7 @@ class ImageViewer {
                 filters: [{
                   items: viewer.world.getItemAt(itemIndex),
                   processors: [
-                    filter.prototype.COLORIZE(imf.getColor(itemIndex - 1))
+                    filter.prototype.COLORIZE(imf.getColor(itemIndex))
                   ]
                 }]
               })
