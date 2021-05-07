@@ -24,7 +24,7 @@ module.exports = function (grunt) {
           // 'src/ruler.js',
           // 'src/roiAlchemy.js',
           'src/markupTools.js',
-          'src/Filters.js',
+          'src/filters.js',
           'src/ImageViewer.js',
           'src/MultiViewer.js',
           'src/synchronizeViewers.js'],

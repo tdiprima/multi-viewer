@@ -12,7 +12,7 @@ class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
     this.viewer = {}
     this.options = options
-    this.imf = new Filters()
+    this.imf = filters()
     this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.imf, this.options)
   }
 
@@ -128,9 +128,9 @@ class ImageViewer {
       let filter
       if (ranges) {
         imf.setColorRanges(cr)
-        filter = getFilter1()
+        filter = imf.getFilter1()
       } else {
-        filter = getFilter()
+        filter = imf.getFilter()
       }
       return filter
     }
