@@ -19,10 +19,6 @@ module.exports = function (grunt) {
           'src/mugshots.js',
           'src/gridOverlay.js',
           'src/mapMarker.js',
-          // 'src/iiifUrlParser.js',
-          // 'src/circleRuler.js',
-          // 'src/ruler.js',
-          // 'src/roiAlchemy.js',
           'src/markupTools.js',
           'src/filters.js',
           'src/ImageViewer.js',
@@ -34,8 +30,6 @@ module.exports = function (grunt) {
         src: ['vendor/openseadragon/openseadragon.min.js',
           'vendor/openseadragon-fabricjs-overlay.js',
           'vendor/jquery-3.5.1.min.js',
-          // 'vendor/fabric.adapted.js',
-          // 'vendor/openseadragon-filtering.js',
           'vendor/color-picker.min.js'],
         dest: 'build/vendor.min.js'
       }
@@ -54,7 +48,6 @@ module.exports = function (grunt) {
       target: {
         files: {
           'build/main.min.css': ['css/*.css']
-          // 'build/main.min.css': ['css/main.css', 'css/color-picker.min.css']
         }
       }
     }
@@ -62,8 +55,6 @@ module.exports = function (grunt) {
 
   // Load npm plugins to provide necessary tasks.
   grunt.loadNpmTasks('grunt-concat-in-order')
-  // grunt.loadNpmTasks('grunt-contrib-concat')
-  // grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-uglify-es')
   grunt.loadNpmTasks('grunt-contrib-cssmin')
 
