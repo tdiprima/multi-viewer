@@ -8,6 +8,7 @@ let filters = function(cr) {
   } else {
     colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
   }
+  let rangesCopy = [...colorRanges] // so that we can go back
 
   let layerNumber = 1
 

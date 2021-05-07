@@ -9,12 +9,10 @@
  */
 class ImageViewer {
 
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, imf, options) {
     this.viewer = {}
     this.options = options
-    console.log('Set up filters')
-    this.imf = filters(options.colorRanges)
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.imf, this.options)
+    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), imf, this.options)
   }
 
   setViewer(viewerDivId) {
