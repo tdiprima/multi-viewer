@@ -1,8 +1,14 @@
-let imageFiltering = function() {
+let filters = function(cr) {
   'use strict'
   let colors = []
   _setColors()
-  let colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
+  let colorRanges // User defines what color ranges go with which pixel values
+  if (cr) {
+    colorRanges = cr
+  } else {
+    colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
+  }
+
   let layerNumber = 1
 
   function _setColors() {
@@ -266,7 +272,7 @@ let imageFiltering = function() {
     colorPopup.appendChild(t)
 
     // Sort
-    sortIt(colorRanges)
+    // sortIt(colorRanges)
 
     // UI
     createUserInput(colorPopup, viewer)
@@ -433,15 +439,6 @@ let imageFiltering = function() {
       } else {
         return colors[num]
       }
-    },
-
-    getColorRanges() {
-      return colorRanges
-    },
-
-    setColorRanges(cr) {
-      /* USER DEFINES WHICH COLORS GO WITH WHAT NUMERIC RANGES OF PIXEL VALUES */
-      colorRanges = cr
     },
 
     getLayerNumber() {

@@ -50,12 +50,7 @@ class MultiViewer extends ImageViewer {
       let layersBtn = document.getElementById('colors' + this.idx)
       if (layersBtn) {
         if (options.colorRanges) {
-          let x = this.imf.getColorRanges()
-          if (isEmpty(x)) {
-            this.imf.setColorRanges(options.colorRanges)
-          }
           this.imf.handleColorLevels(layersBtn, this.viewer1)
-
         } else {
           console.warn("No colors, no button for you.")
           layersBtn.style.visibility = hidden
