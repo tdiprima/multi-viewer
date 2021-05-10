@@ -165,6 +165,28 @@ class ImageViewer {
       }
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
+
+    // IN FUNCTION overlayFeatures()
+    // Set filter options
+    // // let filter = imf.getFilter()
+    // let filter = imf.getFilter1()
+    // let itemCount = viewer.world.getItemCount()
+    // let i
+    // let filterOpts = []
+    // for (i = 0; i < itemCount; i++) {
+    //   if (i > 0) {
+    //     filterOpts.push({
+    //       items: viewer.world.getItemAt(i),
+    //       processors: [
+    //         filter.prototype.COLORLEVELS(options.colorRanges)
+    //         // filter.prototype.COLORIZE(imf.getColor(i - 1))
+    //       ]
+    //     })
+    //   }
+    // }
+    // viewer.setFilterOptions({
+    //   filters: filterOpts
+    // })
   }
 
 }
