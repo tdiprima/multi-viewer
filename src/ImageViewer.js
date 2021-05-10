@@ -92,6 +92,7 @@ class ImageViewer {
           if (filter !== null && itemIndex > 0) {
             imf.setLayerNumber(itemIndex)
             if (colorRanges.length > 0) {
+              // Use COLORLEVELS
               viewer.setFilterOptions({
                 filters: [{
                   items: viewer.world.getItemAt(itemIndex),
