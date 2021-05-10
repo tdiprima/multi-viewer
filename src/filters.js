@@ -36,14 +36,6 @@ let filters = function(cr) {
     colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
   }
 
-  function sortIt(cr) {
-    // sort by low, desc
-    cr.sort(function (c1, c2) {
-      if (c1.low > c2.low) return -1
-      if (c1.low < c2.low) return 1
-    })
-  }
-
   // Function to help drag popup around screen
   function dragElement(elmnt) {
     let pos1 = 0
@@ -273,7 +265,7 @@ let filters = function(cr) {
     colorPopup.appendChild(t)
 
     // Sort
-    // sortIt(colorRanges)
+    colorRanges.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
 
     // UI
     createUserInput(colorPopup, viewer)
