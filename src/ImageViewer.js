@@ -36,11 +36,6 @@ class ImageViewer {
     return this.viewer
   }
 
-  getImF() {
-    // Image Filter
-    return this.imf
-  }
-
   setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, imf, options) {
     let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
     let opacity = allOpacity[idx]
