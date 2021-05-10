@@ -1,4 +1,4 @@
-let filters = function(cr) {
+let filters = function (cr) {
   'use strict'
   let colors = []
   _setColors()
@@ -101,6 +101,47 @@ let filters = function(cr) {
     }
   }
 
+  function setError(a, b) {
+    a.style.outlineStyle = 'solid'
+    a.style.outlineColor = 'red'
+    b.style.outlineStyle = 'solid'
+    b.style.outlineColor = 'red'
+  }
+
+  function clearError(a, b) {
+    a.style.outlineStyle = ''
+    a.style.outlineColor = ''
+    b.style.outlineStyle = ''
+    b.style.outlineColor = ''
+  }
+
+  function isIntersect(arr, n) {
+    // Clear any previous errors
+    arr.forEach((element, index) => {
+      clearError(document.getElementById('low' + index), document.getElementById('hi' + index))
+    })
+
+    // Validate
+    for (let i = 1; i < n; i++) {
+
+      if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
+        // console.log(parseInt(arr[i - 1].hi), parseInt(arr[i].low))
+        setError(document.getElementById('low' + i), document.getElementById('hi' + (i - 1)))
+        return true
+      }
+
+      if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
+        // console.log(parseInt(arr[i - 1].low), parseInt(arr[i].hi))
+        setError(document.getElementById('low' + (i - 1)), document.getElementById('hi' + i))
+        return true
+      }
+
+    }
+
+    // If we reach here, then no overlap
+    return false
+  }
+
   // NUMBER INPUT to let user set threshold values
   function createNumericInput({id, val, index}, viewer) {
     let x = document.createElement('input')
@@ -111,6 +152,10 @@ let filters = function(cr) {
     x.step = '1'
     x.value = val.toString()
     x.size = 5
+
+    x.addEventListener('change', function () {
+      isIntersect(colorRanges, colorRanges.length)
+    })
 
     // this event happens whenever the value changes
     x.addEventListener('input', function () {
