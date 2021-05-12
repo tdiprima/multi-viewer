@@ -21,7 +21,10 @@ class ImageViewer {
       viewer = OpenSeadragon({
         id: viewerDivId,
         prefixUrl: 'vendor/openseadragon/images/',
-        crossOriginPolicy: 'Anonymous'
+        crossOriginPolicy: 'Anonymous',
+        immediateRender: true,
+        animationTime: 0,
+        imageLoaderLimit: 1
       })
     } catch (e) {
       console.warn('setViewer', e)
@@ -118,6 +121,12 @@ class ImageViewer {
         console.error('Here we are', e.message)
       }
     }
+    // viewer.addHandler("open",  (openEvent) => {
+    //   const tiledImage = viewer.world.getItemAt(0)
+    //   tiledImage.addHandler("fully-loaded-change", (fullyLoadedEvent) => {
+    //     // handle tiles loaded event
+    //   })
+    // })
 
     function fetchFilter(imf, cr) {
       // MAKE DECISION ON TYPE OF FILTER
