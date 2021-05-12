@@ -94,7 +94,8 @@ let filters = function (cr) {
           processors: [
             getFilter1().prototype.COLORLEVELS(colorRanges)
           ]
-        }]
+        }],
+        loadMode: 'sync'
       })
     } catch (err) {
       console.log('OK')

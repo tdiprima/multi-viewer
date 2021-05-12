@@ -94,7 +94,8 @@ class ImageViewer {
                   processors: [
                     filter.prototype.COLORLEVELS(colorRanges)
                   ]
-                }]
+                }],
+                loadMode: 'sync'
               })
             } else {
               // Use COLORIZE
@@ -104,7 +105,8 @@ class ImageViewer {
                   processors: [
                     filter.prototype.COLORIZE(imf.getColor(itemIndex))
                   ]
-                }]
+                }],
+                loadMode: 'sync'
               })
             }
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
