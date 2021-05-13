@@ -20,6 +20,7 @@ module.exports = function (grunt) {
           'src/gridOverlay.js',
           'src/mapMarker.js',
           'src/markupTools.js',
+          'src/draggable.js',
           'src/filters.js',
           'src/ImageViewer.js',
           'src/layers.js',

@@ -36,56 +36,6 @@ let filters = function (cr) {
     colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
   }
 
-  // Function to help drag popup around screen
-  function dragElement(elmnt) {
-    let pos1 = 0
-    let pos2 = 0
-    let pos3 = 0
-    let pos4 = 0
-
-    let header = document.getElementsByClassName('popupHeader')
-    if (header) {
-      // if present, the header is where you move the DIV from:
-      let n
-      for (n = 0; n < header.length; n++) {
-        header[n].onmousedown = dragMouseDown
-      }
-    }
-
-    // Mousedown handler
-    function dragMouseDown(e) {
-      e = e || window.event
-      e.preventDefault()
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX
-      pos4 = e.clientY
-      document.onmouseup = closeDragElement
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag
-    }
-
-    // Mouse-move handler
-    function elementDrag(e) {
-      e = e || window.event
-      e.preventDefault()
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX
-      pos2 = pos4 - e.clientY
-      pos3 = e.clientX
-      pos4 = e.clientY
-      // set the element's new position:
-      elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
-      elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
-    }
-
-    // Done handler
-    function closeDragElement() {
-      // stop moving when mouse button is released:
-      document.onmouseup = null
-      document.onmousemove = null
-    }
-  }
-
   function setViewerFilter(viewer) {
     try {
       viewer.setFilterOptions({
@@ -285,6 +235,7 @@ let filters = function (cr) {
     // Close button
     let d = document.createElement('div')
     d.className = 'popupHeader'
+    d.id = 'colorPopupHeader'
     const img = document.createElement('img')
     img.src = 'images/close_icon.png'
     img.width = 25

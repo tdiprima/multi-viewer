@@ -95,10 +95,10 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             htm += `</span></span>`
           }
 
-          if (opts && opts.draggableLayers) {
-            // Placeholder
-            htm += `<div class="tab" id="tabBox${idx}">&nbsp;</div>`
-          }
+          // if (opts && opts.draggableLayers) {
+          //   // Placeholder
+          //   htm += `<div class="tab" id="tabBox${idx}">&nbsp;</div>`
+          // }
 
           // CREATE VIEWER
           htm += `<div id="${osdId}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
