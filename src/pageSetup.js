@@ -95,26 +95,9 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             htm += `</span></span>`
           }
 
-          // DRAGGABLE LAYERS
           if (opts && opts.draggableLayers) {
-            htm += `<div class="tab" id="tabBox${idx}">`
-
-            const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
-            try {
-              if (idx === 1) {
-                // TODO: This is a hack.
-                htm += `<button class="tab_links" id="feat${f1}" draggable="true">${features[0][0] ? features[0][0].match(regex) : 'Feat n'}</button>
-            <button class="tab_links" id="feat${f2}" draggable="true">${features[1][0] ? features[1][0].match(regex) : 'Feat n'}</button>`
-              } else {
-                htm += `<button class="tab_links" id="feat${f3}" draggable="true">${features[0][0] ? features[0][0].match(regex) : 'Feat n'}</button>
-            <button class="tab_links" id="feat${f4}" draggable="true">${features[1][0] ? features[1][0].match(regex) : 'Feat n'}</button>`
-              }
-            }
-            catch(err) {
-              console.error(err.message)
-            }
-
-            htm += `&nbsp;</div>`
+            // Placeholder
+            htm += `<div class="tab" id="tabBox${idx}">&nbsp;</div>`
           }
 
           // CREATE VIEWER
