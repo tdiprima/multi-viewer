@@ -179,42 +179,36 @@ let filters = function (cr) {
   // CREATE USER INPUT PER COLOR
   // Display colors and low/high values
   // {color: "rgba(r, g, b, a)", hi: n, low: n}
-  function createUserInput(colorPopup, viewer) {
+  function createUserInput(popupBody, viewer) {
     let i
     for (i = 0; i < colorRanges.length; i++) {
       // COLOR DIV
-      let colorDiv = document.createElement('div')
+      let p = document.createElement('p')
       let colorCode = colorRanges[i].color
 
       // COLOR PICKER
       let m = document.createElement('mark')
       m.id = `marker${i}`
       m.innerHTML = rgba2hex(colorCode)
-      colorDiv.appendChild(m)
+      p.appendChild(m)
       colorPickerEvent(m, i, viewer)
 
       // LOW
-      let lowDiv = document.createElement('div')
-      let d = {
+      p.appendChild(createNumericInput({
         id: `low${i}`,
         val: colorRanges[i].low,
         index: i
-      }
-      lowDiv.appendChild(createNumericInput(d, viewer))
+      }, viewer))
 
       // HIGH
-      let hiDiv = document.createElement('div')
-      d = {
+      p.appendChild(createNumericInput({
         id: `hi${i}`,
         val: colorRanges[i].hi,
         index: i
-      }
-      hiDiv.appendChild(createNumericInput(d, viewer))
+      }, viewer))
 
       // ADD TO CONTAINER DIV
-      colorPopup.appendChild(colorDiv)
-      colorPopup.appendChild(lowDiv)
-      colorPopup.appendChild(hiDiv)
+      popupBody.appendChild(p)
     }
   }
 
@@ -226,55 +220,9 @@ let filters = function (cr) {
     style.color = '#0f0'
     style.cursor = 'pointer'
 
-    // Main container
-    let colorPopup = document.createElement('div')
-    colorPopup.id = 'colorPopup'
-    colorPopup.classList.add('grid-container')
-    colorPopup.classList.add('colorPopup')
-
-    // Close button
-    let d = document.createElement('div')
-    d.className = 'popupHeader'
-    d.id = 'colorPopupHeader'
-    const img = document.createElement('img')
-    img.src = 'images/close_icon.png'
-    img.width = 25
-    img.height = 25
-    img.style.cssFloat = 'left'
-    d.appendChild(img)
-
-    // Remove div on click
-    img.addEventListener('click', function () {
-      style.color = '#000'
-      // Re-enable buttons
-      layerButtonToggle('#000', 'pointer')
-      this.parentNode.parentNode.remove()
-    })
-    colorPopup.appendChild(d)
-
-    // Header to drag around screen
-    const popupHeader = document.createElement('div')
-    popupHeader.className = 'popupHeader'
-    popupHeader.innerHTML = 'Color Levels'
-    colorPopup.appendChild(popupHeader)
-    let t = document.createElement('div')
-    t.className = 'popupHeader'
-    colorPopup.appendChild(t)
-
-    // Sort
     colorRanges.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
-
-    // UI
-    createUserInput(colorPopup, viewer)
-
-    // put it where user clicked
-    colorPopup.style.left = `${clientX}px`
-    colorPopup.style.top = `${clientY}px`
-
-    document.body.appendChild(colorPopup)
-
-    // Make DIV element draggable:
-    dragElement(colorPopup)
+    createDraggableDiv('colorPopup', 'Color Levels', clientX, clientY)
+    createUserInput(document.getElementById('colorPopupBody'), viewer)
   }
 
   function handleColorLevels(layersBtn, viewer) {

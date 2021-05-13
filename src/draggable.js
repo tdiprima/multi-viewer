@@ -1,29 +1,25 @@
-function createDraggableDiv(id, title) {
+function createDraggableDiv(id, title, left, top) {
+  let htm = `<div id="${id}" class="popup" style="left: ${left}px; top: ${top}px;">
+  <img id="closeDiv" src="images/close_icon.png" style="float: left;" width="25" height="25" alt="close">
+  <div id="${id}Header" class="popupHeader">${title}</div>
+  <div id="${id}Body"></div></div>`
+
   let div = document.createElement('div')
-  div.id = id
+  div.innerHTML = htm
+  document.body.appendChild(div)
 
-  // Include a header DIV with the same name as the draggable DIV, followed by "Header"
-  let divHead = document.createElement('div')
-  divHead.id = `${id}Header`
-  div.appendChild(divHead)
+  // Make the DIV element draggable
+  dragElement(document.getElementById(`${id}`))
 
-  let img = document.createElement('img')
-  img.src = 'images/close_icon.png'
-  img.width = 25
-  img.height = 25
-  img.style.cssFloat = 'left'
-  divHead.appendChild(img)
-
-
-  // Ditto body
-  let divBody = document.createElement('div')
-  divBody.id = `${id}Body`
-  div.appendChild(divHead)
+  // Remove div on click
+  document.getElementById('closeDiv').addEventListener('click', function () {
+    this.style.color = '#000'
+    this.parentNode.parentNode.remove()
+  })
 
   return div
 }
 
-// Make the DIV element draggable:
 function dragElement(elmnt) {
   let pos1 = 0;
   let pos2 = 0;
