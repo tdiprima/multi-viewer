@@ -48,15 +48,23 @@ class MultiViewer extends ImageViewer {
         handleDraggable()
       }
 
-      let layersBtn = document.getElementById('colors' + this.idx)
+      let layersBtn = document.getElementById('layers' + this.idx)
       if (layersBtn) {
+        layers(layersBtn, this.viewer1)
+        // layers(`layers${this.idx}`, featureLayers)
+      }
+
+      let colorsBtn = document.getElementById('colors' + this.idx)
+      if (colorsBtn) {
         if (options.colorRanges) {
-          imf.handleColorLevels(layersBtn, this.viewer1)
+          imf.handleColorLevels(colorsBtn, this.viewer1)
         } else {
           console.warn("No colors, no button for you.")
-          layersBtn.style.visibility = hidden
+          colorsBtn.style.visibility = hidden
         }
       }
+
+
 
     } catch (e) {
       console.log(e)

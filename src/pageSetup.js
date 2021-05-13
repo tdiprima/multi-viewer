@@ -51,8 +51,14 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           container.style.width = width + 'px'
           td.appendChild(container) // ADD CONTAINER TO CELL
 
-          // LAYERS BUTTON
-          let htm = `<div><i id="colors${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i></div>`
+          let htm = ''
+
+          // LAYER BUTTONS
+          let layerHtm = `<div>
+<i id="layers${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i>&nbsp;
+<i id="colors${idx}" style="cursor: pointer;" class="fas fa-palette"></i>
+</div>`
+          htm += layerHtm
 
           // NAVIGATION TOOLS
           if (numViewers > 1) {
