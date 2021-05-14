@@ -60,7 +60,7 @@ class MultiViewer extends ImageViewer {
           imf.handleColorLevels(colorsBtn, this.viewer1)
         } else {
           console.warn("No colors, no button for you.")
-          colorsBtn.style.visibility = hidden
+          colorsBtn.style.display = 'none'
         }
       }
 
