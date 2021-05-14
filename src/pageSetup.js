@@ -40,14 +40,10 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           count++
           const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
-          let f1 = makeId(5)
-          let f2 = makeId(5)
-          let f3 = makeId(5)
-          let f4 = makeId(5)
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
           let container = document.createElement('div') // Viewer + tools
-          container.className = 'divSquare'
+          container.classList.add('divSquare')
           container.style.width = width + 'px'
           td.appendChild(container) // ADD CONTAINER TO CELL
 
@@ -101,13 +97,8 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             htm += `</span></span>`
           }
 
-          // if (opts && opts.draggableLayers) {
-          //   // Placeholder
-          //   htm += `<div class="tab" id="tabBox${idx}">&nbsp;</div>`
-          // }
-
           // CREATE VIEWER
-          htm += `<div id="${osdId}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
+          htm += `<div id="${osdId}" class="viewer tab" style="width: ${width}px; height: ${height}px;"></div>`
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm

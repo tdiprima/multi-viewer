@@ -128,7 +128,7 @@ a:link {
 }
 
 /* TABS */
-/*
+
 button {
   cursor: move !important;
   border-radius: 5px !important;
@@ -142,7 +142,7 @@ button {
   background-color: #f1f1f1 !important;
 }
 
-.tab button {
+.tab_links {
   cursor: move !important;
   background-color: inherit !important;
   float: left !important;
@@ -156,9 +156,9 @@ button {
 .tab.over {
   border: 3px dotted #00FF00 !important;
 }
-*/
 
-/* floating color function div */
+/* floating div */
+
 .popup {
   position: absolute;
   z-index: 9;

@@ -25,7 +25,7 @@
 </head>
 
 <body>
-  <h2 class="title">Work in progress</h2>
+  <h2 class="title">Draggable Layers</h2>
 
 <!-- Content -->
 <div id="contentDiv"></div>
@@ -73,11 +73,14 @@
     features = [[f1, f2], [f1, f2]]
   }
 
-  // brca()
-  // blca()
+  function test() {
+    base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
+    features = [[base], [base]] // Testing
+  }
 
-  base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-  features = [[base], [base]] // Testing
+  brca()
+  // blca()
+  // test()
 
   const options = {
     draggableLayers: true,

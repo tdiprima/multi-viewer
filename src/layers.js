@@ -6,25 +6,28 @@ let layers = function (button, arr, viewer) {
     // Fill in the body
     const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
     arr.forEach(function (arr1) {
-      arr1.forEach(function (layer) {
-        let name = layer.match(regex) // TODO: I need actual names!
+      arr1.forEach(function (layer, index) {
+        let name = layer.match(regex) // TODO: Need: name, unique id.
         if (!name) {
           name = 'unnamed'
         }
-        let p = document.createElement('p')
+        let p = document.createElement('span')
+        p.classList.add('tab_links')
+        p.id = index + 'feat' + makeId(5) // unique, and give it 1st char is index
         p.innerHTML = name
         div.appendChild(p)
+        div.appendChild(document.createElement('BR'))
       })
     })
+    handleDragLayers(viewer)
   })
 }
 
 // DRAGGABLE LAYER TABS
-let handleDraggable = function () {
+let handleDragLayers = function (viewer) {
   let items = document.querySelectorAll('.tab_links')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
-    // item.addEventListener('click', handleDragStart) // will this fix it?
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
   })
@@ -55,7 +58,7 @@ let handleDraggable = function () {
   function handleDragStart(e) {
     this.style.opacity = '0.4'
     dragSrcEl = this // The draggable feature
-    sourceViewer = whichViewer(dragSrcEl.parentElement.parentElement)
+    sourceViewer = viewer
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('text', e.target.id)
   }
@@ -70,45 +73,43 @@ let handleDraggable = function () {
   function handleDrop(e) {
     e.stopPropagation()
     if (dragSrcEl !== this) {
-      // get the element that was dragged
-      let movedTab = e.dataTransfer.getData('text')
-      // get the (new) parent element
-      let parent = e.target.parentElement
-      // Only drop to specific elements
-      if (parent.classList.contains('divSquare')) {
-        e.target.appendChild(document.getElementById(movedTab))
-        // TODO: Keep track of which tab belongs to what layer number.
-        let layer
-        let targetViewer = whichViewer(parent)
-        layer = targetViewer.world.getItemCount() - 1 // get the last layer (TODO: change)
-        targetViewer.world.getItemAt(layer).setOpacity(1.0)
-        layer = sourceViewer.world.getItemCount() - 1 // get the last layer
-        sourceViewer.world.getItemAt(layer).setOpacity(0.0)
+      const target = e.target
+      // get closest viewer element to where we dropped it
+      console.log('target', target)
+      const closestElement = target.closest('.viewer')
+      console.log('closestElement', closestElement)
+      if (!closestElement) {
+        return false
       }
+      // get the element that was dragged
+      let movedElemId = e.dataTransfer.getData('text')
+      console.log('movedElemId', movedElemId)
+      // get the actual viewer object
+      let targetViewer = getViewerObject(closestElement)
+      let layerNum = movedElemId[0] // 1st char is array index
+      layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
+      targetViewer.world.getItemAt(layerNum).setOpacity(1.0)
+      sourceViewer.world.getItemAt(layerNum).setOpacity(0.0)
     }
     return false
   }
 }
 
-function whichViewer(element) {
-  let children = element.children
-  let retVal, i, j
-  for (i = 0; i < children.length; i++) {
-    let el = children[i]
-    if (el.classList.contains('viewer')) {
-      try {
-        // It's this viewer. Retrieve the viewer object.
-        // syncedImageViewers = global variable set in synchronizeViewers.js
-        for (j = 0; j < syncedImageViewers.length; j++) {
-          if (syncedImageViewers[j].getViewer().id === el.id) {
-            retVal = syncedImageViewers[j].getViewer()
-            break
-          }
-        }
-      } catch (e) {
-        console.warn('No syncedImageViewers')
+function getViewerObject(element) {
+  let retVal
+
+  try {
+    // syncedImageViewers = global variable set in synchronizeViewers.js
+    let j
+    for (j = 0; j < syncedImageViewers.length; j++) {
+      if (syncedImageViewers[j].getViewer().id === element.id) {
+        retVal = syncedImageViewers[j].getViewer()
+        break
       }
     }
+  } catch (e) {
+    console.error('Cwap :(', e.message)
   }
+
   return retVal
 }

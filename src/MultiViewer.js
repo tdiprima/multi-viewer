@@ -45,14 +45,12 @@ class MultiViewer extends ImageViewer {
         markupTools(this.idx, this.viewer1)
       }
 
-      if (options.draggableLayers) {
-        handleDraggable()
-      }
-
       let layersBtn = document.getElementById('layers' + this.idx)
-      if (layersBtn) {
+      if (options.draggableLayers && layersBtn && featureLayers && featureLayers.length > 0) {
         layers(layersBtn, featureLayers, this.viewer1)
-        // layers(`layers${this.idx}`, featureLayers)
+      } else {
+        console.log('Say "no" to LAYERS.')
+        layersBtn.style.display = 'none'
       }
 
       let colorsBtn = document.getElementById('colors' + this.idx)
@@ -60,7 +58,7 @@ class MultiViewer extends ImageViewer {
         if (options.colorRanges) {
           imf.handleColorLevels(colorsBtn, this.viewer1)
         } else {
-          console.warn("No colors, no button for you.")
+          console.log('Say "no" to COLORS.')
           colorsBtn.style.display = 'none'
         }
       }
