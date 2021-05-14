@@ -89,7 +89,7 @@ class ImageViewer {
           let filter = fetchFilter(imf, colorRanges)
           if (filter !== null && itemIndex > 0) {
             imf.setLayerNumber(itemIndex)
-            if (colorRanges.length > 0) {
+            if (colorRanges && colorRanges.length > 0) {
               // Use COLORLEVELS
               viewer.setFilterOptions({
                 filters: [{
