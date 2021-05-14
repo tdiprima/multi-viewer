@@ -1,12 +1,22 @@
-let layers = function (button, viewer) {
+let layers = function (button, arr, viewer) {
 
   button.addEventListener('click', function (e) {
     createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
-    layers.forEach(function (layer) {
-      console.log(layer) // do i get a name?
+    let div = document.getElementById('layersBody')
+    // Fill in the body
+    const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
+    arr.forEach(function (arr1) {
+      arr1.forEach(function (layer) {
+        let name = layer.match(regex) // TODO: I need actual names!
+        if (!name) {
+          name = 'unnamed'
+        }
+        let p = document.createElement('p')
+        p.innerHTML = name
+        div.appendChild(p)
+      })
     })
   })
-
 }
 
 // DRAGGABLE LAYER TABS

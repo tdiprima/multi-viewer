@@ -11,6 +11,7 @@
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
+
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
     let imf
@@ -50,7 +51,7 @@ class MultiViewer extends ImageViewer {
 
       let layersBtn = document.getElementById('layers' + this.idx)
       if (layersBtn) {
-        layers(layersBtn, this.viewer1)
+        layers(layersBtn, featureLayers, this.viewer1)
         // layers(`layers${this.idx}`, featureLayers)
       }
 
@@ -63,8 +64,6 @@ class MultiViewer extends ImageViewer {
           colorsBtn.style.display = 'none'
         }
       }
-
-
 
     } catch (e) {
       console.log(e)
