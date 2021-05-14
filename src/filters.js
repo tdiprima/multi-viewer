@@ -8,7 +8,7 @@ let filters = function (cr) {
   } else {
     colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
   }
-  let rangesCopy = [...colorRanges] // so that we can go back
+  // let rangesCopy = [...colorRanges] // so that we can go back
 
   let layerNumber = 1
 
@@ -48,7 +48,8 @@ let filters = function (cr) {
         loadMode: 'sync'
       })
     } catch (err) {
-      console.log('OK')
+      console.error('setViewerFilter:', err)
+      console.warn('Is layer color the original?')
     }
   }
 
@@ -127,10 +128,14 @@ let filters = function (cr) {
     return x
   }
 
-  function layerButtonToggle(color, cursor) {
+  // TODO: easier way
+  function buttonToggle(color, cursor) {
     jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
+        console.log('this.id', this.id)
         let num = this.id.slice(-1) // hack to get the id #
+        num = parseInt(num) - 1 // bc they're one ahead
+        console.log('colors${num}', `colors${num}`)
         let z = document.getElementById(`colors${num}`)
         z.style.color = color
         z.style.cursor = cursor
@@ -212,20 +217,29 @@ let filters = function (cr) {
     }
   }
 
-  function createPopup({clientX, clientY}, {style}, viewer) {
+  function createPopup(event, layersBtn, viewer) {
     // Disable buttons
-    layerButtonToggle('#ccc', 'not-allowed')
+    buttonToggle('#ccc', 'not-allowed')
 
-    // Highlight this button
-    style.color = '#0f0'
-    style.cursor = 'pointer'
+    // Highlight *this* button
+    layersBtn.style.color = '#0f0'
+    layersBtn.style.cursor = 'pointer'
 
     colorRanges.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
-    createDraggableDiv('colorPopup', 'Color Levels', clientX, clientY)
+    createDraggableDiv('colorPopup', 'Color Levels', event.clientX, event.clientY)
+    let img = document.querySelector('#closeDiv')
+
+    // Remove div on click & re-enable buttons
+    img.addEventListener('click', function () {
+      // Re-enable buttons
+      buttonToggle('#000', 'pointer')
+      this.parentNode.parentNode.remove() // the containing div
+    })
     createUserInput(document.getElementById('colorPopupBody'), viewer)
   }
 
   function handleColorLevels(layersBtn, viewer) {
+    console.warn('handleColorLevels')
     // Event handler for the layers button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
@@ -233,6 +247,7 @@ let filters = function (cr) {
       // Let there be only one
       let el = document.getElementById('colorPopup')
       if (!el) {
+        console.warn('createPopup')
         createPopup(event, layersBtn, viewer)
       }
     })
