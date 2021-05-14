@@ -1,23 +1,23 @@
-let layers = function (button, arr, viewer) {
+let layers = function (button, arr, viewer, idx) {
 
   button.addEventListener('click', function (e) {
     createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
     let div = document.getElementById('layersBody')
     // Fill in the body
     const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
-    arr.forEach(function (arr1) {
-      arr1.forEach(function (layer, index) {
-        let name = layer.match(regex) // TODO: Need: name, unique id.
-        if (!name) {
-          name = 'unnamed'
-        }
-        let p = document.createElement('span')
-        p.classList.add('tab_links')
-        p.id = index + 'feat' + makeId(5) // unique, and give it 1st char is index
-        p.innerHTML = name
-        div.appendChild(p)
-        div.appendChild(document.createElement('BR'))
-      })
+    console.log('idx', idx)
+    let arr1 = arr[idx]
+    arr1.forEach(function (layer, index) {
+      let name = layer.match(regex) // TODO: Need: name, unique id.
+      if (!name) {
+        name = 'unnamed'
+      }
+      let p = document.createElement('span')
+      p.classList.add('tab_links')
+      p.id = index + 'feat' + makeId(5) // unique, and give it 1st char is index
+      p.innerHTML = name
+      div.appendChild(p)
+      div.appendChild(document.createElement('BR'))
     })
     handleDragLayers(viewer)
   })

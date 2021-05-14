@@ -14,6 +14,7 @@
 
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
+    console.log('viewerIndex', viewerIndex)
     let imf
     imf = new filters(options.colorRanges)
     super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, imf, options)
@@ -47,9 +48,9 @@ class MultiViewer extends ImageViewer {
 
       let layersBtn = document.getElementById('layers' + this.idx)
       if (options.draggableLayers && layersBtn && featureLayers && featureLayers.length > 0) {
-        layers(layersBtn, featureLayers, this.viewer1)
+        layers(layersBtn, featureLayers, this.viewer1, this.idx)
       } else {
-        console.log('Say "no" to LAYERS.')
+        console.log('Removing layers button.')
         layersBtn.style.display = 'none'
       }
 
@@ -58,7 +59,7 @@ class MultiViewer extends ImageViewer {
         if (options.colorRanges) {
           imf.handleColorLevels(colorsBtn, this.viewer1)
         } else {
-          console.log('Say "no" to COLORS.')
+          console.log('Removing colors button.')
           colorsBtn.style.display = 'none'
         }
       }
@@ -86,6 +87,7 @@ function addInputHandler(sliderElem, viewerElem) {
     // SLIDER EVENT LISTENER
     sliderElem[i].addEventListener('input', function () {
       let layerNum
+      // console.log('slide', this.id)
       const num = this.id.replace('sliderRange', '') - 1  // sliderRange1, sliderRange2, ...
       if (num % 2 === 0) { // They're paired.
         layerNum = 0 // 1st slider affects the base layer

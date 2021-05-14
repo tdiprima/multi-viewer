@@ -40,7 +40,7 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, imf, options) {
-    let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
+    let idx = viewerIndex
     let opacity = allOpacity[idx]
 
     // Quick check url
@@ -70,10 +70,10 @@ class ImageViewer {
         return false
       }
       // Do we have an array of features, for this viewer?
-      if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
+      if (typeof featureLayers[viewerIndex] === 'undefined') {
         return false
       }
-      if (featureLayers[viewerIndex - 1].length === 0) {
+      if (featureLayers[viewerIndex].length === 0) {
         return false
       }
       // All checks were successful
@@ -190,7 +190,7 @@ class ImageViewer {
     //       items: viewer.world.getItemAt(i),
     //       processors: [
     //         filter.prototype.COLORLEVELS(options.colorRanges)
-    //         // filter.prototype.COLORIZE(imf.getColor(i - 1))
+    //         // filter.prototype.COLORIZE(imf.getColor(i - 1)) // bc skip base (0)
     //       ]
     //     })
     //   }
@@ -199,5 +199,4 @@ class ImageViewer {
     //   filters: filterOpts
     // })
   }
-
 }

@@ -37,13 +37,13 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
         const tr = table.insertRow(r)
         let c
         for (c = 0; c < columns; c++) {
-          count++
           const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
+          count++
           let container = document.createElement('div') // Viewer + tools
-          container.classList.add('divSquare')
+          container.className = 'divSquare'
           container.style.width = width + 'px'
           td.appendChild(container) // ADD CONTAINER TO CELL
 
