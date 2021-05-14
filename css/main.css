@@ -127,7 +127,14 @@ a:link {
   height: auto;
 }
 
-/* TABS */
+/* DRAGGABLE */
+
+*[draggable=true] {
+  -khtml-user-drag: element;
+  cursor: move;
+}
+
+/* tabs (redone as list) */
 
 button {
   cursor: move !important;

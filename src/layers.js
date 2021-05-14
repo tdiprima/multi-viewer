@@ -23,8 +23,9 @@ let layers = function (button, arr, viewer, idx) {
   })
 }
 
-// DRAGGABLE LAYER TABS
+// DRAGGABLE LAYERS (previously in tabs, now list)
 let handleDragLayers = function (viewer) {
+  // Features in feature list
   let items = document.querySelectorAll('.tab_links')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
@@ -32,6 +33,7 @@ let handleDragLayers = function (viewer) {
     item.addEventListener('dragend', handleDragEnd, false)
   })
 
+  // The viewer, basically
   items = document.querySelectorAll('.tab')
   items.forEach(function (item) {
     item.addEventListener('dragenter', handleDragEnter, false)
@@ -108,7 +110,7 @@ function getViewerObject(element) {
       }
     }
   } catch (e) {
-    console.error('Cwap :(', e.message)
+    console.error('getViewerObject:', e.message)
   }
 
   return retVal
