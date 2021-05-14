@@ -37,7 +37,6 @@
 <script src="vendor/fabric.adapted.js"></script>
 <script src="vendor/openseadragon-filtering.js"></script>
 <script src="vendor/color-picker.min.js"></script>
-<!-- <script src="src/iiifUrlParser.js"></script> -->
 <script src="src/colorPicker.js"></script>
 <script src="src/commonFunctions.js"></script>
 <script src="src/pageSetup.js"></script>
@@ -46,8 +45,10 @@
 <script src="src/gridOverlay.js"></script>
 <script src="src/mapMarker.js"></script>
 <script src="src/markupTools.js"></script>
+<script src="src/draggable.js"></script>
 <script src="src/filters.js"></script>
 <script src="src/ImageViewer.js"></script>
+<script src="src/layers.js"></script>
 <script src="src/MultiViewer.js"></script>
 <script src="src/synchronizeViewers.js"></script>
 
@@ -72,11 +73,11 @@
     features = [[f1, f2], [f1, f2]]
   }
 
-  brca()
+  // brca()
   // blca()
 
-  // base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-  // features = [[base], [base]] // Testing
+  base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
+  features = [[base], [base]] // Testing
 
   const options = {
     draggableLayers: true,
