@@ -133,18 +133,14 @@ let filters = function (cr) {
   }
 
   function buttonToggle(color, cursor) {
-    let start = performance.now()
-    let elementList = document.querySelectorAll("#osd-overlaycanvas")
-    elementList.forEach(function (item, index) {
+    document.querySelectorAll("#osd-overlaycanvas").forEach(node => {
       // NOTE: This hack is faster performance than querying for ('[id^="colors"]'):
       let num = this.id.slice(-1) // hack to get the id #
-      num = parseInt(num) - 1 // bc they're one ahead
+      num = parseInt(num) - 1 // bc overlay canvases are one ahead
       let z = document.getElementById(`colors${num}`)
       z.style.color = color
       z.style.cursor = cursor
     })
-    let end = performance.now()
-    console.log(`buttonToggle time: ${end - start} ms`)
   }
 
   function rgba2hex(orig) {
