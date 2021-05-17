@@ -129,7 +129,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             sliderElements.push(document.getElementById('sliderRange' + slider1))
             sliderElements.push(document.getElementById('sliderRange' + slider2))
           } catch (e) {
-            console.log(e)
+            console.error(e)
           }
 
           // ADD A MultiViewer OBJECT TO ARRAY

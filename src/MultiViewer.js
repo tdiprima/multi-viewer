@@ -14,7 +14,6 @@
 
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
-    console.log('viewerIndex', viewerIndex)
     let imf
     imf = new filters(options.colorRanges)
     super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, imf, options)
@@ -65,7 +64,7 @@ class MultiViewer extends ImageViewer {
       }
 
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
 
   }
@@ -87,7 +86,6 @@ function addInputHandler(sliderElem, viewerElem) {
     // SLIDER EVENT LISTENER
     sliderElem[i].addEventListener('input', function () {
       let layerNum
-      // console.log('slide', this.id)
       const num = this.id.replace('sliderRange', '') - 1  // sliderRange1, sliderRange2, ...
       if (num % 2 === 0) { // They're paired.
         layerNum = 0 // 1st slider affects the base layer

@@ -132,10 +132,8 @@ let filters = function (cr) {
   function buttonToggle(color, cursor) {
     jQuery("*").each(function () {
       if (this.id.startsWith('osd-overlaycanvas')) {
-        console.log('this.id', this.id)
         let num = this.id.slice(-1) // hack to get the id #
         num = parseInt(num) - 1 // bc they're one ahead
-        console.log('colors${num}', `colors${num}`)
         let z = document.getElementById(`colors${num}`)
         z.style.color = color
         z.style.cursor = cursor
@@ -226,9 +224,10 @@ let filters = function (cr) {
     layersBtn.style.cursor = 'pointer'
 
     colorRanges.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
-    createDraggableDiv('colorPopup', 'Color Levels', event.clientX, event.clientY)
-    let img = document.querySelector('#closeDiv')
 
+    createDraggableDiv('colorPopup', 'Color Levels', event.clientX, event.clientY)
+
+    let img = document.querySelector('#closeDiv')
     // Remove div on click & re-enable buttons
     img.addEventListener('click', function () {
       // Re-enable buttons

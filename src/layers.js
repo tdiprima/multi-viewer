@@ -5,7 +5,6 @@ let layers = function (button, arr, viewer, idx) {
     let div = document.getElementById('layersBody')
     // Fill in the body
     const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
-    console.log('idx', idx)
     let arr1 = arr[idx]
     arr1.forEach(function (layer, index) {
       let name = layer.match(regex) // TODO: Need: name, unique id.
@@ -77,15 +76,12 @@ let handleDragLayers = function (viewer) {
     if (dragSrcEl !== this) {
       const target = e.target
       // get closest viewer element to where we dropped it
-      console.log('target', target)
       const closestElement = target.closest('.viewer')
-      console.log('closestElement', closestElement)
       if (!closestElement) {
         return false
       }
       // get the element that was dragged
       let movedElemId = e.dataTransfer.getData('text')
-      console.log('movedElemId', movedElemId)
       // get the actual viewer object
       let targetViewer = getViewerObject(closestElement)
       let layerNum = movedElemId[0] // 1st char is array index
