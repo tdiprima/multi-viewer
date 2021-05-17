@@ -56,7 +56,7 @@ class MultiViewer extends ImageViewer {
       let colorsBtn = document.getElementById('colors' + this.idx)
       if (colorsBtn) {
         if (options.colorRanges) {
-          imf.handleColorLevels(colorsBtn, this.viewer1)
+          imf.handleColorLevels(colorsBtn, this.viewer1, options.colorRanges)
         } else {
           console.log('Removing colors button.')
           colorsBtn.style.display = 'none'

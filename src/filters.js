@@ -9,7 +9,6 @@ let filters = function (cr) {
     colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
   }
   // let rangesCopy = [...colorRanges] // so that we can go back
-
   let layerNumber = 1
 
   function _setColors() {
@@ -138,6 +137,26 @@ let filters = function (cr) {
   }
 
   function rgba2hex(orig) {
+    let a
+    const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
+    const alpha = (rgb && rgb[4] || '').trim()
+    let hex = rgb
+      ? (rgb[1] | 1 << 8).toString(16).slice(1) +
+      (rgb[2] | 1 << 8).toString(16).slice(1) +
+      (rgb[3] | 1 << 8).toString(16).slice(1) : orig
+
+    if (alpha !== '') {
+      a = alpha
+    } else {
+      a = 0o1
+    }
+    // multiply before convert to HEX (a * 255)
+    a = (a | 1 << 8).toString(16).slice(1)
+    hex = hex + a
+    return hex
+  }
+  /*
+  function rgba2hex(orig) {
     let a,
       arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
       alpha = (arr && arr[4] || "").trim(),
@@ -154,25 +173,17 @@ let filters = function (cr) {
     // multiply before convert to HEX
     a = ((a * 255) | 1 << 8).toString(16).slice(1);
     hex = hex + a;
+    console.log('hex', hex)
 
     return hex;
   }
+   */
 
   function colorPickerEvent(mark, idx, viewer) {
-    const picker = new CP(mark)
-    // Supposed to happen on change.  But it happens on creation too.
-    picker.on('change', function (r, g, b, a) {
-      this.source.value = this.color(r, g, b, a)
-      this.source.style.backgroundColor = this.color(r, g, b, a)
-      // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-      colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-      setViewerFilter(viewer)
-    })
+
   }
 
   // CREATE USER INPUT PER COLOR
-  // Display colors and low/high values
-  // {color: "rgba(r, g, b, a)", hi: n, low: n}
   function createUserInput(popupBody, viewer) {
     let i
     for (i = 0; i < colorRanges.length; i++) {
@@ -184,8 +195,9 @@ let filters = function (cr) {
       let m = document.createElement('mark')
       m.id = `marker${i}`
       m.innerHTML = "#" + rgba2hex(colorCode)
+      m.style.backgroundColor = colorCode
       p.appendChild(m)
-      colorPickerEvent(m, i, viewer)
+      // colorPickerEvent(m, i, viewer)
 
       // LOW
       p.appendChild(createNumericInput({
@@ -228,9 +240,11 @@ let filters = function (cr) {
     })
 
     createUserInput(document.getElementById('colorPopupBody'), viewer)
+
   }
 
-  function handleColorLevels(layersBtn, viewer) {
+  function handleColorLevels(layersBtn, viewer, cr) {
+    colorRanges = cr
     // Event handler for the layers button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
@@ -238,6 +252,22 @@ let filters = function (cr) {
       let el = document.getElementById('colorPopup')
       if (!el) {
         createPopup(event, layersBtn, viewer)
+        let el = document.getElementsByTagName('mark')
+        let i
+        let count = 0
+        for (i = 0; i < el.length; i++) {
+          if (el[i].id.startsWith("marker")) {
+            const picker = new CP(el[i])
+            // Supposed to happen on change.  But it happens on creation too.
+            picker.on('change', function (r, g, b, a) {
+              this.source.value = this.color(r, g, b, a)
+              this.source.style.backgroundColor = this.color(r, g, b, a)
+              // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+              colorRanges[count++].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+              setViewerFilter(viewer)
+            })
+          }
+        }
       }
     })
   }
