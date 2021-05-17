@@ -96,6 +96,8 @@ let filters = function (cr) {
 
   // NUMBER INPUT to let user set threshold values
   function createNumericInput({id, val, index}, viewer) {
+    let start = performance.now()
+
     let x = document.createElement('input')
     x.id = id
     x.setAttribute('type', 'number')
@@ -125,23 +127,28 @@ let filters = function (cr) {
       }
     })
 
+    let end = performance.now()
+    console.log(`createNumericInput time: ${end - start} ms`)
     return x
   }
 
-  // TODO: easier way
   function buttonToggle(color, cursor) {
-    jQuery("*").each(function () {
-      if (this.id.startsWith('osd-overlaycanvas')) {
-        let num = this.id.slice(-1) // hack to get the id #
-        num = parseInt(num) - 1 // bc they're one ahead
-        let z = document.getElementById(`colors${num}`)
-        z.style.color = color
-        z.style.cursor = cursor
-      }
+    let start = performance.now()
+    let elementList = document.querySelectorAll("#osd-overlaycanvas")
+    elementList.forEach(function (item, index){
+      let num = this.id.slice(-1) // hack to get the id #
+      num = parseInt(num) - 1 // bc they're one ahead
+      let z = document.getElementById(`colors${num}`)
+      z.style.color = color
+      z.style.cursor = cursor
     })
+    let end = performance.now()
+    console.log(`buttonToggle time: ${end - start} ms`)
   }
 
   function rgba2hex(orig) {
+    let start = performance.now()
+
     let a
     const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
     const alpha = (rgb && rgb[4] || '').trim()
@@ -160,10 +167,14 @@ let filters = function (cr) {
     hex = hex + a
     hex = `#${hex}`
 
+    let end = performance.now()
+    console.log(`rgba2hex time: ${end - start} ms`)
     return hex
   }
 
   function colorPickerEvent(mark, idx, viewer) {
+    let start = performance.now()
+
     const cp = new CP(mark)
 
     cp.on('change', (r, g, b, a) => {
@@ -177,12 +188,15 @@ let filters = function (cr) {
         console.warn('check this:', err.message)
       }
     })
+    let end = performance.now()
+    console.log(`colorPickerEvent time: ${end - start} ms`)
   }
 
   // CREATE USER INPUT PER COLOR
   // Display colors and low/high values
   // {color: "rgba(r, g, b, a)", hi: n, low: n}
   function createUserInput(popupBody, viewer) {
+    let start = performance.now()
     let i
     for (i = 0; i < colorRanges.length; i++) {
       // COLOR DIV
@@ -213,9 +227,12 @@ let filters = function (cr) {
       // ADD TO CONTAINER DIV
       popupBody.appendChild(p)
     }
+    let end = performance.now()
+    console.log(`createUserInput time: ${end - start} ms`)
   }
 
   function createPopup(event, layersBtn, viewer) {
+    let start = performance.now()
     // Disable buttons
     buttonToggle('#ccc', 'not-allowed')
 
@@ -235,10 +252,12 @@ let filters = function (cr) {
       this.parentNode.parentNode.remove() // the containing div
     })
     createUserInput(document.getElementById('colorPopupBody'), viewer)
+    let end = performance.now()
+    console.log(`createPopup time: ${end - start} ms`)
   }
 
   function handleColorLevels(layersBtn, viewer) {
-    console.warn('handleColorLevels')
+    console.log('handleColorLevels!')
     // Event handler for the layers button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
@@ -246,7 +265,6 @@ let filters = function (cr) {
       // Let there be only one
       let el = document.getElementById('colorPopup')
       if (!el) {
-        console.warn('createPopup')
         createPopup(event, layersBtn, viewer)
       }
     })
