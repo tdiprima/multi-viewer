@@ -135,7 +135,8 @@ let filters = function (cr) {
   function buttonToggle(color, cursor) {
     let start = performance.now()
     let elementList = document.querySelectorAll("#osd-overlaycanvas")
-    elementList.forEach(function (item, index){
+    elementList.forEach(function (item, index) {
+      // NOTE: This hack is faster performance than querying for ('[id^="colors"]'):
       let num = this.id.slice(-1) // hack to get the id #
       num = parseInt(num) - 1 // bc they're one ahead
       let z = document.getElementById(`colors${num}`)
