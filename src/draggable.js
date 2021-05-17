@@ -11,7 +11,7 @@ function createDraggableDiv(id, title, left, top) {
   // Make the DIV element draggable
   dragElement(document.getElementById(`${id}`))
 
-  // Remove div on click
+  // Setup "close" event listener
   document.getElementById('closeDiv').addEventListener('click', function () {
     this.style.color = '#000'
     this.parentNode.parentNode.remove()
@@ -33,7 +33,7 @@ function dragElement(elmnt) {
     elmnt.onmousedown = dragMouseDown
   }
 
-  // Mousedown handler
+  // Mouse-down handler
   function dragMouseDown(e) {
     e = e || window.event
     e.preventDefault()
@@ -59,7 +59,7 @@ function dragElement(elmnt) {
     elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
   }
 
-  // Done handler
+  // Mouse-up handler
   function closeDragElement() {
     // stop moving when mouse button is released:
     document.onmouseup = null

@@ -49,7 +49,6 @@ let filters = function (cr) {
       })
     } catch (err) {
       console.error('setViewerFilter:', err)
-      console.warn('Is layer color the original?')
     }
   }
 
@@ -96,8 +95,6 @@ let filters = function (cr) {
 
   // NUMBER INPUT to let user set threshold values
   function createNumericInput({id, val, index}, viewer) {
-    let start = performance.now()
-
     let x = document.createElement('input')
     x.id = id
     x.setAttribute('type', 'number')
@@ -126,9 +123,6 @@ let filters = function (cr) {
         setViewerFilter(viewer) // triggered by high value input
       }
     })
-
-    let end = performance.now()
-    console.log(`createNumericInput time: ${end - start} ms`)
     return x
   }
 
@@ -144,56 +138,42 @@ let filters = function (cr) {
   }
 
   function rgba2hex(orig) {
-    let start = performance.now()
-
     let a
-    const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
-    const alpha = (rgb && rgb[4] || '').trim()
-    let hex = rgb
-      ? (rgb[1] | 1 << 8).toString(16).slice(1) +
-      (rgb[2] | 1 << 8).toString(16).slice(1) +
-      (rgb[3] | 1 << 8).toString(16).slice(1) : orig
+    const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
+    const alpha = (arr && arr[4] || '').trim()
+    let hex = arr
+      ? (arr[1] | 1 << 8).toString(16).slice(1) +
+      (arr[2] | 1 << 8).toString(16).slice(1) +
+      (arr[3] | 1 << 8).toString(16).slice(1) : orig
 
     if (alpha !== '') {
       a = alpha
     } else {
       a = 0o1
     }
-    // multiply before convert to HEX (a * 255)
+
     a = (a | 1 << 8).toString(16).slice(1)
     hex = hex + a
     hex = `#${hex}`
 
-    let end = performance.now()
-    console.log(`rgba2hex time: ${end - start} ms`)
     return hex
   }
 
   function colorPickerEvent(mark, idx, viewer) {
-    let start = performance.now()
-
-    const cp = new CP(mark)
-
-    cp.on('change', (r, g, b, a) => {
-      try {
-        cp.source.value = cp.color(r, g, b, a)
-        cp.source.innerHTML = cp.color(r, g, b, a)
-        cp.source.style.backgroundColor = cp.color(r, g, b, a)
-        colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-        setViewerFilter(viewer)
-      } catch (err) {
-        console.warn('check this:', err.message)
-      }
+    const picker = new CP(mark)
+    // Supposed to happen on change.  But it happens on creation too.
+    picker.on('change', function (r, g, b, a) {
+      this.source.value = this.color(r, g, b, a)
+      this.source.style.backgroundColor = this.color(r, g, b, a)
+      colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+      setViewerFilter(viewer)
     })
-    let end = performance.now()
-    console.log(`colorPickerEvent time: ${end - start} ms`)
   }
 
   // CREATE USER INPUT PER COLOR
   // Display colors and low/high values
   // {color: "rgba(r, g, b, a)", hi: n, low: n}
   function createUserInput(popupBody, viewer) {
-    let start = performance.now()
     let i
     for (i = 0; i < colorRanges.length; i++) {
       // COLOR DIV
@@ -224,12 +204,10 @@ let filters = function (cr) {
       // ADD TO CONTAINER DIV
       popupBody.appendChild(p)
     }
-    let end = performance.now()
-    console.log(`createUserInput time: ${end - start} ms`)
+
   }
 
   function createPopup(event, layersBtn, viewer) {
-    let start = performance.now()
     // Disable buttons
     buttonToggle('#ccc', 'not-allowed')
 
@@ -248,13 +226,11 @@ let filters = function (cr) {
       buttonToggle('#000', 'pointer')
       this.parentNode.parentNode.remove() // the containing div
     })
+
     createUserInput(document.getElementById('colorPopupBody'), viewer)
-    let end = performance.now()
-    console.log(`createPopup time: ${end - start} ms`)
   }
 
   function handleColorLevels(layersBtn, viewer) {
-    console.log('handleColorLevels!')
     // Event handler for the layers button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
