@@ -129,34 +129,33 @@ let filters = function (cr) {
   function buttonToggle(color, cursor) {
     document.querySelectorAll("#osd-overlaycanvas").forEach(node => {
       // NOTE: This hack is faster performance than querying for ('[id^="colors"]'):
-      let num = this.id.slice(-1) // hack to get the id #
+      let num = node.id.slice(-1) // hack to get the id #
       num = parseInt(num) - 1 // bc overlay canvases are one ahead
-      let z = document.getElementById(`colors${num}`)
-      z.style.color = color
-      z.style.cursor = cursor
+      let el = document.getElementById(`colors${num}`)
+      el.style.color = color
+      el.style.cursor = cursor
     })
   }
 
   function rgba2hex(orig) {
-    let a
-    const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
-    const alpha = (arr && arr[4] || '').trim()
-    let hex = arr
-      ? (arr[1] | 1 << 8).toString(16).slice(1) +
-      (arr[2] | 1 << 8).toString(16).slice(1) +
-      (arr[3] | 1 << 8).toString(16).slice(1) : orig
+    let a,
+      arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+      alpha = (arr && arr[4] || "").trim(),
+      hex = arr ?
+        (arr[1] | 1 << 8).toString(16).slice(1) +
+        (arr[2] | 1 << 8).toString(16).slice(1) +
+        (arr[3] | 1 << 8).toString(16).slice(1) : orig;
 
-    if (alpha !== '') {
-      a = alpha
+    if (alpha !== "") {
+      a = alpha;
     } else {
-      a = 0o1
+      a = 0x0;
     }
+    // multiply before convert to HEX
+    a = ((a * 255) | 1 << 8).toString(16).slice(1);
+    hex = hex + a;
 
-    a = (a | 1 << 8).toString(16).slice(1)
-    hex = hex + a
-    hex = `#${hex}`
-
-    return hex
+    return hex;
   }
 
   function colorPickerEvent(mark, idx, viewer) {
@@ -183,7 +182,7 @@ let filters = function (cr) {
       // COLOR PICKER
       let m = document.createElement('mark')
       m.id = `marker${i}`
-      m.innerHTML = rgba2hex(colorCode)
+      m.innerHTML = "#" + rgba2hex(colorCode)
       p.appendChild(m)
       colorPickerEvent(m, i, viewer)
 
@@ -234,7 +233,6 @@ let filters = function (cr) {
     // Event handler for the layers button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
-
       // Let there be only one
       let el = document.getElementById('colorPopup')
       if (!el) {
