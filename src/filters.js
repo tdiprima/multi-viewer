@@ -164,6 +164,7 @@ let filters = function (cr) {
     picker.on('change', function (r, g, b, a) {
       this.source.value = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
+      // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
       colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
       setViewerFilter(viewer)
     })
