@@ -1,24 +1,26 @@
-let layers = function (button, arr, viewer, idx) {
+let layers = function (button, arr, viewer) {
   button.addEventListener('click', function (e) {
     createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
-    let div = document.getElementById('layersBody')
-    let htm = '<table>'
-    // Fill in the body
-    const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
-    let arr1 = arr[idx]
-    arr1.forEach(function (layer, index) {
-      let name = layer.hashCode()
-      htm += `<tr>
+    createLayerWidget(arr, document.getElementById('layersBody'))
+    handleDragLayers(viewer)
+  })
+}
+
+let createLayerWidget = function (arr, div) {
+  let htm = '<table>'
+  // Fill in the body
+  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
+  arr.forEach(function (layer, index) {
+    let name = layer.hashCode()
+    htm += `<tr>
 <td><span class="tab_links" id="${index + 'feat' + makeId(5)}" draggable="true">${name}</span></td>
 <td><i class="fas fa-eye" id="eye${index}"></i></td>
 <td><i class="fas fa-palette" style="cursor: pointer;"></i></td>
 </tr>`
-      eyeball(`#eye${index}`)
-    })
-    htm += '</table>'
-    div.innerHTML = htm
-    handleDragLayers(viewer)
+    eyeball(`#eye${index}`)
   })
+  htm += '</table>'
+  div.innerHTML = htm
 }
 
 String.prototype.hashCode = function () {

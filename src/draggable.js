@@ -1,4 +1,5 @@
 function createDraggableDiv(id, title, left, top) {
+  console.log('createDraggableDiv')
   let htm = `<div id="${id}" class="popup" style="left: ${left}px; top: ${top}px;">
   <img id="closeDiv" src="images/close_icon.png" style="float: left;" width="25" height="25" alt="close">
   <div id="${id}Header" class="popupHeader">${title}</div>
@@ -20,17 +21,17 @@ function createDraggableDiv(id, title, left, top) {
   return div
 }
 
-function dragElement(elmnt) {
+function dragElement(_elem) {
   let pos1 = 0;
   let pos2 = 0;
   let pos3 = 0;
   let pos4 = 0
-  if (document.getElementById(elmnt.id + 'Header')) {
+  if (document.getElementById(_elem.id + 'Header')) {
     // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + 'Header').onmousedown = dragMouseDown
+    document.getElementById(_elem.id + 'Header').onmousedown = dragMouseDown
   } else {
     // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown
+    _elem.onmousedown = dragMouseDown
   }
 
   // Mouse-down handler
@@ -55,8 +56,8 @@ function dragElement(elmnt) {
     pos3 = e.clientX
     pos4 = e.clientY
     // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
+    _elem.style.top = (_elem.offsetTop - pos2) + 'px'
+    _elem.style.left = (_elem.offsetLeft - pos1) + 'px'
   }
 
   // Mouse-up handler

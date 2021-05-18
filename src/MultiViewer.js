@@ -22,39 +22,50 @@ class MultiViewer extends ImageViewer {
       options = {}
     }
 
+
+    this.checkboxes = {
+      checkPan: true,
+      checkZoom: true
+    }
+
+    this.viewer1 = super.getViewer()
+    this.idx = viewerIndex
+    this.sliders = sliderElements
+
+    if (numViewers > 1) {
+      this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
+      this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
+    }
+
+    if (options.slidersOn && options.toolbarOn) {
+      addInputHandler(this.sliders, this.viewer1)
+    }
+
+    if (options.toolbarOn) {
+      markupTools(this.idx, this.viewer1)
+    }
+
     try {
-      this.checkboxes = {
-        checkPan: true,
-        checkZoom: true
-      }
-
-      this.viewer1 = super.getViewer()
-      this.idx = viewerIndex
-      this.sliders = sliderElements
-
-      if (numViewers > 1) {
-        this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
-        this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
-      }
-
-      if (options.slidersOn && options.toolbarOn) {
-        addInputHandler(this.sliders, this.viewer1)
-      }
-
-      if (options.toolbarOn) {
-        markupTools(this.idx, this.viewer1)
-      }
-
-      let layersBtn = document.getElementById('layers' + this.idx)
-      let ll = featureLayers[this.idx]
-      console.log(ll)
-      if (options.draggableLayers && layersBtn && featureLayers && typeof ll !== 'undefined') {
-        layers(layersBtn, featureLayers, this.viewer1, this.idx)
+      // LAYERS
+      let features = featureLayers[this.idx]
+      let layersBtn = document.getElementById(`layers${this.idx}`)
+      // TODO: what do they want??
+      if (featureLayers && typeof features !== 'undefined' && options.draggableLayers && layersBtn) {
+        // First of all...
+        createLayerWidget(features, document.getElementById(`layers_and_colors${this.idx}`))
+        handleDragLayers(this.viewer1)
+        // Then create/handle floating layers div
+        layers(layersBtn, features, this.viewer1)
       } else {
         console.log('Removing layers button.')
         layersBtn.style.display = 'none'
       }
+    } catch (e) {
+      console.error('LAYERS:', e)
+    }
 
+    try {
+      // COLORS
       let colorsBtn = document.getElementById('colors' + this.idx)
       if (colorsBtn) {
         if (options.colorRanges) {
@@ -64,11 +75,9 @@ class MultiViewer extends ImageViewer {
           colorsBtn.style.display = 'none'
         }
       }
-
     } catch (e) {
-      console.error(e)
+      console.error('COLORS:', e)
     }
-
   }
 
   getViewer() {

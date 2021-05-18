@@ -73,9 +73,9 @@ a:link {
 /* quad */
 
 .divSquare {
-  width: 48%;
-  height: 560px;
-  margin: 4px;
+  /*width: 48%;*/
+  /*height: 560px;*/
+  margin-right: 200px;
   float: left;
 }
 
