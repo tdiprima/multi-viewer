@@ -217,6 +217,7 @@ function rgba2hex(orig) {
 
   function handleColorLevels(layersBtn, viewer, cr) {
     colorRanges = cr
+
     // Event handler for the layers button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
@@ -224,22 +225,17 @@ function rgba2hex(orig) {
       let el = document.getElementById('colorPopup')
       if (!el) {
         createPopup(event, layersBtn, viewer)
-        let el = document.getElementsByTagName('mark')
-        let i
-        let count = 0
-        for (i = 0; i < el.length; i++) {
-          if (el[i].id.startsWith("marker")) {
-            const picker = new CP(el[i])
-            // Supposed to happen on change.  But it happens on creation too.
-            picker.on('change', function (r, g, b, a) {
-              this.source.value = this.color(r, g, b, a)
-              this.source.style.backgroundColor = this.color(r, g, b, a)
-              // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-              colorRanges[count++].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-              setViewerFilter(viewer)
-            })
-          }
-        }
+        // Setup color picker event handler
+        let nodeList = document.querySelectorAll('[id^="marker"]')
+        nodeList.forEach(function (_elem, ind) {
+          const picker = new CP(_elem)
+          picker.on('change', function (r, g, b, a) {
+            this.source.value = this.color(r, g, b, a)
+            this.source.style.backgroundColor = this.color(r, g, b, a)
+            colorRanges[ind].color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+            setViewerFilter(viewer)
+          })
+        })
       }
     })
   }
