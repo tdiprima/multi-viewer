@@ -20,10 +20,6 @@ function toggleButton (elem, onClass, offClass, callback) {
   }
 }
 
-function buttonIsOn (btn) {
-  return btn.classList.contains('btnOn')
-}
-
 function isRealValue (obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }

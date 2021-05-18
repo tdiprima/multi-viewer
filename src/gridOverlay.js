@@ -26,14 +26,14 @@ const gridOverlay = function (idx, overlay) {
 
 function gridHandler(button, gridProps) {
   toggleButton(button, 'btnOn', 'btn')
-
-  if (buttonIsOn(button)) {
+  const on = button.classList.contains('btnOn')
+  if (on) {
     turnGridOn(gridProps)
     gridProps.gridAdded = true
     button.innerHTML = '<i class="fas fa-border-all"></i> Remove grid'
   }
 
-  if (!buttonIsOn(button)) {
+  if (!on) {
     turnGridOff(gridProps)
     gridProps.gridAdded = false
     button.innerHTML = '<i class="fas fa-border-all"></i> Draw grid'
@@ -105,7 +105,7 @@ function getCellPosition(mousePosition) {
 
 function markerHandler(button, gridProps) {
   toggleButton(button, 'btnOn', 'btn')
-  const on = buttonIsOn(button)
+  const on = button.classList.contains('btnOn')
 
   if (!on) {
     // Done marking; remove mouse:move listener because we use it for other things.
