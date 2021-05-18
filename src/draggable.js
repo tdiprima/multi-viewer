@@ -1,5 +1,4 @@
 function createDraggableDiv(id, title, left, top) {
-  console.log('createDraggableDiv')
   let htm = `<div id="${id}" class="popup" style="left: ${left}px; top: ${top}px;">
   <img id="closeDiv" src="images/close_icon.png" style="float: left;" width="25" height="25" alt="close">
   <div id="${id}Header" class="popupHeader">${title}</div>

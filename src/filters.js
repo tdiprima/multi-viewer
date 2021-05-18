@@ -157,37 +157,40 @@ function rgba2hex(orig) {
 
   // CREATE USER INPUT PER COLOR
   function createUserInput(popupBody, viewer) {
-    let i
-    for (i = 0; i < colorRanges.length; i++) {
-      // COLOR DIV
-      let p = document.createElement('p')
-      let colorCode = colorRanges[i].color
+    const table = document.createElement('table')
+    popupBody.appendChild(table)
+
+    colorRanges.forEach(function (elem, ind) {
+      let tr = table.insertRow(-1)
+      table.appendChild(tr)
+
+      let td = tr.insertCell(-1)
+      let colorCode = elem.color
 
       // COLOR PICKER
       let m = document.createElement('mark')
-      m.id = `marker${i}`
+      m.id = `marker${ind}`
       m.innerHTML = "#" + rgba2hex(colorCode)
       m.style.backgroundColor = colorCode
-      p.appendChild(m)
-      // colorPickerEvent(m, i, viewer)
+      td.appendChild(m) // I hope this is right!
 
       // LOW
-      p.appendChild(createNumericInput({
-        id: `low${i}`,
-        val: colorRanges[i].low,
-        index: i
+      td = tr.insertCell(-1)
+      td.appendChild(createNumericInput({
+        id: `low${ind}`,
+        val: colorRanges[ind].low,
+        index: ind
       }, viewer))
 
       // HIGH
-      p.appendChild(createNumericInput({
-        id: `hi${i}`,
-        val: colorRanges[i].hi,
-        index: i
+      td = tr.insertCell(-1)
+      td.appendChild(createNumericInput({
+        id: `hi${ind}`,
+        val: colorRanges[ind].hi,
+        index: ind
       }, viewer))
 
-      // ADD TO CONTAINER DIV
-      popupBody.appendChild(p)
-    }
+    })
 
   }
 
