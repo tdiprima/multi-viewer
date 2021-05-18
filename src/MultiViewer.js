@@ -49,7 +49,7 @@ class MultiViewer extends ImageViewer {
       // LAYERS
       let features = featureLayers[this.idx]
       let layersBtn = document.getElementById(`layers${this.idx}`)
-      // TODO: what do they want??
+      // TODO: Does draggableLayers even mean anything anymore, or are we just showing it regardless?
       if (featureLayers && typeof features !== 'undefined' && options.draggableLayers && layersBtn) {
         // First of all...
         createLayerWidget(features, document.getElementById(`layers_and_colors${this.idx}`))
@@ -57,7 +57,7 @@ class MultiViewer extends ImageViewer {
         // Then create/handle floating layers div
         layers(layersBtn, features, this.viewer1)
       } else {
-        console.log('Removing layers button.')
+        console.log(`Viewer ${this.viewer1.id} has no layers. Removing layers button.`)
         layersBtn.style.display = 'none'
       }
     } catch (e) {

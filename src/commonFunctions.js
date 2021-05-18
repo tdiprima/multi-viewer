@@ -5,13 +5,18 @@ function clearClassList (element) {
   }
 }
 
-function toggleButtonHighlight (btn) {
-  const isOn = btn.classList.contains('btnOn')
-  clearClassList(btn)
-  if (isOn) {
-    btn.classList.add('btn')
+function toggleButton (elem, onClass, offClass, callback) {
+
+  if (elem.classList.contains(onClass)) {
+    elem.classList.remove(onClass)
+    elem.classList.add(offClass)
   } else {
-    btn.classList.add('btnOn')
+    elem.classList.remove(offClass)
+    elem.classList.add(onClass)
+  }
+
+  if (callback) {
+    callback()
   }
 }
 

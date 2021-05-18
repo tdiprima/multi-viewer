@@ -32,7 +32,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   })
 
   btnDraw.addEventListener('click', function () {
-    toggleButtonHighlight(this)
+    toggleButton(this, 'btnOn', 'btn')
 
     if (canvas.isDrawingMode) {
       turnDrawingOff(canvas, viewer)

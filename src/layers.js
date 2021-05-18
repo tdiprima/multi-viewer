@@ -7,20 +7,31 @@ let layers = function (button, arr, viewer) {
 }
 
 let createLayerWidget = function (arr, div) {
-  let htm = '<table>'
-  // Fill in the body
-  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
+  const table = document.createElement('table')
+  div.appendChild(table)
+
   arr.forEach(function (layer, index) {
+    let tr = table.insertRow(-1)
+    table.appendChild(tr)
+
     let name = layer.hashCode()
-    htm += `<tr>
-<td><span class="tab_links" id="${index + 'feat' + makeId(5)}" draggable="true">${name}</span></td>
-<td><i class="fas fa-eye" id="eye${index}"></i></td>
-<td><i class="fas fa-palette" style="cursor: pointer;"></i></td>
-</tr>`
-    eyeball(`#eye${index}`)
+
+    let cell = tr.insertCell(-1)
+    cell.innerHTML = `<span class="tab_links" id="${index + 'feat' + makeId(5)}" draggable="true">${name}</span>`
+
+    cell = tr.insertCell(-1)
+    cell.innerHTML = `<i class="fas fa-eye" id="eye${index}"></i>`
+
+    cell = tr.insertCell(-1)
+    cell.innerHTML = `<i class="fas fa-palette" style="cursor: pointer;"></i>`
+
+    let x = document.getElementById(`eye${index}`)
+    x.addEventListener('click', function () {
+      toggleButton(this, 'fa-eye', 'fa-eye-slash')
+    })
+
   })
-  htm += '</table>'
-  div.innerHTML = htm
+
 }
 
 String.prototype.hashCode = function () {
@@ -33,26 +44,6 @@ String.prototype.hashCode = function () {
     hash = hash & hash // Convert to 32bit integer
   }
   return hash
-}
-
-let eyeball = function (jqId) {
-  jQuery(function () {
-    jQuery(jqId).click(function () {
-      if (jQuery(this).hasClass('fa-eye')) {
-        jQuery(this).removeClass('fa-eye')
-
-        jQuery(this).addClass('fa-eye-slash')
-
-        jQuery('#password').attr('type', 'text')
-      } else {
-        jQuery(this).removeClass('fa-eye-slash')
-
-        jQuery(this).addClass('fa-eye')
-
-        jQuery('#password').attr('type', 'password')
-      }
-    })
-  })
 }
 
 // DRAGGABLE LAYERS (previously in tabs, now list)
