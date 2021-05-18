@@ -1,22 +1,16 @@
 let layers = function (button, arr, viewer, idx) {
   button.addEventListener('click', function (e) {
-    console.log(button, arr, viewer, idx)
     createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
     let div = document.getElementById('layersBody')
     let htm = '<table>'
-    // let htm = ``
     // Fill in the body
     const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
     let arr1 = arr[idx]
-    console.log('arr1', arr1)
     arr1.forEach(function (layer, index) {
-      let name = layer.match(regex) // TODO: Need: name, unique id.
-      if (!name) {
-        name = 'unnamed'
-      }
+      let name = layer.hashCode()
       htm += `<tr>
 <td><span class="tab_links" id="${index + 'feat' + makeId(5)}" draggable="true">${name}</span></td>
-<td><i class="fas fa-eye-slash" id="eye${index}"></i></td>
+<td><i class="fas fa-eye" id="eye${index}"></i></td>
 <td><i class="fas fa-palette" style="cursor: pointer;"></i></td>
 </tr>`
       eyeball(`#eye${index}`)
@@ -27,19 +21,31 @@ let layers = function (button, arr, viewer, idx) {
   })
 }
 
+String.prototype.hashCode = function () {
+  let hash = 0
+  if (this.length === 0) return hash
+  let i, char;
+  for (i = 0; i < this.length; i++) {
+    char = this.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return hash
+}
+
 let eyeball = function (jqId) {
   jQuery(function () {
     jQuery(jqId).click(function () {
-      if (jQuery(this).hasClass('fa-eye-slash')) {
-        jQuery(this).removeClass('fa-eye-slash')
-
-        jQuery(this).addClass('fa-eye')
-
-        jQuery('#password').attr('type', 'text')
-      } else {
+      if (jQuery(this).hasClass('fa-eye')) {
         jQuery(this).removeClass('fa-eye')
 
         jQuery(this).addClass('fa-eye-slash')
+
+        jQuery('#password').attr('type', 'text')
+      } else {
+        jQuery(this).removeClass('fa-eye-slash')
+
+        jQuery(this).addClass('fa-eye')
 
         jQuery('#password').attr('type', 'password')
       }
