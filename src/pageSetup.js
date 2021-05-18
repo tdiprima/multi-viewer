@@ -25,6 +25,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
       const table = document.createElement('table')
+      // table.style.border = '1px solid black'
       table.id = 'myTable'
       mainDiv.appendChild(table) // TABLE ADDED TO PAGE
       let slider1, slider2
@@ -98,7 +99,9 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           }
 
           // CREATE VIEWER
-          htm += `<div id="${osdId}" class="viewer tab" style="width: ${width}px; height: ${height}px;"></div>`
+          htm += `<table><tr><td><div id="${osdId}" class="viewer tab" style="width: ${width}px; height: ${height}px;"></div>
+</td><td><span id="layers_and_colors${idx}"></span></td>
+</tr></table>`
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
@@ -129,7 +132,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             sliderElements.push(document.getElementById('sliderRange' + slider1))
             sliderElements.push(document.getElementById('sliderRange' + slider2))
           } catch (e) {
-            console.error(e)
+            console.error('sliders', e)
           }
 
           // ADD A MultiViewer OBJECT TO ARRAY
