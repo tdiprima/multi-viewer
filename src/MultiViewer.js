@@ -46,7 +46,9 @@ class MultiViewer extends ImageViewer {
       }
 
       let layersBtn = document.getElementById('layers' + this.idx)
-      if (options.draggableLayers && layersBtn && featureLayers && featureLayers.length > 0) {
+      let ll = featureLayers[this.idx]
+      console.log(ll)
+      if (options.draggableLayers && layersBtn && featureLayers && typeof ll !== 'undefined') {
         layers(layersBtn, featureLayers, this.viewer1, this.idx)
       } else {
         console.log('Removing layers button.')
