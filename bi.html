@@ -38,28 +38,24 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
-  let base, features
+  let base, features, opacities
   let loc = window.location.origin
 
   function blca() {
     base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
     let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-    let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-    features = [
-      [f1, f2],
-      [f1, f2]
-    ]
+    features = [[f1], [f1]] // Both have the same feature
+    opacities = [[1.0], [1.0]]
   }
 
   function test() {
     base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-    features = [[base]] // Testing
+    features = [[base]] // One viewer has a layer; the other doesn't.
+    opacities = [[0.5]]
   }
 
   blca()
   // test()
-
-  let opacities = [[1.0], [1.0]]
 
   // PROBABILITY FILTER
   let colorRanges = [{color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255},
