@@ -49,7 +49,7 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
-  let base, features
+  let base, features, opacities
   let loc = window.location.origin
 
   function blca() {
@@ -60,6 +60,7 @@
       [f1, f2],
       [f1, f2]
     ]
+    opacities = [[1.0, 0.0], [1.0, 1.0]]
   }
 
   function brca() {
@@ -67,11 +68,13 @@
     let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
     let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
     features = [[f1, f2], [f1, f2]]
+    opacities = [[1.0, 0.0], [1.0, 1.0]]
   }
 
   function test() {
     base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
     features = [[base], [base]] // Testing
+    opacities = [[1.0], [0.0]]
   }
 
   brca()
@@ -92,7 +95,7 @@
   }
 
   // divId, image, features, opacity, numViewers, rows, columns, width, height, opts
-  pageSetup('contentDiv', base, features, [[1.0, 0.0], [1.0, 1.0]], 2, 1, 2, 640, 480, options)
+  pageSetup('contentDiv', base, features, opacities, 2, 1, 2, 640, 480, options)
 
 </script>
 
