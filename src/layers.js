@@ -52,7 +52,7 @@ let createLayerWidget = function (arr, div, viewer) {
     fas.id = makeId(5, 'palette')
     fas.style.cursor = 'pointer'
     cell.appendChild(fas)
-
+    new filters().handleColorLevels(fas, viewer, options.colorRanges)
   })
 }
 

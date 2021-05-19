@@ -1,13 +1,9 @@
-let filters = function (cr) {
+let filters = function () {
   'use strict'
   let colors = []
   _setColors()
   let colorRanges // User defines what color ranges go with which pixel values
-  if (cr) {
-    colorRanges = cr
-  } else {
-    colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
-  }
+  colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
   // let rangesCopy = [...colorRanges] // so that we can go back
   let layerNumber = 1
 

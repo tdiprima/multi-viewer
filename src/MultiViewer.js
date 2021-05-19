@@ -14,14 +14,12 @@
 
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
-    let imf
-    imf = new filters(options.colorRanges)
+    let imf = new filters()
     super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, imf, options)
 
     if (typeof options === 'undefined') {
       options = {}
     }
-
 
     this.checkboxes = {
       checkPan: true,
