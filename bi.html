@@ -12,8 +12,10 @@
 
 <body>
 
+<!-- Content -->
 <div id="contentDiv"></div>
 
+<!-- Scripts -->
 <script src="vendor/openseadragon/openseadragon.min.js"></script>
 <script src="vendor/openseadragon-fabricjs-overlay.js"></script>
 <script src="vendor/jquery-3.5.1.min.js"></script>
@@ -36,13 +38,26 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
-  let baseImage = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json';
-  let featureLayers = [[window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'],
-    [window.location.origin + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json']
-  ]
+  let base, features
+  let loc = window.location.origin
 
-  // let baseImage = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-  // let featureLayers = [[baseImage]] // Testing
+  function blca() {
+    base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+    let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+    let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+    features = [
+      [f1, f2],
+      [f1, f2]
+    ]
+  }
+
+  function test() {
+    base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
+    features = [[base]] // Testing
+  }
+
+  blca()
+  // test()
 
   let opacities = [[1.0], [1.0]]
 
@@ -68,7 +83,7 @@
   }
 
   // divId, image, features, opacity, numViewers, rows, columns, width, height, opts
-  pageSetup('contentDiv', baseImage, featureLayers, opacities, 2, 1, 2, 640, 480, options)
+  pageSetup('contentDiv', base, features, opacities, 2, 1, 2, 640, 480, options)
 
 </script>
 
