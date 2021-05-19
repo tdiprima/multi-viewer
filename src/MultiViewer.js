@@ -63,18 +63,18 @@ class MultiViewer extends ImageViewer {
     }
 
     try {
-      // COLORS
-      let colorsBtn = document.getElementById('colors' + this.idx)
-      if (colorsBtn) {
+      // COLOR PALETTE
+      let palette = document.getElementById('palette' + this.idx)
+      if (palette) {
         if (options.colorRanges) {
-          imf.handleColorLevels(colorsBtn, this.viewer1, options.colorRanges)
+          imf.handleColorLevels(palette, this.viewer1, options.colorRanges)
         } else {
           console.log('Removing colors button.')
-          colorsBtn.style.display = 'none'
+          palette.style.display = 'none'
         }
       }
     } catch (e) {
-      console.error('COLORS:', e)
+      console.error('COLOR PALETTE:', e)
     }
   }
 

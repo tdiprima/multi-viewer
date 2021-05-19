@@ -120,7 +120,7 @@ let filters = function () {
   }
 
   function buttonToggle(color, cursor) {
-    document.querySelectorAll('[id^="colors"]').forEach(node => {
+    document.querySelectorAll('[id^="palette"]').forEach(node => {
       node.style.color = color
       node.style.cursor = cursor
     })

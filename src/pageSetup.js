@@ -53,7 +53,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
           // LAYER BUTTONS
           let layerHtm = `<div>
 <i id="layers${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i>&nbsp;
-<i id="colors${idx}" style="cursor: pointer;" class="fas fa-palette"></i>
+<i id="palette${idx}" style="cursor: pointer;" class="fas fa-palette"></i>
 </div>`
           htm += layerHtm
 
