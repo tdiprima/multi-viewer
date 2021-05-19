@@ -1,49 +1,58 @@
 let layers = function (button, arr, viewer) {
   button.addEventListener('click', function (e) {
     createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
-    createLayerWidget(arr, document.getElementById('layersBody'))
+    createLayerWidget(arr, document.getElementById('layersBody'), viewer)
     handleDragLayers(viewer)
   })
 }
 
-let createLayerWidget = function (arr, div) {
+let createLayerWidget = function (arr, div, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
 
-  arr.forEach(function (layer, index) {
-    let tr = table.insertRow(-1)
+  arr.forEach(function (layer, layerNum) {
+    let tr, cell, span, eye, fas
+    tr = table.insertRow(-1)
     table.appendChild(tr)
 
-    let name = layer.hashCode()
-
-    let cell = tr.insertCell(-1)
-    cell.innerHTML = `<span class="tab_links" id="${index + 'feat' + makeId(5)}" draggable="true">${name}</span>`
-
+    // DRAGGABLE FEATURE TAB
     cell = tr.insertCell(-1)
-    cell.innerHTML = `<i class="fas fa-eye" id="eye${index}"></i>`
+    span = document.createElement('span')
+    span.className = 'tab_links'
+    span.id = makeId(5, 'feat')
+    span.setAttribute('draggable', 'true')
+    span.innerHTML = layer.hashCode() // HASH OF NAME
+    cell.appendChild(span)
 
+    // EYEBALL VISIBILITY TOGGLE
     cell = tr.insertCell(-1)
-    cell.innerHTML = `<i class="fas fa-palette" style="cursor: pointer;"></i>`
-
-    let x = document.getElementById(`eye${index}`)
-    x.addEventListener('click', function () {
-      toggleButton(this, 'fa-eye', 'fa-eye-slash')
+    eye = document.createElement('i')
+    eye.classList.add('fas')
+    eye.classList.add('fa-eye')
+    eye.id = makeId(5, 'eye')
+    cell.appendChild(eye)
+    eye.addEventListener('click', function () {
+      toggleButton(this, 'fa-eye', 'fa-eye-slash', function () {
+        if (this.classList.contains('fa-eye')) {
+          // Turn on layer
+          viewer.world.getItemAt(layerNum).setOpacity(1)
+        } else {
+          // Turn off layer
+          viewer.world.getItemAt(layerNum).setOpacity(0)
+        }
+      })
     })
 
+    // PALETTE COLOR FUNCTION
+    cell = tr.insertCell(-1)
+    fas = document.createElement('i')
+    fas.classList.add('fas')
+    fas.classList.add('fa-palette')
+    fas.id = makeId(5, 'palette')
+    fas.style.cursor = 'pointer'
+    cell.appendChild(fas)
+
   })
-
-}
-
-String.prototype.hashCode = function () {
-  let hash = 0
-  if (this.length === 0) return hash
-  let i, char;
-  for (i = 0; i < this.length; i++) {
-    char = this.charCodeAt(i)
-    hash = ((hash << 5) - hash) + char
-    hash = hash & hash // Convert to 32bit integer
-  }
-  return hash
 }
 
 // DRAGGABLE LAYERS (previously in tabs, now list)
