@@ -40,8 +40,6 @@ class ImageViewer {
   }
 
   setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, imf, options) {
-    let idx = viewerIndex
-    let opacity = allOpacity[idx]
 
     // Quick check url
     jQuery.get(baseImage).done(function () {
@@ -49,36 +47,19 @@ class ImageViewer {
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
       // Add FEATURE layers to viewer
-      if (arrayCheck(viewerIndex, allFeatures)) {
-        allFeatures[idx].forEach(function (feature, index) {
-          viewer.addTiledImage({tileSource: feature, opacity: (opacity[index]).toFixed(1), x: 0, y: 0})
+      let features = allFeatures[viewerIndex]
+      let opacity = allOpacity[viewerIndex]
+      if (features) {
+        features.forEach(function (feature, index) {
+          let op = (opacity && opacity[index]) ? opacity[index] : 1.0
+          viewer.addTiledImage({tileSource: feature, opacity: (op).toFixed(1), x: 0, y: 0})
         })
       }
-
       overlayFeatures(viewer, imf, options.colorRanges)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
-
-    function arrayCheck(viewerIndex, featureLayers) {
-      // Do we have an array of features?
-      if (typeof featureLayers === 'undefined') {
-        return false
-      }
-      if (featureLayers.length === 0) {
-        return false
-      }
-      // Do we have an array of features, for this viewer?
-      if (typeof featureLayers[viewerIndex] === 'undefined') {
-        return false
-      }
-      if (featureLayers[viewerIndex].length === 0) {
-        return false
-      }
-      // All checks were successful
-      return true
-    }
 
     function overlayFeatures(viewer, imf, colorRanges) {
 
