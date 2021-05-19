@@ -20,7 +20,7 @@ let createLayerWidget = function (arr, div, viewer) {
     cell = tr.insertCell(-1)
     span = document.createElement('span')
     span.className = 'tab_links'
-    span.id = makeId(5, 'feat')
+    span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
     span.innerHTML = layer.hashCode() // HASH OF NAME
     cell.appendChild(span)
@@ -119,6 +119,7 @@ let handleDragLayers = function (viewer) {
       let movedElemId = e.dataTransfer.getData('text')
       // get the actual viewer object
       let targetViewer = getViewerObject(closestElement)
+      console.log('movedElemId', movedElemId)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
       targetViewer.world.getItemAt(layerNum).setOpacity(1.0)
