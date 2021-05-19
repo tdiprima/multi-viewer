@@ -1,11 +1,11 @@
-function clearClassList (element) {
+function clearClassList(element) {
   const classList = element.classList
   while (classList.length > 0) {
     classList.remove(classList.item(0))
   }
 }
 
-function toggleButton (elem, onClass, offClass, callback) {
+function toggleButton(elem, onClass, offClass, callback) {
 
   if (elem.classList.contains(onClass)) {
     elem.classList.remove(onClass)
@@ -20,20 +20,20 @@ function toggleButton (elem, onClass, offClass, callback) {
   }
 }
 
-function isRealValue (obj) {
+function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
 const isEmpty = function (value) {
   const isEmptyObject = function (a) {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
-      const hasNonempty = Object.keys(a).some(function nonEmpty (element) {
+      const hasNonempty = Object.keys(a).some(function nonEmpty(element) {
         return !isEmpty(a[element])
       })
       return hasNonempty ? false : isEmptyObject(Object.keys(a))
     }
 
-    return !a.some(function nonEmpty (element) { // check if array is really not empty as JS thinks
+    return !a.some(function nonEmpty(element) { // check if array is really not empty as JS thinks
       return !isEmpty(element) // at least one element should be non-empty
     })
   }
@@ -42,12 +42,12 @@ const isEmpty = function (value) {
   )
 }
 
-function getAColorThatShowsUp (strokeColor) {
-  function isBlueIsh () {
+function getAColorThatShowsUp(strokeColor) {
+  function isBlueIsh() {
     return strokeColor.endsWith('ff')
   }
 
-  function isCyanOrMagenta () {
+  function isCyanOrMagenta() {
     return strokeColor === '#00ffff' || strokeColor === '#ff00ff'
   }
 
@@ -58,12 +58,12 @@ function getAColorThatShowsUp (strokeColor) {
   }
 }
 
-function alertMessage (messageObject) {
+function alertMessage(messageObject) {
   alert(messageObject)
   return true
 }
 
-function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
   const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
   return {
     width: Math.round(srcWidth * ratio),
@@ -71,13 +71,16 @@ function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
   }
 }
 
-function makeId(length) {
+function makeId(length, prefix) {
   let result = ''
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
   let i
   for (i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  if (prefix) {
+    result = prefix + result
   }
   return result
 }
