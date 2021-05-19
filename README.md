@@ -19,10 +19,6 @@ npm install; grunt
 
 Explore & run the html files for usage examples.
 
-## Release History
-
-* Yes there are releases. No, you should not use them. Please use the `master` branch.
-
 ## Meta
 
 Tammy DiPrima tammy.diprima@stonybrook.edu
