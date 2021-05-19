@@ -52,7 +52,7 @@ class MultiViewer extends ImageViewer {
       // TODO: Does draggableLayers even mean anything anymore, or are we just showing it regardless?
       if (featureLayers && typeof features !== 'undefined' && options.draggableLayers && layersBtn) {
         // First of all...
-        createLayerWidget(features, document.getElementById(`layers_and_colors${this.idx}`))
+        createLayerWidget(features, document.getElementById(`layers_and_colors${this.idx}`), this.viewer1)
         handleDragLayers(this.viewer1)
         // Then create/handle floating layers div
         layers(layersBtn, features, this.viewer1)

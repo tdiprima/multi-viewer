@@ -33,7 +33,7 @@ let createLayerWidget = function (arr, div, viewer) {
     cell.appendChild(eye)
     eye.addEventListener('click', function () {
       toggleButton(this, 'fa-eye', 'fa-eye-slash', function () {
-        if (this.classList.contains('fa-eye')) {
+        if (eye.classList.contains('fa-eye')) {
           // Turn on layer
           viewer.world.getItemAt(layerNum).setOpacity(1)
         } else {
