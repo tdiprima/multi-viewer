@@ -75,13 +75,11 @@ let filters = function (cr) {
     for (let i = 1; i < n; i++) {
 
       if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
-        // console.log(parseInt(arr[i - 1].hi), parseInt(arr[i].low))
         setError(document.getElementById('low' + i), document.getElementById('hi' + (i - 1)))
         return true
       }
 
       if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
-        // console.log(parseInt(arr[i - 1].low), parseInt(arr[i].hi))
         setError(document.getElementById('low' + (i - 1)), document.getElementById('hi' + i))
         return true
       }
@@ -126,13 +124,9 @@ let filters = function (cr) {
   }
 
   function buttonToggle(color, cursor) {
-    document.querySelectorAll("#osd-overlaycanvas").forEach(node => {
-      // NOTE: This hack is faster performance than querying for ('[id^="colors"]'):
-      let num = node.id.slice(-1) // hack to get the id #
-      num = parseInt(num) - 1 // bc overlay canvases are one ahead
-      let el = document.getElementById(`colors${num}`)
-      el.style.color = color
-      el.style.cursor = cursor
+    document.querySelectorAll('[id^="colors"]').forEach(node => {
+      node.style.color = color
+      node.style.cursor = cursor
     })
   }
 

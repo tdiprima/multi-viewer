@@ -10,7 +10,8 @@ let createLayerWidget = function (arr, div, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
 
-  arr.forEach(function (layer, layerNum) {
+  arr.forEach(function (layer, ind) {
+    let layerNum = ind + 1 // skip base
     let tr, cell, span, eye, fas
     tr = table.insertRow(-1)
     table.appendChild(tr)
