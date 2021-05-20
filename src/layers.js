@@ -90,9 +90,7 @@ let handleDragLayers = function (viewer) {
   })
 
   function handleDragOver(e) {
-    if (e.preventDefault) {
-      e.preventDefault()
-    }
+    if (e.preventDefault) e.preventDefault()
     return false
   }
 
@@ -120,7 +118,8 @@ let handleDragLayers = function (viewer) {
   }
 
   function handleDrop(e) {
-    e.stopPropagation()
+    if (e.preventDefault) e.preventDefault()
+    
     if (dragSrcEl !== this) {
       const target = e.target
       // get closest viewer element to where we dropped it
