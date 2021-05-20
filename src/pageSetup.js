@@ -98,7 +98,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           // CREATE VIEWER
-          htm += `<table><tr><td><div id="${osdId}" class="viewer tab" style="width: ${width}px; height: ${height}px;"></div>
+          htm += `<table><tr><td><div id="${osdId}" class="viewer drop_site" style="width: ${width}px; height: ${height}px;"></div>
 </td><td><span id="layers_and_colors${idx}"></span></td>
 </tr></table>`
 

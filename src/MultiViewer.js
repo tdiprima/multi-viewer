@@ -42,25 +42,22 @@ class MultiViewer extends ImageViewer {
       markupTools(this.idx, this.viewer1)
     }
 
-    try {
       // LAYERS
-      let features = data.features
-      let opacities = data.opacities
       let layersBtn = document.getElementById(`layers${this.idx}`)
-      // TODO: Does draggableLayers even mean anything anymore, or are we just showing it regardless?
-      if (typeof features !== 'undefined' && options.draggableLayers && layersBtn) {
-        // First of all...
-        createLayerWidget(document.getElementById(`layers_and_colors${this.idx}`), this.viewer1, data)
-        handleDragLayers(this.viewer1)
-        // Then create/handle floating layers div
-        // layers(layersBtn, features, this.viewer1) TODO: HUH?
-      } else {
-        console.log(`Viewer ${this.viewer1.id} has no layers. Removing layers button.`)
-        layersBtn.style.display = 'none'
+
+      if (typeof data.features !== 'undefined') {
+        // This function is placed to the right of the viewer:
+        layers(`layers_and_colors${this.idx}`, this.viewer1, data)
+
+        if (options.draggableLayers && layersBtn) {
+          // Then create/handle floating layers div
+          layers('layersBody', this.viewer1, data, layersBtn)
+          // TODO: don't create every time - hide and viz.
+        } else {
+          console.log(`Viewer ${this.viewer1.id} has no layers. Removing layers button.`)
+          layersBtn.style.display = 'none'
+        }
       }
-    } catch (e) {
-      console.error('LAYERS:', e)
-    }
 
     try {
       // COLOR PALETTE

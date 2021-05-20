@@ -1,17 +1,21 @@
-let layers = function (button, viewer, data) {
-
-  button.addEventListener('click', function (e) {
-    createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
-    createLayerWidget(data, document.getElementById('layersBody'), viewer)
+let layers = function (divName, viewer, data, button) {
+  if (isRealValue(button)) {
+    button.addEventListener('click', function (e) {
+      createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
+      createLayerWidget(document.getElementById(divName), viewer, data)
+      handleDragLayers(viewer) // TODO: PARMS
+    })
+  } else {
+    createLayerWidget(document.getElementById(divName), viewer, data)
     handleDragLayers(viewer)
-  })
+  }
 }
 
 let createLayerWidget = function (div, viewer, data) {
   const table = document.createElement('table')
   div.appendChild(table)
 
-  let layers = data.layers
+  let layers = data.features
   let opacities = data.opacities
   layers.forEach(function (layer, ind) {
     let layerNum = ind + 1 // skip base
@@ -32,7 +36,10 @@ let createLayerWidget = function (div, viewer, data) {
     cell = tr.insertCell(-1)
     eye = document.createElement('i')
     eye.classList.add('fas')
-    eye.classList.add('fa-eye')
+    if (opacities[ind] === 1.0)
+      eye.classList.add('fa-eye')
+    else
+      eye.classList.add('fa-eye-slash')
     eye.id = makeId(5, 'eye')
     cell.appendChild(eye)
     eye.addEventListener('click', function () {
@@ -67,7 +74,6 @@ let handleDragLayers = function (viewer) {
   // Features in feature list
   let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
-    console.log('layer_tab', item)
     item.setAttribute('draggable', 'true')
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
@@ -76,7 +82,6 @@ let handleDragLayers = function (viewer) {
   // The viewer, basically
   items = document.querySelectorAll('.drop_site')
   items.forEach(function (item) {
-    console.log('drop_site', item)
     item.addEventListener('dragenter', handleDragEnter, false)
     item.addEventListener('dragleave', handleDragLeave, false)
     item.addEventListener('dragover', handleDragOver, false)
@@ -119,21 +124,15 @@ let handleDragLayers = function (viewer) {
       const target = e.target
       // get closest viewer element to where we dropped it
       const closestViewer = target.closest('.viewer')
-      console.log('closestViewer', closestViewer)
       if (!closestViewer) {
         return false
       }
       // get the element that was dragged
       let movedElemId = e.dataTransfer.getData('text')
-      console.log('movedElemId', movedElemId)
       // get the actual viewer object
       let targetViewer = getViewerObject(closestViewer)
-      console.log('targetViewer', targetViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
-      console.log('layerNum', layerNum)
-      console.log('targetViewer.world.getItemAt(layerNum)', targetViewer.world.getItemAt(layerNum))
-      console.log('sourceViewer.world.getItemAt(layerNum)', sourceViewer.world.getItemAt(layerNum))
       targetViewer.world.getItemAt(layerNum).setOpacity(1.0)
       sourceViewer.world.getItemAt(layerNum).setOpacity(0.0)
     }
