@@ -42,22 +42,22 @@ class MultiViewer extends ImageViewer {
       markupTools(this.idx, this.viewer1)
     }
 
-      // LAYERS
-      let layersBtn = document.getElementById(`layers${this.idx}`)
+    // LAYERS
+    let layersBtn = document.getElementById(`layers${this.idx}`)
 
-      if (typeof data.features !== 'undefined') {
-        // This function is placed to the right of the viewer:
-        layers(`layers_and_colors${this.idx}`, this.viewer1, data)
+    if (typeof data.features !== 'undefined') {
+      // This function is placed to the right of the viewer:
+      layers(`layers_and_colors${this.idx}`, this.viewer1, data)
 
-        if (options.draggableLayers && layersBtn) {
-          // Then create/handle floating layers div
-          layers('layersBody', this.viewer1, data, layersBtn)
-          // TODO: don't create every time - hide and viz.
-        } else {
-          console.log(`Viewer ${this.viewer1.id} has no layers. Removing layers button.`)
-          layersBtn.style.display = 'none'
-        }
+      if (options.draggableLayers && layersBtn) {
+        // Then create/handle floating layers div
+        layers('layersBody', this.viewer1, data, layersBtn)
+        // TODO: don't create every time - hide and viz.
+      } else {
+        console.log(`Viewer ${this.viewer1.id} has no layers. Removing layers button.`)
+        layersBtn.style.display = 'none'
       }
+    }
 
     try {
       // COLOR PALETTE
