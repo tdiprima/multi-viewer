@@ -97,3 +97,10 @@ String.prototype.hashCode = function () {
   }
   return hash
 }
+
+function getStringRep(_input) {
+  let _md5 = _input.hashCode()
+  let _number = parseInt(_md5, 16)
+  let _text = _md5.toString(16)
+  return _text.toUpperCase()
+}

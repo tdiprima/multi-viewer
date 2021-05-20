@@ -29,7 +29,8 @@ let createLayerWidget = function (div, viewer, data) {
     span.className = 'layer_tab'
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
-    span.innerHTML = layer.hashCode() // HASH OF NAME
+    // span.innerHTML = layer.hashCode() // HASH OF NAME
+    span.innerHTML = getStringRep(layer)
     cell.appendChild(span)
 
     // EYEBALL VISIBILITY TOGGLE
