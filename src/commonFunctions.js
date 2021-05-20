@@ -100,7 +100,9 @@ String.prototype.hashCode = function () {
 
 function getStringRep(_input) {
   let _md5 = _input.hashCode()
-  let _number = parseInt(_md5, 16)
+  if (_md5 < 0) {
+    _md5 *= -1
+  }
   let _text = _md5.toString(16)
   return _text.toUpperCase()
 }
