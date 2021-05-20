@@ -1,16 +1,19 @@
-let layers = function (button, arr, viewer) {
+let layers = function (button, viewer, data) {
+
   button.addEventListener('click', function (e) {
     createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
-    createLayerWidget(arr, document.getElementById('layersBody'), viewer)
+    createLayerWidget(data, document.getElementById('layersBody'), viewer)
     handleDragLayers(viewer)
   })
 }
 
-let createLayerWidget = function (arr, div, viewer) {
+let createLayerWidget = function (div, viewer, data) {
   const table = document.createElement('table')
   div.appendChild(table)
 
-  arr.forEach(function (layer, ind) {
+  let layers = data.layers
+  let opacities = data.opacities
+  layers.forEach(function (layer, ind) {
     let layerNum = ind + 1 // skip base
     let tr, cell, span, eye, fas
     tr = table.insertRow(-1)
@@ -19,7 +22,7 @@ let createLayerWidget = function (arr, div, viewer) {
     // DRAGGABLE FEATURE TAB
     cell = tr.insertCell(-1)
     span = document.createElement('span')
-    span.className = 'tab_links'
+    span.className = 'layer_tab'
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
     span.innerHTML = layer.hashCode() // HASH OF NAME
@@ -59,17 +62,21 @@ let createLayerWidget = function (arr, div, viewer) {
 
 // DRAGGABLE LAYERS (previously in tabs, now list)
 let handleDragLayers = function (viewer) {
+  let dragSrcEl, sourceViewer
+
   // Features in feature list
-  let items = document.querySelectorAll('.tab_links')
+  let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
+    console.log('layer_tab', item)
     item.setAttribute('draggable', 'true')
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
   })
 
   // The viewer, basically
-  items = document.querySelectorAll('.tab')
+  items = document.querySelectorAll('.drop_site')
   items.forEach(function (item) {
+    console.log('drop_site', item)
     item.addEventListener('dragenter', handleDragEnter, false)
     item.addEventListener('dragleave', handleDragLeave, false)
     item.addEventListener('dragover', handleDragOver, false)
@@ -111,17 +118,22 @@ let handleDragLayers = function (viewer) {
     if (dragSrcEl !== this) {
       const target = e.target
       // get closest viewer element to where we dropped it
-      const closestElement = target.closest('.viewer')
-      if (!closestElement) {
+      const closestViewer = target.closest('.viewer')
+      console.log('closestViewer', closestViewer)
+      if (!closestViewer) {
         return false
       }
       // get the element that was dragged
       let movedElemId = e.dataTransfer.getData('text')
-      // get the actual viewer object
-      let targetViewer = getViewerObject(closestElement)
       console.log('movedElemId', movedElemId)
+      // get the actual viewer object
+      let targetViewer = getViewerObject(closestViewer)
+      console.log('targetViewer', targetViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
+      console.log('layerNum', layerNum)
+      console.log('targetViewer.world.getItemAt(layerNum)', targetViewer.world.getItemAt(layerNum))
+      console.log('sourceViewer.world.getItemAt(layerNum)', sourceViewer.world.getItemAt(layerNum))
       targetViewer.world.getItemAt(layerNum).setOpacity(1.0)
       sourceViewer.world.getItemAt(layerNum).setOpacity(0.0)
     }

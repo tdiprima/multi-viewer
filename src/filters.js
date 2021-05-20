@@ -211,7 +211,7 @@ function rgba2hex(orig) {
   function handleColorLevels(layersBtn, viewer, cr) {
     colorRanges = cr
 
-    // Event handler for the layers button
+    // Event handler for the palette button
     layersBtn.addEventListener('click', event => {
       event = event || window.event
       // Let there be only one

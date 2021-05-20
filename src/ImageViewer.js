@@ -4,15 +4,14 @@
  *
  * @param viewerDivId: (viewer1, viewer2...)
  * @param baseImage
- * @param featureLayers
- * @param opacity - feature opacity
+ * @param data - features and opacities
  */
 class ImageViewer {
 
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, imf, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, imf, options) {
     this.viewer = {}
     this.options = options
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), imf, this.options)
+    this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), imf, this.options)
   }
 
   setViewer(viewerDivId) {
@@ -39,7 +38,7 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, imf, options) {
+  setSources(viewerIndex, baseImage, data, viewer, imf, options) {
 
     // Quick check url
     jQuery.get(baseImage).done(function () {
@@ -47,8 +46,8 @@ class ImageViewer {
       viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
 
       // Add FEATURE layers to viewer
-      let features = allFeatures[viewerIndex]
-      let opacity = allOpacity[viewerIndex]
+      let features = data.features
+      let opacity = data.opacities
       if (features) {
         features.forEach(function (feature, index) {
           let op = (opacity && opacity[index]) ? opacity[index] : 1.0

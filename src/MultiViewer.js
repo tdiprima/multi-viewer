@@ -5,17 +5,16 @@
  * @param viewerIndex
  * @param viewerDivId: (viewer1, viewer2...)
  * @param baseImage
- * @param featureLayers
- * @param opacity - feature opacity
+ * @param data - features and opacities
  * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
 
 class MultiViewer extends ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, sliderElements, numViewers, options) {
     let imf = new filters()
-    super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, imf, options)
+    super(viewerIndex, viewerDivId, baseImage, data, imf, options)
 
     if (typeof options === 'undefined') {
       options = {}
@@ -45,15 +44,16 @@ class MultiViewer extends ImageViewer {
 
     try {
       // LAYERS
-      let features = featureLayers[this.idx]
+      let features = data.features
+      let opacities = data.opacities
       let layersBtn = document.getElementById(`layers${this.idx}`)
       // TODO: Does draggableLayers even mean anything anymore, or are we just showing it regardless?
-      if (featureLayers && typeof features !== 'undefined' && options.draggableLayers && layersBtn) {
+      if (typeof features !== 'undefined' && options.draggableLayers && layersBtn) {
         // First of all...
-        createLayerWidget(features, document.getElementById(`layers_and_colors${this.idx}`), this.viewer1)
+        createLayerWidget(document.getElementById(`layers_and_colors${this.idx}`), this.viewer1, data)
         handleDragLayers(this.viewer1)
         // Then create/handle floating layers div
-        layers(layersBtn, features, this.viewer1)
+        // layers(layersBtn, features, this.viewer1) TODO: HUH?
       } else {
         console.log(`Viewer ${this.viewer1.id} has no layers. Removing layers button.`)
         layersBtn.style.display = 'none'
