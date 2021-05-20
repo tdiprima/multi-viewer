@@ -85,6 +85,7 @@ function makeId(length, prefix) {
   return result
 }
 
+// Standard replacement for Java's String.hashCode()
 String.prototype.hashCode = function () {
   let hash = 0
   if (this.length === 0) return hash
