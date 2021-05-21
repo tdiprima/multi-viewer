@@ -1,4 +1,7 @@
 let layers = function (divName, viewer, data, button) {
+  if (viewer) console.log('layers() - got viewer', viewer)
+  else console.log('viewer?', viewer)
+
   if (isRealValue(button)) {
     button.addEventListener('click', function (e) {
       createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
@@ -41,18 +44,29 @@ let createLayerWidget = function (div, viewer, data) {
       eye.classList.add('fa-eye')
     else
       eye.classList.add('fa-eye-slash')
+
     eye.id = makeId(5, 'eye')
     cell.appendChild(eye)
+
+    // EYEBALL EVENT LISTENER
     eye.addEventListener('click', function () {
-      toggleButton(this, 'fa-eye', 'fa-eye-slash', function () {
+      toggleButton(this, 'fa-eye', 'fa-eye-slash')
+      let l
+      try {
+        l = viewer.world.getItemAt(layerNum)
+      }
+      catch(err) {
+        console.error(`Toggle Eyeball ${err.message}\nlayerNum: ${layerNum} viewer: ${viewer}`)
+      }
+      if (l) {
         if (eye.classList.contains('fa-eye')) {
           // Turn on layer
-          viewer.world.getItemAt(layerNum).setOpacity(1)
+          l.setOpacity(1)
         } else {
           // Turn off layer
-          viewer.world.getItemAt(layerNum).setOpacity(0)
+          l.setOpacity(0)
         }
-      })
+      }
     })
 
     // PALETTE COLOR FUNCTION
