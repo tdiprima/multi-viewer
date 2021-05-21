@@ -29,8 +29,7 @@ let createLayerWidget = function (div, viewer, data) {
     span.className = 'layer_tab'
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
-    // span.innerHTML = layer.hashCode() // HASH OF NAME
-    span.innerHTML = getStringRep(layer)
+    span.innerHTML = getStringRep(layer) // WAITING FOR skos:prefLabel
     cell.appendChild(span)
 
     // EYEBALL VISIBILITY TOGGLE
@@ -119,7 +118,7 @@ let handleDragLayers = function (viewer) {
 
   function handleDrop(e) {
     if (e.preventDefault) e.preventDefault()
-    
+
     if (dragSrcEl !== this) {
       const target = e.target
       // get closest viewer element to where we dropped it
