@@ -66,7 +66,7 @@ class ImageViewer {
         viewer.world.addHandler('add-item', function (event) {
           let itemIndex = viewer.world.getIndexOfItem(event.item)
           if (itemIndex > 0) {
-            imf.setViewerFilter(options.colorRanges, viewer)
+            imf.setViewerFilter(colorRanges, viewer)
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
               return getIIIFTileUrl(this, level, x, y)
             }
