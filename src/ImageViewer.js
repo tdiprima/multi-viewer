@@ -65,33 +65,25 @@ class ImageViewer {
       try {
         viewer.world.addHandler('add-item', function (event) {
           let itemIndex = viewer.world.getIndexOfItem(event.item)
-          // let itemCount = viewer.world.getItemCount()
-          let filter = fetchFilter(imf, colorRanges)
+          let filter = imf.getFilter1()
           if (filter !== null && itemIndex > 0) {
-            imf.setLayerNumber(itemIndex)
-            if (colorRanges && colorRanges.length > 0) {
-              // Use COLORLEVELS
-              viewer.setFilterOptions({
-                filters: [{
-                  items: viewer.world.getItemAt(itemIndex),
+            let itemCount = viewer.world.getItemCount()
+            let i
+            let filterOpts = []
+            for (i = 0; i < itemCount; i++) {
+              if (i > 0) {
+                filterOpts.push({
+                  items: viewer.world.getItemAt(i),
                   processors: [
-                    filter.prototype.COLORLEVELS(colorRanges)
+                    filter.prototype.COLORLEVELS(options.colorRanges)
                   ]
-                }],
-                loadMode: 'sync'
-              })
-            } else {
-              // Use COLORIZE
-              viewer.setFilterOptions({
-                filters: [{
-                  items: viewer.world.getItemAt(itemIndex),
-                  processors: [
-                    filter.prototype.COLORIZE(imf.getColor(itemIndex))
-                  ]
-                }],
-                loadMode: 'sync'
-              })
+                })
+              }
             }
+            viewer.setFilterOptions({
+              filters: filterOpts
+            })
+            // imf.setViewerFilter(itemIndex, viewer, options.colorRanges)
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
               return getIIIFTileUrl(this, level, x, y)
             }
@@ -100,24 +92,6 @@ class ImageViewer {
       } catch (e) {
         console.error('Here we are', e.message)
       }
-    }
-    // viewer.addHandler("open",  (openEvent) => {
-    //   const tiledImage = viewer.world.getItemAt(0)
-    //   tiledImage.addHandler("fully-loaded-change", (fullyLoadedEvent) => {
-    //     // handle tiles loaded event
-    //   })
-    // })
-
-    function fetchFilter(imf, cr) {
-      // MAKE DECISION ON TYPE OF FILTER
-      let ranges = cr && cr.length > 0
-      let filter
-      if (ranges) {
-        filter = imf.getFilter1()
-      } else {
-        filter = imf.getFilter()
-      }
-      return filter
     }
 
     function dataCheck(url, jqXHR) {
@@ -157,26 +131,5 @@ class ImageViewer {
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
 
-    // IN FUNCTION overlayFeatures()
-    // Set filter options
-    // // let filter = imf.getFilter()
-    // let filter = imf.getFilter1()
-    // let itemCount = viewer.world.getItemCount()
-    // let i
-    // let filterOpts = []
-    // for (i = 0; i < itemCount; i++) {
-    //   if (i > 0) {
-    //     filterOpts.push({
-    //       items: viewer.world.getItemAt(i),
-    //       processors: [
-    //         filter.prototype.COLORLEVELS(options.colorRanges)
-    //         // filter.prototype.COLORIZE(imf.getColor(i - 1)) // bc skip base (0)
-    //       ]
-    //     })
-    //   }
-    // }
-    // viewer.setFilterOptions({
-    //   filters: filterOpts
-    // })
   }
 }

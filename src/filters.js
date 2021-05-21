@@ -5,7 +5,6 @@ let filters = function () {
   let colorRanges // User defines what color ranges go with which pixel values
   colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
   // let rangesCopy = [...colorRanges] // so that we can go back
-  let layerNumber = 1
 
   function _setColors() {
     // My RGB object
@@ -31,19 +30,20 @@ let filters = function () {
     colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
   }
 
-  function setViewerFilter(viewer) {
+  function setViewerFilter(layerNumber, cr, viewer) {
     try {
       viewer.setFilterOptions({
         filters: [{
-          items: viewer.world.getItemAt(layerNumber === 0 ? 1 : layerNumber),
+          items: viewer.world.getItemAt(layerNumber),
           processors: [
-            getFilter1().prototype.COLORLEVELS(colorRanges)
+            getFilter1().prototype.COLORLEVELS(cr)
           ]
         }],
         loadMode: 'sync'
       })
     } catch (err) {
-      console.error('setViewerFilter:', err)
+      console.error(`setViewerFilter ${err.message}`)
+      console.error('layerNumber:', layerNumber, 'cr:', cr, 'viewer:', viewer)
     }
   }
 
@@ -87,7 +87,7 @@ let filters = function () {
   }
 
   // NUMBER INPUT to let user set threshold values
-  function createNumericInput({id, val, index}, viewer) {
+  function createNumericInput({id, val}, viewer) {
     let x = document.createElement('input')
     x.id = id
     x.setAttribute('type', 'number')
@@ -113,7 +113,7 @@ let filters = function () {
         colorRanges[index].low = parseInt(this.value)
       } else {
         colorRanges[index].hi = parseInt(this.value)
-        setViewerFilter(viewer) // triggered by high value input
+        setViewerFilter(colorRanges, viewer) // triggered by high value input
       }
     })
     return x
@@ -168,16 +168,14 @@ function rgba2hex(orig) {
       td = tr.insertCell(-1)
       td.appendChild(createNumericInput({
         id: `low${ind}`,
-        val: colorRanges[ind].low,
-        index: ind
+        val: colorRanges[ind].low
       }, viewer))
 
       // HIGH
       td = tr.insertCell(-1)
       td.appendChild(createNumericInput({
         id: `hi${ind}`,
-        val: colorRanges[ind].hi,
-        index: ind
+        val: colorRanges[ind].hi
       }, viewer))
 
     })
@@ -226,7 +224,7 @@ function rgba2hex(orig) {
             this.source.value = this.color(r, g, b, a)
             this.source.style.backgroundColor = this.color(r, g, b, a)
             colorRanges[ind].color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-            setViewerFilter(viewer)
+            setViewerFilter(cr, viewer)
           })
         })
       }
@@ -357,6 +355,7 @@ function rgba2hex(orig) {
   return {
     getFilter: getFilter,
     getFilter1: getFilter1,
+    setViewerFilter: setViewerFilter,
     handleColorLevels: handleColorLevels,
 
     getColors() {
@@ -372,15 +371,7 @@ function rgba2hex(orig) {
       } else {
         return colors[num]
       }
-    },
-
-    getLayerNumber() {
-      return layerNumber
-    },
-
-    setLayerNumber(num) {
-      /* PGM SETS CURRENT LAYER */
-      layerNumber = num
     }
+
   }
 }

@@ -1,7 +1,4 @@
 let layers = function (divName, viewer, data, button) {
-  if (viewer) console.log('layers() - got viewer', viewer)
-  else console.log('viewer?', viewer)
-
   if (isRealValue(button)) {
     button.addEventListener('click', function (e) {
       createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
