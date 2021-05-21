@@ -25,8 +25,9 @@ let createLayerWidget = function (div, viewer, data) {
 
     // DRAGGABLE FEATURE TAB
     cell = tr.insertCell(-1)
-    cell.style.verticalAlign = "top";
+    cell.style.verticalAlign = 'top'
     span = document.createElement('span')
+    span.style.verticalAlign = 'top'
     span.className = 'layer_tab'
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
