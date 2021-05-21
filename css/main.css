@@ -151,6 +151,7 @@ button {
 
 .layer_tab {
   cursor: move !important;
+  border-radius: 5px !important;
   background-color: inherit !important;
   float: left !important;
   border: 1px solid darkgray !important;
