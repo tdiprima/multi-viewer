@@ -11,6 +11,21 @@ let layers = function (divName, viewer, data, button) {
   }
 }
 
+let eyeball = function (eye, layerNum, viewer) {
+  let l = viewer.world.getItemAt(layerNum)
+  if (l) {
+    if (eye.classList.contains('fa-eye')) {
+      // Turn on layer
+      l.setOpacity(1)
+    } else {
+      // Turn off layer
+      l.setOpacity(0)
+    }
+  } else {
+    console.log('here')
+  }
+}
+
 let createLayerWidget = function (div, viewer, data) {
   const table = document.createElement('table')
   div.appendChild(table)
@@ -39,29 +54,15 @@ let createLayerWidget = function (div, viewer, data) {
       eye.classList.add('fa-eye')
     else
       eye.classList.add('fa-eye-slash')
+    // eyeball(eye, layerNum, viewer) // viewer.world... undefined here.
 
     eye.id = makeId(5, 'eye')
     cell.appendChild(eye)
 
     // EYEBALL EVENT LISTENER
     eye.addEventListener('click', function () {
-      toggleButton(this, 'fa-eye', 'fa-eye-slash')
-      let l
-      try {
-        l = viewer.world.getItemAt(layerNum)
-      }
-      catch(err) {
-        console.error(`Toggle Eyeball ${err.message}\nlayerNum: ${layerNum} viewer: ${viewer}`)
-      }
-      if (l) {
-        if (eye.classList.contains('fa-eye')) {
-          // Turn on layer
-          l.setOpacity(1)
-        } else {
-          // Turn off layer
-          l.setOpacity(0)
-        }
-      }
+      toggleButton(eye, 'fa-eye', 'fa-eye-slash')
+      eyeball(eye, layerNum, viewer)
     })
 
     // PALETTE COLOR FUNCTION

@@ -51,6 +51,7 @@ class ImageViewer {
       if (features) {
         features.forEach(function (feature, index) {
           let op = (opacity && opacity[index]) ? opacity[index] : 1.0
+          // console.log('index', index, 'is', opacity[index])
           viewer.addTiledImage({tileSource: feature, opacity: (op).toFixed(1), x: 0, y: 0})
         })
       }
