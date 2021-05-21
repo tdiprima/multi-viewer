@@ -65,25 +65,8 @@ class ImageViewer {
       try {
         viewer.world.addHandler('add-item', function (event) {
           let itemIndex = viewer.world.getIndexOfItem(event.item)
-          let filter = imf.getFilter1()
-          if (filter !== null && itemIndex > 0) {
-            let itemCount = viewer.world.getItemCount()
-            let i
-            let filterOpts = []
-            for (i = 0; i < itemCount; i++) {
-              if (i > 0) {
-                filterOpts.push({
-                  items: viewer.world.getItemAt(i),
-                  processors: [
-                    filter.prototype.COLORLEVELS(options.colorRanges)
-                  ]
-                })
-              }
-            }
-            viewer.setFilterOptions({
-              filters: filterOpts
-            })
-            // imf.setViewerFilter(itemIndex, viewer, options.colorRanges)
+          if (itemIndex > 0) {
+            imf.setViewerFilter(options.colorRanges, viewer)
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
               return getIIIFTileUrl(this, level, x, y)
             }

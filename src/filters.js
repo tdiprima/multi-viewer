@@ -30,20 +30,30 @@ let filters = function () {
     colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
   }
 
-  function setViewerFilter(layerNumber, cr, viewer) {
+  function setViewerFilter(cr, viewer) {
     try {
+      let itemCount = viewer.world.getItemCount()
+      let i
+      let filterOpts = []
+      for (i = 0; i < itemCount; i++) {
+        if (i > 0) {
+          filterOpts.push({
+            items: viewer.world.getItemAt(i),
+            processors: [
+              getFilter1().prototype.COLORLEVELS(cr)
+            ]
+          })
+        }
+      }
       viewer.setFilterOptions({
-        filters: [{
-          items: viewer.world.getItemAt(layerNumber),
-          processors: [
-            getFilter1().prototype.COLORLEVELS(cr)
-          ]
-        }],
+        filters: filterOpts,
         loadMode: 'sync'
       })
+      console.log('filterOpts', filterOpts)
+
     } catch (err) {
       console.error(`setViewerFilter ${err.message}`)
-      console.error('layerNumber:', layerNumber, 'cr:', cr, 'viewer:', viewer)
+      console.error('cr:', cr, 'viewer:', viewer)
     }
   }
 
