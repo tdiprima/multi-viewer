@@ -106,3 +106,10 @@ function getStringRep(_input) {
   let _text = _md5.toString(16)
   return _text.toUpperCase()
 }
+
+// async function
+async function fetchAsync (url) {
+  const response = await fetch(url) // await response of fetch call
+  const data = await response.json() // only proceed once promise is resolved
+  return data // only proceed once second promise is resolved
+}
