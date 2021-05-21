@@ -136,13 +136,6 @@ a:link {
 
 /* tabs (redone as list) */
 
-button {
-  cursor: move !important;
-  border-radius: 5px !important;
-  outline-color: #f1f1f1 !important;
-  border-color: #f1f1f1 !important;
-}
-
 .drop_site {
   overflow: hidden !important;
   border: 1px solid #ccc !important;
@@ -155,7 +148,7 @@ button {
   background-color: inherit !important;
   float: left !important;
   border: 1px solid darkgray !important;
-  outline: none !important;
+  /*outline: none !important;*/
   padding: 14px 16px !important;
   transition: 0.3s !important;
   font-size: 17px !important;
