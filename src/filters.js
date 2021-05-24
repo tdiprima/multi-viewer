@@ -10,14 +10,14 @@ let filters = function () {
       let i
       let filterOpts = []
       for (i = 0; i < itemCount; i++) {
-        // if (i > 0) {
+        if (i > 0) {
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
               getFilter().prototype.COLORLEVELS(cr)
             ]
           })
-        // }
+        }
       }
       viewer.setFilterOptions({
         filters: filterOpts,
