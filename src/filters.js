@@ -1,34 +1,8 @@
 let filters = function () {
   'use strict'
-  let colors = []
-  _setColors()
   let colorRanges // User defines what color ranges go with which pixel values
   colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
   // let rangesCopy = [...colorRanges] // so that we can go back
-
-  function _setColors() {
-    // My RGB object
-    function filterColors(r, g, b) {
-      this.r = r
-      this.g = g
-      this.b = b
-    }
-
-    // Colors per layer
-    colors.push(new filterColors(0, 255, 0)) // we skip the first layer, so colors[0] doesn't count
-    colors.push(new filterColors(0, 255, 0)) // lime 00ff00
-    colors.push(new filterColors(255, 255, 0)) // yellow ffff00
-    colors.push(new filterColors(0, 255, 255)) // cyan 00ffff
-    colors.push(new filterColors(255, 0, 0)) // red ff0000
-    colors.push(new filterColors(255, 165, 0)) // orange ffa500
-    colors.push(new filterColors(0, 128, 0)) // dark green 008000
-    colors.push(new filterColors(0, 0, 255)) // blue 0000ff
-    colors.push(new filterColors(75, 0, 130)) // indigo 4b0082
-    colors.push(new filterColors(28, 28, 28)) // dark gray #1c1c1c
-    colors.push(new filterColors(167, 226, 46)) // leaf green #a7e22e
-    colors.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
-    colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
-  }
 
   function setViewerFilter(cr, viewer) {
     try {
@@ -40,7 +14,7 @@ let filters = function () {
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
-              getFilter1().prototype.COLORLEVELS(cr)
+              getFilter().prototype.COLORLEVELS(cr)
             ]
           })
         }
@@ -49,6 +23,7 @@ let filters = function () {
         filters: filterOpts,
         loadMode: 'sync'
       })
+      console.log('filters', filterOpts)
 
     } catch (err) {
       console.error(`setViewerFilter ${err.message}`)
@@ -241,55 +216,9 @@ function rgba2hex(orig) {
   }
 
   let getFilter = function () {
-    let filter = OpenSeadragon.Filters.GREYSCALE
-    filter.prototype.COLORIZE = ({r, g, b}) => (context, callback) => {
-      // w x h: 256 x 256
-      if (context.canvas.width > 0 && context.canvas.height > 0) {
-        // Read the canvas pixels
-        let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-        if (typeof imgData !== undefined) {
-          try {
-            const pixels = imgData.data
-            // Run the filter on them
-            let i
-            for (i = 0; i < pixels.length; i += 4) {
-              if (pixels[i + 3] === 255) {
-                // Alpha channel = 255 ("opaque"): nuclear material here.
-                pixels[i] = r
-                pixels[i + 1] = g
-                pixels[i + 2] = b
-                pixels[i + 3] = 255
-              } else {
-                // No nuclear material: set to transparent.
-                pixels[i + 3] = 0
-              }
-            }
-          } catch (err) {
-            console.warn('1:', err.message)
-          }
-
-          try {
-            // Write the result back onto the canvas
-            context.putImageData(imgData, 0, 0)
-            callback()
-          } catch (err) {
-            console.warn('2:', err.message)
-          }
-        } else {
-          console.warn('imgData undefined')
-        }
-      } else {
-        filter = null
-        console.warn('Canvas width and height are 0. Setting filter to null')
-      }
-    }
-    return filter
-  }
-
-  let getFilter1 = function () {
     // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
-    let filter1 = OpenSeadragon.Filters.GREYSCALE
-    filter1.prototype.COLORLEVELS = colorRanges => (context, callback) => {
+    let filter = OpenSeadragon.Filters.GREYSCALE
+    filter.prototype.COLORLEVELS = colorRanges => (context, callback) => {
       if (context.canvas.width > 0 && context.canvas.height > 0) {
         // Read the canvas pixels
         let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -355,32 +284,15 @@ function rgba2hex(orig) {
           console.warn('imgData undefined')
         }
       } else {
-        filter1 = null
+        filter = null
         console.warn('Canvas width and height are 0. Setting filter to null')
       }
     }
-    return filter1
+    return filter
   }
   return {
     getFilter: getFilter,
-    getFilter1: getFilter1,
     setViewerFilter: setViewerFilter,
     handleColorLevels: handleColorLevels,
-
-    getColors() {
-      // Return color array defined at top of script
-      return colors
-    },
-
-    getColor(num) {
-      // Get color per layer num
-      if (num >= colors.length) {
-        // random 0 - N
-        return colors[Math.floor(Math.random() * colors.length - 1)]
-      } else {
-        return colors[num]
-      }
-    }
-
   }
 }

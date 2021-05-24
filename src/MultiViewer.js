@@ -53,22 +53,15 @@ class MultiViewer extends ImageViewer {
       // layers('layersBody', this.viewer1, data, layersBtn) // TODO: don't *create* every time - hide and viz.
     }
 
-    /*
     try {
       // COLOR PALETTE
       let palette = document.getElementById('palette' + this.idx)
-      if (palette) {
-        if (options.colorRanges) {
-          imf.handleColorLevels(palette, this.viewer1, options.colorRanges)
-        } else {
-          console.log('Removing colors button.')
-          palette.style.display = 'none'
-        }
+      if (options.colorRanges) {
+        imf.handleColorLevels(palette, this.viewer1, options.colorRanges)
       }
     } catch (e) {
       console.error('COLOR PALETTE:', e)
     }
-    */
   }
 
   getViewer() {
