@@ -47,21 +47,14 @@ class MultiViewer extends ImageViewer {
       // This function is placed to the right of the viewer:
       layers(`layers_and_colors${this.idx}`, this.viewer1, data)
 
-      let layersBtn = document.getElementById(`layers${this.idx}`)
-      let id = makeId(5, 'layersBody')
-      console.log('id', id)
-      let widget = layers(id, this.viewer1, data, layersBtn)
-      // console.log('widget', widget)
       // Create/handle floating layers div
-      //
-      //
-      // console.log('layersBtn', layersBtn)
-      // layersBtn.addEventListener('click', function (e) {
-      //   console.log('widget', widget)
-      //   widget.style.display = 'inline' // block?
-      //   widget.style.left = e.clientX
-      //   widget.style.top = e.clientY
-      // })
+      let layersBtn = document.getElementById(`layers${this.idx}`)
+
+      let id = makeId(5, 'layersBody')
+      let widget = layers(id, this.viewer1, data, layersBtn)
+      layersBtn.addEventListener('click', function (e) {
+        widget.style.display = 'block'
+      })
     }
 
     try {
