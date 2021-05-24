@@ -1,10 +1,11 @@
 let layers = function (divName, viewer, data, button) {
   let div
-  console.log(divName, document.getElementById(divName))
   if (isRealValue(button)) {
-    div = createDraggableDiv('layers', 'Features', 10, 10)
-    createLayerWidget(document.getElementById(divName), viewer, data)
-    handleDragLayers(viewer)
+    let id = makeId(5, 'layers')
+    let rect = button.getBoundingClientRect()
+    div = createDraggableDiv(id, 'Features', rect.left, rect.top)
+    createLayerWidget(document.getElementById(`${id}Body`), viewer, data)
+    // handleDragLayers(viewer)
   } else {
     createLayerWidget(document.getElementById(divName), viewer, data)
     handleDragLayers(viewer)
@@ -89,6 +90,7 @@ let handleDragLayers = function (viewer) {
   let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
+    console.log('handleDragStart', item.id)
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
   })
@@ -120,6 +122,7 @@ let handleDragLayers = function (viewer) {
     dragSrcEl = this // The draggable feature
     sourceViewer = viewer
     e.dataTransfer.effectAllowed = 'move'
+    console.log('e.target.id', e.target.id)
     e.dataTransfer.setData('text', e.target.id)
   }
 
@@ -143,8 +146,10 @@ let handleDragLayers = function (viewer) {
       }
 
       // DRAGGED ITEM
+      console.log('e.dataTransfer', e.dataTransfer)
       let movedElemId = e.dataTransfer.getData('text')
       let tmpEl = document.getElementById(movedElemId)
+      console.log('tmpEl', tmpEl)
       let tmpId = tmpEl.id
       let tmpHtml = tmpEl.innerHTML
       let items = document.querySelectorAll('.layer_tab')
