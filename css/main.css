@@ -145,7 +145,6 @@ a:link {
 .layer_tab {
   cursor: move !important;
   border-radius: 5px !important;
-  background-color: inherit !important;
   float: left !important;
   border: 1px solid darkgray !important;
   /*outline: none !important;*/
@@ -193,4 +192,23 @@ a:link {
 
 .not-allowed {
   cursor: not-allowed;
+}
+
+/* HIGHLIGHT ON DROP */
+
+.highlight {
+  background-color: yellow;
+  animation-name: bckanim;
+  animation-fill-mode: forwards;
+  animation-duration: 3s;
+  animation-delay: 0s;
+}
+
+@keyframes bckanim {
+  0% {
+    background-color: yellow;
+  }
+  100% {
+    background-color: transparent;
+  }
 }

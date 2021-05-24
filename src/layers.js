@@ -43,6 +43,7 @@ let createLayerWidget = function (div, viewer, data) {
     span.className = 'layer_tab'
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
+    span.display = 'block'
     span.innerHTML = getStringRep(layer) // WAITING FOR skos:prefLabel
     cell.appendChild(span)
 
@@ -151,7 +152,10 @@ let handleDragLayers = function (viewer) {
           // Great, we got a match.
           // Toggle eyeball.
           let tds = layerTab.parentElement.parentElement.children
-          toggleButton(tds[1].children[0], 'fa-eye', 'fa-eye-slash')
+          let eye = tds[1].children[0]
+          toggleButton(eye, 'fa-eye', 'fa-eye-slash')
+          layerTab.classList.remove('highlight')
+          layerTab.classList.add('highlight')
         }
       }
 
