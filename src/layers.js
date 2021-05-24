@@ -127,6 +127,7 @@ let handleDragLayers = function (viewer) {
     })
   }
 
+  /************ HANDLE DROP ************/
   function handleDrop(e) {
     if (e.preventDefault) e.preventDefault()
 
