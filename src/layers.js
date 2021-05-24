@@ -50,7 +50,7 @@ let createLayerWidget = function (div, viewer, data) {
     cell = tr.insertCell(-1)
     eye = document.createElement('i')
     eye.classList.add('fas')
-    if (opacities[ind] === 1.0)
+    if (opacities[ind] === 1)
       eye.classList.add('fa-eye')
     else
       eye.classList.add('fa-eye-slash')
@@ -131,20 +131,35 @@ let handleDragLayers = function (viewer) {
     if (e.preventDefault) e.preventDefault()
 
     if (dragSrcEl !== this) {
+      // TARGET
       const target = e.target
-      // get closest viewer element to where we dropped it
       const closestViewer = target.closest('.viewer')
       if (!closestViewer) {
         return false
       }
-      // get the element that was dragged
+
+      // DRAGGED ITEM
       let movedElemId = e.dataTransfer.getData('text')
-      // get the actual viewer object
+      let tmpEl = document.getElementById(movedElemId)
+      let tmpId = tmpEl.id
+      let tmpHtml = tmpEl.innerHTML
+      let items = document.querySelectorAll('.layer_tab')
+      for (let i = 0; i < items.length; i++) {
+        let layerTab = items[i]
+        if (layerTab.innerHTML === tmpHtml && layerTab.id !== tmpId) {
+          // Great, we got a match.
+          // Toggle eyeball.
+          let tds = layerTab.parentElement.parentElement.children
+          toggleButton(tds[1].children[0], 'fa-eye', 'fa-eye-slash')
+        }
+      }
+
+      // VIEWER
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
-      targetViewer.world.getItemAt(layerNum).setOpacity(1.0)
-      sourceViewer.world.getItemAt(layerNum).setOpacity(0.0)
+      targetViewer.world.getItemAt(layerNum).setOpacity(1)
+      sourceViewer.world.getItemAt(layerNum).setOpacity(0)
     }
     return false
   }
