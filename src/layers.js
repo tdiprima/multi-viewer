@@ -153,7 +153,8 @@ let handleDragLayers = function (viewer) {
           // Toggle eyeball.
           let tds = layerTab.parentElement.parentElement.children
           let eye = tds[1].children[0]
-          toggleButton(eye, 'fa-eye', 'fa-eye-slash')
+          eye.classList.remove('fa-eye-slash')
+          eye.classList.add('fa-eye')
           layerTab.classList.remove('highlight')
           layerTab.classList.add('highlight')
         }
