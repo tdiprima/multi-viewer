@@ -9,22 +9,25 @@ function createDraggableDiv(id, title, left, top, viz) {
 
   let myImg = document.createElement('img')
   myImg.src = 'images/close_icon.png'
-  myImg.style.left = left + 'px'
-  myImg.style.top = top + 'px'
   myImg.width = 25
   myImg.height = 25
   myImg.alt = 'close'
+  myImg.style.cursor = 'pointer'
   myImg.addEventListener('click', function () {
     this.style.color = '#000' // huh?
-    this.parentNode.parentNode.remove()
+    // this.parentNode.remove()
+    myDiv.style.display = 'none'
   })
-  myDiv.appendChild(myImg)
 
   let myHeader = document.createElement('div')
   myHeader.id = id + 'Header'
   myHeader.className = 'popupHeader'
   myHeader.innerHTML = title
+  myHeader.appendChild(myImg)
   myDiv.appendChild(myHeader)
+
+
+
 
   let body = document.createElement('div')
   body.id = id + 'Body'
