@@ -43,16 +43,14 @@ class ImageViewer {
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
-      viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
+      viewer.addTiledImage({tileSource: baseImage, opacity: 1, x: 0, y: 0})
 
       // Add FEATURE layers to viewer
       let features = data.features
       let opacity = data.opacities
       if (features) {
         features.forEach(function (feature, index) {
-          let op = (opacity && opacity[index]) ? opacity[index] : 1.0
-          // console.log('index', index, 'is', opacity[index])
-          viewer.addTiledImage({tileSource: feature, opacity: (op).toFixed(1), x: 0, y: 0})
+          viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
         })
       }
       overlayFeatures(viewer, imf, options.colorRanges)
