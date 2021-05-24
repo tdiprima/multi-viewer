@@ -1,23 +1,44 @@
-function createDraggableDiv(id, title, left, top) {
-  let htm = `<div id="${id}" class="popup" style="left: ${left}px; top: ${top}px;">
-  <img id="closeDiv" src="images/close_icon.png" style="float: left;" width="25" height="25" alt="close">
-  <div id="${id}Header" class="popupHeader">${title}</div>
-  <div id="${id}Body"></div></div>`
+function createDraggableDiv(id, title, left, top, viz) {
 
-  let div = document.createElement('div')
-  div.innerHTML = htm
-  document.body.appendChild(div)
+  // This widget referenced in...
+  let myDiv = document.createElement('div')
+  myDiv.id = id
+  myDiv.className = 'popup'
+  myDiv.style.left = left + 'px'
+  myDiv.style.top = top + 'px'
 
-  // Make the DIV element draggable
-  dragElement(document.getElementById(`${id}`))
-
-  // Setup "close" event listener
-  document.getElementById('closeDiv').addEventListener('click', function () {
-    this.style.color = '#000'
+  let myImg = document.createElement('img')
+  myImg.src = 'images/close_icon.png'
+  myImg.style.left = left + 'px'
+  myImg.style.top = top + 'px'
+  myImg.width = 25
+  myImg.height = 25
+  myImg.alt = 'close'
+  myImg.addEventListener('click', function () {
+    this.style.color = '#000' // huh?
     this.parentNode.parentNode.remove()
   })
+  myDiv.appendChild(myImg)
 
-  return div
+  let myHeader = document.createElement('div')
+  myHeader.id = id + 'Header'
+  myHeader.className = 'popupHeader'
+  myHeader.innerHTML = title
+  myDiv.appendChild(myHeader)
+
+  let body = document.createElement('div')
+  body.id = id + 'Body'
+  // to be filled in by function...
+  myDiv.appendChild(body)
+  document.body.appendChild(myDiv)
+  if (!viz) {
+    myDiv.style.display = 'none'
+  }
+
+  // Make the DIV element draggable
+  dragElement(myDiv)
+
+  return myDiv
 }
 
 function dragElement(_elem) {

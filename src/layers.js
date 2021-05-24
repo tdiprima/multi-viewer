@@ -1,14 +1,15 @@
 let layers = function (divName, viewer, data, button) {
+  let div
+  console.log(divName, document.getElementById(divName))
   if (isRealValue(button)) {
-    button.addEventListener('click', function (e) {
-      createDraggableDiv('layers', 'Features', e.clientX, e.clientY)
-      createLayerWidget(document.getElementById(divName), viewer, data)
-      handleDragLayers(viewer) // TODO: PARMS
-    })
+    div = createDraggableDiv('layers', 'Features', 10, 10)
+    createLayerWidget(document.getElementById(divName), viewer, data)
+    handleDragLayers(viewer)
   } else {
     createLayerWidget(document.getElementById(divName), viewer, data)
     handleDragLayers(viewer)
   }
+  return div
 }
 
 let eyeball = function (eye, layerNum, viewer) {
@@ -21,12 +22,13 @@ let eyeball = function (eye, layerNum, viewer) {
       // Turn off layer
       l.setOpacity(0)
     }
-  } else {
-    console.log('here')
   }
 }
 
 let createLayerWidget = function (div, viewer, data) {
+  if (div === null) {
+    div = document.body
+  }
   const table = document.createElement('table')
   div.appendChild(table)
   let layers = data.features

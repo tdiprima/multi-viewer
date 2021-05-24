@@ -43,14 +43,25 @@ class MultiViewer extends ImageViewer {
     }
 
     // LAYERS
-    // let layersBtn = document.getElementById(`layers${this.idx}`)
-    if (typeof data.features !== 'undefined') {
+    if (typeof data.features !== 'undefined' && options.draggableLayers) {
       // This function is placed to the right of the viewer:
       layers(`layers_and_colors${this.idx}`, this.viewer1, data)
-      // if (!layersBtn) console.warn('!layersBtn', layersBtn)
-      // if (!options.draggableLayers) console.warn('!draggableLayers', options.draggableLayers)
-      // // Create/handle floating layers div
-      // layers('layersBody', this.viewer1, data, layersBtn) // TODO: don't *create* every time - hide and viz.
+
+      let layersBtn = document.getElementById(`layers${this.idx}`)
+      let id = makeId(5, 'layersBody')
+      console.log('id', id)
+      let widget = layers(id, this.viewer1, data, layersBtn)
+      // console.log('widget', widget)
+      // Create/handle floating layers div
+      //
+      //
+      // console.log('layersBtn', layersBtn)
+      // layersBtn.addEventListener('click', function (e) {
+      //   console.log('widget', widget)
+      //   widget.style.display = 'inline' // block?
+      //   widget.style.left = e.clientX
+      //   widget.style.top = e.clientY
+      // })
     }
 
     try {

@@ -10,20 +10,20 @@ let filters = function () {
       let i
       let filterOpts = []
       for (i = 0; i < itemCount; i++) {
-        if (i > 0) {
+        // if (i > 0) {
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
               getFilter().prototype.COLORLEVELS(cr)
             ]
           })
-        }
+        // }
       }
       viewer.setFilterOptions({
         filters: filterOpts,
         loadMode: 'sync'
       })
-      console.log('filters', filterOpts)
+      // console.log('filters', filterOpts)
 
     } catch (err) {
       console.error(`setViewerFilter ${err.message}`)
@@ -178,13 +178,13 @@ function rgba2hex(orig) {
 
     createDraggableDiv('colorPopup', 'Color Levels', event.clientX, event.clientY)
 
-    let img = document.querySelector('#closeDiv')
+    // let img = document.querySelector('#closeDiv')
     // Remove div on click & re-enable buttons
-    img.addEventListener('click', function () {
-      // Re-enable buttons
-      buttonToggle('#000', 'pointer')
-      this.parentNode.parentNode.remove() // the containing div
-    })
+    // img.addEventListener('click', function () {
+    //   // Re-enable buttons
+    //   buttonToggle('#000', 'pointer')
+    //   this.parentNode.parentNode.remove() // the containing div
+    // })
 
     createUserInput(document.getElementById('colorPopupBody'), viewer)
 
