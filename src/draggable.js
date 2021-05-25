@@ -18,14 +18,14 @@ function createDraggableDiv(id, title, left, top, viz) {
   })
 
   let myHeader = document.createElement('div')
-  myHeader.id = id + 'Header'
+  myHeader.id = id + 'Header' // Note the naming convention
   myHeader.className = 'popupHeader'
   myHeader.innerHTML = title
   myHeader.appendChild(myImg)
   myDiv.appendChild(myHeader)
 
   let body = document.createElement('div')
-  body.id = id + 'Body'
+  body.id = id + 'Body' // Note the naming convention
   // to be filled in by function...
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
@@ -44,6 +44,7 @@ function dragElement(_elem) {
   let pos2 = 0;
   let pos3 = 0;
   let pos4 = 0
+  // Note the naming convention
   if (document.getElementById(_elem.id + 'Header')) {
     // if present, the header is where you move the DIV from:
     document.getElementById(_elem.id + 'Header').onmousedown = dragMouseDown
