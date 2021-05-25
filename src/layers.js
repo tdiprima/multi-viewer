@@ -5,7 +5,7 @@ let layers = function (divName, viewer, data, button) {
     let rect = button.getBoundingClientRect()
     div = createDraggableDiv(id, 'Features', rect.left, rect.top)
     createLayerWidget(document.getElementById(`${id}Body`), viewer, data)
-    // TODO: handleDragLayers(viewer)
+    handleDragLayers(viewer)
   } else {
     createLayerWidget(document.getElementById(divName), viewer, data)
     handleDragLayers(viewer)
@@ -74,8 +74,10 @@ let createLayerWidget = function (div, viewer, data) {
     fas.id = makeId(5, 'palette')
     fas.style.cursor = 'pointer'
     cell.appendChild(fas)
-    // TODO:
-    // new filters().handleColorLevels(fas, viewer, options.colorRanges)
+    // TODO: get widget
+    // fas.addEventListener('click', function (e) {
+    //   widget.style.display = 'block'
+    // })
   })
 }
 
@@ -142,10 +144,8 @@ let handleDragLayers = function (viewer) {
       }
 
       // DRAGGED ITEM
-      console.log('e.dataTransfer', e.dataTransfer)
       let movedElemId = e.dataTransfer.getData('text')
       let tmpEl = document.getElementById(movedElemId)
-      console.log('tmpEl', tmpEl)
       let tmpId = tmpEl.id
       let tmpHtml = tmpEl.innerHTML
       let items = document.querySelectorAll('.layer_tab')
@@ -156,8 +156,8 @@ let handleDragLayers = function (viewer) {
           // Toggle eyeball.
           let tds = layerTab.parentElement.parentElement.children
           let eye = tds[1].children[0]
-          eye.classList.remove('fa-eye-slash')
-          eye.classList.add('fa-eye')
+          toggleButton(eye, 'fa-eye', 'fa-eye-slash')
+          eyeball(eye, i + 1, viewer)
           layerTab.classList.remove('highlight')
           layerTab.classList.add('highlight')
         }
