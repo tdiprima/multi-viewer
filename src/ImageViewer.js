@@ -8,10 +8,10 @@
  */
 class ImageViewer {
 
-  constructor(viewerIndex, viewerDivId, baseImage, data, imf, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
     this.options = options
-    this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), imf, this.options)
+    this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), this.options)
   }
 
   setViewer(viewerDivId) {
@@ -38,7 +38,7 @@ class ImageViewer {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, data, viewer, imf, options) {
+  setSources(viewerIndex, baseImage, data, viewer, options) {
 
     // Quick check url
     jQuery.get(baseImage).done(function () {
@@ -53,19 +53,19 @@ class ImageViewer {
           viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
         })
       }
-      overlayFeatures(viewer, imf, options.colorRanges)
+      overlayFeatures(viewer, options.colorRanges)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
 
-    function overlayFeatures(viewer, imf, colorRanges) {
+    function overlayFeatures(viewer, colorRanges) {
 
       try {
         viewer.world.addHandler('add-item', function (event) {
           let itemIndex = viewer.world.getIndexOfItem(event.item)
           if (itemIndex > 0) {
-            imf.setViewerFilter(colorRanges, viewer)
+            setViewerFilter(colorRanges, viewer)
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
               return getIIIFTileUrl(this, level, x, y)
             }

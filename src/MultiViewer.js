@@ -13,8 +13,7 @@
 
 class MultiViewer extends ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, data, sliderElements, numViewers, options) {
-    let imf = new filters()
-    super(viewerIndex, viewerDivId, baseImage, data, imf, options)
+    super(viewerIndex, viewerDivId, baseImage, data, options)
 
     if (typeof options === 'undefined') {
       options = {}
@@ -60,8 +59,12 @@ class MultiViewer extends ImageViewer {
     try {
       // COLOR PALETTE
       let palette = document.getElementById('palette' + this.idx)
-      if (options.colorRanges) {
-        imf.handleColorLevels(palette, this.viewer1, options.colorRanges)
+      if (typeof options.colorRanges !== 'undefined' && typeof palette !== 'undefined') {
+        let id = makeId(5, 'filtersBody')
+        let widget = filters(id, this.viewer1, options.colorRanges, palette)
+        palette.addEventListener('click', function (e) {
+          widget.style.display = 'block'
+        })
       }
     } catch (e) {
       console.error('COLOR PALETTE:', e)
