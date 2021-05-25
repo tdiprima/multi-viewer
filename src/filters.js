@@ -106,7 +106,7 @@ function createNumericInput({id, val}, viewer, data) {
   return x
 }
 
-// TODO: handle the IDs
+// TODO: Don't handle it by ID
 /*
 function isIntersect(arr, n) {
   // Clear any previous errors
