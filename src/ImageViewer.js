@@ -1,10 +1,11 @@
 /**
  * ImageViewer
  * Set up 1 basic OSD viewer.
- *
- * @param viewerDivId: (viewer1, viewer2...)
+ * @param viewerIndex
+ * @param viewerDivId - containing div id
  * @param baseImage
  * @param data - features and opacities
+ * @param options
  */
 class ImageViewer {
 
