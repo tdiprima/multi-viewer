@@ -87,7 +87,6 @@ let handleDragLayers = function (viewer) {
   let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
-    console.log('handleDragStart', item.id)
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
   })
