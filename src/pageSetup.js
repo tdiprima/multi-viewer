@@ -63,7 +63,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           if (opts && opts.toolbarOn) {
-            // SHOW / HIDE TOOLBAR
+            // show/hide
             htm += `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] </span><BR>
 <span id="tools${idx}" hidden=true>`
 
@@ -105,7 +105,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
 
-          // EVENT HANDLER - Show / Hide
+          // ANNOTATION TOOLS - Show/Hide Handler
           if (opts && opts.toolbarOn) {
             let toggle = document.getElementById('hideTools' + idx)
             let tools = document.getElementById('tools' + idx)
@@ -121,6 +121,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
               }
             })
 
+            // DRAW POLYGON COLOR PICKER 
             const colorPicker = new CP(document.getElementById('mark' + idx))
             colorPicker.on('change', function (r, g, b, a) {
               this.source.value = this.color(r, g, b, a)
