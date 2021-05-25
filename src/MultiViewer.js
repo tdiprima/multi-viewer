@@ -12,6 +12,7 @@
  */
 
 class MultiViewer extends ImageViewer {
+
   constructor(viewerIndex, viewerDivId, baseImage, data, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, data, options)
 
@@ -58,7 +59,7 @@ class MultiViewer extends ImageViewer {
       let palette = document.getElementById('palette' + this.idx)
       if (typeof options.colorRanges !== 'undefined' && typeof palette !== 'undefined') {
         // Create/handle floating layers div
-        let widget = filters('', this.viewer1, options.colorRanges, palette)
+        let widget = filters(this.viewer1, options.colorRanges, palette)
         palette.addEventListener('click', function (e) {
           widget.style.display = 'block'
         })

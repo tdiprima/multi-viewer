@@ -1,4 +1,4 @@
-let filters = function (divName, viewer, data, button) {
+let filters = function (viewer, data, button) {
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
