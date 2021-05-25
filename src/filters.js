@@ -23,7 +23,6 @@ let filters = function () {
         filters: filterOpts,
         loadMode: 'sync'
       })
-      // console.log('filters', filterOpts)
 
     } catch (err) {
       console.error(`setViewerFilter ${err.message}`)
