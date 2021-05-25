@@ -33,7 +33,7 @@ let createLayerWidget = function (div, viewer, data) {
   let opacities = data.opacities
   layers.forEach(function (layer, ind) {
     let layerNum = ind + 1 // skip base
-    let tr, cell, span, eye, fas
+    let tr, cell, span, eye, fas, range
     tr = table.insertRow(-1)
     table.appendChild(tr)
 
@@ -65,6 +65,23 @@ let createLayerWidget = function (div, viewer, data) {
       toggleButton(eye, 'fa-eye', 'fa-eye-slash')
       eyeball(eye, layerNum, viewer)
     })
+
+    // TRANSPARENCY SLIDER
+    cell = tr.insertCell(-1)
+    fas = document.createElement('i')
+    fas.classList.add('fas')
+    fas.classList.add('fa-adjust')
+    fas.classList.add('myIcon')
+    fas.style.cursor = 'pointer'
+    cell.appendChild(fas)
+    range = document.createElement('input')
+    range.type = 'range'
+    range.id = makeId(5, 'range')
+    range.min = '0'
+    range.max = '100'
+    range.value = '100'
+    range.classList.add('hide')
+    cell.appendChild(range)
 
     // PALETTE COLOR FUNCTION
     cell = tr.insertCell(-1)

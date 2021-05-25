@@ -212,3 +212,13 @@ a:link {
     background-color: transparent;
   }
 }
+
+/* DISPLAY SLIDER ON HOVER */
+.hide {
+  display: none;
+}
+
+.myIcon:hover + .hide {
+  display: block;
+  color: red;
+}
