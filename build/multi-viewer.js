@@ -1,63 +1,37 @@
-/*! multi-viewer - v2.4.8 - 2021-05-07 */
-// Utilizes: https://github.com/taufik-nurrohman/color-picker
-const colorPicker = function (inputElement) {
-  // Check
-  if (!isRealValue(inputElement)) {
-    throw Error('colorPicker.js: Expected input argument, but received none.')
-  }
-
-  // Construct
-  const picker = new CP(inputElement)
-  picker.on('change', function (r, g, b, a) {
-    try {
-      this.source.value = this.color(r, g, b, a)
-      this.source.innerHTML = this.color(r, g, b, a)
-      this.source.style.backgroundColor = this.color(r, g, b, a)
-    }
-    catch (err) {
-      console.error('Caught!', err.message)
-    }
-
-  })
-
-  return picker
-}
-
-function clearClassList (element) {
+/*! multi-viewer - v2.4.8 - 2021-05-25 */
+function clearClassList(element) {
   const classList = element.classList
   while (classList.length > 0) {
     classList.remove(classList.item(0))
   }
 }
 
-function toggleButtonHighlight (btn) {
-  const isOn = btn.classList.contains('btnOn')
-  clearClassList(btn)
-  if (isOn) {
-    btn.classList.add('btn')
+function toggleButton(elem, onClass, offClass) {
+
+  if (elem.classList.contains(onClass)) {
+    elem.classList.remove(onClass)
+    elem.classList.add(offClass)
   } else {
-    btn.classList.add('btnOn')
+    elem.classList.remove(offClass)
+    elem.classList.add(onClass)
   }
+
 }
 
-function buttonIsOn (btn) {
-  return btn.classList.contains('btnOn')
-}
-
-function isRealValue (obj) {
+function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
 const isEmpty = function (value) {
   const isEmptyObject = function (a) {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
-      const hasNonempty = Object.keys(a).some(function nonEmpty (element) {
+      const hasNonempty = Object.keys(a).some(function nonEmpty(element) {
         return !isEmpty(a[element])
       })
       return hasNonempty ? false : isEmptyObject(Object.keys(a))
     }
 
-    return !a.some(function nonEmpty (element) { // check if array is really not empty as JS thinks
+    return !a.some(function nonEmpty(element) { // check if array is really not empty as JS thinks
       return !isEmpty(element) // at least one element should be non-empty
     })
   }
@@ -66,12 +40,12 @@ const isEmpty = function (value) {
   )
 }
 
-function getAColorThatShowsUp (strokeColor) {
-  function isBlueIsh () {
+function getAColorThatShowsUp(strokeColor) {
+  function isBlueIsh() {
     return strokeColor.endsWith('ff')
   }
 
-  function isCyanOrMagenta () {
+  function isCyanOrMagenta() {
     return strokeColor === '#00ffff' || strokeColor === '#ff00ff'
   }
 
@@ -82,12 +56,12 @@ function getAColorThatShowsUp (strokeColor) {
   }
 }
 
-function alertMessage (messageObject) {
+function alertMessage(messageObject) {
   alert(messageObject)
   return true
 }
 
-function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
   const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
   return {
     width: Math.round(srcWidth * ratio),
@@ -95,7 +69,7 @@ function calculateAspectRatioFit (srcWidth, srcHeight, maxWidth, maxHeight) {
   }
 }
 
-function makeId(length) {
+function makeId(length, prefix) {
   let result = ''
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
@@ -103,7 +77,39 @@ function makeId(length) {
   for (i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
+  if (prefix) {
+    result = prefix + result
+  }
   return result
+}
+
+// Standard replacement for Java's String.hashCode()
+String.prototype.hashCode = function () {
+  let hash = 0
+  if (this.length === 0) return hash
+  let i, char;
+  for (i = 0; i < this.length; i++) {
+    char = this.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return hash
+}
+
+function getStringRep(_input) {
+  let _md5 = _input.hashCode()
+  if (_md5 < 0) {
+    _md5 *= -1
+  }
+  let _text = _md5.toString(16)
+  return _text.toUpperCase()
+}
+
+// async function
+async function fetchAsync (url) {
+  const response = await fetch(url) // await response of fetch call
+  const data = await response.json() // only proceed once promise is resolved
+  return data // only proceed once second promise is resolved
 }
 
 /**
@@ -112,8 +118,7 @@ function makeId(length) {
  *
  * @param divId: Main div id.
  * @param image: Base image.
- * @param features: Array of features (feature layers).
- * @param opacity: Array of features opacities.
+ * @param data: Array of features and opacities.
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
  * @param columns: LAYOUT: Number of columns (of viewers)
@@ -121,7 +126,7 @@ function makeId(length) {
  * @param height: Viewer height
  * @param opts: Multi-viewer options; filters, paintbrush, sliders, etc.
  */
-const pageSetup = function (divId, image, features, opacity, numViewers, rows, columns, width, height, opts) {
+const pageSetup = function (divId, image, data, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
   let sliderIdNum = 0
 
@@ -133,6 +138,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
       const table = document.createElement('table')
+      // table.style.border = '1px solid black'
       table.id = 'myTable'
       mainDiv.appendChild(table) // TABLE ADDED TO PAGE
       let slider1, slider2
@@ -145,22 +151,24 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
         const tr = table.insertRow(r)
         let c
         for (c = 0; c < columns; c++) {
-          count++
           const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
-          let f1 = makeId(5)
-          let f2 = makeId(5)
-          let f3 = makeId(5)
-          let f4 = makeId(5)
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
+          count++
           let container = document.createElement('div') // Viewer + tools
           container.className = 'divSquare'
           container.style.width = width + 'px'
           td.appendChild(container) // ADD CONTAINER TO CELL
 
-          // LAYERS BUTTON
-          let htm = `<div><i id="colors${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i></div>`
+          let htm = ''
+
+          // LAYER BUTTONS
+          let layerHtm = `<div>
+<i id="layers${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i>&nbsp;
+<i id="palette${idx}" style="cursor: pointer;" class="fas fa-palette"></i>
+</div>`
+          htm += layerHtm
 
           // NAVIGATION TOOLS
           if (numViewers > 1) {
@@ -203,30 +211,10 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             htm += `</span></span>`
           }
 
-          // DRAGGABLE LAYERS
-          if (opts && opts.draggableLayers) {
-            htm += `<div class="tab" id="tabBox${idx}">`
-
-            const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm;
-            try {
-              if (idx === 1) {
-                // TODO: This is a hack.
-                htm += `<button class="tab_links" id="feat${f1}" draggable="true">${features[0][0] ? features[0][0].match(regex) : 'Feat n'}</button>
-            <button class="tab_links" id="feat${f2}" draggable="true">${features[1][0] ? features[1][0].match(regex) : 'Feat n'}</button>`
-              } else {
-                htm += `<button class="tab_links" id="feat${f3}" draggable="true">${features[0][0] ? features[0][0].match(regex) : 'Feat n'}</button>
-            <button class="tab_links" id="feat${f4}" draggable="true">${features[1][0] ? features[1][0].match(regex) : 'Feat n'}</button>`
-              }
-            }
-            catch(err) {
-              console.error(err.message)
-            }
-
-            htm += `&nbsp;</div>`
-          }
-
           // CREATE VIEWER
-          htm += `<div id="${osdId}" class="viewer" style="width: ${width}px; height: ${height}px;"></div>`
+          htm += `<table><tr><td><div id="${osdId}" class="viewer drop_site" style="width: ${width}px; height: ${height}px;"></div>
+</td><td style="vertical-align: top;"><span id="layers_and_colors${idx}"></span></td>
+</tr></table>`
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
@@ -247,8 +235,12 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
               }
             })
 
-            // ADD FUNCTIONALITY - colorPicker
-            colorPicker(document.getElementById('mark' + idx))
+            const colorPicker = new CP(document.getElementById('mark' + idx))
+            colorPicker.on('change', function (r, g, b, a) {
+              this.source.value = this.color(r, g, b, a)
+              this.source.innerHTML = this.color(r, g, b, a)
+              this.source.style.backgroundColor = this.color(r, g, b, a)
+            })
           }
 
           // NEED TO PASS THESE TO VIEWER
@@ -257,11 +249,19 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
             sliderElements.push(document.getElementById('sliderRange' + slider1))
             sliderElements.push(document.getElementById('sliderRange' + slider2))
           } catch (e) {
-            console.log(e)
+            console.error('sliders', e)
           }
 
-          // ADD A MultiViewer OBJECT TO ARRAY
-          viewers.push(new MultiViewer(idx, osdId, image, features, opacity, sliderElements, numViewers, opts))
+          // Pass along data for "this" viewer
+          let allFeatures = data.features
+          let allOpacity = data.opacities
+          let thisData = {
+            features: allFeatures[idx],
+            opacities: allOpacity[idx]
+          }
+
+          // Create MultiViewer object and add to array
+          viewers.push(new MultiViewer(idx, osdId, image, thisData, sliderElements, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer
@@ -280,7 +280,7 @@ const pageSetup = function (divId, image, features, opacity, numViewers, rows, c
 
 const editPolygon = function (idx, overlay) {
   document.getElementById('btnEdit' + idx).addEventListener('click', function () {
-    toggleButtonHighlight(this)
+    toggleButton(this, 'btnOn', 'btn')
     Edit(overlay.fabricCanvas())
   })
 }
@@ -428,7 +428,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   })
 
   btnDraw.addEventListener('click', function () {
-    toggleButtonHighlight(this)
+    toggleButton(this, 'btnOn', 'btn')
 
     if (canvas.isDrawingMode) {
       turnDrawingOff(canvas, viewer)
@@ -810,23 +810,23 @@ const gridOverlay = function (idx, overlay) {
   })
 }
 
-function gridHandler (button, gridProps) {
-  toggleButtonHighlight(button)
-
-  if (buttonIsOn(button)) {
+function gridHandler(button, gridProps) {
+  toggleButton(button, 'btnOn', 'btn')
+  const on = button.classList.contains('btnOn')
+  if (on) {
     turnGridOn(gridProps)
     gridProps.gridAdded = true
     button.innerHTML = '<i class="fas fa-border-all"></i> Remove grid'
   }
 
-  if (!buttonIsOn(button)) {
+  if (!on) {
     turnGridOff(gridProps)
     gridProps.gridAdded = false
     button.innerHTML = '<i class="fas fa-border-all"></i> Draw grid'
   }
 }
 
-function turnGridOff (gridProps) {
+function turnGridOff(gridProps) {
   const r = gridProps.canvas.getObjects('line')
   let i
   for (i = 0; i < r.length; i++) {
@@ -834,8 +834,8 @@ function turnGridOff (gridProps) {
   }
 }
 
-function turnGridOn (gridProps) {
-  const lineProps = { stroke: gridProps.color, strokeWidth: 2, selectable: false }
+function turnGridOn(gridProps) {
+  const lineProps = {stroke: gridProps.color, strokeWidth: 2, selectable: false}
 
   createHorizontalLines(gridProps, lineProps)
   createVerticalLines(gridProps, lineProps)
@@ -844,7 +844,7 @@ function turnGridOn (gridProps) {
   gridProps.gridAdded = true
 }
 
-function createHorizontalLines (gridProps, lineProps) {
+function createHorizontalLines(gridProps, lineProps) {
   let y
   for (y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
     gridProps.canvas.add(new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps))
@@ -852,7 +852,7 @@ function createHorizontalLines (gridProps, lineProps) {
   }
 }
 
-function createVerticalLines (gridProps, lineProps) {
+function createVerticalLines(gridProps, lineProps) {
   let x
   for (x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
     gridProps.canvas.add(new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps))
@@ -860,7 +860,7 @@ function createVerticalLines (gridProps, lineProps) {
   }
 }
 
-function fillInGrid (pointerEvent, gridProps) {
+function fillInGrid(pointerEvent, gridProps) {
   const mousePosition = getMousePosition(pointerEvent, gridProps)
   const cellPosition = getCellPosition(mousePosition)
 
@@ -876,22 +876,22 @@ function fillInGrid (pointerEvent, gridProps) {
   gridProps.canvas.add(rect)
 }
 
-function getMousePosition (pointerEvent, gridProps) {
+function getMousePosition(pointerEvent, gridProps) {
   const pointer = gridProps.canvas.getPointer(pointerEvent.e)
   const positionX = pointer.x / gridProps.cellWidth
   const positionY = pointer.y / gridProps.cellHeight
-  return { x: positionX, y: positionY }
+  return {x: positionX, y: positionY}
 }
 
-function getCellPosition (mousePosition) {
+function getCellPosition(mousePosition) {
   const positionX = Math.ceil(mousePosition.x + 0.001)
   const positionY = Math.ceil(mousePosition.y + 0.001)
-  return { x: positionX, y: positionY }
+  return {x: positionX, y: positionY}
 }
 
-function markerHandler (button, gridProps) {
-  toggleButtonHighlight(button)
-  const on = buttonIsOn(button)
+function markerHandler(button, gridProps) {
+  toggleButton(button, 'btnOn', 'btn')
+  const on = button.classList.contains('btnOn')
 
   if (!on) {
     // Done marking; remove mouse:move listener because we use it for other things.
@@ -906,7 +906,7 @@ function markerHandler (button, gridProps) {
       })
       button.innerHTML = '<i class="fas fa-paint-brush"></i> Done marking'
     } else {
-      toggleButtonHighlight(button) // turn it back off; we're not letting them do this
+      toggleButton(button, 'btnOn', 'btn') // turn it back off; we're not letting them do this
       alertMessage('Please draw a grid first.')
     }
   }
@@ -1012,479 +1012,349 @@ const markupTools = function (idx, viewer) {
   // ruler(idx, viewer, overlay)
 }
 
-let imageFiltering = function() {
-  'use strict'
-  let colors = []
-  _setColors()
-  let colorRanges = [{color: 'rgba(75, 0, 130, 255)', low: 201, hi: 255}]
-  let layerNumber = 1
+function createDraggableDiv(id, title, left, top, viz) {
+  let myDiv = document.createElement('div')
+  myDiv.id = id
+  myDiv.className = 'popup'
+  myDiv.style.left = left + 'px'
+  myDiv.style.top = top + 'px'
 
-  function _setColors() {
-    // My RGB object
-    function filterColors(r, g, b) {
-      this.r = r
-      this.g = g
-      this.b = b
-    }
+  let myImg = document.createElement('img')
+  myImg.src = 'images/close_icon.png'
+  myImg.width = 25
+  myImg.height = 25
+  myImg.alt = 'close'
+  myImg.style.cursor = 'pointer'
+  myImg.addEventListener('click', function () {
+    // this.parentNode.remove()
+    myDiv.style.display = 'none'
+  })
 
-    // Colors per layer
-    colors.push(new filterColors(0, 255, 0)) // we skip the first layer, so colors[0] doesn't count
-    colors.push(new filterColors(0, 255, 0)) // lime 00ff00
-    colors.push(new filterColors(255, 255, 0)) // yellow ffff00
-    colors.push(new filterColors(0, 255, 255)) // cyan 00ffff
-    colors.push(new filterColors(255, 0, 0)) // red ff0000
-    colors.push(new filterColors(255, 165, 0)) // orange ffa500
-    colors.push(new filterColors(0, 128, 0)) // dark green 008000
-    colors.push(new filterColors(0, 0, 255)) // blue 0000ff
-    colors.push(new filterColors(75, 0, 130)) // indigo 4b0082
-    colors.push(new filterColors(28, 28, 28)) // dark gray #1c1c1c
-    colors.push(new filterColors(167, 226, 46)) // leaf green #a7e22e
-    colors.push(new filterColors(31, 120, 180)) // strong blue, #1f78b4
-    colors.push(new filterColors(255, 210, 4)) // goldenrod #ffd204
+  let myHeader = document.createElement('div')
+  myHeader.id = id + 'Header' // Note the naming convention
+  myHeader.className = 'popupHeader'
+  myHeader.innerHTML = title
+  myHeader.appendChild(myImg)
+  myDiv.appendChild(myHeader)
+
+  let body = document.createElement('div')
+  body.id = id + 'Body' // Note the naming convention
+  // "body" to be filled in by calling function
+  myDiv.appendChild(body)
+  document.body.appendChild(myDiv)
+  if (!viz) {
+    myDiv.style.display = 'none' // This gets toggled
   }
 
-  function sortIt(cr) {
-    // sort by low, desc
-    cr.sort(function (c1, c2) {
-      if (c1.low > c2.low) return -1
-      if (c1.low < c2.low) return 1
-    })
+  // Make the DIV element draggable
+  dragElement(myDiv)
+
+  return myDiv
+}
+
+function dragElement(_elem) {
+  let pos1 = 0;
+  let pos2 = 0;
+  let pos3 = 0;
+  let pos4 = 0
+  // Note the naming convention
+  if (document.getElementById(_elem.id + 'Header')) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(_elem.id + 'Header').onmousedown = dragMouseDown
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    _elem.onmousedown = dragMouseDown
   }
 
-  // Function to help drag popup around screen
-  function dragElement(elmnt) {
-    let pos1 = 0
-    let pos2 = 0
-    let pos3 = 0
-    let pos4 = 0
-
-    let header = document.getElementsByClassName('popupHeader')
-    if (header) {
-      // if present, the header is where you move the DIV from:
-      let n
-      for (n = 0; n < header.length; n++) {
-        header[n].onmousedown = dragMouseDown
-      }
-    }
-
-    // Mousedown handler
-    function dragMouseDown(e) {
-      e = e || window.event
-      e.preventDefault()
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX
-      pos4 = e.clientY
-      document.onmouseup = closeDragElement
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag
-    }
-
-    // Mouse-move handler
-    function elementDrag(e) {
-      e = e || window.event
-      e.preventDefault()
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX
-      pos2 = pos4 - e.clientY
-      pos3 = e.clientX
-      pos4 = e.clientY
-      // set the element's new position:
-      elmnt.style.top = (elmnt.offsetTop - pos2) + 'px'
-      elmnt.style.left = (elmnt.offsetLeft - pos1) + 'px'
-    }
-
-    // Done handler
-    function closeDragElement() {
-      // stop moving when mouse button is released:
-      document.onmouseup = null
-      document.onmousemove = null
-    }
+  // Mouse-down handler
+  function dragMouseDown(e) {
+    e = e || window.event
+    e.preventDefault()
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX
+    pos4 = e.clientY
+    document.onmouseup = closeDragElement
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag
   }
 
-  function setViewerFilter(viewer) {
-    try {
-      viewer.setFilterOptions({
-        filters: [{
-          items: viewer.world.getItemAt(layerNumber === 0 ? 1 : layerNumber),
-          processors: [
-            getFilter1().prototype.COLORLEVELS(colorRanges)
-          ]
-        }]
-      })
-    } catch (err) {
-      console.log('OK')
-    }
+  // Mouse-move handler
+  function elementDrag(e) {
+    e = e || window.event
+    e.preventDefault()
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX
+    pos2 = pos4 - e.clientY
+    pos3 = e.clientX
+    pos4 = e.clientY
+    // set the element's new position:
+    _elem.style.top = (_elem.offsetTop - pos2) + 'px'
+    _elem.style.left = (_elem.offsetLeft - pos1) + 'px'
   }
 
-  // NUMBER INPUT to let user set threshold values
-  function createNumericInput({id, val, index}, viewer) {
-    let x = document.createElement('input')
-    x.id = id
-    x.setAttribute('type', 'number')
-    x.min = '0'
-    x.max = '255'
-    x.step = '1'
-    x.value = val.toString()
-    x.size = 5
+  // Mouse-up handler
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null
+    document.onmousemove = null
+  }
+}
 
-    // this event happens whenever the value changes
-    x.addEventListener('input', function () {
-      let intVal = parseInt(this.value)
+let filters = function (viewer, data, button) {
+  let div
+  if (isRealValue(button)) {
+    let id = makeId(5, 'filters')
+    let rect = button.getBoundingClientRect()
+    div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
+    createWidget(document.getElementById(`${id}Body`), viewer, data)
+  } else {
+    console.log('tba')
+  }
+  return div
+}
 
-      // If they set it to something outside of 0-255, reset it
-      if (intVal > 255) this.value = '255'
-      if (intVal < 0) this.value = '0'
+let createWidget = function (div, viewer, data) {
+  const table = document.createElement('table')
+  div.appendChild(table)
+  // data.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
+  data.forEach(function (elem, ind) {
+    let tr = table.insertRow(-1)
+    table.appendChild(tr)
 
-      if (this.id.startsWith('low')) {
-        colorRanges[index].low = parseInt(this.value)
-      } else {
-        colorRanges[index].hi = parseInt(this.value)
-        setViewerFilter(viewer) // triggered by high value input
-      }
+    let td = tr.insertCell(-1)
+    let colorCode = elem.color
+
+    // COLOR PICKER
+    let m = document.createElement('mark')
+    m.id = makeId(5, 'marker')
+    m.innerHTML = "#" + rgba2hex(colorCode)
+    m.style.backgroundColor = colorCode
+    td.appendChild(m)
+
+    const picker = new CP(m)
+    picker.on('change', function (r, g, b, a) {
+      this.source.value = this.color(r, g, b, a)
+      this.source.style.backgroundColor = this.color(r, g, b, a)
+      data[ind].color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+      setViewerFilter(data, viewer)
     })
 
-    return x
+    // LOW
+    td = tr.insertCell(-1)
+    td.appendChild(createNumericInput({
+      id: makeId(5, 'low'),
+      val: data[ind].low
+    }, viewer, data))
+
+    // HIGH
+    td = tr.insertCell(-1)
+    td.appendChild(createNumericInput({
+      id: makeId(5, 'hi'),
+      val: data[ind].hi
+    }, viewer, data))
+
+  })
+}
+
+function rgba2hex(orig) {
+  let a,
+    arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+    alpha = (arr && arr[4] || "").trim(),
+    hex = arr ?
+      (arr[1] | 1 << 8).toString(16).slice(1) +
+      (arr[2] | 1 << 8).toString(16).slice(1) +
+      (arr[3] | 1 << 8).toString(16).slice(1) : orig;
+
+  if (alpha !== "") {
+    a = alpha;
+  } else {
+    a = 0x0;
   }
+  a = (a | 1 << 8).toString(16).slice(1)
+  hex = hex + a
+  return hex
+}
 
-  function layerButtonToggle(color, cursor) {
-    jQuery("*").each(function () {
-      if (this.id.startsWith('osd-overlaycanvas')) {
-        let num = this.id.slice(-1) // hack to get the id #
-        let z = document.getElementById(`colors${num}`)
-        z.style.color = color
-        z.style.cursor = cursor
-      }
-    })
-  }
+// NUMBER INPUT to let user set threshold values
+function createNumericInput({id, val}, viewer, data) {
+  let x = document.createElement('input')
+  x.id = id
+  x.setAttribute('type', 'number')
+  x.min = '0'
+  x.max = '255'
+  x.step = '1'
+  x.value = val.toString()
+  x.size = 5
 
-  function rgba2hex(orig) {
-    let a
-    const rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
-    const alpha = (rgb && rgb[4] || '').trim()
-    let hex = rgb
-      ? (rgb[1] | 1 << 8).toString(16).slice(1) +
-      (rgb[2] | 1 << 8).toString(16).slice(1) +
-      (rgb[3] | 1 << 8).toString(16).slice(1) : orig
+  // x.addEventListener('change', function () {
+  //   isIntersect(data, data.length)
+  // })
 
-    if (alpha !== '') {
-      a = alpha
+  // this event happens whenever the value changes
+  x.addEventListener('input', function () {
+    let intVal = parseInt(this.value)
+
+    // If they set it to something outside of 0-255, reset it
+    if (intVal > 255) this.value = '255'
+    if (intVal < 0) this.value = '0'
+
+    if (this.id.startsWith('low')) {
+      data[index].low = parseInt(this.value)
     } else {
-      a = 0o1
+      data[index].hi = parseInt(this.value)
+      setViewerFilter(data, viewer) // triggered by high value input
     }
-    // multiply before convert to HEX (a * 255)
-    a = (a | 1 << 8).toString(16).slice(1)
-    hex = hex + a
-    hex = `#${hex}`
+  })
+  return x
+}
 
-    return hex
+// TODO: handle the IDs
+/*
+function isIntersect(arr, n) {
+  // Clear any previous errors
+  arr.forEach((element, index) => {
+    clearError(document.getElementById('low' + index), document.getElementById('hi' + index))
+  })
+  // Validate
+  for (let i = 1; i < n; i++) {
+    if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
+      setError(document.getElementById('low' + i), document.getElementById('hi' + (i - 1)))
+      return true
+    }
+    if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
+      setError(document.getElementById('low' + (i - 1)), document.getElementById('hi' + i))
+      return true
+    }
   }
+  // If we reach here, then no overlap
+  return false
+}
+function setError(a, b) {
+  a.style.outlineStyle = 'solid'
+  a.style.outlineColor = 'red'
+  b.style.outlineStyle = 'solid'
+  b.style.outlineColor = 'red'
+}
+function clearError(a, b) {
+  a.style.outlineStyle = ''
+  a.style.outlineColor = ''
+  b.style.outlineStyle = ''
+  b.style.outlineColor = ''
+}
+ */
 
-  function colorPickerEvent(mark, idx, viewer) {
-    const cp = new CP(mark)
-
-    cp.on('change', (r, g, b, a) => {
-      try {
-        cp.source.value = cp.color(r, g, b, a)
-        cp.source.innerHTML = cp.color(r, g, b, a)
-        cp.source.style.backgroundColor = cp.color(r, g, b, a)
-        colorRanges[idx].color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-        setViewerFilter(viewer)
-      } catch (err) {
-        console.warn('check this:', err.message)
-      }
-    })
-  }
-
-  // CREATE USER INPUT PER COLOR
-  // Display colors and low/high values
-  // {color: "rgba(r, g, b, a)", hi: n, low: n}
-  function createUserInput(colorPopup, viewer) {
+function setViewerFilter(cr, viewer) {
+  try {
+    let itemCount = viewer.world.getItemCount()
     let i
-    for (i = 0; i < colorRanges.length; i++) {
-      // COLOR DIV
-      let colorDiv = document.createElement('div')
-      let colorCode = colorRanges[i].color
-
-      // COLOR PICKER
-      let m = document.createElement('mark')
-      m.id = `marker${i}`
-      m.innerHTML = rgba2hex(colorCode)
-      colorDiv.appendChild(m)
-      colorPickerEvent(m, i, viewer)
-
-      // LOW
-      let lowDiv = document.createElement('div')
-      let d = {
-        id: `low${i}`,
-        val: colorRanges[i].low,
-        index: i
+    let filterOpts = []
+    for (i = 0; i < itemCount; i++) {
+      if (i > 0) {
+        filterOpts.push({
+          items: viewer.world.getItemAt(i),
+          processors: [
+            colorFilter.prototype.COLORLEVELS(cr)
+          ]
+        })
       }
-      lowDiv.appendChild(createNumericInput(d, viewer))
-
-      // HIGH
-      let hiDiv = document.createElement('div')
-      d = {
-        id: `hi${i}`,
-        val: colorRanges[i].hi,
-        index: i
-      }
-      hiDiv.appendChild(createNumericInput(d, viewer))
-
-      // ADD TO CONTAINER DIV
-      colorPopup.appendChild(colorDiv)
-      colorPopup.appendChild(lowDiv)
-      colorPopup.appendChild(hiDiv)
     }
-  }
-
-  function createPopup({clientX, clientY}, {style}, viewer) {
-    // Disable buttons
-    layerButtonToggle('#ccc', 'not-allowed')
-
-    // Highlight this button
-    style.color = '#0f0'
-    style.cursor = 'pointer'
-
-    // Main container
-    let colorPopup = document.createElement('div')
-    colorPopup.id = 'colorPopup'
-    colorPopup.classList.add('grid-container')
-    colorPopup.classList.add('colorPopup')
-
-    // Close button
-    let d = document.createElement('div')
-    d.className = 'popupHeader'
-    const img = document.createElement('img')
-    img.src = 'images/close_icon.png'
-    img.width = 25
-    img.height = 25
-    img.style.cssFloat = 'left'
-    d.appendChild(img)
-
-    // Remove div on click
-    img.addEventListener('click', function () {
-      style.color = '#000'
-      // Re-enable buttons
-      layerButtonToggle('#000', 'pointer')
-      this.parentNode.parentNode.remove()
+    viewer.setFilterOptions({
+      filters: filterOpts,
+      loadMode: 'sync'
     })
-    colorPopup.appendChild(d)
 
-    // Header to drag around screen
-    const popupHeader = document.createElement('div')
-    popupHeader.className = 'popupHeader'
-    popupHeader.innerHTML = 'Color Levels'
-    colorPopup.appendChild(popupHeader)
-    let t = document.createElement('div')
-    t.className = 'popupHeader'
-    colorPopup.appendChild(t)
-
-    // Sort
-    sortIt(colorRanges)
-
-    // UI
-    createUserInput(colorPopup, viewer)
-
-    // put it where user clicked
-    colorPopup.style.left = `${clientX}px`
-    colorPopup.style.top = `${clientY}px`
-
-    document.body.appendChild(colorPopup)
-
-    // Make DIV element draggable:
-    dragElement(colorPopup)
+  } catch (err) {
+    console.error(`setViewerFilter ${err.message}`)
+    console.error('cr:', cr, 'viewer:', viewer)
   }
+}
 
-  function handleColorLevels(layersBtn, viewer) {
-    // Event handler for the layers button
-    layersBtn.addEventListener('click', event => {
-      event = event || window.event
-
-      // Let there be only one
-      let el = document.getElementById('colorPopup')
-      if (!el) {
-        createPopup(event, layersBtn, viewer)
-      }
-    })
-  }
-
-  let getFilter = function () {
-    let filter = OpenSeadragon.Filters.GREYSCALE
-    filter.prototype.COLORIZE = ({r, g, b}) => (context, callback) => {
-      // w x h: 256 x 256
-      if (context.canvas.width > 0 && context.canvas.height > 0) {
-        // Read the canvas pixels
-        let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-        if (typeof imgData !== undefined) {
-          try {
-            const pixels = imgData.data
-            // Run the filter on them
-            let i
-            for (i = 0; i < pixels.length; i += 4) {
-              if (pixels[i + 3] === 255) {
-                // Alpha channel = 255 ("opaque"): nuclear material here.
-                pixels[i] = r
-                pixels[i + 1] = g
-                pixels[i + 2] = b
-                pixels[i + 3] = 255
-              } else {
-                // No nuclear material: set to transparent.
-                pixels[i + 3] = 0
-              }
+let colorFilter = OpenSeadragon.Filters.GREYSCALE
+colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
+  if (context.canvas.width > 0 && context.canvas.height > 0) {
+    // Read the canvas pixels
+    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+    if (typeof imgData !== undefined) {
+      try {
+        const pxl = imgData.data
+        let j
+        for (j = 0; j < pxl.length; j += 4) {
+          if (pxl[j + 3] === 255) {
+            let rgba = levels(pxl[j], data) // r = g = b
+            if (typeof rgba === 'undefined') {
+              console.warn('rgba undefined', pxl[j])
             }
-          } catch (err) {
-            console.warn('1:', err.message)
+            pxl[j] = rgba[0]
+            pxl[j + 1] = rgba[1]
+            pxl[j + 2] = rgba[2]
+            pxl[j + 3] = rgba[3]
+          } else {
+            // No nuclear material: set to transparent.
+            pxl[j + 3] = 0
           }
-
-          try {
-            // Write the result back onto the canvas
-            context.putImageData(imgData, 0, 0)
-            callback()
-          } catch (err) {
-            console.warn('2:', err.message)
-          }
-        } else {
-          console.warn('imgData undefined')
         }
-      } else {
-        filter = null
-        console.warn('Canvas width and height are 0. Setting filter to null')
+      } catch (err) {
+        console.warn('1:', err.message)
       }
-    }
-    return filter
-  }
 
-  let getFilter1 = function () {
-    // colorRanges array = [{color: "rgba(r, g, b, a)", low: n, hi: n}, {...}, etc]
-    let filter1 = OpenSeadragon.Filters.GREYSCALE
-    filter1.prototype.COLORLEVELS = colorRanges => (context, callback) => {
-      if (context.canvas.width > 0 && context.canvas.height > 0) {
-        // Read the canvas pixels
-        let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-        if (typeof imgData !== undefined) {
-          try {
-            const pxl = imgData.data
-            let j
-            for (j = 0; j < pxl.length; j += 4) {
-              if (pxl[j + 3] === 255) {
-                let rgba = levels(pxl[j], colorRanges) // r = g = b
-                if (typeof rgba === 'undefined') {
-                  console.warn('rgba undefined', pxl[j])
-                }
-                pxl[j] = rgba[0]
-                pxl[j + 1] = rgba[1]
-                pxl[j + 2] = rgba[2]
-                pxl[j + 3] = rgba[3]
-              } else {
-                // No nuclear material: set to transparent.
-                pxl[j + 3] = 0
-              }
-            }
-          } catch (err) {
-            console.warn('1:', err.message)
-          }
-
-          function levels(value, _colors) {
-            try {
-              let i
-              let retVal
-              for (i = 0; i < _colors.length; i++) {
-                let low = _colors[i].low
-                let hi = _colors[i].hi
-                let color = _colors[i].color
-                if (value >= low && value <= hi) {
-                  retVal = parseColor(color)
-                }
-              }
-
-              if (typeof retVal === 'undefined') {
-                return value
-              } else {
-                return retVal
-              }
-            } catch (err) {
-              console.warn('2:', err.message)
+      function levels(value, _colors) {
+        try {
+          let i
+          let retVal
+          for (i = 0; i < _colors.length; i++) {
+            let low = _colors[i].low
+            let hi = _colors[i].hi
+            let color = _colors[i].color
+            if (value >= low && value <= hi) {
+              retVal = parseColor(color)
             }
           }
 
-          function parseColor(input) {
-            // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
-            return input.replace(/[a-z%\s\(\)]/g, '').split(',')
+          if (typeof retVal === 'undefined') {
+            return value
+          } else {
+            return retVal
           }
-
-          try {
-            context.putImageData(imgData, 0, 0)
-            callback()
-          } catch (err) {
-            console.warn('3:', err.message)
-          }
-
-        } else {
-          console.warn('imgData undefined')
+        } catch (err) {
+          console.warn('2:', err.message)
         }
-      } else {
-        filter1 = null
-        console.warn('Canvas width and height are 0. Setting filter to null')
       }
-    }
-    return filter1
-  }
-  return {
-    getFilter: getFilter,
-    getFilter1: getFilter1,
-    handleColorLevels: handleColorLevels,
 
-    getColors() {
-      // Return color array defined at top of script
-      return colors
-    },
-
-    getColor(num) {
-      // Get color per layer num
-      if (num >= colors.length) {
-        // random 0 - N
-        return colors[Math.floor(Math.random() * colors.length - 1)]
-      } else {
-        return colors[num]
+      function parseColor(input) {
+        // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
+        return input.replace(/[a-z%\s\(\)]/g, '').split(',')
       }
-    },
 
-    getColorRanges() {
-      return colorRanges
-    },
+      try {
+        context.putImageData(imgData, 0, 0)
+        callback()
+      } catch (err) {
+        console.warn('3:', err.message)
+      }
 
-    setColorRanges(cr) {
-      /* USER DEFINES WHICH COLORS GO WITH WHAT NUMERIC RANGES OF PIXEL VALUES */
-      colorRanges = cr
-    },
-
-    getLayerNumber() {
-      return layerNumber
-    },
-
-    setLayerNumber(num) {
-      /* PGM SETS CURRENT LAYER */
-      layerNumber = num
+    } else {
+      console.warn('imgData undefined')
     }
+  } else {
+    colorFilter = null
+    console.warn('Canvas width and height are 0. Setting filter to null')
   }
 }
 
 /**
  * ImageViewer
  * Set up 1 basic OSD viewer.
- *
- * @param viewerDivId: (viewer1, viewer2...)
+ * @param viewerIndex
+ * @param viewerDivId - containing div id
  * @param baseImage
- * @param featureLayers
- * @param opacity - feature opacity
+ * @param data - features and opacities
+ * @param options
  */
 class ImageViewer {
-
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
     this.options = options
-    this.imf = filters()
-    this.setSources(viewerIndex, baseImage, featureLayers, opacity, this.setViewer(viewerDivId), this.imf, this.options)
+    this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), this.options)
   }
 
   setViewer(viewerDivId) {
@@ -1493,7 +1363,10 @@ class ImageViewer {
       viewer = OpenSeadragon({
         id: viewerDivId,
         prefixUrl: 'vendor/openseadragon/images/',
-        crossOriginPolicy: 'Anonymous'
+        crossOriginPolicy: 'Anonymous',
+        immediateRender: true,
+        animationTime: 0,
+        imageLoaderLimit: 1
       })
     } catch (e) {
       console.warn('setViewer', e)
@@ -1508,81 +1381,34 @@ class ImageViewer {
     return this.viewer
   }
 
-  getImF() {
-    // Image Filter
-    return this.imf
-  }
-
-  setSources(viewerIndex, baseImage, allFeatures, allOpacity, viewer, imf, options) {
-    let idx = viewerIndex - 1  // Array starts with 0; viewer indices start with 1
-    let opacity = allOpacity[idx]
+  setSources(viewerIndex, baseImage, data, viewer, options) {
 
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
-      viewer.addTiledImage({tileSource: baseImage, opacity: 1.0, x: 0, y: 0})
+      viewer.addTiledImage({tileSource: baseImage, opacity: 1, x: 0, y: 0})
 
       // Add FEATURE layers to viewer
-      if (arrayCheck(viewerIndex, allFeatures)) {
-        allFeatures[idx].forEach(function (feature, index) {
-          viewer.addTiledImage({tileSource: feature, opacity: (opacity[index]).toFixed(1), x: 0, y: 0})
+      let features = data.features
+      let opacity = data.opacities
+      if (features) {
+        features.forEach(function (feature, index) {
+          viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
         })
       }
-
-      overlayFeatures(viewer, imf, options.colorRanges)
+      overlayFeatures(viewer, options.colorRanges)
 
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
 
-    function arrayCheck(viewerIndex, featureLayers) {
-      // Do we have an array of features?
-      if (typeof featureLayers === 'undefined') {
-        return false
-      }
-      if (featureLayers.length === 0) {
-        return false
-      }
-      // Do we have an array of features, for this viewer?
-      if (typeof featureLayers[viewerIndex - 1] === 'undefined') {
-        return false
-      }
-      if (featureLayers[viewerIndex - 1].length === 0) {
-        return false
-      }
-      // All checks were successful
-      return true
-    }
-
-    function overlayFeatures(viewer, imf, colorRanges) {
+    function overlayFeatures(viewer, colorRanges) {
 
       try {
         viewer.world.addHandler('add-item', function (event) {
           let itemIndex = viewer.world.getIndexOfItem(event.item)
-          // let itemCount = viewer.world.getItemCount()
-          let filter = fetchFilter(imf, colorRanges)
-          if (filter !== null && itemIndex > 0) {
-            imf.setLayerNumber(itemIndex)
-            if (colorRanges.length > 0) {
-              viewer.setFilterOptions({
-                filters: [{
-                  items: viewer.world.getItemAt(itemIndex),
-                  processors: [
-                    filter.prototype.COLORLEVELS(colorRanges)
-                  ]
-                }]
-              })
-            } else {
-              // Use COLORIZE
-              viewer.setFilterOptions({
-                filters: [{
-                  items: viewer.world.getItemAt(itemIndex),
-                  processors: [
-                    filter.prototype.COLORIZE(imf.getColor(itemIndex))
-                  ]
-                }]
-              })
-            }
+          if (itemIndex > 0) {
+            setViewerFilter(colorRanges, viewer)
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
               return getIIIFTileUrl(this, level, x, y)
             }
@@ -1591,19 +1417,6 @@ class ImageViewer {
       } catch (e) {
         console.error('Here we are', e.message)
       }
-    }
-
-    function fetchFilter(imf, cr) {
-      // MAKE DECISION ON TYPE OF FILTER
-      let ranges = cr && cr.length > 0
-      let filter
-      if (ranges) {
-        imf.setColorRanges(cr)
-        filter = imf.getFilter1()
-      } else {
-        filter = imf.getFilter()
-      }
-      return filter
     }
 
     function dataCheck(url, jqXHR) {
@@ -1642,101 +1455,106 @@ class ImageViewer {
       }
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
-  }
 
+  }
 }
 
-/**
- * MultiViewer
- * Set up OSD viewer to allow for multiple viewer control.
- *
- * @param viewerIndex
- * @param viewerDivId: (viewer1, viewer2...)
- * @param baseImage
- * @param featureLayers
- * @param opacity - feature opacity
- * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
- * @param numViewers: Total number of viewers.
- * @param options: Filters, paintbrush, sliders, etc.
- */
-class MultiViewer extends ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, sliderElements, numViewers, options) {
-    super(viewerIndex, viewerDivId, baseImage, featureLayers, opacity, options)
-
-    if (typeof options === 'undefined') {
-      options = {}
-    }
-
-    try {
-      this.checkboxes = {
-        checkPan: true,
-        checkZoom: true
-      }
-
-      this.viewer1 = super.getViewer()
-      this.idx = viewerIndex
-      this.sliders = sliderElements
-      this.imf = super.getImF()
-
-      if (numViewers > 1) {
-        this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
-        this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
-      }
-
-      if (options.slidersOn && options.toolbarOn) {
-        addInputHandler(this.sliders, this.viewer1)
-      }
-
-      if (options.toolbarOn) {
-        markupTools(this.idx, this.viewer1)
-      }
-
-      if (options.draggableLayers) {
-        handleDraggable()
-      }
-
-      let layersBtn = document.getElementById('colors' + this.idx)
-      if (layersBtn) {
-        if (options.colorRanges) {
-          let x = this.imf.getColorRanges()
-          if (isEmpty(x)) {
-            this.imf.setColorRanges(options.colorRanges)
-          }
-          this.imf.handleColorLevels(layersBtn, this.viewer1)
-
-        } else {
-          console.warn("No colors, no button for you.")
-          layersBtn.style.visibility = hidden
-        }
-      }
-
-    } catch (e) {
-      console.log(e)
-    }
-
+let layers = function (divName, viewer, data, button) {
+  let div
+  if (isRealValue(button)) {
+    let id = makeId(5, 'layers')
+    let rect = button.getBoundingClientRect()
+    div = createDraggableDiv(id, 'Features', rect.left, rect.top)
+    createLayerWidget(document.getElementById(`${id}Body`), viewer, data)
+    handleDragLayers(viewer)
+  } else {
+    createLayerWidget(document.getElementById(divName), viewer, data)
+    handleDragLayers(viewer)
   }
-
-  getViewer() {
-    return this.viewer1
-  }
-
-  getPanZoom() {
-    return this.checkboxes
-  }
-
+  return div
 }
 
-// DRAGGABLE LAYER TABS
-function handleDraggable() {
-  let items = document.querySelectorAll('.tab_links')
+let eyeball = function (eye, layerNum, viewer) {
+  let l = viewer.world.getItemAt(layerNum)
+  if (l) {
+    if (eye.classList.contains('fa-eye')) {
+      // Turn on layer
+      l.setOpacity(1)
+    } else {
+      // Turn off layer
+      l.setOpacity(0)
+    }
+  }
+}
+
+let createLayerWidget = function (div, viewer, data) {
+  const table = document.createElement('table')
+  div.appendChild(table)
+  let layers = data.features
+  let opacities = data.opacities
+  layers.forEach(function (layer, ind) {
+    let layerNum = ind + 1 // skip base
+    let tr, cell, span, eye, fas
+    tr = table.insertRow(-1)
+    table.appendChild(tr)
+
+    // DRAGGABLE FEATURE TAB
+    cell = tr.insertCell(-1)
+    span = document.createElement('span')
+    span.className = 'layer_tab'
+    span.id = ind + makeId(5, 'feat')
+    span.setAttribute('draggable', 'true')
+    span.display = 'block'
+    span.innerHTML = getStringRep(layer) // WAITING FOR skos:prefLabel
+    cell.appendChild(span)
+
+    // EYEBALL VISIBILITY TOGGLE
+    cell = tr.insertCell(-1)
+    eye = document.createElement('i')
+    eye.classList.add('fas')
+    if (opacities[ind] === 1)
+      eye.classList.add('fa-eye')
+    else
+      eye.classList.add('fa-eye-slash')
+    // eyeball(eye, layerNum, viewer) // viewer.world... undefined here.
+
+    eye.id = makeId(5, 'eye')
+    cell.appendChild(eye)
+
+    // EYEBALL EVENT LISTENER
+    eye.addEventListener('click', function () {
+      toggleButton(eye, 'fa-eye', 'fa-eye-slash')
+      eyeball(eye, layerNum, viewer)
+    })
+
+    // PALETTE COLOR FUNCTION
+    cell = tr.insertCell(-1)
+    fas = document.createElement('i')
+    fas.classList.add('fas')
+    fas.classList.add('fa-palette')
+    fas.id = makeId(5, 'palette')
+    fas.style.cursor = 'pointer'
+    cell.appendChild(fas)
+    let widget = filters(viewer, colorRanges, fas)
+    fas.addEventListener('click', function (e) {
+      widget.style.display = 'block'
+    })
+  })
+}
+
+// DRAGGABLE LAYERS (previously in tabs, now list)
+let handleDragLayers = function (viewer) {
+
+  // Features in feature list
+  let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
-    // item.addEventListener('click', handleDragStart) // will this fix it?
     item.addEventListener('dragstart', handleDragStart, false)
     item.addEventListener('dragend', handleDragEnd, false)
   })
 
-  items = document.querySelectorAll('.tab')
+  // The viewer, basically
+  items = document.querySelectorAll('.drop_site')
   items.forEach(function (item) {
     item.addEventListener('dragenter', handleDragEnter, false)
     item.addEventListener('dragleave', handleDragLeave, false)
@@ -1745,9 +1563,7 @@ function handleDraggable() {
   })
 
   function handleDragOver(e) {
-    if (e.preventDefault) {
-      e.preventDefault()
-    }
+    if (e.preventDefault) e.preventDefault()
     return false
   }
 
@@ -1762,8 +1578,9 @@ function handleDraggable() {
   function handleDragStart(e) {
     this.style.opacity = '0.4'
     dragSrcEl = this // The draggable feature
-    sourceViewer = whichViewer(dragSrcEl.parentElement.parentElement)
+    sourceViewer = viewer
     e.dataTransfer.effectAllowed = 'move'
+    console.log('e.target.id', e.target.id)
     e.dataTransfer.setData('text', e.target.id)
   }
 
@@ -1774,50 +1591,148 @@ function handleDraggable() {
     })
   }
 
+  /************ HANDLE DROP ************/
   function handleDrop(e) {
-    e.stopPropagation()
+    if (e.preventDefault) e.preventDefault()
+
     if (dragSrcEl !== this) {
-      // get the element that was dragged
-      let movedTab = e.dataTransfer.getData('text')
-      // get the (new) parent element
-      let parent = e.target.parentElement
-      // Only drop to specific elements
-      if (parent.classList.contains('divSquare')) {
-        e.target.appendChild(document.getElementById(movedTab))
-        // TODO: Keep track of which tab belongs to what layer number.
-        let layer
-        let targetViewer = whichViewer(parent)
-        layer = targetViewer.world.getItemCount() - 1 // get the last layer (TODO: change)
-        targetViewer.world.getItemAt(layer).setOpacity(1.0)
-        layer = sourceViewer.world.getItemCount() - 1 // get the last layer
-        sourceViewer.world.getItemAt(layer).setOpacity(0.0)
+      // TARGET
+      const target = e.target
+      const closestViewer = target.closest('.viewer')
+      if (!closestViewer) {
+        return false
       }
+
+      // DRAGGED ITEM
+      let movedElemId = e.dataTransfer.getData('text')
+      let tmpEl = document.getElementById(movedElemId)
+      let tmpId = tmpEl.id
+      let tmpHtml = tmpEl.innerHTML
+      let items = document.querySelectorAll('.layer_tab')
+      for (let i = 0; i < items.length; i++) {
+        let layerTab = items[i]
+        if (layerTab.innerHTML === tmpHtml && layerTab.id !== tmpId) {
+          // Great, we got a match.
+          // Toggle eyeball.
+          let tds = layerTab.parentElement.parentElement.children
+          let eye = tds[1].children[0]
+          eye.classList.remove('fa-eye-slash')
+          eye.classList.add('fa-eye')
+          layerTab.classList.remove('highlight')
+          layerTab.classList.add('highlight')
+          break
+        }
+      }
+
+      // VIEWER
+      let targetViewer = getViewerObject(closestViewer)
+      let layerNum = movedElemId[0] // 1st char is array index
+      console.log('layerNum', layerNum)
+      layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
+      targetViewer.world.getItemAt(layerNum).setOpacity(1)
+      // TODO: Do we want to make it a "move" or a "copy"?
+      // sourceViewer.world.getItemAt(layerNum).setOpacity(0)
     }
     return false
   }
 }
 
-function whichViewer(element) {
-  let children = element.children
-  let retVal, i, j
-  for (i = 0; i < children.length; i++) {
-    let el = children[i]
-    if (el.classList.contains('viewer')) {
-      try {
-        // It's this viewer. Retrieve the viewer object.
-        // syncedImageViewers = global variable set in synchronizeViewers.js
-        for (j = 0; j < syncedImageViewers.length; j++) {
-          if (syncedImageViewers[j].getViewer().id === el.id) {
-            retVal = syncedImageViewers[j].getViewer()
-            break
-          }
-        }
-      } catch (e) {
-        console.warn('No syncedImageViewers')
+function getViewerObject(element) {
+  let retVal
+
+  try {
+    // syncedImageViewers = global variable set in synchronizeViewers.js
+    let j
+    for (j = 0; j < syncedImageViewers.length; j++) {
+      if (syncedImageViewers[j].getViewer().id === element.id) {
+        retVal = syncedImageViewers[j].getViewer()
+        break
       }
     }
+  } catch (e) {
+    console.error('getViewerObject:', e.message)
   }
+
   return retVal
+}
+
+/**
+ * MultiViewer
+ * Set up OSD viewer to allow for multiple viewer control.
+ *
+ * @param viewerIndex
+ * @param viewerDivId
+ * @param baseImage
+ * @param data: features and opacities
+ * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
+ * @param numViewers: Total number of viewers.
+ * @param options: Filters, paintbrush, sliders, etc.
+ */
+class MultiViewer extends ImageViewer {
+  constructor(viewerIndex, viewerDivId, baseImage, data, sliderElements, numViewers, options) {
+    super(viewerIndex, viewerDivId, baseImage, data, options)
+
+    if (typeof options === 'undefined') {
+      options = {}
+    }
+
+    this.checkboxes = {
+      checkPan: true,
+      checkZoom: true
+    }
+
+    this.viewer1 = super.getViewer()
+    this.idx = viewerIndex
+    this.sliders = sliderElements
+
+    if (numViewers > 1) {
+      this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
+      this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
+    }
+
+    if (options.slidersOn && options.toolbarOn) {
+      addInputHandler(this.sliders, this.viewer1)
+    }
+
+    if (options.toolbarOn) {
+      markupTools(this.idx, this.viewer1)
+    }
+
+    // LAYERS
+    if (typeof data.features !== 'undefined' && options.draggableLayers) {
+      // This function is placed to the right of the viewer:
+      layers(`layers_and_colors${this.idx}`, this.viewer1, data)
+      // Create/handle floating layers div
+      let layersBtn = document.getElementById(`layers${this.idx}`)
+      let widget = layers('', this.viewer1, data, layersBtn)
+      layersBtn.addEventListener('click', function (e) {
+        widget.style.display = 'block'
+      })
+    }
+
+    try {
+      // COLOR PALETTE
+      let palette = document.getElementById('palette' + this.idx)
+      if (typeof options.colorRanges !== 'undefined' && typeof palette !== 'undefined') {
+        // Create/handle floating layers div
+        let widget = filters(this.viewer1, options.colorRanges, palette)
+        palette.addEventListener('click', function (e) {
+          widget.style.display = 'block'
+        })
+      }
+    } catch (e) {
+      console.error('COLOR PALETTE:', e)
+    }
+  }
+
+  getViewer() {
+    return this.viewer1
+  }
+
+  getPanZoom() {
+    return this.checkboxes
+  }
+
 }
 
 function addInputHandler(sliderElem, viewerElem) {

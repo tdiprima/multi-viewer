@@ -11,8 +11,7 @@ module.exports = function (grunt) {
         separator: ';'
       },
       basic: {
-        src: ['src/colorPicker.js',
-          'src/commonFunctions.js',
+        src: ['src/commonFunctions.js',
           'src/pageSetup.js',
           'src/editPolygon.js',
           'src/drawPolygon.js',

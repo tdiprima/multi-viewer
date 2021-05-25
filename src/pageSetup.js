@@ -121,8 +121,12 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
               }
             })
 
-            // ADD FUNCTIONALITY - colorPicker
-            colorPicker(document.getElementById('mark' + idx))
+            const colorPicker = new CP(document.getElementById('mark' + idx))
+            colorPicker.on('change', function (r, g, b, a) {
+              this.source.value = this.color(r, g, b, a)
+              this.source.innerHTML = this.color(r, g, b, a)
+              this.source.style.backgroundColor = this.color(r, g, b, a)
+            })
           }
 
           // NEED TO PASS THESE TO VIEWER
