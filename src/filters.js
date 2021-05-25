@@ -177,14 +177,6 @@ function rgba2hex(orig) {
 
     createDraggableDiv('colorPopup', 'Color Levels', event.clientX, event.clientY)
 
-    // let img = document.querySelector('#closeDiv')
-    // Remove div on click & re-enable buttons
-    // img.addEventListener('click', function () {
-    //   // Re-enable buttons
-    //   buttonToggle('#000', 'pointer')
-    //   this.parentNode.parentNode.remove() // the containing div
-    // })
-
     createUserInput(document.getElementById('colorPopupBody'), viewer)
 
   }
