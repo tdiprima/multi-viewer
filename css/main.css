@@ -221,4 +221,5 @@ a:link {
 .myIcon:hover + .hide {
   display: block;
   z-index: 12;
+  position: absolute;
 }
