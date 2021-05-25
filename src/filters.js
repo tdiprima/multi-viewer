@@ -41,15 +41,15 @@ let createWidget = function (div, viewer, data) {
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
       id: makeId(5, 'low'),
-      val: colorRanges[ind].low
-    }, viewer))
+      val: data[ind].low
+    }, viewer, data))
 
     // HIGH
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
       id: makeId(5, 'hi'),
-      val: colorRanges[ind].hi
-    }, viewer))
+      val: data[ind].hi
+    }, viewer, data))
 
   })
 }
@@ -74,7 +74,7 @@ function rgba2hex(orig) {
 }
 
 // NUMBER INPUT to let user set threshold values
-function createNumericInput({id, val}, viewer) {
+function createNumericInput({id, val}, viewer, data) {
   let x = document.createElement('input')
   x.id = id
   x.setAttribute('type', 'number')
@@ -85,7 +85,7 @@ function createNumericInput({id, val}, viewer) {
   x.size = 5
 
   // x.addEventListener('change', function () {
-  //   isIntersect(colorRanges, colorRanges.length)
+  //   isIntersect(data, data.length)
   // })
 
   // this event happens whenever the value changes
@@ -97,10 +97,10 @@ function createNumericInput({id, val}, viewer) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      colorRanges[index].low = parseInt(this.value)
+      data[index].low = parseInt(this.value)
     } else {
-      colorRanges[index].hi = parseInt(this.value)
-      setViewerFilter(colorRanges, viewer) // triggered by high value input
+      data[index].hi = parseInt(this.value)
+      setViewerFilter(data, viewer) // triggered by high value input
     }
   })
   return x
@@ -127,14 +127,12 @@ function isIntersect(arr, n) {
   // If we reach here, then no overlap
   return false
 }
-
 function setError(a, b) {
   a.style.outlineStyle = 'solid'
   a.style.outlineColor = 'red'
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
-
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
@@ -149,14 +147,14 @@ function setViewerFilter(cr, viewer) {
     let i
     let filterOpts = []
     for (i = 0; i < itemCount; i++) {
-      if (i > 0) {
+      // if (i > 0) {
         filterOpts.push({
           items: viewer.world.getItemAt(i),
           processors: [
             colorFilter.prototype.COLORLEVELS(cr)
           ]
         })
-      }
+      // }
     }
     viewer.setFilterOptions({
       filters: filterOpts,
@@ -170,7 +168,7 @@ function setViewerFilter(cr, viewer) {
 }
 
 let colorFilter = OpenSeadragon.Filters.GREYSCALE
-colorFilter.prototype.COLORLEVELS = colorRanges => (context, callback) => {
+colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
   if (context.canvas.width > 0 && context.canvas.height > 0) {
     // Read the canvas pixels
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -180,7 +178,7 @@ colorFilter.prototype.COLORLEVELS = colorRanges => (context, callback) => {
         let j
         for (j = 0; j < pxl.length; j += 4) {
           if (pxl[j + 3] === 255) {
-            let rgba = levels(pxl[j], colorRanges) // r = g = b
+            let rgba = levels(pxl[j], data) // r = g = b
             if (typeof rgba === 'undefined') {
               console.warn('rgba undefined', pxl[j])
             }
