@@ -3,16 +3,14 @@
  * Set up OSD viewer to allow for multiple viewer control.
  *
  * @param viewerIndex
- * @param viewerDivId: (viewer1, viewer2...)
+ * @param viewerDivId
  * @param baseImage
- * @param data - features and opacities
+ * @param data: features and opacities
  * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
-
 class MultiViewer extends ImageViewer {
-
   constructor(viewerIndex, viewerDivId, baseImage, data, sliderElements, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, data, options)
 

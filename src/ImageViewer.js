@@ -8,7 +8,6 @@
  * @param options
  */
 class ImageViewer {
-
   constructor(viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
     this.options = options
