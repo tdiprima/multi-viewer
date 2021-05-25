@@ -74,10 +74,10 @@ let createLayerWidget = function (div, viewer, data) {
     fas.id = makeId(5, 'palette')
     fas.style.cursor = 'pointer'
     cell.appendChild(fas)
-    // TODO: get widget
-    // fas.addEventListener('click', function (e) {
-    //   widget.style.display = 'block'
-    // })
+    let widget = filters('', viewer, colorRanges, fas)
+    fas.addEventListener('click', function (e) {
+      widget.style.display = 'block'
+    })
   })
 }
 
@@ -155,16 +155,18 @@ let handleDragLayers = function (viewer) {
           // Toggle eyeball.
           let tds = layerTab.parentElement.parentElement.children
           let eye = tds[1].children[0]
-          toggleButton(eye, 'fa-eye', 'fa-eye-slash')
-          eyeball(eye, i + 1, viewer)
+          eye.classList.remove('fa-eye-slash')
+          eye.classList.add('fa-eye')
           layerTab.classList.remove('highlight')
           layerTab.classList.add('highlight')
+          break
         }
       }
 
       // VIEWER
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
+      console.log('layerNum', layerNum)
       layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
       targetViewer.world.getItemAt(layerNum).setOpacity(1)
       sourceViewer.world.getItemAt(layerNum).setOpacity(0)
