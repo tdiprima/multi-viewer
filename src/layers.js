@@ -27,9 +27,6 @@ let eyeball = function (eye, layerNum, viewer) {
 }
 
 let createLayerWidget = function (div, viewer, data) {
-  if (div === null) {
-    div = document.body
-  }
   const table = document.createElement('table')
   div.appendChild(table)
   let layers = data.features
