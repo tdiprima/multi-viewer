@@ -220,5 +220,5 @@ a:link {
 
 .myIcon:hover + .hide {
   display: block;
-  color: red;
+  z-index: 12;
 }
