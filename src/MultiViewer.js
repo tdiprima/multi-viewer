@@ -45,12 +45,9 @@ class MultiViewer extends ImageViewer {
     if (typeof data.features !== 'undefined' && options.draggableLayers) {
       // This function is placed to the right of the viewer:
       layers(`layers_and_colors${this.idx}`, this.viewer1, data)
-
       // Create/handle floating layers div
       let layersBtn = document.getElementById(`layers${this.idx}`)
-
-      let id = makeId(5, 'layersBody')
-      let widget = layers(id, this.viewer1, data, layersBtn)
+      let widget = layers('', this.viewer1, data, layersBtn)
       layersBtn.addEventListener('click', function (e) {
         widget.style.display = 'block'
       })
@@ -60,8 +57,8 @@ class MultiViewer extends ImageViewer {
       // COLOR PALETTE
       let palette = document.getElementById('palette' + this.idx)
       if (typeof options.colorRanges !== 'undefined' && typeof palette !== 'undefined') {
-        let id = makeId(5, 'filtersBody')
-        let widget = filters(id, this.viewer1, options.colorRanges, palette)
+        // Create/handle floating layers div
+        let widget = filters('', this.viewer1, options.colorRanges, palette)
         palette.addEventListener('click', function (e) {
           widget.style.display = 'block'
         })

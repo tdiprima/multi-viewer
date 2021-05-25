@@ -8,19 +8,6 @@ let filters = function (divName, viewer, data, button) {
   } else {
     console.log('tba')
   }
-
-  // Setup color picker event handler
-  let nodeList = document.querySelectorAll('[id^="marker"]')
-  nodeList.forEach(function (_elem, ind) {
-    const picker = new CP(_elem)
-    console.log('picker', picker)
-    picker.on('change', function (r, g, b, a) {
-      this.source.value = this.color(r, g, b, a)
-      this.source.style.backgroundColor = this.color(r, g, b, a)
-      data[ind].color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-      setViewerFilter(data, viewer)
-    })
-  })
   return div
 }
 
@@ -37,23 +24,30 @@ let createWidget = function (div, viewer, data) {
 
     // COLOR PICKER
     let m = document.createElement('mark')
-    // m.id = `marker${ind}`
     m.id = makeId(5, 'marker')
     m.innerHTML = "#" + rgba2hex(colorCode)
     m.style.backgroundColor = colorCode
     td.appendChild(m)
 
+    const picker = new CP(m)
+    picker.on('change', function (r, g, b, a) {
+      this.source.value = this.color(r, g, b, a)
+      this.source.style.backgroundColor = this.color(r, g, b, a)
+      data[ind].color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+      setViewerFilter(data, viewer)
+    })
+
     // LOW
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      id: `low${ind}`,
+      id: makeId(5, 'low'),
       val: colorRanges[ind].low
     }, viewer))
 
     // HIGH
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      id: `hi${ind}`,
+      id: makeId(5, 'hi'),
       val: colorRanges[ind].hi
     }, viewer))
 
@@ -116,9 +110,9 @@ function createNumericInput({id, val}, viewer) {
   x.value = val.toString()
   x.size = 5
 
-  x.addEventListener('change', function () {
-    isIntersect(colorRanges, colorRanges.length)
-  })
+  // x.addEventListener('change', function () {
+  //   isIntersect(colorRanges, colorRanges.length)
+  // })
 
   // this event happens whenever the value changes
   x.addEventListener('input', function () {
@@ -138,27 +132,24 @@ function createNumericInput({id, val}, viewer) {
   return x
 }
 
+// TODO: handle the IDs
+/*
 function isIntersect(arr, n) {
   // Clear any previous errors
   arr.forEach((element, index) => {
     clearError(document.getElementById('low' + index), document.getElementById('hi' + index))
   })
-
   // Validate
   for (let i = 1; i < n; i++) {
-
     if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
       setError(document.getElementById('low' + i), document.getElementById('hi' + (i - 1)))
       return true
     }
-
     if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
       setError(document.getElementById('low' + (i - 1)), document.getElementById('hi' + i))
       return true
     }
-
   }
-
   // If we reach here, then no overlap
   return false
 }
@@ -176,6 +167,7 @@ function clearError(a, b) {
   b.style.outlineStyle = ''
   b.style.outlineColor = ''
 }
+ */
 
 let colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = colorRanges => (context, callback) => {

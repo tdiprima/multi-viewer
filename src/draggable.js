@@ -1,6 +1,4 @@
 function createDraggableDiv(id, title, left, top, viz) {
-
-  // This widget referenced in...
   let myDiv = document.createElement('div')
   myDiv.id = id
   myDiv.className = 'popup'

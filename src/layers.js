@@ -5,7 +5,7 @@ let layers = function (divName, viewer, data, button) {
     let rect = button.getBoundingClientRect()
     div = createDraggableDiv(id, 'Features', rect.left, rect.top)
     createLayerWidget(document.getElementById(`${id}Body`), viewer, data)
-    // handleDragLayers(viewer)
+    // TODO: handleDragLayers(viewer)
   } else {
     createLayerWidget(document.getElementById(divName), viewer, data)
     handleDragLayers(viewer)
