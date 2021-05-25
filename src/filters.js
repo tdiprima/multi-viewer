@@ -54,32 +54,6 @@ let createWidget = function (div, viewer, data) {
   })
 }
 
-function setViewerFilter(cr, viewer) {
-  try {
-    let itemCount = viewer.world.getItemCount()
-    let i
-    let filterOpts = []
-    for (i = 0; i < itemCount; i++) {
-      if (i > 0) {
-        filterOpts.push({
-          items: viewer.world.getItemAt(i),
-          processors: [
-            colorFilter.prototype.COLORLEVELS(cr)
-          ]
-        })
-      }
-    }
-    viewer.setFilterOptions({
-      filters: filterOpts,
-      loadMode: 'sync'
-    })
-
-  } catch (err) {
-    console.error(`setViewerFilter ${err.message}`)
-    console.error('cr:', cr, 'viewer:', viewer)
-  }
-}
-
 function rgba2hex(orig) {
   let a,
     arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
@@ -168,6 +142,32 @@ function clearError(a, b) {
   b.style.outlineColor = ''
 }
  */
+
+function setViewerFilter(cr, viewer) {
+  try {
+    let itemCount = viewer.world.getItemCount()
+    let i
+    let filterOpts = []
+    for (i = 0; i < itemCount; i++) {
+      if (i > 0) {
+        filterOpts.push({
+          items: viewer.world.getItemAt(i),
+          processors: [
+            colorFilter.prototype.COLORLEVELS(cr)
+          ]
+        })
+      }
+    }
+    viewer.setFilterOptions({
+      filters: filterOpts,
+      loadMode: 'sync'
+    })
+
+  } catch (err) {
+    console.error(`setViewerFilter ${err.message}`)
+    console.error('cr:', cr, 'viewer:', viewer)
+  }
+}
 
 let colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = colorRanges => (context, callback) => {
