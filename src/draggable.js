@@ -14,7 +14,7 @@ function createDraggableDiv(id, title, left, top, viz) {
   myImg.alt = 'close'
   myImg.style.cursor = 'pointer'
   myImg.addEventListener('click', function () {
-    this.style.color = '#000' // huh?
+    this.style.color = '#000'
     // this.parentNode.remove()
     myDiv.style.display = 'none'
   })
