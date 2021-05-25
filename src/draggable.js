@@ -26,9 +26,6 @@ function createDraggableDiv(id, title, left, top, viz) {
   myHeader.appendChild(myImg)
   myDiv.appendChild(myHeader)
 
-
-
-
   let body = document.createElement('div')
   body.id = id + 'Body'
   // to be filled in by function...
