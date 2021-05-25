@@ -83,7 +83,6 @@ let createLayerWidget = function (div, viewer, data) {
 
 // DRAGGABLE LAYERS (previously in tabs, now list)
 let handleDragLayers = function (viewer) {
-  let dragSrcEl, sourceViewer
 
   // Features in feature list
   let items = document.querySelectorAll('.layer_tab')
