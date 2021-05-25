@@ -145,7 +145,7 @@ function rgba2hex(orig) {
       m.id = `marker${ind}`
       m.innerHTML = "#" + rgba2hex(colorCode)
       m.style.backgroundColor = colorCode
-      td.appendChild(m) // I hope this is right!
+      td.appendChild(m)
 
       // LOW
       td = tr.insertCell(-1)
