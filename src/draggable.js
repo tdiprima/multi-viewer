@@ -26,7 +26,7 @@ function createDraggableDiv(id, title, left, top, viz) {
 
   let body = document.createElement('div')
   body.id = id + 'Body' // Note the naming convention
-  // to be filled in by function...
+  // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
   if (!viz) {
