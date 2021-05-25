@@ -141,13 +141,16 @@ function clearError(a, b) {
 }
  */
 
+// TODO: CHANGE! Set a different color function per layer
+// Currently: the same color function for each layer
 function setViewerFilter(cr, viewer) {
   try {
     let itemCount = viewer.world.getItemCount()
     let i
     let filterOpts = []
+    // For each layer
     for (i = 0; i < itemCount; i++) {
-      if (i > 0) {
+      if (i > 0) { // except the base
         filterOpts.push({
           items: viewer.world.getItemAt(i),
           processors: [
