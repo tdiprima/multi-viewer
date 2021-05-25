@@ -30,7 +30,7 @@ function createDraggableDiv(id, title, left, top, viz) {
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
   if (!viz) {
-    myDiv.style.display = 'none'
+    myDiv.style.display = 'none' // This gets toggled
   }
 
   // Make the DIV element draggable
