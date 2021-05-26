@@ -214,12 +214,14 @@ a:link {
 }
 
 /* DISPLAY SLIDER ON HOVER */
-.hide {
+
+.showHover {
   display: none;
 }
 
-.myIcon:hover + .hide {
+.showDiv:hover .showHover {
   display: block;
-  z-index: 12;
+  z-index: 1002;
   position: absolute;
+  overflow: hidden;
 }

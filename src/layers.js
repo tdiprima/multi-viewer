@@ -33,7 +33,7 @@ let createLayerWidget = function (div, viewer, data) {
   let opacities = data.opacities
   layers.forEach(function (layer, ind) {
     let layerNum = ind + 1 // skip base
-    let tr, cell, span, eye, fas, range
+    let tr, cell, span, eye, fas
     tr = table.insertRow(-1)
     table.appendChild(tr)
 
@@ -68,20 +68,34 @@ let createLayerWidget = function (div, viewer, data) {
 
     // TRANSPARENCY SLIDER
     cell = tr.insertCell(-1)
+
+    let div = document.createElement('div')
+    div.className = 'showDiv'
+
+    let div1 = document.createElement('div')
+    div1.className = 'showHover'
+
     fas = document.createElement('i')
     fas.classList.add('fas')
     fas.classList.add('fa-adjust')
-    fas.classList.add('myIcon')
     fas.style.cursor = 'pointer'
-    cell.appendChild(fas)
-    range = document.createElement('input')
+    div.appendChild(fas)
+
+    let range = document.createElement('input')
     range.type = 'range'
     range.id = makeId(5, 'range')
     range.min = '0'
     range.max = '100'
-    range.value = '100'
-    range.classList.add('hide')
-    cell.appendChild(range)
+    range.step = '1'
+    // range.value = '100' // this works
+    // range.value = opacities[ind].toString() // this doesn't
+    // range.value = "'" + opacities[ind].toString() + "'" // nor does this
+    range.value = "'" + opacities[ind] + "'" // why not?
+    console.log(opacities[ind], " ", range.value)
+    div1.appendChild(range)
+
+    div.appendChild(div1)
+    cell.appendChild(div)
 
     // PALETTE COLOR FUNCTION
     cell = tr.insertCell(-1)
