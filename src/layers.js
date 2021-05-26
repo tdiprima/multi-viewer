@@ -78,6 +78,7 @@ let createLayerWidget = function (div, viewer, data) {
     fas = document.createElement('i')
     fas.classList.add('fas')
     fas.classList.add('fa-adjust')
+    fas.classList.add('hover-orange')
     fas.style.cursor = 'pointer'
     div.appendChild(fas)
 

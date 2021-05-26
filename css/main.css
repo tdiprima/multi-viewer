@@ -225,3 +225,10 @@ a:link {
   position: absolute;
   overflow: hidden;
 }
+
+/* HOVER ORANGE */
+
+.hover-orange:focus,
+.hover-orange:hover {
+  color: #fd7e14
+}
