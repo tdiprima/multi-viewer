@@ -88,6 +88,14 @@ let createLayerWidget = function (div, viewer, data) {
     range.max = '100'
     range.step = '0.1'
     range.value = opacities[ind] * 100
+    range.addEventListener('input', function () {
+      const worldItem = viewer.world.getItemAt(layerNum)
+      if (worldItem !== undefined) {
+        worldItem.setOpacity(this.value / 100) // SET OPACITY
+      } else {
+        console.warn('worldItem', worldItem)
+      }
+    })
     div1.appendChild(range)
 
     div.appendChild(div1)
