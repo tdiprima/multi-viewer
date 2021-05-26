@@ -26,27 +26,6 @@ let eyeball = function (eye, layerNum, viewer) {
   }
 }
 
-function rangeValue(range, val) {
-  // If the value is not specified, the default value is "50" - https://www.w3schools.com/jsref/prop_range_value.asp
-  range.value = '100' // this works
-  console.log("'100' -> " + range.value) // '100' -> 100
-
-  range.value = "'" + val.toString() + "'" // this totally doesn't work
-  console.log("'" + val.toString() + "'" + " -> " + range.value) // '1' -> 50
-
-  range.value = "'" + val + "'" // neither does this
-  console.log("'" + val + "'" + " -> " + range.value) // '1' -> 50
-
-  range.value = val.toString() // this seems to be right but the range is at the 0 mark when displayed
-  console.log(val.toString() + " -> " + range.value) // 1 -> 1
-
-  range.value = val // ditto.
-  console.log(val + " -> " + range.value) // 1 -> 1
-
-  console.log(typeof range.value)
-  console.log(typeof val)
-}
-
 let createLayerWidget = function (div, viewer, data) {
   const table = document.createElement('table')
   div.appendChild(table)
@@ -102,16 +81,14 @@ let createLayerWidget = function (div, viewer, data) {
     fas.style.cursor = 'pointer'
     div.appendChild(fas)
 
-    // let range = document.createElement('input')
-    // range.type = 'range'
-    // range.id = makeId(5, 'range')
-    // range.min = '0'
-    // range.max = '100'
-    // range.step = '1'
-    // rangeValue(range, opacities[ind])
-    // div1.appendChild(range)
-
-    div1.innerHTML = `<input type="range" id="${makeId(5, 'range')}" min="0" max="100" step="1" value="${opacities[ind]}">`
+    let range = document.createElement('input')
+    range.type = 'range'
+    range.id = makeId(5, 'range')
+    range.min = '0'
+    range.max = '100'
+    range.step = '0.1'
+    range.value = opacities[ind] * 100
+    div1.appendChild(range)
 
     div.appendChild(div1)
     cell.appendChild(div)
