@@ -102,16 +102,16 @@ let createLayerWidget = function (div, viewer, data) {
     fas.style.cursor = 'pointer'
     div.appendChild(fas)
 
-    let range = document.createElement('input')
-    range.type = 'range'
-    range.id = makeId(5, 'range')
-    range.min = '0'
-    range.max = '100'
-    range.step = '1'
+    // let range = document.createElement('input')
+    // range.type = 'range'
+    // range.id = makeId(5, 'range')
+    // range.min = '0'
+    // range.max = '100'
+    // range.step = '1'
+    // rangeValue(range, opacities[ind])
+    // div1.appendChild(range)
 
-    rangeValue(range, opacities[ind])
-
-    div1.appendChild(range)
+    div1.innerHTML = `<input type="range" id="${makeId(5, 'range')}" min="0" max="100" step="1" value="${opacities[ind]}">`
 
     div.appendChild(div1)
     cell.appendChild(div)
