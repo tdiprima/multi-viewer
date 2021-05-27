@@ -91,7 +91,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 <button id="btnEdit${idx}" class="btn"><i class="fas fa-draw-polygon"></i> Edit polygon</button>&nbsp;
 <button id="btnGrid${idx}" class="btn"><i class="fas fa-border-all"></i> Draw grid</button>&nbsp;
 <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
-<button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler-horizontal"></i> Ruler</button>&nbsp;
+<button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Ruler</button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
             // END
