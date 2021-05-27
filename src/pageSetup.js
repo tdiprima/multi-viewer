@@ -63,23 +63,24 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           if (opts && opts.toolbarOn) {
+            htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
             // show/hide
-            htm += `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] </span><BR>
-<span id="tools${idx}" hidden=true>`
+//             htm += `<div class="controls showDiv" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] <BR>
+// <div id="tools${idx}" class="showHover">`
 
             // SLIDERS
             if (opts && opts.slidersOn) {
               slider1 = sliderIdNum += 1
               slider2 = sliderIdNum += 1
 
-              htm += `<span class="range">
+              htm += `<div class="range">
 <input type="range" id="sliderRange${slider1}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
 <input type="range" id="sliderRange${slider2}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
-</span>`
+</div>`
             }
 
             // ANNOTATION TOOLS
-            htm += `<span class="floated buttons">`
+            htm += `<div class="floated buttons">`
 
             if (opts && opts.paintbrushColor) {
               htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
@@ -95,7 +96,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
             // END
-            htm += `</span></span>`
+            htm += `</div></div>`
           }
 
           // CREATE VIEWER
@@ -107,29 +108,28 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           container.innerHTML = htm
 
           // ANNOTATION TOOLS - Show/Hide Handler
-          if (opts && opts.toolbarOn) {
-            let toggle = document.getElementById('hideTools' + idx)
-            let tools = document.getElementById('tools' + idx)
-            toggle.addEventListener('click', function () {
-              if (tools.hidden) {
-                tools.hidden = false
-                this.textContent = '[-] '
-                this.style.color = "maroon"
-              } else {
-                tools.hidden = true
-                this.textContent = '[+] '
-                this.style.color = "blue"
-              }
-            })
+          // if (opts && opts.toolbarOn) {
+          //   let toggle = document.getElementById('hideTools' + idx)
+          //   let tools = document.getElementById('tools' + idx)
+          //   toggle.addEventListener('click', function () {
+          //     if (tools.hidden) {
+          //       tools.hidden = false
+          //       this.textContent = '[-] '
+          //       this.style.color = "maroon"
+          //     } else {
+          //       tools.hidden = true
+          //       this.textContent = '[+] '
+          //       this.style.color = "blue"
+          //     }
+          //   })
+          // }
 
-            // DRAW POLYGON COLOR PICKER
-            const colorPicker = new CP(document.getElementById('mark' + idx))
-            colorPicker.on('change', function (r, g, b, a) {
-              this.source.value = this.color(r, g, b, a)
-              this.source.innerHTML = this.color(r, g, b, a)
-              this.source.style.backgroundColor = this.color(r, g, b, a)
-            })
-          }
+          // DRAW POLYGON COLOR PICKER
+          const colorPicker = new CP(document.getElementById('mark' + idx))
+          colorPicker.on('change', function (r, g, b, a) {
+            this.source.value = this.color(r, g, b, a)
+            this.source.style.backgroundColor = this.color(r, g, b, a)
+          })
 
           // NEED TO PASS THESE TO VIEWER
           let sliderElements = []

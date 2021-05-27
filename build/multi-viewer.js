@@ -1,4 +1,4 @@
-/*! multi-viewer - v2.4.8 - 2021-05-25 */
+/*! multi-viewer - v2.4.8 - 2021-05-27 */
 function clearClassList(element) {
   const classList = element.classList
   while (classList.length > 0) {
@@ -177,23 +177,24 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           if (opts && opts.toolbarOn) {
-            // SHOW / HIDE TOOLBAR
-            htm += `<span class="controls" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] </span><BR>
-<span id="tools${idx}" hidden=true>`
+            htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
+            // show/hide
+//             htm += `<div class="controls showDiv" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] <BR>
+// <div id="tools${idx}" class="showHover">`
 
             // SLIDERS
             if (opts && opts.slidersOn) {
               slider1 = sliderIdNum += 1
               slider2 = sliderIdNum += 1
 
-              htm += `<span class="range">
+              htm += `<div class="range">
 <input type="range" id="sliderRange${slider1}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
 <input type="range" id="sliderRange${slider2}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
-</span>`
+</div>`
             }
 
             // ANNOTATION TOOLS
-            htm += `<span class="floated buttons">`
+            htm += `<div class="floated buttons">`
 
             if (opts && opts.paintbrushColor) {
               htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
@@ -205,10 +206,11 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 <button id="btnEdit${idx}" class="btn"><i class="fas fa-draw-polygon"></i> Edit polygon</button>&nbsp;
 <button id="btnGrid${idx}" class="btn"><i class="fas fa-border-all"></i> Draw grid</button>&nbsp;
 <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
+<button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Ruler</button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
             // END
-            htm += `</span></span>`
+            htm += `</div></div>`
           }
 
           // CREATE VIEWER
@@ -219,29 +221,29 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
 
-          // EVENT HANDLER - Show / Hide
-          if (opts && opts.toolbarOn) {
-            let toggle = document.getElementById('hideTools' + idx)
-            let tools = document.getElementById('tools' + idx)
-            toggle.addEventListener('click', function () {
-              if (tools.hidden) {
-                tools.hidden = false
-                this.textContent = '[-] '
-                this.style.color = "maroon"
-              } else {
-                tools.hidden = true
-                this.textContent = '[+] '
-                this.style.color = "blue"
-              }
-            })
+          // ANNOTATION TOOLS - Show/Hide Handler
+          // if (opts && opts.toolbarOn) {
+          //   let toggle = document.getElementById('hideTools' + idx)
+          //   let tools = document.getElementById('tools' + idx)
+          //   toggle.addEventListener('click', function () {
+          //     if (tools.hidden) {
+          //       tools.hidden = false
+          //       this.textContent = '[-] '
+          //       this.style.color = "maroon"
+          //     } else {
+          //       tools.hidden = true
+          //       this.textContent = '[+] '
+          //       this.style.color = "blue"
+          //     }
+          //   })
+          // }
 
-            const colorPicker = new CP(document.getElementById('mark' + idx))
-            colorPicker.on('change', function (r, g, b, a) {
-              this.source.value = this.color(r, g, b, a)
-              this.source.innerHTML = this.color(r, g, b, a)
-              this.source.style.backgroundColor = this.color(r, g, b, a)
-            })
-          }
+          // DRAW POLYGON COLOR PICKER
+          const colorPicker = new CP(document.getElementById('mark' + idx))
+          colorPicker.on('change', function (r, g, b, a) {
+            this.source.value = this.color(r, g, b, a)
+            this.source.style.backgroundColor = this.color(r, g, b, a)
+          })
 
           // NEED TO PASS THESE TO VIEWER
           let sliderElements = []
@@ -1001,6 +1003,116 @@ function handleButtonShowHide () {
   })
 }
 
+const ruler = function (idx, viewer, overlay) {
+  // TODO: turn off event handlers, to not collide with others.
+  let line, isDown, mode
+  let startx = []
+  let endx = []
+  let starty = []
+  let endy = []
+  let temp = 0
+  let text
+
+  // let canvas = overlay.fabricCanvas()
+  let canvas = overlay.fabricCanvas({ // on/off
+    hoverCursor: 'pointer',
+    selection: false
+  })
+  fabric.Object.prototype.transparentCorners = false
+
+  const button = document.getElementById('btnRuler' + idx)
+  button.addEventListener('click', function () {
+    toggleButton(button, 'btnOn', 'btn')
+
+    if (button.classList.contains('btnOn')) {
+      mode = 'draw'
+      button.innerHTML = '<i class="fas fa-ruler"></i> Ruler off'
+    } else {
+      mode = ''
+      button.innerHTML = '<i class="fas fa-ruler"></i> Ruler on'
+    }
+  })
+
+  canvas.on('mouse:down', function (o) {
+    if (mode === 'draw') {
+      viewer.setMouseNavEnabled(false)
+      viewer.outerTracker.setTracking(false)
+      isDown = true
+      let pointer = canvas.getPointer(o.e)
+
+      // LINE
+      let points = [pointer.x, pointer.y, pointer.x, pointer.y]
+      startx[temp] = pointer.x
+      starty[temp] = pointer.y
+      line = new fabric.Line(points, {
+        strokeWidth: 2,
+        stroke: '#0f0',
+        originX: 'center',
+        originY: 'center'
+      })
+      canvas.add(line)
+    } else {
+      viewer.setMouseNavEnabled(true)
+      viewer.outerTracker.setTracking(true)
+      canvas.forEachObject(function (o) {
+        o.setCoords() // update coordinates
+      })
+    }
+  })
+
+  canvas.on('mouse:move', function (o) {
+    canvas.remove(text) // remove text element before re-adding it
+    canvas.renderAll() // on/off
+    if (!isDown) return
+    let pointer = canvas.getPointer(o.e)
+
+    // LINE
+    line.set({x2: pointer.x, y2: pointer.y})
+
+    endx[temp] = pointer.x
+    endy[temp] = pointer.y
+
+    // TEXT
+    if (mode === 'draw') {
+      let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
+      text = new fabric.Text('Length ' + px, {left: endx[temp], top: endy[temp], fontSize: 14, fill: '#0f0'})
+      canvas.add(text)
+    }
+
+    canvas.renderAll()
+  })
+
+  canvas.on('mouse:up', function (o) {
+    let pointer = canvas.getPointer(o.e)
+    isDown = false
+
+    // RECT
+    canvas.add(new fabric.Rect({
+      left: pointer.x + 1,
+      top: pointer.y + 1,
+      width: 150,
+      height: 25,
+      fill: 'rgba(255,255,255,0.5)',
+      transparentCorners: true
+    }))
+
+    // TEXT
+    canvas.add(new fabric.Text(text.text, {
+      fontSize: 20,
+      left: pointer.x + 1,
+      top: pointer.y + 1
+    }))
+
+    canvas.renderAll()
+  })
+
+  let Calculate = {
+    lineLength: function (x1, y1, x2, y2) {
+      return Math.sqrt(Math.pow(x2 * 1 - x1 * 1, 2) + Math.pow(y2 * 1 - y1 * 1, 2))
+    }
+  }
+}
+
 const markupTools = function (idx, viewer) {
   const overlay = viewer.fabricjsOverlay({
     scale: 1000
@@ -1009,7 +1121,7 @@ const markupTools = function (idx, viewer) {
   drawPolygon(idx, viewer, overlay)
   editPolygon(idx, overlay)
   gridOverlay(idx, overlay)
-  // ruler(idx, viewer, overlay)
+  ruler(idx, viewer, overlay)
 }
 
 function createDraggableDiv(id, title, left, top, viz) {
@@ -1208,7 +1320,7 @@ function createNumericInput({id, val}, viewer, data) {
   return x
 }
 
-// TODO: handle the IDs
+// TODO: Don't handle it by ID
 /*
 function isIntersect(arr, n) {
   // Clear any previous errors
@@ -1243,13 +1355,16 @@ function clearError(a, b) {
 }
  */
 
+// TODO: CHANGE! Set a different color function per layer
+// Currently: the same color function for each layer
 function setViewerFilter(cr, viewer) {
   try {
     let itemCount = viewer.world.getItemCount()
     let i
     let filterOpts = []
+    // For each layer
     for (i = 0; i < itemCount; i++) {
-      if (i > 0) {
+      if (i > 0) { // except the base
         filterOpts.push({
           items: viewer.world.getItemAt(i),
           processors: [
@@ -1351,13 +1466,13 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
  * @param options
  */
 class ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, data, options) {
+  constructor (viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
     this.options = options
     this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), this.options)
   }
 
-  setViewer(viewerDivId) {
+  setViewer (viewerDivId) {
     let viewer
     try {
       viewer = OpenSeadragon({
@@ -1367,46 +1482,48 @@ class ImageViewer {
         immediateRender: true,
         animationTime: 0,
         imageLoaderLimit: 1
+        // showNavigator: true,
+        // debugMode: true,
+        // debugGridColor: "#f9276f"
       })
+      // function rstDrawer() {
+      //   viewer.drawer.reset()
+      // }
     } catch (e) {
       console.warn('setViewer', e)
       viewer = null
     }
     this.viewer = viewer
     return viewer
-
   }
 
-  getViewer() {
+  getViewer () {
     return this.viewer
   }
 
-  setSources(viewerIndex, baseImage, data, viewer, options) {
-
+  setSources (viewerIndex, baseImage, data, viewer, options) {
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
-      viewer.addTiledImage({tileSource: baseImage, opacity: 1, x: 0, y: 0})
+      viewer.addTiledImage({ tileSource: baseImage, opacity: 1, x: 0, y: 0 })
 
       // Add FEATURE layers to viewer
-      let features = data.features
-      let opacity = data.opacities
+      const features = data.features
+      const opacity = data.opacities
       if (features) {
         features.forEach(function (feature, index) {
-          viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
+          viewer.addTiledImage({ tileSource: feature, opacity: opacity[index], x: 0, y: 0 })
         })
       }
       overlayFeatures(viewer, options.colorRanges)
-
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
     })
 
-    function overlayFeatures(viewer, colorRanges) {
-
+    function overlayFeatures (viewer, colorRanges) {
       try {
         viewer.world.addHandler('add-item', function (event) {
-          let itemIndex = viewer.world.getIndexOfItem(event.item)
+          const itemIndex = viewer.world.getIndexOfItem(event.item)
           if (itemIndex > 0) {
             setViewerFilter(colorRanges, viewer)
             viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
@@ -1419,7 +1536,7 @@ class ImageViewer {
       }
     }
 
-    function dataCheck(url, jqXHR) {
+    function dataCheck (url, jqXHR) {
       const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
       console.warn(message)
       console.log('jqXHR object:', jqXHR)
@@ -1428,7 +1545,7 @@ class ImageViewer {
       throw new Error('Something went wrong.') // Terminates the script.
     }
 
-    function getIIIFTileUrl(source, level, x, y) {
+    function getIIIFTileUrl (source, level, x, y) {
       const scale = Math.pow(0.5, source.maxLevel - level)
       const levelWidth = Math.ceil(source.width * scale)
       const levelHeight = Math.ceil(source.height * scale)
@@ -1455,7 +1572,6 @@ class ImageViewer {
       }
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
-
   }
 }
 
@@ -1526,6 +1642,42 @@ let createLayerWidget = function (div, viewer, data) {
       toggleButton(eye, 'fa-eye', 'fa-eye-slash')
       eyeball(eye, layerNum, viewer)
     })
+
+    // TRANSPARENCY SLIDER
+    cell = tr.insertCell(-1)
+
+    let div = document.createElement('div')
+    div.className = 'showDiv'
+
+    let div1 = document.createElement('div')
+    div1.className = 'showHover'
+
+    fas = document.createElement('i')
+    fas.classList.add('fas')
+    fas.classList.add('fa-adjust')
+    fas.classList.add('hover-orange')
+    fas.style.cursor = 'pointer'
+    div.appendChild(fas)
+
+    let range = document.createElement('input')
+    range.type = 'range'
+    range.id = makeId(5, 'range')
+    range.min = '0'
+    range.max = '100'
+    range.step = '0.1'
+    range.value = opacities[ind] * 100
+    range.addEventListener('input', function () {
+      const worldItem = viewer.world.getItemAt(layerNum)
+      if (worldItem !== undefined) {
+        worldItem.setOpacity(this.value / 100) // SET OPACITY
+      } else {
+        console.warn('worldItem', worldItem)
+      }
+    })
+    div1.appendChild(range)
+
+    div.appendChild(div1)
+    cell.appendChild(div)
 
     // PALETTE COLOR FUNCTION
     cell = tr.insertCell(-1)
