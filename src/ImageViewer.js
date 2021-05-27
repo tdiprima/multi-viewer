@@ -8,13 +8,13 @@
  * @param options
  */
 class ImageViewer {
-  constructor (viewerIndex, viewerDivId, baseImage, data, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
     this.options = options
     this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), this.options)
   }
 
-  setViewer (viewerDivId) {
+  setViewer(viewerDivId) {
     let viewer
     try {
       viewer = OpenSeadragon({
@@ -24,26 +24,39 @@ class ImageViewer {
         immediateRender: true,
         animationTime: 0,
         imageLoaderLimit: 1
+        // DEBUG TOOLS:
         // showNavigator: true,
         // debugMode: true,
         // debugGridColor: "#f9276f"
       })
-      // function rstDrawer() {
-      //   viewer.drawer.reset()
-      // }
     } catch (e) {
       console.warn('setViewer', e)
       viewer = null
     }
+
+    // let ppm = (1 / (parseFloat(mpp-x) * 0.000001))
+    viewer.scalebar({
+      type: OpenSeadragon.ScalebarType.MICROSCOPY,
+      pixelsPerMeter: 39370078, // TODO: get mpp/ppm dynamically
+      location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+      xOffset: 5,
+      yOffset: 10,
+      stayInsideImage: true,
+      color: "rgb(150, 150, 150)",
+      fontColor: "rgb(100, 100, 100)",
+      backgroundColor: "rgba(255, 255, 255, 0.5)",
+      // fontSize: "small",
+      barThickness: 2
+    });
     this.viewer = viewer
     return viewer
   }
 
-  getViewer () {
+  getViewer() {
     return this.viewer
   }
 
-  setSources (viewerIndex, baseImage, data, viewer, options) {
+  setSources(viewerIndex, baseImage, data, viewer, options) {
     // Quick check url
     jQuery.get(baseImage).done(function () {
       // Add BASE image to viewer
@@ -62,9 +75,10 @@ class ImageViewer {
       dataCheck(baseImage, jqXHR, statusText)
     })
 
-    function overlayFeatures (viewer, colorRanges) {
+    function overlayFeatures(viewer, colorRanges) {
       try {
         viewer.world.addHandler('add-item', function (event) {
+          console.log(viewer.world.getItemAt(0))
           const itemIndex = viewer.world.getIndexOfItem(event.item)
           if (itemIndex > 0) {
             setViewerFilter(colorRanges, viewer)
@@ -78,7 +92,7 @@ class ImageViewer {
       }
     }
 
-    function dataCheck (url, jqXHR) {
+    function dataCheck(url, jqXHR) {
       const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
       console.warn(message)
       console.log('jqXHR object:', jqXHR)
@@ -87,7 +101,7 @@ class ImageViewer {
       throw new Error('Something went wrong.') // Terminates the script.
     }
 
-    function getIIIFTileUrl (source, level, x, y) {
+    function getIIIFTileUrl(source, level, x, y) {
       const scale = Math.pow(0.5, source.maxLevel - level)
       const levelWidth = Math.ceil(source.width * scale)
       const levelHeight = Math.ceil(source.height * scale)
