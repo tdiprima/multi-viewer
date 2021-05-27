@@ -2,9 +2,8 @@ const markupTools = function (idx, viewer) {
   const overlay = viewer.fabricjsOverlay({
     scale: 1000
   })
-
-  drawPolygon(idx, viewer, overlay)
-  editPolygon(idx, overlay)
-  gridOverlay(idx, overlay)
-  ruler(idx, viewer, overlay)
+  drawPolygon(document.getElementById('btnDraw' + idx), document.getElementById('mark' + idx), viewer, overlay)
+  editPolygon(document.getElementById('btnEdit' + idx), overlay)
+  gridOverlay(document.getElementById('btnGrid' + idx), document.getElementById('btnGridMarker' + idx), overlay)
+  ruler(document.getElementById('btnRuler' + idx), viewer, overlay)
 }

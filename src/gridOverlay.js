@@ -1,4 +1,4 @@
-const gridOverlay = function (idx, overlay) {
+const gridOverlay = function (btnGrid, btnGridMarker, overlay) {
   const cellSize = 25
 
   const gridProps = {
@@ -13,12 +13,10 @@ const gridOverlay = function (idx, overlay) {
     gridAdded: false
   }
 
-  const btnGrid = document.getElementById('btnGrid' + idx)
   btnGrid.addEventListener('click', function () {
     gridHandler(this, gridProps)
   })
 
-  const btnGridMarker = document.getElementById('btnGridMarker' + idx)
   btnGridMarker.addEventListener('click', function () {
     markerHandler(this, gridProps)
   })

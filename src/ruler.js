@@ -1,5 +1,4 @@
-const ruler = function (idx, viewer, overlay) {
-  // TODO: turn off event handlers, to not collide with others.
+const ruler = function (button, viewer, overlay) {
   let line, isDown, mode
   let startx = []
   let endx = []
@@ -8,14 +7,12 @@ const ruler = function (idx, viewer, overlay) {
   let temp = 0
   let text
 
-  // let canvas = overlay.fabricCanvas()
   let canvas = overlay.fabricCanvas({ // on/off
     hoverCursor: 'pointer',
     selection: false
   })
   fabric.Object.prototype.transparentCorners = false
 
-  const button = document.getElementById('btnRuler' + idx)
   button.addEventListener('click', function () {
     toggleButton(button, 'btnOn', 'btn')
 

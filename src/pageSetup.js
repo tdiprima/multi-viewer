@@ -1,7 +1,6 @@
 /**
  * pageSetup
  * Set up web page for multi-viewer.
- *
  * @param divId: Main div id.
  * @param image: Base image.
  * @param data: Array of features and opacities.
@@ -64,9 +63,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 
           if (opts && opts.toolbarOn) {
             htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
-            // show/hide
-//             htm += `<div class="controls showDiv" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] <BR>
-// <div id="tools${idx}" class="showHover">`
 
             // SLIDERS
             if (opts && opts.slidersOn) {
@@ -106,23 +102,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
-
-          // ANNOTATION TOOLS - Show/Hide Handler
-          // if (opts && opts.toolbarOn) {
-          //   let toggle = document.getElementById('hideTools' + idx)
-          //   let tools = document.getElementById('tools' + idx)
-          //   toggle.addEventListener('click', function () {
-          //     if (tools.hidden) {
-          //       tools.hidden = false
-          //       this.textContent = '[-] '
-          //       this.style.color = "maroon"
-          //     } else {
-          //       tools.hidden = true
-          //       this.textContent = '[+] '
-          //       this.style.color = "blue"
-          //     }
-          //   })
-          // }
 
           // DRAW POLYGON COLOR PICKER
           const colorPicker = new CP(document.getElementById('mark' + idx))

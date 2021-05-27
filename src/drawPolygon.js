@@ -1,16 +1,12 @@
 /**
  * Allow user to draw a polygon on the image.
- *
- * @param idx: Current viewer index.
+ * @param btnDraw
+ * @param mark
  * @param viewer: OSD viewer object.
  * @param overlay: fabric overlay object.
  */
-const drawPolygon = function (idx, viewer, overlay) {
-  const btnDraw = document.getElementById('btnDraw' + idx)
-  const mark = document.getElementById('mark' + idx)
-
+const drawPolygon = function (btnDraw, mark, viewer, overlay) {
   const canvas = overlay.fabricCanvas()
-
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
@@ -42,7 +38,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   })
 }
 
-function turnDrawingOff (canvas, viewer) {
+function turnDrawingOff(canvas, viewer) {
   canvas.isDrawingMode = false
 
   canvas.off('mouse:down', function () {
@@ -53,7 +49,7 @@ function turnDrawingOff (canvas, viewer) {
   viewer.outerTracker.setTracking(true)
 }
 
-function turnDrawingOn (canvas, viewer, paintBrush, mark) {
+function turnDrawingOn(canvas, viewer, paintBrush, mark) {
   canvas.isDrawingMode = true
 
   canvas.on('mouse:down', function () {
@@ -67,7 +63,7 @@ function turnDrawingOn (canvas, viewer, paintBrush, mark) {
   viewer.outerTracker.setTracking(false)
 }
 
-function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
+function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {
   convertPathToPolygon(options.path, canvas, paintBrush)
 
   customizePolygonControls(options.path, canvas, viewer)
@@ -81,7 +77,7 @@ function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
   })
 }
 
-function setGestureSettings (canvas, viewer) {
+function setGestureSettings(canvas, viewer) {
   if (!canvas.getActiveObject()) {
     $('.deleteBtn').remove()
     viewer.gestureSettingsMouse.clickToZoom = true
@@ -90,7 +86,7 @@ function setGestureSettings (canvas, viewer) {
   }
 }
 
-function customizePolygonControls (obj, canvas, viewer) {
+function customizePolygonControls(obj, canvas, viewer) {
   obj.hasControls = false
   obj.lockMovementX = true
   obj.lockMovementY = true
@@ -98,8 +94,8 @@ function customizePolygonControls (obj, canvas, viewer) {
   setupDeleteButton(canvas, viewer)
 }
 
-function setupDeleteButton (canvas, viewer) {
-  function addDeleteBtn (x, y) {
+function setupDeleteButton(canvas, viewer) {
+  function addDeleteBtn(x, y) {
     jQuery('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
@@ -139,7 +135,7 @@ function setupDeleteButton (canvas, viewer) {
   })
 }
 
-function convertPathToPolygon (pathObject, canvas, paintBrush) {
+function convertPathToPolygon(pathObject, canvas, paintBrush) {
   const _points0 = pathObject.path.map(item => ({
     x: item[1],
     y: item[2]
@@ -164,7 +160,7 @@ function convertPathToPolygon (pathObject, canvas, paintBrush) {
   canvas.remove(pathObject)
 }
 
-function fillPolygon (pointerEvent, canvas) {
+function fillPolygon(pointerEvent, canvas) {
   if (weHoveredOverPolygon(pointerEvent)) {
     const obj = pointerEvent.target
 
@@ -178,7 +174,7 @@ function fillPolygon (pointerEvent, canvas) {
   }
 }
 
-function unfillPolygon (pointerEvent, canvas) {
+function unfillPolygon(pointerEvent, canvas) {
   if (weHoveredOverPolygon(pointerEvent)) {
     const obj = pointerEvent.target
     if (obj !== null) {
@@ -192,7 +188,7 @@ function unfillPolygon (pointerEvent, canvas) {
   }
 }
 
-function weHoveredOverPolygon (pointerEvent) {
+function weHoveredOverPolygon(pointerEvent) {
   return (isRealValue(pointerEvent.target) && pointerEvent.target.type === 'polygon')
 }
 
