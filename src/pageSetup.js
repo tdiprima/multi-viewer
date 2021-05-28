@@ -18,8 +18,16 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
       return resolve(opts)
-
     }).then(function (opts) {
+      // quick little dark-mode
+      let newNode = document.createElement('button')
+      newNode.innerHTML = 'Toggle Dark Mode'
+      let referenceNode = document.querySelector('#contentDiv');
+      referenceNode.before(newNode)
+      newNode.addEventListener('click', function () {
+        document.body.classList.toggle("dark-mode")
+      })
+
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
       const table = document.createElement('table')
