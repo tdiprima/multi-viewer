@@ -26,7 +26,6 @@
 <body>
 
 <button id="multilay" type="button" class="btn btn-outline-primary">Test Multi Layers</button>
-<button id="rois" type="button" class="btn btn-outline-info">Test ROIs</button>
 
 <h3 class="title" id="info"></h3>
 <div id="contentDiv" style="width: 640px; height: 480px;"></div>
@@ -35,7 +34,6 @@
   // let base = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
   let base = window.location.origin + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-4Z-AA7N-01Z-00-DX1.10AA3499-6678-4DB2-9466-9CB3EA25CBB6.svs/info.json'
 
-  let rois = document.getElementById('rois')
   let multilay = document.getElementById('multilay')
 
   // Testing multiple layers
@@ -61,16 +59,6 @@
 
     info.innerHTML = 'Display Multiple Features'
     new ImageViewer(1, 'contentDiv', base, features, opacities, {colorRanges:[]})
-  })
-
-  // Zoom to different ROIs
-  rois.addEventListener('click', function () {
-    info.innerHTML = 'Zoom in on Different Regions of Interest'
-    const regions = ['/8192,8192,4096,4096/max/0/default.jpg',
-      '/12288,12288,3072,3072/max/0/default.jpg',
-      '/16384,16384,2048,2048/max/0/default.jpg',
-      '/20480,20480,1024,1024/max/0/default.jpg']
-    roiAlchemy('contentDiv', base, regions, 2, 2, 500, 300)
   })
 
   function buildUrl(type, cType, img) {
