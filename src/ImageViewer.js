@@ -73,6 +73,9 @@ class ImageViewer {
       overlayFeatures(viewer, options.colorRanges)
     }).fail(function (jqXHR, statusText) {
       dataCheck(baseImage, jqXHR, statusText)
+      // Terminate the script.
+      window.stop()
+      throw new Error("ERROR")
     })
 
     function overlayFeatures(viewer, colorRanges) {
@@ -98,7 +101,6 @@ class ImageViewer {
       console.log('jqXHR object:', jqXHR)
       console.log('URL', url)
       document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
-      throw new Error('Something went wrong.') // Terminates the script.
     }
 
     function getIIIFTileUrl(source, level, x, y) {
