@@ -55,6 +55,24 @@ class ImageViewer {
       })
     }
 
+    function zoomTo() {
+      viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
+    }
+
+    // viewer.addHandler('open', () => {})
+    viewer.addOnceHandler('tile-loaded', function () {
+      let thing = 'vendor/openseadragon/images/zoomin-1.png'
+      let printButton = new OpenSeadragon.Button({
+        tooltip: 'Zoom to 100%',
+        srcRest: thing,
+        srcGroup: thing,
+        srcHover: thing,
+        srcDown: thing,
+        onClick: zoomTo
+      })
+      viewer.addControl(printButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+    })
+
     this.viewer = viewer
     return viewer
   }
