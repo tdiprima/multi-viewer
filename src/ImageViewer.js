@@ -25,7 +25,8 @@ class ImageViewer {
         animationTime: 0,
         imageLoaderLimit: 1,
         showNavigator: true,
-        navigatorPosition:   "BOTTOM_RIGHT",
+        navigatorPosition: "BOTTOM_RIGHT"
+        // navigatorAutoFade: true,
         // DEBUG TOOLS:
         // debugMode: true,
         // debugGridColor: "#f9276f"
@@ -87,7 +88,7 @@ class ImageViewer {
     function overlayFeatures(viewer, colorRanges) {
       try {
         viewer.world.addHandler('add-item', function (event) {
-          console.log(viewer.world.getItemAt(0))
+          // console.log(viewer.world.getItemAt(0))
           const itemIndex = viewer.world.getIndexOfItem(event.item)
           if (itemIndex > 0) {
             setViewerFilter(colorRanges, viewer)
