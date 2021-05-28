@@ -23,9 +23,10 @@ class ImageViewer {
         crossOriginPolicy: 'Anonymous',
         immediateRender: true,
         animationTime: 0,
-        imageLoaderLimit: 1
+        imageLoaderLimit: 1,
+        showNavigator: true,
+        navigatorPosition:   "BOTTOM_LEFT",
         // DEBUG TOOLS:
-        // showNavigator: true,
         // debugMode: true,
         // debugGridColor: "#f9276f"
       })
