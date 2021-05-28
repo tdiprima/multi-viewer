@@ -34,7 +34,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
       // table.style.border = '1px solid black'
       table.id = 'myTable'
       mainDiv.appendChild(table) // TABLE ADDED TO PAGE
-      let slider1, slider2
 
       // CREATE ROWS & COLUMNS
       let r
@@ -72,17 +71,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           if (opts && opts.toolbarOn) {
             htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
 
-            // SLIDERS
-            if (opts && opts.slidersOn) {
-              slider1 = sliderIdNum += 1
-              slider2 = sliderIdNum += 1
-
-              htm += `<div class="range">
-<input type="range" id="sliderRange${slider1}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
-<input type="range" id="sliderRange${slider2}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
-</div>`
-            }
-
             // ANNOTATION TOOLS
             htm += `<div class="floated buttons">`
 
@@ -118,15 +106,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          // NEED TO PASS THESE TO VIEWER
-          let sliderElements = []
-          try {
-            sliderElements.push(document.getElementById('sliderRange' + slider1))
-            sliderElements.push(document.getElementById('sliderRange' + slider2))
-          } catch (e) {
-            console.error('sliders', e)
-          }
-
           // Pass along data for "this" viewer
           let allFeatures = data.features
           let allOpacity = data.opacities
@@ -136,7 +115,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer(idx, osdId, image, thisData, sliderElements, numViewers, opts))
+          viewers.push(new MultiViewer(idx, osdId, image, thisData, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer
