@@ -1,4 +1,4 @@
-/* main style */
+/* MAIN STYLE */
 
 body {
   font-family: sans-serif;
@@ -12,7 +12,14 @@ a:link {
   text-decoration: none;
 }
 
-/* user controls */
+/* DARK MODE */
+
+.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+/* USER CONTROLS */
 
 .btn {
   color: #0e74da;
@@ -30,7 +37,7 @@ a:link {
   cursor: default !important;
 }
 
-/* range sliders */
+/* RANGE SLIDERS */
 
 .slider-square {
   -webkit-appearance: none;
@@ -64,13 +71,13 @@ a:link {
   cursor: pointer;
 }
 
-/* color-picker */
+/* color-picker no-alpha */
 
-.color-picker.no-alpha .color-picker\:a {
-  display: none;
-}
+/*.color-picker.no-alpha .color-picker\:a {*/
+/*  display: none;*/
+/*}*/
 
-/* quad */
+/* "QUAD" */
 
 .divSquare {
   /*width: 48%;*/
@@ -103,7 +110,7 @@ a:link {
   margin-right: 5px;
 }
 
-/* mugshots */
+/* MUGSHOTS */
 
 .thumbnail-container {
   overflow-x: scroll;
