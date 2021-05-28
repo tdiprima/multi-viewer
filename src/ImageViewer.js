@@ -34,20 +34,25 @@ class ImageViewer {
       viewer = null
     }
 
-    // let ppm = (1 / (parseFloat(mpp-x) * 0.000001))
-    viewer.scalebar({
-      type: OpenSeadragon.ScalebarType.MICROSCOPY,
-      pixelsPerMeter: 39370078, // TODO: get mpp/ppm dynamically
-      location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
-      xOffset: 5,
-      yOffset: 10,
-      stayInsideImage: true,
-      color: "rgb(150, 150, 150)",
-      fontColor: "rgb(100, 100, 100)",
-      backgroundColor: "rgba(255, 255, 255, 0.5)",
-      // fontSize: "small",
-      barThickness: 2
-    });
+    // TODO: get mpp/ppm dynamically
+    // openslide.mpp-x: '0.25'
+    let ppm = (1 / (parseFloat('0.25') * 0.000001))
+    if (viewer !== null) {
+      viewer.scalebar({
+        type: OpenSeadragon.ScalebarType.MICROSCOPY,
+        pixelsPerMeter: ppm,
+        location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+        xOffset: 5,
+        yOffset: 10,
+        stayInsideImage: true,
+        color: "rgb(150, 150, 150)",
+        fontColor: "rgb(100, 100, 100)",
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        // fontSize: "small",
+        barThickness: 2
+      })
+    }
+
     this.viewer = viewer
     return viewer
   }
