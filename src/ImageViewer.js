@@ -25,7 +25,7 @@ class ImageViewer {
         animationTime: 0,
         imageLoaderLimit: 1,
         showNavigator: true,
-        navigatorPosition:   "BOTTOM_LEFT",
+        navigatorPosition:   "BOTTOM_RIGHT",
         // DEBUG TOOLS:
         // debugMode: true,
         // debugGridColor: "#f9276f"
