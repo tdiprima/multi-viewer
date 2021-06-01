@@ -14,6 +14,7 @@ let filters = function (viewer, data, button) {
 let createWidget = function (div, viewer, data) {
   const table = document.createElement('table')
   div.appendChild(table)
+  const uniq = makeId(5)
   // data.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
   data.forEach(function (elem, ind) {
     let tr = table.insertRow(-1)
@@ -40,15 +41,21 @@ let createWidget = function (div, viewer, data) {
     // LOW
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      id: makeId(5, 'low'),
-      val: data[ind].low
+      prefix: 'low',
+      uniq: uniq,
+      suffix: ind,
+      val: data[ind].low,
+      index: ind
     }, viewer, data))
 
     // HIGH
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      id: makeId(5, 'hi'),
-      val: data[ind].hi
+      prefix: 'hi',
+      uniq: uniq,
+      suffix: ind,
+      val: data[ind].hi,
+      index: ind
     }, viewer, data))
 
   })
@@ -74,19 +81,19 @@ function rgba2hex(orig) {
 }
 
 // NUMBER INPUT to let user set threshold values
-function createNumericInput({id, val}, viewer, data) {
+function createNumericInput(obj, viewer, data) {
   let x = document.createElement('input')
-  x.id = id
+  x.id = obj.prefix + obj.uniq + obj.suffix
   x.setAttribute('type', 'number')
   x.min = '0'
   x.max = '255'
   x.step = '1'
-  x.value = val.toString()
+  x.value = obj.val.toString()
   x.size = 5
 
-  // x.addEventListener('change', function () {
-  //   isIntersect(data, data.length)
-  // })
+  x.addEventListener('change', function () {
+    isIntersect(obj.uniq, data, data.length)
+  })
 
   // this event happens whenever the value changes
   x.addEventListener('input', function () {
@@ -97,49 +104,51 @@ function createNumericInput({id, val}, viewer, data) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      data[index].low = parseInt(this.value)
+      data[obj.index].low = parseInt(this.value)
     } else {
-      data[index].hi = parseInt(this.value)
+      data[obj.index].hi = parseInt(this.value)
       setViewerFilter(data, viewer) // triggered by high value input
     }
   })
   return x
 }
 
-// TODO: Don't handle it by ID
-/*
-function isIntersect(arr, n) {
-  // Clear any previous errors
-  arr.forEach((element, index) => {
-    clearError(document.getElementById('low' + index), document.getElementById('hi' + index))
-  })
-  // Validate
+function isIntersect(uniq, arr, n) {
+
+  for (let i = 0; i < n; i++) {
+    // Clear all previous errors
+    clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
+  }
+
   for (let i = 1; i < n; i++) {
+    // Validate
     if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
-      setError(document.getElementById('low' + i), document.getElementById('hi' + (i - 1)))
+      setError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + (i - 1)))
       return true
     }
     if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
-      setError(document.getElementById('low' + (i - 1)), document.getElementById('hi' + i))
+      setError(document.getElementById('low' + uniq + (i - 1)), document.getElementById('hi' + uniq + i))
       return true
     }
   }
+
   // If we reach here, then no overlap
   return false
 }
+
 function setError(a, b) {
   a.style.outlineStyle = 'solid'
   a.style.outlineColor = 'red'
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
+
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
   b.style.outlineColor = ''
 }
- */
 
 // TODO: CHANGE! Set a different color function per layer
 // Currently: the same color function for each layer
