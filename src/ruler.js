@@ -23,79 +23,83 @@ const ruler = function (button, viewer, overlay) {
       mode = ''
       button.innerHTML = '<i class="fas fa-ruler"></i> Ruler on'
     }
-  })
 
-  canvas.on('mouse:down', function (o) {
-    if (mode === 'draw') {
-      viewer.setMouseNavEnabled(false)
-      viewer.outerTracker.setTracking(false)
-      isDown = true
+    canvas.on('mouse:down', function (o) {
+      if (mode === 'draw') {
+        viewer.setMouseNavEnabled(false)
+        viewer.outerTracker.setTracking(false)
+        isDown = true
+        let pointer = canvas.getPointer(o.e)
+
+        // LINE
+        let points = [pointer.x, pointer.y, pointer.x, pointer.y]
+        startx[temp] = pointer.x
+        starty[temp] = pointer.y
+        line = new fabric.Line(points, {
+          strokeWidth: 2,
+          stroke: '#0f0',
+          originX: 'center',
+          originY: 'center'
+        })
+        canvas.add(line)
+      } else {
+        console.log('ELSE!')
+        viewer.setMouseNavEnabled(true)
+        viewer.outerTracker.setTracking(true)
+        canvas.forEachObject(function (o) {
+          o.setCoords() // update coordinates
+        })
+      }
+    })
+
+    canvas.on('mouse:move', function (o) {
+      canvas.remove(text) // remove text element before re-adding it
+      canvas.renderAll() // on/off
+      if (!isDown) return
       let pointer = canvas.getPointer(o.e)
 
       // LINE
-      let points = [pointer.x, pointer.y, pointer.x, pointer.y]
-      startx[temp] = pointer.x
-      starty[temp] = pointer.y
-      line = new fabric.Line(points, {
-        strokeWidth: 2,
-        stroke: '#0f0',
-        originX: 'center',
-        originY: 'center'
-      })
-      canvas.add(line)
-    } else {
-      viewer.setMouseNavEnabled(true)
-      viewer.outerTracker.setTracking(true)
-      canvas.forEachObject(function (o) {
-        o.setCoords() // update coordinates
-      })
-    }
-  })
+      line.set({x2: pointer.x, y2: pointer.y})
 
-  canvas.on('mouse:move', function (o) {
-    canvas.remove(text) // remove text element before re-adding it
-    canvas.renderAll() // on/off
-    if (!isDown) return
-    let pointer = canvas.getPointer(o.e)
+      endx[temp] = pointer.x
+      endy[temp] = pointer.y
 
-    // LINE
-    line.set({x2: pointer.x, y2: pointer.y})
+      // TEXT
+      if (mode === 'draw') {
+        let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
+        text = new fabric.Text('Length ' + px, {left: endx[temp], top: endy[temp], fontSize: 14, fill: '#0f0'})
+        canvas.add(text)
+      }
 
-    endx[temp] = pointer.x
-    endy[temp] = pointer.y
+      canvas.renderAll()
+    })
 
-    // TEXT
-    if (mode === 'draw') {
-      let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
-      text = new fabric.Text('Length ' + px, {left: endx[temp], top: endy[temp], fontSize: 14, fill: '#0f0'})
-      canvas.add(text)
-    }
+    canvas.on('mouse:up', function (o) {
+      let pointer = canvas.getPointer(o.e)
+      isDown = false
 
-    canvas.renderAll()
-  })
+      // RECT
+      canvas.add(new fabric.Rect({
+        left: pointer.x + 1,
+        top: pointer.y + 1,
+        width: 150,
+        height: 25,
+        fill: 'rgba(255,255,255,0.5)',
+        transparentCorners: true
+      }))
 
-  canvas.on('mouse:up', function (o) {
-    let pointer = canvas.getPointer(o.e)
-    isDown = false
+      // TEXT
+      if (typeof text !== 'undefined') {
+        canvas.add(new fabric.Text(text.text, {
+          fontSize: 20,
+          left: pointer.x + 1,
+          top: pointer.y + 1
+        }))
+      }
 
-    // RECT
-    canvas.add(new fabric.Rect({
-      left: pointer.x + 1,
-      top: pointer.y + 1,
-      width: 150,
-      height: 25,
-      fill: 'rgba(255,255,255,0.5)',
-      transparentCorners: true
-    }))
+      canvas.renderAll()
+    })
 
-    // TEXT
-    canvas.add(new fabric.Text(text.text, {
-      fontSize: 20,
-      left: pointer.x + 1,
-      top: pointer.y + 1
-    }))
-
-    canvas.renderAll()
   })
 
   let Calculate = {
