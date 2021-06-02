@@ -55,13 +55,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 
           let htm = ''
 
-          // LAYER BUTTONS
-          let layerHtm = `<div>
-<i id="layers${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i>&nbsp;
-<i id="palette${idx}" style="cursor: pointer;" class="fas fa-palette"></i>
-</div>`
-          htm += layerHtm
-
           // NAVIGATION TOOLS
           if (numViewers > 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
