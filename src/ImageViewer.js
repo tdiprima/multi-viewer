@@ -10,123 +10,87 @@
 class ImageViewer {
   constructor(viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
-    this.options = options
-    this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), this.options)
-  }
+    let viewer = OpenSeadragon({
+      id: viewerDivId,
+      prefixUrl: 'vendor/openseadragon/images/',
+      crossOriginPolicy: 'Anonymous',
+      immediateRender: true,
+      animationTime: 0,
+      imageLoaderLimit: 1,
+      showNavigator: true,
+      navigatorPosition: "BOTTOM_RIGHT"
+    })
 
-  setViewer(viewerDivId) {
-    let viewer
-    try {
-      viewer = OpenSeadragon({
-        id: viewerDivId,
-        prefixUrl: 'vendor/openseadragon/images/',
-        crossOriginPolicy: 'Anonymous',
-        immediateRender: true,
-        animationTime: 0,
-        imageLoaderLimit: 1,
-        showNavigator: true,
-        navigatorPosition: "BOTTOM_RIGHT"
-        // navigatorAutoFade: true,
-        // DEBUG TOOLS:
-        // debugMode: true,
-        // debugGridColor: "#f9276f"
-      })
-    } catch (e) {
-      console.warn('setViewer', e)
-      viewer = null
-    }
-
-    // TODO: get mpp/ppm dynamically
-    // openslide.mpp-x: '0.25'
-    let ppm = (1 / (parseFloat('0.25') * 0.000001))
-    if (viewer !== null) {
-      viewer.scalebar({
-        type: OpenSeadragon.ScalebarType.MICROSCOPY,
-        pixelsPerMeter: ppm,
-        location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
-        xOffset: 5,
-        yOffset: 10,
-        stayInsideImage: true,
-        color: "rgb(150, 150, 150)",
-        fontColor: "rgb(100, 100, 100)",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
-        // fontSize: "small",
-        barThickness: 2
+    if (baseImage.includes('info.json')) {
+      let setScaleBar = function (ppm) {
+        viewer.scalebar({
+          type: OpenSeadragon.ScalebarType.MICROSCOPY,
+          pixelsPerMeter: ppm,
+          location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+          xOffset: 5,
+          yOffset: 10,
+          stayInsideImage: true,
+          color: "rgb(150, 150, 150)",
+          fontColor: "rgb(100, 100, 100)",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          // fontSize: "small",
+          barThickness: 2
+        })
+      }
+      // Get info for scale bar
+      let promiseA = async function () {
+        return (await fetch(baseImage)).json()
+      }
+      let promiseB = promiseA()
+      promiseB.then(function (d) {
+        if (d['resolutionUnit'] === 3) {
+          setScaleBar(d['xResolution'] * 100)
+        } else {
+          // let ppm = (1 / (parseFloat('0.25') * 0.000001))
+          console.warn('Handle resolution unit', d['resolutionUnit'])
+        }
       })
     }
 
+    // CUSTOM ZOOM BUTTON
     function zoomTo() {
       viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
     }
-
-    // viewer.addHandler('open', () => {})
     viewer.addOnceHandler('tile-loaded', function () {
-      let thing = 'vendor/openseadragon/images/zoomin-1.png'
-      let printButton = new OpenSeadragon.Button({
+      let img = 'vendor/openseadragon/images/zoomin-1.png'
+      let zoomButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest: thing,
-        srcGroup: thing,
-        srcHover: thing,
-        srcDown: thing,
+        srcRest: img,
+        srcGroup: img,
+        srcHover: img,
+        srcDown: img,
         onClick: zoomTo
       })
-      viewer.addControl(printButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+      viewer.addControl(zoomButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
-    this.viewer = viewer
-    return viewer
-  }
+    // Add BASE image to viewer
+    viewer.addTiledImage({tileSource: baseImage, opacity: 1, x: 0, y: 0})
 
-  getViewer() {
-    return this.viewer
-  }
+    // Add FEATURE layers to viewer
+    const features = data.features
+    const opacity = data.opacities
+    if (features) {
+      features.forEach(function (feature, index) {
+        viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
+      })
+    }
 
-  setSources(viewerIndex, baseImage, data, viewer, options) {
-    // Quick check url
-    jQuery.get(baseImage).done(function () {
-      // Add BASE image to viewer
-      viewer.addTiledImage({ tileSource: baseImage, opacity: 1, x: 0, y: 0 })
-
-      // Add FEATURE layers to viewer
-      const features = data.features
-      const opacity = data.opacities
-      if (features) {
-        features.forEach(function (feature, index) {
-          viewer.addTiledImage({ tileSource: feature, opacity: opacity[index], x: 0, y: 0 })
-        })
+    // OVERLAY FEATURES
+    viewer.world.addHandler('add-item', function (event) {
+      const itemIndex = viewer.world.getIndexOfItem(event.item)
+      if (itemIndex > 0) {
+        setViewerFilter(options.colorRanges, viewer)
+        viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
+          return getIIIFTileUrl(this, level, x, y)
+        }
       }
-      overlayFeatures(viewer, options.colorRanges)
-    }).fail(function (jqXHR, statusText) {
-      dataCheck(baseImage, jqXHR, statusText)
-      // Terminate the script.
-      window.stop()
-      throw new Error("ERROR")
     })
-
-    function overlayFeatures(viewer, colorRanges) {
-      try {
-        viewer.world.addHandler('add-item', function (event) {
-          // console.log(viewer.world.getItemAt(0))
-          const itemIndex = viewer.world.getIndexOfItem(event.item)
-          if (itemIndex > 0) {
-            setViewerFilter(colorRanges, viewer)
-            viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
-              return getIIIFTileUrl(this, level, x, y)
-            }
-          }
-        })
-      } catch (e) {
-        console.error('Here we are', e.message)
-      }
-    }
-
-    function dataCheck(url, jqXHR) {
-      const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
-      console.warn(message)
-      console.log('jqXHR object:', jqXHR)
-      console.log('URL', url)
-      document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
-    }
 
     function getIIIFTileUrl(source, level, x, y) {
       const scale = Math.pow(0.5, source.maxLevel - level)
@@ -155,5 +119,13 @@ class ImageViewer {
       }
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
+
+    this.viewer = viewer
+
   }
+
+  getViewer() {
+    return this.viewer
+  }
+
 }
