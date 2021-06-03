@@ -60,10 +60,10 @@ class ImageViewer {
       let dir = 'vendor/openseadragon/images/'
       let zoomButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest: dir + zin_rest.png,
-        srcGroup: dir + zin_grouphover.png,
-        srcHover: dir + zin_hover.png,
-        srcDown: dir + zin_pressed.png,
+        srcRest: dir + 'zin_rest.png',
+        srcGroup: dir + 'zin_grouphover.png',
+        srcHover: dir + 'zin_hover.png',
+        srcDown: dir + 'zin_pressed.png',
         onClick: zoomTo
       })
       viewer.addControl(zoomButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
