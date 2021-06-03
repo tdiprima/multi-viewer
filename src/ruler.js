@@ -43,7 +43,6 @@ const ruler = function (button, viewer, overlay) {
         })
         canvas.add(line)
       } else {
-        console.log('ELSE!')
         viewer.setMouseNavEnabled(true)
         viewer.outerTracker.setTracking(true)
         canvas.forEachObject(function (o) {
