@@ -52,21 +52,31 @@ class ImageViewer {
       })
     }
 
-    // CUSTOM ZOOM BUTTON
-    function zoomTo() {
-      viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
-    }
+    // CUSTOM ZOOM BUTTONS
     viewer.addOnceHandler('tile-loaded', function () {
       let dir = 'vendor/openseadragon/images/'
-      let zoomButton = new OpenSeadragon.Button({
+      let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
         srcRest: dir + 'zin_rest.png',
         srcGroup: dir + 'zin_grouphover.png',
         srcHover: dir + 'zin_hover.png',
         srcDown: dir + 'zin_pressed.png',
-        onClick: zoomTo
+        onClick: function () {
+          viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
+        }
       })
-      viewer.addControl(zoomButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+      let zoutButton = new OpenSeadragon.Button({
+        tooltip: 'perspective',
+        srcRest: dir + 'zout_rest.png',
+        srcGroup: dir + 'zout_grouphover.png',
+        srcHover: dir + 'zout_grouphover.png',
+        srcDown: dir + 'zout_pressed.png',
+        onClick: function () {
+          viewer.viewport.goHome(true)
+        }
+      })
+      viewer.addControl(zinButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+      viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
     // Add BASE image to viewer
