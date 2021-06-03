@@ -69,7 +69,7 @@ class ImageViewer {
         tooltip: 'perspective',
         srcRest: dir + 'zout_rest.png',
         srcGroup: dir + 'zout_grouphover.png',
-        srcHover: dir + 'zout_grouphover.png',
+        srcHover: dir + 'zout_hover.png',
         srcDown: dir + 'zout_pressed.png',
         onClick: function () {
           viewer.viewport.goHome(true)
