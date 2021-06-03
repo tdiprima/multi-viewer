@@ -57,13 +57,13 @@ class ImageViewer {
       viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
     }
     viewer.addOnceHandler('tile-loaded', function () {
-      let img = 'vendor/openseadragon/images/zoomin-1.png'
+      let dir = 'vendor/openseadragon/images/'
       let zoomButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest: img,
-        srcGroup: img,
-        srcHover: img,
-        srcDown: img,
+        srcRest: dir + zin_rest.png,
+        srcGroup: dir + zin_grouphover.png,
+        srcHover: dir + zin_hover.png,
+        srcDown: dir + zin_pressed.png,
         onClick: zoomTo
       })
       viewer.addControl(zoomButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
