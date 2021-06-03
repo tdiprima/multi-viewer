@@ -1,4 +1,4 @@
-/*! multi-viewer - v2.4.8 - 2021-05-27 */
+/*! multi-viewer - v2.4.8 - 2021-06-03 */
 function clearClassList(element) {
   const classList = element.classList
   while (classList.length > 0) {
@@ -115,7 +115,6 @@ async function fetchAsync (url) {
 /**
  * pageSetup
  * Set up web page for multi-viewer.
- *
  * @param divId: Main div id.
  * @param image: Base image.
  * @param data: Array of features and opacities.
@@ -133,15 +132,22 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
       return resolve(opts)
-
     }).then(function (opts) {
+      // quick little dark-mode
+      let newNode = document.createElement('button')
+      newNode.innerHTML = 'Toggle Dark Mode'
+      let referenceNode = document.querySelector('#contentDiv');
+      referenceNode.before(newNode)
+      newNode.addEventListener('click', function () {
+        document.body.classList.toggle("dark-mode")
+      })
+
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
       const table = document.createElement('table')
       // table.style.border = '1px solid black'
       table.id = 'myTable'
       mainDiv.appendChild(table) // TABLE ADDED TO PAGE
-      let slider1, slider2
 
       // CREATE ROWS & COLUMNS
       let r
@@ -163,13 +169,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 
           let htm = ''
 
-          // LAYER BUTTONS
-          let layerHtm = `<div>
-<i id="layers${idx}" style="cursor: pointer;" class="fa fa-layer-group"></i>&nbsp;
-<i id="palette${idx}" style="cursor: pointer;" class="fas fa-palette"></i>
-</div>`
-          htm += layerHtm
-
           // NAVIGATION TOOLS
           if (numViewers > 1) {
             htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
@@ -178,20 +177,6 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
 
           if (opts && opts.toolbarOn) {
             htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
-            // show/hide
-//             htm += `<div class="controls showDiv" id="hideTools${idx}" style="color:blue; cursor:pointer;">[+] <BR>
-// <div id="tools${idx}" class="showHover">`
-
-            // SLIDERS
-            if (opts && opts.slidersOn) {
-              slider1 = sliderIdNum += 1
-              slider2 = sliderIdNum += 1
-
-              htm += `<div class="range">
-<input type="range" id="sliderRange${slider1}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
-<input type="range" id="sliderRange${slider2}" min="0" max="100" value="100" class="slider-square" style="display: inline;">
-</div>`
-            }
 
             // ANNOTATION TOOLS
             htm += `<div class="floated buttons">`
@@ -221,38 +206,12 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
           container.innerHTML = htm
 
-          // ANNOTATION TOOLS - Show/Hide Handler
-          // if (opts && opts.toolbarOn) {
-          //   let toggle = document.getElementById('hideTools' + idx)
-          //   let tools = document.getElementById('tools' + idx)
-          //   toggle.addEventListener('click', function () {
-          //     if (tools.hidden) {
-          //       tools.hidden = false
-          //       this.textContent = '[-] '
-          //       this.style.color = "maroon"
-          //     } else {
-          //       tools.hidden = true
-          //       this.textContent = '[+] '
-          //       this.style.color = "blue"
-          //     }
-          //   })
-          // }
-
           // DRAW POLYGON COLOR PICKER
           const colorPicker = new CP(document.getElementById('mark' + idx))
           colorPicker.on('change', function (r, g, b, a) {
             this.source.value = this.color(r, g, b, a)
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
-
-          // NEED TO PASS THESE TO VIEWER
-          let sliderElements = []
-          try {
-            sliderElements.push(document.getElementById('sliderRange' + slider1))
-            sliderElements.push(document.getElementById('sliderRange' + slider2))
-          } catch (e) {
-            console.error('sliders', e)
-          }
 
           // Pass along data for "this" viewer
           let allFeatures = data.features
@@ -263,7 +222,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer(idx, osdId, image, thisData, sliderElements, numViewers, opts))
+          viewers.push(new MultiViewer(idx, osdId, image, thisData, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer
@@ -280,22 +239,22 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
   })
 }
 
-const editPolygon = function (idx, overlay) {
-  document.getElementById('btnEdit' + idx).addEventListener('click', function () {
+const editPolygon = function (button, overlay) {
+  button.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'btn')
     Edit(overlay.fabricCanvas())
   })
 }
 
 // Position handling code borrowed from: http://fabricjs.com/custom-controls-polygon
-function polygonPositionHandler (dim, finalMatrix, fabricObject) {
+function polygonPositionHandler(dim, finalMatrix, fabricObject) {
   // This function looks at the pointIndex of the control and returns the
   // current canvas position for that particular point.
   const x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x)
   const y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y)
 
   return fabric.util.transformPoint(
-    { x: x, y: y },
+    {x: x, y: y},
 
     fabric.util.multiplyTransformMatrices(
       fabricObject.canvas.viewportTransform,
@@ -305,7 +264,7 @@ function polygonPositionHandler (dim, finalMatrix, fabricObject) {
 }
 
 // Custom action handler makes the control change the current point.
-function actionHandler (eventData, transform, x, y) {
+function actionHandler(eventData, transform, x, y) {
   const polygon = transform.target
   const currentControl = polygon.controls[polygon.__corner]
 
@@ -321,7 +280,7 @@ function actionHandler (eventData, transform, x, y) {
 }
 
 // Handles the object that changes dimensions, while maintaining the correct position.
-function anchorWrapper (anchorIndex, fn) {
+function anchorWrapper(anchorIndex, fn) {
   return function (eventData, transform, x, y) {
     const fabricObject = transform.target
 
@@ -341,7 +300,7 @@ function anchorWrapper (anchorIndex, fn) {
   }
 }
 
-function getPolygon (canvas) {
+function getPolygon(canvas) {
   if (canvas.getActiveObject()) {
     // User selected object that they want to work on.
     return canvas.getActiveObject()
@@ -361,7 +320,7 @@ function getPolygon (canvas) {
   }
 }
 
-function Edit (canvas) {
+function Edit(canvas) {
   const fabricPolygon = getPolygon(canvas)
 
   if (isRealValue(fabricPolygon)) {
@@ -398,17 +357,13 @@ function Edit (canvas) {
 
 /**
  * Allow user to draw a polygon on the image.
- *
- * @param idx: Current viewer index.
+ * @param btnDraw
+ * @param mark
  * @param viewer: OSD viewer object.
  * @param overlay: fabric overlay object.
  */
-const drawPolygon = function (idx, viewer, overlay) {
-  const btnDraw = document.getElementById('btnDraw' + idx)
-  const mark = document.getElementById('mark' + idx)
-
+const drawPolygon = function (btnDraw, mark, viewer, overlay) {
   const canvas = overlay.fabricCanvas()
-
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
@@ -440,7 +395,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   })
 }
 
-function turnDrawingOff (canvas, viewer) {
+function turnDrawingOff(canvas, viewer) {
   canvas.isDrawingMode = false
 
   canvas.off('mouse:down', function () {
@@ -451,7 +406,7 @@ function turnDrawingOff (canvas, viewer) {
   viewer.outerTracker.setTracking(true)
 }
 
-function turnDrawingOn (canvas, viewer, paintBrush, mark) {
+function turnDrawingOn(canvas, viewer, paintBrush, mark) {
   canvas.isDrawingMode = true
 
   canvas.on('mouse:down', function () {
@@ -465,7 +420,7 @@ function turnDrawingOn (canvas, viewer, paintBrush, mark) {
   viewer.outerTracker.setTracking(false)
 }
 
-function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
+function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {
   convertPathToPolygon(options.path, canvas, paintBrush)
 
   customizePolygonControls(options.path, canvas, viewer)
@@ -479,7 +434,7 @@ function pathCreatedHandler (options, button, canvas, paintBrush, viewer) {
   })
 }
 
-function setGestureSettings (canvas, viewer) {
+function setGestureSettings(canvas, viewer) {
   if (!canvas.getActiveObject()) {
     $('.deleteBtn').remove()
     viewer.gestureSettingsMouse.clickToZoom = true
@@ -488,7 +443,7 @@ function setGestureSettings (canvas, viewer) {
   }
 }
 
-function customizePolygonControls (obj, canvas, viewer) {
+function customizePolygonControls(obj, canvas, viewer) {
   obj.hasControls = false
   obj.lockMovementX = true
   obj.lockMovementY = true
@@ -496,8 +451,8 @@ function customizePolygonControls (obj, canvas, viewer) {
   setupDeleteButton(canvas, viewer)
 }
 
-function setupDeleteButton (canvas, viewer) {
-  function addDeleteBtn (x, y) {
+function setupDeleteButton(canvas, viewer) {
+  function addDeleteBtn(x, y) {
     jQuery('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
@@ -537,7 +492,7 @@ function setupDeleteButton (canvas, viewer) {
   })
 }
 
-function convertPathToPolygon (pathObject, canvas, paintBrush) {
+function convertPathToPolygon(pathObject, canvas, paintBrush) {
   const _points0 = pathObject.path.map(item => ({
     x: item[1],
     y: item[2]
@@ -562,7 +517,7 @@ function convertPathToPolygon (pathObject, canvas, paintBrush) {
   canvas.remove(pathObject)
 }
 
-function fillPolygon (pointerEvent, canvas) {
+function fillPolygon(pointerEvent, canvas) {
   if (weHoveredOverPolygon(pointerEvent)) {
     const obj = pointerEvent.target
 
@@ -576,7 +531,7 @@ function fillPolygon (pointerEvent, canvas) {
   }
 }
 
-function unfillPolygon (pointerEvent, canvas) {
+function unfillPolygon(pointerEvent, canvas) {
   if (weHoveredOverPolygon(pointerEvent)) {
     const obj = pointerEvent.target
     if (obj !== null) {
@@ -590,7 +545,7 @@ function unfillPolygon (pointerEvent, canvas) {
   }
 }
 
-function weHoveredOverPolygon (pointerEvent) {
+function weHoveredOverPolygon(pointerEvent) {
   return (isRealValue(pointerEvent.target) && pointerEvent.target.type === 'polygon')
 }
 
@@ -613,180 +568,7 @@ function weHoveredOverPolygon (pointerEvent) {
 //   canvas.add(infoText)
 // }
 
-/**
- * mugshots.js
- * Create an array of rois; onClick: image will zoom to area, and draw a box around the ROI.
- *
- * @param options:
-  {
-    'divId': options.divId,
-    'thumbId': options.thumbId,
-    'infoUrl': options.infoUrl,
-    'imgDims': options.imgDims,
-    'thumbnailSize': options.thumbnailSize,
-    'scrollerLength': options.scrollerLength,
-    'mugshotArray': options.mugshotArray,
-    'roiColor': options.roiColor,
-    'overlay': options.overlay,
-    'viewer': options.viewer
-  }
- */
-const mugshots = function (options) {
-  const canvas = this.__canvas = options.overlay.fabricCanvas()
-  options.overlay.resizeCanvas = function () {
-    // Function override: Resize overlay canvas
-    const image1 = this._viewer.world.getItemAt(0)
-
-    this._fabricCanvas.setWidth(this._containerWidth)
-    this._fabricCanvas.setHeight(this._containerHeight)
-    this._fabricCanvas.setZoom(image1.viewportToImageZoom(this._viewer.viewport.getZoom(true)))
-
-    const image1WindowPoint = image1.imageToWindowCoordinates(new OpenSeadragon.Point(0, 0))
-    const canvasOffset = this._canvasdiv.getBoundingClientRect()
-    const pageScroll = OpenSeadragon.getPageScroll()
-
-    this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - Math.round(image1WindowPoint.x) + pageScroll.x, canvasOffset.top - Math.round(image1WindowPoint.y) + pageScroll.y))
-  }
-
-  const vpt = options.viewer.viewport
-
-  const size = '256,'
-  const rotation = '0'
-  const quality = 'default'
-  const format = 'jpg'
-
-  createScroller(options.imgDims)
-
-  function createScroller (data) {
-    let ul, li, span
-
-    const fragment = document.createDocumentFragment()
-    ul = document.createElement('ul')
-    ul.classList.add('thumbnail-list')
-    fragment.appendChild(ul)
-
-    let j
-    for (j = 0; j < options.scrollerLength; j++) {
-      li = document.createElement('li')
-      ul.appendChild(li)
-      span = document.createElement('span')
-      // Giving it some number in the middle of the image
-      // createThumbnail(data, span, Math.round(data.width / 2), Math.round(data.height / 2)) // Image coordinates
-      createThumbnail(data, span)
-      li.appendChild(span)
-    }
-    document.getElementById(options.thumbId).appendChild(fragment)
-  }
-
-  function getRandomInt (min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-
-  function xyExist (x, y) {
-    return (typeof (x) !== 'undefined' && typeof (y) !== 'undefined' && x >= 0 && y >= 0)
-  }
-
-  function createThumbnail (data, span, x, y) {
-    let imageRect // it's a rectangle
-    if (xyExist(x, y)) {
-      // x,y,w,h
-      imageRect = new OpenSeadragon.Rect(x, y, options.thumbnailSize, options.thumbnailSize)
-    } else {
-      imageRect = randomImageRectangle(data)
-    }
-    checkWholeNumbers(imageRect)
-
-    const imgElement = document.createElement('IMG')
-    imgElement.alt = 'mugshot'
-    imgElement.classList.add('thumbnail-image')
-
-    imgElement.src = getImageUrl(options.infoUrl, imageRect)
-
-    span.appendChild(imgElement)
-
-    // highlightLocation(imageRect)
-
-    imgElement.addEventListener('click', function () {
-      showThumbnailOnImage(imageRect)
-    })
-  }
-
-  function checkWholeNumbers (imageRect) {
-    // IIIF wants whole numbers
-    const imagePoint = imageRect.getTopLeft()
-    if (imagePoint.x % 1 !== 0) {
-      console.warn(imagePoint.x, 'not a whole number')
-    }
-    if (imagePoint.y % 1 !== 0) {
-      console.warn(imagePoint.y, 'not a whole number')
-    }
-  }
-
-  function getImageUrl (infoUrl, imageRect) {
-    return infoUrl + '/' +
-      imageRect.getTopLeft().x + ',' +
-      imageRect.getTopLeft().y + ',' +
-      imageRect.width + ',' +
-      imageRect.height + '/' +
-      size + '/' +
-      rotation + '/' +
-      quality + '.' + format
-  }
-
-  function showThumbnailOnImage (imageRect) {
-    zoomToLocation(imageRect)
-    highlightLocation(imageRect)
-  }
-
-  function zoomToLocation (imageRect) {
-    const vptRect = vpt.imageToViewportRectangle(imageRect)
-    vpt.panTo(vptRect.getCenter())
-    vpt.zoomTo(vpt.getMaxZoom())
-  }
-
-  function highlightLocation (imageRect) {
-    // Translate coordinates => image to viewport coordinates.
-    // const vptRect = vpt.imageToViewportRectangle(imageRect)
-    // const webRect = vpt.viewportToViewerElementRectangle(vptRect)
-    // canvas.add(
-    //   new fabric.Rect({
-    //     stroke: options.roiColor,
-    //     strokeWidth: 1,
-    //     fill: '',
-    //     left: webRect.x,
-    //     top: webRect.y,
-    //     width: webRect.width,
-    //     height: webRect.height
-    //   })
-    // )
-
-    // TODO: NOTE: With resizeCanvas override, use imageRect
-    canvas.add(
-      new fabric.Rect({
-        stroke: options.roiColor,
-        strokeWidth: 2,
-        fill: '',
-        left: imageRect.x,
-        top: imageRect.y,
-        width: imageRect.width,
-        height: imageRect.height
-      })
-    )
-
-    canvas.renderAll()
-  }
-
-  function randomImageRectangle (data) {
-    // Give it plenty of room from the edge
-    const padding = options.thumbnailSize * 2 // 512
-    const left = getRandomInt(padding, (data.width - padding))
-    const top = getRandomInt(padding, (data.height - padding))
-
-    return new OpenSeadragon.Rect(left, top, options.thumbnailSize, options.thumbnailSize)
-  }
-}
-
-const gridOverlay = function (idx, overlay) {
+const gridOverlay = function (btnGrid, btnGridMarker, overlay) {
   const cellSize = 25
 
   const gridProps = {
@@ -801,12 +583,10 @@ const gridOverlay = function (idx, overlay) {
     gridAdded: false
   }
 
-  const btnGrid = document.getElementById('btnGrid' + idx)
   btnGrid.addEventListener('click', function () {
     gridHandler(this, gridProps)
   })
 
-  const btnGridMarker = document.getElementById('btnGridMarker' + idx)
   btnGridMarker.addEventListener('click', function () {
     markerHandler(this, gridProps)
   })
@@ -1003,8 +783,7 @@ function handleButtonShowHide () {
   })
 }
 
-const ruler = function (idx, viewer, overlay) {
-  // TODO: turn off event handlers, to not collide with others.
+const ruler = function (button, viewer, overlay) {
   let line, isDown, mode
   let startx = []
   let endx = []
@@ -1013,14 +792,12 @@ const ruler = function (idx, viewer, overlay) {
   let temp = 0
   let text
 
-  // let canvas = overlay.fabricCanvas()
   let canvas = overlay.fabricCanvas({ // on/off
     hoverCursor: 'pointer',
     selection: false
   })
   fabric.Object.prototype.transparentCorners = false
 
-  const button = document.getElementById('btnRuler' + idx)
   button.addEventListener('click', function () {
     toggleButton(button, 'btnOn', 'btn')
 
@@ -1031,79 +808,82 @@ const ruler = function (idx, viewer, overlay) {
       mode = ''
       button.innerHTML = '<i class="fas fa-ruler"></i> Ruler on'
     }
-  })
 
-  canvas.on('mouse:down', function (o) {
-    if (mode === 'draw') {
-      viewer.setMouseNavEnabled(false)
-      viewer.outerTracker.setTracking(false)
-      isDown = true
+    canvas.on('mouse:down', function (o) {
+      if (mode === 'draw') {
+        viewer.setMouseNavEnabled(false)
+        viewer.outerTracker.setTracking(false)
+        isDown = true
+        let pointer = canvas.getPointer(o.e)
+
+        // LINE
+        let points = [pointer.x, pointer.y, pointer.x, pointer.y]
+        startx[temp] = pointer.x
+        starty[temp] = pointer.y
+        line = new fabric.Line(points, {
+          strokeWidth: 2,
+          stroke: '#0f0',
+          originX: 'center',
+          originY: 'center'
+        })
+        canvas.add(line)
+      } else {
+        viewer.setMouseNavEnabled(true)
+        viewer.outerTracker.setTracking(true)
+        canvas.forEachObject(function (o) {
+          o.setCoords() // update coordinates
+        })
+      }
+    })
+
+    canvas.on('mouse:move', function (o) {
+      canvas.remove(text) // remove text element before re-adding it
+      canvas.renderAll() // on/off
+      if (!isDown) return
       let pointer = canvas.getPointer(o.e)
 
       // LINE
-      let points = [pointer.x, pointer.y, pointer.x, pointer.y]
-      startx[temp] = pointer.x
-      starty[temp] = pointer.y
-      line = new fabric.Line(points, {
-        strokeWidth: 2,
-        stroke: '#0f0',
-        originX: 'center',
-        originY: 'center'
-      })
-      canvas.add(line)
-    } else {
-      viewer.setMouseNavEnabled(true)
-      viewer.outerTracker.setTracking(true)
-      canvas.forEachObject(function (o) {
-        o.setCoords() // update coordinates
-      })
-    }
-  })
+      line.set({x2: pointer.x, y2: pointer.y})
 
-  canvas.on('mouse:move', function (o) {
-    canvas.remove(text) // remove text element before re-adding it
-    canvas.renderAll() // on/off
-    if (!isDown) return
-    let pointer = canvas.getPointer(o.e)
+      endx[temp] = pointer.x
+      endy[temp] = pointer.y
 
-    // LINE
-    line.set({x2: pointer.x, y2: pointer.y})
+      // TEXT
+      if (mode === 'draw') {
+        let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
+        text = new fabric.Text('Length ' + px, {left: endx[temp], top: endy[temp], fontSize: 14, fill: '#0f0'})
+        canvas.add(text)
+      }
 
-    endx[temp] = pointer.x
-    endy[temp] = pointer.y
+      canvas.renderAll()
+    })
 
-    // TEXT
-    if (mode === 'draw') {
-      let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
-      text = new fabric.Text('Length ' + px, {left: endx[temp], top: endy[temp], fontSize: 14, fill: '#0f0'})
-      canvas.add(text)
-    }
+    canvas.on('mouse:up', function (o) {
+      let pointer = canvas.getPointer(o.e)
+      isDown = false
 
-    canvas.renderAll()
-  })
+      // RECT
+      canvas.add(new fabric.Rect({
+        left: pointer.x + 1,
+        top: pointer.y + 1,
+        width: 150,
+        height: 25,
+        fill: 'rgba(255,255,255,0.5)',
+        transparentCorners: true
+      }))
 
-  canvas.on('mouse:up', function (o) {
-    let pointer = canvas.getPointer(o.e)
-    isDown = false
+      // TEXT
+      if (typeof text !== 'undefined') {
+        canvas.add(new fabric.Text(text.text, {
+          fontSize: 20,
+          left: pointer.x + 1,
+          top: pointer.y + 1
+        }))
+      }
 
-    // RECT
-    canvas.add(new fabric.Rect({
-      left: pointer.x + 1,
-      top: pointer.y + 1,
-      width: 150,
-      height: 25,
-      fill: 'rgba(255,255,255,0.5)',
-      transparentCorners: true
-    }))
+      canvas.renderAll()
+    })
 
-    // TEXT
-    canvas.add(new fabric.Text(text.text, {
-      fontSize: 20,
-      left: pointer.x + 1,
-      top: pointer.y + 1
-    }))
-
-    canvas.renderAll()
   })
 
   let Calculate = {
@@ -1117,11 +897,10 @@ const markupTools = function (idx, viewer) {
   const overlay = viewer.fabricjsOverlay({
     scale: 1000
   })
-
-  drawPolygon(idx, viewer, overlay)
-  editPolygon(idx, overlay)
-  gridOverlay(idx, overlay)
-  ruler(idx, viewer, overlay)
+  drawPolygon(document.getElementById('btnDraw' + idx), document.getElementById('mark' + idx), viewer, overlay)
+  editPolygon(document.getElementById('btnEdit' + idx), overlay)
+  gridOverlay(document.getElementById('btnGrid' + idx), document.getElementById('btnGridMarker' + idx), overlay)
+  ruler(document.getElementById('btnRuler' + idx), viewer, overlay)
 }
 
 function createDraggableDiv(id, title, left, top, viz) {
@@ -1228,6 +1007,7 @@ let filters = function (viewer, data, button) {
 let createWidget = function (div, viewer, data) {
   const table = document.createElement('table')
   div.appendChild(table)
+  const uniq = makeId(5)
   // data.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
   data.forEach(function (elem, ind) {
     let tr = table.insertRow(-1)
@@ -1254,15 +1034,21 @@ let createWidget = function (div, viewer, data) {
     // LOW
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      id: makeId(5, 'low'),
-      val: data[ind].low
+      prefix: 'low',
+      uniq: uniq,
+      suffix: ind,
+      val: data[ind].low,
+      index: ind
     }, viewer, data))
 
     // HIGH
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      id: makeId(5, 'hi'),
-      val: data[ind].hi
+      prefix: 'hi',
+      uniq: uniq,
+      suffix: ind,
+      val: data[ind].hi,
+      index: ind
     }, viewer, data))
 
   })
@@ -1288,19 +1074,19 @@ function rgba2hex(orig) {
 }
 
 // NUMBER INPUT to let user set threshold values
-function createNumericInput({id, val}, viewer, data) {
+function createNumericInput(obj, viewer, data) {
   let x = document.createElement('input')
-  x.id = id
+  x.id = obj.prefix + obj.uniq + obj.suffix
   x.setAttribute('type', 'number')
   x.min = '0'
   x.max = '255'
   x.step = '1'
-  x.value = val.toString()
+  x.value = obj.val.toString()
   x.size = 5
 
-  // x.addEventListener('change', function () {
-  //   isIntersect(data, data.length)
-  // })
+  x.addEventListener('change', function () {
+    isIntersect(obj.uniq, data, data.length)
+  })
 
   // this event happens whenever the value changes
   x.addEventListener('input', function () {
@@ -1311,49 +1097,51 @@ function createNumericInput({id, val}, viewer, data) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      data[index].low = parseInt(this.value)
+      data[obj.index].low = parseInt(this.value)
     } else {
-      data[index].hi = parseInt(this.value)
+      data[obj.index].hi = parseInt(this.value)
       setViewerFilter(data, viewer) // triggered by high value input
     }
   })
   return x
 }
 
-// TODO: Don't handle it by ID
-/*
-function isIntersect(arr, n) {
-  // Clear any previous errors
-  arr.forEach((element, index) => {
-    clearError(document.getElementById('low' + index), document.getElementById('hi' + index))
-  })
-  // Validate
+function isIntersect(uniq, arr, n) {
+
+  for (let i = 0; i < n; i++) {
+    // Clear all previous errors
+    clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
+  }
+
   for (let i = 1; i < n; i++) {
+    // Validate
     if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
-      setError(document.getElementById('low' + i), document.getElementById('hi' + (i - 1)))
+      setError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + (i - 1)))
       return true
     }
     if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
-      setError(document.getElementById('low' + (i - 1)), document.getElementById('hi' + i))
+      setError(document.getElementById('low' + uniq + (i - 1)), document.getElementById('hi' + uniq + i))
       return true
     }
   }
+
   // If we reach here, then no overlap
   return false
 }
+
 function setError(a, b) {
   a.style.outlineStyle = 'solid'
   a.style.outlineColor = 'red'
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
+
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
   b.style.outlineColor = ''
 }
- */
 
 // TODO: CHANGE! Set a different color function per layer
 // Currently: the same color function for each layer
@@ -1466,86 +1254,101 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
  * @param options
  */
 class ImageViewer {
-  constructor (viewerIndex, viewerDivId, baseImage, data, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, options) {
     this.viewer = {}
-    this.options = options
-    this.setSources(viewerIndex, baseImage, data, this.setViewer(viewerDivId), this.options)
-  }
-
-  setViewer (viewerDivId) {
-    let viewer
-    try {
-      viewer = OpenSeadragon({
-        id: viewerDivId,
-        prefixUrl: 'vendor/openseadragon/images/',
-        crossOriginPolicy: 'Anonymous',
-        immediateRender: true,
-        animationTime: 0,
-        imageLoaderLimit: 1
-        // showNavigator: true,
-        // debugMode: true,
-        // debugGridColor: "#f9276f"
-      })
-      // function rstDrawer() {
-      //   viewer.drawer.reset()
-      // }
-    } catch (e) {
-      console.warn('setViewer', e)
-      viewer = null
-    }
-    this.viewer = viewer
-    return viewer
-  }
-
-  getViewer () {
-    return this.viewer
-  }
-
-  setSources (viewerIndex, baseImage, data, viewer, options) {
-    // Quick check url
-    jQuery.get(baseImage).done(function () {
-      // Add BASE image to viewer
-      viewer.addTiledImage({ tileSource: baseImage, opacity: 1, x: 0, y: 0 })
-
-      // Add FEATURE layers to viewer
-      const features = data.features
-      const opacity = data.opacities
-      if (features) {
-        features.forEach(function (feature, index) {
-          viewer.addTiledImage({ tileSource: feature, opacity: opacity[index], x: 0, y: 0 })
-        })
-      }
-      overlayFeatures(viewer, options.colorRanges)
-    }).fail(function (jqXHR, statusText) {
-      dataCheck(baseImage, jqXHR, statusText)
+    let viewer = OpenSeadragon({
+      id: viewerDivId,
+      prefixUrl: 'vendor/openseadragon/images/',
+      crossOriginPolicy: 'Anonymous',
+      immediateRender: true,
+      animationTime: 0,
+      imageLoaderLimit: 1,
+      showNavigator: true,
+      navigatorPosition: "BOTTOM_RIGHT"
     })
 
-    function overlayFeatures (viewer, colorRanges) {
-      try {
-        viewer.world.addHandler('add-item', function (event) {
-          const itemIndex = viewer.world.getIndexOfItem(event.item)
-          if (itemIndex > 0) {
-            setViewerFilter(colorRanges, viewer)
-            viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
-              return getIIIFTileUrl(this, level, x, y)
-            }
-          }
+    if (baseImage.includes('info.json')) {
+      let setScaleBar = function (ppm) {
+        viewer.scalebar({
+          type: OpenSeadragon.ScalebarType.MICROSCOPY,
+          pixelsPerMeter: ppm,
+          location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+          xOffset: 5,
+          yOffset: 10,
+          stayInsideImage: true,
+          color: "rgb(150, 150, 150)",
+          fontColor: "rgb(100, 100, 100)",
+          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          // fontSize: "small",
+          barThickness: 2
         })
-      } catch (e) {
-        console.error('Here we are', e.message)
       }
+      // Get info for scale bar
+      let promiseA = async function () {
+        return (await fetch(baseImage)).json()
+      }
+      let promiseB = promiseA()
+      promiseB.then(function (d) {
+        if (d['resolutionUnit'] === 3) {
+          setScaleBar(d['xResolution'] * 100)
+        } else {
+          // let ppm = (1 / (parseFloat('0.25') * 0.000001))
+          console.warn('Handle resolution unit', d['resolutionUnit'])
+        }
+      })
     }
 
-    function dataCheck (url, jqXHR) {
-      const message = 'ImageViewer.js: Url for the viewer isn\'t good... please check.'
-      console.warn(message)
-      console.log('jqXHR object:', jqXHR)
-      console.log('URL', url)
-      document.write(`<h1>${message}</h1><b>URL:</b>&nbsp;${url}<br><br><b>Check the console for any clues.`)
-      throw new Error('Something went wrong.') // Terminates the script.
+    // CUSTOM ZOOM BUTTONS
+    viewer.addOnceHandler('tile-loaded', function () {
+      let dir = 'vendor/openseadragon/images/'
+      let zinButton = new OpenSeadragon.Button({
+        tooltip: 'Zoom to 100%',
+        srcRest: dir + 'zin_rest.png',
+        srcGroup: dir + 'zin_grouphover.png',
+        srcHover: dir + 'zin_hover.png',
+        srcDown: dir + 'zin_pressed.png',
+        onClick: function () {
+          viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
+        }
+      })
+      let zoutButton = new OpenSeadragon.Button({
+        tooltip: 'perspective',
+        srcRest: dir + 'zout_rest.png',
+        srcGroup: dir + 'zout_grouphover.png',
+        srcHover: dir + 'zout_hover.png',
+        srcDown: dir + 'zout_pressed.png',
+        onClick: function () {
+          viewer.viewport.goHome(true)
+        }
+      })
+      viewer.addControl(zinButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+      viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+    })
+
+    // Add BASE image to viewer
+    viewer.addTiledImage({tileSource: baseImage, opacity: 1, x: 0, y: 0})
+
+    // Add FEATURE layers to viewer
+    const features = data.features
+    const opacity = data.opacities
+    if (features) {
+      features.forEach(function (feature, index) {
+        viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
+      })
     }
 
-    function getIIIFTileUrl (source, level, x, y) {
+    // OVERLAY FEATURES
+    viewer.world.addHandler('add-item', function (event) {
+      const itemIndex = viewer.world.getIndexOfItem(event.item)
+      if (itemIndex > 0) {
+        setViewerFilter(options.colorRanges, viewer)
+        viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
+          return getIIIFTileUrl(this, level, x, y)
+        }
+      }
+    })
+
+    function getIIIFTileUrl(source, level, x, y) {
       const scale = Math.pow(0.5, source.maxLevel - level)
       const levelWidth = Math.ceil(source.width * scale)
       const levelHeight = Math.ceil(source.height * scale)
@@ -1572,7 +1375,15 @@ class ImageViewer {
       }
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
+
+    this.viewer = viewer
+
   }
+
+  getViewer() {
+    return this.viewer
+  }
+
 }
 
 let layers = function (divName, viewer, data, button) {
@@ -1816,12 +1627,11 @@ function getViewerObject(element) {
  * @param viewerDivId
  * @param baseImage
  * @param data: features and opacities
- * @param sliderElements: 2 slides per image viewer (controls image opacity and overlay opacity).
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, data, sliderElements, numViewers, options) {
+  constructor(viewerIndex, viewerDivId, baseImage, data, numViewers, options) {
     super(viewerIndex, viewerDivId, baseImage, data, options)
 
     if (typeof options === 'undefined') {
@@ -1835,15 +1645,10 @@ class MultiViewer extends ImageViewer {
 
     this.viewer1 = super.getViewer()
     this.idx = viewerIndex
-    this.sliders = sliderElements
 
     if (numViewers > 1) {
       this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
       this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
-    }
-
-    if (options.slidersOn && options.toolbarOn) {
-      addInputHandler(this.sliders, this.viewer1)
     }
 
     if (options.toolbarOn) {
@@ -1851,29 +1656,16 @@ class MultiViewer extends ImageViewer {
     }
 
     // LAYERS
-    if (typeof data.features !== 'undefined' && options.draggableLayers) {
-      // This function is placed to the right of the viewer:
+    // TEMP: if (typeof data.features !== 'undefined' && options.draggableLayers) {
+    if (typeof data.features !== 'undefined') {
       layers(`layers_and_colors${this.idx}`, this.viewer1, data)
-      // Create/handle floating layers div
-      let layersBtn = document.getElementById(`layers${this.idx}`)
-      let widget = layers('', this.viewer1, data, layersBtn)
-      layersBtn.addEventListener('click', function (e) {
-        widget.style.display = 'block'
-      })
+    } else {
+      console.error('data.features is undefined or null\nHINT: Keys should be in quotes!')
+      console.log("****** HERE'S 'DATA':", data, " ******")
     }
-
-    try {
-      // COLOR PALETTE
-      let palette = document.getElementById('palette' + this.idx)
-      if (typeof options.colorRanges !== 'undefined' && typeof palette !== 'undefined') {
-        // Create/handle floating layers div
-        let widget = filters(this.viewer1, options.colorRanges, palette)
-        palette.addEventListener('click', function (e) {
-          widget.style.display = 'block'
-        })
-      }
-    } catch (e) {
-      console.error('COLOR PALETTE:', e)
+    // TEMP: Testing calling program:
+    if (!options.draggableLayers) {
+      console.error("There's your trouble: options.draggableLayers = ", options.draggableLayers)
     }
   }
 
@@ -1885,30 +1677,6 @@ class MultiViewer extends ImageViewer {
     return this.checkboxes
   }
 
-}
-
-function addInputHandler(sliderElem, viewerElem) {
-  // 2 x numViewers = total number of sliders
-  let i
-  for (i = 0; i < sliderElem.length; i++) {
-    // SLIDER EVENT LISTENER
-    sliderElem[i].addEventListener('input', function () {
-      let layerNum
-      const num = this.id.replace('sliderRange', '') - 1  // sliderRange1, sliderRange2, ...
-      if (num % 2 === 0) { // They're paired.
-        layerNum = 0 // 1st slider affects the base layer
-      } else {
-        layerNum = 1 // 2nd slider affects the first layer
-      }
-      const worldItem = viewerElem.world.getItemAt(layerNum)
-      if (worldItem !== undefined) {
-        worldItem.setOpacity(this.value / 100) // SET OPACITY
-      } else {
-        // In case of 2 sliders with only 1 layer - hide the slide.
-        this.hidden = true
-      }
-    })
-  }
 }
 
 // Synchronize pan & zoom
