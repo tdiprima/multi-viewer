@@ -159,14 +159,15 @@ function setViewerFilter(cr, viewer) {
     let filterOpts = []
     // For each layer
     for (i = 0; i < itemCount; i++) {
-      if (i > 0) { // except the base
+      // todo: if include base, then try to avoid colorization on init
+      // if (i > 0) { // except the base
         filterOpts.push({
           items: viewer.world.getItemAt(i),
           processors: [
             colorFilter.prototype.COLORLEVELS(cr)
           ]
         })
-      }
+      // }
     }
     viewer.setFilterOptions({
       filters: filterOpts,

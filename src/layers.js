@@ -110,7 +110,8 @@ let createLayerWidget = function (div, viewer, data) {
     fas.id = makeId(5, 'palette')
     fas.style.cursor = 'pointer'
     cell.appendChild(fas)
-    let widget = filters(viewer, colorRanges, fas)
+    // todo: options.colorRanges works, but it shouldn't
+    let widget = filters(viewer, data.colorRanges, fas)
     fas.addEventListener('click', function (e) {
       widget.style.display = 'block'
     })

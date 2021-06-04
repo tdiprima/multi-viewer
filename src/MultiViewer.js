@@ -33,18 +33,24 @@ class MultiViewer extends ImageViewer {
       markupTools(this.idx, this.viewer1)
     }
 
+    // TEMPORARY. WILL REQUIRE CR PER LAYER IN NEAR FUTURE.
+    if (!data.colorRanges) {
+      console.log("data.colorRanges doesn't exist. Creating...")
+      if (options.colorRanges) {
+        data['colorRanges'] = options.colorRanges
+      } else {
+        console.warn("options.colorRanges doesn't exist")
+      }
+    }
+
     // LAYERS
-    // TEMP: if (typeof data.features !== 'undefined' && options.draggableLayers) {
     if (typeof data.features !== 'undefined') {
       layers(`layers_and_colors${this.idx}`, this.viewer1, data)
     } else {
       console.error('data.features is undefined or null\nHINT: Keys should be in quotes!')
       console.log("****** HERE'S 'DATA':", data, " ******")
     }
-    // TEMP: Testing calling program:
-    if (!options.draggableLayers) {
-      console.error("There's your trouble: options.draggableLayers = ", options.draggableLayers)
-    }
+
   }
 
   getViewer() {
