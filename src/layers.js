@@ -51,10 +51,10 @@ let createLayerWidget = function (div, viewer, data) {
     cell = tr.insertCell(-1)
     eye = document.createElement('i')
     eye.classList.add('fas')
-    if (opacities[ind] === 1)
-      eye.classList.add('fa-eye')
-    else
+    if (opacities[ind] === 0)
       eye.classList.add('fa-eye-slash')
+    else
+      eye.classList.add('fa-eye')
     // eyeball(eye, layerNum, viewer) // viewer.world... undefined here.
 
     eye.id = makeId(5, 'eye')
