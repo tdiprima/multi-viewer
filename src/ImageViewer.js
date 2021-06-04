@@ -66,7 +66,7 @@ class ImageViewer {
         }
       })
       let zoutButton = new OpenSeadragon.Button({
-        tooltip: 'perspective',
+        tooltip: 'Zoom to 0%',
         srcRest: dir + 'zout_rest.png',
         srcGroup: dir + 'zout_grouphover.png',
         srcHover: dir + 'zout_hover.png',
