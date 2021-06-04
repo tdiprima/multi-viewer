@@ -40,32 +40,29 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
-  let base, features, opacities
+  let features, opacities
   let loc = window.location.origin
+  opacities = [[1, 1, 1], [1, 1, 1]]
 
   function blca() {
-    base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+    let base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
     let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
     let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA-featureimage.tif/info.json'
-    features = [
-      [f1, f2],
-      [f1, f2]
-    ]
-    opacities = [[1, 0], [1, 1]]
+    features = [[base, f1, f2], [base, f1, f2]]
   }
 
   function brca() {
-    base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
+    let base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
     let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
     let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
-    features = [[f1, f2], [f1, f2]]
-    opacities = [[1, 0], [1, 1]]
+    features = [[base, f1, f2], [base, f1, f2]]
   }
 
   function test() {
-    base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-    features = [[base], [base]] // Testing
-    opacities = [[1], [0]]
+    let base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
+    let f1 = base
+    features = [[base, f1], [base, f1]]
+    opacities = [[0.7, 0.7], [0.7, 0.7]]
   }
 
   brca()
@@ -99,7 +96,7 @@
   }
 
   // divId, image, data, numViewers, rows, columns, width, height, opts
-  pageSetup('contentDiv', base, data, 2, 1, 2, 640, 480, options)
+  pageSetup('contentDiv', data, 2, 1, 2, 640, 480, options)
 
 </script>
 

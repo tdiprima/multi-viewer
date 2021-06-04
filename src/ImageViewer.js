@@ -3,12 +3,11 @@
  * Set up 1 basic OSD viewer.
  * @param viewerIndex
  * @param viewerDivId - containing div id
- * @param baseImage
  * @param data - features and opacities
  * @param options
  */
 class ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, data, options) {
+  constructor(viewerIndex, viewerDivId, data, options) {
     this.viewer = {}
     let viewer = OpenSeadragon({
       id: viewerDivId,
@@ -21,7 +20,10 @@ class ImageViewer {
       navigatorPosition: "BOTTOM_RIGHT"
     })
 
-    if (baseImage.includes('info.json')) {
+    const features = data.features
+    const opacity = data.opacities
+
+    if (features[0].includes('info.json')) {
       let setScaleBar = function (ppm) {
         viewer.scalebar({
           type: OpenSeadragon.ScalebarType.MICROSCOPY,
@@ -39,7 +41,7 @@ class ImageViewer {
       }
       // Get info for scale bar
       let promiseA = async function () {
-        return (await fetch(baseImage)).json()
+        return (await fetch(features[0])).json()
       }
       let promiseB = promiseA()
       promiseB.then(function (d) {
@@ -79,12 +81,7 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
-    // Add BASE image to viewer
-    viewer.addTiledImage({tileSource: baseImage, opacity: 1, x: 0, y: 0})
-
     // Add FEATURE layers to viewer
-    const features = data.features
-    const opacity = data.opacities
     if (features) {
       features.forEach(function (feature, index) {
         viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})

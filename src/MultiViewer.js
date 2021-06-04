@@ -4,14 +4,13 @@
  *
  * @param viewerIndex
  * @param viewerDivId
- * @param baseImage
  * @param data: features and opacities
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerIndex, viewerDivId, baseImage, data, numViewers, options) {
-    super(viewerIndex, viewerDivId, baseImage, data, options)
+  constructor(viewerIndex, viewerDivId, data, numViewers, options) {
+    super(viewerIndex, viewerDivId, data, options)
 
     if (typeof options === 'undefined') {
       options = {}

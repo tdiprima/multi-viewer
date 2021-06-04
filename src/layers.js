@@ -16,12 +16,12 @@ let layers = function (divName, viewer, data, button) {
 let eyeball = function (eye, layerNum, viewer) {
   let l = viewer.world.getItemAt(layerNum)
   if (l) {
-    if (eye.classList.contains('fa-eye')) {
-      // Turn on layer
-      l.setOpacity(1)
-    } else {
+    if (eye.classList.contains('fa-eye-slash')) {
       // Turn off layer
       l.setOpacity(0)
+    } else {
+      // Turn on layer
+      l.setOpacity(1)
     }
   }
 }
@@ -32,7 +32,7 @@ let createLayerWidget = function (div, viewer, data) {
   let layers = data.features
   let opacities = data.opacities
   layers.forEach(function (layer, ind) {
-    let layerNum = ind + 1 // skip base
+    let layerNum = ind
     let tr, cell, span, eye, fas
     tr = table.insertRow(-1)
     table.appendChild(tr)
@@ -203,7 +203,8 @@ let handleDragLayers = function (viewer) {
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       console.log('layerNum', layerNum)
-      layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
+      // layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
+      layerNum = parseInt(layerNum)
       targetViewer.world.getItemAt(layerNum).setOpacity(1)
       // TODO: Do we want to make it a "move" or a "copy"?
       // sourceViewer.world.getItemAt(layerNum).setOpacity(0)

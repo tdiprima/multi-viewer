@@ -2,7 +2,6 @@
  * pageSetup
  * Set up web page for multi-viewer.
  * @param divId: Main div id.
- * @param image: Base image.
  * @param data: Array of features and opacities.
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
@@ -11,7 +10,7 @@
  * @param height: Viewer height
  * @param opts: Multi-viewer options; filters, paintbrush, sliders, etc.
  */
-const pageSetup = function (divId, image, data, numViewers, rows, columns, width, height, opts) {
+const pageSetup = function (divId, data, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
   let sliderIdNum = 0
 
@@ -108,7 +107,7 @@ const pageSetup = function (divId, image, data, numViewers, rows, columns, width
           }
 
           // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer(idx, osdId, image, thisData, numViewers, opts))
+          viewers.push(new MultiViewer(idx, osdId, thisData, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer
