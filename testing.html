@@ -40,49 +40,20 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
-  let features, opacities
-  let loc = window.location.origin
-  opacities = [[1, 1, 1], [1, 1, 1]]
-
-  function blca() {
-    let base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
-    let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-    let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA-featureimage.tif/info.json'
-    features = [[base, f1, f2], [base, f1, f2]]
-  }
-
-  function brca() {
-    let base = loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
-    let f1 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
-    let f2 = loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
-    features = [[base, f1, f2], [base, f1, f2]]
-  }
-
-  function test() {
-    let base = '//openseadragon.github.io/example-images/duomo/duomo.dzi' // Testing
-    let f1 = base
-    features = [[base, f1], [base, f1]]
-    opacities = [[0.7, 0.7], [0.7, 0.7]]
-  }
-
-  brca()
-  // blca()
-  // test()
-
-  // PROBABILITY FILTER
-  // {color: 'rgba(216, 63, 42, 255)', low: 201, hi: 255}
-  let colorRanges = [{color: 'rgba(0, 0, 255, 255)', low: 201, hi: 255},
-    {color: 'rgba(246, 173, 96, 255)', low: 151, hi: 200},
-    {color: 'rgba(254, 251, 191, 255)', low: 101, hi: 150},
-    {color: 'rgba(171, 221, 164, 255)', low: 51, hi: 100},
-    {color: 'rgba(44, 131, 186, 255)', low: 0, hi: 50}]
-
+  // BLCA slides
+  // '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
+  // '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
+  // '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA-featureimage.tif/info.json'
+  // BRCA slides
+  // '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
+  // '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
+  // '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
+  // TEST
+  // '//openseadragon.github.io/example-images/duomo/duomo.dzi'
   const options = {
     filterOn: true,
     toolbarOn: true,
     paintbrushColor: '#0ff',
-    colorRanges: colorRanges,
-    draggableLayers: true,
     viewerOpts: {
       showFullPageControl: true,
       showHomeControl: true,
@@ -90,16 +61,37 @@
     }
   }
 
-  let data = {
-    "features": features,
-    "opacities": opacities
-  }
+  let loc = window.location.origin
 
-  // divId, data, numViewers, rows, columns, width, height, opts
-  pageSetup('contentDiv', data, 2, 1, 2, 640, 480, options)
+  // Slides for a viewer
+  let slides = []
+  // Slide #1
+  slides.push({
+    location: loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json',
+    opacity: 1,
+    colors: [{color: 'rgba(255, 0, 255, 255)', low: 200, hi: 255}]
+  })
 
+  // Slide #2
+  slides.push({
+    location: loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json',
+    opacity: 1,
+    colors: [{color: 'rgba(0, 0, 255, 255)', low: 200, hi: 255}]
+  })
+
+  // Slide #3
+  // This is a hack since I do not have more than one slide per image :(
+  slides.push({
+    location: loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json',
+    opacity: 1,
+    colors: [{color: 'rgba(0, 255, 0, 255)', low: 200, hi: 255}]
+  })
+
+  let viewerSlides = [slides, slides] // pass an array of 'slides' per viewer
+  pageSetup('contentDiv', viewerSlides, 2, 1, 2, 640, 480, options)
+  // let viewerSlides = [slides] // [[]] if 2 viewers, viewerSlides or whatever u wanna call it will be [[], []]
+  // pageSetup('contentDiv', viewerSlides, 1, 1, 1, 640, 480, options)
 </script>
 
 </body>
-
 </html>

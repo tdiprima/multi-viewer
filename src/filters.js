@@ -1,27 +1,27 @@
-let filters = function (viewer, data, button) {
+let filters = function (viewer, layer, button) {
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
     let rect = button.getBoundingClientRect()
     div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
-    createWidget(document.getElementById(`${id}Body`), viewer, data)
+    createWidget(document.getElementById(`${id}Body`), viewer, layer)
   } else {
     console.log('tba')
   }
   return div
 }
 
-let createWidget = function (div, viewer, data) {
+let createWidget = function (div, viewer, layer) {
   const table = document.createElement('table')
   div.appendChild(table)
   const uniq = makeId(5)
-  // data.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
-  data.forEach(function (elem, ind) {
+  // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
+  layer.colors.forEach(function (c, ind) {
     let tr = table.insertRow(-1)
     table.appendChild(tr)
 
     let td = tr.insertCell(-1)
-    let colorCode = elem.color
+    let colorCode = c.color
 
     // COLOR PICKER
     let m = document.createElement('mark')
@@ -34,8 +34,8 @@ let createWidget = function (div, viewer, data) {
     picker.on('change', function (r, g, b, a) {
       this.source.value = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
-      data[ind].color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-      setViewerFilter(data, viewer)
+      c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+      setViewerFilter(layer.colors, viewer, 1) // todo
     })
 
     // LOW
@@ -44,9 +44,9 @@ let createWidget = function (div, viewer, data) {
       prefix: 'low',
       uniq: uniq,
       suffix: ind,
-      val: data[ind].low,
+      val: c.low,
       index: ind
-    }, viewer, data))
+    }, viewer, c))
 
     // HIGH
     td = tr.insertCell(-1)
@@ -54,9 +54,9 @@ let createWidget = function (div, viewer, data) {
       prefix: 'hi',
       uniq: uniq,
       suffix: ind,
-      val: data[ind].hi,
+      val: c.hi,
       index: ind
-    }, viewer, data))
+    }, viewer, c))
 
   })
 }
@@ -82,6 +82,7 @@ function rgba2hex(orig) {
 
 // NUMBER INPUT to let user set threshold values
 function createNumericInput(obj, viewer, data) {
+  //todo
   let x = document.createElement('input')
   x.id = obj.prefix + obj.uniq + obj.suffix
   x.setAttribute('type', 'number')
@@ -107,7 +108,7 @@ function createNumericInput(obj, viewer, data) {
       data[obj.index].low = parseInt(this.value)
     } else {
       data[obj.index].hi = parseInt(this.value)
-      setViewerFilter(data, viewer) // triggered by high value input
+      setViewerFilter(data.color, viewer, 1) // todo
     }
   })
   return x
@@ -150,34 +151,37 @@ function clearError(a, b) {
   b.style.outlineColor = ''
 }
 
-// TODO: CHANGE! Set a different color function per layer
-// Currently: the same color function for each layer
-function setViewerFilter(cr, viewer) {
-  try {
-    let itemCount = viewer.world.getItemCount()
-    let i
-    let filterOpts = []
-    // For each layer
-    for (i = 0; i < itemCount; i++) {
-      // todo: if include base, then try to avoid colorization on init
-      if (i > 0) { // except the base
-        filterOpts.push({
-          items: viewer.world.getItemAt(i),
-          processors: [
-            colorFilter.prototype.COLORLEVELS(cr)
-          ]
-        })
-      }
-    }
-    viewer.setFilterOptions({
-      filters: filterOpts,
-      loadMode: 'sync'
-    })
+function setViewerFilter(cr, viewer, layerNumber) {
+  console.log(layerNumber, cr) // entire cr?
+  // viewer.setFilterOptions({
+  //   filters: [{
+  //     items: viewer.world.getItemAt(layerNumber),
+  //     processors: [
+  //       colorFilter.prototype.COLORLEVELS(cr)
+  //     ]
+  //   }],
+  //   loadMode: 'sync'
+  // })
 
-  } catch (err) {
-    console.error(`setViewerFilter ${err.message}`)
-    console.error('cr:', cr, 'viewer:', viewer)
+  let itemCount = viewer.world.getItemCount()
+  let i
+  let filterOpts = []
+  // For each layer
+  for (i = 0; i < itemCount; i++) {
+    if (i > 0) { // except the base
+      filterOpts.push({
+        items: viewer.world.getItemAt(i),
+        processors: [
+          colorFilter.prototype.COLORLEVELS(cr)
+        ]
+      })
+    }
   }
+  viewer.setFilterOptions({
+    filters: filterOpts,
+    loadMode: 'sync'
+  })
+
 }
 
 let colorFilter = OpenSeadragon.Filters.GREYSCALE

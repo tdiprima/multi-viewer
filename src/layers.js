@@ -1,19 +1,10 @@
-let layers = function (divName, viewer, data, button) {
-  let div
-  if (isRealValue(button)) {
-    let id = makeId(5, 'layers')
-    let rect = button.getBoundingClientRect()
-    div = createDraggableDiv(id, 'Features', rect.left, rect.top)
-    createLayerWidget(document.getElementById(`${id}Body`), viewer, data)
-    handleDragLayers(viewer)
-  } else {
-    createLayerWidget(document.getElementById(divName), viewer, data)
-    handleDragLayers(viewer)
-  }
-  return div
+let layers = function (divName, viewer, viewerSlides) {
+  createLayerWidget(document.getElementById(divName), viewer, viewerSlides)
+  handleDragLayers(viewer)
 }
 
 let eyeball = function (eye, layerNum, viewer) {
+  console.log(layerNum)
   let l = viewer.world.getItemAt(layerNum)
   if (l) {
     if (eye.classList.contains('fa-eye-slash')) {
@@ -26,12 +17,10 @@ let eyeball = function (eye, layerNum, viewer) {
   }
 }
 
-let createLayerWidget = function (div, viewer, data) {
+let createLayerWidget = function (div, viewer, viewerSlides) {
   const table = document.createElement('table')
   div.appendChild(table)
-  let layers = data.features
-  let opacities = data.opacities
-  layers.forEach(function (layer, ind) {
+  viewerSlides.forEach(function (layer, ind) {
     let layerNum = ind
     let tr, cell, span, eye, fas
     tr = table.insertRow(-1)
@@ -44,14 +33,14 @@ let createLayerWidget = function (div, viewer, data) {
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
     span.display = 'block'
-    span.innerHTML = getStringRep(layer) // WAITING FOR skos:prefLabel
+    span.innerHTML = getStringRep(layer.location) // WAITING FOR skos:prefLabel
     cell.appendChild(span)
 
     // EYEBALL VISIBILITY TOGGLE
     cell = tr.insertCell(-1)
     eye = document.createElement('i')
     eye.classList.add('fas')
-    if (opacities[ind] === 0)
+    if (layer.opacity === 0)
       eye.classList.add('fa-eye-slash')
     else
       eye.classList.add('fa-eye')
@@ -88,7 +77,8 @@ let createLayerWidget = function (div, viewer, data) {
     range.min = '0'
     range.max = '100'
     range.step = '0.1'
-    range.value = opacities[ind] * 100
+    range.value = layer.opacity * 100
+
     range.addEventListener('input', function () {
       const worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
@@ -97,6 +87,7 @@ let createLayerWidget = function (div, viewer, data) {
         console.warn('worldItem', worldItem)
       }
     })
+
     div1.appendChild(range)
 
     div.appendChild(div1)
@@ -110,8 +101,7 @@ let createLayerWidget = function (div, viewer, data) {
     fas.id = makeId(5, 'palette')
     fas.style.cursor = 'pointer'
     cell.appendChild(fas)
-    // todo: options.colorRanges works, but it shouldn't
-    let widget = filters(viewer, data.colorRanges, fas)
+    let widget = filters(viewer, layer, fas)
     fas.addEventListener('click', function (e) {
       widget.style.display = 'block'
     })

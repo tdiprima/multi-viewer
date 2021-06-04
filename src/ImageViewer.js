@@ -3,11 +3,11 @@
  * Set up 1 basic OSD viewer.
  * @param viewerIndex
  * @param viewerDivId - containing div id
- * @param data - features and opacities
+ * @param viewerSlides - array
  * @param options
  */
 class ImageViewer {
-  constructor(viewerIndex, viewerDivId, data, options) {
+  constructor(viewerIndex, viewerDivId, viewerSlides, options) {
     this.viewer = {}
     let viewer = OpenSeadragon({
       id: viewerDivId,
@@ -20,10 +20,8 @@ class ImageViewer {
       navigatorPosition: "BOTTOM_RIGHT"
     })
 
-    const features = data.features
-    const opacity = data.opacities
-
-    if (features[0].includes('info.json')) {
+    let slide = viewerSlides[0].location
+    if (slide.includes('info.json')) {
       let setScaleBar = function (ppm) {
         viewer.scalebar({
           type: OpenSeadragon.ScalebarType.MICROSCOPY,
@@ -41,7 +39,7 @@ class ImageViewer {
       }
       // Get info for scale bar
       let promiseA = async function () {
-        return (await fetch(features[0])).json()
+        return (await fetch(slide)).json()
       }
       let promiseB = promiseA()
       promiseB.then(function (d) {
@@ -81,18 +79,16 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
-    // Add FEATURE layers to viewer
-    if (features) {
-      features.forEach(function (feature, index) {
-        viewer.addTiledImage({tileSource: feature, opacity: opacity[index], x: 0, y: 0})
-      })
-    }
+    viewerSlides.forEach(function (slide, index) {
+      viewer.addTiledImage({tileSource: slide.location, opacity: slide.opacity, x: 0, y: 0})
+    })
 
-    // OVERLAY FEATURES
+    // OVERLAY
     viewer.world.addHandler('add-item', function (event) {
       const itemIndex = viewer.world.getIndexOfItem(event.item)
+      // todo: include base?
       if (itemIndex > 0) {
-        setViewerFilter(options.colorRanges, viewer)
+        setViewerFilter(viewerSlides[itemIndex].colors, viewer, itemIndex)
         viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }

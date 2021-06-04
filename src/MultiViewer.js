@@ -4,13 +4,13 @@
  *
  * @param viewerIndex
  * @param viewerDivId
- * @param data: features and opacities
+ * @param viewerSlides: array
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, sliders, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerIndex, viewerDivId, data, numViewers, options) {
-    super(viewerIndex, viewerDivId, data, options)
+  constructor(viewerIndex, viewerDivId, viewerSlides, numViewers, options) {
+    super(viewerIndex, viewerDivId, viewerSlides, options)
 
     if (typeof options === 'undefined') {
       options = {}
@@ -33,23 +33,7 @@ class MultiViewer extends ImageViewer {
       markupTools(this.idx, this.viewer1)
     }
 
-    // TEMPORARY. WILL REQUIRE CR PER LAYER IN NEAR FUTURE.
-    if (!data.colorRanges) {
-      console.log("data.colorRanges doesn't exist. Creating...")
-      if (options.colorRanges) {
-        data['colorRanges'] = options.colorRanges
-      } else {
-        console.warn("options.colorRanges doesn't exist")
-      }
-    }
-
-    // LAYERS
-    if (typeof data.features !== 'undefined') {
-      layers(`layers_and_colors${this.idx}`, this.viewer1, data)
-    } else {
-      console.error('data.features is undefined or null\nHINT: Keys should be in quotes!')
-      console.log("****** HERE'S 'DATA':", data, " ******")
-    }
+    layers(`layers_and_colors${this.idx}`, this.viewer1, viewerSlides)
 
   }
 
