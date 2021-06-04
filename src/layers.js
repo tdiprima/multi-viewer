@@ -202,12 +202,8 @@ let handleDragLayers = function (viewer) {
       // VIEWER
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
-      console.log('layerNum', layerNum)
-      // layerNum = parseInt(layerNum) + 1 // (bc 0 = base)
       layerNum = parseInt(layerNum)
       targetViewer.world.getItemAt(layerNum).setOpacity(1)
-      // TODO: Do we want to make it a "move" or a "copy"?
-      // sourceViewer.world.getItemAt(layerNum).setOpacity(0)
     }
     return false
   }
