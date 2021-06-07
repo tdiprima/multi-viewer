@@ -35,6 +35,7 @@ let createWidget = function (div, viewer, layer) {
       this.source.value = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
       c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+      console.log('hello from cp')
       setViewerFilter(layer.colors, viewer, 1) // todo
     })
 
@@ -108,6 +109,7 @@ function createNumericInput(obj, viewer, data) {
       data[obj.index].low = parseInt(this.value)
     } else {
       data[obj.index].hi = parseInt(this.value)
+      console.log('hello from number')
       setViewerFilter(data.color, viewer, 1) // todo
     }
   })
@@ -152,35 +154,36 @@ function clearError(a, b) {
 }
 
 function setViewerFilter(colorRanges, viewer, layerNumber) {
-  console.log(layerNumber, colorRanges)
-  // viewer.setFilterOptions({
-  //   filters: [{
-  //     items: viewer.world.getItemAt(layerNumber),
-  //     processors: [
-  //       colorFilter.prototype.COLORLEVELS(colorRanges)
-  //     ]
-  //   }],
-  //   loadMode: 'sync'
-  // })
-
-  let itemCount = viewer.world.getItemCount()
-  let i
-  let filterOpts = []
-  // For each layer
-  for (i = 0; i < itemCount; i++) {
-    if (i > 0) { // except the base
-      filterOpts.push({
-        items: viewer.world.getItemAt(i),
-        processors: [
-          colorFilter.prototype.COLORLEVELS(colorRanges)
-        ]
-      })
-    }
-  }
+  console.log('set filter, layer', layerNumber, colorRanges)
+  // console.log(layerNumber, colorRanges)
   viewer.setFilterOptions({
-    filters: filterOpts,
+    filters: [{
+      items: viewer.world.getItemAt(layerNumber),
+      processors: [
+        colorFilter.prototype.COLORLEVELS(colorRanges)
+      ]
+    }],
     loadMode: 'sync'
   })
+
+  // let itemCount = viewer.world.getItemCount()
+  // let i
+  // let filterOpts = []
+  // // For each layer
+  // for (i = 0; i < itemCount; i++) {
+  //   if (i > 0) { // except the base
+  //     filterOpts.push({
+  //       items: viewer.world.getItemAt(i),
+  //       processors: [
+  //         colorFilter.prototype.COLORLEVELS(colorRanges)
+  //       ]
+  //     })
+  //   }
+  // }
+  // viewer.setFilterOptions({
+  //   filters: filterOpts,
+  //   loadMode: 'sync'
+  // })
 
 }
 
