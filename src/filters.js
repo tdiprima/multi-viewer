@@ -151,13 +151,13 @@ function clearError(a, b) {
   b.style.outlineColor = ''
 }
 
-function setViewerFilter(cr, viewer, layerNumber) {
-  console.log(layerNumber, cr) // entire cr?
+function setViewerFilter(colorRanges, viewer, layerNumber) {
+  console.log(layerNumber, colorRanges) // entire cr?
   // viewer.setFilterOptions({
   //   filters: [{
   //     items: viewer.world.getItemAt(layerNumber),
   //     processors: [
-  //       colorFilter.prototype.COLORLEVELS(cr)
+  //       colorFilter.prototype.COLORLEVELS(colorRanges)
   //     ]
   //   }],
   //   loadMode: 'sync'
@@ -172,7 +172,7 @@ function setViewerFilter(cr, viewer, layerNumber) {
       filterOpts.push({
         items: viewer.world.getItemAt(i),
         processors: [
-          colorFilter.prototype.COLORLEVELS(cr)
+          colorFilter.prototype.COLORLEVELS(colorRanges)
         ]
       })
     }

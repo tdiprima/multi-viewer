@@ -1,5 +1,5 @@
-let layers = function (divName, viewer, viewerSlides) {
-  createLayerWidget(document.getElementById(divName), viewer, viewerSlides)
+let layers = function (divName, viewer, imagesToBeDisplayed) {
+  createLayerWidget(document.getElementById(divName), viewer, imagesToBeDisplayed)
   handleDragLayers(viewer)
 }
 
@@ -17,10 +17,10 @@ let eyeball = function (eye, layerNum, viewer) {
   }
 }
 
-let createLayerWidget = function (div, viewer, viewerSlides) {
+let createLayerWidget = function (div, viewer, imagesToBeDisplayed) {
   const table = document.createElement('table')
   div.appendChild(table)
-  viewerSlides.forEach(function (layer, ind) {
+  imagesToBeDisplayed.forEach(function (layer, ind) {
     let layerNum = ind
     let tr, cell, span, eye, fas
     tr = table.insertRow(-1)

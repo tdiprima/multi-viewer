@@ -1,16 +1,16 @@
 /**
  * ImageViewer
  * Set up 1 basic OSD viewer.
- * @param viewerIndex
- * @param viewerDivId - containing div id
- * @param viewerSlides - array
+ * @param viewerInfo.idx
+ * @param viewerInfo.divId - containing div id
+ * @param imagesToBeDisplayed - array
  * @param options
  */
 class ImageViewer {
-  constructor(viewerIndex, viewerDivId, viewerSlides, options) {
+  constructor(viewerInfo, imagesToBeDisplayed, options) {
     this.viewer = {}
     let viewer = OpenSeadragon({
-      id: viewerDivId,
+      id: viewerInfo.divId,
       prefixUrl: 'vendor/openseadragon/images/',
       crossOriginPolicy: 'Anonymous',
       immediateRender: true,
@@ -20,7 +20,7 @@ class ImageViewer {
       navigatorPosition: "BOTTOM_RIGHT"
     })
 
-    let slide = viewerSlides[0].location
+    let slide = imagesToBeDisplayed[0].location
     if (slide.includes('info.json')) {
       let setScaleBar = function (ppm) {
         viewer.scalebar({
@@ -79,7 +79,7 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
-    viewerSlides.forEach(function (slide, index) {
+    imagesToBeDisplayed.forEach(function (slide, index) {
       viewer.addTiledImage({tileSource: slide.location, opacity: slide.opacity, x: 0, y: 0})
     })
 
@@ -88,7 +88,7 @@ class ImageViewer {
       const itemIndex = viewer.world.getIndexOfItem(event.item)
       // todo: include base?
       if (itemIndex > 0) {
-        setViewerFilter(viewerSlides[itemIndex].colors, viewer, itemIndex)
+        setViewerFilter(imagesToBeDisplayed[itemIndex].colors, viewer, itemIndex)
         viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }

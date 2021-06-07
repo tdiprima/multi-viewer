@@ -2,15 +2,15 @@
  * pageSetup
  * Set up web page for multi-viewer.
  * @param divId: Main div id.
- * @param viewerSlides: Array
+ * @param imagesToBeDisplayed: Array
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
  * @param columns: LAYOUT: Number of columns (of viewers)
  * @param width: Viewer width
  * @param height: Viewer height
- * @param opts: Multi-viewer options; filters, paintbrush, sliders, etc.
+ * @param opts: Multi-viewer options; filters, paintbrush, etc.
  */
-const pageSetup = function (divId, viewerSlides, numViewers, rows, columns, width, height, opts) {
+const pageSetup = function (divId, imagesToBeDisplayed, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -97,11 +97,10 @@ const pageSetup = function (divId, viewerSlides, numViewers, rows, columns, widt
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          // Pass along slides for "this" viewer
-          let thisData = viewerSlides[idx] // I now have an array of things (slides) to be displayed.
+          let thisData = imagesToBeDisplayed[idx] // Images to be displayed in "this" viewer
 
           // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer(idx, osdId, thisData, numViewers, opts))
+          viewers.push(new MultiViewer({"idx": idx, "divId": osdId}, thisData, numViewers, opts))
 
           if (numViewers < num && (count - 1 === numViewers)) {
             // we've done our last viewer
