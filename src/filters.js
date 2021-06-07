@@ -153,10 +153,10 @@ function clearError(a, b) {
 }
 
 function setViewerFilter(colorRanges, viewer, layerNumber) {
+  // TODO: fix this.
   let itemCount = viewer.world.getItemCount()
   let i
   let filterOpts = []
-  // TODO: swap out the one that changed (i === layerNumber)
   // For each layer
   for (i = 0; i < itemCount; i++) {
     if (i > 0) { // except the base
