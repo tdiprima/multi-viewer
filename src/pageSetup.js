@@ -2,15 +2,15 @@
  * pageSetup
  * Set up web page for multi-viewer.
  * @param divId: Main div id.
- * @param imagesToBeDisplayed: Array
+ * @param itemsToBeDisplayed: Array
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
  * @param columns: LAYOUT: Number of columns (of viewers)
  * @param width: Viewer width
  * @param height: Viewer height
- * @param opts: Multi-viewer options; filters, paintbrush, etc.
+ * @param opts: Multi-viewer options; filters, paintbrush, etc. TODO: REVISIT.
  */
-const pageSetup = function (divId, imagesToBeDisplayed, numViewers, rows, columns, width, height, opts) {
+const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -97,7 +97,7 @@ const pageSetup = function (divId, imagesToBeDisplayed, numViewers, rows, column
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          let thisData = imagesToBeDisplayed[idx] // Images to be displayed in "this" viewer
+          let thisData = itemsToBeDisplayed[idx] // Images to be displayed in "this" viewer
 
           // Create MultiViewer object and add to array
           viewers.push(new MultiViewer({"idx": idx, "divId": osdId}, thisData, numViewers, opts))

@@ -2,15 +2,14 @@
  * MultiViewer
  * Set up OSD viewer to allow for multiple viewer control.
  *
- * @param viewerInfo.idx
- * @param viewerInfo.divId
- * @param imagesToBeDisplayed: array
+ * @param viewerInfo
+ * @param itemsToBeDisplayed
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerInfo, imagesToBeDisplayed, numViewers, options) {
-    super(viewerInfo, imagesToBeDisplayed, options)
+  constructor(viewerInfo, itemsToBeDisplayed, numViewers, options) {
+    super(viewerInfo, itemsToBeDisplayed, options)
 
     if (typeof options === 'undefined') {
       options = {}
@@ -22,18 +21,17 @@ class MultiViewer extends ImageViewer {
     }
 
     this.viewer1 = super.getViewer()
-    this.idx = viewerInfo.idx
 
     if (numViewers > 1) {
-      this.checkboxes.checkPan = document.getElementById('chkPan' + this.idx)
-      this.checkboxes.checkZoom = document.getElementById('chkZoom' + this.idx)
+      this.checkboxes.checkPan = document.getElementById('chkPan' + viewerInfo.idx)
+      this.checkboxes.checkZoom = document.getElementById('chkZoom' + viewerInfo.idx)
     }
 
     if (options.toolbarOn) {
-      markupTools(this.idx, this.viewer1)
+      markupTools(viewerInfo.idx, this.viewer1)
     }
 
-    layers(`layers_and_colors${this.idx}`, this.viewer1, imagesToBeDisplayed)
+    layers(`layers_and_colors${viewerInfo.idx}`, this.viewer1, itemsToBeDisplayed)
 
   }
 

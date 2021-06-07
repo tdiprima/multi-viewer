@@ -152,7 +152,7 @@ function clearError(a, b) {
 }
 
 function setViewerFilter(colorRanges, viewer, layerNumber) {
-  console.log(layerNumber, colorRanges) // entire cr?
+  console.log(layerNumber, colorRanges)
   // viewer.setFilterOptions({
   //   filters: [{
   //     items: viewer.world.getItemAt(layerNumber),
