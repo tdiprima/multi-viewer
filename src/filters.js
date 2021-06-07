@@ -43,6 +43,7 @@ let createWidget = function (div, viewer, layer, layerNum) {
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
       prefix: 'low',
+      layerNum: layerNum,
       uniq: uniq,
       suffix: ind,
       val: c.low,
@@ -52,8 +53,8 @@ let createWidget = function (div, viewer, layer, layerNum) {
     // HIGH
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
-      layerNum: layerNum,
       prefix: 'hi',
+      layerNum: layerNum,
       uniq: uniq,
       suffix: ind,
       val: c.hi,
