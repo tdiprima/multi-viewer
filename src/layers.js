@@ -4,15 +4,16 @@ let layers = function (divName, viewer, itemsToBeDisplayed) {
 }
 
 let eyeball = function (eye, layerNum, viewer) {
-  console.log(layerNum)
   let l = viewer.world.getItemAt(layerNum)
   if (l) {
     if (eye.classList.contains('fa-eye-slash')) {
       // Turn off layer
       l.setOpacity(0)
+      console.log('layer', layerNum, 'off')
     } else {
       // Turn on layer
       l.setOpacity(1)
+      console.log('layer', layerNum, 'on')
     }
   }
 }

@@ -78,9 +78,16 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
-    itemsToBeDisplayed.forEach(function (slide, index) {
-      viewer.addTiledImage({tileSource: slide.location, opacity: slide.opacity, x: 0, y: 0})
-    })
+    for (let i = 0; i < itemsToBeDisplayed.length; i++) {
+      // console.log('addTiledImage', itemsToBeDisplayed[i].location, 'at', itemsToBeDisplayed[i].opacity)
+      console.log('hello from ImageViewer')
+      viewer.addTiledImage({
+        tileSource: itemsToBeDisplayed[i].location,
+        opacity: itemsToBeDisplayed[i].opacity,
+        x: 0,
+        y: 0
+      })
+    }
 
     // OVERLAY
     viewer.world.addHandler('add-item', function (event) {
