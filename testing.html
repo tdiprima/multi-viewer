@@ -40,16 +40,41 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
-  // BLCA images
-  // '/iiif/?iiif=/tcgaseg/tcgaimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E.svs/info.json'
-  // '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KO-01Z-00-DX1.195576CF-B739-4BD9-B15B-4A70AE287D3E-featureimage.tif/info.json'
-  // '/iiif/?iiif=/tcgaseg/featureimages/blca/TCGA-2F-A9KP-01Z-00-DX1.3CDF534E-958F-4467-AA7E-FD3C5A86AAAA-featureimage.tif/info.json'
-  // BRCA images
-  // '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json'
-  // '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json'
-  // '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json'
-  // TEST
-  // '//openseadragon.github.io/example-images/duomo/duomo.dzi'
+  function brcaItems() {
+    let items = [] // ITEMS TO BE DISPLAYED IN VIEWER
+    // Item #1
+    items.push({
+      location: loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json',
+      opacity: 1,
+      colors: [{color: 'rgba(255, 0, 255, 255)', low: 200, hi: 255}]
+    })
+
+    // Item #2
+    items.push({
+      location: loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json',
+      opacity: 1,
+      colors: [{color: 'rgba(0, 0, 255, 255)', low: 200, hi: 255}]
+    })
+
+    // Item #3
+    // This image is a hack since I do not have more than one slide per image :(
+    items.push({
+      location: loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json',
+      opacity: 1,
+      colors: [{color: 'rgba(0, 255, 0, 255)', low: 200, hi: 255}]
+    })
+    return items
+  }
+
+  function testItems() {
+    // ITEMS TO BE DISPLAYED IN VIEWER
+    return [{
+      location: '//openseadragon.github.io/example-images/duomo/duomo.dzi',
+      opacity: 1,
+      colors: [{color: 'rgba(199, 36, 177)', low: 200, hi: 255}]
+    }]
+  }
+
   const options = {
     filterOn: true,
     toolbarOn: true,
@@ -63,33 +88,16 @@
 
   let loc = window.location.origin
 
-  // ITEMS TO BE DISPLAYED IN VIEWER
-  let imagesToBeDisplayed = []
-  // Item #1
-  imagesToBeDisplayed.push({
-    location: loc + '/iiif/?iiif=/tcgaseg/tcgaimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291.svs/info.json',
-    opacity: 1,
-    colors: [{color: 'rgba(255, 0, 255, 255)', low: 200, hi: 255}]
-  })
+  let itemsToBeDisplayed = brcaItems()
+  // let itemsToBeDisplayed = testItems()
 
-  // Item #2
-  imagesToBeDisplayed.push({
-    location: loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALI-01Z-00-DX1.F6E9A5DF-D8FB-45CF-B4BD-C6B76294C291-featureimage.tif/info.json',
-    opacity: 1,
-    colors: [{color: 'rgba(0, 0, 255, 255)', low: 200, hi: 255}]
-  })
-
-  // Item #3
-  // This image is a hack since I do not have more than one slide per image :(
-  imagesToBeDisplayed.push({
-    location: loc + '/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json',
-    opacity: 1,
-    colors: [{color: 'rgba(0, 255, 0, 255)', low: 200, hi: 255}]
-  })
-
-  let images = [imagesToBeDisplayed, imagesToBeDisplayed] // pass an array of 'imagesToBeDisplayed' per viewer
+  // 2 VIEWERS.  Each element represents each viewer's array of images to be displayed.
+  // Here, we are using the same set of images for each viewer:
+  let images = [itemsToBeDisplayed, itemsToBeDisplayed]
   pageSetup('contentDiv', images, 2, 1, 2, 640, 480, options)
-  // let viewerSlides = [imagesToBeDisplayed] // [[]] if 2 viewers, viewerSlides or whatever u wanna call it will be [[], []]
+
+  // 1 VIEWER.
+  // let viewerSlides = [itemsToBeDisplayed] // [[]] if 2 viewers, viewerSlides or whatever u wanna call it will be [[], []]
   // pageSetup('contentDiv', viewerSlides, 1, 1, 1, 640, 480, options)
 </script>
 
