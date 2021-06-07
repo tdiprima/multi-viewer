@@ -40,6 +40,7 @@
 <script src="src/synchronizeViewers.js"></script>
 
 <script>
+  let loc = window.location.origin
   function brcaItems() {
     let items = [] // ITEMS TO BE DISPLAYED IN VIEWER
     // Item #1
@@ -70,8 +71,12 @@
     // ITEMS TO BE DISPLAYED IN VIEWER
     return [{
       location: '//openseadragon.github.io/example-images/duomo/duomo.dzi',
-      opacity: 1,
-      colors: [{color: 'rgba(199, 36, 177, 255)', low: 200, hi: 255}]
+      opacity: 0.5,
+      colors: [{ color: 'rgba(255, 0, 0, 255)', low: 201, hi: 255 }]
+    },{
+      location: '//openseadragon.github.io/example-images/duomo/duomo.dzi',
+      opacity: 0.7,
+      colors: [{ color: 'rgba(255, 255, 0, 255)', low: 141, hi: 170 }]
     }]
   }
 
@@ -85,8 +90,6 @@
       showZoomControl: true
     }
   }
-
-  let loc = window.location.origin
 
   let itemsToBeDisplayed = brcaItems()
   // let itemsToBeDisplayed = testItems()

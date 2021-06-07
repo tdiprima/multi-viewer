@@ -2,13 +2,13 @@
  * pageSetup
  * Set up web page for multi-viewer.
  * @param divId: Main div id.
- * @param itemsToBeDisplayed: Array
+ * @param itemsToBeDisplayed
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
  * @param columns: LAYOUT: Number of columns (of viewers)
  * @param width: Viewer width
  * @param height: Viewer height
- * @param opts: Multi-viewer options; filters, paintbrush, etc. TODO: REVISIT.
+ * @param opts: Multi-viewer options; paintbrush, etc. TODO: revisit options.
  */
 const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const

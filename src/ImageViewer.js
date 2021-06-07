@@ -19,8 +19,8 @@ class ImageViewer {
       navigatorPosition: "BOTTOM_RIGHT"
     })
 
-    let slide = itemsToBeDisplayed[0].location // pick one
-    if (slide.includes('info.json')) {
+    let item = itemsToBeDisplayed[0].location // pick one
+    if (item.includes('info.json')) {
       let setScaleBar = function (ppm) {
         viewer.scalebar({
           type: OpenSeadragon.ScalebarType.MICROSCOPY,
@@ -38,7 +38,7 @@ class ImageViewer {
       }
       // Get info for scale bar
       let promiseA = async function () {
-        return (await fetch(slide)).json()
+        return (await fetch(item)).json()
       }
       let promiseB = promiseA()
       promiseB.then(function (d) {
@@ -80,7 +80,6 @@ class ImageViewer {
 
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
       // console.log('addTiledImage', itemsToBeDisplayed[i].location, 'at', itemsToBeDisplayed[i].opacity)
-      console.log('hello from ImageViewer')
       viewer.addTiledImage({
         tileSource: itemsToBeDisplayed[i].location,
         opacity: itemsToBeDisplayed[i].opacity,
@@ -92,7 +91,6 @@ class ImageViewer {
     // OVERLAY
     viewer.world.addHandler('add-item', function (event) {
       const itemIndex = viewer.world.getIndexOfItem(event.item)
-      // todo: include base?
       if (itemIndex > 0) {
         setViewerFilter(itemsToBeDisplayed[itemIndex].colors, viewer, itemIndex)
         viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
