@@ -1,17 +1,17 @@
-let filters = function (viewer, layer, button) {
+let filters = function (viewer, layer, layerNum, button) {
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
     let rect = button.getBoundingClientRect()
     div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
-    createWidget(document.getElementById(`${id}Body`), viewer, layer)
+    createWidget(document.getElementById(`${id}Body`), viewer, layer, layerNum)
   } else {
     console.log('tba')
   }
   return div
 }
 
-let createWidget = function (div, viewer, layer) {
+let createWidget = function (div, viewer, layer, layerNum) {
   const table = document.createElement('table')
   div.appendChild(table)
   const uniq = makeId(5)
@@ -36,7 +36,7 @@ let createWidget = function (div, viewer, layer) {
       this.source.style.backgroundColor = this.color(r, g, b, a)
       c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
       console.log('hello from cp')
-      setViewerFilter(layer.colors, viewer, 1) // todo
+      setViewerFilter(layer.colors, viewer, layerNum)
     })
 
     // LOW
@@ -52,6 +52,7 @@ let createWidget = function (div, viewer, layer) {
     // HIGH
     td = tr.insertCell(-1)
     td.appendChild(createNumericInput({
+      layerNum: layerNum,
       prefix: 'hi',
       uniq: uniq,
       suffix: ind,
@@ -82,19 +83,18 @@ function rgba2hex(orig) {
 }
 
 // NUMBER INPUT to let user set threshold values
-function createNumericInput(obj, viewer, data) {
-  //todo
+function createNumericInput(info, viewer, data) {
   let x = document.createElement('input')
-  x.id = obj.prefix + obj.uniq + obj.suffix
+  x.id = info.prefix + info.uniq + info.suffix
   x.setAttribute('type', 'number')
   x.min = '0'
   x.max = '255'
   x.step = '1'
-  x.value = obj.val.toString()
+  x.value = info.val.toString()
   x.size = 5
 
   x.addEventListener('change', function () {
-    isIntersect(obj.uniq, data, data.length)
+    isIntersect(info.uniq, data, data.length)
   })
 
   // this event happens whenever the value changes
@@ -106,11 +106,11 @@ function createNumericInput(obj, viewer, data) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      data[obj.index].low = parseInt(this.value)
+      data[info.index].low = parseInt(this.value)
     } else {
-      data[obj.index].hi = parseInt(this.value)
+      data[info.index].hi = parseInt(this.value)
       console.log('hello from number')
-      setViewerFilter(data.color, viewer, 1) // todo
+      setViewerFilter(data.color, viewer, info.layerNum)
     }
   })
   return x
