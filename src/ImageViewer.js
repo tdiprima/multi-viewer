@@ -83,6 +83,7 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
     })
 
+    // LOAD IMAGES INTO THE VIEWER
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
       // console.log('addTiledImage', itemsToBeDisplayed[i].location, 'at', itemsToBeDisplayed[i].opacity)
       viewer.addTiledImage({
@@ -93,15 +94,44 @@ class ImageViewer {
       })
     }
 
-    // OVERLAY
-    viewer.world.addHandler('add-item', function (event) {
-      const itemIndex = viewer.world.getIndexOfItem(event.item)
+    function setFilter() {
+      // SET COLOR FILTER
+      let itemCount = viewer.world.getItemCount()
+      let filterOpts = []
+      // Gather what we're doing for each layer
+      for (let i = 0; i < itemCount; i++) {
+        if (i > 0) { // except the base
+          filterOpts.push({
+            items: viewer.world.getItemAt(i),
+            processors: [
+              colorFilter.prototype.COLORLEVELS(itemsToBeDisplayed[i].colors)
+            ]
+          })
+        }
+      }
+      // Set all layers at once (required)
+      viewer.setFilterOptions({
+        filters: filterOpts,
+        loadMode: 'sync'
+      })
+    }
+
+    viewer.world.addHandler('add-item', ({item}) => {
+      const itemIndex = viewer.world.getIndexOfItem(item)
       if (itemIndex > 0) {
-        setViewerFilter(itemsToBeDisplayed[itemIndex].colors, viewer, itemIndex)
+        // CONFIGURE OUR CUSTOM TILE SOURCES
         viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }
       }
+      // COLOR FILTER
+      if (viewer.world.getItemCount() === itemsToBeDisplayed.length) {
+        setFilter()
+      }
+      // Nope. Fires too many times:
+      // item.addHandler('fully-loaded-change', ({fullyLoaded}) => {
+      //   setFilter()
+      // })
     })
 
     function getIIIFTileUrl(source, level, x, y) {
