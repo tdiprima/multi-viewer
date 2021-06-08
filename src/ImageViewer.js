@@ -7,7 +7,7 @@
  */
 class ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed, options) {
-    this.viewer = {}
+    // SET UP VIEWER
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
       prefixUrl: 'vendor/openseadragon/images/',
@@ -19,23 +19,28 @@ class ImageViewer {
       navigatorPosition: "BOTTOM_RIGHT"
     })
 
-    let item = itemsToBeDisplayed[0].location // pick one
+    // SET UP SCALE BAR
+    let setScaleBar = function (ppm) {
+      viewer.scalebar({
+        type: OpenSeadragon.ScalebarType.MICROSCOPY,
+        pixelsPerMeter: ppm,
+        location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+        xOffset: 5,
+        yOffset: 10,
+        stayInsideImage: true,
+        color: "rgb(150, 150, 150)",
+        fontColor: "rgb(100, 100, 100)",
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        // fontSize: "small",
+        barThickness: 2
+      })
+    }
+
+    // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
+    let item = itemsToBeDisplayed[0].location
+
+    // Check our image url for info.json
     if (item.includes('info.json')) {
-      let setScaleBar = function (ppm) {
-        viewer.scalebar({
-          type: OpenSeadragon.ScalebarType.MICROSCOPY,
-          pixelsPerMeter: ppm,
-          location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
-          xOffset: 5,
-          yOffset: 10,
-          stayInsideImage: true,
-          color: "rgb(150, 150, 150)",
-          fontColor: "rgb(100, 100, 100)",
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
-          // fontSize: "small",
-          barThickness: 2
-        })
-      }
       // Get info for scale bar
       let promiseA = async function () {
         return (await fetch(item)).json()
@@ -43,9 +48,9 @@ class ImageViewer {
       let promiseB = promiseA()
       promiseB.then(function (d) {
         if (d['resolutionUnit'] === 3) {
-          setScaleBar(d['xResolution'] * 100)
+          setScaleBar(d['xResolution'] * 100) // Call our function!
         } else {
-          // let ppm = (1 / (parseFloat('0.25') * 0.000001))
+          // Temporarily:
           console.warn('Handle resolution unit', d['resolutionUnit'])
         }
       })
@@ -127,7 +132,7 @@ class ImageViewer {
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
 
-    this.viewer = viewer
+    this.viewer = viewer // SET THIS VIEWER
 
   }
 
