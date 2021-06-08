@@ -35,6 +35,7 @@ let createWidget = function (div, viewer, layer, layerNum) {
     const picker = new CP(m)
     picker.on('change', function (r, g, b, a) {
       this.source.value = this.color(r, g, b, a)
+      this.source.innerHTML = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
       c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
       setViewerFilter(layer.colors, viewer, layerNum)
