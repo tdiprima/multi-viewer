@@ -1,4 +1,5 @@
 let filters = function (viewer, layer, layerNum, button) {
+  console.log(layerNum, layer)
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
@@ -16,6 +17,7 @@ let createWidget = function (div, viewer, layer, layerNum) {
   div.appendChild(table)
   const uniq = makeId(5)
   // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
+  // DISPLAY COLOR, LOW, HIGH VALUE
   layer.colors.forEach(function (c, ind) {
     let tr = table.insertRow(-1)
     table.appendChild(tr)
@@ -173,6 +175,17 @@ function setViewerFilter(colorRanges, viewer, layerNumber) {
     loadMode: 'sync'
   })
 
+  // TESTING.
+  // viewer.setFilterOptions({
+  //   filters: [{
+  //     items: viewer.world.getItemAt(layerNumber),
+  //     processors: [
+  //       colorFilter.prototype.COLORLEVELS(colorRanges)
+  //     ]
+  //   }],
+  //   loadMode: 'sync'
+  // })
+
 }
 
 let colorFilter = OpenSeadragon.Filters.GREYSCALE
@@ -182,7 +195,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     if (typeof imgData !== undefined) {
       try {
-        const pxl = imgData.data
+        const pxl = imgData.data // Uint8ClampedArray
         let j
         for (j = 0; j < pxl.length; j += 4) {
           if (pxl[j + 3] === 255) {
