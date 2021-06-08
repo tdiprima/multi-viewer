@@ -1,5 +1,6 @@
+// TODO: layer now has layerNum
 let filters = function (viewer, layer, layerNum, button) {
-  console.log(layerNum, layer)
+  // console.log(layerNum, layer)
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
@@ -10,6 +11,40 @@ let filters = function (viewer, layer, layerNum, button) {
     console.log('tba')
   }
   return div
+}
+
+let resetFilter = function (layer, viewer) {
+  // One does not simply set the layer that changed:
+  viewer.setFilterOptions({
+    filters: [{
+      items: viewer.world.getItemAt(layer.layerNum),
+      processors: [
+        colorFilter.prototype.COLORLEVELS(layer.colors) // (The layer should have the updated color values)
+      ]
+    }],
+    loadMode: 'sync'
+  })
+
+  // One needs to set ALL the layers
+  // TODO: pass all layers to this function
+  // let itemCount = viewer.world.getItemCount()
+  // let i
+  // let filterOpts = []
+  // // For each layer
+  // for (i = 0; i < itemCount; i++) {
+  //   if (i > 0) { // except the base
+  //     filterOpts.push({
+  //       items: viewer.world.getItemAt(i),
+  //       processors: [
+  //         colorFilter.prototype.COLORLEVELS(layer.colors)
+  //       ]
+  //     })
+  //   }
+  // }
+  // viewer.setFilterOptions({
+  //   filters: filterOpts,
+  //   loadMode: 'sync'
+  // })
 }
 
 let createWidget = function (div, viewer, layer, layerNum) {
@@ -38,11 +73,15 @@ let createWidget = function (div, viewer, layer, layerNum) {
       this.source.innerHTML = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
       c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-      setViewerFilter(layer.colors, viewer, layerNum)
+      resetFilter(layer, viewer)
     })
 
     // LOW
     td = tr.insertCell(-1)
+
+    // TODO: FIX
+    /*
+    // Pass layer & viewer, so we can resetFilter
     td.appendChild(createNumericInput({
       prefix: 'low',
       layerNum: layerNum,
@@ -62,6 +101,7 @@ let createWidget = function (div, viewer, layer, layerNum) {
       val: c.hi,
       index: ind
     }, viewer, c))
+     */
 
   })
 }
@@ -112,7 +152,8 @@ function createNumericInput(info, viewer, data) {
       data[info.index].low = parseInt(this.value)
     } else {
       data[info.index].hi = parseInt(this.value)
-      setViewerFilter(data.color, viewer, info.layerNum)
+      resetFilter()
+      //Filter(data.color, viewer, info.layerNum)
     }
   })
   return x
@@ -153,40 +194,6 @@ function clearError(a, b) {
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
   b.style.outlineColor = ''
-}
-
-function setViewerFilter(colorRanges, viewer, layerNumber) {
-  // TODO: fix this.
-  let itemCount = viewer.world.getItemCount()
-  let i
-  let filterOpts = []
-  // For each layer
-  for (i = 0; i < itemCount; i++) {
-    if (i > 0) { // except the base
-      filterOpts.push({
-        items: viewer.world.getItemAt(i),
-        processors: [
-          colorFilter.prototype.COLORLEVELS(colorRanges)
-        ]
-      })
-    }
-  }
-  viewer.setFilterOptions({
-    filters: filterOpts,
-    loadMode: 'sync'
-  })
-
-  // TESTING.
-  // viewer.setFilterOptions({
-  //   filters: [{
-  //     items: viewer.world.getItemAt(layerNumber),
-  //     processors: [
-  //       colorFilter.prototype.COLORLEVELS(colorRanges)
-  //     ]
-  //   }],
-  //   loadMode: 'sync'
-  // })
-
 }
 
 let colorFilter = OpenSeadragon.Filters.GREYSCALE
