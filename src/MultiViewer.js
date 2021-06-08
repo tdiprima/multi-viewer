@@ -20,27 +20,21 @@ class MultiViewer extends ImageViewer {
       checkZoom: true
     }
 
-    // this.viewer1 = super.getViewer()
-    // this.idx = viewerIndex
-
     if (numViewers > 1) {
       this.checkboxes.checkPan = document.getElementById('chkPan' + viewerInfo.idx)
       this.checkboxes.checkZoom = document.getElementById('chkZoom' + viewerInfo.idx)
     }
 
     if (options.toolbarOn) {
-      // markupTools(viewerInfo.idx, this.viewer1)
       markupTools(viewerInfo.idx, super.getViewer())
     }
 
-    // layers(`layers_and_colors${viewerInfo.idx}`, this.viewer1, itemsToBeDisplayed)
     layers(`layers_and_colors${viewerInfo.idx}`, super.getViewer(), itemsToBeDisplayed)
 
   }
 
   getViewer() {
     return super.getViewer()
-    // return this.viewer1
   }
 
   getPanZoom() {
