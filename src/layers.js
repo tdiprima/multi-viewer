@@ -9,11 +9,9 @@ let eyeball = function (eye, range, layerNum, viewer) {
     if (eye.classList.contains('fa-eye-slash')) {
       l.setOpacity(0) // Turn off layer
       range.value = '0' // Set slider to 0
-      console.log('layer', layerNum, 'off')
     } else {
       l.setOpacity(1) // Turn on layer
       range.value = '100' // Set slider to (opacity * 100)
-      console.log('layer', layerNum, 'on')
     }
   }
 }
@@ -78,7 +76,17 @@ let createLayerWidget = function (div, viewer, itemsToBeDisplayed) {
     range.addEventListener('input', function () {
       const worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
-        worldItem.setOpacity(this.value / 100) // SET OPACITY
+        // SET IMAGE OPACITY
+        worldItem.setOpacity(this.value / 100)
+        // TOGGLE EYEBALL
+        if (this.value === '0') {
+          eye.classList.remove('fa-eye')
+          eye.classList.add('fa-eye-slash')
+        }
+        if (parseFloat(this.value) > 0) {
+          eye.classList.remove('fa-eye-slash')
+          eye.classList.add('fa-eye')
+        }
       } else {
         console.warn('worldItem', worldItem)
       }
