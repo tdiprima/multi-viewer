@@ -1,4 +1,3 @@
-// TODO: layer now has layerNum
 let filters = function (viewer, layer, layers, button) {
   let div
   if (isRealValue(button)) {
