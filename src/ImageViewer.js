@@ -128,10 +128,6 @@ class ImageViewer {
       if (viewer.world.getItemCount() === itemsToBeDisplayed.length) {
         setFilter()
       }
-      // Nope. Fires too many times:
-      // item.addHandler('fully-loaded-change', ({fullyLoaded}) => {
-      //   setFilter()
-      // })
     })
 
     function getIIIFTileUrl(source, level, x, y) {
