@@ -137,9 +137,9 @@ function createNumericInput(id, uniq, layer, layers, color, colors, viewer) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      color[layer.layerNum].low = parseInt(this.value)
+      color.low = parseInt(this.value)
     } else {
-      color[layer.layerNum].hi = parseInt(this.value)
+      color.hi = parseInt(this.value)
       resetFilter(layer, layers, viewer)
     }
   })
