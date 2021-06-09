@@ -1,59 +1,57 @@
 // TODO: layer now has layerNum
-let filters = function (viewer, layer, layerNum, button) {
-  // console.log(layerNum, layer)
+let filters = function (viewer, layer, layers, button) {
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
     let rect = button.getBoundingClientRect()
     div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
-    createWidget(document.getElementById(`${id}Body`), viewer, layer, layerNum)
+    createWidget(document.getElementById(`${id}Body`), layer, layers, viewer)
   } else {
     console.log('tba')
   }
   return div
 }
 
-let resetFilter = function (layer, viewer) {
+let resetFilter = function (layer, layers, viewer) {
   // One does not simply set the layer that changed:
-  viewer.setFilterOptions({
-    filters: [{
-      items: viewer.world.getItemAt(layer.layerNum),
-      processors: [
-        colorFilter.prototype.COLORLEVELS(layer.colors) // (The layer should have the updated color values)
-      ]
-    }],
-    loadMode: 'sync'
-  })
-
-  // One needs to set ALL the layers
-  // TODO: pass all layers to this function
-  // let itemCount = viewer.world.getItemCount()
-  // let i
-  // let filterOpts = []
-  // // For each layer
-  // for (i = 0; i < itemCount; i++) {
-  //   if (i > 0) { // except the base
-  //     filterOpts.push({
-  //       items: viewer.world.getItemAt(i),
-  //       processors: [
-  //         colorFilter.prototype.COLORLEVELS(layer.colors)
-  //       ]
-  //     })
-  //   }
-  // }
   // viewer.setFilterOptions({
-  //   filters: filterOpts,
+  //   filters: [{
+  //     items: viewer.world.getItemAt(layer.layerNum),
+  //     processors: [
+  //       colorFilter.prototype.COLORLEVELS(layer.colors) // (The layer should have the updated color values)
+  //     ]
+  //   }],
   //   loadMode: 'sync'
   // })
+
+  // One needs to set ALL the layers
+  let itemCount = viewer.world.getItemCount()
+  let filterOpts = []
+  for (let i = 0; i < itemCount; i++) {
+    if (i > 0) {
+      filterOpts.push({
+        items: viewer.world.getItemAt(i),
+        processors: [
+          colorFilter.prototype.COLORLEVELS(layers[i].colors)
+        ]
+      })
+    }
+  }
+  viewer.setFilterOptions({
+    filters: filterOpts,
+    loadMode: 'sync'
+  })
 }
 
-let createWidget = function (div, viewer, layer, layerNum) {
+// COLOR RANGES UI
+let createWidget = function (div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
-  const uniq = makeId(5)
+
   // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
-  // DISPLAY COLOR, LOW, HIGH VALUE
-  layer.colors.forEach(function (c, ind) {
+
+  layer.colors.forEach(function (c, cIdx) {
+    // calling it 'c' because 'color' is already taken
     let tr = table.insertRow(-1)
     table.appendChild(tr)
 
@@ -69,39 +67,25 @@ let createWidget = function (div, viewer, layer, layerNum) {
 
     const picker = new CP(m)
     picker.on('change', function (r, g, b, a) {
+      // set cp widget
       this.source.value = this.color(r, g, b, a)
       this.source.innerHTML = this.color(r, g, b, a)
       this.source.style.backgroundColor = this.color(r, g, b, a)
+      // set new color
       c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-      resetFilter(layer, viewer)
+      // set filter to new color
+      resetFilter(layer, layers, viewer)
     })
+
+    const uniq = makeId(5)
 
     // LOW
     td = tr.insertCell(-1)
-
-    // TODO: FIX
-    /*
-    // Pass layer & viewer, so we can resetFilter
-    td.appendChild(createNumericInput({
-      prefix: 'low',
-      layerNum: layerNum,
-      uniq: uniq,
-      suffix: ind,
-      val: c.low,
-      index: ind
-    }, viewer, c))
+    td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layer, layers, c, layer.colors, viewer))
 
     // HIGH
     td = tr.insertCell(-1)
-    td.appendChild(createNumericInput({
-      prefix: 'hi',
-      layerNum: layerNum,
-      uniq: uniq,
-      suffix: ind,
-      val: c.hi,
-      index: ind
-    }, viewer, c))
-     */
+    td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layer, layers, c, layer.colors, viewer))
 
   })
 }
@@ -125,19 +109,23 @@ function rgba2hex(orig) {
   return hex
 }
 
-// NUMBER INPUT to let user set threshold values
-function createNumericInput(info, viewer, data) {
+// USER INPUTS to set color threshold values
+function createNumericInput(id, uniq, layer, layers, color, colors, viewer) {
+  // console.log('\nlayer', layer)
+  // console.log('\nlayers', layers)
+  // console.log('\ncolor', color)
+  // console.log('\ncolors', colors)
   let x = document.createElement('input')
-  x.id = info.prefix + info.uniq + info.suffix
+  x.id = id
   x.setAttribute('type', 'number')
   x.min = '0'
   x.max = '255'
   x.step = '1'
-  x.value = info.val.toString()
+  x.value = id.includes('low') ? color.low.toString() : color.hi.toString()
   x.size = 5
 
   x.addEventListener('change', function () {
-    isIntersect(info.uniq, data, data.length)
+    isIntersect(uniq, colors, colors.length)
   })
 
   // this event happens whenever the value changes
@@ -149,30 +137,29 @@ function createNumericInput(info, viewer, data) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      data[info.index].low = parseInt(this.value)
+      color[layer.layerNum].low = parseInt(this.value)
     } else {
-      data[info.index].hi = parseInt(this.value)
-      resetFilter()
-      //Filter(data.color, viewer, info.layerNum)
+      color[layer.layerNum].hi = parseInt(this.value)
+      resetFilter(layer, layers, viewer)
     }
   })
   return x
 }
 
-function isIntersect(uniq, arr, n) {
+function isIntersect(uniq, colors, len) {
 
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < len; i++) {
     // Clear all previous errors
     clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
   }
 
-  for (let i = 1; i < n; i++) {
+  for (let i = 1; i < len; i++) {
     // Validate
-    if (parseInt(arr[i - 1].hi) < parseInt(arr[i].low)) {
+    if (parseInt(colors[i - 1].hi) < parseInt(colors[i].low)) {
       setError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + (i - 1)))
       return true
     }
-    if (parseInt(arr[i - 1].low) < parseInt(arr[i].hi)) {
+    if (parseInt(colors[i - 1].low) < parseInt(colors[i].hi)) {
       setError(document.getElementById('low' + uniq + (i - 1)), document.getElementById('hi' + uniq + i))
       return true
     }
