@@ -9,7 +9,7 @@
  */
 class MultiViewer extends ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed, numViewers, options) {
-    super(viewerInfo, itemsToBeDisplayed, options)
+    super(viewerInfo, itemsToBeDisplayed)
 
     if (typeof options === 'undefined') {
       options = {}

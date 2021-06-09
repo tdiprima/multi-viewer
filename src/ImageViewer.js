@@ -3,10 +3,9 @@
  * Set up 1 basic OSD viewer.
  * @param viewerInfo
  * @param itemsToBeDisplayed
- * @param options
  */
 class ImageViewer {
-  constructor(viewerInfo, itemsToBeDisplayed, options) {
+  constructor(viewerInfo, itemsToBeDisplayed) {
     // SET UP VIEWER
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
