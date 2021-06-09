@@ -3,16 +3,16 @@ let layers = function (divName, viewer, itemsToBeDisplayed) {
   handleDragLayers(viewer)
 }
 
-let eyeball = function (eye, layerNum, viewer) {
+let eyeball = function (eye, range, layerNum, viewer) {
   let l = viewer.world.getItemAt(layerNum)
   if (l) {
     if (eye.classList.contains('fa-eye-slash')) {
-      // Turn off layer
-      l.setOpacity(0)
+      l.setOpacity(0) // Turn off layer
+      range.value = '0' // Set slider to 0
       console.log('layer', layerNum, 'off')
     } else {
-      // Turn on layer
-      l.setOpacity(1)
+      l.setOpacity(1) // Turn on layer
+      range.value = '100' // Set slider to (opacity * 100)
       console.log('layer', layerNum, 'on')
     }
   }
@@ -50,12 +50,6 @@ let createLayerWidget = function (div, viewer, itemsToBeDisplayed) {
     eye.id = makeId(5, 'eye')
     cell.appendChild(eye)
 
-    // EYEBALL EVENT LISTENER
-    eye.addEventListener('click', function () {
-      toggleButton(eye, 'fa-eye', 'fa-eye-slash')
-      eyeball(eye, layerNum, viewer)
-    })
-
     // TRANSPARENCY SLIDER
     cell = tr.insertCell(-1)
 
@@ -78,8 +72,9 @@ let createLayerWidget = function (div, viewer, itemsToBeDisplayed) {
     range.min = '0'
     range.max = '100'
     range.step = '0.1'
-    range.value = layer.opacity * 100
+    range.value = (layer.opacity * 100).toString()
 
+    // RANGE EVENT LISTENER
     range.addEventListener('input', function () {
       const worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
@@ -87,6 +82,12 @@ let createLayerWidget = function (div, viewer, itemsToBeDisplayed) {
       } else {
         console.warn('worldItem', worldItem)
       }
+    })
+
+    // EYEBALL EVENT LISTENER
+    eye.addEventListener('click', function () {
+      toggleButton(eye, 'fa-eye', 'fa-eye-slash')
+      eyeball(eye, range, layerNum, viewer)
     })
 
     div1.appendChild(range)
