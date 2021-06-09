@@ -50,6 +50,7 @@ let createWidget = function (div, layer, layers, viewer) {
 
   // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
 
+  const uniq = makeId(5) // create it outside of loop
   layer.colors.forEach(function (c, cIdx) {
     // calling it 'c' because 'color' is already taken
     let tr = table.insertRow(-1)
@@ -76,8 +77,6 @@ let createWidget = function (div, layer, layers, viewer) {
       // set filter to new color
       resetFilter(layer, layers, viewer)
     })
-
-    const uniq = makeId(5)
 
     // LOW
     td = tr.insertCell(-1)
