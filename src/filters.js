@@ -38,7 +38,8 @@ let createWidget = function (div, layer, layers, viewer) {
 
   if (!layer.colors) {
     if (layer.layerNum && layer.layerNum > 0) {
-      console.warn('viewer', viewer.id, 'layer', layer.layerNum, 'colors:', layer.colors)
+      table.innerHTML = 'None'
+      console.warn(`viewer ${viewer.id} layer ${layer.layerNum} colors: ${layer.colors}`)
     }
   } else {
     // Sort intervals in decreasing order of low value
