@@ -36,48 +36,55 @@ let createWidget = function (div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
 
-  // Sort intervals in decreasing order of low value
-  layer.colors.sort((a, b) => b.low - a.low)
+  if (!layer.colors) {
+    if (layer.layerNum && layer.layerNum > 0) {
+      console.warn('viewer', viewer.id, 'layer', layer.layerNum, 'colors:', layer.colors)
+    }
+  } else {
+    // Sort intervals in decreasing order of low value
+    layer.colors.sort((a, b) => b.low - a.low)
 
-  const uniq = makeId(5) // create it outside of loop
-  // Display a row of tools for each layer
-  layer.colors.forEach(function (c, cIdx) {
-    // calling it 'c' because 'color' is already taken
-    let tr = table.insertRow(-1)
-    table.appendChild(tr)
+    const uniq = makeId(5) // create it outside of loop
+    // Display a row of tools for each layer
+    layer.colors.forEach(function (c, cIdx) {
+      // calling it 'c' because 'color' is already taken
+      let tr = table.insertRow(-1)
+      table.appendChild(tr)
 
-    let td = tr.insertCell(-1)
-    let colorCode = c.color
+      let td = tr.insertCell(-1)
+      let colorCode = c.color
 
-    // COLOR PICKER
-    let m = document.createElement('mark')
-    m.id = makeId(5, 'marker')
-    m.innerHTML = "#" + rgba2hex(colorCode)
-    m.style.backgroundColor = colorCode
-    td.appendChild(m)
+      // COLOR PICKER
+      let m = document.createElement('mark')
+      m.id = makeId(5, 'marker')
+      m.innerHTML = "#" + rgba2hex(colorCode)
+      m.style.backgroundColor = colorCode
+      td.appendChild(m)
 
-    // COLOR PICKER HANDLER
-    const picker = new CP(m)
-    picker.on('change', function (r, g, b, a) {
-      // set cp widget
-      this.source.value = this.color(r, g, b, a)
-      this.source.innerHTML = this.color(r, g, b, a)
-      this.source.style.backgroundColor = this.color(r, g, b, a)
-      // set new color
-      c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-      // set filter to new color
-      setFilter(layers, viewer)
+      // COLOR PICKER HANDLER
+      const picker = new CP(m)
+      picker.on('change', function (r, g, b, a) {
+        // set cp widget
+        this.source.value = this.color(r, g, b, a)
+        this.source.innerHTML = this.color(r, g, b, a)
+        this.source.style.backgroundColor = this.color(r, g, b, a)
+        // set new color
+        c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+        // set filter to new color
+        setFilter(layers, viewer)
+      })
+
+      // LOW
+      td = tr.insertCell(-1)
+      td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
+
+      // HIGH
+      td = tr.insertCell(-1)
+      td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
+
     })
+  }
 
-    // LOW
-    td = tr.insertCell(-1)
-    td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
-
-    // HIGH
-    td = tr.insertCell(-1)
-    td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
-
-  })
 }
 
 function rgba2hex(orig) {
