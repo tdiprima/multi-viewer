@@ -40,6 +40,7 @@ let createWidget = function (div, layer, layers, viewer) {
   // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
 
   const uniq = makeId(5) // create it outside of loop
+  // Display a row of tools for each layer
   layer.colors.forEach(function (c, cIdx) {
     // calling it 'c' because 'color' is already taken
     let tr = table.insertRow(-1)
@@ -70,11 +71,11 @@ let createWidget = function (div, layer, layers, viewer) {
 
     // LOW
     td = tr.insertCell(-1)
-    td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layer, layers, c, layer.colors, viewer))
+    td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
 
     // HIGH
     td = tr.insertCell(-1)
-    td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layer, layers, c, layer.colors, viewer))
+    td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
 
   })
 }
@@ -99,11 +100,7 @@ function rgba2hex(orig) {
 }
 
 // USER INPUTS to set color threshold values
-function createNumericInput(id, uniq, layer, layers, color, colors, viewer) {
-  // console.log('\nlayer', layer)
-  // console.log('\nlayers', layers)
-  // console.log('\ncolor', color)
-  // console.log('\ncolors', colors)
+function createNumericInput(id, uniq, layers, color, colors, viewer) {
   let x = document.createElement('input')
   x.id = id
   x.setAttribute('type', 'number')
@@ -129,8 +126,9 @@ function createNumericInput(id, uniq, layer, layers, color, colors, viewer) {
       color.low = parseInt(this.value)
     } else {
       color.hi = parseInt(this.value)
-      setFilter(layers, viewer)
     }
+
+    setFilter(layers, viewer)
   })
   return x
 }
