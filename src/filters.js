@@ -1,4 +1,4 @@
-let filters = function (viewer, layer, layers, button) {
+let filters = function (button, layer, layers, viewer) {
   let div
   if (isRealValue(button)) {
     let id = makeId(5, 'filters')
@@ -11,19 +11,8 @@ let filters = function (viewer, layer, layers, button) {
   return div
 }
 
-let resetFilter = function (layer, layers, viewer) {
-  // One does not simply set the layer that changed:
-  // viewer.setFilterOptions({
-  //   filters: [{
-  //     items: viewer.world.getItemAt(layer.layerNum),
-  //     processors: [
-  //       colorFilter.prototype.COLORLEVELS(layer.colors) // (The layer should have the updated color values)
-  //     ]
-  //   }],
-  //   loadMode: 'sync'
-  // })
-
-  // One needs to set ALL the layers
+// SET LAYERS' COLOR FILTER
+let setFilter = function (layers, viewer) {
   let itemCount = viewer.world.getItemCount()
   let filterOpts = []
   for (let i = 0; i < itemCount; i++) {
@@ -47,6 +36,7 @@ let createWidget = function (div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
 
+  // Do we want to sort?
   // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
 
   const uniq = makeId(5) // create it outside of loop
@@ -65,6 +55,7 @@ let createWidget = function (div, layer, layers, viewer) {
     m.style.backgroundColor = colorCode
     td.appendChild(m)
 
+    // COLOR PICKER HANDLER
     const picker = new CP(m)
     picker.on('change', function (r, g, b, a) {
       // set cp widget
@@ -74,7 +65,7 @@ let createWidget = function (div, layer, layers, viewer) {
       // set new color
       c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
       // set filter to new color
-      resetFilter(layer, layers, viewer)
+      setFilter(layers, viewer)
     })
 
     // LOW
@@ -138,7 +129,7 @@ function createNumericInput(id, uniq, layer, layers, color, colors, viewer) {
       color.low = parseInt(this.value)
     } else {
       color.hi = parseInt(this.value)
-      resetFilter(layer, layers, viewer)
+      setFilter(layers, viewer)
     }
   })
   return x

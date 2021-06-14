@@ -1,5 +1,5 @@
-let layers = function (divName, viewer, itemsToBeDisplayed) {
-  createLayerWidget(document.getElementById(divName), viewer, itemsToBeDisplayed)
+let layers = function (divName, itemsToBeDisplayed, viewer) {
+  createLayerWidget(document.getElementById(divName), itemsToBeDisplayed, viewer)
   handleDragLayers(viewer)
 }
 
@@ -16,7 +16,7 @@ let eyeball = function (eye, range, layerNum, viewer) {
   }
 }
 
-let createLayerWidget = function (div, viewer, itemsToBeDisplayed) {
+let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
   itemsToBeDisplayed.forEach(function (layer, ind) {
@@ -111,7 +111,7 @@ let createLayerWidget = function (div, viewer, itemsToBeDisplayed) {
     fas.id = makeId(5, 'palette')
     fas.style.cursor = 'pointer'
     cell.appendChild(fas)
-    let widget = filters(viewer, layer, itemsToBeDisplayed, fas)
+    let widget = filters(fas, layer, itemsToBeDisplayed, viewer)
     fas.addEventListener('click', function (e) {
       widget.style.display = 'block'
     })
