@@ -6,15 +6,8 @@ function clearClassList(element) {
 }
 
 function toggleButton(elem, onClass, offClass) {
-
-  if (elem.classList.contains(onClass)) {
-    elem.classList.remove(onClass)
-    elem.classList.add(offClass)
-  } else {
-    elem.classList.remove(offClass)
-    elem.classList.add(onClass)
-  }
-
+  elem.classList.toggle(onClass)
+  elem.classList.toggle(offClass)
 }
 
 function isRealValue(obj) {
