@@ -105,16 +105,19 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
 
     // PALETTE COLOR FUNCTION
     cell = tr.insertCell(-1)
-    fas = document.createElement('i')
-    fas.classList.add('fas')
-    fas.classList.add('fa-palette')
-    fas.id = makeId(5, 'palette')
-    fas.style.cursor = 'pointer'
-    cell.appendChild(fas)
-    let widget = filters(fas, layer, itemsToBeDisplayed, viewer)
-    fas.addEventListener('click', function (e) {
-      widget.style.display = 'block'
-    })
+    // Color function for all layers except base
+    if (layerNum > 0) {
+      fas = document.createElement('i')
+      fas.classList.add('fas')
+      fas.classList.add('fa-palette')
+      fas.id = makeId(5, 'palette')
+      fas.style.cursor = 'pointer'
+      cell.appendChild(fas)
+      let widget = filters(fas, layer, itemsToBeDisplayed, viewer)
+      fas.addEventListener('click', function (e) {
+        widget.style.display = 'block'
+      })
+    }
   })
 }
 
