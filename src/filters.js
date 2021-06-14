@@ -111,7 +111,7 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
   x.size = 5
 
   x.addEventListener('change', function () {
-    isIntersect(uniq, colors, colors.length)
+    isIntersect(uniq, colors.length)
   })
 
   // this event happens whenever the value changes
@@ -133,7 +133,7 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
   return x
 }
 
-function isIntersect(uniq, colors, len) {
+function isIntersect(uniq, len) {
 
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
