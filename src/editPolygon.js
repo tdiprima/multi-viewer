@@ -1,7 +1,7 @@
 const editPolygon = function (button, overlay) {
   button.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'btn')
-    Edit(overlay.fabricCanvas())
+    Edit(this, overlay.fabricCanvas())
   })
 }
 
@@ -79,7 +79,7 @@ function getPolygon(canvas) {
   }
 }
 
-function Edit(canvas) {
+function Edit(button, canvas) {
   const fabricPolygon = getPolygon(canvas)
 
   if (isRealValue(fabricPolygon)) {
@@ -110,6 +110,7 @@ function Edit(canvas) {
     fabricPolygon.hasBorders = !fabricPolygon.edit
     canvas.requestRenderAll()
   } else {
+    toggleButton(button, 'btnOn', 'btn')
     alertMessage('Please select a polygon for editing.')
   }
 }
