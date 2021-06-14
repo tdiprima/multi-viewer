@@ -36,8 +36,8 @@ let createWidget = function (div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
 
-  // Do we want to sort?
-  // layer.colors.sort((a, b) => b.low - a.low) // ORDER BY LOW DESC
+  // Sort intervals in decreasing order of low value
+  layer.colors.sort((a, b) => b.low - a.low)
 
   const uniq = makeId(5) // create it outside of loop
   // Display a row of tools for each layer
@@ -135,19 +135,24 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
 
 function isIntersect(uniq, colors, len) {
 
+  // Clear all previous errors
   for (let i = 0; i < len; i++) {
-    // Clear all previous errors
     clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
   }
 
+  // Validation
   for (let i = 1; i < len; i++) {
-    // Validate
-    if (parseInt(colors[i - 1].hi) < parseInt(colors[i].low)) {
-      setError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + (i - 1)))
+    // If low of an interval, is less than the high value of the 'previous' (next) interval, then error
+    let low = document.getElementById('low' + uniq + (i - 1))
+    let high = document.getElementById('hi' + uniq + i)
+    if (parseInt(low.value) < parseInt(high.value)) {
+      setError(low, high)
       return true
     }
-    if (parseInt(colors[i - 1].low) < parseInt(colors[i].hi)) {
-      setError(document.getElementById('low' + uniq + (i - 1)), document.getElementById('hi' + uniq + i))
+    // If high ends up being less than its low, then error
+    let high1 = document.getElementById('hi' + uniq + (i - 1))
+    if (parseInt(high1.value) < parseInt(low.value)) {
+      setError(low, high1)
       return true
     }
   }
