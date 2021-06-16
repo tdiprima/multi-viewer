@@ -41,15 +41,13 @@ class ImageViewer {
     // Check our image url for info.json
     if (item.includes('info.json')) {
       // Get info for scale bar
-      let promiseA = async function () {
+      let fetchAsync = async function () {
         return (await fetch(item)).json()
       }
-      let promiseB = promiseA()
-      promiseB.then(function (d) {
+      fetchAsync().then(function (d) {
         if (d['resolutionUnit'] === 3) {
-          setScaleBar(d['xResolution'] * 100) // Call our function!
+          setScaleBar(d['xResolution'] * 100)
         } else {
-          // Temporarily:
           console.warn('Handle resolution unit', d['resolutionUnit'])
         }
       })

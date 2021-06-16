@@ -1,108 +1,136 @@
 const ruler = function (button, viewer, overlay) {
-  let line, isDown, mode
+  let line, isDown
   let startx = []
   let endx = []
   let starty = []
   let endy = []
   let temp = 0
+  let lineLength = 0
+  let mode = 'x'
   let text
 
-  let canvas = overlay.fabricCanvas({ // on/off
-    hoverCursor: 'pointer',
-    selection: false
-  })
+  let canvas = this.__canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
 
-  button.addEventListener('click', function () {
-    toggleButton(button, 'btnOn', 'btn')
+  function setOsdMove(myBool) {
+    viewer.setMouseNavEnabled(myBool)
+    viewer.outerTracker.setTracking(myBool)
+    viewer.gestureSettingsMouse.clickToZoom = myBool
+  }
 
-    if (button.classList.contains('btnOn')) {
-      mode = 'draw'
-      button.innerHTML = '<i class="fas fa-ruler"></i> Ruler off'
+  function clear() {
+    lineLength = 0
+    startx[temp] = 0
+    starty[temp] = 0
+    endx[temp] = 0
+    endy[temp] = 0
+  }
+
+  function mouseDownHandler(o) {
+    clear()
+    if (mode === 'draw') {
+      setOsdMove(false)
+      isDown = true
+      let pointer = canvas.getPointer(o.e)
+
+      let points = [pointer.x, pointer.y, pointer.x, pointer.y]
+      startx[temp] = pointer.x
+      starty[temp] = pointer.y
+      line = new fabric.Line(points, {
+        strokeWidth: 2 / viewer.viewport.getZoom(true),
+        stroke: '#0f0',
+        originX: 'center',
+        originY: 'center'
+      })
+      canvas.add(line)
     } else {
-      mode = ''
-      button.innerHTML = '<i class="fas fa-ruler"></i> Ruler on'
+      setOsdMove(true)
+      canvas.forEachObject(function (o) {
+        o.setCoords() // update coordinates
+      })
+    }
+  }
+
+  function mouseMoveHandler(o) {
+    canvas.remove(text) // remove text element before re-adding it
+    canvas.renderAll()
+    if (!isDown) return
+    let pointer = canvas.getPointer(o.e)
+    line.set({x2: pointer.x, y2: pointer.y})
+
+    endx[temp] = pointer.x
+    endy[temp] = pointer.y
+
+    if (mode === 'draw') {
+      lineLength = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
+      text = new fabric.Text('Length ' + lineLength, {
+        left: endx[temp],
+        top: endy[temp],
+        fontSize: 12 / viewer.viewport.getZoom(true),
+        'selectable': false,
+        'evented': false
+      })
+      canvas.add(text)
     }
 
-    canvas.on('mouse:down', function (o) {
-      if (mode === 'draw') {
-        viewer.setMouseNavEnabled(false)
-        viewer.outerTracker.setTracking(false)
-        isDown = true
-        let pointer = canvas.getPointer(o.e)
+    canvas.renderAll()
+  }
 
-        // LINE
-        let points = [pointer.x, pointer.y, pointer.x, pointer.y]
-        startx[temp] = pointer.x
-        starty[temp] = pointer.y
-        line = new fabric.Line(points, {
-          strokeWidth: 2,
-          stroke: '#0f0',
-          originX: 'center',
-          originY: 'center'
-        })
-        canvas.add(line)
-      } else {
-        viewer.setMouseNavEnabled(true)
-        viewer.outerTracker.setTracking(true)
-        canvas.forEachObject(function (o) {
-          o.setCoords() // update coordinates
-        })
-      }
-    })
+  function mouseUpHandler(o) {
+    let pointer = canvas.getPointer(o.e)
+    isDown = false
 
-    canvas.on('mouse:move', function (o) {
-      canvas.remove(text) // remove text element before re-adding it
-      canvas.renderAll() // on/off
-      if (!isDown) return
-      let pointer = canvas.getPointer(o.e)
-
-      // LINE
-      line.set({x2: pointer.x, y2: pointer.y})
-
-      endx[temp] = pointer.x
-      endy[temp] = pointer.y
-
-      // TEXT
-      if (mode === 'draw') {
-        let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
-        text = new fabric.Text('Length ' + px, {left: endx[temp], top: endy[temp], fontSize: 14, fill: '#0f0'})
-        canvas.add(text)
-      }
-
-      canvas.renderAll()
-    })
-
-    canvas.on('mouse:up', function (o) {
-      let pointer = canvas.getPointer(o.e)
-      isDown = false
-
-      // RECT
+    if (endx[temp] !== 0) {
       canvas.add(new fabric.Rect({
         left: pointer.x + 1,
         top: pointer.y + 1,
-        width: 150,
-        height: 25,
+        width: 150 / viewer.viewport.getZoom(true),
+        height: 25 / viewer.viewport.getZoom(true),
         fill: 'rgba(255,255,255,0.5)',
-        transparentCorners: true
+        transparentCorners: true,
+        'selectable': false,
+        'evented': false
       }))
-
-      // TEXT
-      if (typeof text !== 'undefined') {
-        canvas.add(new fabric.Text(text.text, {
-          fontSize: 20,
-          left: pointer.x + 1,
-          top: pointer.y + 1
-        }))
-      }
-
+      canvas.add(new fabric.Text(text.text, {
+        fontSize: 20 / viewer.viewport.getZoom(true),
+        left: pointer.x + 1,
+        top: pointer.y + 1,
+        'selectable': false,
+        'evented': false
+      }))
       canvas.renderAll()
-    })
+    }
+  }
 
+  button.addEventListener('click', function () {
+    if (mode === 'draw') {
+      mode = 'x'
+      canvas.off('mouse:down', function (o) {
+        mouseDownHandler(o)
+      })
+      canvas.off('mouse:move', function (o) {
+        mouseMoveHandler(o)
+      })
+      canvas.off('mouse:up', function (o) {
+        mouseUpHandler(o)
+      })
+    } else {
+      mode = 'draw'
+      canvas.on('mouse:down', function (o) {
+        mouseDownHandler(o)
+      })
+      canvas.on('mouse:move', function (o) {
+        mouseMoveHandler(o)
+      })
+      canvas.on('mouse:up', function (o) {
+        mouseUpHandler(o)
+      })
+    }
+    toggleButton(button, 'btnOn', 'btn')
   })
 
   let Calculate = {
-    lineLength: function (x1, y1, x2, y2) {
+    lineLength: function (x1, y1, x2, y2) { // Line length
       return Math.sqrt(Math.pow(x2 * 1 - x1 * 1, 2) + Math.pow(y2 * 1 - y1 * 1, 2))
     }
   }

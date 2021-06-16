@@ -208,6 +208,7 @@ let handleDragLayers = function (viewer) {
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum)
       targetViewer.world.getItemAt(layerNum).setOpacity(1)
+      // sourceViewer.world.getItemAt(layerNum).setOpacity(0)
     }
     return false
   }
