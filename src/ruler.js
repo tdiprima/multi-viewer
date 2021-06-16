@@ -62,11 +62,12 @@ const ruler = function (button, viewer, overlay) {
     endy[temp] = pointer.y
 
     if (mode === 'draw') {
+      // Show info while drawing line
       lineLength = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
       text = new fabric.Text('Length ' + lineLength, {
         left: endx[temp],
         top: endy[temp],
-        fontSize: 12 / viewer.viewport.getZoom(true),
+        fontSize: 15 / viewer.viewport.getZoom(true),
         'selectable': false,
         'evented': false
       })
@@ -80,10 +81,12 @@ const ruler = function (button, viewer, overlay) {
     let pointer = canvas.getPointer(o.e)
     isDown = false
 
+    // Make sure user actually drew a line
     if (endx[temp] !== 0) {
+      // Show end result
       canvas.add(new fabric.Rect({
-        left: pointer.x + 1,
-        top: pointer.y + 1,
+        left: pointer.x,
+        top: pointer.y,
         width: 150 / viewer.viewport.getZoom(true),
         height: 25 / viewer.viewport.getZoom(true),
         fill: 'rgba(255,255,255,0.5)',
@@ -93,8 +96,8 @@ const ruler = function (button, viewer, overlay) {
       }))
       canvas.add(new fabric.Text(text.text, {
         fontSize: 20 / viewer.viewport.getZoom(true),
-        left: pointer.x + 1,
-        top: pointer.y + 1,
+        left: pointer.x,
+        top: pointer.y,
         'selectable': false,
         'evented': false
       }))
@@ -104,27 +107,18 @@ const ruler = function (button, viewer, overlay) {
 
   button.addEventListener('click', function () {
     if (mode === 'draw') {
+      // Turn off
+      canvas.remove(...canvas.getObjects()) // clear previous
       mode = 'x'
-      canvas.off('mouse:down', function (o) {
-        mouseDownHandler(o)
-      })
-      canvas.off('mouse:move', function (o) {
-        mouseMoveHandler(o)
-      })
-      canvas.off('mouse:up', function (o) {
-        mouseUpHandler(o)
-      })
+      canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
+      canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })
+      canvas.off('mouse:up', function (o) { mouseUpHandler(o) })
     } else {
+      // Turn on
       mode = 'draw'
-      canvas.on('mouse:down', function (o) {
-        mouseDownHandler(o)
-      })
-      canvas.on('mouse:move', function (o) {
-        mouseMoveHandler(o)
-      })
-      canvas.on('mouse:up', function (o) {
-        mouseUpHandler(o)
-      })
+      canvas.on('mouse:down', function (o) { mouseDownHandler(o) })
+      canvas.on('mouse:move', function (o) { mouseMoveHandler(o) })
+      canvas.on('mouse:up', function (o) { mouseUpHandler(o) })
     }
     toggleButton(button, 'btnOn', 'btn')
   })
