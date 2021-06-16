@@ -1,11 +1,10 @@
 const ruler = function (button, viewer, overlay) {
   let line, isDown
-  let startx = []
-  let endx = []
-  let starty = []
-  let endy = []
-  let temp = 0
-  let lineLength = 0
+  let startx = 0.0
+  let endx = 0.0
+  let starty = 0.0
+  let endy = 0.0
+  let lineLength = 0.0
   let mode = 'x'
   let text
 
@@ -19,11 +18,11 @@ const ruler = function (button, viewer, overlay) {
   }
 
   function clear() {
-    lineLength = 0
-    startx[temp] = 0
-    starty[temp] = 0
-    endx[temp] = 0
-    endy[temp] = 0
+    startx = 0.0
+    endx = 0.0
+    starty = 0.0
+    endy = 0.0
+    lineLength = 0.0
   }
 
   function mouseDownHandler(o) {
@@ -34,8 +33,8 @@ const ruler = function (button, viewer, overlay) {
       let pointer = canvas.getPointer(o.e)
 
       let points = [pointer.x, pointer.y, pointer.x, pointer.y]
-      startx[temp] = pointer.x
-      starty[temp] = pointer.y
+      startx = pointer.x
+      starty = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
         stroke: '#0f0',
@@ -58,15 +57,15 @@ const ruler = function (button, viewer, overlay) {
     let pointer = canvas.getPointer(o.e)
     line.set({x2: pointer.x, y2: pointer.y})
 
-    endx[temp] = pointer.x
-    endy[temp] = pointer.y
+    endx = pointer.x
+    endy = pointer.y
 
     if (mode === 'draw') {
       // Show info while drawing line
-      lineLength = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2)
+      lineLength = Calculate.lineLength(startx, starty, endx, endy).toFixed(2)
       text = new fabric.Text('Length ' + lineLength, {
-        left: endx[temp],
-        top: endy[temp],
+        left: endx,
+        top: endy,
         fontSize: 15 / viewer.viewport.getZoom(true),
         'selectable': false,
         'evented': false
@@ -82,7 +81,7 @@ const ruler = function (button, viewer, overlay) {
     isDown = false
 
     // Make sure user actually drew a line
-    if (endx[temp] !== 0) {
+    if (endx > 0) {
       // Show end result
       canvas.add(new fabric.Rect({
         left: pointer.x,
