@@ -1,3 +1,4 @@
+// TODO: measure μm (currently px)
 const ruler = function (button, viewer, overlay) {
   let line, isDown
   let startx = 0.0
@@ -63,7 +64,7 @@ const ruler = function (button, viewer, overlay) {
     if (mode === 'draw') {
       // Show info while drawing line
       lineLength = Calculate.lineLength(startx, starty, endx, endy).toFixed(2)
-      text = new fabric.Text('Length ' + lineLength, {
+      text = new fabric.Text(`Length ${lineLength} px`, {
         left: endx,
         top: endy,
         fontSize: 15 / viewer.viewport.getZoom(true),
