@@ -25,7 +25,7 @@ a:link {
   vertical-align: middle;
   cursor: pointer;
   color: #333333;
-  text-shadow: 0 1px 1px rgb(255 255 255 / 75%);
+  text-shadow: 0 1px 1px rgba(255 255 255 0.75);
   padding: 4px 12px;
 }
 
@@ -37,7 +37,7 @@ a:link {
   cursor: pointer;
   color: #74f272;
   border: 2px solid #74f272;
-  text-shadow: 0 1px 1px rgb(255 255 255 / 75%);
+  text-shadow: 0 1px 1px rgba(255 255 255 0.75);
   padding: 4px 12px;
 }
 
