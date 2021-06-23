@@ -111,7 +111,7 @@ const ruler = function (button, viewer, overlay) {
   button.addEventListener('click', function () {
     if (mode === 'draw') {
       // Turn off
-      canvas.remove(...canvas.getObjects()) // clear previous
+      canvas.remove(...canvas.getObjects()) // TODO: clear previous rulers, only.
       mode = 'x'
       canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
       canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })
