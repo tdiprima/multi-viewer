@@ -163,7 +163,7 @@ a:link {
 
 /* HIGHLIGHT ON DROP */
 .highlight {
-  background-color: yellow;
+  background-color: #ffa214;
   animation-name: bckanim;
   animation-fill-mode: forwards;
   animation-duration: 3s;
@@ -172,7 +172,7 @@ a:link {
 
 @keyframes bckanim {
   0% {
-    background-color: yellow;
+    background-color: #ffa214;
   }
   100% {
     background-color: transparent;
