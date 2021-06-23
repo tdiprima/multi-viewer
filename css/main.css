@@ -1,5 +1,4 @@
 /* MAIN STYLE */
-
 body {
   font-family: sans-serif;
 }
@@ -13,14 +12,12 @@ a:link {
 }
 
 /* DARK MODE */
-
 .dark-mode {
   background-color: black;
   color: white;
 }
 
 /* USER CONTROLS */
-
 .btn {
   color: #0e74da;
   border: 1px solid #0e74da;
@@ -38,7 +35,6 @@ a:link {
 }
 
 /* RANGE SLIDERS */
-
 .slider-square {
   -webkit-appearance: none;
   width: 90%;
@@ -72,13 +68,11 @@ a:link {
 }
 
 /* color-picker no-alpha */
-
 /*.color-picker.no-alpha .color-picker\:a {*/
 /*  display: none;*/
 /*}*/
 
 /* "QUAD" */
-
 .divSquare {
   /*width: 48%;*/
   /*height: 560px;*/
@@ -111,7 +105,6 @@ a:link {
 }
 
 /* MUGSHOTS */
-
 .thumbnail-container {
   overflow-x: scroll;
   width: 100%;
@@ -135,14 +128,12 @@ a:link {
 }
 
 /* DRAGGABLE */
-
 *[draggable=true] {
   -khtml-user-drag: element;
   cursor: move;
 }
 
-/* tabs (redone as list) */
-
+/* TABS (redone as LIST) */
 .drop_site {
   overflow: hidden !important;
   border: 1px solid #ccc !important;
@@ -164,8 +155,7 @@ a:link {
   border: 3px dotted #00FF00 !important;
 }
 
-/* floating div */
-
+/* FLOATING DIV */
 .popup {
   position: absolute;
   z-index: 9;
@@ -202,7 +192,6 @@ a:link {
 }
 
 /* HIGHLIGHT ON DROP */
-
 .highlight {
   background-color: yellow;
   animation-name: bckanim;
@@ -220,8 +209,7 @@ a:link {
   }
 }
 
-/* DISPLAY SLIDER ON HOVER */
-
+/* DISPLAY TOOLS ON HOVER */
 .showHover {
   display: none;
 }
@@ -234,7 +222,6 @@ a:link {
 }
 
 /* HOVER ORANGE */
-
 .hover-orange:focus,
 .hover-orange:hover {
   color: #fd7e14
