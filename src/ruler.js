@@ -8,7 +8,14 @@ const ruler = function (button, viewer, overlay) {
   let lineLength = 0.0
   let mode = 'x'
   let text
-  let color = '#b3f836'
+  // let temp = '#60c603'
+  // temp = '#00cc01'
+  // temp = '#009933'
+  // temp = '#b3f836'
+  // temp = '#333333'
+  let bgColor = '#009933'
+  let fontColor = '#fff'
+  let lineColor = '#00cc01'
 
   let canvas = this.__canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
@@ -39,7 +46,7 @@ const ruler = function (button, viewer, overlay) {
       starty = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
-        stroke: color,
+        stroke: lineColor,
         originX: 'center',
         originY: 'center',
         'name': 'ruler'
@@ -70,9 +77,9 @@ const ruler = function (button, viewer, overlay) {
         left: endx,
         top: endy,
         fontSize: 15 / viewer.viewport.getZoom(true),
-        'selectable': false,
-        'evented': false,
-        'name': 'ruler'
+        selectable: false,
+        evented: false,
+        name: 'ruler'
       })
       canvas.add(text)
     }
@@ -94,19 +101,21 @@ const ruler = function (button, viewer, overlay) {
         height: 25 / viewer.viewport.getZoom(true),
         rx: 5,
         ry: 5,
-        fill: color,
+        fill: bgColor,
         transparentCorners: true,
-        'selectable': false,
-        'evented': false,
-        'name': 'ruler'
+        selectable: false,
+        evented: false,
+        name: 'ruler'
       }))
       canvas.add(new fabric.Text(text.text, {
         fontSize: 20 / viewer.viewport.getZoom(true),
         left: pointer.x,
         top: pointer.y,
-        'selectable': false,
-        'evented': false,
-        'name': 'ruler'
+        selectable: false,
+        evented: false,
+        stroke: fontColor,
+        fill: fontColor,
+        name: 'ruler'
       }))
       canvas.renderAll()
     }

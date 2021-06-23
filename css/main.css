@@ -19,19 +19,26 @@ a:link {
 
 /* USER CONTROLS */
 .btn {
-  color: #0e74da;
-  border: 1px solid #0e74da;
-  border-radius: 5px;
+  font-size: 14px;
+  line-height: 20px;
   text-align: center;
-  cursor: default !important;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #333333;
+  text-shadow: 0 1px 1px rgb(255 255 255 / 75%);
+  padding: 4px 12px;
 }
 
 .btnOn {
-  color: #74f272;
-  border: 1px solid #74f272;
-  border-radius: 5px;
+  font-size: 14px;
+  line-height: 20px;
   text-align: center;
-  cursor: default !important;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #74f272;
+  border: 2px solid #74f272;
+  text-shadow: 0 1px 1px rgb(255 255 255 / 75%);
+  padding: 4px 12px;
 }
 
 /* RANGE SLIDERS */
@@ -162,7 +169,7 @@ a:link {
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
-  border-radius: 5px;
+  border-radius: 4px;
   display: inline-block;
   white-space: nowrap;
 }

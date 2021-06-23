@@ -28,13 +28,13 @@ function gridHandler(button, gridProps) {
   if (on) {
     turnGridOn(gridProps)
     gridProps.gridAdded = true
-    button.innerHTML = '<i class="fas fa-border-all"></i> Remove grid'
+    // button.innerHTML = '<i class="fas fa-border-all"></i> Remove grid'
   }
 
   if (!on) {
     turnGridOff(gridProps)
     gridProps.gridAdded = false
-    button.innerHTML = '<i class="fas fa-border-all"></i> Draw grid'
+    // button.innerHTML = '<i class="fas fa-border-all"></i> Draw grid'
   }
 }
 
@@ -108,7 +108,7 @@ function markerHandler(button, gridProps) {
   if (!on) {
     // Done marking; remove mouse:move listener because we use it for other things.
     gridProps.canvas.__eventListeners['mouse:move'] = []
-    button.innerHTML = '<i class="fas fa-paint-brush"></i> Mark grid'
+    // button.innerHTML = '<i class="fas fa-paint-brush"></i> Mark grid'
   }
 
   if (on) {
@@ -116,7 +116,7 @@ function markerHandler(button, gridProps) {
       gridProps.canvas.on('mouse:move', function (pointerEvent) {
         fillInGrid(pointerEvent, gridProps)
       })
-      button.innerHTML = '<i class="fas fa-paint-brush"></i> Done marking'
+      // button.innerHTML = '<i class="fas fa-paint-brush"></i> Done marking'
     } else {
       toggleButton(button, 'btnOn', 'btn') // turn it back off; we're not letting them do this
       alertMessage('Please draw a grid first.')
