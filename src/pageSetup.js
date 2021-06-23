@@ -95,6 +95,7 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
           const colorPicker = new CP(document.getElementById('mark' + idx))
           colorPicker.on('change', function (r, g, b, a) {
             this.source.value = this.color(r, g, b, a)
+            this.source.innerHTML = this.color(r, g, b, a)
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
