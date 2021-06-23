@@ -41,44 +41,6 @@ a:link {
   padding: 4px 12px;
 }
 
-/* RANGE SLIDERS */
-.slider-square {
-  -webkit-appearance: none;
-  width: 90%;
-  height: 12px;
-  background: #d3d3d3;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: opacity .15s ease-in-out;
-  transition: opacity .15s ease-in-out;
-}
-
-.slider-square:hover {
-  opacity: 1;
-}
-
-.slider-square::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  background: #8ac1ef;
-  cursor: pointer;
-}
-
-.slider-square::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border: 0;
-  background: #8ac1ef;
-  cursor: pointer;
-}
-
-/* color-picker no-alpha */
-/*.color-picker.no-alpha .color-picker\:a {*/
-/*  display: none;*/
-/*}*/
-
 /* "QUAD" */
 .divSquare {
   /*width: 48%;*/
