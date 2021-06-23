@@ -8,6 +8,7 @@ const ruler = function (button, viewer, overlay) {
   let lineLength = 0.0
   let mode = 'x'
   let text
+  let color = '#b3f836'
 
   let canvas = this.__canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
@@ -38,7 +39,8 @@ const ruler = function (button, viewer, overlay) {
       starty = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
-        stroke: '#0f0',
+        // stroke: '#0f0',
+        stroke: color,
         originX: 'center',
         originY: 'center'
       })
@@ -89,7 +91,9 @@ const ruler = function (button, viewer, overlay) {
         top: pointer.y,
         width: 150 / viewer.viewport.getZoom(true),
         height: 25 / viewer.viewport.getZoom(true),
-        fill: 'rgba(255,255,255,0.5)',
+        rx: 3,
+        ry: 3,
+        fill: color,
         transparentCorners: true,
         'selectable': false,
         'evented': false
