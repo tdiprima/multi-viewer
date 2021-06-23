@@ -18,11 +18,12 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
       return resolve(opts)
     }).then(function (opts) {
       // quick little dark-mode
-      let newNode = document.createElement('button')
-      newNode.innerHTML = 'Toggle Dark Mode'
+      let btnDark = document.createElement('button')
+      btnDark.innerHTML = 'Toggle Dark Mode'
+      btnDark.className = 'btn'
       let referenceNode = document.querySelector('#contentDiv');
-      referenceNode.before(newNode)
-      newNode.addEventListener('click', function () {
+      referenceNode.before(btnDark)
+      btnDark.addEventListener('click', function () {
         document.body.classList.toggle("dark-mode")
       })
 
