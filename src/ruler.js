@@ -39,7 +39,6 @@ const ruler = function (button, viewer, overlay) {
       starty = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
-        // stroke: '#0f0',
         stroke: color,
         originX: 'center',
         originY: 'center'
