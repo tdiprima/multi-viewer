@@ -41,7 +41,8 @@ const ruler = function (button, viewer, overlay) {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
         stroke: color,
         originX: 'center',
-        originY: 'center'
+        originY: 'center',
+        'name': 'ruler'
       })
       canvas.add(line)
     } else {
@@ -70,7 +71,8 @@ const ruler = function (button, viewer, overlay) {
         top: endy,
         fontSize: 15 / viewer.viewport.getZoom(true),
         'selectable': false,
-        'evented': false
+        'evented': false,
+        'name': 'ruler'
       })
       canvas.add(text)
     }
@@ -95,14 +97,16 @@ const ruler = function (button, viewer, overlay) {
         fill: color,
         transparentCorners: true,
         'selectable': false,
-        'evented': false
+        'evented': false,
+        'name': 'ruler'
       }))
       canvas.add(new fabric.Text(text.text, {
         fontSize: 20 / viewer.viewport.getZoom(true),
         left: pointer.x,
         top: pointer.y,
         'selectable': false,
-        'evented': false
+        'evented': false,
+        'name': 'ruler'
       }))
       canvas.renderAll()
     }
@@ -111,7 +115,8 @@ const ruler = function (button, viewer, overlay) {
   button.addEventListener('click', function () {
     if (mode === 'draw') {
       // Turn off
-      canvas.remove(...canvas.getObjects()) // TODO: clear previous rulers, only.
+      canvas.remove(...canvas.getItemsByName('ruler'))
+      // console.log(canvas.getItemsByName('ruler'))
       mode = 'x'
       canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
       canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })

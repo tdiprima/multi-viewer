@@ -103,3 +103,31 @@ async function fetchAsync (url) {
   const data = await response.json() // only proceed once promise is resolved
   return data // only proceed once second promise is resolved
 }
+
+// Item name is unique
+// fabric.Canvas.prototype.getItemByName = function (name) {
+//   let object = null
+//   const objects = this.getObjects()
+//
+//   for (let i = 0, len = this.size(); i < len; i++) {
+//     if (objects[i].name && objects[i].name === name) {
+//       object = objects[i]
+//       break
+//     }
+//   }
+//
+//   return object
+// }
+// Item name is non-unique
+fabric.Canvas.prototype.getItemsByName = function (name) {
+  const objectList = []
+  const objects = this.getObjects()
+
+  for (let i = 0, len = this.size(); i < len; i++) {
+    if (objects[i].name && objects[i].name === name) {
+      objectList.push(objects[i])
+    }
+  }
+
+  return objectList
+}
