@@ -178,8 +178,9 @@ a:link {
   padding: 10px;
   cursor: move;
   z-index: 10;
-  background-color: #2196F3;
-  color: #fff;
+  background-color: #caccce;
+  font-weight: bold;
+  color: #333;
 }
 
 .grid-container {
