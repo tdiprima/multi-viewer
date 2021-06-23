@@ -1,6 +1,7 @@
 let blender = function (button, viewer) {
   let blend_modes = [
     'normal',
+    'difference', // reposition difference
     'multiply',
     'screen',
     'overlay',
@@ -10,7 +11,7 @@ let blender = function (button, viewer) {
     'color-burn',
     'hard-light',
     'soft-light',
-    'difference',
+    // 'difference',
     'exclusion',
     'hue',
     'saturation',
@@ -49,15 +50,12 @@ let blender = function (button, viewer) {
   button.addEventListener('click', function () {
     if (widgetCreated) {
       // Turn off
-      console.warn('turn off')
       widgetCreated = false
     } else {
       // Turn on
-      console.warn('turn ON')
       let id = makeId(5, 'modes')
       let rect = button.getBoundingClientRect()
       let div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top)
-      console.warn(div)
       div.style.display = 'block'
       createWidget(document.getElementById(`${id}Body`), viewer)
       widgetCreated = true
