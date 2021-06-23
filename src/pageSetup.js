@@ -76,7 +76,7 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
 <button id="btnGrid${idx}" class="btn"><i class="fas fa-border-all"></i> Grid</button>&nbsp;
 <button id="btnGridMarker${idx}" class="btn"><i class="fas fa-paint-brush"></i> Mark grid</button>&nbsp;
 <button id="btnRuler${idx}" class="btn"><i class="fas fa-ruler"></i> Ruler</button>&nbsp;
-<!--<button id="btnBlender${idx}" class="btn"><i class="fas fa-blender"></i> Blend-modes</button>&nbsp;-->
+<button id="btnBlender${idx}" class="btn"><i class="fas fa-blender"></i> Blend-modes</button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
             // END

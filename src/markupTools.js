@@ -6,4 +6,5 @@ const markupTools = function (idx, viewer) {
   editPolygon(document.getElementById('btnEdit' + idx), overlay)
   gridOverlay(document.getElementById('btnGrid' + idx), document.getElementById('btnGridMarker' + idx), overlay)
   ruler(document.getElementById('btnRuler' + idx), viewer, overlay)
+  blender(document.getElementById('btnBlender' + idx), viewer)
 }
