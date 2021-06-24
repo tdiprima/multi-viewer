@@ -1,10 +1,3 @@
-function clearClassList(element) {
-  const classList = element.classList
-  while (classList.length > 0) {
-    classList.remove(classList.item(0))
-  }
-}
-
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0)
   element.classList.toggle(class1)

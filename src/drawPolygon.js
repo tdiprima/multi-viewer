@@ -69,9 +69,7 @@ function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {
 
   customizePolygonControls(options.path, canvas, viewer)
 
-  clearClassList(button)
-
-  button.classList.add('btn')
+  toggleButton(button, 'btn', 'btnOn')
 
   canvas.off('path:created', function () {
     pathCreatedHandler(options, button, canvas, paintBrush, viewer)
