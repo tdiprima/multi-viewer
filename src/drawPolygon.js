@@ -1,9 +1,10 @@
 /**
  * Allow user to draw a polygon on the image.
- * @param btnDraw
- * @param mark
- * @param viewer: OSD viewer object.
- * @param overlay: fabric overlay object.
+ *
+ * @param btnDraw: element that is clicked to get here
+ * @param mark: HTML element; text which is marked or highlighted
+ * @param viewer: OSD viewer object
+ * @param overlay: fabric overlay object
  */
 const drawPolygon = function (btnDraw, mark, viewer, overlay) {
   const canvas = overlay.fabricCanvas()
