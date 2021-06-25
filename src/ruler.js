@@ -8,19 +8,7 @@ const ruler = function (button, viewer, overlay) {
   let lineLength = 0.0
   let mode = 'x'
   let text
-  let temp = '#60c603'
-  temp = '#00cc01'
-  temp = '#009933'
-  temp = '#b3f836'
-  temp = '#0f0'
-  temp = '#333333'
-  temp = 'rgba(255,255,255,0.5)'
-
-  let bgColor = '#009933'
-  let fontColor = '#fff'
-  let lineColor = '#00cc01'
-  let initFont = 12, font_size = 0.05
-
+  let color = '#b3f836'
   let canvas = this.__canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
 
@@ -40,7 +28,6 @@ const ruler = function (button, viewer, overlay) {
 
   function mouseDownHandler(o) {
     clear()
-    // font_size = initFont / viewer.viewport.getZoom(true)
     if (mode === 'draw') {
       setOsdMove(false)
       isDown = true
@@ -51,7 +38,7 @@ const ruler = function (button, viewer, overlay) {
       starty = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
-        stroke: lineColor,
+        stroke: color,
         originX: 'center',
         originY: 'center'
       })
@@ -80,9 +67,7 @@ const ruler = function (button, viewer, overlay) {
       text = new fabric.Text(` Length ${lineLength * 4} \u00B5`, {
         left: endx,
         top: endy,
-        fontSize: font_size,
-        fill: '#fff',
-        // stroke: '#fff', // it didn't like stroke?
+        fontSize: 15 / viewer.viewport.getZoom(true),
         'selectable': false,
         'evented': false
       })
@@ -94,32 +79,30 @@ const ruler = function (button, viewer, overlay) {
 
   function mouseUpHandler(o) {
     let pointer = canvas.getPointer(o.e)
-    let zoo = viewer.viewport.getZoom(true)
+    let zoom = viewer.viewport.getZoom(true)
     isDown = false
 
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
       console.info('lineLength', lineLength * 4 + ' \u00B5')
-      console.info('fontSize', font_size, bgColor, fontColor)
 
       canvas.add(new fabric.Rect({
         left: pointer.x,
         top: pointer.y,
-        width: 150 / zoo,
-        height: 25 / zoo,
-        rx: 5 / zoo,
-        ry: 5 / zoo,
-        fill: bgColor,
+        width: 150 / zoom,
+        height: 25 / zoom,
+        rx: 5 / zoom,
+        ry: 5 / zoom,
+        fill: color,
         transparentCorners: true,
         'selectable': false,
         'evented': false
       }))
       canvas.add(new fabric.Text(text.text, {
+        fontSize: 20 / zoom,
         left: pointer.x,
         top: pointer.y,
-        fontSize: font_size,
-        fill: fontColor,
         'selectable': false,
         'evented': false
       }))
@@ -133,27 +116,15 @@ const ruler = function (button, viewer, overlay) {
       // canvas.remove(...canvas.getObjects()) // TODO: Make an X to remove.
       // canvas.remove(...canvas.getItemsByName('ruler'))
       mode = 'x'
-      canvas.off('mouse:down', function (o) {
-        mouseDownHandler(o)
-      })
-      canvas.off('mouse:move', function (o) {
-        mouseMoveHandler(o)
-      })
-      canvas.off('mouse:up', function (o) {
-        mouseUpHandler(o)
-      })
+      canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
+      canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })
+      canvas.off('mouse:up', function (o) { mouseUpHandler(o) })
     } else {
       // Turn on
       mode = 'draw'
-      canvas.on('mouse:down', function (o) {
-        mouseDownHandler(o)
-      })
-      canvas.on('mouse:move', function (o) {
-        mouseMoveHandler(o)
-      })
-      canvas.on('mouse:up', function (o) {
-        mouseUpHandler(o)
-      })
+      canvas.on('mouse:down', function (o) { mouseDownHandler(o) })
+      canvas.on('mouse:move', function (o) { mouseMoveHandler(o) })
+      canvas.on('mouse:up', function (o) { mouseUpHandler(o) })
     }
     toggleButton(button, 'btnOn', 'btn')
   })
