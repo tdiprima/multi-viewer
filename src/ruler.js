@@ -1,4 +1,4 @@
-// TODO: measure μm (currently px)
+let PDR = OpenSeadragon.pixelDensityRatio;
 const ruler = function (button, viewer, overlay) {
   let line, isDown
   let startx = 0.0
@@ -8,14 +8,18 @@ const ruler = function (button, viewer, overlay) {
   let lineLength = 0.0
   let mode = 'x'
   let text
-  // let temp = '#60c603'
-  // temp = '#00cc01'
-  // temp = '#009933'
-  // temp = '#b3f836'
-  // temp = '#333333'
+  let temp = '#60c603'
+  temp = '#00cc01'
+  temp = '#009933'
+  temp = '#b3f836'
+  temp = '#0f0'
+  temp = '#333333'
+  temp = 'rgba(255,255,255,0.5)'
+
   let bgColor = '#009933'
   let fontColor = '#fff'
   let lineColor = '#00cc01'
+  let initFont = 12, font_size = 12
 
   let canvas = this.__canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
@@ -36,6 +40,7 @@ const ruler = function (button, viewer, overlay) {
 
   function mouseDownHandler(o) {
     clear()
+    font_size = initFont / viewer.viewport.getZoom(true)
     if (mode === 'draw') {
       setOsdMove(false)
       isDown = true
@@ -48,8 +53,7 @@ const ruler = function (button, viewer, overlay) {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
         stroke: lineColor,
         originX: 'center',
-        originY: 'center',
-        'name': 'ruler'
+        originY: 'center'
       })
       canvas.add(line)
     } else {
@@ -73,13 +77,14 @@ const ruler = function (button, viewer, overlay) {
     if (mode === 'draw') {
       // Show info while drawing line
       lineLength = Calculate.lineLength(startx, starty, endx, endy).toFixed(2)
-      text = new fabric.Text(` Length ${lineLength} px`, {
+      text = new fabric.Text(` Length ${lineLength * 4} \u00B5`, {
         left: endx,
         top: endy,
-        fontSize: 15 / viewer.viewport.getZoom(true),
-        selectable: false,
-        evented: false,
-        name: 'ruler'
+        fontSize: font_size,
+        fill: '#fff',
+        // stroke: '#fff', // it didn't like stroke?
+        'selectable': false,
+        'evented': false
       })
       canvas.add(text)
     }
@@ -94,28 +99,28 @@ const ruler = function (button, viewer, overlay) {
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
+      console.info('lineLength', lineLength * 4 + ' \u00B5')
+      console.info('fontSize', font_size)
       canvas.add(new fabric.Rect({
         left: pointer.x,
         top: pointer.y,
         width: 150 / viewer.viewport.getZoom(true),
         height: 25 / viewer.viewport.getZoom(true),
-        rx: 5,
-        ry: 5,
-        fill: bgColor,
+        // rx: 5,
+        // ry: 5,
+        fill: '#0f0',
         transparentCorners: true,
-        selectable: false,
-        evented: false,
-        name: 'ruler'
+        'selectable': false,
+        'evented': false
       }))
       canvas.add(new fabric.Text(text.text, {
-        fontSize: 20 / viewer.viewport.getZoom(true),
+        fontSize: font_size,
         left: pointer.x,
         top: pointer.y,
-        selectable: false,
-        evented: false,
-        stroke: fontColor,
-        fill: fontColor,
-        name: 'ruler'
+        'selectable': false,
+        'evented': false,
+        // stroke: '#fff'
+        fill: '#fff'
       }))
       canvas.renderAll()
     }
@@ -124,8 +129,8 @@ const ruler = function (button, viewer, overlay) {
   button.addEventListener('click', function () {
     if (mode === 'draw') {
       // Turn off
-      canvas.remove(...canvas.getItemsByName('ruler'))
-      // console.log(canvas.getItemsByName('ruler'))
+      // canvas.remove(...canvas.getObjects()) // TODO: Make an X to remove.
+      // canvas.remove(...canvas.getItemsByName('ruler'))
       mode = 'x'
       canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
       canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })
@@ -142,7 +147,7 @@ const ruler = function (button, viewer, overlay) {
 
   let Calculate = {
     lineLength: function (x1, y1, x2, y2) { // Line length
-      return Math.sqrt(Math.pow(x2 * 1 - x1 * 1, 2) + Math.pow(y2 * 1 - y1 * 1, 2))
+      return Math.sqrt(Math.pow(x2 * PDR - x1 * PDR, 2) + Math.pow(y2 * PDR - y1 * PDR, 2))
     }
   }
 }
