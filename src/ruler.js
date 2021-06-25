@@ -135,8 +135,11 @@ const ruler = function (button, viewer, overlay) {
   })
 
   let Calculate = {
-    lineLength: function (x1, y1, x2, y2) { // Line length
-      return Math.sqrt(Math.pow(x2 * PDR - x1 * PDR, 2) + Math.pow(y2 * PDR - y1 * PDR, 2))
+    lineLength: function (x1, y1, x2, y2) {
+      let a = x1 - x2;
+      let b = y1 - y2;
+      let c = Math.sqrt(a * a + b * b); // c is the distance
+      return c * PDR;
     }
   }
 }
