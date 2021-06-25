@@ -40,7 +40,10 @@ const ruler = function (button, viewer, overlay) {
         strokeWidth: 2 / viewer.viewport.getZoom(true),
         stroke: color,
         originX: 'center',
-        originY: 'center'
+        originY: 'center',
+        selectable: false,
+        evented: false,
+        name: 'ruler'
       })
       canvas.add(line)
     } else {
@@ -68,8 +71,9 @@ const ruler = function (button, viewer, overlay) {
         left: endx,
         top: endy,
         fontSize: 15 / viewer.viewport.getZoom(true),
-        'selectable': false,
-        'evented': false
+        selectable: false,
+        evented: false,
+        name: 'ruler'
       })
       canvas.add(text)
     }
@@ -86,7 +90,6 @@ const ruler = function (button, viewer, overlay) {
     if (endx > 0) {
       // Show end result
       console.info('lineLength', lineLength * 4 + ' \u00B5')
-
       canvas.add(new fabric.Rect({
         left: pointer.x,
         top: pointer.y,
@@ -96,15 +99,17 @@ const ruler = function (button, viewer, overlay) {
         ry: 5 / zoom,
         fill: color,
         transparentCorners: true,
-        'selectable': false,
-        'evented': false
+        selectable: false,
+        evented: false,
+        name: 'ruler'
       }))
       canvas.add(new fabric.Text(text.text, {
         fontSize: 20 / zoom,
         left: pointer.x,
         top: pointer.y,
-        'selectable': false,
-        'evented': false
+        selectable: false,
+        evented: false,
+        name: 'ruler'
       }))
       canvas.renderAll()
     }
@@ -113,8 +118,8 @@ const ruler = function (button, viewer, overlay) {
   button.addEventListener('click', function () {
     if (mode === 'draw') {
       // Turn off
-      // canvas.remove(...canvas.getObjects()) // TODO: Make an X to remove.
-      // canvas.remove(...canvas.getItemsByName('ruler'))
+      canvas.remove(...canvas.getItemsByName('ruler')) // TODO: Make an X to remove.
+      // canvas.remove(...canvas.getObjects())
       mode = 'x'
       canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
       canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })
