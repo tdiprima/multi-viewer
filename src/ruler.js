@@ -70,7 +70,7 @@ const ruler = function (button, viewer, overlay) {
       text = new fabric.Text(` Length ${lineLength * 4} \u00B5`, {
         left: endx,
         top: endy,
-        fontSize: 15 / viewer.viewport.getZoom(true),
+        fontSize: 12 / viewer.viewport.getZoom(true),
         selectable: false,
         evented: false,
         name: 'ruler'
@@ -104,7 +104,7 @@ const ruler = function (button, viewer, overlay) {
         name: 'ruler'
       }))
       canvas.add(new fabric.Text(text.text, {
-        fontSize: 20 / zoom,
+        fontSize: 12 / zoom,
         left: pointer.x,
         top: pointer.y,
         selectable: false,
