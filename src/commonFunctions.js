@@ -1,3 +1,7 @@
+function log(msg, color) {
+  console.log(`%c ${msg}`, `color:${color};`)
+}
+
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0)
   element.classList.toggle(class1)
