@@ -6,7 +6,7 @@ function createDraggableDiv(id, title, left, top, viz) {
   myDiv.style.top = top + 'px'
 
   let myImg = document.createElement('img')
-  myImg.src = 'images/close_icon.png'
+  myImg.src = '/multi-viewer/images/close_icon.png'
   myImg.width = 25
   myImg.height = 25
   myImg.alt = 'close'
