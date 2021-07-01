@@ -9,7 +9,7 @@ class ImageViewer {
     // SET UP VIEWER
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
-      prefixUrl: '/multiviewer/vendor/openseadragon/images/', /* WICKET ENVI */
+      prefixUrl: '/multi-viewer/vendor/openseadragon/images/', /* WICKET ENVI */
       crossOriginPolicy: 'Anonymous',
       immediateRender: true,
       animationTime: 0,
@@ -55,7 +55,7 @@ class ImageViewer {
 
     // CUSTOM ZOOM BUTTONS
     viewer.addOnceHandler('tile-loaded', function () {
-      let dir = '/multiviewer/vendor/openseadragon/images/' /* WICKET ENVI */
+      let dir = '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
       let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
         srcRest: dir + 'zin_rest.png',
