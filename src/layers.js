@@ -32,7 +32,7 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
     span.display = 'block'
-    span.innerHTML = getStringRep(layer.location) // WAITING FOR skos:prefLabel
+    span.innerHTML = getStringRep(layer.location) // WAITING FOR rdfs:prefLabel
     cell.appendChild(span)
 
     // EYEBALL VISIBILITY TOGGLE
