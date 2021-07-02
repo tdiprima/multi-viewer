@@ -1,0 +1,13 @@
+@prefix :      <https://halcyon.is/ns/> .
+
+<http://localhost>
+	a :HalcyonSettingsFile;
+	:RDFStoreLocation "/data/halcyon/dbam";
+        :Scan <file:/data/halcyon/HalcyonStorage>;
+        :MasterStorageLocation  "/data/halcyon/dcore";
+	:HostName "http://test-bmi.bmi.stonybrook.edu";
+	:ProxyHostName "http://test-bmi.bmi.stonybrook.edu";
+	:MultiviewerLocation <file:/data/halcyon/multi-viewer/>;
+	:SPARQLport  8887 .
+
+<file:///HalcyonStorage> a :StorageLocation .

@@ -21,12 +21,20 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
       log('2', '#ff0') // (2)
       // quick little dark-mode
       let btnDark = document.createElement('button')
-      btnDark.innerHTML = 'Toggle Dark Mode'
+      // btnDark.innerHTML = 'Toggle Dark Mode'
       btnDark.className = 'btn'
+      // <i class="fas fa-light-switch"></i>
+      let awesome = document.createElement('i')
+      awesome.classList.add('fas')
+      awesome.classList.add('fa-moon')
+      // btnDark.classList.add('btn')
+      btnDark.appendChild(awesome)
       let referenceNode = document.querySelector('#contentDiv');
       referenceNode.before(btnDark)
       btnDark.addEventListener('click', function () {
+        toggleButton(awesome, 'fa-moon', 'fa-sun')
         document.body.classList.toggle("dark-mode")
+
       })
 
       // CREATE TABLE FOR VIEWERS
