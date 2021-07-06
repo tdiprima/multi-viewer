@@ -7,9 +7,10 @@
 class ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed) {
     // SET UP VIEWER
+    // PTF prefixUrl
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
-      prefixUrl: '/multi-viewer/vendor/openseadragon/images/', /* WICKET ENVI */
+      prefixUrl: (window.location.hostname === "quip.bmi.stonybrook.edu" || window.location.hostname ==="127.0.0.1") ? 'vendor/openseadragon/images/' :'/multi-viewer/vendor/openseadragon/images/',
       crossOriginPolicy: 'Anonymous',
       immediateRender: true,
       animationTime: 0,
@@ -55,7 +56,13 @@ class ImageViewer {
 
     // CUSTOM ZOOM BUTTONS
     viewer.addOnceHandler('tile-loaded', function () {
-      let dir = '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
+      let dir
+      // PTF:
+      if (window.location.hostname === "quip.bmi.stonybrook.edu" || window.location.hostname ==="127.0.0.1") {
+        dir = 'vendor/openseadragon/images/'
+      } else {
+        dir = '/multi-viewer/vendor/openseadragon/images/'
+      }
       let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
         srcRest: dir + 'zin_rest.png',

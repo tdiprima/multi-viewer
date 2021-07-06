@@ -98,7 +98,14 @@ function setupDeleteButton(canvas, viewer) {
     jQuery('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
-    const deleteBtn = `<img src="/multi-viewer/images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    // TEMPORARY:
+    let src
+    if (window.location.hostname === "quip.bmi.stonybrook.edu" || window.location.hostname ==="127.0.0.1") {
+      src = 'images/delete-icon'
+    } else {
+      src = '/multi-viewer/images/delete-icon'
+    }
+    const deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
     jQuery('.canvas-container').append(deleteBtn)
   }
 
