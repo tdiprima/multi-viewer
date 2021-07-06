@@ -118,11 +118,12 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
   x.value = id.includes('low') ? color.low.toString() : color.hi.toString()
   x.size = 5
 
+  // 'change' waits until they're done entering a number, and they have to exit that field (like blur)
   x.addEventListener('change', function () {
     isIntersect(uniq, colors.length)
   })
 
-  // this event happens whenever the value changes
+  // 'input' fires for each alteration; a user can enter a number without exiting the field.
   x.addEventListener('input', function () {
     let intVal = parseInt(this.value)
 
