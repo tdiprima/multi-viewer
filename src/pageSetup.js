@@ -15,10 +15,8 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
 
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
-      // log('1', '#f0f') // (1)
       return resolve(opts)
     }).then(function (opts) {
-      // log('2', '#ff0') // (2)
       // quick little dark-mode
       let btnDark = document.createElement('button')
       // btnDark.innerHTML = 'Toggle Dark Mode'
@@ -125,7 +123,6 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
 
       return viewers
     }).then(function (viewers) {
-      // log('3', '#0f0') // (3)
       // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
       synchronizeViewers(viewers)
     })
