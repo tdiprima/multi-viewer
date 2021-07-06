@@ -113,9 +113,9 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
       fas.id = makeId(5, 'palette')
       fas.style.cursor = 'pointer'
       cell.appendChild(fas)
-      let widget = filters(fas, layer, itemsToBeDisplayed, viewer)
+      let colorsUI = filters(fas, layer, itemsToBeDisplayed, viewer)
       fas.addEventListener('click', function (e) {
-        widget.style.display = 'block'
+        colorsUI.style.display = 'block'
       })
     }
   })

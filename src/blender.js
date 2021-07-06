@@ -11,16 +11,15 @@ let blender = function (button, viewer) {
     'color-burn',
     'hard-light',
     'soft-light',
-    // 'difference',
     'exclusion',
     'hue',
     'saturation',
     'color',
     'luminosity'
   ]
-  let widgetCreated = false
+  let uiCreated = false
 
-  function createWidget(div, viewer) {
+  function createBlendModesUI(div, viewer) {
     const table = document.createElement('table')
     div.appendChild(table)
     blend_modes.forEach(function (item, index) {
@@ -48,17 +47,17 @@ let blender = function (button, viewer) {
   }
 
   button.addEventListener('click', function () {
-    if (widgetCreated) {
+    if (uiCreated) {
       // Turn off
-      widgetCreated = false
+      uiCreated = false
     } else {
       // Turn on
       let id = makeId(5, 'modes')
       let rect = button.getBoundingClientRect()
       let div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top)
       div.style.display = 'block'
-      createWidget(document.getElementById(`${id}Body`), viewer)
-      widgetCreated = true
+      createBlendModesUI(document.getElementById(`${id}Body`), viewer)
+      uiCreated = true
     }
     toggleButton(button, 'btnOn', 'btn')
   })

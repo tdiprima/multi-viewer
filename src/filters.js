@@ -65,13 +65,13 @@ let createUI = function (div, layer, layers, viewer) {
       // COLOR PICKER HANDLER
       const picker = new CP(m)
       picker.on('change', function (r, g, b, a) {
-        // set cp widget
+        // set cp values
         this.source.value = this.color(r, g, b, a)
         this.source.innerHTML = this.color(r, g, b, a)
         this.source.style.backgroundColor = this.color(r, g, b, a)
-        // set new color
+        // set our new color
         c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-        // set filter to new color
+        // set viewer filter to new color
         setFilter(layers, viewer)
       })
 
