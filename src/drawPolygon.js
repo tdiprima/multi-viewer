@@ -101,9 +101,9 @@ function setupDeleteButton(canvas, viewer) {
     // TEMPORARY:
     let src
     if (window.location.hostname === "quip.bmi.stonybrook.edu" || window.location.hostname ==="127.0.0.1") {
-      src = 'images/delete-icon'
+      src = 'images/delete-icon.png'
     } else {
-      src = '/multi-viewer/images/delete-icon'
+      src = '/multi-viewer/images/delete-icon.png'
     }
     const deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
     jQuery('.canvas-container').append(deleteBtn)
