@@ -132,9 +132,9 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      color.low = parseInt(this.value)
+      color.low = intVal
     } else {
-      color.hi = parseInt(this.value)
+      color.hi = intVal
     }
 
     setFilter(layers, viewer)
