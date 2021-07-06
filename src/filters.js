@@ -4,7 +4,7 @@ let filters = function (button, layer, layers, viewer) {
     let id = makeId(5, 'filters')
     let rect = button.getBoundingClientRect()
     div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
-    createWidget(document.getElementById(`${id}Body`), layer, layers, viewer)
+    createUI(document.getElementById(`${id}Body`), layer, layers, viewer)
   } else {
     console.log('tba')
   }
@@ -32,7 +32,7 @@ let setFilter = function (layers, viewer) {
 }
 
 // COLOR RANGES UI
-let createWidget = function (div, layer, layers, viewer) {
+let createUI = function (div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
 
