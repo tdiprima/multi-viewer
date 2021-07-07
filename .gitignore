@@ -3,5 +3,6 @@ node_modules/
 build/
 .idea/
 .vscode/
+multi-viewer/
 .cache
 .DS_Store

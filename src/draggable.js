@@ -6,12 +6,7 @@ function createDraggableDiv(id, title, left, top, viz) {
   myDiv.style.top = top + 'px'
 
   let myImg = document.createElement('img')
-  // TEMPORARY:
-  if (window.location.hostname === "quip.bmi.stonybrook.edu" || window.location.hostname ==="127.0.0.1") {
-    myImg.src = 'images/close-icon.png'
-  } else {
-    myImg.src = '/multi-viewer/images/close-icon.png'
-  }
+  myImg.src = '/multi-viewer/images/close-icon.png'
 
   myImg.width = 25
   myImg.height = 25
