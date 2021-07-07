@@ -42,7 +42,7 @@ function getAColorThatShowsUp(strokeColor) {
 }
 
 function alertMessage(messageObject) {
-  alert(messageObject)
+  window.alert(messageObject)
   return true
 }
 
@@ -52,6 +52,10 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
     width: Math.round(srcWidth * ratio),
     height: Math.round(srcHeight * ratio)
   }
+}
+
+function getRandomInt(minm, maxm) {
+  return Math.floor(Math.random() * (maxm - minm + 1)) + minm
 }
 
 function makeId(length, prefix) {
@@ -72,7 +76,7 @@ function makeId(length, prefix) {
 String.prototype.hashCode = function () {
   let hash = 0
   if (this.length === 0) return hash
-  let i, char;
+  let i, char
   for (i = 0; i < this.length; i++) {
     char = this.charCodeAt(i)
     hash = ((hash << 5) - hash) + char
@@ -86,12 +90,12 @@ function getStringRep(_input) {
   if (_md5 < 0) {
     _md5 *= -1
   }
-  let _text = _md5.toString(16)
+  const _text = _md5.toString(16)
   return _text.toUpperCase()
 }
 
 // async function
-async function fetchAsync (url) {
+async function fetchAsync(url) {
   const response = await fetch(url) // await response of fetch call
   const data = await response.json() // only proceed once promise is resolved
   return data // only proceed once second promise is resolved
