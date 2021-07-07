@@ -230,7 +230,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
 
       function parseColor(input) {
         // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
-        return input.replace(/[a-z%\s\(\)]/g, '').split(',')
+        return input.replace(/[a-z%\s()]/g, '').split(',')
       }
 
       try {
