@@ -197,10 +197,10 @@
         return value;
     };
     var getParent = function getParent(node) {
-      console.log('getParent') // todo: temp debug output
-      console.log('node', node)
+      // console.log('getParent') // debug output
+      // console.log('node', node)
       let parentNode = node.parentNode
-      console.log('parentNode', parentNode)
+      // console.log('parentNode', parentNode)
         return parentNode || null;
     };
     var getState = function getState(node, state) {
