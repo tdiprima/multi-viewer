@@ -23,7 +23,7 @@ Explore & run the html files for usage examples.
 
 Tammy DiPrima tammy.diprima@stonybrook.edu
 
-Distributed under the BSD 3-Clause License license. See ``LICENSE.txt`` for more information.
+Distributed under the BSD 3-Clause License license. See [LICENSE.txt](LICENSE.txt) for more information.
 
 ## Contributing
 
