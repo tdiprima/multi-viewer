@@ -25,11 +25,9 @@ Tammy DiPrima tammy.diprima@stonybrook.edu
 
 Distributed under the BSD 3-Clause License license. See ``LICENSE.txt`` for more information.
 
-[https://github.com/tdiprima/multi-viewer](https://github.com/tdiprima/)
-
 ## Contributing
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
+1. Fork it to your repo
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
