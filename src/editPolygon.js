@@ -5,7 +5,7 @@ const editPolygon = function (button, overlay) {
   })
 }
 
-// Position handling code borrowed from: http://fabricjs.com/custom-controls-polygon
+// Position handling: fabricjs.com custom-controls-polygon
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
   // This function looks at the pointIndex of the control and returns the
   // current canvas position for that particular point.
