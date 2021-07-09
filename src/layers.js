@@ -34,9 +34,22 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
     span.setAttribute('draggable', 'true')
     span.display = 'block'
 
+    // fetch(layer.location)
+    //   .then(response => response.json())
+    //   .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(layer.location))
+
     fetch(layer.location)
       .then(response => response.json())
-      .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(layer.location))
+      .then(function (d) {
+        let loc = layer.location
+        if (d.prefLabel) {
+          span.innerHTML = d.prefLabel
+        } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
+          span.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+        } else {
+          span.innerHTML = getStringRep(loc)
+        }
+      })
 
     cell.appendChild(span)
 
