@@ -17,6 +17,7 @@ let eyeball = function (eye, range, layerNum, viewer) {
 }
 
 let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
+  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
   const table = document.createElement('table')
   div.appendChild(table)
 
@@ -46,6 +47,11 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
           span.innerHTML = d.prefLabel
         } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
           span.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+        } else if (loc.includes('TCGA')) {
+          if (loc.match(regex) !== null)
+            span.innerHTML = loc.match(regex)[0]
+          else
+            span.innerHTML = getStringRep(loc)
         } else {
           span.innerHTML = getStringRep(loc)
         }
