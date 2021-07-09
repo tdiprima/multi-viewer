@@ -19,6 +19,7 @@ let eyeball = function (eye, range, layerNum, viewer) {
 let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
+
   itemsToBeDisplayed.forEach(function (layer, ind) {
     let layerNum = ind
     let tr, cell, span, eye, fas
@@ -32,7 +33,11 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
     span.id = ind + makeId(5, 'feat')
     span.setAttribute('draggable', 'true')
     span.display = 'block'
-    span.innerHTML = getStringRep(layer.location) // WAITING FOR rdfs:prefLabel
+
+    fetch(layer.location)
+      .then(response => response.json())
+      .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(layer.location))
+
     cell.appendChild(span)
 
     // EYEBALL VISIBILITY TOGGLE
