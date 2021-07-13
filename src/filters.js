@@ -27,10 +27,18 @@ const setFilter = function (layers, viewer) {
   })
 }
 
+// SMALL TEST.
+const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent
+const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+)(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
+
 // COLOR RANGES UI
 const createUI = function (uniq, div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
+
+  let arr = ['Color', 'Low', 'High']
 
   if (!layer.colors) {
     if (layer.layerNum && layer.layerNum > 0) {
@@ -40,6 +48,21 @@ const createUI = function (uniq, div, layer, layers, viewer) {
   } else {
     // Sort intervals in decreasing order of low value
     layer.colors.sort((a, b) => b.low - a.low)
+
+    // Add the header row.
+    let row = table.insertRow(-1);
+    for (let i = 0; i < arr.length; i++) {
+      let th = document.createElement("TH")
+      th.innerHTML = arr[i]
+      row.appendChild(th)
+      // SMALL TEST
+      th.addEventListener('click', () => {
+        const table = th.closest('table')
+        Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+          .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+          .forEach(tr => table.appendChild(tr))
+      })
+    }
 
     // Display a row of tools for each layer
     layer.colors.forEach(function (c, cIdx) {
