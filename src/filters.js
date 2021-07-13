@@ -83,7 +83,7 @@ const createUI = function (uniq, div, layer, layers, viewer) {
 
       // COLOR PICKER
       const m = document.createElement('mark')
-      m.id = `marker${uniq}`
+      m.id = `marker${uniq}${cIdx}`
       m.innerHTML = `#${rgba2hex(colorCode)}`
       m.style.backgroundColor = colorCode
       td.appendChild(m)
