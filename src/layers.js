@@ -35,27 +35,33 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
     span.setAttribute('draggable', 'true')
     span.display = 'block'
 
-    // fetch(layer.location)
+    let loc = layer.location
+    // fetch(loc)
     //   .then(response => response.json())
-    //   .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(layer.location))
+    //   .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(loc))
 
-    fetch(layer.location)
-      .then(response => response.json())
-      .then(function (d) {
-        let loc = layer.location
-        if (d.prefLabel) {
-          span.innerHTML = d.prefLabel
-        } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-          span.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
-        } else if (loc.includes('TCGA')) {
-          if (loc.match(regex) !== null)
-            span.innerHTML = loc.match(regex)[0]
-          else
+    // FETCH THE PREFERRED LABEL
+    if (loc.includes('info.json')) {
+      fetch(loc)
+        .then(response => response.json())
+        .then(function (d) {
+          if (d.prefLabel) {
+            span.innerHTML = d.prefLabel
+            // TODO: temporary hack until we get prefLabel:
+          } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
+            span.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+          } else if (loc.includes('TCGA')) {
+            if (loc.match(regex) !== null)
+              span.innerHTML = loc.match(regex)[0]
+            else
+              span.innerHTML = getStringRep(loc)
+          } else {
             span.innerHTML = getStringRep(loc)
-        } else {
-          span.innerHTML = getStringRep(loc)
-        }
-      })
+          }
+        })
+    } else {
+      span.innerHTML = 'UFO' // TODO: TEMP
+    }
 
     cell.appendChild(span)
 
