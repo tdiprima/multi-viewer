@@ -7,7 +7,6 @@
 class ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed) {
     // SET UP VIEWER
-    // PTF prefixUrl
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
       prefixUrl: '/multi-viewer/vendor/openseadragon/images/', /* WICKET ENVI */
@@ -16,7 +15,9 @@ class ImageViewer {
       animationTime: 0,
       imageLoaderLimit: 1,
       showNavigator: true,
-      navigatorPosition: "BOTTOM_RIGHT"
+      navigatorPosition: "BOTTOM_RIGHT",
+      minZoomPixelRatio: 0,
+      maxZoomPixelRatio: 1
     })
 
     // SET UP SCALE BAR

@@ -6,9 +6,12 @@ const ruler = function (button, viewer, overlay) {
   let starty = 0.0
   let endy = 0.0
   let lineLength = 0.0
+  let color = '#b3f836'
+  const fontSize = 15
+  let zoom
   let mode = 'x'
   let text
-  let color = '#b3f836'
+
   let canvas = this.__canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
 
@@ -28,16 +31,16 @@ const ruler = function (button, viewer, overlay) {
 
   function mouseDownHandler(o) {
     clear()
+    zoom = viewer.viewport.getZoom(true)
     if (mode === 'draw') {
       setOsdMove(false)
       isDown = true
       let pointer = canvas.getPointer(o.e)
-
       let points = [pointer.x, pointer.y, pointer.x, pointer.y]
       startx = pointer.x
       starty = pointer.y
       line = new fabric.Line(points, {
-        strokeWidth: 2 / viewer.viewport.getZoom(true),
+        strokeWidth: 2 / zoom,
         stroke: color,
         originX: 'center',
         originY: 'center',
@@ -60,7 +63,6 @@ const ruler = function (button, viewer, overlay) {
     if (!isDown) return
     let pointer = canvas.getPointer(o.e)
     line.set({x2: pointer.x, y2: pointer.y})
-
     endx = pointer.x
     endy = pointer.y
 
@@ -70,7 +72,7 @@ const ruler = function (button, viewer, overlay) {
       text = new fabric.Text(` Length ${lineLength * 4} \u00B5`, {
         left: endx,
         top: endy,
-        fontSize: 12 / viewer.viewport.getZoom(true),
+        fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
         selectable: false,
         evented: false,
         name: 'ruler'
@@ -82,17 +84,21 @@ const ruler = function (button, viewer, overlay) {
   }
 
   function mouseUpHandler(o) {
-    let pointer = canvas.getPointer(o.e)
-    let zoom = viewer.viewport.getZoom(true)
+    canvas.remove(text)
     isDown = false
+    let pointer = canvas.getPointer(o.e)
 
+    let left = pointer.x
+    let top = pointer.y
+    console.log('%czoom', 'color: darkseagreen;', zoom)
+    console.log('%cx, y, endx, endy', 'color: deeppink', left, top, endx, endy)
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
       console.info('lineLength', lineLength * 4 + ' \u00B5')
       canvas.add(new fabric.Rect({
-        left: pointer.x,
-        top: pointer.y,
+        left: left,
+        top: top,
         width: 150 / zoom,
         height: 25 / zoom,
         rx: 5 / zoom,
@@ -104,9 +110,9 @@ const ruler = function (button, viewer, overlay) {
         name: 'ruler'
       }))
       canvas.add(new fabric.Text(text.text, {
-        fontSize: 12 / zoom,
-        left: pointer.x,
-        top: pointer.y,
+        fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
+        left: left,
+        top: top,
         selectable: false,
         evented: false,
         name: 'ruler'
