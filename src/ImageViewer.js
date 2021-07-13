@@ -11,13 +11,7 @@ class ImageViewer {
       id: viewerInfo.divId,
       prefixUrl: '/multi-viewer/vendor/openseadragon/images/', /* WICKET ENVI */
       crossOriginPolicy: 'Anonymous',
-      immediateRender: true,
-      animationTime: 0,
-      imageLoaderLimit: 1,
-      showNavigator: true,
-      navigatorPosition: "BOTTOM_RIGHT",
-      minZoomPixelRatio: 0,
-      maxZoomPixelRatio: 1
+      immediateRender: true
     })
 
     // SET UP SCALE BAR
