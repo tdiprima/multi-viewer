@@ -27,8 +27,15 @@ const setFilter = function (layers, viewer) {
   })
 }
 
-// SMALL TEST.
-const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent
+const getCellValue = (tr, idx) => {
+  let td = tr.children[idx]
+  if (td.children[0].type === 'number') {
+    return td.children[0].value
+  } else {
+    return td.innerText || td.textContent
+  }
+}
+
 const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
@@ -55,7 +62,8 @@ const createUI = function (uniq, div, layer, layers, viewer) {
       let th = document.createElement("TH")
       th.innerHTML = arr[i]
       row.appendChild(th)
-      // SMALL TEST
+
+      // SORT BY HEADER
       th.addEventListener('click', () => {
         const table = th.closest('table')
         Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
