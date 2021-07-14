@@ -28,7 +28,7 @@ const setFilter = function (layers, viewer) {
 }
 
 const getCellValue = (tr, idx) => {
-  let td = tr.children[idx]
+  const td = tr.children[idx]
   if (td.children[0].type === 'number') {
     return td.children[0].value
   } else {
@@ -37,15 +37,79 @@ const getCellValue = (tr, idx) => {
 }
 
 const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+  v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
+
+// Create table header
+function createHeaderRow (table) {
+  // Add the header row.
+  const row = table.insertRow(-1)
+  const tableHeaders = ['Color', 'Low', 'High']
+
+  for (let i = 0; i < tableHeaders.length; i++) {
+    // Create element
+    const th = document.createElement('TH')
+    th.innerHTML = tableHeaders[i]
+    row.appendChild(th)
+
+    // Sort by header event listener
+    th.addEventListener('click', () => {
+      const table = th.closest('table')
+      Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => table.appendChild(tr))
+    })
+  }
+}
+
+function createColorPickerCell (tr, mColor, cIdx, uniq, layers, viewer) {
+  const td = tr.insertCell(-1)
+  const colorCode = mColor.color
+
+  // COLOR PICKER
+  const m = document.createElement('mark')
+  m.id = `marker${uniq}${cIdx}`
+  m.innerHTML = `#${rgba2hex(colorCode)}`
+  m.style.backgroundColor = colorCode
+  td.appendChild(m)
+
+  // COLOR PICKER HANDLER
+  const picker = new CP(m)
+  picker.on('change', function (r, g, b, a) {
+    // set cp values
+    this.source.value = this.color(r, g, b, a)
+    this.source.innerHTML = this.color(r, g, b, a)
+    this.source.style.backgroundColor = this.color(r, g, b, a)
+    // set our new color
+    mColor.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+    // set viewer filter to new color
+    setFilter(layers, viewer)
+  })
+}
+
+function extraRow () {
+  // Extra row
+  const row = e('tr', {}, [
+    e('td', {}, [
+      e('mark', { id: 'dummy' })
+    ])
+  ])
+
+  row.appendChild(e('td', {}, [
+    e('input', { id: 'low1111', type: 'number', min: '0', max: '255', step: '1', size: '5' })
+  ]))
+
+  row.appendChild(e('td', {}, [
+    e('input', { id: 'high1111', type: 'number', min: '0', max: '255', step: '1', size: '5' })
+  ]))
+
+  return row
+}
 
 // COLOR RANGES UI
 const createUI = function (uniq, div, layer, layers, viewer) {
   const table = document.createElement('table')
   div.appendChild(table)
-
-  let arr = ['Color', 'Low', 'High']
 
   if (!layer.colors) {
     if (layer.layerNum && layer.layerNum > 0) {
@@ -56,68 +120,31 @@ const createUI = function (uniq, div, layer, layers, viewer) {
     // Sort intervals in decreasing order of low value
     layer.colors.sort((a, b) => b.low - a.low)
 
-    // Add the header row.
-    let row = table.insertRow(-1);
-    for (let i = 0; i < arr.length; i++) {
-      let th = document.createElement("TH")
-      th.innerHTML = arr[i]
-      row.appendChild(th)
+    createHeaderRow(table)
 
-      // SORT BY HEADER
-      th.addEventListener('click', () => {
-        const table = th.closest('table')
-        Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
-          .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-          .forEach(tr => table.appendChild(tr))
-      })
-    }
-
-    // Display a row of tools for each layer
-    layer.colors.forEach(function (c, cIdx) {
-      // calling it 'c' because 'color' is already taken
+    layer.colors.forEach(function (color, cIdx) {
       const tr = table.insertRow(-1)
       table.appendChild(tr)
-
-      let td = tr.insertCell(-1)
-      const colorCode = c.color
-
-      // COLOR PICKER
-      const m = document.createElement('mark')
-      m.id = `marker${uniq}${cIdx}`
-      m.innerHTML = `#${rgba2hex(colorCode)}`
-      m.style.backgroundColor = colorCode
-      td.appendChild(m)
-
-      // COLOR PICKER HANDLER
-      const picker = new CP(m)
-      picker.on('change', function (r, g, b, a) {
-        // set cp values
-        this.source.value = this.color(r, g, b, a)
-        this.source.innerHTML = this.color(r, g, b, a)
-        this.source.style.backgroundColor = this.color(r, g, b, a)
-        // set our new color
-        c.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-        // set viewer filter to new color
-        setFilter(layers, viewer)
-      })
-
+      // CP
+      createColorPickerCell(tr, color, cIdx, uniq, layers, viewer)
       // LOW
-      td = tr.insertCell(-1)
-      td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
-
+      let td = tr.insertCell(-1)
+      td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer))
       // HIGH
       td = tr.insertCell(-1)
-      td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, c, layer.colors, viewer))
+      td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer))
     })
+
+    table.appendChild(extraRow())
   }
 }
 
-function rgba2hex(orig) {
+function rgba2hex (orig) {
   let a
   const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
   const alpha = ((arr && arr[4]) || '').trim()
-  let hex = arr ?
-    (arr[1] | 1 << 8).toString(16).slice(1) +
+  let hex = arr
+    ? (arr[1] | 1 << 8).toString(16).slice(1) +
     (arr[2] | 1 << 8).toString(16).slice(1) +
     (arr[3] | 1 << 8).toString(16).slice(1)
     : orig
@@ -133,7 +160,7 @@ function rgba2hex(orig) {
 }
 
 // USER INPUTS to set color threshold values
-function createNumericInput(id, uniq, layers, color, colors, viewer) {
+function createNumericInput (id, uniq, layers, color, colors, viewer) {
   const x = document.createElement('input')
   x.id = id
   x.setAttribute('type', 'number')
@@ -167,7 +194,7 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
   return x
 }
 
-function isIntersect(uniq, len) {
+function isIntersect (uniq, len) {
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
     clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
@@ -194,14 +221,14 @@ function isIntersect(uniq, len) {
   return false
 }
 
-function setError(a, b) {
+function setError (a, b) {
   a.style.outlineStyle = 'solid'
   a.style.outlineColor = 'red'
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
 
-function clearError(a, b) {
+function clearError (a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
@@ -236,7 +263,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
         console.warn('1:', err.message)
       }
 
-      function levels(value, _colors) {
+      function levels (value, _colors) {
         try {
           let i
           let retVal
@@ -259,7 +286,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
         }
       }
 
-      function parseColor(input) {
+      function parseColor (input) {
         // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
         return input.replace(/[a-z%\s()]/g, '').split(',')
       }
