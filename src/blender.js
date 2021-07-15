@@ -1,7 +1,7 @@
-let blender = function (button, viewer) {
-  let blend_modes = [
+let blender = function (callerBtn, viewer) {
+  let blendModes = [
     'normal',
-    'difference', // reposition difference
+    'difference',
     'multiply',
     'screen',
     'overlay',
@@ -20,25 +20,22 @@ let blender = function (button, viewer) {
   let uiCreated = false
 
   function createBlendModesUI(div, viewer) {
-    const table = document.createElement('table')
+    const table = e('table')
     div.appendChild(table)
-    blend_modes.forEach(function (item, index) {
-      let tr = table.insertRow(-1)
-      table.appendChild(tr)
-      let td = tr.insertCell(-1)
-      let el = document.createElement('button')
-      el.type = 'button'
-      el.id = item.replace('-', '_')
-      el.value = item
-      el.innerHTML = item
-      el.classList.add('button')
-      td.appendChild(el)
-      td.appendChild(document.createElement('br'))
-      el.addEventListener('click', function () {
+
+    blendModes.forEach(function (item, index) {
+      let blendBtn = e('button', {type: 'button', id: item.replace('-', '_'), value: item, class: 'button'})
+      blendBtn.innerHTML = item
+      const row = e('tr', {}, [
+        e('td', {}, [blendBtn, e('br')])
+      ])
+      table.appendChild(row)
+
+      blendBtn.addEventListener('click', function () {
         try {
           let count = viewer.world.getItemCount()
           let topImage = viewer.world.getItemAt(count - 1) // Blend all
-          topImage.setCompositeOperation(el.value)
+          topImage.setCompositeOperation(blendBtn.value)
         } catch (e) {
           console.log(e.message)
         }
@@ -46,19 +43,19 @@ let blender = function (button, viewer) {
     })
   }
 
-  button.addEventListener('click', function () {
+  callerBtn.addEventListener('click', function () {
     if (uiCreated) {
       // Turn off
       uiCreated = false
     } else {
       // Turn on
       let id = makeId(5, 'modes')
-      let rect = button.getBoundingClientRect()
+      let rect = callerBtn.getBoundingClientRect()
       let div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top)
       div.style.display = 'block'
       createBlendModesUI(document.getElementById(`${id}Body`), viewer)
       uiCreated = true
     }
-    toggleButton(button, 'btnOn', 'btn')
+    toggleButton(callerBtn, 'btnOn', 'btn')
   })
 }

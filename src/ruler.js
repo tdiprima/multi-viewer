@@ -87,15 +87,13 @@ const ruler = function (button, viewer, overlay) {
     canvas.remove(text)
     isDown = false
     let pointer = canvas.getPointer(o.e)
-
     let left = pointer.x
     let top = pointer.y
-    console.log('%czoom', 'color: darkseagreen;', zoom)
-    console.log('%cx, y, endx, endy', 'color: deeppink', left, top, endx, endy)
+
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
-      console.info('lineLength', lineLength * 4 + ' \u00B5')
+      console.log('%clineLength', 'color: darkseagreen;', `${lineLength * 4} \u00B5`)
       canvas.add(new fabric.Rect({
         left: left,
         top: top,
@@ -127,15 +125,27 @@ const ruler = function (button, viewer, overlay) {
       canvas.remove(...canvas.getItemsByName('ruler')) // TODO: Make an X to remove.
       // canvas.remove(...canvas.getObjects())
       mode = 'x'
-      canvas.off('mouse:down', function (o) { mouseDownHandler(o) })
-      canvas.off('mouse:move', function (o) { mouseMoveHandler(o) })
-      canvas.off('mouse:up', function (o) { mouseUpHandler(o) })
+      canvas.off('mouse:down', function (o) {
+        mouseDownHandler(o)
+      })
+      canvas.off('mouse:move', function (o) {
+        mouseMoveHandler(o)
+      })
+      canvas.off('mouse:up', function (o) {
+        mouseUpHandler(o)
+      })
     } else {
       // Turn on
       mode = 'draw'
-      canvas.on('mouse:down', function (o) { mouseDownHandler(o) })
-      canvas.on('mouse:move', function (o) { mouseMoveHandler(o) })
-      canvas.on('mouse:up', function (o) { mouseUpHandler(o) })
+      canvas.on('mouse:down', function (o) {
+        mouseDownHandler(o)
+      })
+      canvas.on('mouse:move', function (o) {
+        mouseMoveHandler(o)
+      })
+      canvas.on('mouse:up', function (o) {
+        mouseUpHandler(o)
+      })
     }
     toggleButton(button, 'btnOn', 'btn')
   })
