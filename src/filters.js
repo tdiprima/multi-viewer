@@ -58,19 +58,16 @@ function createHeaderRow(table) {
   }
 }
 
-function createColorPickerCell(tr, color, cIdx, uniq, layers, viewer) {
-  const td = tr.insertCell(-1)
-
+function createColorPickerCell(cIdx, uniq, color, layers, viewer) {
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
+  let colorCode
   if (color !== null) {
-    const colorCode = color.color
-    m.innerHTML = `#${rgba2hex(colorCode)}`
-    m.style.backgroundColor = colorCode
+    colorCode = color.color
   } else {
-    m.innerHTML = ''
-    m.style.backgroundColor = ''
+    colorCode = 'rgba(255, 255, 255, 255)'
   }
-  td.appendChild(m)
+  m.innerHTML = `#${rgba2hex(colorCode)}`
+  m.style.backgroundColor = colorCode
 
   const picker = new CP(m)
   picker.on('change', function (r, g, b, a) {
@@ -85,23 +82,39 @@ function createColorPickerCell(tr, color, cIdx, uniq, layers, viewer) {
     // set viewer filter to new color
     setFilter(layers, viewer)
   })
+
+  return e('td', {}, [m])
 }
 
 function extraRow(uniq, idx, layers, viewer) {
-  const row = e('tr')
-  createColorPickerCell(row, null, idx, uniq, layers, viewer)
+  let cpCell = createColorPickerCell(idx, uniq, null, layers, viewer)
+  // todo: evt handlers
+  let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
+  let num2 = e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
+  let addBtn = e('i', {class: 'fas fa-plus icon'})
 
-  row.appendChild(e('td', {}, [
-    e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
-  ]))
+  let tr = e('tr', {}, [
+    e('td', {}, [cpCell]),
+    e('td', {}, [num1]),
+    e('td', {}, [num2]),
+    e('td', {}, [addBtn])
+  ])
 
-  row.appendChild(e('td', {}, [
-    e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
-  ]))
+  addBtn.addEventListener('click', function () {
+    clearError(num1, num2)
+    if (num1.value === '' || num2.value === '') {
+      if (num1.value === '') {
+        setError(num1, null)
+      }
+      if (num2.value === '') {
+        setError(num2, null)
+      }
+    } else {
+      // todo: add to list
+    }
 
-  row.appendChild(e('td', {}, [e('i', { class: 'fas fa-plus icon' })]))
-
-  return row
+  })
+  return tr
 }
 
 // COLOR RANGES UI
@@ -121,19 +134,22 @@ const createUI = function (uniq, div, layer, layers, viewer) {
     createHeaderRow(table)
 
     layer.colors.forEach(function (color, cIdx) {
-      const tr = e('tr')
+      let cpCell = createColorPickerCell(cIdx, uniq, color, layers, viewer)
+      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
+      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
+      let removeBtn = e('i', {class: 'fas fa-minus icon'})
+
+      let tr = e('tr', {}, [
+        e('td', {}, [cpCell]),
+        e('td', {}, [num1]),
+        e('td', {}, [num2]),
+        e('td', {}, [removeBtn])
+      ])
       table.appendChild(tr)
-      createColorPickerCell(tr, color, cIdx, uniq, layers, viewer)
 
-      tr.appendChild(e('td', {}, [
-        createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
-      ]))
-
-      tr.appendChild(e('td', {}, [
-        createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
-      ]))
-
-      tr.appendChild(e('td', {}, [e('i', { class: 'fas fa-minus icon' })]))
+      removeBtn.addEventListener('click', function () {
+        tr.remove() // todo: remove from list
+      })
 
     })
 
@@ -163,14 +179,15 @@ function rgba2hex(orig) {
 
 // USER INPUTS to set color threshold values
 function createNumericInput(id, uniq, layers, color, colors, viewer) {
-  const x = document.createElement('input')
-  x.id = id
-  x.setAttribute('type', 'number')
-  x.min = '0'
-  x.max = '255'
-  x.step = '1'
-  x.value = id.includes('low') ? color.low.toString() : color.hi.toString()
-  x.size = 5
+  let x = e('input', {
+    id: id,
+    'type': 'number',
+    'min': '0',
+    'max': '255',
+    step: '1',
+    value: id.includes('low') ? color.low.toString() : color.hi.toString(),
+    size: 5
+  })
 
   // 'change' waits until they're done entering a number, and they have to exit that field (like blur)
   x.addEventListener('change', function () {
@@ -194,12 +211,6 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
     setFilter(layers, viewer)
   })
   return x
-}
-
-function addItem() {
-}
-
-function removeItem() {
 }
 
 // TODO: dis hab da change (w add subtr rows)
@@ -231,10 +242,14 @@ function isIntersect(uniq, len) {
 }
 
 function setError(a, b) {
-  a.style.outlineStyle = 'solid'
-  a.style.outlineColor = 'red'
-  b.style.outlineStyle = 'solid'
-  b.style.outlineColor = 'red'
+  if (a !== null) {
+    a.style.outlineStyle = 'solid'
+    a.style.outlineColor = 'red'
+  }
+  if (b !== null) {
+    b.style.outlineStyle = 'solid'
+    b.style.outlineColor = 'red'
+  }
 }
 
 function clearError(a, b) {
