@@ -53,15 +53,9 @@ function addMarkerToViewer (point, viewer) {
 }
 
 function createLink () {
-  const link = document.createElement('a')
-  const href = '#'
-  link.href = href
-  link.dataset.href = href
-  link.id = 'the-map-marker'
-  link.className = 'fas fa-map-marker'
-  link.style.cssText =
-    ' text-decoration: none; font-size: 22px; color: red;' +
-    ' cursor: pointer'
+  const link = e('a', {'href': '#', 'id':'pin', 'class': 'fas fa-map-marker'})
+  link.style = 'text-decoration: none; font-size: 22px; color: red; cursor: pointer'
+  link.dataset.href = '#'
   return link
 }
 
@@ -79,7 +73,7 @@ function handleButtonShowHide () {
         html = '<i class="fas fa-map-marker"></i> Show markers'
       }
       this.innerHTML = html
-      document.querySelectorAll('#the-map-marker').forEach(function (thing) {
+      document.querySelectorAll('#pin').forEach(function (thing) {
         thing.style.display = style
       })
       markersHaveBeenDrawn = !markersHaveBeenDrawn

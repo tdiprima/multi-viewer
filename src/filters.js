@@ -37,18 +37,18 @@ const getCellValue = (tr, idx) => {
 }
 
 const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-  v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
 
 // Create table header
-function createHeaderRow (table) {
+function createHeaderRow(table) {
   // Add the header row.
   const row = table.insertRow(-1)
   const tableHeaders = ['Color', 'Low', 'High']
 
   for (let i = 0; i < tableHeaders.length; i++) {
     // Create element
-    const th = document.createElement('TH')
+    const th = e('th')
     th.innerHTML = tableHeaders[i]
     row.appendChild(th)
 
@@ -62,7 +62,7 @@ function createHeaderRow (table) {
   }
 }
 
-function createColorPickerCell (tr, mColor, cIdx, uniq, layers, viewer) {
+function createColorPickerCell(tr, mColor, cIdx, uniq, layers, viewer) {
   const td = tr.insertCell(-1)
   const colorCode = mColor.color
 
@@ -87,20 +87,21 @@ function createColorPickerCell (tr, mColor, cIdx, uniq, layers, viewer) {
   })
 }
 
-function extraRow () {
+function extraRow(uniq, idx, layers, viewer) {
   // Extra row
-  const row = e('tr', {}, [
-    e('td', {}, [
-      e('mark', { id: 'dummy' })
-    ])
-  ])
+  const row = e('tr')
+
+  createColorPickerCell(row, {color : 'rgba(0, 0, 0, 0)'}, idx, uniq, layers, viewer)
+  // row.appendChild(e('td', {}, [
+  //   e('mark', {id: `marker${uniq}${idx}`})
+  // ]))
 
   row.appendChild(e('td', {}, [
-    e('input', { id: 'low1111', type: 'number', min: '0', max: '255', step: '1', size: '5' })
+    e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   ]))
 
   row.appendChild(e('td', {}, [
-    e('input', { id: 'high1111', type: 'number', min: '0', max: '255', step: '1', size: '5' })
+    e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   ]))
 
   return row
@@ -108,7 +109,7 @@ function extraRow () {
 
 // COLOR RANGES UI
 const createUI = function (uniq, div, layer, layers, viewer) {
-  const table = document.createElement('table')
+  const table = e('table')
   div.appendChild(table)
 
   if (!layer.colors) {
@@ -135,11 +136,11 @@ const createUI = function (uniq, div, layer, layers, viewer) {
       td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer))
     })
 
-    table.appendChild(extraRow())
+    table.appendChild(extraRow(uniq, layer.colors.length, layers, viewer))
   }
 }
 
-function rgba2hex (orig) {
+function rgba2hex(orig) {
   let a
   const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
   const alpha = ((arr && arr[4]) || '').trim()
@@ -160,7 +161,7 @@ function rgba2hex (orig) {
 }
 
 // USER INPUTS to set color threshold values
-function createNumericInput (id, uniq, layers, color, colors, viewer) {
+function createNumericInput(id, uniq, layers, color, colors, viewer) {
   const x = document.createElement('input')
   x.id = id
   x.setAttribute('type', 'number')
@@ -194,7 +195,7 @@ function createNumericInput (id, uniq, layers, color, colors, viewer) {
   return x
 }
 
-function isIntersect (uniq, len) {
+function isIntersect(uniq, len) {
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
     clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
@@ -221,14 +222,14 @@ function isIntersect (uniq, len) {
   return false
 }
 
-function setError (a, b) {
+function setError(a, b) {
   a.style.outlineStyle = 'solid'
   a.style.outlineColor = 'red'
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
 
-function clearError (a, b) {
+function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
@@ -263,7 +264,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
         console.warn('1:', err.message)
       }
 
-      function levels (value, _colors) {
+      function levels(value, _colors) {
         try {
           let i
           let retVal
@@ -286,7 +287,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
         }
       }
 
-      function parseColor (input) {
+      function parseColor(input) {
         // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
         return input.replace(/[a-z%\s()]/g, '').split(',')
       }
