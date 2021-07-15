@@ -91,10 +91,7 @@ function extraRow(uniq, idx, layers, viewer) {
   // Extra row
   const row = e('tr')
 
-  createColorPickerCell(row, {color : 'rgba(0, 0, 0, 0)'}, idx, uniq, layers, viewer)
-  // row.appendChild(e('td', {}, [
-  //   e('mark', {id: `marker${uniq}${idx}`})
-  // ]))
+  createColorPickerCell(row, {color : 'rgba(255, 255, 255, 255)'}, idx, uniq, layers, viewer)
 
   row.appendChild(e('td', {}, [
     e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
