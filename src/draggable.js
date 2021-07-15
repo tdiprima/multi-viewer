@@ -1,30 +1,19 @@
 function createDraggableDiv(id, title, left, top, viz) {
-  let myDiv = document.createElement('div')
-  myDiv.id = id
-  myDiv.className = 'popup'
+  let myDiv = e('div', {id: id, class: 'popup'})
   myDiv.style.left = left + 'px'
   myDiv.style.top = top + 'px'
 
-  let myImg = document.createElement('img')
-  myImg.src = '/multi-viewer/images/close-icon.png'
-
-  myImg.width = 25
-  myImg.height = 25
-  myImg.alt = 'close'
+  let myImg = e('img', {src: '/multi-viewer/images/close-icon.png', width: 25, height: 25, alt: 'close'})
   myImg.style.cursor = 'pointer'
   myImg.addEventListener('click', function () {
     myDiv.style.display = 'none'
   })
 
-  let myHeader = document.createElement('div')
-  myHeader.id = id + 'Header' // Note the naming convention
-  myHeader.className = 'popupHeader'
-  myHeader.appendChild(myImg)
-  myHeader.appendChild(document.createTextNode(title))
+  const myHeader = e('div', {id: `${id}Header`, class: 'popupHeader'},
+    [myImg, e('span', {}, [title])])
   myDiv.appendChild(myHeader)
 
-  let body = document.createElement('div')
-  body.id = id + 'Body' // Note the naming convention
+  let body = e('div', {id: `${id}Body`})
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)

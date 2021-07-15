@@ -1,7 +1,7 @@
-const filters = function (callerBtn, layer, layers, viewer) {
+const filters = function (paletteBtn, layer, layers, viewer) {
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
-  const rect = callerBtn.getBoundingClientRect()
+  const rect = paletteBtn.getBoundingClientRect()
   const div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
   createUI(identifier, document.getElementById(`${id}Body`), layer, layers, viewer)
   return div
@@ -63,7 +63,6 @@ function createHeaderRow(table) {
 }
 
 function createColorPickerCell(tr, color, cIdx, uniq, layers, viewer) {
-  console.log('%cmColor', 'color: deeppink', color)
   const td = tr.insertCell(-1)
 
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
@@ -93,7 +92,6 @@ function createColorPickerCell(tr, color, cIdx, uniq, layers, viewer) {
 }
 
 function extraRow(uniq, idx, layers, viewer) {
-  console.log('%cextraRow', 'color: darkseagreen;', 'extraRow')
   const row = e('tr')
   createColorPickerCell(row, null, idx, uniq, layers, viewer)
 
@@ -104,6 +102,8 @@ function extraRow(uniq, idx, layers, viewer) {
   row.appendChild(e('td', {}, [
     e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   ]))
+
+  row.appendChild(e('i', {class: 'fas fa-plus icon'}))
 
   return row
 }
@@ -135,6 +135,10 @@ const createUI = function (uniq, div, layer, layers, viewer) {
       // HIGH
       td = tr.insertCell(-1)
       td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer))
+
+      td = tr.insertCell(-1)
+      td.appendChild(e('i', {class: 'fas fa-minus icon'}))
+
     })
 
     table.appendChild(extraRow(uniq, layer.colors.length, layers, viewer))
@@ -194,6 +198,12 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
     setFilter(layers, viewer)
   })
   return x
+}
+
+function addItem() {
+}
+
+function removeItem() {
 }
 
 // TODO: dis hab da change (w add subtr rows)

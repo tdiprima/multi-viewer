@@ -1,4 +1,4 @@
-let blender = function (callerBtn, viewer) {
+let blender = function (blenderBtn, viewer) {
   let blendModes = [
     'normal',
     'difference',
@@ -43,19 +43,19 @@ let blender = function (callerBtn, viewer) {
     })
   }
 
-  callerBtn.addEventListener('click', function () {
+  blenderBtn.addEventListener('click', function () {
     if (uiCreated) {
       // Turn off
       uiCreated = false
     } else {
       // Turn on
       let id = makeId(5, 'modes')
-      let rect = callerBtn.getBoundingClientRect()
+      let rect = blenderBtn.getBoundingClientRect()
       let div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top)
       div.style.display = 'block'
       createBlendModesUI(document.getElementById(`${id}Body`), viewer)
       uiCreated = true
     }
-    toggleButton(callerBtn, 'btnOn', 'btn')
+    toggleButton(blenderBtn, 'btnOn', 'btn')
   })
 }

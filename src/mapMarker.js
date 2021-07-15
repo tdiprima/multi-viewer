@@ -53,8 +53,8 @@ function addMarkerToViewer (point, viewer) {
 }
 
 function createLink () {
-  const link = e('a', {'href': '#', 'id':'pin', 'class': 'fas fa-map-marker'})
-  link.style = 'text-decoration: none; font-size: 22px; color: red; cursor: pointer'
+  const link = e('a', {'href': '#', 'id':'pin', 'class': 'fas fa-map-marker icon'})
+  link.style = 'text-decoration: none; font-size: 22px; color: red;'
   link.dataset.href = '#'
   return link
 }

@@ -196,3 +196,8 @@ a:link {
 .hover-orange:hover {
   color: #fd7e14
 }
+
+/* ICON */
+.icon {
+  cursor: pointer;
+}
