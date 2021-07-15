@@ -7,7 +7,6 @@ const filters = function (paletteBtn, layer, layers, viewer) {
   return div
 }
 
-// SET LAYERS' COLOR FILTER
 const setFilter = function (layers, viewer) {
   const itemCount = viewer.world.getItemCount()
   const filterOpts = []
@@ -40,14 +39,11 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
 
-// Create table header
 function createHeaderRow(table) {
-  // Add the header row.
   const row = table.insertRow(-1)
   const tableHeaders = ['Color', 'Low', 'High']
 
   for (let i = 0; i < tableHeaders.length; i++) {
-    // Create element
     const th = e('th')
     th.innerHTML = tableHeaders[i]
     row.appendChild(th)
@@ -103,7 +99,7 @@ function extraRow(uniq, idx, layers, viewer) {
     e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   ]))
 
-  row.appendChild(e('i', {class: 'fas fa-plus icon'}))
+  row.appendChild(e('td', {}, [e('i', { class: 'fas fa-plus icon' })]))
 
   return row
 }
@@ -125,19 +121,19 @@ const createUI = function (uniq, div, layer, layers, viewer) {
     createHeaderRow(table)
 
     layer.colors.forEach(function (color, cIdx) {
-      const tr = table.insertRow(-1)
+      const tr = e('tr')
       table.appendChild(tr)
-      // CP
       createColorPickerCell(tr, color, cIdx, uniq, layers, viewer)
-      // LOW
-      let td = tr.insertCell(-1)
-      td.appendChild(createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer))
-      // HIGH
-      td = tr.insertCell(-1)
-      td.appendChild(createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer))
 
-      td = tr.insertCell(-1)
-      td.appendChild(e('i', {class: 'fas fa-minus icon'}))
+      tr.appendChild(e('td', {}, [
+        createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
+      ]))
+
+      tr.appendChild(e('td', {}, [
+        createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
+      ]))
+
+      tr.appendChild(e('td', {}, [e('i', { class: 'fas fa-minus icon' })]))
 
     })
 
