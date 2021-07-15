@@ -1,7 +1,7 @@
-const filters = function (button, layer, layers, viewer) {
+const filters = function (callerBtn, layer, layers, viewer) {
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
-  const rect = button.getBoundingClientRect()
+  const rect = callerBtn.getBoundingClientRect()
   const div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
   createUI(identifier, document.getElementById(`${id}Body`), layer, layers, viewer)
   return div
@@ -62,36 +62,40 @@ function createHeaderRow(table) {
   }
 }
 
-function createColorPickerCell(tr, mColor, cIdx, uniq, layers, viewer) {
+function createColorPickerCell(tr, color, cIdx, uniq, layers, viewer) {
+  console.log('%cmColor', 'color: deeppink', color)
   const td = tr.insertCell(-1)
-  const colorCode = mColor.color
 
-  // COLOR PICKER
-  const m = document.createElement('mark')
-  m.id = `marker${uniq}${cIdx}`
-  m.innerHTML = `#${rgba2hex(colorCode)}`
-  m.style.backgroundColor = colorCode
+  const m = e('mark', {id: `marker${uniq}${cIdx}`})
+  if (color !== null) {
+    const colorCode = color.color
+    m.innerHTML = `#${rgba2hex(colorCode)}`
+    m.style.backgroundColor = colorCode
+  } else {
+    m.innerHTML = ''
+    m.style.backgroundColor = ''
+  }
   td.appendChild(m)
 
-  // COLOR PICKER HANDLER
   const picker = new CP(m)
   picker.on('change', function (r, g, b, a) {
-    // set cp values
+    // set color-picker values
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
-    // set our new color
-    mColor.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+    if (color !== null) {
+      // set our new color
+      color.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
+    }
     // set viewer filter to new color
     setFilter(layers, viewer)
   })
 }
 
 function extraRow(uniq, idx, layers, viewer) {
-  // Extra row
+  console.log('%cextraRow', 'color: darkseagreen;', 'extraRow')
   const row = e('tr')
-
-  createColorPickerCell(row, {color : 'rgba(255, 255, 255, 255)'}, idx, uniq, layers, viewer)
+  createColorPickerCell(row, null, idx, uniq, layers, viewer)
 
   row.appendChild(e('td', {}, [
     e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
@@ -192,6 +196,7 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
   return x
 }
 
+// TODO: dis hab da change (w add subtr rows)
 function isIntersect(uniq, len) {
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
