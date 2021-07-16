@@ -129,6 +129,7 @@ fabric.Canvas.prototype.getItemsByName = function (name) {
   return objectList
 }
 
+// element creation abstraction
 const e = (name, properties = {}, children = []) => {
   // Create the element
   const element = document.createElement(name)
