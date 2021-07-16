@@ -3,121 +3,11 @@ const filters = function (paletteBtn, layer, layers, viewer) {
   const id = `filters${identifier}`
   const rect = paletteBtn.getBoundingClientRect()
   const div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
-  createUI(identifier, document.getElementById(`${id}Body`), layer, layers, viewer)
+  createUI(identifier, div.lastChild, layer, layers, viewer)
   return div
 }
 
-const setFilter = function (layers, viewer) {
-  const itemCount = viewer.world.getItemCount()
-  const filterOpts = []
-  for (let i = 0; i < itemCount; i++) {
-    if (i > 0) {
-      filterOpts.push({
-        items: viewer.world.getItemAt(i),
-        processors: [
-          colorFilter.prototype.COLORLEVELS(layers[i].colors)
-        ]
-      })
-    }
-  }
-  viewer.setFilterOptions({
-    filters: filterOpts,
-    loadMode: 'sync'
-  })
-}
-
-const getCellValue = (tr, idx) => {
-  const td = tr.children[idx]
-  if (td.children[0].type === 'number') {
-    return td.children[0].value
-  } else {
-    return td.innerText || td.textContent
-  }
-}
-
-const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-)(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
-
-function createHeaderRow(table) {
-  const row = table.insertRow(-1)
-  const tableHeaders = ['Color', 'Low', 'High']
-
-  for (let i = 0; i < tableHeaders.length; i++) {
-    const th = e('th')
-    th.innerHTML = tableHeaders[i]
-    row.appendChild(th)
-
-    // Sort by header event listener
-    th.addEventListener('click', () => {
-      const table = th.closest('table')
-      Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
-        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-        .forEach(tr => table.appendChild(tr))
-    })
-  }
-}
-
-function createColorPickerCell(cIdx, uniq, color, layers, viewer) {
-  const m = e('mark', {id: `marker${uniq}${cIdx}`})
-  let colorCode
-  if (color !== null) {
-    colorCode = color.color
-  } else {
-    colorCode = 'rgba(255, 255, 255, 255)'
-  }
-  m.innerHTML = `#${rgba2hex(colorCode)}`
-  m.style.backgroundColor = colorCode
-
-  const picker = new CP(m)
-  picker.on('change', function (r, g, b, a) {
-    // set color-picker values
-    this.source.value = this.color(r, g, b, a)
-    this.source.innerHTML = this.color(r, g, b, a)
-    this.source.style.backgroundColor = this.color(r, g, b, a)
-    if (color !== null) {
-      // set our new color
-      color.color = `rgba(${r}, ${g}, ${b}, ${a * 255})` // "color picker" alpha needs to be 1.  "osd" alpha needs to be 255.
-    }
-    // set viewer filter to new color
-    setFilter(layers, viewer)
-  })
-
-  return e('td', {}, [m])
-}
-
-function extraRow(uniq, idx, layers, viewer) {
-  let cpCell = createColorPickerCell(idx, uniq, null, layers, viewer)
-  // todo: evt handlers
-  let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
-  let num2 = e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
-  let addBtn = e('i', {class: 'fas fa-plus icon'})
-
-  let tr = e('tr', {}, [
-    e('td', {}, [cpCell]),
-    e('td', {}, [num1]),
-    e('td', {}, [num2]),
-    e('td', {}, [addBtn])
-  ])
-
-  addBtn.addEventListener('click', function () {
-    clearError(num1, num2)
-    if (num1.value === '' || num2.value === '') {
-      if (num1.value === '') {
-        setError(num1, null)
-      }
-      if (num2.value === '') {
-        setError(num2, null)
-      }
-    } else {
-      // todo: add to list
-    }
-
-  })
-  return tr
-}
-
-// COLOR RANGES UI
+// CREATE USER INTERFACE
 const createUI = function (uniq, div, layer, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
@@ -128,7 +18,6 @@ const createUI = function (uniq, div, layer, layers, viewer) {
       console.warn(`viewer ${viewer.id} layer ${layer.layerNum} colors: ${layer.colors}`)
     }
   } else {
-    // Sort intervals in decreasing order of low value
     layer.colors.sort((a, b) => b.low - a.low)
 
     createHeaderRow(table)
@@ -157,6 +46,66 @@ const createUI = function (uniq, div, layer, layers, viewer) {
   }
 }
 
+// CREATE SORTABLE HEADER ROW
+function createHeaderRow(table) {
+  const row = table.insertRow(-1)
+  const tableHeaders = ['Color', 'Low', 'High']
+
+  for (let i = 0; i < tableHeaders.length; i++) {
+    const th = e('th')
+    th.innerHTML = tableHeaders[i]
+    row.appendChild(th)
+
+    th.addEventListener('click', () => {
+      const table = th.closest('table')
+      Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => table.appendChild(tr))
+    })
+  }
+}
+
+const getCellValue = (tr, idx) => {
+  const td = tr.children[idx]
+  if (td.children[0].type === 'number') {
+    return td.children[0].value
+  } else {
+    return td.innerText || td.textContent
+  }
+}
+
+const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+)(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
+
+// CREATE COLOR PICKER INPUT
+function createColorPickerCell(cIdx, uniq, color, layers, viewer) {
+  const m = e('mark', {id: `marker${uniq}${cIdx}`})
+  let colorCode
+  if (color !== null) {
+    colorCode = color.color
+  } else {
+    colorCode = 'rgba(255, 255, 255, 255)'
+  }
+  m.innerHTML = `#${rgba2hex(colorCode)}` // hex
+  m.style.backgroundColor = colorCode // rgba
+
+  const picker = new CP(m)
+  picker.on('change', function (r, g, b, a) {
+    this.source.value = this.color(r, g, b, a)
+    this.source.innerHTML = this.color(r, g, b, a)
+    this.source.style.backgroundColor = this.color(r, g, b, a)
+    if (color !== null) {
+      // alpha value is between 0 and 1
+      // convert to 0 to 255 for openseadragon
+      color.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+    }
+    setFilter(layers, viewer)
+  })
+
+  return e('td', {}, [m])
+}
+
 function rgba2hex(orig) {
   let a
   const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
@@ -177,7 +126,26 @@ function rgba2hex(orig) {
   return hex
 }
 
-// USER INPUTS to set color threshold values
+const setFilter = function (layers, viewer) {
+  const itemCount = viewer.world.getItemCount()
+  const filterOpts = []
+  for (let i = 0; i < itemCount; i++) {
+    if (i > 0) {
+      filterOpts.push({
+        items: viewer.world.getItemAt(i),
+        processors: [
+          colorFilter.prototype.COLORLEVELS(layers[i].colors)
+        ]
+      })
+    }
+  }
+  viewer.setFilterOptions({
+    filters: filterOpts,
+    loadMode: 'sync'
+  })
+}
+
+// CREATE NUMERIC INPUT
 function createNumericInput(id, uniq, layers, color, colors, viewer) {
   let x = e('input', {
     id: id,
@@ -259,6 +227,39 @@ function clearError(a, b) {
   b.style.outlineColor = ''
 }
 
+// EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
+function extraRow(uniq, idx, layers, viewer) {
+  let cpCell = createColorPickerCell(idx, uniq, null, layers, viewer)
+  // todo: evt handlers
+  let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
+  let num2 = e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
+  let addBtn = e('i', {class: 'fas fa-plus icon'})
+
+  let tr = e('tr', {}, [
+    e('td', {}, [cpCell]),
+    e('td', {}, [num1]),
+    e('td', {}, [num2]),
+    e('td', {}, [addBtn])
+  ])
+
+  addBtn.addEventListener('click', function () {
+    clearError(num1, num2)
+    if (num1.value === '' || num2.value === '') {
+      if (num1.value === '') {
+        setError(num1, null)
+      }
+      if (num2.value === '') {
+        setError(num2, null)
+      }
+    } else {
+      // todo: add to list
+    }
+
+  })
+  return tr
+}
+
+// CUSTOM FILTER IMPLEMENTATION
 let colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
   if (context.canvas.width > 0 && context.canvas.height > 0) {
