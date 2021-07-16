@@ -22,7 +22,7 @@ function createUI(uniq, div, layer, layers, viewer) {
   } else {
     layer.colors.sort((a, b) => b.low - a.low)
 
-    createHeaderRow(table)
+    table.appendChild(createHeaderRow())
 
     layer.colors.forEach(function (color, cIdx) {
       let cpCell = createColorPickerCell(cIdx, uniq, color, layers, viewer)
@@ -49,8 +49,8 @@ function createUI(uniq, div, layer, layers, viewer) {
 }
 
 // CREATE SORTABLE HEADER ROW
-function createHeaderRow(table) {
-  const row = table.insertRow(-1)
+function createHeaderRow() {
+  const row = e('tr')
   const tableHeaders = ['Color', 'Low', 'High']
 
   for (let i = 0; i < tableHeaders.length; i++) {
@@ -65,6 +65,8 @@ function createHeaderRow(table) {
         .forEach(tr => table.appendChild(tr))
     })
   }
+
+  return row
 }
 
 const getCellValue = (tr, idx) => {
@@ -159,12 +161,11 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
     size: 5
   })
 
-  // 'change' waits until they're done entering a number, and they have to exit that field (like blur)
-  x.addEventListener('change', function () {
-    isIntersect(uniq, colors.length)
-  })
+  // todo: Validation needs to be revised
+  // x.addEventListener('change', function () {
+  //   isIntersect(uniq, colors.length)
+  // })
 
-  // 'input' fires for each alteration; a user can enter a number without exiting the field.
   x.addEventListener('input', function () {
     const intVal = parseInt(this.value)
 
@@ -183,7 +184,8 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
   return x
 }
 
-// TODO: dis hab da change (w add subtr rows)
+/*
+// todo: needs to be revised
 function isIntersect(uniq, len) {
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
@@ -210,24 +212,19 @@ function isIntersect(uniq, len) {
   // If we reach here, then no overlap
   return false
 }
-
 function setError(a, b) {
-  if (a !== null) {
-    a.style.outlineStyle = 'solid'
-    a.style.outlineColor = 'red'
-  }
-  if (b !== null) {
-    b.style.outlineStyle = 'solid'
-    b.style.outlineColor = 'red'
-  }
+  a.style.outlineStyle = 'solid'
+  a.style.outlineColor = 'red'
+  b.style.outlineStyle = 'solid'
+  b.style.outlineColor = 'red'
 }
-
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
   b.style.outlineColor = ''
 }
+ */
 
 // EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
 function extraRow(uniq, idx, layers, viewer) {
@@ -248,10 +245,12 @@ function extraRow(uniq, idx, layers, viewer) {
     clearError(num1, num2)
     if (num1.value === '' || num2.value === '') {
       if (num1.value === '') {
-        setError(num1, null)
+        num1.style.outlineStyle = 'solid'
+        num1.style.outlineColor = 'red'
       }
       if (num2.value === '') {
-        setError(num2, null)
+        num2.style.outlineStyle = 'solid'
+        num2.style.outlineColor = 'red'
       }
     } else {
       // todo: add to list

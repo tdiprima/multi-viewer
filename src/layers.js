@@ -11,18 +11,16 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
   itemsToBeDisplayed.forEach(function (layer) {
     let layerNum = layer.layerNum
 
-    let tr, cell, span, eye, fas
-    tr = table.insertRow(-1)
+    let tr = e('tr')
     table.appendChild(tr)
 
     // Feature (draggable)
-    cell = tr.insertCell(-1)
-    span = e('span', {class: 'layer_tab', id: `${layerNum}${makeId(5, 'feat')}`, draggable: 'true', display: 'block'})
+    let feat = e('span', {class: 'layer_tab', id: `${layerNum}${makeId(5, 'feat')}`, draggable: 'true', display: 'block'})
 
     let loc = layer.location
     // fetch(loc)
     //   .then(response => response.json())
-    //   .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(loc))
+    //   .then(d => feat.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(loc))
 
     // Fetch the preferred label
     if (loc.includes('info.json')) {
@@ -30,107 +28,71 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
         .then(response => response.json())
         .then(function (d) {
           if (d.prefLabel) {
-            span.innerHTML = d.prefLabel
+            feat.innerHTML = d.prefLabel
             // TODO: temporary hack until we get prefLabel:
           } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-            span.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+            feat.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
           } else if (loc.includes('TCGA')) {
             if (loc.match(regex) !== null)
-              span.innerHTML = loc.match(regex)[0]
+              feat.innerHTML = loc.match(regex)[0]
             else
-              span.innerHTML = getStringRep(loc)
+              feat.innerHTML = getStringRep(loc)
           } else {
-            span.innerHTML = getStringRep(loc)
+            feat.innerHTML = getStringRep(loc)
           }
         })
     } else {
-      span.innerHTML = 'Feature'
+      feat.innerHTML = 'Feature'
     }
+    tr.appendChild(e('td', {}, [feat]))
 
-    cell.appendChild(span)
+    // eyeball visibility toggle
+    faEye = e('i', { id: makeId(5, 'eye'), class: layer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
+    tr.appendChild(e('td', {}, [faEye]))
 
-    // EYEBALL VISIBILITY TOGGLE
-    cell = tr.insertCell(-1)
-    eye = document.createElement('i')
-    eye.classList.add('fas')
-    if (layer.opacity === 0)
-      eye.classList.add('fa-eye-slash')
-    else
-      eye.classList.add('fa-eye')
-    // eyeball(eye, layerNum, viewer) // viewer.world... undefined here.
+    // transparency slider
+    let faAdjust = document.createElement('i')
+    faAdjust.classList.add('fas')
+    faAdjust.classList.add('fa-adjust')
+    faAdjust.classList.add('hover-orange')
+    faAdjust.style.cursor = 'pointer'
+    let div = e('div', {class: 'showDiv'}, [faAdjust])
 
-    eye.id = makeId(5, 'eye')
-    cell.appendChild(eye)
-
-    // TRANSPARENCY SLIDER
-    cell = tr.insertCell(-1)
-
-    let div = document.createElement('div')
-    div.className = 'showDiv'
-
-    let div1 = document.createElement('div')
-    div1.className = 'showHover'
-
-    fas = document.createElement('i')
-    fas.classList.add('fas')
-    fas.classList.add('fa-adjust')
-    fas.classList.add('hover-orange')
-    fas.style.cursor = 'pointer'
-    div.appendChild(fas)
-
-    let range = document.createElement('input')
-    range.type = 'range'
-    range.id = makeId(5, 'range')
-    range.min = '0'
-    range.max = '100'
-    range.step = '0.1'
-    range.value = (layer.opacity * 100).toString()
-
-    // RANGE EVENT LISTENER
+    let range = e('input', {type: 'range', id: makeId(5, 'range'), min: '0', max: '100', step: '0.1', value: (layer.opacity * 100).toString()})
     range.addEventListener('input', function () {
       const worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
-        // SET IMAGE OPACITY
         worldItem.setOpacity(this.value / 100)
-        // TOGGLE EYEBALL
         if (this.value === '0') {
-          eye.classList.remove('fa-eye')
-          eye.classList.add('fa-eye-slash')
+          faEye.classList.remove('fa-eye')
+          faEye.classList.add('fa-eye-slash')
         }
         if (parseFloat(this.value) > 0) {
-          eye.classList.remove('fa-eye-slash')
-          eye.classList.add('fa-eye')
+          faEye.classList.remove('fa-eye-slash')
+          faEye.classList.add('fa-eye')
         }
       } else {
         console.warn('worldItem', worldItem)
       }
     })
 
-    // EYEBALL EVENT LISTENER
-    eye.addEventListener('click', function () {
-      toggleButton(eye, 'fa-eye', 'fa-eye-slash')
-      eyeball(eye, range, layerNum, viewer)
+    faEye.addEventListener('click', function () {
+      toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
+      eyeball(faEye, range, layerNum, viewer)
     })
 
-    div1.appendChild(range)
+    div.appendChild(e('div', {class: 'showHover'}, [range]))
+    tr.appendChild(e('td', {}, [div]))
 
-    div.appendChild(div1)
-    cell.appendChild(div)
-
-    // PALETTE COLOR FUNCTION
-    cell = tr.insertCell(-1)
-    // Color function for all layers except base
     if (layerNum > 0) {
-      fas = document.createElement('i')
-      fas.classList.add('fas')
-      fas.classList.add('fa-palette')
-      fas.id = makeId(5, 'palette')
-      fas.style.cursor = 'pointer'
-      cell.appendChild(fas)
-      let colorsUI = filters(fas, layer, itemsToBeDisplayed, viewer)
-      fas.addEventListener('click', function (e) {
+      let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
+      tr.appendChild(e('td', {}, [palette]))
+      let colorsUI = filters(palette, layer, itemsToBeDisplayed, viewer)
+      palette.addEventListener('click', function (e) {
         colorsUI.style.display = 'block'
       })
+    } else {
+      tr.appendChild(e('td'))
     }
   })
 }
