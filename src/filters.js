@@ -1,4 +1,6 @@
 const filters = function (paletteBtn, layer, layers, viewer) {
+  console.log('%clayer', 'color: deeppink', layer)
+  console.log('%clayers', 'color: deeppink', layers)
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -8,7 +10,7 @@ const filters = function (paletteBtn, layer, layers, viewer) {
 }
 
 // CREATE USER INTERFACE
-const createUI = function (uniq, div, layer, layers, viewer) {
+function createUI(uniq, div, layer, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
 
@@ -26,7 +28,7 @@ const createUI = function (uniq, div, layer, layers, viewer) {
       let cpCell = createColorPickerCell(cIdx, uniq, color, layers, viewer)
       let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
       let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
-      let removeBtn = e('i', {class: 'fas fa-minus icon'})
+      let removeBtn = e('i', {class: 'fas fa-minus pointer'})
 
       let tr = e('tr', {}, [
         e('td', {}, [cpCell]),
@@ -52,7 +54,7 @@ function createHeaderRow(table) {
   const tableHeaders = ['Color', 'Low', 'High']
 
   for (let i = 0; i < tableHeaders.length; i++) {
-    const th = e('th')
+    const th = e('th', {class: 'pointer'})
     th.innerHTML = tableHeaders[i]
     row.appendChild(th)
 
@@ -126,7 +128,7 @@ function rgba2hex(orig) {
   return hex
 }
 
-const setFilter = function (layers, viewer) {
+function setFilter(layers, viewer) {
   const itemCount = viewer.world.getItemCount()
   const filterOpts = []
   for (let i = 0; i < itemCount; i++) {
@@ -233,7 +235,7 @@ function extraRow(uniq, idx, layers, viewer) {
   // todo: evt handlers
   let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   let num2 = e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
-  let addBtn = e('i', {class: 'fas fa-plus icon'})
+  let addBtn = e('i', {class: 'fas fa-plus pointer'})
 
   let tr = e('tr', {}, [
     e('td', {}, [cpCell]),

@@ -1,46 +1,30 @@
-let layers = function (divName, itemsToBeDisplayed, viewer) {
-  createLayerWidget(document.getElementById(divName), itemsToBeDisplayed, viewer)
+let layers = function (divEl, itemsToBeDisplayed, viewer) {
+  createLayerWidget(divEl, itemsToBeDisplayed, viewer)
   handleDragLayers(viewer)
 }
 
-let eyeball = function (eye, range, layerNum, viewer) {
-  let l = viewer.world.getItemAt(layerNum)
-  if (l) {
-    if (eye.classList.contains('fa-eye-slash')) {
-      l.setOpacity(0) // Turn off layer
-      range.value = '0' // Set slider to 0
-    } else {
-      l.setOpacity(1) // Turn on layer
-      range.value = '100' // Set slider to (opacity * 100)
-    }
-  }
-}
-
-let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
+function createLayerWidget(div, itemsToBeDisplayed, viewer) {
   const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
-  const table = document.createElement('table')
+  const table = e('table')
   div.appendChild(table)
 
-  itemsToBeDisplayed.forEach(function (layer, ind) {
-    let layerNum = ind
+  itemsToBeDisplayed.forEach(function (layer) {
+    let layerNum = layer.layerNum
+
     let tr, cell, span, eye, fas
     tr = table.insertRow(-1)
     table.appendChild(tr)
 
-    // DRAGGABLE FEATURE TAB
+    // Feature (draggable)
     cell = tr.insertCell(-1)
-    span = document.createElement('span')
-    span.className = 'layer_tab'
-    span.id = ind + makeId(5, 'feat')
-    span.setAttribute('draggable', 'true')
-    span.display = 'block'
+    span = e('span', {class: 'layer_tab', id: `${layerNum}${makeId(5, 'feat')}`, draggable: 'true', display: 'block'})
 
     let loc = layer.location
     // fetch(loc)
     //   .then(response => response.json())
     //   .then(d => span.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(loc))
 
-    // FETCH THE PREFERRED LABEL
+    // Fetch the preferred label
     if (loc.includes('info.json')) {
       fetch(loc)
         .then(response => response.json())
@@ -60,7 +44,7 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
           }
         })
     } else {
-      span.innerHTML = 'UFO' // TODO: TEMP
+      span.innerHTML = 'Feature'
     }
 
     cell.appendChild(span)
@@ -152,7 +136,7 @@ let createLayerWidget = function (div, itemsToBeDisplayed, viewer) {
 }
 
 // DRAGGABLE LAYERS (previously in tabs, now list)
-let handleDragLayers = function (viewer) {
+function handleDragLayers(viewer) {
 
   // Features in feature list
   let items = document.querySelectorAll('.layer_tab')
@@ -241,6 +225,19 @@ let handleDragLayers = function (viewer) {
       // sourceViewer.world.getItemAt(layerNum).setOpacity(0)
     }
     return false
+  }
+}
+
+function eyeball(eye, range, layerNum, viewer) {
+  let l = viewer.world.getItemAt(layerNum)
+  if (l) {
+    if (eye.classList.contains('fa-eye-slash')) {
+      l.setOpacity(0) // Turn off layer
+      range.value = '0' // Set slider to 0
+    } else {
+      l.setOpacity(1) // Turn on layer
+      range.value = '100' // Set slider to (opacity * 100)
+    }
   }
 }
 
