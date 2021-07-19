@@ -201,3 +201,9 @@ a:link {
 .pointer {
   cursor: pointer;
 }
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #caccce !important;
+  /* e9e8ed */
+  color: #333 !important;
+}
