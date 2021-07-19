@@ -135,7 +135,7 @@ function handleDragLayers(viewer) {
     dragSrcEl = this // The draggable feature
     sourceViewer = viewer
     e.dataTransfer.effectAllowed = 'move'
-    console.log('e.target.id', e.target.id)
+    // console.log('e.target.id', e.target.id)
     e.dataTransfer.setData('text', e.target.id)
   }
 
@@ -179,7 +179,7 @@ function handleDragLayers(viewer) {
         }
       }
 
-      // VIEWER
+      // viewer
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum)

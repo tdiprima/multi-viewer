@@ -1,6 +1,6 @@
 const filters = function (paletteBtn, layer, layers, viewer) {
-  console.log('%clayer', 'color: deeppink', layer)
-  console.log('%clayers', 'color: deeppink', layers)
+  // console.log('%clayer', 'color: deeppink', layer)
+  // console.log('%clayers', 'color: darkseagreen', layers)
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -24,10 +24,10 @@ function createUI(uniq, div, layer, layers, viewer) {
 
     table.appendChild(createHeaderRow())
 
-    layer.colors.forEach(function (color, cIdx) {
-      let cpCell = createColorPickerCell(cIdx, uniq, color, layers, viewer)
-      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
-      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, color, layer.colors, viewer)
+    layer.colors.forEach(function (colorLowHi, cIdx) {
+      let cpCell = createColorPickerCell(cIdx, uniq, colorLowHi, layers, viewer)
+      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorLowHi, layer.colors, viewer)
+      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorLowHi, layer.colors, viewer)
       let removeBtn = e('i', {class: 'fas fa-minus pointer'})
 
       let tr = e('tr', {}, [
@@ -38,8 +38,20 @@ function createUI(uniq, div, layer, layers, viewer) {
       ])
       table.appendChild(tr)
 
+      // todo: 
+      // let rgb = cpCell.firstChild.style.backgroundColor // rgb
       removeBtn.addEventListener('click', function () {
-        tr.remove() // todo: remove from list
+        // let lay = layer.colors
+        // console.log('%clay', 'color: yellow', Array.isArray(lay))
+        // console.log('%clay', 'color: deeppink', lay)
+        // for (let i = 0; i < lay.length; i++) {
+        //   let rgba = lay[i].color
+          // if (rgba.truncated === rgb && num1 and num2 match the ones from this <tr>) {
+          // that's the one; remove it
+          //   break
+          // }
+        // }
+        tr.remove()
       })
 
     })
@@ -83,11 +95,11 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
 
 // CREATE COLOR PICKER INPUT
-function createColorPickerCell(cIdx, uniq, color, layers, viewer) {
+function createColorPickerCell(cIdx, uniq, colorLowHi, layers, viewer) {
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
   let colorCode
-  if (color !== null) {
-    colorCode = color.color
+  if (colorLowHi !== null) {
+    colorCode = colorLowHi.color
   } else {
     colorCode = 'rgba(255, 255, 255, 255)'
   }
@@ -99,10 +111,10 @@ function createColorPickerCell(cIdx, uniq, color, layers, viewer) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
-    if (color !== null) {
+    if (colorLowHi !== null) {
       // alpha value is between 0 and 1
       // convert to 0 to 255 for openseadragon
-      color.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+      colorLowHi.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
     }
     setFilter(layers, viewer)
   })
@@ -150,14 +162,14 @@ function setFilter(layers, viewer) {
 }
 
 // CREATE NUMERIC INPUT
-function createNumericInput(id, uniq, layers, color, colors, viewer) {
+function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   let x = e('input', {
     id: id,
     'type': 'number',
     'min': '0',
     'max': '255',
     step: '1',
-    value: id.includes('low') ? color.low.toString() : color.hi.toString(),
+    value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString(),
     size: 5
   })
 
@@ -174,9 +186,9 @@ function createNumericInput(id, uniq, layers, color, colors, viewer) {
     if (intVal < 0) this.value = '0'
 
     if (this.id.startsWith('low')) {
-      color.low = intVal
+      colorLowHi.low = intVal
     } else {
-      color.hi = intVal
+      colorLowHi.hi = intVal
     }
 
     setFilter(layers, viewer)
@@ -297,6 +309,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
             const low = _colors[i].low
             const hi = _colors[i].hi
             const color = _colors[i].color
+            // console.log('%ccolor', 'color: lime', color)
             if (value >= low && value <= hi) {
               retVal = parseColor(color)
             }
