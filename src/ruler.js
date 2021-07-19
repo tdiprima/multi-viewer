@@ -125,27 +125,15 @@ const ruler = function (button, viewer, overlay) {
       canvas.remove(...canvas.getItemsByName('ruler')) // TODO: Make an X to remove.
       // canvas.remove(...canvas.getObjects())
       mode = 'x'
-      canvas.off('mouse:down', function (o) {
-        mouseDownHandler(o)
-      })
-      canvas.off('mouse:move', function (o) {
-        mouseMoveHandler(o)
-      })
-      canvas.off('mouse:up', function (o) {
-        mouseUpHandler(o)
-      })
+      canvas.off('mouse:down', mouseDownHandler)
+      canvas.off('mouse:move', mouseMoveHandler)
+      canvas.off('mouse:up', mouseUpHandler)
     } else {
       // Turn on
       mode = 'draw'
-      canvas.on('mouse:down', function (o) {
-        mouseDownHandler(o)
-      })
-      canvas.on('mouse:move', function (o) {
-        mouseMoveHandler(o)
-      })
-      canvas.on('mouse:up', function (o) {
-        mouseUpHandler(o)
-      })
+      canvas.on('mouse:down', mouseDownHandler)
+      canvas.on('mouse:move', mouseMoveHandler)
+      canvas.on('mouse:up', mouseUpHandler)
     }
     toggleButton(button, 'btnOn', 'btn')
   })
