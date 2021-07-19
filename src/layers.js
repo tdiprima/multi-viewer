@@ -54,7 +54,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     let faAdjust = document.createElement('i')
     faAdjust.classList.add('fas')
     faAdjust.classList.add('fa-adjust')
-    faAdjust.classList.add('hover-orange')
+    faAdjust.classList.add('hover-light')
     faAdjust.style.cursor = 'pointer'
     let div = e('div', {class: 'showDiv'}, [faAdjust])
 

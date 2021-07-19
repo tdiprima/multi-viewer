@@ -1,4 +1,9 @@
-/* MAIN STYLE */
+:root {
+  --hilite: #74f272;
+  --dkgray: #333;
+  --ltgray: #ccc;
+}
+
 body {
   font-family: sans-serif;
 }
@@ -24,7 +29,7 @@ a:link {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  color: #333333;
+  color: var(--dkgray);
   text-shadow: 0 1px 1px rgba(255 255 255 0.75);
   padding: 4px 12px;
 }
@@ -35,8 +40,8 @@ a:link {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  color: #74f272;
-  border: 2px solid #74f272;
+  color: var(--hilite);
+  border: 2px solid var(--hilite);
   text-shadow: 0 1px 1px rgba(255 255 255 0.75);
   padding: 4px 12px;
 }
@@ -105,7 +110,7 @@ a:link {
 /* TABS (redone as LIST) */
 .drop_site {
   overflow: hidden !important;
-  border: 1px solid #ccc !important;
+  border: 1px solid var(--ltgray) !important;
   background-color: #f1f1f1 !important;
 }
 
@@ -113,15 +118,14 @@ a:link {
   cursor: move !important;
   border-radius: 5px !important;
   float: left !important;
-  border: 1px solid darkgray !important;
-  /*outline: none !important;*/
+  border: 1px solid var(--dkgray) !important;
   padding: 14px 16px !important;
   transition: 0.3s !important;
   font-size: 17px !important;
 }
 
 .drop_site.over {
-  border: 3px dotted #00FF00 !important;
+  border: 3px dotted #00ff00 !important;
 }
 
 /* FLOATING DIV */
@@ -129,7 +133,7 @@ a:link {
   position: absolute;
   z-index: 9;
   background-color: #f1f1f1;
-  border: 1px solid #d3d3d3;
+  border: 1px solid var(--ltgray);
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
   border-radius: 4px;
   display: inline-block;
@@ -140,9 +144,9 @@ a:link {
   padding: 10px;
   cursor: move;
   z-index: 10;
-  background-color: #caccce;
+  background-color: var(--ltgray);
   font-weight: bold;
-  color: #333;
+  color: var(--dkgray);
 }
 
 .grid-container {
@@ -161,9 +165,9 @@ a:link {
   cursor: not-allowed;
 }
 
-/* HIGHLIGHT ON DROP */
-.highlight {
-  background-color: #ffa214;
+/* hilite ON DROP */
+.hilite {
+  background-color: var(--hilite);
   animation-name: bckanim;
   animation-fill-mode: forwards;
   animation-duration: 3s;
@@ -172,7 +176,7 @@ a:link {
 
 @keyframes bckanim {
   0% {
-    background-color: #ffa214;
+    background-color: var(--hilite);
   }
   100% {
     background-color: transparent;
@@ -191,10 +195,9 @@ a:link {
   overflow: hidden;
 }
 
-/* HOVER ORANGE */
-.hover-orange:focus,
-.hover-orange:hover {
-  color: #fd7e14
+.hover-light:focus,
+.hover-light:hover {
+  color: var(--hilite);
 }
 
 /* POINTER */
@@ -203,7 +206,7 @@ a:link {
 }
 
 .navbar a:hover, .dropdown:hover .dropbtn {
-  background-color: #caccce !important;
-  /* e9e8ed */
-  color: #333 !important;
+  /* background-color: var(--hilite) !important; */
+  background-color: var(--ltgray) !important;
+  color: var(--dkgray) !important;
 }
