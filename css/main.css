@@ -4,22 +4,34 @@
   --ltgray: #ccc;
 }
 
-body {
-  font-family: sans-serif;
+/* HIGHLIGHT ON DROP */
+.highlight {
+  background-color: var(--hilite);
+  animation-name: bckanim;
+  animation-fill-mode: forwards;
+  animation-duration: 3s;
+  animation-delay: 0s;
 }
 
-ul {
-  list-style-type: none;
+@keyframes bckanim {
+  0% {
+    background-color: var(--hilite);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 
-a:link {
-  text-decoration: none;
+/* DRAGGABLE */
+*[draggable=true] {
+  -khtml-user-drag: element;
+  cursor: move;
 }
 
-/* DARK MODE */
-.dark-mode {
-  background-color: black;
-  color: white;
+/* HOVER OVER ICONS */
+.hover-light:focus,
+.hover-light:hover {
+  color: var(--hilite);
 }
 
 /* USER CONTROLS */
@@ -44,6 +56,97 @@ a:link {
   border: 2px solid var(--hilite);
   text-shadow: 0 1px 1px rgba(255 255 255 0.75);
   padding: 4px 12px;
+}
+
+/* TABS (redone as LIST) */
+.drop_site {
+  overflow: hidden !important;
+  border: 1px solid var(--ltgray) !important;
+  background-color: #f1f1f1 !important;
+}
+
+.layer_tab {
+  cursor: move !important;
+  border-radius: 5px !important;
+  float: left !important;
+  border: 1px solid var(--dkgray) !important;
+  padding: 14px 16px !important;
+  transition: 0.3s !important;
+  font-size: 17px !important;
+}
+
+.drop_site.over {
+  border: 3px dotted #00ff00 !important;
+}
+
+/* FLOATING DIV */
+.popup {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border: 1px solid var(--ltgray);
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
+  border-radius: 4px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.popupHeader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: var(--ltgray);
+  font-weight: bold;
+  color: var(--dkgray);
+}
+
+/* DARK MODE */
+.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  /* background-color: var(--hilite) !important; */
+  background-color: var(--ltgray) !important;
+  color: var(--dkgray) !important;
+}
+
+/* POINTER */
+.pointer {
+  cursor: pointer;
+}
+
+.none {
+  cursor: none;
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+/* DISPLAY TOOLS ON HOVER */
+.showHover {
+  display: none;
+}
+
+.showDiv:hover .showHover {
+  display: block;
+  z-index: 1002;
+  position: absolute;
+  overflow: hidden;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a:link {
+  text-decoration: none;
 }
 
 /* "QUAD" */
@@ -99,114 +202,4 @@ a:link {
   padding: 2px;
   max-width: 100px;
   height: auto;
-}
-
-/* DRAGGABLE */
-*[draggable=true] {
-  -khtml-user-drag: element;
-  cursor: move;
-}
-
-/* TABS (redone as LIST) */
-.drop_site {
-  overflow: hidden !important;
-  border: 1px solid var(--ltgray) !important;
-  background-color: #f1f1f1 !important;
-}
-
-.layer_tab {
-  cursor: move !important;
-  border-radius: 5px !important;
-  float: left !important;
-  border: 1px solid var(--dkgray) !important;
-  padding: 14px 16px !important;
-  transition: 0.3s !important;
-  font-size: 17px !important;
-}
-
-.drop_site.over {
-  border: 3px dotted #00ff00 !important;
-}
-
-/* FLOATING DIV */
-.popup {
-  position: absolute;
-  z-index: 9;
-  background-color: #f1f1f1;
-  border: 1px solid var(--ltgray);
-  box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
-  border-radius: 4px;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.popupHeader {
-  padding: 10px;
-  cursor: move;
-  z-index: 10;
-  background-color: var(--ltgray);
-  font-weight: bold;
-  color: var(--dkgray);
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 0 0;
-  grid-template-areas: ". . ." ". . ." ". . ." ". . ." ". . .";
-}
-
-.none {
-  cursor: none;
-}
-
-.not-allowed {
-  cursor: not-allowed;
-}
-
-/* hilite ON DROP */
-.hilite {
-  background-color: var(--hilite);
-  animation-name: bckanim;
-  animation-fill-mode: forwards;
-  animation-duration: 3s;
-  animation-delay: 0s;
-}
-
-@keyframes bckanim {
-  0% {
-    background-color: var(--hilite);
-  }
-  100% {
-    background-color: transparent;
-  }
-}
-
-/* DISPLAY TOOLS ON HOVER */
-.showHover {
-  display: none;
-}
-
-.showDiv:hover .showHover {
-  display: block;
-  z-index: 1002;
-  position: absolute;
-  overflow: hidden;
-}
-
-.hover-light:focus,
-.hover-light:hover {
-  color: var(--hilite);
-}
-
-/* POINTER */
-.pointer {
-  cursor: pointer;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn {
-  /* background-color: var(--hilite) !important; */
-  background-color: var(--ltgray) !important;
-  color: var(--dkgray) !important;
 }
