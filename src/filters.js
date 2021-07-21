@@ -232,10 +232,10 @@ function clearError(a, b) {
 // EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
 function extraRow(uniq, colors, layers, viewer) {
   let idx = colors.length
-  let colorLowHi = { color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0 }
-  let cpEl = createColorPicker(idx, uniq, colorLowHi, layers, viewer)
-  let num1 = createNumericInput(`low${uniq}${idx}`, uniq, layers, colorLowHi, colors, viewer)
-  let num2 = createNumericInput(`hi${uniq}${idx}`, uniq, layers, colorLowHi, colors, viewer)
+  let generic = { color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0 }
+  let cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
+  let num1 = createNumericInput(`low${uniq}${idx}`, uniq, layers, generic, colors, viewer)
+  let num2 = createNumericInput(`hi${uniq}${idx}`, uniq, layers, generic, colors, viewer)
   let addBtn = e('i', {class: 'fas fa-plus pointer'})
 
   let tr = e('tr', {}, [
@@ -246,7 +246,6 @@ function extraRow(uniq, colors, layers, viewer) {
   ])
 
   addBtn.addEventListener('click', function () {
-    // todo: if we successfully add it, then the + needs to turn into a - so they could remove it
     clearError(num1, num2)
     if (num1.value === '0' || num2.value === '0') {
       if (num1.value === '0') {
@@ -259,11 +258,21 @@ function extraRow(uniq, colors, layers, viewer) {
       }
     } else {
       // add to list
-      let a = cpEl.style.backgroundColor
-      let a1 = a.replace('rgb', 'rgba')
-      a1 = a1.replace(')', ', 255)')
-      colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)})
-      console.log('%chere', 'color: darkseagreen;')
+      let a = cpEl.style.backgroundColor // we get rgb back from CP
+      let a1 = a.replace('rgb', 'rgba') // we need rgba
+      a1 = a1.replace(')', ', 255)') // give it default alpha
+      colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
+
+      // sort
+      colors.sort((a, b) => b.low - a.low)
+
+      // + becomes -
+      // let removeBtn = e('i', {class: 'fas fa-minus pointer'})
+      tr.lastChild.innerHTML = '<i class="fas fa-minus pointer"></i>' // todo: add evt listener
+
+      // add another empty row
+      const table = tr.closest('table')
+      table.appendChild(extraRow(uniq, colors, layers, viewer))
     }
 
   })
@@ -307,7 +316,6 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
             const low = _colors[i].low
             const hi = _colors[i].hi
             const color = _colors[i].color
-            // console.log('%ccolor', 'color: lime', color)
             if (value >= low && value <= hi) {
               retVal = analizarElColor(color)
             }
