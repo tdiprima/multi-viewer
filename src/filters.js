@@ -12,12 +12,7 @@ function createUI(uniq, div, layer, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
 
-  if (!layer.colors) {
-    if (layer.layerNum && layer.layerNum > 0) {
-      table.innerHTML = 'None'
-      console.warn(`viewer ${viewer.id} layer ${layer.layerNum} colors: ${layer.colors}`)
-    }
-  } else {
+  if (layer.colors) {
     layer.colors.sort((a, b) => b.low - a.low)
 
     table.appendChild(createHeaderRow())
@@ -41,6 +36,7 @@ function createUI(uniq, div, layer, layers, viewer) {
       let modNum2 = num2.value
       let ourRanges = layer.colors
       removeBtn.addEventListener('click', function () {
+        // Make sure we remove the right one from the list
         for (let i = 0; i < ourRanges.length; i++) {
           let r = ourRanges[i]
           let a = parseColor(r.color)
