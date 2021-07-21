@@ -1,6 +1,4 @@
 const filters = function (paletteBtn, layer, layers, viewer) {
-  // console.log('%clayer', 'color: deeppink', layer)
-  // console.log('%clayers', 'color: darkseagreen', layers)
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -59,7 +57,7 @@ function createUI(uniq, div, layer, layers, viewer) {
 
     })
 
-    table.appendChild(extraRow(uniq, layer.colors.length, layers, viewer))
+    table.appendChild(extraRow(uniq, layer.colors, layers, viewer))
   }
 }
 
@@ -234,16 +232,17 @@ function setError(a, b) {
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
+ */
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   b.style.outlineStyle = ''
   b.style.outlineColor = ''
 }
- */
 
 // EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
-function extraRow(uniq, idx, layers, viewer) {
+function extraRow(uniq, colors, layers, viewer) {
+  let idx = colors.length
   let cpEl = createColorPicker(idx, uniq, null, layers, viewer)
   // todo: evt handlers
   let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
@@ -258,7 +257,7 @@ function extraRow(uniq, idx, layers, viewer) {
   ])
 
   addBtn.addEventListener('click', function () {
-    // clearError(num1, num2) todo arrrggghhh
+    clearError(num1, num2)
     if (num1.value === '' || num2.value === '') {
       if (num1.value === '') {
         num1.style.outlineStyle = 'solid'
@@ -269,7 +268,11 @@ function extraRow(uniq, idx, layers, viewer) {
         num2.style.outlineColor = 'red'
       }
     } else {
-      // todo: add to list
+      // add to list
+      let a = cpEl.style.backgroundColor
+      let a1 = a.replace('rgb', 'rgba')
+      a1 = a1.replace(')', ', 255)')
+      colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)})
     }
 
   })
@@ -315,7 +318,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
             const color = _colors[i].color
             // console.log('%ccolor', 'color: lime', color)
             if (value >= low && value <= hi) {
-              retVal = parseColor(color)
+              retVal = analizarElColor(color)
             }
           }
 
@@ -329,7 +332,7 @@ colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
         }
       }
 
-      function parseColor(input) {
+      function analizarElColor(input) {
         // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
         return input.replace(/[a-z%\s()]/g, '').split(',')
       }
