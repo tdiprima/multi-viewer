@@ -94,12 +94,7 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 // CREATE COLOR PICKER INPUT
 function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
-  let colorCode
-  if (colorLowHi !== null) {
-    colorCode = colorLowHi.color
-  } else {
-    colorCode = 'rgba(255, 255, 255, 255)'
-  }
+  let colorCode = colorLowHi.color
   m.innerHTML = `#${rgba2hex(colorCode)}` // hex
   m.style.backgroundColor = colorCode // rgba
 
@@ -108,11 +103,9 @@ function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
-    if (colorLowHi !== null) {
-      // alpha value is between 0 and 1
-      // convert to 0 to 255 for openseadragon
-      colorLowHi.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-    }
+    // alpha value is between 0 and 1
+    // convert to 0 to 255 for openseadragon
+    colorLowHi.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
     setFilter(layers, viewer)
   })
 
@@ -163,12 +156,12 @@ function setFilter(layers, viewer) {
 function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   let x = e('input', {
     id: id,
-    'type': 'number',
-    'min': '0',
-    'max': '255',
+    type: 'number',
+    min: '0',
+    max: '255',
     step: '1',
-    value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString(),
-    size: 5
+    size: '5',
+    value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
   // todo: Validation needs to be revised
@@ -239,10 +232,10 @@ function clearError(a, b) {
 // EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
 function extraRow(uniq, colors, layers, viewer) {
   let idx = colors.length
-  let cpEl = createColorPicker(idx, uniq, null, layers, viewer)
-  // todo: evt handlers
-  let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
-  let num2 = e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
+  let colorLowHi = { color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0 }
+  let cpEl = createColorPicker(idx, uniq, colorLowHi, layers, viewer)
+  let num1 = createNumericInput(`low${uniq}${idx}`, uniq, layers, colorLowHi, colors, viewer)
+  let num2 = createNumericInput(`hi${uniq}${idx}`, uniq, layers, colorLowHi, colors, viewer)
   let addBtn = e('i', {class: 'fas fa-plus pointer'})
 
   let tr = e('tr', {}, [
@@ -253,13 +246,14 @@ function extraRow(uniq, colors, layers, viewer) {
   ])
 
   addBtn.addEventListener('click', function () {
+    // todo: if we successfully add it, then the + needs to turn into a - so they could remove it
     clearError(num1, num2)
-    if (num1.value === '' || num2.value === '') {
-      if (num1.value === '') {
+    if (num1.value === '0' || num2.value === '0') {
+      if (num1.value === '0') {
         num1.style.outlineStyle = 'solid'
         num1.style.outlineColor = 'red'
       }
-      if (num2.value === '') {
+      if (num2.value === '0') {
         num2.style.outlineStyle = 'solid'
         num2.style.outlineColor = 'red'
       }
@@ -269,6 +263,7 @@ function extraRow(uniq, colors, layers, viewer) {
       let a1 = a.replace('rgb', 'rgba')
       a1 = a1.replace(')', ', 255)')
       colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)})
+      console.log('%chere', 'color: darkseagreen;')
     }
 
   })
