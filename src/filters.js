@@ -25,32 +25,35 @@ function createUI(uniq, div, layer, layers, viewer) {
     table.appendChild(createHeaderRow())
 
     layer.colors.forEach(function (colorLowHi, cIdx) {
-      let cpCell = createColorPickerCell(cIdx, uniq, colorLowHi, layers, viewer)
+      let cpEl = createColorPicker(cIdx, uniq, colorLowHi, layers, viewer)
       let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorLowHi, layer.colors, viewer)
       let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorLowHi, layer.colors, viewer)
       let removeBtn = e('i', {class: 'fas fa-minus pointer'})
 
       let tr = e('tr', {}, [
-        e('td', {}, [cpCell]),
+        e('td', {}, [cpEl]),
         e('td', {}, [num1]),
         e('td', {}, [num2]),
         e('td', {}, [removeBtn])
       ])
       table.appendChild(tr)
 
-      // todo: 
-      // let rgb = cpCell.firstChild.style.backgroundColor // rgb
+      let modRgb = cpEl.style.backgroundColor
+      let modNum1 = num1.value
+      let modNum2 = num2.value
+      let ourRanges = layer.colors
       removeBtn.addEventListener('click', function () {
-        // let lay = layer.colors
-        // console.log('%clay', 'color: yellow', Array.isArray(lay))
-        // console.log('%clay', 'color: deeppink', lay)
-        // for (let i = 0; i < lay.length; i++) {
-        //   let rgba = lay[i].color
-          // if (rgba.truncated === rgb && num1 and num2 match the ones from this <tr>) {
-          // that's the one; remove it
-          //   break
-          // }
-        // }
+        for (let i = 0; i < ourRanges.length; i++) {
+          let r = ourRanges[i]
+          let a = parseColor(r.color)
+          let a1 = [a[0], a[1], a[2]]
+          let b = parseColor(modRgb)
+          if (arraysEqual(a1, b) && r.low === parseInt(modNum1) && r.hi === parseInt(modNum2)) {
+            // that's the one; remove it
+            layer.colors.splice(i, 1)
+            break
+          }
+        }
         tr.remove()
       })
 
@@ -95,7 +98,7 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
 
 // CREATE COLOR PICKER INPUT
-function createColorPickerCell(cIdx, uniq, colorLowHi, layers, viewer) {
+function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
   let colorCode
   if (colorLowHi !== null) {
@@ -119,7 +122,8 @@ function createColorPickerCell(cIdx, uniq, colorLowHi, layers, viewer) {
     setFilter(layers, viewer)
   })
 
-  return e('td', {}, [m])
+  // return e('td', {}, [m])
+  return m
 }
 
 function rgba2hex(orig) {
@@ -240,21 +244,21 @@ function clearError(a, b) {
 
 // EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
 function extraRow(uniq, idx, layers, viewer) {
-  let cpCell = createColorPickerCell(idx, uniq, null, layers, viewer)
+  let cpEl = createColorPicker(idx, uniq, null, layers, viewer)
   // todo: evt handlers
   let num1 = e('input', {id: `low${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   let num2 = e('input', {id: `hi${uniq}${idx}`, type: 'number', min: '0', max: '255', step: '1', size: '5'})
   let addBtn = e('i', {class: 'fas fa-plus pointer'})
 
   let tr = e('tr', {}, [
-    e('td', {}, [cpCell]),
+    e('td', {}, [cpEl]),
     e('td', {}, [num1]),
     e('td', {}, [num2]),
     e('td', {}, [addBtn])
   ])
 
   addBtn.addEventListener('click', function () {
-    clearError(num1, num2)
+    // clearError(num1, num2) todo arrrggghhh
     if (num1.value === '' || num2.value === '') {
       if (num1.value === '') {
         num1.style.outlineStyle = 'solid'
