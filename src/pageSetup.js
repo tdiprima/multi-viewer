@@ -12,6 +12,16 @@
  */
 const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
+  let styles = [
+    'color: #5efe18',
+    'background: #fcfc0d',
+    'font-size: 30px',
+    'border: 1px solid #ff2722',
+    'text-shadow: 2px 2px #ff2722',
+    'padding: 6px',
+    'border-radius:5px'
+  ].join(';')
+  console.log('%cMulti-Viewer', styles);
 
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
