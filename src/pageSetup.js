@@ -18,7 +18,7 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
   let styles = [
     'color: #f0ed00',
     'background: #010101',
-    'font-size: 30px',
+    'font-size: 20px',
     'border: 1px solid #ff3111',
     'text-shadow: 2px 2px #ff3111',
     'padding: 6px',
