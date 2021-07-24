@@ -15,39 +15,40 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     table.appendChild(tr)
 
     // Feature (draggable)
-    let feat = e('span', {class: 'layer_tab', id: `${layerNum}${makeId(5, 'feat')}`, draggable: 'true', display: 'block'})
+    let feat = e('span', {
+      class: 'layer_tab',
+      id: `${layerNum}${makeId(5, 'feat')}`,
+      draggable: 'true',
+      display: 'block'
+    })
 
     let loc = layer.location
-    // fetch(loc)
-    //   .then(response => response.json())
-    //   .then(d => feat.innerHTML = d.prefLabel ? d.prefLabel : getStringRep(loc))
-
-    // Fetch the preferred label
-    if (loc.includes('info.json')) {
-      fetch(loc)
-        .then(response => response.json())
-        .then(function (d) {
-          if (d.prefLabel) {
-            feat.innerHTML = d.prefLabel
-            // TODO: temporary hack until we get prefLabel:
-          } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-            feat.innerHTML = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
-          } else if (loc.includes('TCGA')) {
-            if (loc.match(regex) !== null)
-              feat.innerHTML = loc.match(regex)[0]
-            else
-              feat.innerHTML = getStringRep(loc)
-          } else {
-            feat.innerHTML = getStringRep(loc)
-          }
-        })
+    if (typeof layer.prefLabel !== 'undefined') {
+      feat.innerHTML = layer.prefLabel
+      // TODO: temporary hack until we get prefLabel:
+    } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
+      let name = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+      feat.innerHTML = name
+      layer.prefLabel = name
+    } else if (loc.includes('TCGA')) {
+      if (loc.match(regex) !== null) {
+        let name = loc.match(regex)[0]
+        feat.innerHTML = name
+        layer.prefLabel = name
+      } else {
+        let name = getStringRep(loc)
+        feat.innerHTML = name
+        layer.prefLabel = name
+      }
     } else {
       feat.innerHTML = 'Feature'
+      layer.prefLabel = 'Feature'
     }
+
     tr.appendChild(e('td', {}, [feat]))
 
     // eyeball visibility toggle
-    faEye = e('i', { id: makeId(5, 'eye'), class: layer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
+    faEye = e('i', {id: makeId(5, 'eye'), class: layer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
     tr.appendChild(e('td', {}, [faEye]))
 
     // transparency slider
@@ -58,7 +59,14 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     faAdjust.style.cursor = 'pointer'
     let div = e('div', {class: 'showDiv'}, [faAdjust])
 
-    let range = e('input', {type: 'range', id: makeId(5, 'range'), min: '0', max: '100', step: '0.1', value: (layer.opacity * 100).toString()})
+    let range = e('input', {
+      type: 'range',
+      id: makeId(5, 'range'),
+      min: '0',
+      max: '100',
+      step: '0.1',
+      value: (layer.opacity * 100).toString()
+    })
     range.addEventListener('input', function () {
       const worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
@@ -87,7 +95,8 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     if (layerNum > 0) {
       let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
       tr.appendChild(e('td', {}, [palette]))
-      let colorsUI = filters(palette, layer, itemsToBeDisplayed, viewer)
+      // let colorsUI = filters(palette, layer, itemsToBeDisplayed, viewer)
+      let colorsUI = filters(palette, layer.prefLabel, layer.colors, itemsToBeDisplayed, viewer)
       palette.addEventListener('click', function (e) {
         colorsUI.style.display = 'block'
       })

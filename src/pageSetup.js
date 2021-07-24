@@ -11,13 +11,16 @@
  * @param opts: Multi-viewer options; paintbrush, etc. TODO: revisit options.
  */
 const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
+  // numViewers = 2
+  // rows = 1
+  // columns = 2
   let viewers = [] // eslint-disable-line prefer-const
   let styles = [
-    'color: #5efe18',
-    'background: #fcfc0d',
+    'color: #f0ed00',
+    'background: #010101',
     'font-size: 30px',
-    'border: 1px solid #ff2722',
-    'text-shadow: 2px 2px #ff2722',
+    'border: 1px solid #ff3111',
+    'text-shadow: 2px 2px #ff3111',
     'padding: 6px',
     'border-radius:5px'
   ].join(';')

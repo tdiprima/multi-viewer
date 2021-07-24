@@ -149,38 +149,23 @@ const e = (name, properties = {}, children = []) => {
   return element
 }
 
-function parseColor(input) {
-  let m
-  m = input.match(/^#([0-9a-f]{3})$/i) // 3-char format
-  if (m) {
-    m = m[1]
-    return [
-      parseInt(m.charAt(0), 16) * 0x11,
-      parseInt(m.charAt(1), 16) * 0x11,
-      parseInt(m.charAt(2), 16) * 0x11
-    ]
+// github scijs/almost-equal
+const abs = Math.abs
+const min = Math.min
+function almostEqual(a, b, absoluteError, relativeError) {
+  const d = abs(a - b)
+  if (absoluteError == null) absoluteError = almostEqual.DBL_EPSILON
+  if (relativeError == null) relativeError = absoluteError
+  if (d <= absoluteError) {
+    return true
   }
-  m = input.match(/^#([0-9a-f]{6})$/i) // 6-char format
-  if (m) {
-    m = m[1]
-    return [
-      parseInt(m.substr(0, 2), 16),
-      parseInt(m.substr(2, 2), 16),
-      parseInt(m.substr(4, 2), 16)
-    ]
+  if (d <= relativeError * min(abs(a), abs(b))) {
+    return true
   }
-  m = input.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i) // rgb
-  if (m) {
-    return [m[1], m[2], m[3]]
-  }
-
-  m = input.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i) // rgba
-  if (m) {
-    return [m[1], m[2], m[3], m[4]]
-  }
+  return a === b
 }
+almostEqual.DBL_EPSILON = 2.2204460492503131e-16
 
-function arraysEqual(a1, a2) {
-  // Arrays must not contain {...} or behavior may be undefined
-  return JSON.stringify(a1) === JSON.stringify(a2);
+function colorToArray(input) {
+  return input.replace(/[a-z%\s()]/g, '').split(',')
 }

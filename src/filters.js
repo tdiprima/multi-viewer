@@ -1,26 +1,26 @@
-const filters = function (paletteBtn, layer, layers, viewer) {
+const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
   const rect = paletteBtn.getBoundingClientRect()
-  const div = createDraggableDiv(id, 'Color Levels', rect.left, rect.top)
-  createUI(identifier, div.lastChild, layer, layers, viewer)
+  const div = createDraggableDiv(id, `${prefLabel} color levels`, rect.left, rect.top)
+  createUI(identifier, div.lastChild, layerColors, layers, viewer)
   return div
 }
 
 // CREATE USER INTERFACE
-function createUI(uniq, div, layer, layers, viewer) {
+function createUI(uniq, div, layerColors, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
 
-  if (layer.colors) {
-    layer.colors.sort((a, b) => b.low - a.low)
+  if (layerColors) {
+    layerColors.sort((a, b) => b.low - a.low)
 
     table.appendChild(createHeaderRow())
 
-    layer.colors.forEach(function (colorLowHi, cIdx) {
+    layerColors.forEach(function (colorLowHi, cIdx) {
       let cpEl = createColorPicker(cIdx, uniq, colorLowHi, layers, viewer)
-      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorLowHi, layer.colors, viewer)
-      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorLowHi, layer.colors, viewer)
+      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorLowHi, layerColors, viewer)
+      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorLowHi, layerColors, viewer)
       let removeBtn = e('i', {class: 'fas fa-minus pointer'})
 
       let tr = e('tr', {}, [
@@ -31,30 +31,52 @@ function createUI(uniq, div, layer, layers, viewer) {
       ])
       table.appendChild(tr)
 
-      let modRgb = cpEl.style.backgroundColor
-      let modNum1 = num1.value
-      let modNum2 = num2.value
-      let ourRanges = layer.colors
+      // TODO:
       removeBtn.addEventListener('click', function () {
-        // Make sure we remove the right one from the list
-        for (let i = 0; i < ourRanges.length; i++) {
-          let r = ourRanges[i]
-          let a = parseColor(r.color)
-          let a1 = [a[0], a[1], a[2]]
-          let b = parseColor(modRgb)
-          if (arraysEqual(a1, b) && r.low === parseInt(modNum1) && r.hi === parseInt(modNum2)) {
-            // that's the one; remove it
-            layer.colors.splice(i, 1)
-            break
-          }
-        }
-        tr.remove()
+        removeColor(layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer)
       })
 
     })
 
-    table.appendChild(extraRow(uniq, layer.colors, layers, viewer))
+    table.appendChild(extraRow(uniq, layerColors, layers, viewer))
   }
+}
+
+// work in progress
+function matchmaker(ourRgb, modRgb) {
+  let arr = colorToArray(ourRgb)
+  let arr1 = colorToArray(modRgb)
+
+  // check the first 3
+  let match = arr[0] === arr1[0] && arr[1] === arr1[1] && arr[2] === arr1[2]
+  if (!match) {
+    return false
+  }
+
+  if (arr.length === 4 && arr1.length === 4) {
+    return almostEqual(arr[3], (arr1[3] * 255), 0.1)
+  }
+
+  // If we've gotten this far, it's ok.
+  return match
+}
+
+function removeColor(ourRanges, modRgb, modNum1, modNum2, tr, layers, viewer) {
+  // Make sure we remove the right one from the list
+  for (let i = 0; i < ourRanges.length; i++) {
+    let r = ourRanges[i]
+    let arrEq = matchmaker(r.color, modRgb)
+    if (arrEq && r.low === parseInt(modNum1) && r.hi === parseInt(modNum2)) {
+      // that's the one; remove it
+      ourRanges.splice(i, 1)
+      // sort
+      ourRanges.sort((a, b) => b.low - a.low)
+      // reflect changes in viewer
+      setFilter(layers, viewer)
+      break
+    }
+  }
+  tr.remove()
 }
 
 // CREATE SORTABLE HEADER ROW
@@ -95,21 +117,18 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
   let colorCode = colorLowHi.color
-  m.innerHTML = `#${rgba2hex(colorCode)}` // hex
-  m.style.backgroundColor = colorCode // rgba
+  m.style.backgroundColor = colorCode
+  m.innerHTML = `#${rgba2hex(colorCode)}`
 
   const picker = new CP(m)
   picker.on('change', function (r, g, b, a) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
-    // alpha value is between 0 and 1
-    // convert to 0 to 255 for openseadragon
     colorLowHi.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
     setFilter(layers, viewer)
   })
 
-  // return e('td', {}, [m])
   return m
 }
 
@@ -137,7 +156,7 @@ function setFilter(layers, viewer) {
   const itemCount = viewer.world.getItemCount()
   const filterOpts = []
   for (let i = 0; i < itemCount; i++) {
-    if (i > 0) {
+    if (i > 0 && typeof layers[i].colors !== 'undefined') {
       filterOpts.push({
         items: viewer.world.getItemAt(i),
         processors: [
@@ -170,6 +189,7 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   // })
 
   x.addEventListener('input', function () {
+    clearError(x) // Clear any previous errors
     const intVal = parseInt(this.value)
 
     // If they set it to something outside of 0-255, reset it
@@ -188,7 +208,7 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
 }
 
 /*
-// todo: needs to be revised
+// todo: validation needs to be updated
 function isIntersect(uniq, len) {
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
@@ -225,14 +245,16 @@ function setError(a, b) {
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
-  b.style.outlineStyle = ''
-  b.style.outlineColor = ''
+  if (typeof b !== 'undefined') {
+    b.style.outlineStyle = ''
+    b.style.outlineColor = ''
+  }
 }
 
 // EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
 function extraRow(uniq, colors, layers, viewer) {
   let idx = colors.length
-  let generic = { color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0 }
+  let generic = {color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0}
   let cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
   let num1 = createNumericInput(`low${uniq}${idx}`, uniq, layers, generic, colors, viewer)
   let num2 = createNumericInput(`hi${uniq}${idx}`, uniq, layers, generic, colors, viewer)
@@ -247,28 +269,29 @@ function extraRow(uniq, colors, layers, viewer) {
 
   addBtn.addEventListener('click', function () {
     clearError(num1, num2)
-    if (num1.value === '0' || num2.value === '0') {
-      if (num1.value === '0') {
-        num1.style.outlineStyle = 'solid'
-        num1.style.outlineColor = 'red'
-      }
-      if (num2.value === '0') {
-        num2.style.outlineStyle = 'solid'
-        num2.style.outlineColor = 'red'
-      }
+    if (num1.value === '0' && num2.value === '0') {
+      num1.style.outlineStyle = 'solid'
+      num1.style.outlineColor = 'red'
+      num2.style.outlineStyle = 'solid'
+      num2.style.outlineColor = 'red'
     } else {
       // add to list
       let a = cpEl.style.backgroundColor // we get rgb back from CP
       let a1 = a.replace('rgb', 'rgba') // we need rgba
       a1 = a1.replace(')', ', 255)') // give it default alpha
       colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
-
       // sort
       colors.sort((a, b) => b.low - a.low)
+      // reflect changes in viewer
+      setFilter(layers, viewer)
 
       // + becomes -
-      // let removeBtn = e('i', {class: 'fas fa-minus pointer'})
-      tr.lastChild.innerHTML = '<i class="fas fa-minus pointer"></i>' // todo: add evt listener
+      let removeBtn = e('i', {class: 'fas fa-minus pointer'})
+      tr.lastChild.firstChild.remove()
+      tr.lastChild.appendChild(removeBtn)
+      removeBtn.addEventListener('click', function () {
+        removeColor(colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer)
+      })
 
       // add another empty row
       const table = tr.closest('table')
@@ -280,73 +303,47 @@ function extraRow(uniq, colors, layers, viewer) {
 }
 
 // CUSTOM FILTER IMPLEMENTATION
-let colorFilter = OpenSeadragon.Filters.GREYSCALE
-colorFilter.prototype.COLORLEVELS = data => (context, callback) => {
-  if (context.canvas.width > 0 && context.canvas.height > 0) {
+var colorFilter = OpenSeadragon.Filters.GREYSCALE;
+colorFilter.prototype.COLORLEVELS = function (data) {
+  return function (context, callback) {
     // Read the canvas pixels
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    if (typeof imgData !== 'undefined') {
-      try {
-        const pxl = imgData.data // Uint8ClampedArray
-        let j
-        for (j = 0; j < pxl.length; j += 4) {
-          if (pxl[j + 3] === 255) {
-            const rgba = levels(pxl[j], data) // r = g = b
-            if (typeof rgba === 'undefined') {
-              console.warn('rgba undefined', pxl[j])
-            }
-            pxl[j] = rgba[0]
-            pxl[j + 1] = rgba[1]
-            pxl[j + 2] = rgba[2]
-            pxl[j + 3] = rgba[3]
-          } else {
-            // No nuclear material: set to transparent.
-            pxl[j + 3] = 0
-          }
-        }
-      } catch (err) {
-        console.warn('1:', err.message)
-      }
+    var imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    var pxl = imgData.data; // Uint8ClampedArray
 
-      function levels(value, _colors) {
-        try {
-          let i
-          let retVal
-          for (i = 0; i < _colors.length; i++) {
-            const low = _colors[i].low
-            const hi = _colors[i].hi
-            const color = _colors[i].color
-            if (value >= low && value <= hi) {
-              retVal = analizarElColor(color)
-            }
-          }
-
-          if (typeof retVal === 'undefined') {
-            return value
-          } else {
-            return retVal
-          }
-        } catch (err) {
-          console.warn('2:', err.message)
-        }
-      }
-
-      function analizarElColor(input) {
-        // Input: rgba(r, g, b, a) => Output: [r, g, b, a]
-        return input.replace(/[a-z%\s()]/g, '').split(',')
-      }
-
-      try {
-        context.putImageData(imgData, 0, 0)
-        callback()
-      } catch (err) {
-        console.warn('3:', err.message)
-      }
-    } else {
-      console.warn('imgData undefined')
+    var arr = [];
+    for (var i = 0; i < data.length; i++) {
+      arr.push(colorToArray(data[i].color));
     }
-  } else {
-    colorFilter = null
-    console.warn('Canvas width and height are 0. Setting filter to null')
-  }
-}
+
+    for (var j = 0; j < pxl.length; j += 4) {
+      if (pxl[j + 3] === 255) {
+        var rgba = levels(pxl[j], data, arr); // r = g = b
+        pxl[j] = rgba[0];
+        pxl[j + 1] = rgba[1];
+        pxl[j + 2] = rgba[2];
+        pxl[j + 3] = rgba[3];
+      } else {
+        // No nuclear material: set to transparent.
+        pxl[j + 3] = 0;
+      }
+    }
+
+    function levels(value, _colors) {
+      var retVal = void 0;
+      for (var _i = 0; _i < _colors.length; _i++) {
+        var low = _colors[_i].low;
+        var hi = _colors[_i].hi;
+        // const color = _colors[i].color
+        if (value >= low && value <= hi) {
+          retVal = arr[_i];
+          return arr[_i];
+        }
+      }
+      // if we are here, then no match
+      return [0, 0, 0, 0];
+    }
+
+    context.putImageData(imgData, 0, 0);
+    callback();
+  };
+};

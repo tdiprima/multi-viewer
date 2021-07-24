@@ -28,26 +28,7 @@ class ImageViewer {
         color: "rgb(150, 150, 150)",
         fontColor: "rgb(100, 100, 100)",
         backgroundColor: "rgba(255, 255, 255, 0.5)",
-        // fontSize: "small",
         barThickness: 2
-      })
-    }
-
-    // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
-    let item = itemsToBeDisplayed[0].location
-
-    // Check our image url for info.json
-    if (item.includes('info.json')) {
-      // Get info for scale bar
-      let fetchAsync = async function () {
-        return (await fetch(item)).json()
-      }
-      fetchAsync().then(function (d) {
-        if (d['resolutionUnit'] === 3) {
-          setScaleBar(d['xResolution'] * 100)
-        } else {
-          console.warn('Handle resolution unit', d['resolutionUnit'])
-        }
       })
     }
 
@@ -95,6 +76,7 @@ class ImageViewer {
       let filterOpts = []
       // Gather what we're doing for each layer
       for (let i = 0; i < itemCount; i++) {
+        //if (typeof itemsToBeDisplayed[i].colors !== 'undefined') {
         if (i > 0) { // except the base
           filterOpts.push({
             items: viewer.world.getItemAt(i),
@@ -113,15 +95,29 @@ class ImageViewer {
 
     viewer.world.addHandler('add-item', ({item}) => {
       const itemIndex = viewer.world.getIndexOfItem(item)
+      let tiledImage = viewer.world.getItemAt(itemIndex)
+      let source = tiledImage.source
       if (itemIndex > 0) {
         // CONFIGURE OUR CUSTOM TILE SOURCES
         viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }
+        itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
+      } else {
+        itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
+        itemsToBeDisplayed[itemIndex].resolutionUnit = source.resolutionUnit
+        itemsToBeDisplayed[itemIndex].xResolution = source.xResolution
       }
       // COLOR FILTER
       if (viewer.world.getItemCount() === itemsToBeDisplayed.length) {
         setFilter()
+        let item = itemsToBeDisplayed[0]
+        // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
+        if (item.resolutionUnit === 3) {
+          setScaleBar(item.xResolution * 100)
+        } else {
+          console.warn('Handle resolution unit', item.resolutionUnit)
+        }
       }
     })
 
