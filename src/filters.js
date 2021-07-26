@@ -303,21 +303,20 @@ function extraRow(uniq, colors, layers, viewer) {
 }
 
 // CUSTOM FILTER IMPLEMENTATION
-var colorFilter = OpenSeadragon.Filters.GREYSCALE;
+let colorFilter = OpenSeadragon.Filters.GREYSCALE;
 colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
   return function (context, callback) {
     // Read the canvas pixels
-    var imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    var pxl = imgData.data; // Uint8ClampedArray
+    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    let pxl = imgData.data; // Uint8ClampedArray
 
-    var arr = [];
-    for (var i = 0; i < layerColorRanges.length; i++) {
-      arr.push(colorToArray(layerColorRanges[i].color));
-    }
+    let colorArr = layerColorRanges.map(function(element){
+      return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
+    });
 
-    for (var j = 0; j < pxl.length; j += 4) {
+    for (let j = 0; j < pxl.length; j += 4) {
       if (pxl[j + 3] === 255) {
-        var rgba = levels(pxl[j], layerColorRanges, arr); // r = g = b
+        let rgba = levels(pxl[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
         pxl[j] = rgba[0];
         pxl[j + 1] = rgba[1];
         pxl[j + 2] = rgba[2];
@@ -328,13 +327,12 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
       }
     }
 
-    function levels(value, _colors) {
-      for (var _i = 0; _i < _colors.length; _i++) {
-        var low = _colors[_i].low;
-        var hi = _colors[_i].hi;
-        // const color = _colors[i].color
+    function levels(value, _colors, colorArr) {
+      for (let _i = 0; _i < _colors.length; _i++) {
+        let low = _colors[_i].low;
+        let hi = _colors[_i].hi;
         if (value >= low && value <= hi) {
-          return arr[_i];
+          return colorArr[_i]; // return color
         }
       }
       // if we are here, then no match
