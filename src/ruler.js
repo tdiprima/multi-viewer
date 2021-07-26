@@ -4,7 +4,9 @@ const ruler = function (button, viewer, overlay) {
   let endx = 0.0
   let starty = 0.0
   let endy = 0.0
-  let lineLength = 0.0
+  let length_in_px = 0.0
+  let actual_pixels = 0.0
+  let length_in_microns = 0.0
   let color = '#b3f836'
   const fontSize = 15
   let zoom
@@ -25,7 +27,9 @@ const ruler = function (button, viewer, overlay) {
     endx = 0.0
     starty = 0.0
     endy = 0.0
-    lineLength = 0.0
+    length_in_px = 0.0
+    actual_pixels = 0.0
+    length_in_microns = 0.0
   }
 
   function mouseDownHandler(o) {
@@ -67,11 +71,11 @@ const ruler = function (button, viewer, overlay) {
 
     if (mode === 'draw') {
       // Show info while drawing line
-      lineLength = Calculate.lineLength(startx, starty, endx, endy) * pix_per_micron * PDR
-      text = new fabric.Text(` Length ${lineLength.toFixed(2)} \u00B5`, {
+      length_in_microns = Calculate.lineLength(startx, starty, endx, endy)
+      text = new fabric.Text(` Length ${length_in_microns.toFixed(3)} \u00B5`, {
         left: endx,
         top: endy,
-        fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
+        fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(3),
         selectable: false,
         evented: false,
         name: 'ruler'
@@ -92,7 +96,7 @@ const ruler = function (button, viewer, overlay) {
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
-      console.log('%clineLength', 'color: darkseagreen;', `${lineLength.toFixed(2)} \u00B5`)
+      console.log(`%clength_in_microns: ${length_in_microns.toFixed(3)}`, 'color: orange;')
       canvas.add(new fabric.Rect({
         left: left,
         top: top,
@@ -141,8 +145,10 @@ const ruler = function (button, viewer, overlay) {
     lineLength: function (x1, y1, x2, y2) {
       let a = x1 - x2;
       let b = y1 - y2;
-      let c = Math.sqrt(a * a + b * b); // c is the distance
-      return c;
+      length_in_px = Math.sqrt(a * a + b * b);
+      actual_pixels = length_in_px * PDR
+      length_in_microns = actual_pixels * pix_per_micron
+      return length_in_microns;
     }
   }
 }

@@ -12,7 +12,6 @@
  */
 const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
-
   document.addEventListener('DOMContentLoaded', function () {
     new Promise(function (resolve, reject) {
       return resolve(opts)
@@ -84,7 +83,7 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
 <button id="btnEdit${idx}" class="btn" title="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
 <button id="btnGrid${idx}" class="btn" title="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
 <button id="btnGridMarker${idx}" class="btn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
-<button id="btnRuler${idx}" class="btn" title="Ruler"><i class="fas fa-ruler"></i></button>&nbsp;
+<button id="btnRuler${idx}" class="btn" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
 <button id="btnBlender${idx}" class="btn" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
 
