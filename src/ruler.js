@@ -142,7 +142,7 @@ const ruler = function (button, viewer, overlay) {
       let a = x1 - x2;
       let b = y1 - y2;
       let c = Math.sqrt(a * a + b * b); // c is the distance
-      return c * PDR;
+      return c;
     }
   }
 }
