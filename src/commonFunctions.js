@@ -169,3 +169,6 @@ almostEqual.DBL_EPSILON = 2.2204460492503131e-16
 function colorToArray(input) {
   return input.replace(/[a-z%\s()]/g, '').split(',')
 }
+
+let PDR = OpenSeadragon.pixelDensityRatio
+let pix_per_micron = 4 // default; actual value set later

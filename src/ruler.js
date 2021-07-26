@@ -1,4 +1,3 @@
-let PDR = OpenSeadragon.pixelDensityRatio;
 const ruler = function (button, viewer, overlay) {
   let line, isDown
   let startx = 0.0
@@ -68,8 +67,8 @@ const ruler = function (button, viewer, overlay) {
 
     if (mode === 'draw') {
       // Show info while drawing line
-      lineLength = Calculate.lineLength(startx, starty, endx, endy).toFixed(2)
-      text = new fabric.Text(` Length ${lineLength * 4} \u00B5`, {
+      lineLength = Calculate.lineLength(startx, starty, endx, endy) * pix_per_micron * PDR
+      text = new fabric.Text(` Length ${lineLength.toFixed(2)} \u00B5`, {
         left: endx,
         top: endy,
         fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
@@ -93,7 +92,7 @@ const ruler = function (button, viewer, overlay) {
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
-      console.log('%clineLength', 'color: darkseagreen;', `${lineLength * 4} \u00B5`)
+      console.log('%clineLength', 'color: darkseagreen;', `${lineLength.toFixed(2)} \u00B5`)
       canvas.add(new fabric.Rect({
         left: left,
         top: top,
