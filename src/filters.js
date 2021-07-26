@@ -329,9 +329,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
 
     function levels(value, _colors, colorArr) {
       for (let _i = 0; _i < _colors.length; _i++) {
-        let low = _colors[_i].low;
-        let hi = _colors[_i].hi;
-        if (value >= low && value <= hi) {
+        if (value >= _colors[_i].low && value <= _colors[_i].hi) {
           return colorArr[_i]; // return color
         }
       }
