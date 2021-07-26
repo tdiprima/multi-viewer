@@ -304,20 +304,20 @@ function extraRow(uniq, colors, layers, viewer) {
 
 // CUSTOM FILTER IMPLEMENTATION
 var colorFilter = OpenSeadragon.Filters.GREYSCALE;
-colorFilter.prototype.COLORLEVELS = function (data) {
+colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
   return function (context, callback) {
     // Read the canvas pixels
     var imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     var pxl = imgData.data; // Uint8ClampedArray
 
     var arr = [];
-    for (var i = 0; i < data.length; i++) {
-      arr.push(colorToArray(data[i].color));
+    for (var i = 0; i < layerColorRanges.length; i++) {
+      arr.push(colorToArray(layerColorRanges[i].color));
     }
 
     for (var j = 0; j < pxl.length; j += 4) {
       if (pxl[j + 3] === 255) {
-        var rgba = levels(pxl[j], data, arr); // r = g = b
+        var rgba = levels(pxl[j], layerColorRanges, arr); // r = g = b
         pxl[j] = rgba[0];
         pxl[j + 1] = rgba[1];
         pxl[j + 2] = rgba[2];
