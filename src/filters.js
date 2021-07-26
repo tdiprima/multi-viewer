@@ -329,13 +329,11 @@ colorFilter.prototype.COLORLEVELS = function (data) {
     }
 
     function levels(value, _colors) {
-      var retVal = void 0;
       for (var _i = 0; _i < _colors.length; _i++) {
         var low = _colors[_i].low;
         var hi = _colors[_i].hi;
         // const color = _colors[i].color
         if (value >= low && value <= hi) {
-          retVal = arr[_i];
           return arr[_i];
         }
       }
