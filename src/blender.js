@@ -37,7 +37,7 @@ let blender = function (blenderBtn, viewer) {
           let topImage = viewer.world.getItemAt(count - 1) // Blend all
           topImage.setCompositeOperation(blendBtn.value)
         } catch (e) {
-          console.log(e.message)
+          console.log(`%c${e.message}`, 'color: #ff6a5a;')
         }
       })
     })
