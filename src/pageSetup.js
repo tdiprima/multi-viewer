@@ -8,7 +8,7 @@
  * @param columns: LAYOUT: Number of columns (of viewers)
  * @param width: Viewer width
  * @param height: Viewer height
- * @param opts: Multi-viewer options; paintbrush, etc. TODO: revisit options.
+ * @param opts: Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
   let viewers = [] // eslint-disable-line prefer-const
