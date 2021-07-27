@@ -31,7 +31,6 @@ function createUI(uniq, div, layerColors, layers, viewer) {
       ])
       table.appendChild(tr)
 
-      // TODO:
       removeBtn.addEventListener('click', function () {
         removeColor(layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer)
       })
