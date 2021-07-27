@@ -96,7 +96,7 @@ const ruler = function (button, viewer, overlay) {
     // Make sure user actually drew a line
     if (endx > 0) {
       // Show end result
-      console.log(`%clength_in_microns: ${length_in_microns.toFixed(3)}`, 'color: orange;')
+      console.log(`%clength_in_microns: ${length_in_microns.toFixed(3)}`, `color: ${color};`)
       canvas.add(new fabric.Rect({
         left: left,
         top: top,
