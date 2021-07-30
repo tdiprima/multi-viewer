@@ -1,3 +1,27 @@
+function setFilter(layers, viewer) {
+  if (viewer.world) {
+    // SET COLOR FILTER
+    let itemCount = viewer.world.getItemCount()
+    let filterOpts = []
+    // Gather what we're doing for each layer
+    for (let i = 0; i < itemCount; i++) {
+      if (i > 0 && typeof layers[i].colors !== 'undefined') {
+        filterOpts.push({
+          items: viewer.world.getItemAt(i),
+          processors: [
+            colorFilter.prototype.COLORLEVELS(layers[i].colors)
+          ]
+        })
+      }
+    }
+    // Set all layers at once (required)
+    viewer.setFilterOptions({
+      filters: filterOpts,
+      loadMode: 'sync'
+    })
+  }
+}
+
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0)
   element.classList.toggle(class1)

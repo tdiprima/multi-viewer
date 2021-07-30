@@ -151,25 +151,6 @@ function rgba2hex(orig) {
   return hex
 }
 
-function setFilter(layers, viewer) {
-  const itemCount = viewer.world.getItemCount()
-  const filterOpts = []
-  for (let i = 0; i < itemCount; i++) {
-    if (i > 0 && typeof layers[i].colors !== 'undefined') {
-      filterOpts.push({
-        items: viewer.world.getItemAt(i),
-        processors: [
-          colorFilter.prototype.COLORLEVELS(layers[i].colors)
-        ]
-      })
-    }
-  }
-  viewer.setFilterOptions({
-    filters: filterOpts,
-    loadMode: 'sync'
-  })
-}
-
 // CREATE NUMERIC INPUT
 function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   let x = e('input', {
@@ -200,7 +181,6 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     } else {
       colorLowHi.hi = intVal
     }
-
     setFilter(layers, viewer)
   })
   return x

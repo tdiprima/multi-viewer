@@ -74,7 +74,7 @@ class ImageViewer {
     // DO ONCE
     viewer.addOnceHandler('tile-loaded', function () {
       addCustomButtons()
-      setFilter()
+      setFilter(itemsToBeDisplayed, viewer)
       getInfoForScalebar()
     })
 
@@ -131,29 +131,6 @@ class ImageViewer {
       } else {
         console.warn('Handle resolution unit', item.resolutionUnit)
       }
-    }
-
-    function setFilter() {
-      // SET COLOR FILTER
-      let itemCount = viewer.world.getItemCount()
-      let filterOpts = []
-      // Gather what we're doing for each layer
-      for (let i = 0; i < itemCount; i++) {
-        //if (typeof itemsToBeDisplayed[i].colors !== 'undefined') {
-        if (i > 0) { // except the base
-          filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [
-              colorFilter.prototype.COLORLEVELS(itemsToBeDisplayed[i].colors)
-            ]
-          })
-        }
-      }
-      // Set all layers at once (required)
-      viewer.setFilterOptions({
-        filters: filterOpts,
-        loadMode: 'sync'
-      })
     }
 
     this.viewer = viewer // SET THIS VIEWER
