@@ -16,49 +16,6 @@ class ImageViewer {
       imageLoaderLimit: 1
     })
 
-    // SET UP SCALE BAR
-    let setScaleBar = function (ppm) {
-      viewer.scalebar({
-        type: OpenSeadragon.ScalebarType.MICROSCOPY,
-        pixelsPerMeter: ppm,
-        location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
-        xOffset: 5,
-        yOffset: 10,
-        stayInsideImage: true,
-        color: "rgb(150, 150, 150)",
-        fontColor: "rgb(100, 100, 100)",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
-        barThickness: 2
-      })
-    }
-
-    // CUSTOM ZOOM BUTTONS
-    viewer.addOnceHandler('tile-loaded', function () {
-      let dir = '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
-      let zinButton = new OpenSeadragon.Button({
-        tooltip: 'Zoom to 100%',
-        srcRest: dir + 'zin_rest.png',
-        srcGroup: dir + 'zin_grouphover.png',
-        srcHover: dir + 'zin_hover.png',
-        srcDown: dir + 'zin_pressed.png',
-        onClick: function () {
-          viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
-        }
-      })
-      let zoutButton = new OpenSeadragon.Button({
-        tooltip: 'Zoom to 0%',
-        srcRest: dir + 'zout_rest.png',
-        srcGroup: dir + 'zout_grouphover.png',
-        srcHover: dir + 'zout_hover.png',
-        srcDown: dir + 'zout_pressed.png',
-        onClick: function () {
-          viewer.viewport.goHome(true)
-        }
-      })
-      viewer.addControl(zinButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
-      viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
-    })
-
     // LOAD IMAGES INTO THE VIEWER
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
       viewer.addTiledImage({
@@ -69,56 +26,20 @@ class ImageViewer {
       })
     }
 
-    function setFilter() {
-      // SET COLOR FILTER
-      let itemCount = viewer.world.getItemCount()
-      let filterOpts = []
-      // Gather what we're doing for each layer
-      for (let i = 0; i < itemCount; i++) {
-        //if (typeof itemsToBeDisplayed[i].colors !== 'undefined') {
-        if (i > 0) { // except the base
-          filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [
-              colorFilter.prototype.COLORLEVELS(itemsToBeDisplayed[i].colors)
-            ]
-          })
-        }
-      }
-      // Set all layers at once (required)
-      viewer.setFilterOptions({
-        filters: filterOpts,
-        loadMode: 'sync'
-      })
-    }
-
     viewer.world.addHandler('add-item', ({item}) => {
       const itemIndex = viewer.world.getIndexOfItem(item)
-      let tiledImage = viewer.world.getItemAt(itemIndex)
-      let source = tiledImage.source
+      let source = viewer.world.getItemAt(itemIndex).source
       if (itemIndex > 0) {
         // CONFIGURE OUR CUSTOM TILE SOURCES
-        viewer.world.getItemAt(itemIndex).source.getTileUrl = function (level, x, y) {
+        source.getTileUrl = function (level, x, y) {
           return getIIIFTileUrl(this, level, x, y)
         }
-        itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
+        // ADD INFO TO OUR ITEMS
+        itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel // set prefLabel
       } else {
         itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
         itemsToBeDisplayed[itemIndex].resolutionUnit = source.resolutionUnit
         itemsToBeDisplayed[itemIndex].xResolution = source.xResolution
-      }
-      // COLOR FILTER
-      if (viewer.world.getItemCount() === itemsToBeDisplayed.length) {
-        setFilter()
-        let item = itemsToBeDisplayed[0]
-        // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
-        if (item.resolutionUnit === 3) {
-          let pix_per_cm = item.xResolution
-          setScaleBar(pix_per_cm * 100)
-          pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
-        } else {
-          console.warn('Handle resolution unit', item.resolutionUnit)
-        }
       }
     })
 
@@ -148,6 +69,91 @@ class ImageViewer {
         region = [tileX, tileY, tileW, tileH].join(',')
       }
       return [source['@id'], region, size, ROTATION, quality].join('/')
+    }
+
+    // DO ONCE
+    viewer.addOnceHandler('tile-loaded', function () {
+      addCustomButtons()
+      setFilter()
+      getInfoForScalebar()
+    })
+
+    function addCustomButtons() {
+      let dir = '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
+      let zinButton = new OpenSeadragon.Button({
+        tooltip: 'Zoom to 100%',
+        srcRest: dir + 'zin_rest.png',
+        srcGroup: dir + 'zin_grouphover.png',
+        srcHover: dir + 'zin_hover.png',
+        srcDown: dir + 'zin_pressed.png',
+        onClick: function () {
+          viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
+        }
+      })
+      let zoutButton = new OpenSeadragon.Button({
+        tooltip: 'Zoom to 0%',
+        srcRest: dir + 'zout_rest.png',
+        srcGroup: dir + 'zout_grouphover.png',
+        srcHover: dir + 'zout_hover.png',
+        srcDown: dir + 'zout_pressed.png',
+        onClick: function () {
+          viewer.viewport.goHome(true)
+        }
+      })
+      viewer.addControl(zinButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+      viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+    }
+
+    // SET UP SCALE BAR
+    let setScaleBar = function (ppm) {
+      viewer.scalebar({
+        type: OpenSeadragon.ScalebarType.MICROSCOPY,
+        pixelsPerMeter: ppm,
+        location: OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+        xOffset: 5,
+        yOffset: 10,
+        stayInsideImage: true,
+        color: "rgb(150, 150, 150)",
+        fontColor: "rgb(100, 100, 100)",
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        barThickness: 2
+      })
+    }
+
+    function getInfoForScalebar() {
+      // Get info for scalebar
+      let item = itemsToBeDisplayed[0]
+      // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
+      if (item.resolutionUnit === 3) {
+        let pix_per_cm = item.xResolution
+        setScaleBar(pix_per_cm * 100)
+        pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
+      } else {
+        console.warn('Handle resolution unit', item.resolutionUnit)
+      }
+    }
+
+    function setFilter() {
+      // SET COLOR FILTER
+      let itemCount = viewer.world.getItemCount()
+      let filterOpts = []
+      // Gather what we're doing for each layer
+      for (let i = 0; i < itemCount; i++) {
+        //if (typeof itemsToBeDisplayed[i].colors !== 'undefined') {
+        if (i > 0) { // except the base
+          filterOpts.push({
+            items: viewer.world.getItemAt(i),
+            processors: [
+              colorFilter.prototype.COLORLEVELS(itemsToBeDisplayed[i].colors)
+            ]
+          })
+        }
+      }
+      // Set all layers at once (required)
+      viewer.setFilterOptions({
+        filters: filterOpts,
+        loadMode: 'sync'
+      })
     }
 
     this.viewer = viewer // SET THIS VIEWER
