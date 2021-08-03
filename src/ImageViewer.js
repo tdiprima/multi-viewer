@@ -9,11 +9,7 @@ class ImageViewer {
     // SET UP VIEWER
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
-      prefixUrl: '/multi-viewer/vendor/openseadragon/images/', /* WICKET ENVI */
-      crossOriginPolicy: 'Anonymous',
-      immediateRender: true,
-      animationTime: 0,
-      imageLoaderLimit: 1
+      prefixUrl: '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
     })
 
     // LOAD IMAGES INTO THE VIEWER
