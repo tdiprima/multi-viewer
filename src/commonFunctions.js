@@ -196,3 +196,4 @@ function colorToArray(input) {
 
 let PDR = OpenSeadragon.pixelDensityRatio
 let pix_per_micron = 4 // default; actual value set later
+let microns_per_pix = 0.25 // ditto
