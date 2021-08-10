@@ -41,8 +41,7 @@ function createUI(uniq, div, layerColors, layers, viewer) {
   }
 }
 
-// work in progress
-function matchmaker(ourRgb, modRgb) {
+function isMatch(ourRgb, modRgb) {
   let arr = colorToArray(ourRgb)
   let arr1 = colorToArray(modRgb)
 
@@ -56,7 +55,7 @@ function matchmaker(ourRgb, modRgb) {
     return almostEqual(arr[3], (arr1[3] * 255), 0.1)
   }
 
-  // If we've gotten this far, it's ok.
+  // It's ok if we've gotten this far
   return match
 }
 
@@ -64,7 +63,7 @@ function removeColor(ourRanges, modRgb, modNum1, modNum2, tr, layers, viewer) {
   // Make sure we remove the right one from the list
   for (let i = 0; i < ourRanges.length; i++) {
     let r = ourRanges[i]
-    let arrEq = matchmaker(r.color, modRgb)
+    let arrEq = isMatch(r.color, modRgb)
     if (arrEq && r.low === parseInt(modNum1) && r.hi === parseInt(modNum2)) {
       // that's the one; remove it
       ourRanges.splice(i, 1)
