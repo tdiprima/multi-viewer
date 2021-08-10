@@ -59,9 +59,16 @@ let ruler = function (button, viewer, overlay) {
     }
   }
 
-  function length(a, b) {
+  function difference(a, b) {
     return Math.abs(a - b);
   }
+
+  function getHypotenuseLength(a, b, mpp) { 
+    if (a && b && Number.isFinite(a) && Number.isFinite(b)) {  
+        return Math.sqrt((a * a * mpp * mpp) + (b * b * mpp * mpp))
+    } 
+    throw 'Invalid numbers'
+  } 
 
   function mouseMoveHandler(o) {
     canvas.remove(fText) // remove text element before re-adding it
@@ -71,9 +78,10 @@ let ruler = function (button, viewer, overlay) {
     let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
     let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
     oEndImg = imgPoint
-    let w = length(oStartImg.x, oEndImg.x)
-    let h = length(oStartImg.y, oEndImg.y)
-    let t = valueWithUnit(Math.sqrt(w * w * microns_per_pix * microns_per_pix + h * h * microns_per_pix * microns_per_pix))
+    let w = difference(oStartImg.x, oEndImg.x)
+    let h = difference(oStartImg.y, oEndImg.y)
+    let hypot = getHypotenuseLength(w, h, microns_per_pix)
+    let t = valueWithUnit(hypot)
     // console.log(`%c${t}`, 'color: yellow;')
     let pointer = canvas.getPointer(event)
     line.set({x2: pointer.x, y2: pointer.y})
@@ -116,9 +124,10 @@ let ruler = function (button, viewer, overlay) {
     canvas.remove(fText)
     isDown = false
     let event = o.e
-    let width = length(oStartImg.x, oEndImg.x)
-    let height = length(oStartImg.y, oEndImg.y)
-    let text = valueWithUnit(Math.sqrt(width * width * microns_per_pix * microns_per_pix + height * height * microns_per_pix * microns_per_pix))
+    let width = difference(oStartImg.x, oEndImg.x)
+    let height = difference(oStartImg.y, oEndImg.y)
+    let hypot = getHypotenuseLength(width, height, microns_per_pix)
+    let text = valueWithUnit(hypot)
     // console.log(`%c${text}`, 'color: orange;')
     let pointer = canvas.getPointer(event)
     let left = pointer.x
