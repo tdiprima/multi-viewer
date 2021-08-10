@@ -125,7 +125,7 @@ class ImageViewer {
         setScaleBar(pix_per_cm * 100)
         pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
         microns_per_pix = 10000 / pix_per_cm
-        console.log(`%cmpp: ${microns_per_pix}`, 'color: yellow;')
+        // console.log(`%cmpp: ${microns_per_pix}`, 'color: yellow;')
       } else {
         console.warn('Handle resolution unit', item.resolutionUnit)
       }
