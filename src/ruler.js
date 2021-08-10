@@ -65,8 +65,10 @@ let ruler = function (button, viewer, overlay) {
   function getHypotenuseLength(a, b, mpp) {
     if (a && b && Number.isFinite(a) && Number.isFinite(b)) {
       return Math.sqrt((a * a * mpp * mpp) + (b * b * mpp * mpp))
+    } else {
+      throw 'Invalid numbers'
     }
-    throw 'Invalid numbers'
+    
   }
 
   function mouseMoveHandler(o) {
