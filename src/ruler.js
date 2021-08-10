@@ -7,9 +7,7 @@ let ruler = function (button, viewer, overlay) {
   let fText
   let fStart = {x: 0, y: 0}
   let fEnd = {x: 0, y: 0}
-  let oStartClient = {x: 0, y: 0}
-  let oEndClient = {x: 0, y: 0}
-  let oStart, oEnd
+  let oStartImg, oEndImg
 
   let canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
@@ -25,10 +23,6 @@ let ruler = function (button, viewer, overlay) {
     fEnd.x = 0.0
     fStart.y = 0.0
     fEnd.y = 0.0
-    oStartClient.x = 0.0
-    oEndClient.x = 0.0
-    oStartClient.y = 0.0
-    oEndClient.y = 0.0
   }
 
   function mouseDownHandler(o) {
@@ -38,10 +32,10 @@ let ruler = function (button, viewer, overlay) {
       setOsdMove(false)
       isDown = true
       let event = o.e
+
       let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
       let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
-      oStart = imgPoint
-      oStartClient = new OpenSeadragon.Point(event.clientX, event.clientY)
+      oStartImg = imgPoint
 
       let pointer = canvas.getPointer(event)
       let points = [pointer.x, pointer.y, pointer.x, pointer.y]
@@ -76,18 +70,16 @@ let ruler = function (button, viewer, overlay) {
     let event = o.e
     let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
     let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
-    oEnd = imgPoint
-    oEndClient = new OpenSeadragon.Point(event.clientX, event.clientY)
-    // let w = length(oStartClient.x, oEndClient.x)
-    // let h = length(oStartClient.y, oEndClient.y)
-    // let t = valueWithUnit(Math.sqrt(w * w * microns_per_pix * microns_per_pix + h * h * microns_per_pix * microns_per_pix))
-    // console.log(`%c${t}`, 'color: yellow;')
+    oEndImg = imgPoint
+    let w = length(oStartImg.x, oEndImg.x)
+    let h = length(oStartImg.y, oEndImg.y)
+    let t = valueWithUnit(Math.sqrt(w * w * microns_per_pix * microns_per_pix + h * h * microns_per_pix * microns_per_pix))
+    console.log(`%c${t}`, 'color: yellow;')
     let pointer = canvas.getPointer(event)
     line.set({x2: pointer.x, y2: pointer.y})
     fEnd.x = pointer.x
     fEnd.y = pointer.y
 
-    /*
     if (mode === 'draw') {
       // Show info while drawing line
       fText = new fabric.Text(t, {
@@ -99,18 +91,33 @@ let ruler = function (button, viewer, overlay) {
         name: 'ruler'
       })
       canvas.add(fText)
-    }*/
+    }
 
     canvas.renderAll()
+  }
+
+  function valueWithUnit(value) {
+    if (value < 0.000001) {
+      return `${(value * 1000000000).toFixed(3)} fm`
+    }
+    if (value < 0.001) {
+      return `${(value * 1000000).toFixed(3)} pm`
+    }
+    if (value < 1) {
+      return `${(value * 1000).toFixed(3)} nm`
+    }
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(3)} mm`
+    }
+    return `${(value).toFixed(3)} \u00B5m`
   }
 
   function mouseUpHandler(o) {
     canvas.remove(fText)
     isDown = false
     let event = o.e
-    let width = length(oStart.x, oEnd.x)
-    let height = length(oStart.y, oEnd.y)
-    // console.log(width, height)
+    let width = length(oStartImg.x, oEndImg.x)
+    let height = length(oStartImg.y, oEndImg.y)
     let text = valueWithUnit(Math.sqrt(width * width * microns_per_pix * microns_per_pix + height * height * microns_per_pix * microns_per_pix))
     console.log(`%c${text}`, 'color: orange;')
     let pointer = canvas.getPointer(event)
@@ -144,22 +151,6 @@ let ruler = function (button, viewer, overlay) {
       }))
       canvas.renderAll()
     }
-  }
-
-  function valueWithUnit(value) {
-    if (value < 0.000001) {
-      return `${(value * 1000000000).toFixed(3)} fm`
-    }
-    if (value < 0.001) {
-      return `${(value * 1000000).toFixed(3)} pm`
-    }
-    if (value < 1) {
-      return `${(value * 1000).toFixed(3)} nm`
-    }
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(3)} mm`
-    }
-    return `${(value).toFixed(3)} \u00B5m`
   }
 
   button.addEventListener('click', function () {
