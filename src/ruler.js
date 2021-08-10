@@ -1,19 +1,17 @@
-const ruler = function (button, viewer, overlay) {
+let ruler = function (button, viewer, overlay) {
   let line, isDown
-  let startx = 0.0
-  let endx = 0.0
-  let starty = 0.0
-  let endy = 0.0
-  let length_in_px = 0.0
-  let actual_pixels = 0.0
-  let length_in_microns = 0.0
   let color = '#b3f836'
-  const fontSize = 15
+  let fontSize = 15
   let zoom
   let mode = 'x'
-  let text
+  let fText
+  let fStart = {x: 0, y: 0}
+  let fEnd = {x: 0, y: 0}
+  let oStartClient = {x: 0, y: 0}
+  let oEndClient = {x: 0, y: 0}
+  let oStart, oEnd
 
-  let canvas = this.__canvas = overlay.fabricCanvas()
+  let canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
 
   function setOsdMove(myBool) {
@@ -23,13 +21,14 @@ const ruler = function (button, viewer, overlay) {
   }
 
   function clear() {
-    startx = 0.0
-    endx = 0.0
-    starty = 0.0
-    endy = 0.0
-    length_in_px = 0.0
-    actual_pixels = 0.0
-    length_in_microns = 0.0
+    fStart.x = 0.0
+    fEnd.x = 0.0
+    fStart.y = 0.0
+    fEnd.y = 0.0
+    oStartClient.x = 0.0
+    oEndClient.x = 0.0
+    oStartClient.y = 0.0
+    oEndClient.y = 0.0
   }
 
   function mouseDownHandler(o) {
@@ -38,10 +37,16 @@ const ruler = function (button, viewer, overlay) {
     if (mode === 'draw') {
       setOsdMove(false)
       isDown = true
-      let pointer = canvas.getPointer(o.e)
+      let event = o.e
+      let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
+      let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
+      oStart = imgPoint
+      oStartClient = new OpenSeadragon.Point(event.clientX, event.clientY)
+
+      let pointer = canvas.getPointer(event)
       let points = [pointer.x, pointer.y, pointer.x, pointer.y]
-      startx = pointer.x
-      starty = pointer.y
+      fStart.x = pointer.x
+      fStart.y = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / zoom,
         stroke: color,
@@ -60,43 +65,62 @@ const ruler = function (button, viewer, overlay) {
     }
   }
 
+  function length(a, b) {
+    return Math.abs(a - b);
+  }
+
   function mouseMoveHandler(o) {
-    canvas.remove(text) // remove text element before re-adding it
+    canvas.remove(fText) // remove text element before re-adding it
     canvas.renderAll()
     if (!isDown) return
-    let pointer = canvas.getPointer(o.e)
+    let event = o.e
+    let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
+    let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
+    oEnd = imgPoint
+    oEndClient = new OpenSeadragon.Point(event.clientX, event.clientY)
+    // let w = length(oStartClient.x, oEndClient.x)
+    // let h = length(oStartClient.y, oEndClient.y)
+    // let t = valueWithUnit(Math.sqrt(w * w * microns_per_pix * microns_per_pix + h * h * microns_per_pix * microns_per_pix))
+    // console.log(`%c${t}`, 'color: yellow;')
+    let pointer = canvas.getPointer(event)
     line.set({x2: pointer.x, y2: pointer.y})
-    endx = pointer.x
-    endy = pointer.y
+    fEnd.x = pointer.x
+    fEnd.y = pointer.y
 
+    /*
     if (mode === 'draw') {
       // Show info while drawing line
-      length_in_microns = Calculate.lineLength(startx, starty, endx, endy)
-      text = new fabric.Text(` Length ${length_in_microns.toFixed(3)} \u00B5`, {
-        left: endx,
-        top: endy,
+      fText = new fabric.Text(t, {
+        left: fEnd.x,
+        top: fEnd.y,
         fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(3),
         selectable: false,
         evented: false,
         name: 'ruler'
       })
-      canvas.add(text)
-    }
+      canvas.add(fText)
+    }*/
 
     canvas.renderAll()
   }
 
   function mouseUpHandler(o) {
-    canvas.remove(text)
+    canvas.remove(fText)
     isDown = false
-    let pointer = canvas.getPointer(o.e)
+    let event = o.e
+    let width = length(oStart.x, oEnd.x)
+    let height = length(oStart.y, oEnd.y)
+    // console.log(width, height)
+    let text = valueWithUnit(Math.sqrt(width * width * microns_per_pix * microns_per_pix + height * height * microns_per_pix * microns_per_pix))
+    console.log(`%c${text}`, 'color: orange;')
+    let pointer = canvas.getPointer(event)
     let left = pointer.x
     let top = pointer.y
 
     // Make sure user actually drew a line
-    if (endx > 0) {
+    if (fEnd.x > 0) {
       // Show end result
-      console.log(`%clength_in_microns: ${length_in_microns.toFixed(3)}`, `color: ${color};`)
+      console.log(`%clength: ${text}`, `color: ${color};`)
       canvas.add(new fabric.Rect({
         left: left,
         top: top,
@@ -110,7 +134,7 @@ const ruler = function (button, viewer, overlay) {
         evented: false,
         name: 'ruler'
       }))
-      canvas.add(new fabric.Text(text.text, {
+      canvas.add(new fabric.Text(text, {
         fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
         left: left,
         top: top,
@@ -120,6 +144,22 @@ const ruler = function (button, viewer, overlay) {
       }))
       canvas.renderAll()
     }
+  }
+
+  function valueWithUnit(value) {
+    if (value < 0.000001) {
+      return `${(value * 1000000000).toFixed(3)} fm`
+    }
+    if (value < 0.001) {
+      return `${(value * 1000000).toFixed(3)} pm`
+    }
+    if (value < 1) {
+      return `${(value * 1000).toFixed(3)} nm`
+    }
+    if (value >= 1000) {
+      return `${(value / 1000).toFixed(3)} mm`
+    }
+    return `${(value).toFixed(3)} \u00B5m`
   }
 
   button.addEventListener('click', function () {
@@ -141,14 +181,4 @@ const ruler = function (button, viewer, overlay) {
     toggleButton(button, 'btnOn', 'btn')
   })
 
-  let Calculate = {
-    lineLength: function (x1, y1, x2, y2) {
-      let a = x1 - x2;
-      let b = y1 - y2;
-      length_in_px = Math.sqrt(a * a + b * b);
-      actual_pixels = length_in_px * PDR
-      length_in_microns = actual_pixels * pix_per_micron
-      return length_in_microns;
-    }
-  }
 }
