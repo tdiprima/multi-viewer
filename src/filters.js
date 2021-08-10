@@ -163,9 +163,9 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   })
 
   // todo: Validation needs to be revised
-  // x.addEventListener('change', function () {
-  //   isIntersect(uniq, colors.length)
-  // })
+  x.addEventListener('change', function () {
+    isIntersect(uniq, colors.length)
+  })
 
   x.addEventListener('input', function () {
     clearError(x) // Clear any previous errors
@@ -185,7 +185,6 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   return x
 }
 
-/*
 // todo: validation needs to be updated
 function isIntersect(uniq, len) {
   // Clear all previous errors
@@ -213,13 +212,14 @@ function isIntersect(uniq, len) {
   // If we reach here, then no overlap
   return false
 }
+
 function setError(a, b) {
   a.style.outlineStyle = 'solid'
   a.style.outlineColor = 'red'
   b.style.outlineStyle = 'solid'
   b.style.outlineColor = 'red'
 }
- */
+
 function clearError(a, b) {
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
