@@ -7,7 +7,7 @@ let ruler = function (button, viewer, overlay) {
   let fText
   let fStart = {x: 0, y: 0}
   let fEnd = {x: 0, y: 0}
-  let oStartImg, oEndImg
+  let oStart, oEnd
 
   let canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
@@ -34,8 +34,7 @@ let ruler = function (button, viewer, overlay) {
       let event = o.e
 
       let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
-      let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
-      oStartImg = imgPoint
+      oStart = viewer.viewport.windowToImageCoordinates(webPoint)
 
       let pointer = canvas.getPointer(event)
       let points = [pointer.x, pointer.y, pointer.x, pointer.y]
@@ -76,10 +75,9 @@ let ruler = function (button, viewer, overlay) {
     if (!isDown) return
     let event = o.e
     let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
-    let imgPoint = viewer.viewport.windowToImageCoordinates(webPoint)
-    oEndImg = imgPoint
-    let w = difference(oStartImg.x, oEndImg.x)
-    let h = difference(oStartImg.y, oEndImg.y)
+    oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
+    let w = difference(oStart.x, oEnd.x)
+    let h = difference(oStart.y, oEnd.y)
     let hypot = getHypotenuseLength(w, h, microns_per_pix)
     let t = valueWithUnit(hypot)
     // console.log(`%c${t}`, 'color: yellow;')
@@ -124,8 +122,8 @@ let ruler = function (button, viewer, overlay) {
     canvas.remove(fText)
     isDown = false
     let event = o.e
-    let width = difference(oStartImg.x, oEndImg.x)
-    let height = difference(oStartImg.y, oEndImg.y)
+    let width = difference(oStart.x, oEnd.x)
+    let height = difference(oStart.y, oEnd.y)
     let hypot = getHypotenuseLength(width, height, microns_per_pix)
     let text = valueWithUnit(hypot)
     // console.log(`%c${text}`, 'color: orange;')
