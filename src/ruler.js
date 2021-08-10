@@ -34,7 +34,16 @@ let ruler = function (button, viewer, overlay) {
       let event = o.e
 
       let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
-      oStart = viewer.viewport.windowToImageCoordinates(webPoint)
+      // oStart = viewer.viewport.windowToImageCoordinates(webPoint)
+
+      try {
+        let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+        oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
+        // oStart = tiledImage.viewerElementToImageCoordinates(viewportPoint)
+        // console.log(`%cpt ${pt}`, 'color: deeppink;')
+      } catch (e) {
+        console.log(`%cHere we are. ${e.message}`, 'color: #ff6a5a;')
+      }
 
       let pointer = canvas.getPointer(event)
       let points = [pointer.x, pointer.y, pointer.x, pointer.y]
@@ -72,7 +81,17 @@ let ruler = function (button, viewer, overlay) {
     if (!isDown) return
     let event = o.e
     let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
-    oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
+    // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
+
+    try {
+      let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+      // oEnd = tiledImage.viewerElementToImageCoordinates(viewportPoint)
+      oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
+      // console.log(`%cpt ${pt}`, 'color: deeppink;')
+    } catch (e) {
+      console.log(`%cHere we are. ${e.message}`, 'color: #ff6a5a;')
+    }
+
     let w = difference(oStart.x, oEnd.x)
     let h = difference(oStart.y, oEnd.y)
     let hypot = getHypotenuseLength(w, h, microns_per_pix)

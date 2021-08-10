@@ -83,7 +83,8 @@ class ImageViewer {
         srcHover: dir + 'zin_hover.png',
         srcDown: dir + 'zin_pressed.png',
         onClick: function () {
-          viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
+          // viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
+          viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
       })
       let zoutButton = new OpenSeadragon.Button({
