@@ -39,8 +39,6 @@ let ruler = function (button, viewer, overlay) {
       try {
         let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
-        // oStart = tiledImage.viewerElementToImageCoordinates(viewportPoint)
-        // console.log(`%cpt ${pt}`, 'color: deeppink;')
       } catch (e) {
         console.log(`%cHere we are. ${e.message}`, 'color: #ff6a5a;')
       }
@@ -85,9 +83,7 @@ let ruler = function (button, viewer, overlay) {
 
     try {
       let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
-      // oEnd = tiledImage.viewerElementToImageCoordinates(viewportPoint)
       oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
-      // console.log(`%cpt ${pt}`, 'color: deeppink;')
     } catch (e) {
       console.log(`%cHere we are. ${e.message}`, 'color: #ff6a5a;')
     }
