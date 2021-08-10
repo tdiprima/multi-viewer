@@ -74,7 +74,7 @@ let ruler = function (button, viewer, overlay) {
     let w = length(oStartImg.x, oEndImg.x)
     let h = length(oStartImg.y, oEndImg.y)
     let t = valueWithUnit(Math.sqrt(w * w * microns_per_pix * microns_per_pix + h * h * microns_per_pix * microns_per_pix))
-    console.log(`%c${t}`, 'color: yellow;')
+    // console.log(`%c${t}`, 'color: yellow;')
     let pointer = canvas.getPointer(event)
     line.set({x2: pointer.x, y2: pointer.y})
     fEnd.x = pointer.x
@@ -119,7 +119,7 @@ let ruler = function (button, viewer, overlay) {
     let width = length(oStartImg.x, oEndImg.x)
     let height = length(oStartImg.y, oEndImg.y)
     let text = valueWithUnit(Math.sqrt(width * width * microns_per_pix * microns_per_pix + height * height * microns_per_pix * microns_per_pix))
-    console.log(`%c${text}`, 'color: orange;')
+    // console.log(`%c${text}`, 'color: orange;')
     let pointer = canvas.getPointer(event)
     let left = pointer.x
     let top = pointer.y
