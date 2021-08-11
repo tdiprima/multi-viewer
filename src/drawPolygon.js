@@ -1,12 +1,15 @@
 /**
  * Allow user to draw a polygon on the image.
- *
- * @param btnDraw: element that is clicked to get here
- * @param mark: HTML element; text which is marked or highlighted
+ * btnDraw: element that is clicked to get here
+ * mark: HTML element; text which is marked or highlighted
+ * @param idx
  * @param viewer: OSD viewer object
  * @param overlay: fabric overlay object
  */
-const drawPolygon = function (btnDraw, mark, viewer, overlay) {
+const drawPolygon = function (idx, viewer, overlay) {
+  let overlaycanvas = `osd-overlaycanvas-${idx+1}`
+  let btnDraw = document.getElementById('btnDraw' + idx)
+  let mark = document.getElementById('mark' + idx)
   const canvas = overlay.fabricCanvas()
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
@@ -26,11 +29,12 @@ const drawPolygon = function (btnDraw, mark, viewer, overlay) {
       turnDrawingOn(canvas, viewer, paintBrush, mark)
     }
   })
-}
+
 
 function turnDrawingOff(canvas, viewer) {
   canvas.isDrawingMode = false
   canvas.off('mouse:down', function () { setGestureSettings(canvas, viewer) })
+  viewer.gestureSettingsMouse.clickToZoom = true
   viewer.setMouseNavEnabled(true)
   viewer.outerTracker.setTracking(true)
 }
@@ -40,6 +44,7 @@ function turnDrawingOn(canvas, viewer, paintBrush, mark) {
   canvas.on('mouse:down', function () { setGestureSettings(canvas, viewer) })
   paintBrush.color = mark.innerHTML
   paintBrush.width = 10 / viewer.viewport.getZoom(true)
+  viewer.gestureSettingsMouse.clickToZoom = false
   viewer.setMouseNavEnabled(false)
   viewer.outerTracker.setTracking(false)
 }
@@ -72,9 +77,12 @@ function setupDeleteButton(canvas, viewer) {
     jQuery('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
-    let src = '/multi-viewer/images/delete-icon.png' /* WICKET ENVI */
-    const deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    jQuery('.canvas-container').append(deleteBtn)
+    let src
+    src = '/multi-viewer/images/delete-icon.png' /* WICKET ENVI */
+    // src = '../images/delete-icon.png'
+    let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
+    deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`);
+    document.getElementById(overlaycanvas).closest('.canvas-container').append(deleteBtn)
   }
 
   canvas.on('selection:created', function (e) { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
@@ -167,3 +175,4 @@ function weHoveredOverPolygon(pointerEvent) {
 //   })
 //   canvas.add(infoText)
 // }
+}
