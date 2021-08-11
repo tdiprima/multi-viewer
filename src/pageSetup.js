@@ -36,14 +36,22 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
       const num = rows * columns
       let count = 0
       for (r = 0; r < rows; r++) {
+        console.log(`%crow ${r}`, 'color: indigo;')
         const tr = table.insertRow(r)
         let c
         for (c = 0; c < columns; c++) {
+          console.log(`%ccol ${c}`, 'color: indigo;')
           const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
           let idx = count
           count++
+
+          if (numViewers < num && (count - 1 === numViewers)) {
+            // we've done our last viewer
+            break
+          }
+
           let container = e('div', {'class': 'divSquare'})
           container.style.width = width + 'px'
           td.appendChild(container) // ADD CONTAINER TO CELL
@@ -97,14 +105,8 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
           })
 
           let thisData = itemsToBeDisplayed[idx] // Images to be displayed in "this" viewer
-
           // Create MultiViewer object and add to array
           viewers.push(new MultiViewer({"idx": idx, "divId": osdId}, thisData, numViewers, opts))
-
-          if (numViewers < num && (count - 1 === numViewers)) {
-            // we've done our last viewer
-            break
-          }
         }
       }
 
