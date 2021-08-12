@@ -117,7 +117,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
 
   window.addEventListener('keydown', (e) => {
     const key = e.key.toLocaleLowerCase()
-    if ((key === 'escape' || key === 'esc' || e.keyCode === 27)) {
+    if (key === 'escape' || key === 'esc') {
       e.preventDefault()
       let buttons = document.getElementsByClassName('btnOn')
       for (let i = 0; i < buttons.length; i++) {
