@@ -11,12 +11,7 @@ let ruler = function (button, viewer, overlay) {
 
   let canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
-
-  function setOsdMove(myBool) {
-    viewer.setMouseNavEnabled(myBool)
-    viewer.outerTracker.setTracking(myBool)
-    viewer.gestureSettingsMouse.clickToZoom = myBool
-  }
+  // let canvas = this.__canvas = overlay.fabricCanvas()
 
   function clear() {
     fStart.x = 0.0
@@ -29,7 +24,7 @@ let ruler = function (button, viewer, overlay) {
     clear()
     zoom = viewer.viewport.getZoom(true)
     if (mode === 'draw') {
-      setOsdMove(false)
+      setOsdMove(viewer, false)
       isDown = true
       let event = o.e
 
@@ -58,7 +53,7 @@ let ruler = function (button, viewer, overlay) {
       })
       canvas.add(line)
     } else {
-      setOsdMove(true)
+      setOsdMove(viewer, true)
       canvas.forEachObject(function (o) {
         o.setCoords() // update coordinates
       })

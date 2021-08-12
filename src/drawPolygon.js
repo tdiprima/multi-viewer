@@ -34,9 +34,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   function turnDrawingOff(canvas, viewer) {
     canvas.isDrawingMode = false
     canvas.off('mouse:down', function () { setGestureSettings(canvas, viewer) })
-    viewer.gestureSettingsMouse.clickToZoom = true
-    viewer.setMouseNavEnabled(true)
-    viewer.outerTracker.setTracking(true)
+    setOsdMove(viewer, true)
   }
 
   function turnDrawingOn(canvas, viewer, paintBrush, mark) {
@@ -44,9 +42,7 @@ const drawPolygon = function (idx, viewer, overlay) {
     canvas.on('mouse:down', function () { setGestureSettings(canvas, viewer) })
     paintBrush.color = mark.innerHTML
     paintBrush.width = 10 / viewer.viewport.getZoom(true)
-    viewer.gestureSettingsMouse.clickToZoom = false
-    viewer.setMouseNavEnabled(false)
-    viewer.outerTracker.setTracking(false)
+    setOsdMove(viewer, false)
   }
 
   function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {

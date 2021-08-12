@@ -22,6 +22,12 @@ function setFilter(layers, viewer) {
   }
 }
 
+function setOsdMove(viewer, myBool) {
+  viewer.setMouseNavEnabled(myBool)
+  viewer.outerTracker.setTracking(myBool)
+  viewer.gestureSettingsMouse.clickToZoom = myBool
+}
+
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0)
   element.classList.toggle(class1)
