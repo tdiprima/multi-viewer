@@ -117,23 +117,20 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
 
   window.addEventListener('keydown', (e) => {
     const key = e.key.toLocaleLowerCase()
-    // abort, cancel, close
     if ((key === 'escape' || key === 'esc' || e.keyCode === 27)) {
       e.preventDefault()
-      for (let i = 0; i < viewers.length; i++) {
-        let v = viewers[i].getViewer()
-        let c = viewers[i].getCanvas()
-        let buttons = document.getElementsByClassName('btnOn')
-        for (let i = 0; i < buttons.length; i++) {
-          buttons[i].click()
-          setOsdMove(v, true)
-          // event handlers off
-        }
+      let buttons = document.getElementsByClassName('btnOn')
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].click()
       }
-      // if (e.ctrlKey && key === 'r') {
-      //   e.preventDefault()
-      //   console.log('r')
-      // }
+    }
+    if (e.ctrlKey && key === 'r') {
+      e.preventDefault()
+      for (let i = 0; i < viewers.length; i++) {
+        document.querySelectorAll('[id^="btnRuler"]').forEach(node => {
+          node.click()
+        })
+      }
     }
   })
 }
