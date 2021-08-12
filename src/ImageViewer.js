@@ -11,6 +11,8 @@ class ImageViewer {
       id: viewerInfo.divId,
       prefixUrl: '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
     })
+    let overlay = {}
+    let canvas = {}
 
     // LOAD IMAGES INTO THE VIEWER
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
@@ -133,11 +135,20 @@ class ImageViewer {
     }
 
     this.viewer = viewer // SET THIS VIEWER
-
+    this.overlay = this.viewer.fabricjsOverlay({ scale: 1000 })
+    this.canvas = this.overlay.fabricCanvas()
   }
 
   getViewer() {
     return this.viewer
+  }
+
+  getOverlay() {
+    return this.overlay
+  }
+
+  getCanvas() {
+    return this.canvas
   }
 
 }
