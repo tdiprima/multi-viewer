@@ -113,31 +113,18 @@ function handleDragLayers(viewer) {
   let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
-    item.addEventListener('dragstart', handleDragStart, false)
-    item.addEventListener('dragend', handleDragEnd, false)
+    item.addEventListener('dragstart', handleDragStart)
+    item.addEventListener('dragend', handleDragEnd)
   })
 
   // The viewer, basically
   items = document.querySelectorAll('.drop_site')
   items.forEach(function (item) {
-    item.addEventListener('dragenter', handleDragEnter, false)
-    item.addEventListener('dragleave', handleDragLeave, false)
-    item.addEventListener('dragover', handleDragOver, false)
-    item.addEventListener('drop', handleDrop, false)
+    item.addEventListener('dragenter', function () { this.classList.add('over') })
+    item.addEventListener('dragleave', function () { this.classList.remove('over') })
+    item.addEventListener('dragover', function (e) { if (e.preventDefault) e.preventDefault(); return false })
+    item.addEventListener('drop', handleDrop)
   })
-
-  function handleDragOver(e) {
-    if (e.preventDefault) e.preventDefault()
-    return false
-  }
-
-  function handleDragEnter(e) {
-    this.classList.add('over')
-  }
-
-  function handleDragLeave(e) {
-    this.classList.remove('over')
-  }
 
   function handleDragStart(e) {
     this.style.opacity = '0.4'
@@ -147,26 +134,23 @@ function handleDragLayers(viewer) {
     e.dataTransfer.setData('text', e.target.id)
   }
 
-  function handleDragEnd(e) {
+  function handleDragEnd() {
     this.style.opacity = '1'
     items.forEach(function (item) {
       item.classList.remove('over')
     })
   }
 
-  /************ HANDLE DROP ************/
   function handleDrop(e) {
     if (e.preventDefault) e.preventDefault()
 
     if (dragSrcEl !== this) {
-      // TARGET
+      // target
       const target = e.target
       const closestViewer = target.closest('.viewer')
-      if (!closestViewer) {
-        return false
-      }
+      if (!closestViewer) return false;
 
-      // DRAGGED ITEM
+      // dragged item
       let movedElemId = e.dataTransfer.getData('text')
       let tmpEl = document.getElementById(movedElemId)
       let tmpId = tmpEl.id
@@ -186,7 +170,6 @@ function handleDragLayers(viewer) {
           break
         }
       }
-
       // viewer
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
@@ -213,7 +196,6 @@ function eyeball(eye, range, layerNum, viewer) {
 
 function getViewerObject(element) {
   let retVal
-
   try {
     // syncedImageViewers = global variable set in synchronizeViewers.js
     let j
@@ -226,6 +208,5 @@ function getViewerObject(element) {
   } catch (e) {
     console.error('getViewerObject:', e.message)
   }
-
   return retVal
 }
