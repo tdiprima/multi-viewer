@@ -10,9 +10,9 @@
  * @param height: Viewer height
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
-const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) {
+const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) => {
   let viewers = [] // eslint-disable-line prefer-const
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', () => {
     new Promise(function (resolve) {
       return resolve(opts)
     }).then(function (opts) {
@@ -36,11 +36,9 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
       const num = rows * columns
       let count = 0
       for (r = 0; r < rows; r++) {
-        console.log(`%crow ${r}`, 'color: indigo;')
         const tr = table.insertRow(r)
         let c
         for (c = 0; c < columns; c++) {
-          console.log(`%ccol ${c}`, 'color: indigo;')
           const td = tr.insertCell(c)
           const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
           // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
@@ -117,4 +115,25 @@ const pageSetup = function (divId, itemsToBeDisplayed, numViewers, rows, columns
     })
   })
 
+  window.addEventListener('keydown', (e) => {
+    const key = e.key.toLocaleLowerCase()
+    // abort, cancel, close
+    if ((key === 'escape' || key === 'esc' || e.keyCode === 27)) {
+      e.preventDefault()
+      for (let i = 0; i < viewers.length; i++) {
+        let v = viewers[i].getViewer()
+        let c = viewers[i].getCanvas()
+        let buttons = document.getElementsByClassName('btnOn')
+        for (let i = 0; i < buttons.length; i++) {
+          buttons[i].click()
+          setOsdMove(v, true)
+          // event handlers off
+        }
+      }
+      // if (e.ctrlKey && key === 'r') {
+      //   e.preventDefault()
+      //   console.log('r')
+      // }
+    }
+  })
 }
