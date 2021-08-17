@@ -82,7 +82,7 @@
 /* FLOATING DIV */
 .popup {
   position: absolute;
-  z-index: 9;
+  z-index: 10;
   background-color: #f1f1f1;
   border: 1px solid var(--ltgray);
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
@@ -94,7 +94,7 @@
 .popupHeader {
   padding: 10px;
   cursor: move;
-  z-index: 10;
+  z-index: 20;
   background-color: var(--ltgray);
   font-weight: bold;
   color: var(--dkgray);
@@ -107,7 +107,7 @@
 }
 
 /* OVERRIDE WICKET NAVBAR */
-.navbar a:hover, .dropdown:hover .dropbtn {
+.navbar a:hover, .mag:hover .dropbtn {
   /* background-color: var(--hilite) !important; */
   background-color: var(--ltgray) !important;
   color: var(--dkgray) !important;
@@ -133,7 +133,7 @@
 
 .showDiv:hover .showHover {
   display: block;
-  z-index: 1002;
+  z-index: 30;
   position: absolute;
   overflow: hidden;
 }
@@ -203,4 +203,30 @@ a:link {
   padding: 2px;
   max-width: 100px;
   height: auto;
+}
+
+/* MAGNIFICATION */
+.mag-content {
+  display: none;
+  background-color: rgba(249, 249, 249, 0.5);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.mag-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.mag:hover .mag-content {
+  display: block;
+}
+
+.mag-content a:hover {
+  background-color: #ddd;
 }

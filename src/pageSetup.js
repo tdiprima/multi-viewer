@@ -80,7 +80,21 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
 <button id="btnGridMarker${idx}" class="btn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
 <button id="btnRuler${idx}" class="btn" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
 <button id="btnBlender${idx}" class="btn" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
-<button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button></div>`
+<button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
+<div class="mag" style="display: inline">
+  <button class="dropbtn btn">Magnify
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="mag-content">
+    <a href="#" id="1">1x</a>
+    <a href="#" id="10">10x</a>
+    <a href="#" id="20">20x</a>
+    <a href="#" id="40">40x</a>
+    <a href="#" id="80">80x</a>
+    <a href="#" id="100">100x</a>
+  </div>
+</div>
+</div>`
 
             // END
             htm += `</div></div>`
