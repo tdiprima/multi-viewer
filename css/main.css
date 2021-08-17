@@ -106,6 +106,7 @@
   color: white !important;
 }
 
+/* OVERRIDE WICKET NAVBAR */
 .navbar a:hover, .dropdown:hover .dropbtn {
   /* background-color: var(--hilite) !important; */
   background-color: var(--ltgray) !important;
