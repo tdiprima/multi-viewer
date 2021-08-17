@@ -175,7 +175,7 @@ let ruler = function (button, viewer, overlay) {
   button.addEventListener('click', function () {
     if (mode === 'draw') {
       // Turn off
-      canvas.remove(...canvas.getItemsByName('ruler')) // TODO: Make an X to remove.
+      canvas.remove(...canvas.getItemsByName('ruler'))
       // canvas.remove(...canvas.getObjects())
       mode = 'x'
       canvas.off('mouse:down', mouseDownHandler)
