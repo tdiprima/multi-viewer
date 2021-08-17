@@ -145,7 +145,7 @@ const mugshots = function (options) {
     //   })
     // )
 
-    // TODO: NOTE: With resizeCanvas override, use imageRect
+    // NOTE: With resizeCanvas override, use imageRect
     canvas.add(
       new fabric.Rect({
         stroke: options.roiColor,
