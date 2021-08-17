@@ -25,7 +25,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     let loc = layer.location
     if (typeof layer.prefLabel !== 'undefined') {
       feat.innerHTML = layer.prefLabel
-      // TODO: temporary hack until we get prefLabel:
+      // NOTE: temporary hack until we get prefLabel:
     } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
       let name = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
       feat.innerHTML = name
