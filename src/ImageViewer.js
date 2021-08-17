@@ -24,6 +24,14 @@ class ImageViewer {
       })
     }
 
+    let element = document.querySelector('.mag-content')
+    for (let i = 0; i < element.children.length; i++) {
+      let el = element.children[i]
+      el.addEventListener('click', function () {
+        viewer.viewport.zoomTo(parseInt(el.id))
+      })
+    }
+
     viewer.world.addHandler('add-item', ({item}) => {
       const itemIndex = viewer.world.getIndexOfItem(item)
       let source = viewer.world.getItemAt(itemIndex).source
