@@ -162,7 +162,6 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  // todo: validation
   x.addEventListener('change', function () {
     isIntersect(uniq, colors.length)
   })
@@ -185,7 +184,6 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   return x
 }
 
-// todo: validation
 function isIntersect(uniq, len) {
   // Clear all previous errors
   for (let i = 0; i < len; i++) {
