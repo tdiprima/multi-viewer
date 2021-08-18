@@ -28,7 +28,10 @@ class ImageViewer {
     for (let i = 0; i < element.children.length; i++) {
       let el = element.children[i]
       el.addEventListener('click', function () {
-        viewer.viewport.zoomTo(parseInt(el.id))
+        let attr = el.getAttribute('data-value')
+        let imageZoom = parseFloat(attr)
+        // console.log('imageZoom', imageZoom)
+        viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
       })
     }
 
@@ -93,7 +96,6 @@ class ImageViewer {
         srcHover: dir + 'zin_hover.png',
         srcDown: dir + 'zin_pressed.png',
         onClick: function () {
-          // viewer.viewport.zoomTo(viewer.viewport.imageToViewportZoom(1.0))
           viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
       })

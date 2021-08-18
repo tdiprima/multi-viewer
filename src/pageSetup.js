@@ -86,12 +86,13 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
   <i class="fas fa-search"></i>
   </button>
   <div class="mag-content">
-    <a href="#" id="1">1x</a>
-    <a href="#" id="10">10x</a>
-    <a href="#" id="20">20x</a>
-    <a href="#" id="40">40x</a>
-    <a href="#" id="80">80x</a>
-    <a href="#" id="100">100x</a>
+    <a href="#" data-value="0.025" id="1">1x</a>
+    <a href="#" data-value="0.05" id="2">2x</a>
+    <a href="#" data-value="0.1" id="4">4x</a>
+    <a href="#" data-value="0.2" id="8">8x</a>
+    <a href="#" data-value="0.25" id="10">10x</a>
+    <a href="#" data-value="0.5" id="20">20x</a>
+    <a href="#" data-value="1.0" id="40">40x</a>
   </div>
 </div>
 </div>`
