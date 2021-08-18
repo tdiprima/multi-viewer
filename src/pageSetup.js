@@ -82,8 +82,8 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
 <button id="btnBlender${idx}" class="btn" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 <div class="mag" style="display: inline">
-  <button class="dropbtn btn">Magnify
-    <i class="fa fa-caret-down"></i>
+  <button class="dropbtn btn">
+  <i class="fas fa-search"></i>
   </button>
   <div class="mag-content">
     <a href="#" id="1">1x</a>
