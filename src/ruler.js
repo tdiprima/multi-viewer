@@ -29,8 +29,6 @@ let ruler = function (button, viewer, overlay) {
       let event = o.e
 
       let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
-      // oStart = viewer.viewport.windowToImageCoordinates(webPoint)
-
       try {
         let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
@@ -87,7 +85,7 @@ let ruler = function (button, viewer, overlay) {
     let h = difference(oStart.y, oEnd.y)
     let hypot = getHypotenuseLength(w, h, microns_per_pix)
     let t = valueWithUnit(hypot)
-    // console.log(`%c${t}`, 'color: yellow;')
+    // console.log('t', t)
     let pointer = canvas.getPointer(event)
     line.set({x2: pointer.x, y2: pointer.y})
     fEnd.x = pointer.x
@@ -131,6 +129,7 @@ let ruler = function (button, viewer, overlay) {
   }
 
   function mouseUpHandler(o) {
+    line.setCoords()
     canvas.remove(fText)
     isDown = false
     let event = o.e
@@ -140,16 +139,16 @@ let ruler = function (button, viewer, overlay) {
     let text = valueWithUnit(hypot)
     // console.log(`%c${text}`, 'color: orange;')
     let pointer = canvas.getPointer(event)
-    let left = pointer.x
-    let top = pointer.y
+    let x = pointer.x
+    let y = pointer.y
 
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
       // Show end result
       console.log(`%clength: ${text}`, `color: ${color};`)
-      canvas.add(new fabric.Rect({
-        left: left,
-        top: top,
+      let rect = new fabric.Rect({
+        left: x,
+        top: y,
         width: 150 / zoom,
         height: 25 / zoom,
         rx: 5 / zoom,
@@ -159,15 +158,21 @@ let ruler = function (button, viewer, overlay) {
         selectable: false,
         evented: false,
         name: 'ruler'
-      }))
-      canvas.add(new fabric.Text(text, {
+      })
+      let t = new fabric.Text(text, {
         fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
-        left: left,
-        top: top,
+        left: x,
+        top: y,
         selectable: false,
         evented: false,
         name: 'ruler'
-      }))
+      })
+      const group = new fabric.Group([rect, t], {
+        left: x,
+        top: y
+      })
+      canvas.add(group)
+      // canvas.setActiveObject(group)
       canvas.renderAll()
     }
   }
