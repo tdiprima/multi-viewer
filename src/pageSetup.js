@@ -26,6 +26,19 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
         document.body.classList.toggle('dark-mode')
       })
 
+      // Slide name
+      let name
+      let slide = itemsToBeDisplayed[0][0].location
+      if (slide.includes('TCGA')) {
+        name = slide.match(/TCGA-[^%.]+/)[0]
+      } else {
+        let arr = slide.split('/')
+        name = arr[arr.length - 1]
+      }
+      let slideDiv = e('div', {'id': 'lala', 'style': 'top: 0; right: 0; position: fixed;'})
+      slideDiv.innerHTML = name
+      referenceNode.before(slideDiv)
+
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
       const table = e('table', {id: 'myTable'})
