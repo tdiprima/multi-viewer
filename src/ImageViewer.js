@@ -24,6 +24,7 @@ class ImageViewer {
         y: 0
       })
     }
+    const vpt = viewer.viewport
 
     let element = document.querySelector('.mag-content')
     for (let i = 0; i < element.children.length; i++) {
@@ -31,7 +32,7 @@ class ImageViewer {
       el.addEventListener('click', function () {
         let attr = el.getAttribute('data-value')
         let imageZoom = parseFloat(attr)
-        viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
+        vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
       })
     }
 
@@ -53,8 +54,8 @@ class ImageViewer {
     })
 
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
-      let zoom = viewer.viewport.getZoom()
-      let pan = viewer.viewport.getCenter()
+      let zoom = vpt.getZoom()
+      let pan = vpt.getCenter()
       prompt('Share this link:', `${location}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`)
     })
 
@@ -94,8 +95,21 @@ class ImageViewer {
       return [source['@id'], region, size, ROTATION, quality].join('/')
     }
 
+    function useParams(params) {
+      const zoom = vpt.getZoom()
+      const pan = vpt.getCenter()
+      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like HERE)
+      if (params.zoom !== undefined && params.zoom !== zoom) {
+        vpt.zoomTo(params.zoom, null, true)
+      }
+      if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
+        vpt.panTo(new $.Point(params.x, params.y), true)
+      }
+    }
+
     // DO ONCE
     viewer.addOnceHandler('tile-loaded', function () {
+      if (window.location.hash) { useParams(getHashParams()) }
       addCustomButtons()
       setFilter(itemsToBeDisplayed, viewer)
       getInfoForScalebar()
@@ -110,7 +124,7 @@ class ImageViewer {
         srcHover: dir + 'zin_hover.png',
         srcDown: dir + 'zin_pressed.png',
         onClick: function () {
-          viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
+          vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
       })
       let zoutButton = new OpenSeadragon.Button({
@@ -120,7 +134,7 @@ class ImageViewer {
         srcHover: dir + 'zout_hover.png',
         srcDown: dir + 'zout_pressed.png',
         onClick: function () {
-          viewer.viewport.goHome(true)
+          vpt.goHome(true)
         }
       })
       viewer.addControl(zinButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
@@ -158,7 +172,7 @@ class ImageViewer {
     }
 
     this.viewer = viewer // SET THIS VIEWER
-    this.overlay = this.viewer.fabricjsOverlay({ scale: 1000 })
+    this.overlay = this.viewer.fabricjsOverlay({scale: 1000})
     this.canvas = this.overlay.fabricCanvas()
   }
 
