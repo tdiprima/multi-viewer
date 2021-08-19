@@ -54,14 +54,12 @@ class ImageViewer {
     })
 
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
-      let zoom = vpt.getZoom()
-      let pan = vpt.getCenter()
-      prompt('Share this link:', `${window.location}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`)
-      // let url = window.location.href
-      // if (window.location.hash) {
-      //   url = url.split('#')[0]
-      // }
-      // prompt('Share this link:', `${url}/#zoom=${zoom}&x=${pan.x}&y=${pan.y}`)
+      let zoom = viewer.viewport.getZoom()
+      let pan = viewer.viewport.getCenter()
+      let oldUrl = location.pathname + location.hash
+      let url = location.pathname + '#zoom=' + zoom + '&x=' + pan.x + '&y=' + pan.y
+      console.log(oldUrl, url)
+      prompt('Share this link:', url)
     })
 
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
@@ -101,25 +99,26 @@ class ImageViewer {
     }
 
     function useParams(params) {
-      let pt = new OpenSeadragon.Point(params.x, params.y)
-      vpt.zoomTo(params.zoom, pt, true)
-      vpt.panTo(pt, true)
+      let zoom = viewer.viewport.getZoom()
+      let pan = viewer.viewport.getCenter()
 
-      // const zoom = vpt.getZoom()
-      // const pan = vpt.getCenter()
-      // // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like HERE)
-      // if (params.zoom !== undefined && params.zoom !== zoom) {
-      //   let pt = new OpenSeadragon.Point(params.x, params.y)
-      //   vpt.zoomTo(params.zoom, pt, true)
-      // }
-      // if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
-      //   vpt.panTo(pt, true)
-      // }
+      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like HERE)
+      if (params.zoom !== undefined && params.zoom !== zoom) {
+        viewer.viewport.zoomTo(params.zoom, null, true)
+      }
+
+      if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
+        let point = new OpenSeadragon.Point(params.x, params.y)
+        viewer.viewport.panTo(point, true)
+      }
     }
 
     // DO ONCE
     viewer.addOnceHandler('tile-loaded', function () {
-      if (window.location.hash) { useParams(getHashParams()) }
+      if (window.location.hash) {
+        let params = parseHash()
+        useParams(params)
+      }
       addCustomButtons()
       setFilter(itemsToBeDisplayed, viewer)
       getInfoForScalebar()
