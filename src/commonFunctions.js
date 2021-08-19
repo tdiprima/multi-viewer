@@ -200,6 +200,19 @@ function colorToArray(input) {
   return input.replace(/[a-z%\s()]/g, '').split(',')
 }
 
+function getHashParams () {
+  const hashParams = {}
+  let ee
+  const a = /\+/g // Regex for replacing addition symbol with a space
+  const r = /([^&;=]+)=?([^&;]*)/g
+  const d = function (s) { return decodeURIComponent(s.replace(a, ' ')) }
+  const q = window.location.hash.substring(1)
+
+  while (ee = r.exec(q)) { hashParams[d(ee[1])] = d(ee[2]) }
+
+  return hashParams
+}
+
 let PDR = OpenSeadragon.pixelDensityRatio
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto
