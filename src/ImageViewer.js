@@ -56,7 +56,7 @@ class ImageViewer {
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
       let zoom = vpt.getZoom()
       let pan = vpt.getCenter()
-      prompt('Share this link:', `${location}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`)
+      prompt('Share this link:', `${window.origin}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`)
     })
 
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
