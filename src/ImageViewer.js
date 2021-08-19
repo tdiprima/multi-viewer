@@ -103,7 +103,7 @@ class ImageViewer {
         vpt.zoomTo(params.zoom, null, true)
       }
       if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
-        vpt.panTo(new $.Point(params.x, params.y), true)
+        vpt.panTo(new OpenSeadragon.Point(params.x, params.y), true)
       }
     }
 
