@@ -9,6 +9,7 @@ class ImageViewer {
     // SET UP VIEWER
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
+      crossOriginPolicy: 'Anonymous',
       prefixUrl: '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
     })
     let overlay = {}
@@ -30,7 +31,6 @@ class ImageViewer {
       el.addEventListener('click', function () {
         let attr = el.getAttribute('data-value')
         let imageZoom = parseFloat(attr)
-        // console.log('imageZoom', imageZoom)
         viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
       })
     }
@@ -50,6 +50,20 @@ class ImageViewer {
         itemsToBeDisplayed[itemIndex].resolutionUnit = source.resolutionUnit
         itemsToBeDisplayed[itemIndex].xResolution = source.xResolution
       }
+    })
+
+    document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
+      let zoom = viewer.viewport.getZoom()
+      let pan = viewer.viewport.getCenter()
+      prompt('Share this link:', `${location}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`)
+    })
+
+    document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
+      let img = viewer.drawer.canvas.toDataURL("image/png");
+      let downloadlink = document.createElement('a')
+      downloadlink.href = img
+      downloadlink.download = 'testing'
+      downloadlink.click()
     })
 
     function getIIIFTileUrl(source, level, x, y) {
@@ -138,7 +152,6 @@ class ImageViewer {
         setScaleBar(pix_per_cm * 100)
         pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
         microns_per_pix = 10000 / pix_per_cm
-        // console.log(`%cmpp: ${microns_per_pix}`, 'color: yellow;')
       } else {
         console.warn('Handle resolution unit', item.resolutionUnit)
       }
