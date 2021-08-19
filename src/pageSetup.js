@@ -19,7 +19,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
       // quick little dark-mode
       let awesome = e('i', {'class': 'fas fa-moon'})
       let btnDark = e('button', {'class': 'btn'}, [awesome])
-      let referenceNode = document.querySelector('#contentDiv');
+      let referenceNode = document.querySelector('#contentDiv')
       referenceNode.before(btnDark)
       btnDark.addEventListener('click', function () {
         toggleButton(awesome, 'fa-moon', 'fa-sun')
