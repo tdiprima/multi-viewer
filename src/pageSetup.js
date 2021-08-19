@@ -30,12 +30,12 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
       let name
       let slide = itemsToBeDisplayed[0][0].location
       if (slide.includes('TCGA')) {
-        name = slide.match(/TCGA-[^%.]+/)[0]
+        name = `Slide: ${slide.match(/TCGA-[^%.]+/)[0]}`
       } else {
         let arr = slide.split('/')
-        name = arr[arr.length - 1]
+        name = `Slide: ${arr[arr.length - 1]}`
       }
-      let slideDiv = e('div', {'id': 'lala', 'style': 'top: 0; right: 0; position: fixed;'})
+      let slideDiv = e('div', {'style': 'top: 0; right: 0; position: fixed;'})
       slideDiv.innerHTML = name
       referenceNode.before(slideDiv)
 
