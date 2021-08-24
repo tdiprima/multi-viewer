@@ -167,13 +167,14 @@ let ruler = function (button, viewer, overlay) {
         evented: false,
         name: 'ruler'
       })
-      canvas.add(rect).add(t)
-      // let group = new fabric.Group([rect, t], {
-      //   left: x,
-      //   top: y
-      // })
-      // canvas.add(group)
-      // canvas.setActiveObject(group)
+      let group = new fabric.Group([rect, t], {
+        left: x,
+        top: y,
+        selectable: false,
+        evented: false,
+        name: 'ruler'
+      })
+      canvas.add(group)
       canvas.renderAll()
     }
   }
