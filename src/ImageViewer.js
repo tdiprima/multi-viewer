@@ -63,7 +63,7 @@ class ImageViewer {
     })
 
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
-      let img = viewer.drawer.canvas.toDataURL("image/png");
+      let img = viewer.drawer.canvas.toDataURL('image/png')
       let downloadlink = document.createElement('a')
       downloadlink.href = img
       downloadlink.download = `img_${timeStamp()}`
@@ -159,9 +159,9 @@ class ImageViewer {
         xOffset: 5,
         yOffset: 10,
         stayInsideImage: true,
-        color: "rgb(150, 150, 150)",
-        fontColor: "rgb(100, 100, 100)",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
+        color: 'rgb(150, 150, 150)',
+        fontColor: 'rgb(100, 100, 100)',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
         barThickness: 2
       })
     }
@@ -196,5 +196,4 @@ class ImageViewer {
   getCanvas() {
     return this.canvas
   }
-
 }
