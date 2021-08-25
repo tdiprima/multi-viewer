@@ -57,7 +57,7 @@ class ImageViewer {
       let oldUrl = location.href
       let zoom = viewer.viewport.getZoom()
       let pan = viewer.viewport.getCenter()
-      let url = location.origin + location.pathname + '#zoom=' + zoom + '&x=' + pan.x + '&y=' + pan.y
+      let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
       console.log(oldUrl, url)
       prompt('Share this link:', url)
     })
