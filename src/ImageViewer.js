@@ -66,7 +66,7 @@ class ImageViewer {
       let img = viewer.drawer.canvas.toDataURL("image/png");
       let downloadlink = document.createElement('a')
       downloadlink.href = img
-      downloadlink.download = 'testing'
+      downloadlink.download = `img_${timeStamp()}`
       downloadlink.click()
     })
 

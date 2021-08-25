@@ -220,6 +220,14 @@ function parseHash() {
   return params
 }
 
+function timeStamp() {
+  let dateString = new Date().toISOString()
+  let a = dateString.slice(0, 10)
+  let b = dateString.slice(10)
+  b = b.replaceAll(':', '-').replace('T', '').slice(0, 8)
+  return `${a}_${b}`
+}
+
 let PDR = OpenSeadragon.pixelDensityRatio
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto
