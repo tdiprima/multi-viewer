@@ -63,11 +63,23 @@ class ImageViewer {
     })
 
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
-      let img = viewer.drawer.canvas.toDataURL('image/png')
-      let downloadLink = document.createElement('a')
-      downloadLink.href = img
-      downloadLink.download = `img_${timeStamp()}`
-      downloadLink.click()
+      let parent = document.getElementById(viewerInfo.divId)
+      let children = parent.querySelectorAll('[id^="osd-overlaycanvas"]')
+      for (let i = 0; i < children.length; i++) {
+        let canvasEl = children[i]
+        let id = canvasEl[i].id
+        let num = parseInt(id.slice(0, -1))
+        if (num % 2 === 0) {
+          let ctx = viewer.drawer.context
+          ctx.drawImage(canvasEl, 0, 0)
+          let osdImg = viewer.drawer.canvas.toDataURL('image/png')
+          let downloadLink = document.createElement('a')
+          downloadLink.href = osdImg
+          downloadLink.download = `img_${timeStamp()}`
+          downloadLink.click()
+          break
+        }
+      }
     })
 
     function getIIIFTileUrl(source, level, x, y) {
