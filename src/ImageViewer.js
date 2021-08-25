@@ -67,8 +67,8 @@ class ImageViewer {
       let children = parent.querySelectorAll('[id^="osd-overlaycanvas"]')
       for (let i = 0; i < children.length; i++) {
         let canvasEl = children[i]
-        let id = canvasEl[i].id
-        let num = parseInt(id.slice(0, -1))
+        let id = canvasEl.id
+        let num = parseInt(id.slice(-1))
         if (num % 2 === 0) {
           let ctx = viewer.drawer.context
           ctx.drawImage(canvasEl, 0, 0)
