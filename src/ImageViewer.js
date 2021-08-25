@@ -64,10 +64,10 @@ class ImageViewer {
 
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
       let img = viewer.drawer.canvas.toDataURL('image/png')
-      let downloadlink = document.createElement('a')
-      downloadlink.href = img
-      downloadlink.download = `img_${timeStamp()}`
-      downloadlink.click()
+      let downloadLink = document.createElement('a')
+      downloadLink.href = img
+      downloadLink.download = `img_${timeStamp()}`
+      downloadLink.click()
     })
 
     function getIIIFTileUrl(source, level, x, y) {
