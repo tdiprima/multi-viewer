@@ -132,12 +132,6 @@ let ruler = function (button, viewer, overlay) {
     line.setCoords()
     canvas.remove(fText)
     isDown = false
-    let event = o.e
-    let width = difference(oStart.x, oEnd.x)
-    let height = difference(oStart.y, oEnd.y)
-    let hypot = getHypotenuseLength(width, height, microns_per_pix)
-    let text = valueWithUnit(hypot)
-    // console.log(`%c${text}`, 'color: orange;')
     let pointer = canvas.getPointer(event)
     let x = pointer.x
     let y = pointer.y
@@ -145,7 +139,7 @@ let ruler = function (button, viewer, overlay) {
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
       // Show end result
-      console.log(`%clength: ${text}`, `color: ${color};`)
+      console.log(`%clength: ${fText.text}`, `color: ${color};`)
       let rect = new fabric.Rect({
         left: x,
         top: y,
@@ -159,7 +153,7 @@ let ruler = function (button, viewer, overlay) {
         evented: false,
         name: 'ruler'
       })
-      let t = new fabric.Text(text, {
+      let t = new fabric.Text(fText.text, {
         fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
         left: x,
         top: y,
