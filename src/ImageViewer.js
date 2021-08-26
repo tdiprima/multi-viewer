@@ -26,6 +26,7 @@ class ImageViewer {
     }
     const vpt = viewer.viewport
 
+    // ZOOM TO MAGNIFICATION - 10x, 20x
     let element = document.querySelector('.mag-content')
     for (let i = 0; i < element.children.length; i++) {
       let el = element.children[i]
@@ -53,6 +54,7 @@ class ImageViewer {
       }
     })
 
+    // BOOKMARK URL with ZOOM and X,Y
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
       let oldUrl = location.href
       let zoom = viewer.viewport.getZoom()
@@ -62,6 +64,7 @@ class ImageViewer {
       prompt('Share this link:', url)
     })
 
+    // DOWNLOAD IMAGE SNAPSHOT
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
       let parent = document.getElementById(viewerInfo.divId)
       let children = parent.querySelectorAll('[id^="osd-overlaycanvas"]')
@@ -136,6 +139,7 @@ class ImageViewer {
       getInfoForScalebar()
     })
 
+    // CUSTOM OPENSEADRAGON BUTTONS
     function addCustomButtons() {
       let dir = '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
       let zinButton = new OpenSeadragon.Button({
