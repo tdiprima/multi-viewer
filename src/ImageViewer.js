@@ -26,17 +26,6 @@ class ImageViewer {
     }
     const vpt = viewer.viewport
 
-    // ZOOM TO MAGNIFICATION - 10x, 20x
-    let element = document.querySelector('.mag-content')
-    for (let i = 0; i < element.children.length; i++) {
-      let el = element.children[i]
-      el.addEventListener('click', function () {
-        let attr = el.getAttribute('data-value')
-        let imageZoom = parseFloat(attr)
-        vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
-      })
-    }
-
     viewer.world.addHandler('add-item', ({item}) => {
       const itemIndex = viewer.world.getIndexOfItem(item)
       let source = viewer.world.getItemAt(itemIndex).source
@@ -54,11 +43,22 @@ class ImageViewer {
       }
     })
 
+    // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
+    let element = document.querySelector('.mag-content')
+    for (let i = 0; i < element.children.length; i++) {
+      let el = element.children[i]
+      el.addEventListener('click', function () {
+        let attr = el.getAttribute('data-value')
+        let imageZoom = parseFloat(attr)
+        vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
+      })
+    }
+
     // BOOKMARK URL with ZOOM and X,Y
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
       let oldUrl = location.href
-      let zoom = viewer.viewport.getZoom()
-      let pan = viewer.viewport.getCenter()
+      let zoom = vpt.getZoom()
+      let pan = vpt.getCenter()
       let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
       console.log(oldUrl, url)
       prompt('Share this link:', url)
@@ -114,17 +114,17 @@ class ImageViewer {
     }
 
     function useParams(params) {
-      let zoom = viewer.viewport.getZoom()
-      let pan = viewer.viewport.getCenter()
+      let zoom = vpt.getZoom()
+      let pan = vpt.getCenter()
 
-      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like HERE)
+      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
       if (params.zoom !== undefined && params.zoom !== zoom) {
-        viewer.viewport.zoomTo(params.zoom, null, true)
+        vpt.zoomTo(params.zoom, null, true)
       }
 
       if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
         let point = new OpenSeadragon.Point(params.x, params.y)
-        viewer.viewport.panTo(point, true)
+        vpt.panTo(point, true)
       }
     }
 
