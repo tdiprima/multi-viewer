@@ -1,6 +1,5 @@
 let ruler = function (button, viewer, overlay) {
   let line, isDown
-  let fontSize = 15
   let zoom
   let mode = 'x'
   let fText
@@ -65,26 +64,54 @@ let ruler = function (button, viewer, overlay) {
     return Math.sqrt((a * a * mpp * mpp) + (b * b * mpp * mpp))
   }
 
+  function drawText(x, y, text, showRect) {
+    let rect = new fabric.Rect({
+      left: x,
+      top: y,
+      width: 150 / zoom,
+      height: 25 / zoom,
+      rx: 5 / zoom,
+      ry: 5 / zoom,
+      fill: 'rgba(255,255,255,0.5)',
+      transparentCorners: true,
+      selectable: false,
+      evented: false,
+      name: 'ruler'
+    })
+
+    fText = new fabric.Text(text, {
+      left: x,
+      top: y,
+      fontFamily: 'Verdana',
+      fill: 'black',
+      selectable: false,
+      evented: false,
+      name: 'ruler'
+    })
+    fText.scaleToWidth(rect.width)
+
+    if (showRect) {
+      canvas.add(rect)
+    }
+    canvas.add(fText)
+  }
+
   function mouseMoveHandler(o) {
+    if (!isDown) return
     canvas.remove(fText) // remove text element before re-adding it
     canvas.renderAll()
-    if (!isDown) return
+
     let event = o.e
     let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
     // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
-
-    try {
-      let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
-      oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
-    } catch (e) {
-      console.log(`%cHere we are. ${e.message}`, 'color: #ff6a5a;')
-    }
+    let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
 
     let w = difference(oStart.x, oEnd.x)
     let h = difference(oStart.y, oEnd.y)
     let hypot = getHypotenuseLength(w, h, microns_per_pix)
     let t = valueWithUnit(hypot)
-    // console.log('t', t)
+
     let pointer = canvas.getPointer(event)
     line.set({x2: pointer.x, y2: pointer.y})
     fEnd.x = pointer.x
@@ -92,17 +119,8 @@ let ruler = function (button, viewer, overlay) {
 
     if (mode === 'draw') {
       // Show info while drawing line
-      fText = new fabric.Text(t, {
-        left: fEnd.x,
-        top: fEnd.y,
-        // fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(3),
-        selectable: false,
-        evented: false,
-        name: 'ruler'
-      })
-      canvas.add(fText)
+      drawText(fEnd.x, fEnd.y, t, false)
     }
-
     canvas.renderAll()
   }
 
@@ -132,56 +150,12 @@ let ruler = function (button, viewer, overlay) {
     canvas.remove(fText)
     isDown = false
 
-    let pointer = canvas.getPointer(event)
-    let x = pointer.x
-    let y = pointer.y
-
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
-      // Show end result
       console.log(`%clength: ${fText.text}`, 'color: #b3f836;')
-
-      let rect = new fabric.Rect({
-        left: x,
-        top: y,
-        width: 150 / zoom,
-        height: 25 / zoom,
-        rx: 5 / zoom,
-        ry: 5 / zoom,
-        fill: 'rgba(255,255,255,0.5)',
-        transparentCorners: true,
-        selectable: false,
-        evented: false,
-        name: 'ruler'
-      })
-
-      let text = new fabric.Text(fText.text, {
-        left: rect.left,
-        top: rect.top,
-        // fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
-        fontFamily: 'Verdana',
-        fill: 'black',
-        selectable: false,
-        evented: false,
-        name: 'ruler'
-      })
-
-      text.scaleToWidth(rect.width);
-      canvas.add(text);
-
-      let group = new fabric.Group([rect, text], {
-        //left: x,
-        //top: y,
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        evented: false,
-        name: 'ruler'
-      })
-
-      canvas.add(group)
+      let pointer = canvas.getPointer(event)
+      drawText(pointer.x, pointer.y, fText.text, zoom < 100)
       canvas.renderAll()
-
     }
   }
 
