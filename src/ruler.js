@@ -131,6 +131,7 @@ let ruler = function (button, viewer, overlay) {
     line.setCoords()
     canvas.remove(fText)
     isDown = false
+
     let pointer = canvas.getPointer(event)
     let x = pointer.x
     let y = pointer.y
@@ -139,6 +140,7 @@ let ruler = function (button, viewer, overlay) {
     if (fEnd.x > 0) {
       // Show end result
       console.log(`%clength: ${fText.text}`, 'color: #b3f836;')
+
       let rect = new fabric.Rect({
         left: x,
         top: y,
@@ -152,23 +154,34 @@ let ruler = function (button, viewer, overlay) {
         evented: false,
         name: 'ruler'
       })
-      let t = new fabric.Text(fText.text, {
-        fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
-        left: x,
-        top: y,
+
+      let text = new fabric.Text(fText.text, {
+        left: rect.left,
+        top: rect.top,
+        // fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
+        fontFamily: 'Verdana',
+        fill: 'black',
         selectable: false,
         evented: false,
         name: 'ruler'
       })
-      let group = new fabric.Group([rect, t], {
-        left: x,
-        top: y,
+
+      text.scaleToWidth(rect.width);
+      canvas.add(text);
+
+      let group = new fabric.Group([rect, text], {
+        //left: x,
+        //top: y,
+        originX: 'center',
+        originY: 'center',
         selectable: false,
         evented: false,
         name: 'ruler'
       })
+
       canvas.add(group)
       canvas.renderAll()
+
     }
   }
 
