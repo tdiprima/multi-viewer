@@ -1,6 +1,5 @@
 let ruler = function (button, viewer, overlay) {
   let line, isDown
-  let color = '#b3f836'
   let fontSize = 15
   let zoom
   let mode = 'x'
@@ -42,7 +41,7 @@ let ruler = function (button, viewer, overlay) {
       fStart.y = pointer.y
       line = new fabric.Line(points, {
         strokeWidth: 2 / zoom,
-        stroke: color,
+        stroke: '#0f0',
         originX: 'center',
         originY: 'center',
         selectable: false,
@@ -139,7 +138,7 @@ let ruler = function (button, viewer, overlay) {
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
       // Show end result
-      console.log(`%clength: ${fText.text}`, `color: ${color};`)
+      console.log(`%clength: ${fText.text}`, 'color: #b3f836;')
       let rect = new fabric.Rect({
         left: x,
         top: y,
@@ -147,7 +146,7 @@ let ruler = function (button, viewer, overlay) {
         height: 25 / zoom,
         rx: 5 / zoom,
         ry: 5 / zoom,
-        fill: color,
+        fill: 'rgba(255,255,255,0.5)',
         transparentCorners: true,
         selectable: false,
         evented: false,
