@@ -95,7 +95,7 @@ let ruler = function (button, viewer, overlay) {
       fText = new fabric.Text(t, {
         left: fEnd.x,
         top: fEnd.y,
-        fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(3),
+        // fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(3),
         selectable: false,
         evented: false,
         name: 'ruler'
