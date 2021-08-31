@@ -1,4 +1,15 @@
 function setFilter(layers, viewer) {
+
+  try {
+    let parent = setFilter.caller
+    console.log(parent)
+    if (parent === null || parent === 'null') {
+      console.log("caller is " + arguments.callee.caller.caller)
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
   if (viewer.world) {
     // SET COLOR FILTER
     let itemCount = viewer.world.getItemCount()
@@ -182,6 +193,7 @@ const e = (name, properties = {}, children = []) => {
 // github scijs/almost-equal
 const abs = Math.abs
 const min = Math.min
+
 function almostEqual(a, b, absoluteError, relativeError) {
   const d = abs(a - b)
   if (absoluteError == null) absoluteError = almostEqual.DBL_EPSILON
@@ -194,6 +206,7 @@ function almostEqual(a, b, absoluteError, relativeError) {
   }
   return a === b
 }
+
 almostEqual.DBL_EPSILON = 2.2204460492503131e-16
 
 function colorToArray(input) {
