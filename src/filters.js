@@ -31,9 +31,7 @@ function createUI(uniq, div, layerColors, layers, viewer) {
       ])
       table.appendChild(tr)
 
-      removeBtn.addEventListener('click', function () {
-        removeColor(layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer)
-      })
+      removeBtn.addEventListener('click', removeColor.bind(null, layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
 
     })
 
@@ -150,6 +148,22 @@ function rgba2hex(orig) {
   return hex
 }
 
+function numericEvent(x, colorLowHi, layers, viewer) {
+  clearError(x) // Clear any previous errors
+  const intVal = parseInt(x.value)
+
+  // If they set it to something outside of 0-255, reset it
+  if (intVal > 255) x.value = '255'
+  if (intVal < 0) x.value = '0'
+
+  if (x.id.startsWith('low')) {
+    colorLowHi.low = intVal
+  } else {
+    colorLowHi.hi = intVal
+  }
+  setFilter(layers, viewer)
+}
+
 // CREATE NUMERIC INPUT
 function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
   let x = e('input', {
@@ -162,53 +176,42 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  x.addEventListener('change', function () {
-    isIntersect(uniq, colors.length)
-  })
+  x.addEventListener('change', isIntersect.bind(null, uniq, colors.length), {passive: true});
 
-  x.addEventListener('input', function () {
-    clearError(x) // Clear any previous errors
-    const intVal = parseInt(this.value)
-
-    // If they set it to something outside of 0-255, reset it
-    if (intVal > 255) this.value = '255'
-    if (intVal < 0) this.value = '0'
-
-    if (this.id.startsWith('low')) {
-      colorLowHi.low = intVal
-    } else {
-      colorLowHi.hi = intVal
-    }
-    setFilter(layers, viewer)
-  })
+  x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true});
   return x
 }
 
 function isIntersect(uniq, len) {
-  // Clear all previous errors
-  for (let i = 0; i < len; i++) {
-    clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
-  }
+  try {
+    // Clear all previous errors
+    // for (let i = 0; i < len; i++) {
+    //   // this no longer works
+    //   clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
+    // }
 
-  // Validation
-  for (let i = 1; i < len; i++) {
-    // If low of an interval, is less than the high value of the 'previous' (next) interval, then error
-    const low = document.getElementById('low' + uniq + (i - 1))
-    const high = document.getElementById('hi' + uniq + i)
-    if (parseInt(low.value) < parseInt(high.value)) {
-      setError(low, high)
-      return true
+    // Validation
+    for (let i = 1; i < len; i++) {
+      // If low of an interval, is less than the high value of the 'previous' (next) interval, then error
+      const low = document.getElementById('low' + uniq + (i - 1))
+      const high = document.getElementById('hi' + uniq + i)
+      if (parseInt(low.value) < parseInt(high.value)) {
+        setError(low, high)
+        return true
+      }
+      // If high ends up being less than its low, then error
+      const high1 = document.getElementById('hi' + uniq + (i - 1))
+      if (parseInt(high1.value) < parseInt(low.value)) {
+        setError(low, high1)
+        return true
+      }
     }
-    // If high ends up being less than its low, then error
-    const high1 = document.getElementById('hi' + uniq + (i - 1))
-    if (parseInt(high1.value) < parseInt(low.value)) {
-      setError(low, high1)
-      return true
-    }
-  }
 
-  // If we reach here, then no overlap
-  return false
+    // If we reach here, then no overlap
+    return false
+  } catch (e) {
+    console.log(`%c${e.message}`, 'color: #ff6a5a;')
+  }
 }
 
 function setError(a, b) {
@@ -219,11 +222,42 @@ function setError(a, b) {
 }
 
 function clearError(a, b) {
+  // console.log('a,b', a, b)
   a.style.outlineStyle = ''
   a.style.outlineColor = ''
   if (typeof b !== 'undefined') {
     b.style.outlineStyle = ''
     b.style.outlineColor = ''
+  }
+}
+
+function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
+  clearError(num1, num2)
+  if (num1.value === '0' && num2.value === '0') {
+    num1.style.outlineStyle = 'solid'
+    num1.style.outlineColor = 'red'
+    num2.style.outlineStyle = 'solid'
+    num2.style.outlineColor = 'red'
+  } else {
+    // add to list
+    let a = cpEl.style.backgroundColor // we get rgb back from CP
+    let a1 = a.replace('rgb', 'rgba') // we need rgba
+    a1 = a1.replace(')', ', 255)') // give it default alpha
+    colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
+    // sort
+    colors.sort((a, b) => b.low - a.low)
+    // reflect changes in viewer
+    setFilter(layers, viewer)
+
+    // + becomes -
+    let removeBtn = e('i', {class: 'fas fa-minus pointer'})
+    tr.lastChild.firstChild.remove()
+    tr.lastChild.appendChild(removeBtn)
+    removeBtn.addEventListener('click', removeColor.bind(null, colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
+
+    // add another empty row
+    const table = tr.closest('table')
+    table.appendChild(extraRow(uniq, colors, layers, viewer))
   }
 }
 
@@ -243,50 +277,21 @@ function extraRow(uniq, colors, layers, viewer) {
     e('td', {}, [addBtn])
   ])
 
-  addBtn.addEventListener('click', function () {
-    clearError(num1, num2)
-    if (num1.value === '0' && num2.value === '0') {
-      num1.style.outlineStyle = 'solid'
-      num1.style.outlineColor = 'red'
-      num2.style.outlineStyle = 'solid'
-      num2.style.outlineColor = 'red'
-    } else {
-      // add to list
-      let a = cpEl.style.backgroundColor // we get rgb back from CP
-      let a1 = a.replace('rgb', 'rgba') // we need rgba
-      a1 = a1.replace(')', ', 255)') // give it default alpha
-      colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
-      // sort
-      colors.sort((a, b) => b.low - a.low)
-      // reflect changes in viewer
-      setFilter(layers, viewer)
+  addBtn.addEventListener('click', addEvent.bind(null, num1, num2, cpEl, uniq, tr, colors, layers, viewer), {passive: true});
 
-      // + becomes -
-      let removeBtn = e('i', {class: 'fas fa-minus pointer'})
-      tr.lastChild.firstChild.remove()
-      tr.lastChild.appendChild(removeBtn)
-      removeBtn.addEventListener('click', function () {
-        removeColor(colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer)
-      })
-
-      // add another empty row
-      const table = tr.closest('table')
-      table.appendChild(extraRow(uniq, colors, layers, viewer))
-    }
-
-  })
   return tr
 }
 
 // CUSTOM FILTER IMPLEMENTATION
 let colorFilter = OpenSeadragon.Filters.GREYSCALE;
 colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
+  // console.log('%cCOLORLEVELS', 'color: #ccff00;')
   return function (context, callback) {
     // Read the canvas pixels
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     let pxl = imgData.data; // Uint8ClampedArray
 
-    let colorArr = layerColorRanges.map(function(element){
+    let colorArr = layerColorRanges.map(function (element) {
       return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
     });
 
