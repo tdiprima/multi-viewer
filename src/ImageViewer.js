@@ -18,7 +18,7 @@ class ImageViewer {
 
     // LOAD IMAGES INTO THE VIEWER
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
-      console.log(itemsToBeDisplayed[i].location)
+      // console.log(itemsToBeDisplayed[i].location)
       viewer.addTiledImage({
         tileSource: itemsToBeDisplayed[i].location,
         opacity: itemsToBeDisplayed[i].opacity,
