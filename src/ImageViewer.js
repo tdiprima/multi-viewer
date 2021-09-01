@@ -6,26 +6,30 @@
  */
 class ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed) {
-    // SET UP VIEWER
-    let viewer = OpenSeadragon({
-      id: viewerInfo.divId,
-      maxZoomPixelRatio: 1,
-      crossOriginPolicy: 'Anonymous',
-      prefixUrl: '/multi-viewer/vendor/openseadragon/images/' /* WICKET ENVI */
-    })
-    let overlay = {}
-    let canvas = {}
+    let tileSources = []
 
-    // LOAD IMAGES INTO THE VIEWER
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
       // console.log(itemsToBeDisplayed[i].location)
-      viewer.addTiledImage({
+      tileSources.push({
         tileSource: itemsToBeDisplayed[i].location,
         opacity: itemsToBeDisplayed[i].opacity,
         x: 0,
         y: 0
       })
     }
+
+    // SET UP VIEWER
+    let viewer = OpenSeadragon({
+      id: viewerInfo.divId,
+      crossOriginPolicy: 'Anonymous',
+      prefixUrl: '/multi-viewer/vendor/openseadragon/images/',
+      tileSources: tileSources,
+      maxZoomPixelRatio: 1
+    })
+
+    let overlay = {}
+    let canvas = {}
+
     const vpt = viewer.viewport
 
     viewer.world.addHandler('add-item', ({item}) => {
