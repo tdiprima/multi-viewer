@@ -1,15 +1,4 @@
 function setFilter(layers, viewer) {
-
-  try {
-    let parent = setFilter.caller
-    console.log(parent)
-    if (parent === null || parent === 'null') {
-      console.log("caller is " + arguments.callee.caller.caller)
-    }
-  } catch (error) {
-    console.error(error);
-  }
-
   if (viewer.world) {
     // SET COLOR FILTER
     let itemCount = viewer.world.getItemCount()
