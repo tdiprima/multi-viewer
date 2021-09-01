@@ -111,6 +111,7 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 
 // CREATE COLOR PICKER INPUT
 function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
+  let init = true
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
   let colorCode = colorLowHi.color
   m.style.backgroundColor = colorCode
@@ -118,6 +119,11 @@ function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
 
   const picker = new CP(m)
   picker.on('change', function (r, g, b, a) {
+    if (init) {
+      init = false // Update the state
+      return
+    }
+    console.log(`%c${[r, g, b, a]}`, 'color: deeppink;')
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
