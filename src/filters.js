@@ -31,7 +31,7 @@ function createUI(uniq, div, layerColors, layers, viewer) {
       ])
       table.appendChild(tr)
 
-      removeBtn.addEventListener('click', removeColor.bind(null, layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {capture: true, passive: true});
+      removeBtn.addEventListener('click', removeColor.bind(null, layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
 
     })
 
@@ -123,6 +123,7 @@ function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
       init = false // Update the state
       return
     }
+    // console.log([r, g, b, a])
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
@@ -181,9 +182,9 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  x.addEventListener('change', isIntersect.bind(null, uniq, colors.length), {capture: true, passive: true});
+  x.addEventListener('change', isIntersect.bind(null, uniq, colors.length), {passive: true});
 
-  x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {capture: true, passive: true});
+  x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true});
   return x
 }
 
@@ -258,7 +259,7 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let removeBtn = e('i', {class: 'fas fa-minus pointer'})
     tr.lastChild.firstChild.remove()
     tr.lastChild.appendChild(removeBtn)
-    removeBtn.addEventListener('click', removeColor.bind(null, colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {capture: true, passive: true});
+    removeBtn.addEventListener('click', removeColor.bind(null, colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
 
     // add another empty row
     const table = tr.closest('table')
@@ -282,7 +283,7 @@ function extraRow(uniq, colors, layers, viewer) {
     e('td', {}, [addBtn])
   ])
 
-  addBtn.addEventListener('click', addEvent.bind(null, num1, num2, cpEl, uniq, tr, colors, layers, viewer), {capture: true, passive: true});
+  addBtn.addEventListener('click', addEvent.bind(null, num1, num2, cpEl, uniq, tr, colors, layers, viewer), {passive: true});
 
   return tr
 }
