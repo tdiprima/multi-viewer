@@ -182,19 +182,18 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  x.addEventListener('change', isIntersect.bind(null, uniq, colors.length), {passive: true});
-
+  // x.addEventListener('change', isIntersect.bind(null, uniq, colors.length), {passive: true});
   x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true});
   return x
 }
 
 function isIntersect(uniq, len) {
+  // TODO: THIS FN NO LONGER WORKS - NEED TO REVISE.
   try {
     // Clear all previous errors
-    // for (let i = 0; i < len; i++) {
-    //   // this no longer works
-    //   clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
-    // }
+    for (let i = 0; i < len; i++) {
+      clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
+    }
 
     // Validation
     for (let i = 1; i < len; i++) {
