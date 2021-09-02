@@ -19,6 +19,9 @@ function setFilter(layers, viewer) {
       filters: filterOpts,
       loadMode: 'sync'
     })
+  } else {
+    // temporarily
+    console.log('%cNo viewer.world', 'color: lime;')
   }
 }
 
