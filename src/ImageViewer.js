@@ -62,7 +62,7 @@ class ImageViewer {
       let zoom = vpt.getZoom()
       let pan = vpt.getCenter()
       let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
-      console.log(oldUrl, url)
+      // console.log(oldUrl, url)
       prompt('Share this link:', url)
     })
 
