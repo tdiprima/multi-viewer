@@ -22,6 +22,7 @@ class ImageViewer {
     let viewer = OpenSeadragon({
       id: viewerInfo.divId,
       crossOriginPolicy: 'Anonymous',
+      blendTime: 0,
       prefixUrl: '/multi-viewer/vendor/openseadragon/images/',
       tileSources: tileSources,
       maxZoomPixelRatio: 1
