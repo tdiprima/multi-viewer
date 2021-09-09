@@ -197,16 +197,21 @@ function isIntersect(uniq, len) {
 }
 
 function setError(a, b) {
-  a.style.outlineStyle = 'solid'
-  a.style.outlineColor = 'red'
-  b.style.outlineStyle = 'solid'
-  b.style.outlineColor = 'red'
+  if (typeof a !== 'undefined') {
+    a.style.outlineStyle = 'solid'
+    a.style.outlineColor = 'red'
+  }
+  if (typeof b !== 'undefined') {
+    b.style.outlineStyle = 'solid'
+    b.style.outlineColor = 'red'
+  }
 }
 
 function clearError(a, b) {
-  // console.log('a,b', a, b)
-  a.style.outlineStyle = ''
-  a.style.outlineColor = ''
+  if (typeof a !== 'undefined') {
+    a.style.outlineStyle = ''
+    a.style.outlineColor = ''
+  }
   if (typeof b !== 'undefined') {
     b.style.outlineStyle = ''
     b.style.outlineColor = ''
