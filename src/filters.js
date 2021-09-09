@@ -260,6 +260,7 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
     console.log(tr.lastChild.firstChild)
     console.log(removeBtn)
+    // Replace + with -
     tr.lastChild.firstChild.remove() // last element in row is modifier
     tr.lastChild.appendChild(removeBtn) // replace old modifier with new one
     removeBtn.addEventListener('click', removeColor.bind(null, colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
