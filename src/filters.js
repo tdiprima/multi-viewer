@@ -245,10 +245,10 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     num2.style.outlineColor = 'red'
   } else {
     // add to list
-    let a = cpEl.style.backgroundColor // we get rgb back from CP
-    let a1 = a.replace('rgb', 'rgba') // we need rgba
-    a1 = a1.replace(')', ', 255)') // give it default alpha
-    colors.push({'color': a1, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
+    let rgb = cpEl.style.backgroundColor // we get rgb back from CP
+    let rgba = rgb.replace('rgb', 'rgba') // we need rgba
+    rgba = rgba.replace(')', ', 255)') // give it default alpha
+    colors.push({'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
     // sort
     colors.sort((a, b) => b.low - a.low)
     // reflect changes in viewer
