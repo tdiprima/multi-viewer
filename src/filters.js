@@ -21,7 +21,9 @@ function createUI(uniq, div, layerColors, layers, viewer) {
       let cpEl = createColorPicker(cIdx, uniq, colorLowHi, layers, viewer)
       let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorLowHi, layerColors, viewer)
       let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorLowHi, layerColors, viewer)
-      let removeBtn = e('i', {class: 'fas fa-minus pointer'})
+      let buttonId = `i${uniq}${cIdx}`
+      let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
+      colorLowHi.tempKey = buttonId
 
       let tr = e('tr', {}, [
         e('td', {}, [cpEl]),
@@ -254,8 +256,11 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     // reflect changes in viewer
     setFilter(layers, viewer)
 
-    // + becomes -
+    //let buttonId = `i${uniq}${cIdx}`
+    //let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
     let removeBtn = e('i', {class: 'fas fa-minus pointer'})
+    console.log(tr.lastChild.firstChild)
+    console.log(removeBtn)
     tr.lastChild.firstChild.remove()
     tr.lastChild.appendChild(removeBtn)
     removeBtn.addEventListener('click', removeColor.bind(null, colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
@@ -273,7 +278,7 @@ function extraRow(uniq, colors, layers, viewer) {
   let cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
   let num1 = createNumericInput(`low${uniq}${idx}`, uniq, layers, generic, colors, viewer)
   let num2 = createNumericInput(`hi${uniq}${idx}`, uniq, layers, generic, colors, viewer)
-  let addBtn = e('i', {class: 'fas fa-plus pointer'})
+  let addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
 
   let tr = e('tr', {}, [
     e('td', {}, [cpEl]),
