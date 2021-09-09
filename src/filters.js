@@ -233,10 +233,7 @@ function clearError(a, b) {
 function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
   clearError(num1, num2)
   if (num1.value === '0' && num2.value === '0') {
-    num1.style.outlineStyle = 'solid'
-    num1.style.outlineColor = 'red'
-    num2.style.outlineStyle = 'solid'
-    num2.style.outlineColor = 'red'
+    setError(num1, num2)
   } else {
     // add to list
     let rgb = cpEl.style.backgroundColor // we get rgb back from CP
