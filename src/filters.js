@@ -160,18 +160,22 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  // x.addEventListener('change', isIntersect.bind(null, uniq, colors.length), {passive: true});
+  x.addEventListener('change', isIntersect.bind(null, colors), {passive: true});
   x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true});
   return x
 }
 
-function isIntersect(uniq, len) {
-  try {
-    // Clear all previous errors
-    for (let i = 0; i < len; i++) {
-      clearError(document.getElementById('low' + uniq + i), document.getElementById('hi' + uniq + i))
-    }
+function isIntersect(colors) {
+  // Clear all previous errors
+  for (let i = 0; i < colors.length; i++) {
+    let k = colors[i].tempKey
+    let a = document.getElementById(k.replace('i', 'low'))
+    let b = document.getElementById(k.replace('i', 'hi'))
+    clearError(a, b)
+  }
 
+  try {
+    /*
     // Validation
     for (let i = 1; i < len; i++) {
       // If low of an interval, is less than the high value of the 'previous' (next) interval, then error
@@ -190,31 +194,39 @@ function isIntersect(uniq, len) {
     }
 
     // If we reach here, then no overlap
-    return false
+    return false*/
   } catch (e) {
     console.log(`%c${e.message}`, 'color: #ff6a5a;')
   }
 }
 
 function setError(a, b) {
-  if (typeof a !== 'undefined') {
-    a.style.outlineStyle = 'solid'
-    a.style.outlineColor = 'red'
-  }
-  if (typeof b !== 'undefined') {
-    b.style.outlineStyle = 'solid'
-    b.style.outlineColor = 'red'
+  try {
+    if (typeof a !== 'undefined') {
+      a.style.outlineStyle = 'solid'
+      a.style.outlineColor = 'red'
+    }
+    if (typeof b !== 'undefined') {
+      b.style.outlineStyle = 'solid'
+      b.style.outlineColor = 'red'
+    }
+  } catch (err) {
+    console.log(`%c${err.message}`, 'color: #ff6a5a;')
   }
 }
 
 function clearError(a, b) {
-  if (typeof a !== 'undefined') {
-    a.style.outlineStyle = ''
-    a.style.outlineColor = ''
-  }
-  if (typeof b !== 'undefined') {
-    b.style.outlineStyle = ''
-    b.style.outlineColor = ''
+  try {
+    if (typeof a !== 'undefined') {
+      a.style.outlineStyle = ''
+      a.style.outlineColor = ''
+    }
+    if (typeof b !== 'undefined') {
+      b.style.outlineStyle = ''
+      b.style.outlineColor = ''
+    }
+  } catch (err) {
+    console.log(`%c${err.message}`, 'color: #ff6a5a;')
   }
 }
 
