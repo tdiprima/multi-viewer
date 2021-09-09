@@ -33,7 +33,7 @@ function createUI(uniq, div, layerColors, layers, viewer) {
       ])
       table.appendChild(tr)
 
-      removeBtn.addEventListener('click', removeColor.bind(null, layerColors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
+      removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true});
 
     })
 
@@ -41,39 +41,15 @@ function createUI(uniq, div, layerColors, layers, viewer) {
   }
 }
 
-function isMatch(ourRgb, modRgb) {
-  let arr = colorToArray(ourRgb)
-  let arr1 = colorToArray(modRgb)
-
-  // check the first 3
-  let match = arr[0] === arr1[0] && arr[1] === arr1[1] && arr[2] === arr1[2]
-  if (!match) {
-    return false
-  }
-
-  if (arr.length === 4 && arr1.length === 4) {
-    return almostEqual(arr[3], (arr1[3] * 255), 0.1)
-  }
-
-  // It's ok if we've gotten this far
-  return match
-}
-
-function removeColor(ourRanges, modRgb, modNum1, modNum2, tr, layers, viewer) {
-  // Make sure we remove the right one from the list
-  for (let i = 0; i < ourRanges.length; i++) {
-    let r = ourRanges[i]
-    let arrEq = isMatch(r.color, modRgb)
-    if (arrEq && r.low === parseInt(modNum1) && r.hi === parseInt(modNum2)) {
-      // that's the one; remove it
-      ourRanges.splice(i, 1)
-      // sort
-      ourRanges.sort((a, b) => b.low - a.low)
-      // reflect changes in viewer
-      setFilter(layers, viewer)
-      break
-    }
-  }
+function removeColor(el, ourRanges, tr, layers, viewer) {
+  let str = el.id
+  let n = str.charAt(str.length - 1)
+  // remove from list
+  ourRanges.splice(parseInt(n), 1)
+  // sort
+  // ourRanges.sort((a, b) => b.low - a.low)
+  // reflect changes in viewer
+  setFilter(layers, viewer)
   tr.remove()
 }
 
@@ -250,16 +226,16 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let rgb = cpEl.style.backgroundColor // we get rgb back from CP
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
-    colors.push({'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}) // add it to our list
+    let buttonId = num1.id.replace('low', 'i') // borrowing element id
+    let colorLowHi = {'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}
+    colors.push(colorLowHi) // add it to our list
+    colorLowHi.tempKey = buttonId
     // sort
-    colors.sort((a, b) => b.low - a.low)
+    // colors.sort((a, b) => b.low - a.low)
     // reflect changes in viewer
     setFilter(layers, viewer)
 
-    let buttonId = num1.id.replace('low', 'i')
     let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-    console.log(tr.lastChild.firstChild)
-    console.log(removeBtn)
     // Replace + with -
     tr.lastChild.firstChild.remove() // last element in row is modifier
     tr.lastChild.appendChild(removeBtn) // replace old modifier with new one
