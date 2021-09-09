@@ -160,12 +160,12 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  x.addEventListener('change', isIntersect.bind(null, colors), {passive: true});
-  x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true});
+  x.addEventListener('change', isIntersect.bind(null, colors, uniq), {passive: true})
+  x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true})
   return x
 }
 
-function isIntersect(colors) {
+function isIntersect(colors, uniq) {
   // Clear all previous errors
   for (let i = 0; i < colors.length; i++) {
     let k = colors[i].tempKey
@@ -174,30 +174,49 @@ function isIntersect(colors) {
     clearError(a, b)
   }
 
-  try {
-    /*
-    // Validation
-    for (let i = 1; i < len; i++) {
-      // If low of an interval, is less than the high value of the 'previous' (next) interval, then error
-      const low = document.getElementById('low' + uniq + (i - 1))
-      const high = document.getElementById('hi' + uniq + i)
-      if (parseInt(low.value) < parseInt(high.value)) {
-        setError(low, high)
-        return true
-      }
-      // If high ends up being less than its low, then error
-      const high1 = document.getElementById('hi' + uniq + (i - 1))
-      if (parseInt(high1.value) < parseInt(low.value)) {
-        setError(low, high1)
-        return true
-      }
+  return //stop here.
+  let body = document.getElementById(`filters${uniq}Body`)
+  let table = body.firstChild
+  let firstRow = true
+  for (let i in table.rows) {
+    if (firstRow) {
+      // Skip first row (headers)
+      firstRow = false
+    } else {
+      let row = table.rows[i]
+      let low = row.cells[1]
+      let high = row.cells[2]
+      // for (let j in row.cells) {
+      //   let col = row.cells[j]
+      //   if (typeof col === 'object') {
+      //     console.log('col', col)
+      //   }
+      // }
     }
-
-    // If we reach here, then no overlap
-    return false*/
-  } catch (e) {
-    console.log(`%c${e.message}`, 'color: #ff6a5a;')
   }
+
+  // try {
+    // Validation
+    // for (let i = 1; i < len; i++) {
+    //   // If low of an interval, is less than the high value of the 'previous' (next) interval, then error
+    //   const low = document.getElementById('low' + uniq + (i - 1))
+    //   const high = document.getElementById('hi' + uniq + i)
+    //   if (parseInt(low.value) < parseInt(high.value)) {
+    //     setError(low, high)
+    //     return true
+    //   }
+    //   // If high ends up being less than its low, then error
+    //   const high1 = document.getElementById('hi' + uniq + (i - 1))
+    //   if (parseInt(high1.value) < parseInt(low.value)) {
+    //     setError(low, high1)
+    //     return true
+    //   }
+    // }
+    // // If we reach here, then no overlap
+    // return false
+  // } catch (e) {
+  //   console.log(`%c${e.message}`, 'color: #ff6a5a;')
+  // }
 }
 
 function setError(a, b) {
