@@ -256,13 +256,12 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     // reflect changes in viewer
     setFilter(layers, viewer)
 
-    //let buttonId = `i${uniq}${cIdx}`
-    //let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-    let removeBtn = e('i', {class: 'fas fa-minus pointer'})
+    let buttonId = num1.id.replace('low', 'i')
+    let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
     console.log(tr.lastChild.firstChild)
     console.log(removeBtn)
-    tr.lastChild.firstChild.remove()
-    tr.lastChild.appendChild(removeBtn)
+    tr.lastChild.firstChild.remove() // last element in row is modifier
+    tr.lastChild.appendChild(removeBtn) // replace old modifier with new one
     removeBtn.addEventListener('click', removeColor.bind(null, colors, cpEl.style.backgroundColor, num1.value, num2.value, tr, layers, viewer), {passive: true});
 
     // add another empty row
