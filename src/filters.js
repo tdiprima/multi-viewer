@@ -166,7 +166,6 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
 }
 
 function isIntersect(uniq, len) {
-  // TODO: THIS FN NO LONGER WORKS - NEED TO REVISE.
   try {
     // Clear all previous errors
     for (let i = 0; i < len; i++) {
