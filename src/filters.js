@@ -17,13 +17,13 @@ function createUI(uniq, div, layerColors, layers, viewer) {
 
     table.appendChild(createHeaderRow())
 
-    layerColors.forEach(function (colorLowHi, cIdx) {
-      let cpEl = createColorPicker(cIdx, uniq, colorLowHi, layers, viewer)
-      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorLowHi, layerColors, viewer)
-      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorLowHi, layerColors, viewer)
+    layerColors.forEach(function (colorObject, cIdx) {
+      let cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
+      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorObject, layerColors, viewer)
+      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorObject, layerColors, viewer)
       let buttonId = `i${uniq}${cIdx}`
       let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-      colorLowHi.tempKey = buttonId
+      colorObject.tempKey = buttonId
 
       let tr = e('tr', {}, [
         e('td', {}, [cpEl]),
@@ -88,10 +88,10 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
 
 // CREATE COLOR PICKER INPUT
-function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
+function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
   let init = true
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
-  let colorCode = colorLowHi.color
+  let colorCode = colorObject.color
   m.style.backgroundColor = colorCode
   m.innerHTML = `#${rgba2hex(colorCode)}`
 
@@ -105,7 +105,7 @@ function createColorPicker(cIdx, uniq, colorLowHi, layers, viewer) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
-    colorLowHi.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+    colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
     setFilter(layers, viewer)
   })
 
@@ -132,9 +132,9 @@ function rgba2hex(orig) {
   return hex
 }
 
-function numericEvent(numEl, colorLowHi, layers, viewer) {
+function numericEvent(numEl, colorObject, layers, viewer) {
   console.log('%cx', 'color: deeppink;', numEl)
-  console.log('%ccolorLowHi', 'color: orange;', colorLowHi)
+  console.log('%ccolorLowHi', 'color: orange;', colorObject)
 
   clearError(numEl) // Clear any previous errors
   const intVal = parseInt(numEl.value)
@@ -144,15 +144,15 @@ function numericEvent(numEl, colorLowHi, layers, viewer) {
   if (intVal < 0) numEl.value = '0'
 
   if (numEl.id.startsWith('low')) {
-    colorLowHi.low = intVal
+    colorObject.low = intVal
   } else {
-    colorLowHi.hi = intVal
+    colorObject.hi = intVal
   }
   setFilter(layers, viewer)
 }
 
 // CREATE NUMERIC INPUT
-function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
+function createNumericInput(id, uniq, layers, colorObject, colors, viewer) {
   let numEl = e('input', {
     id: id,
     type: 'number',
@@ -160,11 +160,11 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     max: '255',
     step: '1',
     size: '5',
-    value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
+    value: id.includes('low') ? colorObject.low.toString() : colorObject.hi.toString()
   })
 
   numEl.addEventListener('change', isIntersect.bind(null, colors, uniq), {passive: true})
-  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorLowHi, layers, viewer), {passive: true})
+  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
   return numEl
 }
 
@@ -260,9 +260,9 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
     let buttonId = num1.id.replace('low', 'i') // borrowing element id
-    let colorLowHi = {'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}
-    colors.push(colorLowHi) // add it to our list
-    colorLowHi.tempKey = buttonId
+    let colorObject = {'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}
+    colors.push(colorObject) // add it to our list
+    colorObject.tempKey = buttonId
     // sort
     // colors.sort((a, b) => b.low - a.low)
     // reflect changes in viewer
