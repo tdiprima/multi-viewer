@@ -132,15 +132,18 @@ function rgba2hex(orig) {
   return hex
 }
 
-function numericEvent(x, colorLowHi, layers, viewer) {
-  clearError(x) // Clear any previous errors
-  const intVal = parseInt(x.value)
+function numericEvent(numEl, colorLowHi, layers, viewer) {
+  console.log('%cx', 'color: deeppink;', numEl)
+  console.log('%ccolorLowHi', 'color: orange;', colorLowHi)
+
+  clearError(numEl) // Clear any previous errors
+  const intVal = parseInt(numEl.value)
 
   // If they set it to something outside of 0-255, reset it
-  if (intVal > 255) x.value = '255'
-  if (intVal < 0) x.value = '0'
+  if (intVal > 255) numEl.value = '255'
+  if (intVal < 0) numEl.value = '0'
 
-  if (x.id.startsWith('low')) {
+  if (numEl.id.startsWith('low')) {
     colorLowHi.low = intVal
   } else {
     colorLowHi.hi = intVal
@@ -150,7 +153,7 @@ function numericEvent(x, colorLowHi, layers, viewer) {
 
 // CREATE NUMERIC INPUT
 function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
-  let x = e('input', {
+  let numEl = e('input', {
     id: id,
     type: 'number',
     min: '0',
@@ -160,9 +163,9 @@ function createNumericInput(id, uniq, layers, colorLowHi, colors, viewer) {
     value: id.includes('low') ? colorLowHi.low.toString() : colorLowHi.hi.toString()
   })
 
-  x.addEventListener('change', isIntersect.bind(null, colors, uniq), {passive: true})
-  x.addEventListener('input', numericEvent.bind(null, x, colorLowHi, layers, viewer), {passive: true})
-  return x
+  numEl.addEventListener('change', isIntersect.bind(null, colors, uniq), {passive: true})
+  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorLowHi, layers, viewer), {passive: true})
+  return numEl
 }
 
 function isIntersect(colors, uniq) {
