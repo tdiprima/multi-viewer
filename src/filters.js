@@ -183,17 +183,14 @@ function isIntersect(colors, uniq) {
       const high = document.getElementById('hi' + uniq + i)
       if (parseInt(low.value) <= parseInt(high.value)) {
         setError(low, high)
-        return true
       }
       // High is less than or eq low
       const high1 = document.getElementById('hi' + uniq + (i - 1))
       if (parseInt(high1.value) <= parseInt(low.value)) {
         setError(low, high1)
-        return true
       }
     }
     // If we reach here, then no overlap
-    return false
   } catch (e) {
     console.log(`%c${e.message}`, 'color: #ff6a5a;')
   }
