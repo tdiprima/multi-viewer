@@ -133,9 +133,6 @@ function rgba2hex(orig) {
 }
 
 function numericEvent(numEl, colorObject, layers, viewer) {
-  console.log('%cx', 'color: deeppink;', numEl)
-  console.log('%ccolorLowHi', 'color: orange;', colorObject)
-
   clearError(numEl) // Clear any previous errors
   const intVal = parseInt(numEl.value)
 
@@ -193,7 +190,6 @@ function isIntersect(colors, uniq) {
         setError(low, high1)
       }
     }
-    // If we reach here, then no overlap
   } catch (e) {
     console.log(`%c${e.message}`, 'color: #ff6a5a;')
   }
