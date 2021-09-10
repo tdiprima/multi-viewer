@@ -13,6 +13,7 @@ function createUI(uniq, div, layerColors, layers, viewer) {
   div.appendChild(table)
 
   if (layerColors) {
+    // Sort list right away
     layerColors.sort((a, b) => b.low - a.low)
 
     table.appendChild(createHeaderRow())
@@ -46,8 +47,6 @@ function removeColor(el, ourRanges, tr, layers, viewer) {
   let n = str.charAt(str.length - 1)
   // remove from list
   ourRanges.splice(parseInt(n), 1)
-  // sort
-  // ourRanges.sort((a, b) => b.low - a.low)
   // reflect changes in viewer
   setFilter(layers, viewer)
   tr.remove()
@@ -133,7 +132,6 @@ function rgba2hex(orig) {
 }
 
 function numericEvent(numEl, colorObject, layers, viewer) {
-  clearError(numEl) // Clear any previous errors
   const intVal = parseInt(numEl.value)
 
   // If they set it to something outside of 0-255, reset it
@@ -159,87 +157,70 @@ function createNumericInput(id, uniq, layers, colorObject, colors, viewer) {
     size: '5',
     value: id.includes('low') ? colorObject.low.toString() : colorObject.hi.toString()
   })
-
-  numEl.addEventListener('change', isIntersect.bind(null, colors, uniq), {passive: true})
+  numEl.addEventListener('change', isIntersect.bind(null, numEl, colors), {passive: true})
   numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
   return numEl
 }
 
-function isIntersect(colors, uniq) {
-  const len = colors.length
-  // Clear all previous errors
-  for (let i = 0; i < len; i++) {
-    let k = colors[i].tempKey
-    let a = document.getElementById(k.replace('i', 'low'))
-    let b = document.getElementById(k.replace('i', 'hi'))
-    clearError(a, b)
+function isIntersect(numEl, colors) {
+  let lowEl, lowVal, highEl, highVal, key, tmpId
+  let id = numEl.id
+  let isLow = id.includes('low')
+  if (isLow) {
+    lowEl = numEl
+    tmpId = id.replace('low', 'hi')
+    highEl = document.getElementById(tmpId)
+  } else {
+    highEl = numEl
+    tmpId = id.replace('hi', 'low')
+    lowEl = document.getElementById(tmpId)
+  }
+  highlight(lowEl, highEl, false)
+  lowVal = parseInt(lowEl.value)
+  highVal = parseInt(highEl.value)
+  key = isLow ? id.replace('low', 'i') : id.replace('hi', 'i')
+
+  let index = colors.map(e => e.tempKey).indexOf(key)
+  let nextKey = colors[index + 1].tempKey
+  tmpId = nextKey.replace('i', 'low')
+  let lowEl1 = document.getElementById(tmpId)
+  tmpId = nextKey.replace('i', 'hi')
+  let highEl1 = document.getElementById(tmpId)
+  highlight(lowEl1, highEl1, false)
+
+  // current high <= current low
+  if (highVal <= lowVal) {
+    highlight(lowEl, highEl, true)
   }
 
-  try {
-    // Validation
-    for (let i = 1; i < len; i++) {
-      // Low val is less than or eq hi val of previous
-      const low = document.getElementById('low' + uniq + (i - 1))
-      const high = document.getElementById('hi' + uniq + i)
-      if (parseInt(low.value) <= parseInt(high.value)) {
-        setError(low, high)
-      }
-      // High is less than or eq low
-      const high1 = document.getElementById('hi' + uniq + (i - 1))
-      if (parseInt(high1.value) <= parseInt(low.value)) {
-        setError(low, high1)
-      }
-    }
-  } catch (e) {
-    console.log(`%c${e.message}`, 'color: #ff6a5a;')
+  // current low <= next high
+  if (parseInt(lowVal) <= parseInt(highEl1.value)) {
+    highlight(lowEl, highEl1, true)
   }
 
-  // let body = document.getElementById(`filters${uniq}Body`)
-  // let table = body.firstChild
-  // let firstRow = true
-  // for (let i in table.rows) {
-  //   if (firstRow) {
-  //     // Skip first row (headers)
-  //     firstRow = false
-  //   } else {
-  //     let row = table.rows[i]
-  //     let low = row.cells[1]
-  //     let high = row.cells[2]
-  //     // for (let j in row.cells) {
-  //     //   let col = row.cells[j]
-  //     //   if (typeof col === 'object') {
-  //     //     console.log('col', col)
-  //     //   }
-  //     // }
-  //   }
-  // }
-
-}
-
-function setError(a, b) {
-  try {
-    if (typeof a !== 'undefined') {
-      a.style.outlineStyle = 'solid'
-      a.style.outlineColor = 'red'
-    }
-    if (typeof b !== 'undefined') {
-      b.style.outlineStyle = 'solid'
-      b.style.outlineColor = 'red'
-    }
-  } catch (err) {
-    console.log(`%c${err.message}`, 'color: #ff6a5a;')
+  // current high <= next low
+  if (parseInt(highVal) <= parseInt(lowEl1.value)) {
+    highlight(lowEl1, highVal, true)
   }
 }
 
-function clearError(a, b) {
+function highlight(a, b, isErr) {
+  let style, color
+  if (isErr) {
+    style = 'solid'
+    color = 'red'
+  } else {
+    style = ''
+    color = ''
+  }
   try {
-    if (typeof a !== 'undefined') {
-      a.style.outlineStyle = ''
-      a.style.outlineColor = ''
+    if (isRealValue(a)) {
+      a.style.outlineStyle = style
+      a.style.outlineColor = color
     }
-    if (typeof b !== 'undefined') {
-      b.style.outlineStyle = ''
-      b.style.outlineColor = ''
+    if (isRealValue(b)) {
+      b.style.outlineStyle = style
+      b.style.outlineColor = color
     }
   } catch (err) {
     console.log(`%c${err.message}`, 'color: #ff6a5a;')
@@ -247,7 +228,7 @@ function clearError(a, b) {
 }
 
 function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
-  clearError(num1, num2)
+  highlight(num1, num2)
   if (num1.value === '0' && num2.value === '0') {
     setError(num1, num2)
   } else {
@@ -260,7 +241,7 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     colors.push(colorObject) // add it to our list
     colorObject.tempKey = buttonId
     // sort
-    // colors.sort((a, b) => b.low - a.low)
+    colors.sort((a, b) => b.low - a.low)
     // reflect changes in viewer
     setFilter(layers, viewer)
 
