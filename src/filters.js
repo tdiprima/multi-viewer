@@ -21,9 +21,6 @@ const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
   const rect = paletteBtn.getBoundingClientRect()
   const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
   const widgetBody = div.lastChild
-  // Sort
-  // Create temp key
-  // layerColors.forEach(function (colorObject, cIdx) {
   createUI(uniqueId, widgetBody, layerColors, layers, viewer)
   return div
 }
@@ -183,55 +180,107 @@ function createNumericInput(id, uniq, layers, colorObject, colors, viewer) {
   return numEl
 }
 
+function getNeighbor(index, colors) {
+  let retVal
+  try {
+    let key = colors[index].tempKey
+
+    let lowEl = document.getElementById(key.replace('k', 'low'))
+    let lowVal = lowEl.value
+    let highEl = document.getElementById(key.replace('k', 'hi'))
+    let highVal = highEl.value
+
+    setOutlineStyle(lowEl, highEl, '', '') // clear errors
+
+    retVal = {
+      key: key,
+      index: index,
+      lowEl: lowEl,
+      lowVal: lowVal,
+      highEl: highEl,
+      highVal: highVal
+    }
+  } catch (e) {
+    retVal = null
+    console.log(`%c${e.message}`, 'color: #ff6a5a;')
+  }
+  return retVal
+}
+
+function getNumPair(numEl, colors) {
+  let retVal
+  try {
+    let id = numEl.id;
+    let isLow = id.includes('low')
+    let tmpId
+
+    let currentLowEl, currentHighEl
+    let currentLowVal, currentHighVal
+    if (isLow) {
+      currentLowEl = numEl
+      tmpId = id.replace('low', 'hi')
+      currentHighEl = document.getElementById(tmpId)
+    } else {
+      currentHighEl = numEl
+      tmpId = id.replace('hi', 'low')
+      currentLowEl = document.getElementById(tmpId)
+    }
+    setOutlineStyle(currentLowEl, currentHighEl, '', '') // clear errors
+
+    currentLowVal = parseInt(currentLowEl.value)
+    currentHighVal = parseInt(currentHighEl.value)
+
+    let currentKey = isLow ? id.replace('low', 'k') : id.replace('hi', 'k')
+    let currentIndex = colors.map(e => e.tempKey).indexOf(currentKey) // index of array elem with key
+    retVal = {
+      key: currentKey,
+      index: currentIndex,
+      lowEl: currentLowEl,
+      lowVal: currentLowVal,
+      highEl: currentHighEl,
+      highVal: currentHighVal
+    }
+  } catch (e) {
+    retVal = null
+    console.log(`%c${e.message}`, 'color: #ff6a5a;')
+  }
+  return retVal
+}
+
+function checkNeighbor(index, colors, compareElement) {
+  let neighbor = getNeighbor(index, colors)
+  if (isRealValue(neighbor)) {
+    if (parseInt(compareElement.lowVal) <= parseInt(neighbor.highVal)) {
+      // current low <= neighbor high
+      setOutlineStyle(compareElement.lowEl, neighbor.highEl, 'solid', 'red')
+      return false
+    }
+    if (parseInt(compareElement.highVal) <= parseInt(neighbor.lowVal)) {
+      // current high <= neighbor low
+      setOutlineStyle(neighbor.lowEl, compareElement.highEl, 'solid', 'red')
+      return false
+    }
+  }
+}
+
 function isIntersect(numEl, colors) {
-  let currentLowEl, currentLowVal, currentHighEl, currentHighVal
-  let nextLowEl, nextLowVal, nextHighEl, nextHighVal
-  let id = numEl.id;
-  let isLow = id.includes('low')
-  let tmpId
+  let currentNumPair = getNumPair(numEl, colors)
 
-  if (isLow) {
-    currentLowEl = numEl
-    tmpId = id.replace('low', 'hi')
-    currentHighEl = document.getElementById(tmpId)
-  } else {
-    currentHighEl = numEl
-    tmpId = id.replace('hi', 'low')
-    currentLowEl = document.getElementById(tmpId)
-  }
-  currentLowVal = parseInt(currentLowEl.value)
-  currentHighVal = parseInt(currentHighEl.value)
-  setOutlineStyle(currentLowEl, currentHighEl, '', '') // clear errors (current)
-
-  let key = isLow ? id.replace('low', 'k') : id.replace('hi', 'k')
-  let index = colors.map(e => e.tempKey).indexOf(key) // index of array elem with key
-
-  let nextKey
-  if (index + 1 < colors.length) {
-    nextKey = colors[index + 1].tempKey // key of next element in list
-    tmpId = nextKey.replace('k', 'low')
-    nextLowEl = document.getElementById(tmpId)
-    nextLowVal = nextLowEl.value
-    tmpId = nextKey.replace('k', 'hi')
-    nextHighEl = document.getElementById(tmpId)
-    nextHighVal = nextHighEl.value
-    setOutlineStyle(nextLowEl, nextHighEl, '', '') // clear errors (next)
+  // Check pair
+  if (currentNumPair.highVal <= currentNumPair.lowVal) {
+    // current high <= current low
+    setOutlineStyle(currentNumPair.lowEl, currentNumPair.highEl, 'solid', 'red')
+    return false // return so user can fix it
   }
 
-  // current high <= current low
-  if (currentHighVal <= currentLowVal) {
-    setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
+  // Check next pair
+  if (currentNumPair.index + 1 < colors.length) {
+    checkNeighbor(currentNumPair.index + 1, colors, currentNumPair)
   }
 
-  if (isRealValue(nextKey)) {
-    // current low <= next high
-    if (parseInt(currentLowVal) <= parseInt(nextHighVal)) {
-      setOutlineStyle(currentLowEl, nextHighEl, 'solid', 'red')
-    }
-    // current high <= next low
-    if (parseInt(currentHighVal) <= parseInt(nextLowVal)) {
-      setOutlineStyle(nextLowEl, currentHighEl, 'solid', 'red')
-    }
+  // Check previous pair
+  if (currentNumPair.index - 1 >= 0) {
+    checkNeighbor(currentNumPair.index - 1, colors, currentNumPair)
   }
 }
 
