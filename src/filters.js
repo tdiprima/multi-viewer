@@ -16,15 +16,15 @@
  * <ETC>
  */
 const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
-
-  //console.log(`%c: layerColors${layerColors}, %c: ${1}`, 'color: orange;', 'color: yellow;')
-  //console.log(layers)
-
-  const identifier = getRandomInt(100, 999)
-  const id = `filters${identifier}`
+  const uniqueId = getRandomInt(100, 999)
+  const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
-  const div = createDraggableDiv(id, `${prefLabel} color levels`, rect.left, rect.top)
-  createUI(identifier, div.lastChild, layerColors, layers, viewer)
+  const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
+  const widgetBody = div.lastChild
+  // Sort
+  // Create temp key
+  // layerColors.forEach(function (colorObject, cIdx) {
+  createUI(uniqueId, widgetBody, layerColors, layers, viewer)
   return div
 }
 
@@ -40,12 +40,12 @@ function createUI(uniq, div, layerColors, layers, viewer) {
     table.appendChild(createHeaderRow())
 
     layerColors.forEach(function (colorObject, cIdx) {
+      colorObject.tempKey = `k${uniq}${cIdx}`
       let cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
       let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorObject, layerColors, viewer)
       let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorObject, layerColors, viewer)
       let buttonId = `i${uniq}${cIdx}`
       let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-      colorObject.tempKey = buttonId
 
       let tr = e('tr', {}, [
         e('td', {}, [cpEl]),
@@ -121,7 +121,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
       init = false // Update the state
       return
     }
-    //console.log([r, g, b, a])
+    // console.log([r, g, b, a])
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
@@ -187,7 +187,6 @@ function isIntersect(numEl, colors) {
   let currentLowEl, currentLowVal, currentHighEl, currentHighVal
   let nextLowEl, nextLowVal, nextHighEl, nextHighVal
   let id = numEl.id;
-  //console.log(`%cnumEl.id ${numEl.id}`, 'color: deeppink;');
   let isLow = id.includes('low')
   let tmpId
 
@@ -200,56 +199,40 @@ function isIntersect(numEl, colors) {
     tmpId = id.replace('hi', 'low')
     currentLowEl = document.getElementById(tmpId)
   }
-
   currentLowVal = parseInt(currentLowEl.value)
   currentHighVal = parseInt(currentHighEl.value)
-  let key = isLow ? id.replace('low', 'i') : id.replace('hi', 'i')
-  //console.log(`%ckey ${key}`, 'color: deeppink;');
-  for (let i = 0; i < colors.length; i++) {
-    //console.log(colors[i].tempKey)
-  }
+  setOutlineStyle(currentLowEl, currentHighEl, '', '') // clear errors (current)
+
+  let key = isLow ? id.replace('low', 'k') : id.replace('hi', 'k')
   let index = colors.map(e => e.tempKey).indexOf(key) // index of array elem with key
-  //s/b 0??
-  //console.log(`%cindex ${index}`, 'color: deeppink;');
-  let nextKey = colors[index + 1].tempKey // key of next element in list
-  //console.log(`%cnextKey ${nextKey}`, 'color: deeppink;');
 
-  // Get next low and high after current one
-  tmpId = nextKey.replace('i', 'low')
-  nextLowEl = document.getElementById(tmpId)
-  nextLowVal = nextLowEl.value
+  let nextKey
+  if (index + 1 < colors.length) {
+    nextKey = colors[index + 1].tempKey // key of next element in list
+    tmpId = nextKey.replace('k', 'low')
+    nextLowEl = document.getElementById(tmpId)
+    nextLowVal = nextLowEl.value
+    tmpId = nextKey.replace('k', 'hi')
+    nextHighEl = document.getElementById(tmpId)
+    nextHighVal = nextHighEl.value
+    setOutlineStyle(nextLowEl, nextHighEl, '', '') // clear errors (next)
+  }
 
-  tmpId = nextKey.replace('i', 'hi')
-  nextHighEl = document.getElementById(tmpId)
-  nextHighVal = nextHighEl.value
+  // current high <= current low
+  if (currentHighVal <= currentLowVal) {
+    setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
+  }
 
-  setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
-  setOutlineStyle(nextLowEl, nextHighEl, 'solid', 'red')
-  /*
-    // clear previous errors
-    setOutlineStyle(currentLowEl, currentHighEl, '', '')
-    setOutlineStyle(nextLowEl, nextHighEl, '', '')
-
-    // current high <= current low
-    if (currentHighVal <= currentLowVal) {
-      //console.log('%cHere.', 'color: #ccff00;')
-      //console.log(currentLowEl, currentHighEl)
-      setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
-    }
-
+  if (isRealValue(nextKey)) {
     // current low <= next high
     if (parseInt(currentLowVal) <= parseInt(nextHighVal)) {
-      //console.log('%cHere.', 'color: lime;')
-      //console.log(currentLowEl, nextHighEl)
       setOutlineStyle(currentLowEl, nextHighEl, 'solid', 'red')
     }
-
     // current high <= next low
     if (parseInt(currentHighVal) <= parseInt(nextLowVal)) {
-      //console.log('%cHere.', 'color: deeppink;')
-      //console.log(nextLowEl, currentHighEl)
       setOutlineStyle(nextLowEl, currentHighEl, 'solid', 'red')
-    }*/
+    }
+  }
 }
 
 function setOutlineStyle(a, b, style, color) {
@@ -264,9 +247,9 @@ function setOutlineStyle(a, b, style, color) {
       b.style.outlineColor = color
     }
   } catch (err) {
-    //console.log('a', a)
-    //console.log('b', b)
-    //console.log(`%c${err.message}`, 'color: #ff6a5a;')
+    console.log('a', a)
+    console.log('b', b)
+    console.log(`%c${err.message}`, 'color: #ff6a5a;')
   }
 }
 
@@ -279,10 +262,11 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let rgb = cpEl.style.backgroundColor // we get rgb back from CP
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
-    let buttonId = num1.id.replace('low', 'i') // borrowing element id
+    let blah = num1.id.replace('low', '') // borrowing element id
+    let buttonId = `i${blah}`
     let colorObject = {'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}
     colors.push(colorObject) // add it to our list
-    colorObject.tempKey = buttonId
+    colorObject.tempKey = `k${blah}`
     // sort
     colors.sort((a, b) => b.low - a.low)
     // reflect changes in viewer
@@ -324,7 +308,6 @@ function extraRow(uniq, colors, layers, viewer) {
 // CUSTOM FILTER IMPLEMENTATION
 let colorFilter = OpenSeadragon.Filters.GREYSCALE;
 colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
-  //console.log('%cCOLORLEVELS', 'color: #ccff00;')
   return function (context, callback) {
     // Read the canvas pixels
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
