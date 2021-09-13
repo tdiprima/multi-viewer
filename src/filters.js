@@ -270,7 +270,7 @@ function isIntersect(numEl, colors) {
   if (currentNumPair.highVal <= currentNumPair.lowVal) {
     // current high <= current low
     setOutlineStyle(currentNumPair.lowEl, currentNumPair.highEl, 'solid', 'red')
-    return false // return so user can fix it
+    return false
   }
 
   // Check next pair
