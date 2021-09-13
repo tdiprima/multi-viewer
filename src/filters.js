@@ -121,7 +121,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
       init = false // Update the state
       return
     }
-    // console.log([r, g, b, a])
+    //console.log([r, g, b, a])
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
@@ -187,7 +187,7 @@ function isIntersect(numEl, colors) {
   let currentLowEl, currentLowVal, currentHighEl, currentHighVal
   let nextLowEl, nextLowVal, nextHighEl, nextHighVal
   let id = numEl.id;
-  console.log(`%cnumEl.id ${numEl.id}`, 'color: deeppink;');
+  //console.log(`%cnumEl.id ${numEl.id}`, 'color: deeppink;');
   let isLow = id.includes('low')
   let tmpId
 
@@ -204,15 +204,15 @@ function isIntersect(numEl, colors) {
   currentLowVal = parseInt(currentLowEl.value)
   currentHighVal = parseInt(currentHighEl.value)
   let key = isLow ? id.replace('low', 'i') : id.replace('hi', 'i')
-  console.log(`%ckey ${key}`, 'color: deeppink;');
+  //console.log(`%ckey ${key}`, 'color: deeppink;');
   for (let i = 0; i < colors.length; i++) {
-    console.log(colors[i].tempKey)
+    //console.log(colors[i].tempKey)
   }
   let index = colors.map(e => e.tempKey).indexOf(key) // index of array elem with key
   //s/b 0??
-  console.log(`%cindex ${index}`, 'color: deeppink;');
+  //console.log(`%cindex ${index}`, 'color: deeppink;');
   let nextKey = colors[index + 1].tempKey // key of next element in list
-  console.log(`%cnextKey ${nextKey}`, 'color: deeppink;');
+  //console.log(`%cnextKey ${nextKey}`, 'color: deeppink;');
 
   // Get next low and high after current one
   tmpId = nextKey.replace('i', 'low')
@@ -232,22 +232,22 @@ function isIntersect(numEl, colors) {
 
     // current high <= current low
     if (currentHighVal <= currentLowVal) {
-      console.log('%cHere.', 'color: #ccff00;')
-      console.log(currentLowEl, currentHighEl)
+      //console.log('%cHere.', 'color: #ccff00;')
+      //console.log(currentLowEl, currentHighEl)
       setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
     }
 
     // current low <= next high
     if (parseInt(currentLowVal) <= parseInt(nextHighVal)) {
-      console.log('%cHere.', 'color: lime;')
-      console.log(currentLowEl, nextHighEl)
+      //console.log('%cHere.', 'color: lime;')
+      //console.log(currentLowEl, nextHighEl)
       setOutlineStyle(currentLowEl, nextHighEl, 'solid', 'red')
     }
 
     // current high <= next low
     if (parseInt(currentHighVal) <= parseInt(nextLowVal)) {
-      console.log('%cHere.', 'color: deeppink;')
-      console.log(nextLowEl, currentHighEl)
+      //console.log('%cHere.', 'color: deeppink;')
+      //console.log(nextLowEl, currentHighEl)
       setOutlineStyle(nextLowEl, currentHighEl, 'solid', 'red')
     }*/
 }
@@ -264,9 +264,9 @@ function setOutlineStyle(a, b, style, color) {
       b.style.outlineColor = color
     }
   } catch (err) {
-    console.log('a', a)
-    console.log('b', b)
-    console.log(`%c${err.message}`, 'color: #ff6a5a;')
+    //console.log('a', a)
+    //console.log('b', b)
+    //console.log(`%c${err.message}`, 'color: #ff6a5a;')
   }
 }
 
@@ -324,7 +324,7 @@ function extraRow(uniq, colors, layers, viewer) {
 // CUSTOM FILTER IMPLEMENTATION
 let colorFilter = OpenSeadragon.Filters.GREYSCALE;
 colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
-  // console.log('%cCOLORLEVELS', 'color: #ccff00;')
+  //console.log('%cCOLORLEVELS', 'color: #ccff00;')
   return function (context, callback) {
     // Read the canvas pixels
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
