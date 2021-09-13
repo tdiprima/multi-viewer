@@ -1,4 +1,25 @@
+/**
+ * COLOR LEVELS ELEMENTS NAMING CONVENTION
+ * filtersXXX
+ * filtersXXXHeader
+ * filtersXXXBody
+ * <TR>
+ * markerXXX0 <- 0th row elements
+ * lowXXX0 <- 0th row elements
+ * hiXXX0 <- 0th row elements
+ * iXXX0 <- 0th row elements
+ * <TR>
+ * markerXXX1 <- 1st row elements
+ * lowXXX1 <- 1st row elements
+ * hiXXX1 <- 1st row elements
+ * iXXX1 <- 1st row elements
+ * <ETC>
+ */
 const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
+
+  //console.log(`%c: layerColors${layerColors}, %c: ${1}`, 'color: orange;', 'color: yellow;')
+  //console.log(layers)
+
   const identifier = getRandomInt(100, 999)
   const id = `filters${identifier}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -163,56 +184,76 @@ function createNumericInput(id, uniq, layers, colorObject, colors, viewer) {
 }
 
 function isIntersect(numEl, colors) {
-  let lowEl, lowVal, highEl, highVal, key, tmpId
-  let id = numEl.id
+  let currentLowEl, currentLowVal, currentHighEl, currentHighVal
+  let nextLowEl, nextLowVal, nextHighEl, nextHighVal
+  let id = numEl.id;
+  console.log(`%cnumEl.id ${numEl.id}`, 'color: deeppink;');
   let isLow = id.includes('low')
+  let tmpId
+
   if (isLow) {
-    lowEl = numEl
+    currentLowEl = numEl
     tmpId = id.replace('low', 'hi')
-    highEl = document.getElementById(tmpId)
+    currentHighEl = document.getElementById(tmpId)
   } else {
-    highEl = numEl
+    currentHighEl = numEl
     tmpId = id.replace('hi', 'low')
-    lowEl = document.getElementById(tmpId)
+    currentLowEl = document.getElementById(tmpId)
   }
-  highlight(lowEl, highEl, false)
-  lowVal = parseInt(lowEl.value)
-  highVal = parseInt(highEl.value)
-  key = isLow ? id.replace('low', 'i') : id.replace('hi', 'i')
 
-  let index = colors.map(e => e.tempKey).indexOf(key)
-  let nextKey = colors[index + 1].tempKey
+  currentLowVal = parseInt(currentLowEl.value)
+  currentHighVal = parseInt(currentHighEl.value)
+  let key = isLow ? id.replace('low', 'i') : id.replace('hi', 'i')
+  console.log(`%ckey ${key}`, 'color: deeppink;');
+  for (let i = 0; i < colors.length; i++) {
+    console.log(colors[i].tempKey)
+  }
+  let index = colors.map(e => e.tempKey).indexOf(key) // index of array elem with key
+  //s/b 0??
+  console.log(`%cindex ${index}`, 'color: deeppink;');
+  let nextKey = colors[index + 1].tempKey // key of next element in list
+  console.log(`%cnextKey ${nextKey}`, 'color: deeppink;');
+
+  // Get next low and high after current one
   tmpId = nextKey.replace('i', 'low')
-  let lowEl1 = document.getElementById(tmpId)
+  nextLowEl = document.getElementById(tmpId)
+  nextLowVal = nextLowEl.value
+
   tmpId = nextKey.replace('i', 'hi')
-  let highEl1 = document.getElementById(tmpId)
-  highlight(lowEl1, highEl1, false)
+  nextHighEl = document.getElementById(tmpId)
+  nextHighVal = nextHighEl.value
 
-  // current high <= current low
-  if (highVal <= lowVal) {
-    highlight(lowEl, highEl, true)
-  }
+  setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
+  setOutlineStyle(nextLowEl, nextHighEl, 'solid', 'red')
+  /*
+    // clear previous errors
+    setOutlineStyle(currentLowEl, currentHighEl, '', '')
+    setOutlineStyle(nextLowEl, nextHighEl, '', '')
 
-  // current low <= next high
-  if (parseInt(lowVal) <= parseInt(highEl1.value)) {
-    highlight(lowEl, highEl1, true)
-  }
+    // current high <= current low
+    if (currentHighVal <= currentLowVal) {
+      console.log('%cHere.', 'color: #ccff00;')
+      console.log(currentLowEl, currentHighEl)
+      setOutlineStyle(currentLowEl, currentHighEl, 'solid', 'red')
+    }
 
-  // current high <= next low
-  if (parseInt(highVal) <= parseInt(lowEl1.value)) {
-    highlight(lowEl1, highVal, true)
-  }
+    // current low <= next high
+    if (parseInt(currentLowVal) <= parseInt(nextHighVal)) {
+      console.log('%cHere.', 'color: lime;')
+      console.log(currentLowEl, nextHighEl)
+      setOutlineStyle(currentLowEl, nextHighEl, 'solid', 'red')
+    }
+
+    // current high <= next low
+    if (parseInt(currentHighVal) <= parseInt(nextLowVal)) {
+      console.log('%cHere.', 'color: deeppink;')
+      console.log(nextLowEl, currentHighEl)
+      setOutlineStyle(nextLowEl, currentHighEl, 'solid', 'red')
+    }*/
 }
 
-function highlight(a, b, isErr) {
-  let style, color
-  if (isErr) {
-    style = 'solid'
-    color = 'red'
-  } else {
-    style = ''
-    color = ''
-  }
+function setOutlineStyle(a, b, style, color) {
+  // For numeric element pair
   try {
     if (isRealValue(a)) {
       a.style.outlineStyle = style
@@ -223,14 +264,16 @@ function highlight(a, b, isErr) {
       b.style.outlineColor = color
     }
   } catch (err) {
+    console.log('a', a)
+    console.log('b', b)
     console.log(`%c${err.message}`, 'color: #ff6a5a;')
   }
 }
 
 function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
-  highlight(num1, num2)
+  setOutlineStyle(num1, num2, '', '') // clear error
   if (num1.value === '0' && num2.value === '0') {
-    setError(num1, num2)
+    setOutlineStyle(num1, num2, 'solid', 'red') // set error
   } else {
     // add to list
     let rgb = cpEl.style.backgroundColor // we get rgb back from CP
