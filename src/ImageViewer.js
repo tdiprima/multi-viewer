@@ -158,16 +158,18 @@ class ImageViewer {
     }
 
     function getInfoForScalebar() {
-      // Get info for scalebar
+      // Get info for scale bar
       let item = itemsToBeDisplayed[0]
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
-      if (item.resolutionUnit === 3) {
-        let pix_per_cm = item.xResolution
-        setScaleBar(pix_per_cm * 100)
-        pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
-        microns_per_pix = 10000 / pix_per_cm
-      } else {
-        console.warn('Handle resolution unit', item.resolutionUnit)
+      if (isRealValue(item.resolutionUnit)) {
+        if (item.resolutionUnit === 3) {
+          let pix_per_cm = item.xResolution
+          setScaleBar(pix_per_cm * 100)
+          pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
+          microns_per_pix = 10000 / pix_per_cm
+        } else {
+          console.warn('resolutionUnit <> 3', item.resolutionUnit)
+        }
       }
     }
 
