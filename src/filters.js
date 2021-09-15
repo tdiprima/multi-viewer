@@ -39,8 +39,8 @@ function createUI(uniq, div, layerColors, layers, viewer) {
     layerColors.forEach(function (colorObject, cIdx) {
       colorObject.tempKey = `k${uniq}${cIdx}`
       let cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
-      let num1 = createNumericInput(`low${uniq}${cIdx}`, uniq, layers, colorObject, layerColors, viewer)
-      let num2 = createNumericInput(`hi${uniq}${cIdx}`, uniq, layers, colorObject, layerColors, viewer)
+      let num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
+      let num2 = createNumericInput(`hi${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
       let buttonId = `i${uniq}${cIdx}`
       let removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
 
@@ -165,7 +165,7 @@ function numericEvent(numEl, colorObject, layers, viewer) {
 }
 
 // CREATE NUMERIC INPUT
-function createNumericInput(id, uniq, layers, colorObject, colors, viewer) {
+function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
   let numEl = e('input', {
     id: id,
     type: 'number',
@@ -175,130 +175,56 @@ function createNumericInput(id, uniq, layers, colorObject, colors, viewer) {
     size: '5',
     value: id.includes('low') ? colorObject.low.toString() : colorObject.hi.toString()
   })
-  numEl.addEventListener('change', isIntersect.bind(null, numEl, colors), {passive: true})
+  numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
   numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
   return numEl
 }
 
-function getNeighbor(index, colors) {
-  let retVal
-  try {
-    let key = colors[index].tempKey
-
-    let lowEl = document.getElementById(key.replace('k', 'low'))
-    let lowVal = lowEl.value
-    let highEl = document.getElementById(key.replace('k', 'hi'))
-    let highVal = highEl.value
-
-    setOutlineStyle(lowEl, highEl, '', '') // clear errors
-
-    retVal = {
-      key: key,
-      index: index,
-      lowEl: lowEl,
-      lowVal: lowVal,
-      highEl: highEl,
-      highVal: highVal
-    }
-  } catch (e) {
-    retVal = null
-    console.log(`%c${e.message}`, 'color: #ff6a5a;')
-  }
-  return retVal
-}
-
-function getNumPair(numEl, colors) {
-  let retVal
-  try {
-    let id = numEl.id;
-    let isLow = id.includes('low')
-    let tmpId
-
-    let currentLowEl, currentHighEl
-    let currentLowVal, currentHighVal
-    if (isLow) {
-      currentLowEl = numEl
-      tmpId = id.replace('low', 'hi')
-      currentHighEl = document.getElementById(tmpId)
-    } else {
-      currentHighEl = numEl
-      tmpId = id.replace('hi', 'low')
-      currentLowEl = document.getElementById(tmpId)
-    }
-    setOutlineStyle(currentLowEl, currentHighEl, '', '') // clear errors
-
-    currentLowVal = parseInt(currentLowEl.value)
-    currentHighVal = parseInt(currentHighEl.value)
-
-    let currentKey = isLow ? id.replace('low', 'k') : id.replace('hi', 'k')
-    let currentIndex = colors.map(e => e.tempKey).indexOf(currentKey) // index of array elem with key
-    retVal = {
-      key: currentKey,
-      index: currentIndex,
-      lowEl: currentLowEl,
-      lowVal: currentLowVal,
-      highEl: currentHighEl,
-      highVal: currentHighVal
-    }
-  } catch (e) {
-    retVal = null
-    console.log(`%c${e.message}`, 'color: #ff6a5a;')
-  }
-  return retVal
-}
-
-function checkNeighbor(index, colors, compareElement) {
-  let neighbor = getNeighbor(index, colors)
-  if (isRealValue(neighbor)) {
-    if (parseInt(compareElement.lowVal) <= parseInt(neighbor.highVal)) {
-      // current low <= neighbor high
-      setOutlineStyle(compareElement.lowEl, neighbor.highEl, 'solid', 'red')
-      return false
-    }
-    if (parseInt(compareElement.highVal) <= parseInt(neighbor.lowVal)) {
-      // current high <= neighbor low
-      setOutlineStyle(neighbor.lowEl, compareElement.highEl, 'solid', 'red')
-      return false
+function isIntersect(table) {
+  let arr = []
+  const cells = table.getElementsByTagName('td');
+  for (let cell of cells) {
+    let elem = cell.children[0]
+    if (elem.type === 'number') {
+      elem.style.outlineStyle = ''
+      elem.style.outlineColor = ''
+      if (elem.id.startsWith('low')) {
+        arr.push({'low': elem, 'lowVal': parseInt(elem.value)})
+      }
+      if (elem.id.startsWith('hi')) {
+        let el = arr[arr.length - 1] // get last array elem
+        el.high = elem
+        el.highVal = parseInt(elem.value)
+      }
     }
   }
-}
 
-function isIntersect(numEl, colors) {
-  let currentNumPair = getNumPair(numEl, colors)
-
-  // Check pair
-  if (currentNumPair.highVal <= currentNumPair.lowVal) {
-    // current high <= current low
-    setOutlineStyle(currentNumPair.lowEl, currentNumPair.highEl, 'solid', 'red')
-    return false
+  // Sort DESC
+  arr.sort((a, b) => {
+    return b.lowVal - a.lowVal
+  })
+  let n = arr.length - 1
+  for (let i = 0; i < n; i++) {
+    let notZeroes = (arr[i].lowVal !== 0 && arr[i + 1].highVal !== 0)
+    // If low <= high of next, then overlap
+    if ((arr[i].lowVal <= arr[i + 1].highVal) && notZeroes) {
+      setOutlineStyle(arr[i].low, arr[i + 1].high, 'solid', 'red')
+      return true
+    }
   }
 
-  // Check next pair
-  if (currentNumPair.index + 1 < colors.length) {
-    checkNeighbor(currentNumPair.index + 1, colors, currentNumPair)
-  }
-
-  // Check previous pair
-  if (currentNumPair.index - 1 >= 0) {
-    checkNeighbor(currentNumPair.index - 1, colors, currentNumPair)
-  }
+  return false
 }
 
 function setOutlineStyle(a, b, style, color) {
   // For numeric element pair
-  try {
-    if (isRealValue(a)) {
-      a.style.outlineStyle = style
-      a.style.outlineColor = color
-    }
-    if (isRealValue(b)) {
-      b.style.outlineStyle = style
-      b.style.outlineColor = color
-    }
-  } catch (err) {
-    console.log('a', a)
-    console.log('b', b)
-    console.log(`%c${err.message}`, 'color: #ff6a5a;')
+  if (isRealValue(a)) {
+    a.style.outlineStyle = style
+    a.style.outlineColor = color
+  }
+  if (isRealValue(b)) {
+    b.style.outlineStyle = style
+    b.style.outlineColor = color
   }
 }
 
@@ -338,8 +264,10 @@ function extraRow(uniq, colors, layers, viewer) {
   let idx = colors.length
   let generic = {color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0}
   let cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
-  let num1 = createNumericInput(`low${uniq}${idx}`, uniq, layers, generic, colors, viewer)
-  let num2 = createNumericInput(`hi${uniq}${idx}`, uniq, layers, generic, colors, viewer)
+  let b = document.getElementById(`filters${uniq}Body`)
+  let t = b.firstChild
+  let num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
+  let num2 = createNumericInput(`hi${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
   let addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
 
   let tr = e('tr', {}, [
