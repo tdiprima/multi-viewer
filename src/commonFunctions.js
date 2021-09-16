@@ -1,3 +1,12 @@
+const config = {
+  osdImages: '/multi-viewer/vendor/openseadragon/images/',
+  appImages: '/multi-viewer/images/',
+}
+// const config = {
+//   osdImages: 'vendor/openseadragon/images/',
+//   appImages: 'images/'
+// }
+
 function setFilter(layers, viewer) {
   if (viewer.world) {
     // SET COLOR FILTER

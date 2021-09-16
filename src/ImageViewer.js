@@ -7,9 +7,6 @@
 class ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed) {
     let tileSources = []
-    const imgDir = '/multi-viewer/vendor/openseadragon/images/'
-    // const imgDir = 'vendor/openseadragon/images/'
-
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
       // console.log(itemsToBeDisplayed[i].location)
       tileSources.push({
@@ -25,7 +22,7 @@ class ImageViewer {
       id: viewerInfo.divId,
       crossOriginPolicy: 'Anonymous',
       blendTime: 0,
-      prefixUrl: imgDir,
+      prefixUrl: config.osdImages,
       tileSources: tileSources,
       maxZoomPixelRatio: 1
     })
@@ -121,20 +118,20 @@ class ImageViewer {
 
       let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest:  `${imgDir}zin_rest.png`,
-        srcGroup: `${imgDir}zin_grouphover.png`,
-        srcHover: `${imgDir}zin_hover.png`,
-        srcDown: `${imgDir}zin_pressed.png`,
+        srcRest:  `${config.osdImages}zin_rest.png`,
+        srcGroup: `${config.osdImages}zin_grouphover.png`,
+        srcHover: `${config.osdImages}zin_hover.png`,
+        srcDown: `${config.osdImages}zin_pressed.png`,
         onClick: function () {
           vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
       })
       let zoutButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 0%',
-        srcRest: `${imgDir}zout_rest.png`,
-        srcGroup: `${imgDir}zout_grouphover.png`,
-        srcHover: `${imgDir}zout_hover.png`,
-        srcDown: `${imgDir}zout_pressed.png`,
+        srcRest: `${config.osdImages}zout_rest.png`,
+        srcGroup: `${config.osdImages}zout_grouphover.png`,
+        srcHover: `${config.osdImages}zout_hover.png`,
+        srcDown: `${config.osdImages}zout_pressed.png`,
         onClick: function () {
           vpt.goHome(true)
         }
