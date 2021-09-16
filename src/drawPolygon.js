@@ -74,7 +74,7 @@ const drawPolygon = function (idx, viewer, overlay) {
     const btnTop = y - 10
     let src
     src = '/multi-viewer/images/delete-icon.png' /* WICKET ENVI */
-    // src = '../images/delete-icon.png'
+    // src = 'images/delete-icon.png'
     let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
     deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`);
     document.getElementById(overlaycanvas).closest('.canvas-container').append(deleteBtn)
