@@ -1,7 +1,5 @@
 /**
  * Allow user to draw a polygon on the image.
- * btnDraw: element that is clicked to get here
- * mark: HTML element; text which is marked or highlighted
  * @param idx
  * @param viewer: OSD viewer object
  * @param overlay: fabric overlay object
@@ -72,8 +70,7 @@ const drawPolygon = function (idx, viewer, overlay) {
     jQuery('.deleteBtn').remove()
     const btnLeft = x - 10
     const btnTop = y - 10
-    let src
-    src = `${config.appImages}delete-icon.png`
+    let src = `${config.appImages}delete-icon.png`
     let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
     deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`);
     document.getElementById(overlaycanvas).closest('.canvas-container').append(deleteBtn)
@@ -120,7 +117,7 @@ const drawPolygon = function (idx, viewer, overlay) {
     })
     canvas.add(poly)
     canvas.setActiveObject(poly)
-    addDeleteBtn(poly.oCoords.tr.x, poly.oCoords.tr.y)
+    addDeleteBtn(poly.oCoords.tr.x, poly.oCoords.tr.y) // top-right x,y
     canvas.remove(pathObject)
   }
 
