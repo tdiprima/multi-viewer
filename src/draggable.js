@@ -3,6 +3,7 @@ function createDraggableDiv(id, title, left, top, viz) {
   myDiv.style.left = left + 'px'
   myDiv.style.top = top + 'px'
 
+  // images/close-icon.png
   let myImg = e('img', {src: '/multi-viewer/images/close-icon.png', width: 25, height: 25, alt: 'close'})
   myImg.style.cursor = 'pointer'
   myImg.addEventListener('click', function () {
