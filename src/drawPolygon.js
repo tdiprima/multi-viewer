@@ -66,18 +66,21 @@ const drawPolygon = function (idx, viewer, overlay) {
     setupDeleteButton(canvas, viewer)
   }
 
+  let thisCanvas
   function addDeleteBtn(x, y) {
     jQuery('.deleteBtn').remove()
-    const btnLeft = x - 10
-    const btnTop = y - 10
+    const btnLeft = x
+    const btnTop = y - 20
     let src = `${config.appImages}delete-icon.png`
     let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
     deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:30px;height:30px;`);
-    document.getElementById(overlaycanvas).closest('.canvas-container').append(deleteBtn)
+    thisCanvas = document.getElementById(overlaycanvas).closest('.canvas-container')
+    // console.log(thisCanvas)
+    thisCanvas.append(deleteBtn)
   }
 
   function setupDeleteButton(canvas, viewer) {
-    // Polygon created & selected
+    // Polygon selected
     canvas.on('selection:created', function (e) { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
     // When user moves or modifies the polygon,
     // the delete button goes with it.
