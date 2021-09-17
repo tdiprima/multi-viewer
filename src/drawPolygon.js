@@ -8,7 +8,7 @@ const drawPolygon = function (idx, viewer, overlay) {
   let overlaycanvas = `osd-overlaycanvas-${idx + 1}`
   let btnDraw = document.getElementById('btnDraw' + idx)
   let mark = document.getElementById('mark' + idx)
-  const canvas = overlay.fabricCanvas()
+  let canvas = this.__canvas = overlay.fabricCanvas()
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
@@ -20,14 +20,13 @@ const drawPolygon = function (idx, viewer, overlay) {
 
   btnDraw.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'btn')
-
+    // Toggle drawing
     if (canvas.isDrawingMode) {
       turnDrawingOff(canvas, viewer)
     } else {
       turnDrawingOn(canvas, viewer, paintBrush, mark)
     }
   })
-
 
   function turnDrawingOff(canvas, viewer) {
     canvas.isDrawingMode = false
@@ -67,35 +66,25 @@ const drawPolygon = function (idx, viewer, overlay) {
   }
 
   let thisCanvas
+
   function addDeleteBtn(x, y) {
-    jQuery('.deleteBtn').remove()
-    const btnLeft = x
-    const btnTop = y - 20
+    jQuery('.deleteBtn').remove() // Remove before adding again
+    let btnLeft = x - 10
+    const btnTop = y - 15
     let src = `${config.appImages}delete-icon.png`
-    let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
-    deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:30px;height:30px;`);
+    const deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute; top:${btnTop}px; left:${btnLeft}px; cursor:pointer;"/>`
     thisCanvas = document.getElementById(overlaycanvas).closest('.canvas-container')
-    // console.log(thisCanvas)
-    thisCanvas.append(deleteBtn)
+    jQuery(thisCanvas).append(deleteBtn)
   }
 
   function setupDeleteButton(canvas, viewer) {
-    // Polygon selected
-    canvas.on('selection:created', function (e) { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
-    // When user moves or modifies the polygon,
-    // the delete button goes with it.
-    canvas.on('object:modified', function (e) {
-      // Check for top-right corner
-      if (isRealValue(e.target.oCoords.tr)) {
-        // Set delete button a top-right control
-        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
-      }
-    })
-    canvas.on('object:scaling', function (e) { jQuery('.deleteBtn').remove() })
-    canvas.on('object:moving', function (e) { jQuery('.deleteBtn').remove() })
-    canvas.on('object:rotating', function (e) { jQuery('.deleteBtn').remove() })
+    canvas.on('selection:created', e => { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
+    canvas.on('object:modified', e => { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
+    canvas.on('object:scaling', e => { jQuery('.deleteBtn').remove() })
+    canvas.on('object:moving', e => { jQuery('.deleteBtn').remove() })
+    canvas.on('object:rotating', e => { jQuery('.deleteBtn').remove() })
 
-    jQuery('.canvas-container').on('click', '.deleteBtn', function () {
+    jQuery(thisCanvas).on('click', '.deleteBtn', function () {
       viewer.gestureSettingsMouse.clickToZoom = false
       if (canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject())
