@@ -4,7 +4,7 @@
  * @param viewer: OSD viewer object
  * @param overlay: fabric overlay object
  */
-const drawPolygon = function (idx, viewer, overlay) {
+const drawPolygon = (idx, viewer, overlay) => {
   let overlaycanvas = `osd-overlaycanvas-${idx + 1}`
   let btnDraw = document.getElementById('btnDraw' + idx)
   let mark = document.getElementById('mark' + idx)
@@ -13,10 +13,10 @@ const drawPolygon = function (idx, viewer, overlay) {
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
 
-  canvas.on('mouse:over', function (evt) { fillPolygon(evt, canvas) })
-  canvas.on('mouse:out', function (evt) { unfillPolygon(evt, canvas) })
-  canvas.on('mouse:up', function () { turnDrawingOff(canvas, viewer) })
-  canvas.on('path:created', function (opts) { pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer) })
+  canvas.on('mouse:over', evt => { fillPolygon(evt, canvas) })
+  canvas.on('mouse:out', evt => { unfillPolygon(evt, canvas) })
+  canvas.on('mouse:up', () => { turnDrawingOff(canvas, viewer) })
+  canvas.on('path:created', opts => { pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer) })
 
   btnDraw.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'btn')
@@ -30,13 +30,13 @@ const drawPolygon = function (idx, viewer, overlay) {
 
   function turnDrawingOff(canvas, viewer) {
     canvas.isDrawingMode = false
-    canvas.off('mouse:down', function () { setGestureSettings(canvas, viewer) })
+    canvas.off('mouse:down', () => { setGestureSettings(canvas, viewer) })
     setOsdMove(viewer, true)
   }
 
   function turnDrawingOn(canvas, viewer, paintBrush, mark) {
     canvas.isDrawingMode = true
-    canvas.on('mouse:down', function () { setGestureSettings(canvas, viewer) })
+    canvas.on('mouse:down', () => { setGestureSettings(canvas, viewer) })
     paintBrush.color = mark.innerHTML
     paintBrush.width = 10 / viewer.viewport.getZoom(true)
     setOsdMove(viewer, false)
@@ -46,7 +46,7 @@ const drawPolygon = function (idx, viewer, overlay) {
     convertPathToPolygon(options.path, canvas, paintBrush)
     customizePolygonControls(options.path, canvas, viewer)
     toggleButton(button, 'btn', 'btnOn')
-    canvas.off('path:created', function () { pathCreatedHandler(options, button, canvas, paintBrush, viewer) })
+    canvas.off('path:created', () => { pathCreatedHandler(options, button, canvas, paintBrush, viewer) })
   }
 
   function setGestureSettings(canvas, viewer) {
@@ -71,10 +71,16 @@ const drawPolygon = function (idx, viewer, overlay) {
     jQuery('.deleteBtn').remove() // Remove before adding again
     let btnLeft = x - 10
     const btnTop = y - 15
+
     let src = `${config.appImages}delete-icon.png`
-    const deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute; top:${btnTop}px; left:${btnLeft}px; cursor:pointer;"/>`
+    // let deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute; top:${btnTop}px; left:${btnLeft}px; cursor:pointer;"/>`
+    let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
     thisCanvas = document.getElementById(overlaycanvas).closest('.canvas-container')
-    jQuery(thisCanvas).append(deleteBtn)
+    // console.log('thisCanvas', thisCanvas) //'.canvas-container'
+    deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`);
+    // jQuery(thisCanvas).append(deleteBtn)
+    thisCanvas.append(deleteBtn)
+
   }
 
   function setupDeleteButton(canvas, viewer) {
@@ -84,7 +90,7 @@ const drawPolygon = function (idx, viewer, overlay) {
     canvas.on('object:moving', e => { jQuery('.deleteBtn').remove() })
     canvas.on('object:rotating', e => { jQuery('.deleteBtn').remove() })
 
-    jQuery(thisCanvas).on('click', '.deleteBtn', function () {
+    jQuery(thisCanvas).on('click', '.deleteBtn', () => {
       viewer.gestureSettingsMouse.clickToZoom = false
       if (canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject())
