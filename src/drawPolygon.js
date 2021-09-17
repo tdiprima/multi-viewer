@@ -72,14 +72,19 @@ const drawPolygon = function (idx, viewer, overlay) {
     const btnTop = y - 10
     let src = `${config.appImages}delete-icon.png`
     let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
-    deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`);
+    deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:30px;height:30px;`);
     document.getElementById(overlaycanvas).closest('.canvas-container').append(deleteBtn)
   }
 
   function setupDeleteButton(canvas, viewer) {
+    // Polygon created & selected
     canvas.on('selection:created', function (e) { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
+    // When user moves or modifies the polygon,
+    // the delete button goes with it.
     canvas.on('object:modified', function (e) {
+      // Check for top-right corner
       if (isRealValue(e.target.oCoords.tr)) {
+        // Set delete button a top-right control
         addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
       }
     })
@@ -112,11 +117,11 @@ const drawPolygon = function (idx, viewer, overlay) {
       scaleX: pathObject.scaleX,
       scaleY: pathObject.scaleY,
       objectCaching: false,
-      transparentCorners: false,
+      transparentCorners: true,
       cornerColor: cornerColor
     })
-    canvas.add(poly)
-    canvas.setActiveObject(poly)
+    poly['setControlVisible']('tr', false)
+    canvas.add(poly).setActiveObject(poly)
     addDeleteBtn(poly.oCoords.tr.x, poly.oCoords.tr.y) // top-right x,y
     canvas.remove(pathObject)
   }
