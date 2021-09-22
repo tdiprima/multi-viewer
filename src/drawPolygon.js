@@ -66,7 +66,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
 
   function setGestureSettings(canvas, viewer) {
     if (!canvas.getActiveObject()) {
-      $('.deleteBtn').remove()
+      jQuery('.deleteBtn').remove()
       viewer.gestureSettingsMouse.clickToZoom = true
     } else {
       viewer.gestureSettingsMouse.clickToZoom = false
@@ -81,21 +81,24 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   }
 
   function addDeleteBtn(x, y) {
-    $('.deleteBtn').remove()
+    jQuery('.deleteBtn').remove()
     let btnLeft = x - 10
     let btnTop = y - 10
     let deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    // $('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
-    let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
-    let osdc = cc.parentElement.parentElement
-    let chil = osdc.children
+    jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want, see below
+
+    // let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
+    // jQuery(cc).append(deleteBtn) // this would've been it, but there's more than one
+
+    // let osdc = cc.parentElement.parentElement
+    // let chil = osdc.children
     // Each layer has a .canvas-container with a [id^=osd-overlaycanvas]
-    for (let i = 0; i < chil.length; i++) {
-      if (chil[i].hasChildNodes()) {
-        let canvasContainer = chil[i].children[0]
-        $(canvasContainer).append(deleteBtn)
-      }
-    }
+    // for (let i = 0; i < chil.length; i++) {
+    //   if (chil[i].hasChildNodes()) {
+    //     let canvasContainer = chil[i].children[0]
+    //     jQuery(canvasContainer).append(deleteBtn)
+    //   }
+    // } // TODO: AND IT DOESN'T WORK FOR THE 2ND VIEWER - THE DELETE BUTTON GOES ON THE FIRST VIEWER #:(
   }
 
   function setupDeleteButton(canvas, viewer) {
@@ -110,22 +113,22 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     })
 
     canvas.on('object:scaling', function (e) {
-      $('.deleteBtn').remove()
+      jQuery('.deleteBtn').remove()
     })
 
     canvas.on('object:moving', function (e) {
-      $('.deleteBtn').remove()
+      jQuery('.deleteBtn').remove()
     })
 
     canvas.on('object:rotating', function (e) {
-      $('.deleteBtn').remove()
+      jQuery('.deleteBtn').remove()
     })
 
-    $('.canvas-container').on('click', '.deleteBtn', function (e) {
+    jQuery('.canvas-container').on('click', '.deleteBtn', function (e) {
       viewer.gestureSettingsMouse.clickToZoom = false
       if (canvas.getActiveObject()) {
         canvas.remove(canvas.getActiveObject())
-        let deleteButtons = $('.deleteBtn')
+        let deleteButtons = jQuery('.deleteBtn')
         deleteButtons.remove()
       }
       viewer.gestureSettingsMouse.clickToZoom = true
