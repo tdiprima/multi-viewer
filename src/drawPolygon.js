@@ -7,7 +7,6 @@
 const drawPolygon = (viewerInfo, viewer, overlay) => {
   let idx = viewerInfo.idx
   let overlaycanvas = `osd-overlaycanvas-${idx + 1}`
-  console.log(`%cidx ${idx}`, 'color: #ccff00;')
   let btnDraw = document.getElementById(`btnDraw${idx}`)
   let mark = document.getElementById(`mark${idx}`)
   let canvas = this.__canvas = overlay.fabricCanvas()
@@ -81,71 +80,22 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     setupDeleteButton(canvas, viewer)
   }
 
-  // let oc1 = `osd-overlaycanvas-${idx + 1}` // HARDCODED
-  // let oc2 = `osd-overlaycanvas-${idx + 2}`
-
-  let canvii = $('.canvas-container')
-  // console.log(typeof canvii) // OBJECT
-  // console.log(`%c${Array.isArray(canvii)}`, 'color: deeppink;') // FALSE.
-  console.log(canvii)
-  // $('.canvas-container').each(function( index, eh ) {
-  //   console.log( index + ": " + $( this ) ) // object
-  //   // console.log('eh', eh) // div
-  // })
-
   function addDeleteBtn(x, y) {
     $('.deleteBtn').remove()
     let btnLeft = x - 10
     let btnTop = y - 10
     let deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
     // $('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
-
-    // $(".openseadragon-canvas").each(function (index, elem) {
-    //   console.log("I am " + index + "th element.");
-    //   console.log('this', $(this)) // jQuery element
-    //   // console.log('elem', elem) // DOM element
-    // });
-
-    // let elm = document.createElement("div")
-    // let jelm = $(elm) //convert to jQuery Element
-    // let htmlElm = jelm[0] //convert to HTML Element
-
-    // For this viewer, for as many layers as there are, we have to add a button
-    // console.log($('.canvas-container').find(overlaycanvas))
-
     let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
-    let ccp = cc.parentElement
-    let osdc = ccp.parentElement
-    // console.log('cc', cc)
-    console.log('osdc', osdc)
+    let osdc = cc.parentElement.parentElement
     let chil = osdc.children
-
+    // Each layer has a .canvas-container with a [id^=osd-overlaycanvas]
     for (let i = 0; i < chil.length; i++) {
       if (chil[i].hasChildNodes()) {
-        let ccc = chil[i].children[0]
-        console.log('ccc', ccc)
-        $(ccc).append(deleteBtn)
+        let canvasContainer = chil[i].children[0]
+        $(canvasContainer).append(deleteBtn)
       }
     }
-    // console.log('YAY', $(osdc).children("[id^=osd-overlaycanvas]"))
-
-
-    // TESTING 1
-    // for (let i = 0; i < canvii.length; i++) {
-    //   for (let j = 0; j < viewerInfo.len; j++) {
-    //     console.log(canvii[i].firstChild.id, `osd-overlaycanvas-${idx + j + 1}`)
-    //     if (canvii[i].firstChild.id === `osd-overlaycanvas-${idx + j + 1}`) {
-    //       $(canvii[i]).append(deleteBtn)
-    //     }
-    //   }
-    // }
-
-    // 2
-    // for (let i = 0; i < canvii.length; i++) {
-    //   if (canvii[i].firstChild.id === oc1 || canvii[i].firstChild.id === oc2) {
-    //     $(canvii[i]).append(deleteBtn)
-    //   }
-    // }
   }
 
   function setupDeleteButton(canvas, viewer) {
@@ -174,10 +124,8 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     $('.canvas-container').on('click', '.deleteBtn', function (e) {
       viewer.gestureSettingsMouse.clickToZoom = false
       if (canvas.getActiveObject()) {
-        console.log('getActiveObject()', canvas.getActiveObject())
         canvas.remove(canvas.getActiveObject())
         let deleteButtons = $('.deleteBtn')
-        console.log(deleteButtons)
         deleteButtons.remove()
       }
       viewer.gestureSettingsMouse.clickToZoom = true
