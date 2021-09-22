@@ -26,7 +26,8 @@ class MultiViewer extends ImageViewer {
     }
 
     if (options.toolbarOn) {
-      markupTools(viewerInfo.idx, super.getViewer())
+      viewerInfo.len = itemsToBeDisplayed.length
+      markupTools(viewerInfo, super.getViewer())
     }
 
     layers(document.getElementById(`layers_and_colors${viewerInfo.idx}`), itemsToBeDisplayed, super.getViewer())
