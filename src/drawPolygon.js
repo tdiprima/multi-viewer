@@ -68,28 +68,37 @@ const drawPolygon = (idx, viewer, overlay) => {
   let thisCanvas
 
   function addDeleteBtn(x, y) {
+    // jQuery('.deleteBtn').remove()
+    // let btnLeft = x - 10
+    // let btnTop = y - 10
+    // let deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    // jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
+
     jQuery('.deleteBtn').remove() // Remove before adding again
     let btnLeft = x - 10
-    const btnTop = y - 15
-
+    let btnTop = y - 15
     let src = `${config.appImages}delete-icon.png`
-    // let deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute; top:${btnTop}px; left:${btnLeft}px; cursor:pointer;"/>`
     let deleteBtn = e('img', {'src': src, 'class': 'deleteBtn'})
-    thisCanvas = document.getElementById(overlaycanvas).closest('.canvas-container')
-    // console.log('thisCanvas', thisCanvas) //'.canvas-container'
+    thisCanvas = document.getElementById(overlaycanvas).closest('.canvas-container') // <- just the canvas we're on
+    console.log('thisCanvas', thisCanvas)
     deleteBtn.setAttribute('style', `position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;`);
-    // jQuery(thisCanvas).append(deleteBtn)
     thisCanvas.append(deleteBtn)
-
   }
 
   function setupDeleteButton(canvas, viewer) {
     canvas.on('selection:created', e => { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
-    canvas.on('object:modified', e => { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
+    canvas.on('object:modified', function (e) {
+      if (isRealValue(e.target.oCoords.tr)) {
+        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
+      }
+    })
+    // canvas.on('object:modified', e => { addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y) })
     canvas.on('object:scaling', e => { jQuery('.deleteBtn').remove() })
     canvas.on('object:moving', e => { jQuery('.deleteBtn').remove() })
     canvas.on('object:rotating', e => { jQuery('.deleteBtn').remove() })
 
+
+    //jQuery('.canvas-container').on('click', '.deleteBtn', function () {
     jQuery(thisCanvas).on('click', '.deleteBtn', () => {
       viewer.gestureSettingsMouse.clickToZoom = false
       if (canvas.getActiveObject()) {
