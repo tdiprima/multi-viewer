@@ -13,6 +13,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
+  let src = `${config.appImages}delete-icon.png`
 
   canvas.on('mouse:over', evt => {
     fillPolygon(evt, canvas)
@@ -84,21 +85,20 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     jQuery('.deleteBtn').remove()
     let btnLeft = x - 10
     let btnTop = y - 10
-    let deleteBtn = `<img src="images/delete-icon.png" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want, see below
-
-    // let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
-    // jQuery(cc).append(deleteBtn) // this would've been it, but there's more than one
-
-    // let osdc = cc.parentElement.parentElement
-    // let chil = osdc.children
+    let deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    // jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
+    let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
+    // jQuery(cc).append(deleteBtn) // this could've been it, but there's more than one layer, so the button doesn't delete the object.
+    let osdc = cc.parentElement.parentElement
+    let chil = osdc.children
     // Each layer has a .canvas-container with a [id^=osd-overlaycanvas]
-    // for (let i = 0; i < chil.length; i++) {
-    //   if (chil[i].hasChildNodes()) {
-    //     let canvasContainer = chil[i].children[0]
-    //     jQuery(canvasContainer).append(deleteBtn)
-    //   }
-    // } // TODO: AND IT DOESN'T WORK FOR THE 2ND VIEWER - THE DELETE BUTTON GOES ON THE FIRST VIEWER #:(
+    for (let i = 0; i < chil.length; i++) {
+      if (chil[i].hasChildNodes()) {
+        let canvasContainer = chil[i].children[0]
+        jQuery(canvasContainer).append(deleteBtn)
+      }
+    }
+    // todo: this works, but 2nd viewer's object's delete button goes on 1st viewer canvas; delete button DOES work tho!
   }
 
   function setupDeleteButton(canvas, viewer) {
