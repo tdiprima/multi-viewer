@@ -81,12 +81,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     setupDeleteButton(canvas, viewer)
   }
 
-  function addDeleteBtn(x, y) {
-    jQuery('.deleteBtn').remove()
-    let btnLeft = x - 10
-    let btnTop = y - 10
-    let deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    // jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
+  function f1() {
     let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
     // jQuery(cc).append(deleteBtn) // this could've been it, but there's more than one layer, so the button doesn't delete the object.
     let osdc = cc.parentElement.parentElement
@@ -98,7 +93,16 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         jQuery(canvasContainer).append(deleteBtn)
       }
     }
-    // todo: this works, but 2nd viewer's object's delete button goes on 1st viewer canvas; delete button DOES work tho!
+    // todo: this works, but 2nd viewer's object's delete button goes on 1st viewer canvas; delete button works tho!
+  }
+
+  function addDeleteBtn(x, y) {
+    jQuery('.deleteBtn').remove()
+    let btnLeft = x - 10
+    let btnTop = y - 10
+    let deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
+    jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
+    // f1() // wip
   }
 
   function setupDeleteButton(canvas, viewer) {
