@@ -81,53 +81,50 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     setupDeleteButton(canvas, viewer)
   }
 
-  function f1() {
-    let cc = document.getElementById(overlaycanvas).closest('.canvas-container')
-    // jQuery(cc).append(deleteBtn) // this could've been it, but there's more than one layer, so the button doesn't delete the object.
-    let osdc = cc.parentElement.parentElement
-    let chil = osdc.children
-    // Each layer has a .canvas-container with a [id^=osd-overlaycanvas]
-    for (let i = 0; i < chil.length; i++) {
-      if (chil[i].hasChildNodes()) {
-        let canvasContainer = chil[i].children[0]
-        jQuery(canvasContainer).append(deleteBtn)
+  function setupDeleteButton(canvas, viewer) {
+    let deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E"
+
+    let deleteImg = document.createElement('img')
+    deleteImg.src = deleteIcon
+
+    fabric.Object.prototype.transparentCorners = false
+    fabric.Object.prototype.cornerColor = 'blue'
+    fabric.Object.prototype.cornerStyle = 'circle'
+
+  function renderIcon(icon) {
+    return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
+      let size = this.cornerSize
+      ctx.save()
+      ctx.translate(left, top)
+      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle))
+      ctx.drawImage(icon, -size / 2, -size / 2, size, size)
+      ctx.restore()
+    }
+  }
+
+    fabric.Object.prototype.controls.deleteControl = new fabric.Control({
+      x: 0.5,
+      y: -0.5,
+      offsetX: 15,
+      offsetY: -15,
+      cursorStyle: 'pointer',
+      mouseUpHandler: deleteObject,
+      render: renderIcon(deleteImg),
+      cornerSize: 24
+    })
+
+    function deleteObject(mouseEvent, transform) {
+      let target = transform.target
+      try {
+        let canvas = target.canvas
+        canvas.remove(target)
+        canvas.requestRenderAll()
+      } catch (e) {
+        console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
     }
-    // todo: this works, but 2nd viewer's object's delete button goes on 1st viewer canvas; delete button works tho!
-  }
 
-  function addDeleteBtn(x, y) {
-    jQuery('.deleteBtn').remove()
-    let btnLeft = x - 10
-    let btnTop = y - 10
-    let deleteBtn = `<img src="${src}" class="deleteBtn" style="position:absolute;top:${btnTop}px;left:${btnLeft}px;cursor:pointer;width:20px;height:20px;"/>`
-    jQuery('.canvas-container').append(deleteBtn) // <- every canvas, which we don't want
-    // f1() // wip
-  }
-
-  function setupDeleteButton(canvas, viewer) {
-    canvas.on('selection:created', function (e) {
-      addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
-    })
-
-    canvas.on('object:modified', function (e) {
-      if (isRealValue(e.target.oCoords.tr)) {
-        addDeleteBtn(e.target.oCoords.tr.x, e.target.oCoords.tr.y)
-      }
-    })
-
-    canvas.on('object:scaling', function (e) {
-      jQuery('.deleteBtn').remove()
-    })
-
-    canvas.on('object:moving', function (e) {
-      jQuery('.deleteBtn').remove()
-    })
-
-    canvas.on('object:rotating', function (e) {
-      jQuery('.deleteBtn').remove()
-    })
-
+    /*
     jQuery('.canvas-container').on('click', '.deleteBtn', function (e) {
       viewer.gestureSettingsMouse.clickToZoom = false
       if (canvas.getActiveObject()) {
@@ -137,6 +134,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
       }
       viewer.gestureSettingsMouse.clickToZoom = true
     })
+     */
   }
 
   function convertPathToPolygon(pathObject, canvas, paintBrush) {
@@ -162,7 +160,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     canvas.add(poly)
     poly['setControlVisible']('tr', false)
     canvas.setActiveObject(poly)
-    addDeleteBtn(poly.oCoords.tr.x, poly.oCoords.tr.y) // top-right x,y
+    // TODO
     canvas.remove(pathObject)
   }
 
