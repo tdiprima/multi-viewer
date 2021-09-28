@@ -4,6 +4,11 @@
   --ltgray: #ccc;
 }
 
+/** { border: 1px solid yellow; } */
+/*table, th, td {*/
+/*  border: 1px solid red;*/
+/*}*/
+
 body {
   font-family: sans-serif;
 }
@@ -18,19 +23,15 @@ a:link {
 
 /* "QUAD" */
 .divSquare {
-  /*width: 48%;*/
-  /*height: 560px;*/
   margin-right: 200px;
   float: left;
+  /*border: 2px solid blueviolet*/
 }
 
 .controls {
   width: 640px;
   height: 30px;
-}
-
-.range {
-  width: 100%;
+  /*border: 2px solid cornflowerblue;*/
 }
 
 .buttons {
@@ -38,9 +39,8 @@ a:link {
 }
 
 .viewer {
-  /*width: 640px;*/
-  /*height: 480px;*/
-  width: 100%;
+  /* W + H ARE NOW SET BY USER */
+  /*border: 2px solid green;*/
 }
 
 .floated {
@@ -58,6 +58,19 @@ a:link {
   z-index: 30;
   position: absolute;
   overflow: hidden;
+}
+
+/* DARK MODE */
+.dark-mode {
+  background-color: black !important;
+  color: white !important;
+}
+
+/* OVERRIDE WICKET NAVBAR */
+.navbar a:hover, .mag:hover .dropbtn {
+  /* background-color: var(--hilite) !important; */
+  background-color: var(--ltgray) !important;
+  color: var(--dkgray) !important;
 }
 
 /* POINTER */
@@ -167,19 +180,6 @@ a:link {
   background-color: var(--ltgray);
   font-weight: bold;
   color: var(--dkgray);
-}
-
-/* DARK MODE */
-.dark-mode {
-  background-color: black !important;
-  color: white !important;
-}
-
-/* OVERRIDE WICKET NAVBAR */
-.navbar a:hover, .mag:hover .dropbtn {
-  /* background-color: var(--hilite) !important; */
-  background-color: var(--ltgray) !important;
-  color: var(--dkgray) !important;
 }
 
 /* MAGNIFICATION */
