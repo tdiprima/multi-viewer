@@ -16,15 +16,8 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
     new Promise(function (resolve) {
       return resolve(opts)
     }).then(function (opts) {
-      // quick little dark-mode
-      let awesome = e('i', {'class': 'fas fa-moon'})
-      let btnDark = e('button', {'class': 'btn'}, [awesome])
-      let referenceNode = document.querySelector('#contentDiv')
-      referenceNode.before(btnDark)
-      btnDark.addEventListener('click', function () {
-        toggleButton(awesome, 'fa-moon', 'fa-sun')
-        document.body.classList.toggle('dark-mode')
-      })
+      // dark-mode
+      let btnDark = e('button', {'class': 'btn'}, [e('i', {'class': 'fas fa-moon'})])
 
       // Slide name
       let name
@@ -35,9 +28,19 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
         let arr = slide.split('/')
         name = `Slide: ${arr[arr.length - 1]}`
       }
-      let slideDiv = e('div', {'style': 'top: 0; right: 0; position: fixed;'})
-      slideDiv.innerHTML = name
-      referenceNode.before(slideDiv)
+
+      let top = e('div', {'style': 'display: flex'}, [
+        e('div', {'style': 'flex: 1'}, [btnDark]),
+        e('div', {'style': 'flex: 1; text-align: right;'}, [name])
+      ])
+
+      let referenceNode = document.querySelector('#contentDiv')
+      referenceNode.before(top)
+
+      btnDark.addEventListener('click', function () {
+        toggleButton(awesome, 'fa-moon', 'fa-sun')
+        document.body.classList.toggle('dark-mode')
+      })
 
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
