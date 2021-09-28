@@ -1,28 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+<title>Mugshots</title>
+<link href="favicon.ico" rel="icon" sizes="16x16 32x32" type="image/x-icon">
+<script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>
+<script src="src/mugshots.js"></script>
+<style>
+  .openseadragon {
+    width: 480px;
+    height: 640px;
+    border: 1px solid black;
+    color: #333;
+  }
 
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Mugshots</title>
-  <link href="favicon.ico" rel="icon" sizes="16x16 32x32" type="image/x-icon">
-  <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>
-  <script src="src/mugshots.js"></script>
-  <link href="build/main.min.css" rel="stylesheet"/>
-  <style>
-    .openseadragon {
-      width: 480px;
-      height: 640px;
-      border: 1px solid black;
-      color: #333;
-    }
-  </style>
-</head>
+  /* MUGSHOTS */
+  .thumbnail-container {
+    overflow-x: scroll;
+    width: 100%;
+    padding: 0 15px;
+  }
 
-<body>
+  .thumbnail-list {
+    white-space: nowrap;
+    list-style: none;
+  }
+
+  .thumbnail-list li {
+    display: inline-block;
+  }
+
+  .thumbnail-image {
+    display: block;
+    padding: 2px;
+    max-width: 100px;
+    height: auto;
+  }
+</style>
 <!-- Mugshots Demo -->
 <div class="thumbnail-container" id="thumbnail-container"></div>
 <div class="openseadragon" id="contentDiv"></div>
@@ -38,11 +51,7 @@
             tileSource: data
           }]
         })
-
-        const overlay = viewer.fabricjsOverlay({
-          scale: 1000
-        })
-
+        const overlay = viewer.fabricjsOverlay({ scale: 1 })
         const opts = {
           divId: 'contentDiv',
           thumbId: 'thumbnail-container',
@@ -55,14 +64,7 @@
           viewer: viewer,
           overlay: overlay,
         }
-
         mugshots(opts)
-
       })
   })
-
 </script>
-
-</body>
-
-</html>
