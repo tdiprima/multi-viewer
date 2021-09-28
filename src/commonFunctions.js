@@ -66,22 +66,6 @@ const isEmpty = function (value) {
   )
 }
 
-function getAColorThatShowsUp(strokeColor) {
-  function isBlueIsh() {
-    return strokeColor.endsWith('ff')
-  }
-
-  function isCyanOrMagenta() {
-    return strokeColor === '#00ffff' || strokeColor === '#ff00ff'
-  }
-
-  if (isBlueIsh() && !isCyanOrMagenta()) {
-    return 'rgba(255, 255, 0, 0.5)' // yellow
-  } else {
-    return 'rgba(0, 0, 255, 0.5)' // blue (default)
-  }
-}
-
 function alertMessage(messageObject) {
   window.alert(messageObject)
   return true

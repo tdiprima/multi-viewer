@@ -86,12 +86,10 @@ function Edit(button, canvas) {
     canvas.setActiveObject(fabricPolygon)
     fabricPolygon.edit = !fabricPolygon.edit
 
-    const cornerColor = getAColorThatShowsUp(fabricPolygon.stroke)
-
     if (fabricPolygon.edit) {
       const lastControl = fabricPolygon.points.length - 1
+      fabricPolygon.cornerColor = 'rgba(0, 0, 255, 255)'
       fabricPolygon.cornerStyle = 'circle'
-      fabricPolygon.cornerColor = cornerColor
       // Create one new control for each polygon point
       fabricPolygon.controls = fabricPolygon.points.reduce(function (acc, point, index) {
         acc['p' + index] = new fabric.Control({
@@ -103,7 +101,7 @@ function Edit(button, canvas) {
         return acc
       }, {})
     } else {
-      fabricPolygon.cornerColor = cornerColor
+      fabricPolygon.cornerColor = 'rgba(0, 0, 255, 0.5)'
       fabricPolygon.cornerStyle = 'rect'
       fabricPolygon.controls = fabric.Object.prototype.controls
     }
