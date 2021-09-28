@@ -4,23 +4,15 @@
   --ltgray: #ccc;
 }
 
-/** { border: 1px solid yellow; } */
-table, th, td {
-  width: 100%;
-  /*border: 1px solid blue;*/
-}
+/** { border: 1px solid #333; }*/
+/*table {border: 2px solid blue;}*/
+/*td {border: 2px solid green;}*/
 
-body {
-  font-family: sans-serif;
-}
+body { font-family: sans-serif; }
 
-ul {
-  list-style-type: none;
-}
+ul { list-style-type: none; }
 
-a:link {
-  text-decoration: none;
-}
+a:link { text-decoration: none; }
 
 /* "QUAD" */
 .divSquare {
@@ -30,18 +22,15 @@ a:link {
 }
 
 .controls {
-  width: 640px;
+  width: 100%;
   height: 30px;
   /*border: 2px solid cornflowerblue;*/
 }
 
-.buttons {
-  width: 100%;
-}
+.buttons { width: 100%; }
 
 .viewer {
   /* W + H ARE NOW SET BY USER */
-  /*border: 2px solid green;*/
 }
 
 .floated {
@@ -50,9 +39,7 @@ a:link {
 }
 
 /* DISPLAY TOOLS ON HOVER */
-.showHover {
-  display: none;
-}
+.showHover { display: none; }
 
 .showDiv:hover .showHover {
   display: block;
@@ -75,17 +62,9 @@ a:link {
 }
 
 /* POINTER */
-.pointer {
-  cursor: pointer;
-}
-
-.none {
-  cursor: none;
-}
-
-.not-allowed {
-  cursor: not-allowed;
-}
+.pointer { cursor: pointer; }
+.none { cursor: none; }
+.not-allowed { cursor: not-allowed; }
 
 /* HIGHLIGHT ON DROP */
 .highlight {
@@ -97,12 +76,8 @@ a:link {
 }
 
 @keyframes bckanim {
-  0% {
-    background-color: var(--hilite);
-  }
-  100% {
-    background-color: transparent;
-  }
+  0% { background-color: var(--hilite); }
+  100% { background-color: transparent; }
 }
 
 /* DRAGGABLE */
@@ -158,9 +133,7 @@ a:link {
   font-size: 17px !important;
 }
 
-.drop_site.over {
-  border: 3px dotted #00ff00 !important;
-}
+.drop_site.over { border: 3px dotted #00ff00 !important; }
 
 /* FLOATING DIV */
 .popup {
@@ -188,7 +161,7 @@ a:link {
   display: none;
   background-color: rgba(249, 249, 249, 0.5);
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -201,10 +174,6 @@ a:link {
   text-align: left;
 }
 
-.mag:hover .mag-content {
-  display: block;
-}
+.mag:hover .mag-content { display: block; }
 
-.mag-content a:hover {
-  background-color: #ddd;
-}
+.mag-content a:hover { background-color: #ddd; }
