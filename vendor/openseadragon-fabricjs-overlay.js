@@ -7,6 +7,7 @@
     console.error('[openseadragon-canvas-overlay] requires OpenSeadragon')
     return
   }
+  let testing = false
 
   /**
    * Adds fabric.js overlay capability to your OpenSeadragon Viewer
@@ -21,14 +22,26 @@
    * @returns {Overlay}
    */
   OpenSeadragon.Viewer.prototype.fabricjsOverlay = function (options) {
-    options = checkOptions(options)
+    if (typeof options === 'undefined') {
+      options = {  static: false,  scale: 1 }
+    } else {
+      if (typeof options.static === 'undefined') {
+        options.static = false
+      }
+      if (typeof options.scale === 'undefined') {
+        options.scale = 1 // arbitrary scale for created fabric canvas
+      }
+    }
 
     this._fabricjsOverlayInfo = new Overlay(this, options.static)
     return this._fabricjsOverlayInfo
   }
 
-  // Static counter for multiple overlays differentiation
-  const counter = (function () {
+  /**
+   * Static counter for multiple overlays differentiation
+   * @type {function(): number}
+   */
+  let counter = (function () {
     let i = 1
 
     return function () {
@@ -36,27 +49,15 @@
     }
   })()
 
-  const checkOptions = function (options) {
-    if (typeof options === 'undefined') {
-      options = {
-        static: false,
-        scale: 1000
-      }
-    } else {
-      if (typeof options.static === 'undefined') {
-        options.static = false
-      }
-      if (typeof options.scale === 'undefined') {
-        options.scale = 1000
-      }
-    }
-    return options
-  }
 
-  // ----------
-  // Constructor
-  const Overlay = function (viewer, staticCanvas) {
-    const self = this
+  /**
+   * The overlay object
+   * @param viewer
+   * @param staticCanvas
+   * @constructor
+   */
+  let Overlay = function (viewer, staticCanvas) {
+    let self = this
 
     this._viewer = viewer
 
@@ -88,7 +89,7 @@
     // Disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false
 
-    // Prevent OSD click events on fabric objects
+    // Prevent OSD mousedown on fabric objects
     this._fabricCanvas.on('mouse:down', function (options) {
       if (options.target) {
         options.e.preventDefaultAction = true
@@ -97,6 +98,7 @@
       }
     })
 
+    // Prevent OSD mouseup on fabric objects
     this._fabricCanvas.on('mouse:up', function (options) {
       if (options.target) {
         options.e.preventDefaultAction = true
@@ -105,25 +107,24 @@
       }
     })
 
-    // Callback functions:
-
-    // Resize the fabric.js overlay
+    // RESIZE FABRIC.JS OVERLAY
+    // viewer: update viewport
     this._viewer.addHandler('update-viewport', function () {
-      // called on 'open', when the viewer or window changes size, ...
       self.resize()
       self.resizeCanvas()
       self.render()
     })
 
+    // viewer: open
     this._viewer.addHandler('open', function () {
       self.resize()
       self.resizeCanvas()
-      self.render() //
     })
+
+    // window: resize
     window.addEventListener('resize', function () {
       self.resize()
       self.resizeCanvas()
-      self.render() //
     })
   }
 
@@ -153,6 +154,7 @@
         this._canvasdiv.setAttribute('width', this._containerWidth)
         this._canvas.setAttribute('width', this._containerWidth)
       }
+
       if (this._containerHeight !== this._viewer.container.clientHeight) {
         this._containerHeight = this._viewer.container.clientHeight
         this._canvasdiv.setAttribute('height', this._containerHeight)
@@ -161,19 +163,25 @@
     },
     resizeCanvas: function () {
       // Resize overlay canvas
-      const origin = new OpenSeadragon.Point(0, 0)
-      const viewportZoom = this._viewer.viewport.getZoom(true)
+      let origin = new OpenSeadragon.Point(0, 0)
+      let viewportZoom = this._viewer.viewport.getZoom(true)
       this._fabricCanvas.setWidth(this._containerWidth)
       this._fabricCanvas.setHeight(this._containerHeight)
-      // let zoom = this._viewer.viewport._containerInnerSize.x * viewportZoom / this._scale;
-      // this._fabricCanvas.setZoom(zoom);
-      this._fabricCanvas.setZoom(viewportZoom)
-      const viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(origin)
-      const x = Math.round(viewportWindowPoint.x)
-      const y = Math.round(viewportWindowPoint.y)
-      const canvasOffset = this._canvasdiv.getBoundingClientRect()
-      const pageScroll = OpenSeadragon.getPageScroll()
+      if (testing) {
+        let zoom = this._viewer.viewport._containerInnerSize.x * viewportZoom / this._scale
+        this._fabricCanvas.setZoom(zoom)
+      } else {
+        this._fabricCanvas.setZoom(viewportZoom)
+      }
+      let viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(origin)
+      let x = Math.round(viewportWindowPoint.x)
+      let y = Math.round(viewportWindowPoint.y)
+      let canvasOffset = this._canvasdiv.getBoundingClientRect()
+
+      let pageScroll = OpenSeadragon.getPageScroll()
+
       this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - x + pageScroll.x, canvasOffset.top - y + pageScroll.y))
     }
+
   }
 })()
