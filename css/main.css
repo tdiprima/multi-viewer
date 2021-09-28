@@ -5,9 +5,10 @@
 }
 
 /** { border: 1px solid yellow; } */
-/*table, th, td {*/
-/*  border: 1px solid red;*/
-/*}*/
+table, th, td {
+  width: 100%;
+  /*border: 1px solid blue;*/
+}
 
 body {
   font-family: sans-serif;
