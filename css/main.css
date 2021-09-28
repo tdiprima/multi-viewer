@@ -4,6 +4,75 @@
   --ltgray: #ccc;
 }
 
+body {
+  font-family: sans-serif;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+/* "QUAD" */
+.divSquare {
+  /*width: 48%;*/
+  /*height: 560px;*/
+  margin-right: 200px;
+  float: left;
+}
+
+.controls {
+  width: 640px;
+  height: 30px;
+}
+
+.range {
+  width: 100%;
+}
+
+.buttons {
+  width: 100%;
+}
+
+.viewer {
+  /*width: 640px;*/
+  /*height: 480px;*/
+  width: 100%;
+}
+
+.floated {
+  float: left;
+  margin-right: 5px;
+}
+
+/* DISPLAY TOOLS ON HOVER */
+.showHover {
+  display: none;
+}
+
+.showDiv:hover .showHover {
+  display: block;
+  z-index: 30;
+  position: absolute;
+  overflow: hidden;
+}
+
+/* POINTER */
+.pointer {
+  cursor: pointer;
+}
+
+.none {
+  cursor: none;
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
 /* HIGHLIGHT ON DROP */
 .highlight {
   background-color: var(--hilite);
@@ -111,98 +180,6 @@
   /* background-color: var(--hilite) !important; */
   background-color: var(--ltgray) !important;
   color: var(--dkgray) !important;
-}
-
-/* POINTER */
-.pointer {
-  cursor: pointer;
-}
-
-.none {
-  cursor: none;
-}
-
-.not-allowed {
-  cursor: not-allowed;
-}
-
-/* DISPLAY TOOLS ON HOVER */
-.showHover {
-  display: none;
-}
-
-.showDiv:hover .showHover {
-  display: block;
-  z-index: 30;
-  position: absolute;
-  overflow: hidden;
-}
-
-body {
-  font-family: sans-serif;
-}
-
-ul {
-  list-style-type: none;
-}
-
-a:link {
-  text-decoration: none;
-}
-
-/* "QUAD" */
-.divSquare {
-  /*width: 48%;*/
-  /*height: 560px;*/
-  margin-right: 200px;
-  float: left;
-}
-
-.controls {
-  width: 640px;
-  height: 30px;
-}
-
-.range {
-  width: 100%;
-}
-
-.buttons {
-  width: 100%;
-}
-
-.viewer {
-  /*width: 640px;*/
-  /*height: 480px;*/
-  width: 100%;
-}
-
-.floated {
-  float: left;
-  margin-right: 5px;
-}
-
-/* MUGSHOTS */
-.thumbnail-container {
-  overflow-x: scroll;
-  width: 100%;
-  padding: 0 15px;
-}
-
-.thumbnail-list {
-  white-space: nowrap;
-  list-style: none;
-}
-
-.thumbnail-list li {
-  display: inline-block;
-}
-
-.thumbnail-image {
-  display: block;
-  padding: 2px;
-  max-width: 100px;
-  height: auto;
 }
 
 /* MAGNIFICATION */
