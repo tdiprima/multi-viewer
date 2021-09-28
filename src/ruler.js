@@ -31,7 +31,7 @@ let ruler = function (button, viewer, overlay) {
         let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
       } catch (e) {
-        console.log(`%cHere we are. ${e.message}`, 'color: #ff6a5a;')
+        console.error(`%c${e.message}`, 'font-size: larger;')
       }
 
       let pointer = canvas.getPointer(event)
@@ -152,7 +152,7 @@ let ruler = function (button, viewer, overlay) {
 
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
-      console.log(`%clength: ${fText.text}`, 'color: #b3f836;')
+      console.log(`%clength: ${fText.text}`, 'color: #ccff00;')
       let pointer = canvas.getPointer(event)
       drawText(pointer.x, pointer.y, fText.text, zoom < 100)
       canvas.renderAll()

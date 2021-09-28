@@ -206,7 +206,7 @@ function getViewerObject(element) {
       }
     }
   } catch (e) {
-    console.error('getViewerObject:', e.message)
+    console.error(`%cgetViewerObject: ${e.message}`, 'font-size: larger;')
   }
   return retVal
 }

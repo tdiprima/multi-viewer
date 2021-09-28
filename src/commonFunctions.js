@@ -29,8 +29,7 @@ function setFilter(layers, viewer) {
       loadMode: 'sync'
     })
   } else {
-    // temporarily
-    console.log('%cNo viewer.world', 'color: lime;')
+    console.error('%cNo viewer.world', 'font-size: larger;')
   }
 }
 
@@ -86,14 +85,6 @@ function getAColorThatShowsUp(strokeColor) {
 function alertMessage(messageObject) {
   window.alert(messageObject)
   return true
-}
-
-function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-  const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight)
-  return {
-    width: Math.round(srcWidth * ratio),
-    height: Math.round(srcHeight * ratio)
-  }
 }
 
 function getRandomInt(minm, maxm) {
@@ -242,6 +233,5 @@ function timeStamp() {
   return `${a}_${b}`
 }
 
-let PDR = OpenSeadragon.pixelDensityRatio
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto

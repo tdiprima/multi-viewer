@@ -23,7 +23,7 @@ let blender = function (blenderBtn, viewer) {
     const table = e('table')
     div.appendChild(table)
 
-    blendModes.forEach(function (item, index) {
+    blendModes.forEach(function (item) {
       let blendBtn = e('button', {type: 'button', id: item.replace('-', '_'), value: item, class: 'button'})
       blendBtn.innerHTML = item
       const row = e('tr', {}, [
@@ -37,7 +37,7 @@ let blender = function (blenderBtn, viewer) {
           let topImage = viewer.world.getItemAt(count - 1) // Blend all
           topImage.setCompositeOperation(blendBtn.value)
         } catch (e) {
-          console.log(`%c${e.message}`, 'color: #ff6a5a;')
+          console.error(`%c${e.message}`, 'font-size: larger;')
         }
       })
     })

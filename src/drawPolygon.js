@@ -6,14 +6,13 @@
  */
 const drawPolygon = (viewerInfo, viewer, overlay) => {
   let idx = viewerInfo.idx
-  let overlaycanvas = `osd-overlaycanvas-${idx + 1}`
   let btnDraw = document.getElementById(`btnDraw${idx}`)
   let mark = document.getElementById(`mark${idx}`)
   let canvas = this.__canvas = overlay.fabricCanvas()
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas)
   paintBrush.decimate = 20
   paintBrush.color = mark.innerHTML
-  let src = `${config.appImages}delete-icon.png`
+  // let src = `${config.appImages}delete-icon.png`
 
   canvas.on('mouse:over', evt => {
     fillPolygon(evt, canvas)
@@ -87,9 +86,9 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     let deleteImg = document.createElement('img')
     deleteImg.src = deleteIcon
 
-    fabric.Object.prototype.transparentCorners = false
+    fabric.Object.prototype.transparentCorners = true
     fabric.Object.prototype.cornerColor = 'blue'
-    fabric.Object.prototype.cornerStyle = 'circle'
+    fabric.Object.prototype.cornerStyle = 'square'
 
   function renderIcon(icon) {
     return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
@@ -120,7 +119,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         canvas.remove(target)
         canvas.requestRenderAll()
       } catch (e) {
-        console.log(`%c${e.message}`, 'color: #ff6a5a;')
+        console.error(`%c${e.message}`, 'font-size: larger;')
       }
     }
 
