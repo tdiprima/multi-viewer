@@ -22,6 +22,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
       display: 'block'
     })
 
+    // NAME
     let loc = layer.location
     if (typeof layer.prefLabel !== 'undefined') {
       feat.innerHTML = layer.prefLabel
@@ -48,7 +49,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     tr.appendChild(e('td', {}, [feat]))
 
     // eyeball visibility toggle
-    faEye = e('i', {id: makeId(5, 'eye'), class: layer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
+    let faEye = e('i', {id: makeId(5, 'eye'), class: layer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
     tr.appendChild(e('td', {}, [faEye]))
 
     // transparency slider
@@ -67,6 +68,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
       step: '0.1',
       value: (layer.opacity * 100).toString()
     })
+
     range.addEventListener('input', function () {
       const worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
@@ -95,9 +97,8 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     if (layerNum > 0) {
       let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
       tr.appendChild(e('td', {}, [palette]))
-      // let colorsUI = filters(palette, layer, itemsToBeDisplayed, viewer)
       let colorsUI = filters(palette, layer.prefLabel, layer.colors, itemsToBeDisplayed, viewer)
-      palette.addEventListener('click', function (e) {
+      palette.addEventListener('click', function () {
         colorsUI.style.display = 'block'
       })
     } else {
@@ -108,7 +109,6 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
 
 // DRAGGABLE LAYERS (previously in tabs, now list)
 function handleDragLayers(viewer) {
-
   // Features in feature list
   let items = document.querySelectorAll('.layer_tab')
   items.forEach(function (item) {
@@ -122,16 +122,16 @@ function handleDragLayers(viewer) {
   items.forEach(function (item) {
     item.addEventListener('dragenter', function () { this.classList.add('over') })
     item.addEventListener('dragleave', function () { this.classList.remove('over') })
-    item.addEventListener('dragover', function (e) { if (e.preventDefault) e.preventDefault(); return false })
+    item.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
     item.addEventListener('drop', handleDrop)
   })
 
-  function handleDragStart(e) {
+  function handleDragStart(evt) {
     this.style.opacity = '0.4'
     dragSrcEl = this // The draggable feature
     sourceViewer = viewer
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.setData('text', e.target.id)
+    evt.dataTransfer.effectAllowed = 'move'
+    evt.dataTransfer.setData('text', evt.target.id)
   }
 
   function handleDragEnd() {
@@ -141,17 +141,17 @@ function handleDragLayers(viewer) {
     })
   }
 
-  function handleDrop(e) {
-    if (e.preventDefault) e.preventDefault()
+  function handleDrop(evt) {
+    if (evt.preventDefault) evt.preventDefault()
 
     if (dragSrcEl !== this) {
       // target
-      const target = e.target
+      const target = evt.target
       const closestViewer = target.closest('.viewer')
       if (!closestViewer) return false;
 
       // dragged item
-      let movedElemId = e.dataTransfer.getData('text')
+      let movedElemId = evt.dataTransfer.getData('text')
       let tmpEl = document.getElementById(movedElemId)
       let tmpId = tmpEl.id
       let tmpHtml = tmpEl.innerHTML
@@ -159,8 +159,7 @@ function handleDragLayers(viewer) {
       for (let i = 0; i < items.length; i++) {
         let layerTab = items[i]
         if (layerTab.innerHTML === tmpHtml && layerTab.id !== tmpId) {
-          // Great, we got a match.
-          // Toggle eyeball.
+          // We got a match. Toggle eyeball.
           let tds = layerTab.parentElement.parentElement.children
           let eye = tds[1].children[0]
           eye.classList.remove('fa-eye-slash')
@@ -174,8 +173,8 @@ function handleDragLayers(viewer) {
       let targetViewer = getViewerObject(closestViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum)
-      targetViewer.world.getItemAt(layerNum).setOpacity(1)
-      // sourceViewer.world.getItemAt(layerNum).setOpacity(0)
+      targetViewer.world.getItemAt(layerNum).setOpacity(1) // show
+      // sourceViewer.world.getItemAt(layerNum).setOpacity(0) // hide
     }
     return false
   }
@@ -198,8 +197,7 @@ function getViewerObject(element) {
   let retVal
   try {
     // syncedImageViewers = global variable set in synchronizeViewers.js
-    let j
-    for (j = 0; j < syncedImageViewers.length; j++) {
+    for (let j = 0; j < syncedImageViewers.length; j++) {
       if (syncedImageViewers[j].getViewer().id === element.id) {
         retVal = syncedImageViewers[j].getViewer()
         break
