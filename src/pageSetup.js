@@ -120,7 +120,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
           }
 
           // CREATE VIEWER
-          htm += `<table><tr><td><div id="${osdId}" class="viewer drop_site" style="width: ${width}px; height: ${height}px;"></div>
+          htm += `<table><tr><td><div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;"></div>
 </td><td style="vertical-align: top;"><span id="layers_and_colors${idx}"></span></td>
 </tr></table>`
 

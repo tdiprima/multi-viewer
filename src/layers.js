@@ -16,10 +16,10 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
 
     // Feature (draggable)
     let feat = e('span', {
-      class: 'layer_tab',
       id: `${layerNum}${makeId(5, 'feat')}`,
-      draggable: 'true',
-      display: 'block'
+      class: 'layer_tab',
+      display: 'block',
+      draggable: 'true'
     })
 
     // NAME
@@ -118,7 +118,7 @@ function handleDragLayers(viewer) {
   })
 
   // The viewer, basically
-  items = document.querySelectorAll('.drop_site')
+  items = document.querySelectorAll('.dropzone')
   items.forEach(function (item) {
     item.addEventListener('dragenter', function () { this.classList.add('over') })
     item.addEventListener('dragleave', function () { this.classList.remove('over') })
