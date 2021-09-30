@@ -137,7 +137,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
 
           let thisData = itemsToBeDisplayed[idx] // Images to be displayed in "this" viewer
           // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer({"idx": idx, "divId": osdId}, thisData, numViewers, opts))
+          viewers.push(new MultiViewer({"idx": idx, "divId": osdId, "len": thisData.length}, thisData, numViewers, opts))
         }
       }
 

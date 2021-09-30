@@ -26,7 +26,6 @@ class MultiViewer extends ImageViewer {
     }
 
     if (options.toolbarOn) {
-      viewerInfo.len = itemsToBeDisplayed.length
       markupTools(viewerInfo, super.getViewer())
     }
 
