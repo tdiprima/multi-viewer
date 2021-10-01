@@ -110,44 +110,50 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
 // DRAGGABLE LAYERS
 function handleDragLayers(viewer) {
   // Features in feature list
-  let items = document.querySelectorAll('.dragIt')
-  items.forEach(function (item) {
-    item.setAttribute('draggable', 'true')
-    item.addEventListener('dragstart', handleDragStart)
-    item.addEventListener('dragend', handleDragEnd)
+  let features = document.querySelectorAll('.dragIt')
+  features.forEach(function (feature) {
+    feature.setAttribute('draggable', 'true')
+    feature.addEventListener('dragstart', handleDragStart)
+    feature.addEventListener('dragend', handleDragEnd)
   })
 
   // The viewer, basically
-  items = document.querySelectorAll('.dropzone')
-  items.forEach(function (item) {
-    item.addEventListener('dragenter', function () { this.classList.add('over') })
-    item.addEventListener('dragleave', function () { this.classList.remove('over') })
-    item.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
-    item.addEventListener('drop', handleDrop)
+  viewerDivs = document.querySelectorAll('.dropzone')
+  viewerDivs.forEach(function (viewerDiv) {
+    viewerDiv.addEventListener('dragenter', function () { this.classList.add('over') })
+    viewerDiv.addEventListener('dragleave', function () { this.classList.remove('over') })
+    viewerDiv.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
+    viewerDiv.addEventListener('drop', handleDrop)
   })
 
   function handleDragStart(evt) {
-    this.style.opacity = '0.4'
+    console.log('dragstart')
     dragSrcEl = this // The draggable feature
+    this.style.opacity = '0.4'
     sourceViewer = viewer
     evt.dataTransfer.effectAllowed = 'move'
     evt.dataTransfer.setData('text', evt.target.id)
   }
 
   function handleDragEnd() {
+    // this = the draggable feature
+    console.log('dragend')
     this.style.opacity = '1'
-    items.forEach(function (item) {
-      item.classList.remove('over')
+    viewerDivs.forEach(function (viewerDiv) {
+      viewerDiv.classList.remove('over')
     })
   }
 
   function handleDrop(evt) {
+    // this = dropzone viewer
+    console.log('drop')
     if (evt.preventDefault) evt.preventDefault()
 
     if (dragSrcEl !== this) {
       // target
       const target = evt.target
       const closestViewer = target.closest('.viewer')
+      console.log('closestViewer', closestViewer)
       if (!closestViewer) return false;
 
       // dragged item
@@ -155,9 +161,8 @@ function handleDragLayers(viewer) {
       let tmpEl = document.getElementById(movedElemId)
       let tmpId = tmpEl.id
       let tmpHtml = tmpEl.innerHTML
-      let items = document.querySelectorAll('.dragIt')
-      for (let i = 0; i < items.length; i++) {
-        let layerTab = items[i]
+      for (let i = 0; i < features.length; i++) {
+        let layerTab = features[i]
         if (layerTab.innerHTML === tmpHtml && layerTab.id !== tmpId) {
           // We got a match. Toggle eyeball.
           let tds = layerTab.parentElement.parentElement.children
