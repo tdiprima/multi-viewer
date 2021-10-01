@@ -107,7 +107,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
   })
 }
 
-// DRAGGABLE LAYERS (previously in tabs, now list)
+// DRAGGABLE LAYERS
 function handleDragLayers(viewer) {
   // Features in feature list
   let items = document.querySelectorAll('.layer_tab')
