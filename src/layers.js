@@ -159,8 +159,10 @@ function handleDragLayers(viewer) {
       let movedElem = document.getElementById(movedElemId)
       let name = movedElem.innerHTML
 
+      let layNum
       for (let row of myTable.rows) {
         let lay = row.cells[0].firstChild
+        layNum = lay.id[0] // 1st char is array index)
         let eye = row.cells[1].children[0]
         if (lay.innerHTML === name) {
           // Highlight the layer
@@ -175,12 +177,8 @@ function handleDragLayers(viewer) {
 
       // viewer
       let targetViewer = getViewerObject(targetDiv)
-      console.log('real', targetDiv)
-      console.log('targetViewer', targetViewer)
-      let layerNum = movedElemId[0] // 1st char is array index
-      layerNum = parseInt(layerNum)
-      targetViewer.world.getItemAt(layerNum).setOpacity(1) // show
-      // sourceViewer.world.getItemAt(layerNum).setOpacity(0) // hide
+      targetViewer.world.getItemAt(layNum).setOpacity(1) // show
+      // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
     }
     return false
   }
