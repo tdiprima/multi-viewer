@@ -118,7 +118,7 @@ function handleDragLayers(viewer) {
   })
 
   // The viewer, basically
-  viewerDivs = document.querySelectorAll('.dropzone')
+  let viewerDivs = document.querySelectorAll('.dropzone')
   viewerDivs.forEach(function (viewerDiv) {
     viewerDiv.addEventListener('dragenter', function () { this.classList.add('over') })
     viewerDiv.addEventListener('dragleave', function () { this.classList.remove('over') })
@@ -127,7 +127,6 @@ function handleDragLayers(viewer) {
   })
 
   function handleDragStart(evt) {
-    console.log('dragstart')
     dragSrcEl = this // The draggable feature
     this.style.opacity = '0.4'
     sourceViewer = viewer
@@ -137,7 +136,6 @@ function handleDragLayers(viewer) {
 
   function handleDragEnd() {
     // this = the draggable feature
-    console.log('dragend')
     this.style.opacity = '1'
     viewerDivs.forEach(function (viewerDiv) {
       viewerDiv.classList.remove('over')
@@ -146,36 +144,39 @@ function handleDragLayers(viewer) {
 
   function handleDrop(evt) {
     // this = dropzone viewer
-    console.log('drop')
     if (evt.preventDefault) evt.preventDefault()
 
     if (dragSrcEl !== this) {
       // target
-      const target = evt.target
-      const closestViewer = target.closest('.viewer')
-      console.log('closestViewer', closestViewer)
-      if (!closestViewer) return false;
+      const target = evt.target // fabric upper-canvas
+      const targetDiv = target.closest('.viewer') // returns the real target
+      if (!targetDiv) return false;
 
-      // dragged item
+      let layersColumn = targetDiv.parentElement.nextSibling.firstChild
+      let myTable = layersColumn.firstChild
+
       let movedElemId = evt.dataTransfer.getData('text')
-      let tmpEl = document.getElementById(movedElemId)
-      let tmpId = tmpEl.id
-      let tmpHtml = tmpEl.innerHTML
-      for (let i = 0; i < features.length; i++) {
-        let layerTab = features[i]
-        if (layerTab.innerHTML === tmpHtml && layerTab.id !== tmpId) {
-          // We got a match. Toggle eyeball.
-          let tds = layerTab.parentElement.parentElement.children
-          let eye = tds[1].children[0]
+      let movedElem = document.getElementById(movedElemId)
+      let name = movedElem.innerHTML
+
+      for (let row of myTable.rows) {
+        let lay = row.cells[0].firstChild
+        let eye = row.cells[1].children[0]
+        if (lay.innerHTML === name) {
+          // Highlight the layer
+          lay.classList.remove('highlight') // just in case.
+          lay.classList.add('highlight')
+          // Toggle eyeball
           eye.classList.remove('fa-eye-slash')
           eye.classList.add('fa-eye')
-          layerTab.classList.remove('highlight')
-          layerTab.classList.add('highlight')
           break
         }
       }
+
       // viewer
-      let targetViewer = getViewerObject(closestViewer)
+      let targetViewer = getViewerObject(targetDiv)
+      console.log('real', targetDiv)
+      console.log('targetViewer', targetViewer)
       let layerNum = movedElemId[0] // 1st char is array index
       layerNum = parseInt(layerNum)
       targetViewer.world.getItemAt(layerNum).setOpacity(1) // show
