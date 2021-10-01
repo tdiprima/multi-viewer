@@ -17,7 +17,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     // Feature (draggable)
     let feat = e('span', {
       id: `${layerNum}${makeId(5, 'feat')}`,
-      class: 'layer_tab',
+      class: 'dragIt',
       display: 'block',
       draggable: 'true'
     })
@@ -110,7 +110,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
 // DRAGGABLE LAYERS
 function handleDragLayers(viewer) {
   // Features in feature list
-  let items = document.querySelectorAll('.layer_tab')
+  let items = document.querySelectorAll('.dragIt')
   items.forEach(function (item) {
     item.setAttribute('draggable', 'true')
     item.addEventListener('dragstart', handleDragStart)
@@ -155,7 +155,7 @@ function handleDragLayers(viewer) {
       let tmpEl = document.getElementById(movedElemId)
       let tmpId = tmpEl.id
       let tmpHtml = tmpEl.innerHTML
-      let items = document.querySelectorAll('.layer_tab')
+      let items = document.querySelectorAll('.dragIt')
       for (let i = 0; i < items.length; i++) {
         let layerTab = items[i]
         if (layerTab.innerHTML === tmpHtml && layerTab.id !== tmpId) {

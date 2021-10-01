@@ -123,7 +123,7 @@ a:link { text-decoration: none; }
   background-color: #f1f1f1 !important;
 }
 
-.layer_tab {
+.dragIt {
   cursor: move !important;
   border-radius: 5px !important;
   float: left !important;
