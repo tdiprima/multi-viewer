@@ -1,11 +1,35 @@
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
-  handleDragLayers(viewer)
+  handleDragLayers(itemsToBeDisplayed)
+}
+
+function getSourceViewer(target) {
+  // Go find the source viewer
+  let layers_and_colors = target.parentElement.parentElement.parentElement.parentElement
+  let tr = layers_and_colors.parentElement.parentElement
+  let sourceViewerDiv = tr.firstElementChild.firstElementChild
+  return getViewerObject(sourceViewerDiv)
+}
+
+function getViewerObject(element) {
+  let retVal
+  try {
+    // syncedImageViewers = global variable set in synchronizeViewers.js
+    for (let j = 0; j < syncedImageViewers.length; j++) {
+      if (syncedImageViewers[j].getViewer().id === element.id) {
+        retVal = syncedImageViewers[j].getViewer()
+        break
+      }
+    }
+  } catch (e) {
+    console.error(`%cgetViewerObject: ${e.message}`, 'font-size: larger;')
+  }
+  return retVal
 }
 
 function createLayerWidget(div, itemsToBeDisplayed, viewer) {
   const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
-  const table = e('table')
+  let table = e('table')
   div.appendChild(table)
 
   itemsToBeDisplayed.forEach(function (layer) {
@@ -70,7 +94,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
     })
 
     range.addEventListener('input', function () {
-      const worldItem = viewer.world.getItemAt(layerNum)
+      let worldItem = viewer.world.getItemAt(layerNum)
       if (worldItem !== undefined) {
         worldItem.setOpacity(this.value / 100)
         if (this.value === '0') {
@@ -108,7 +132,7 @@ function createLayerWidget(div, itemsToBeDisplayed, viewer) {
 }
 
 // DRAGGABLE LAYERS
-function handleDragLayers(viewer) {
+function handleDragLayers(layers) {
   // Features in feature list
   let features = document.querySelectorAll('.dragIt')
   features.forEach(function (feature) {
@@ -117,7 +141,7 @@ function handleDragLayers(viewer) {
     feature.addEventListener('dragend', handleDragEnd)
   })
 
-  // The viewer, basically
+  // Div containing viewer
   let viewerDivs = document.querySelectorAll('.dropzone')
   viewerDivs.forEach(function (viewerDiv) {
     viewerDiv.addEventListener('dragenter', function () { this.classList.add('over') })
@@ -129,7 +153,7 @@ function handleDragLayers(viewer) {
   function handleDragStart(evt) {
     dragSrcEl = this // The draggable feature
     this.style.opacity = '0.4'
-    sourceViewer = viewer
+    sourceViewer = getSourceViewer(evt.target)
     evt.dataTransfer.effectAllowed = 'move'
     evt.dataTransfer.setData('text', evt.target.id)
   }
@@ -148,8 +172,8 @@ function handleDragLayers(viewer) {
 
     if (dragSrcEl !== this) {
       // target
-      const target = evt.target // fabric upper-canvas
-      const targetDiv = target.closest('.viewer') // returns the real target
+      let target = evt.target // fabric upper-canvas
+      let targetDiv = target.closest('.viewer') // returns the real target
       if (!targetDiv) return false;
 
       let layersColumn = targetDiv.parentElement.nextSibling.firstChild
@@ -160,11 +184,13 @@ function handleDragLayers(viewer) {
       let name = movedElem.innerHTML
 
       let layNum
+      let foundMatchingSlide = false
       for (let row of myTable.rows) {
         let lay = row.cells[0].firstChild
         layNum = lay.id[0] // 1st char is array index)
         let eye = row.cells[1].children[0]
         if (lay.innerHTML === name) {
+          foundMatchingSlide = true
           // Highlight the layer
           lay.classList.remove('highlight') // just in case.
           lay.classList.add('highlight')
@@ -175,10 +201,53 @@ function handleDragLayers(viewer) {
         }
       }
 
-      // viewer
       let targetViewer = getViewerObject(targetDiv)
-      targetViewer.world.getItemAt(layNum).setOpacity(1) // show
-      // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
+      if (foundMatchingSlide) {
+        targetViewer.world.getItemAt(layNum).setOpacity(1) // show
+        // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
+      } else {
+        try {
+          const location = sourceViewer.tileSources[layNum].tileSource
+          const newLayNum = layers.length
+          // New draggable feature
+          let feat = e('span', {
+            id: `${newLayNum}${makeId(5, 'feat')}`,
+            class: 'dragIt',
+            display: 'block',
+            draggable: 'true'
+          })
+          feat.innerHTML = name
+
+          let addToLayers = {
+            "layerNum": layers.length,
+            "location": location,
+            "opacity": 1,
+            "colors": [
+              {
+                // "color": "rgba(75, 0, 130, 255)",
+                "color": "rgba(184, 226, 242, 255)",
+                "low": 0,
+                "hi": 255
+              }
+            ],
+            "resolutionUnit": 3,
+            "xResolution": 40000
+          }
+          layers.push(addToLayers)
+
+          let row = myTable.insertRow()
+          let cell1 = row.insertCell(0)
+          cell1.appendChild(feat)
+          // let cell2 = row.insertCell(1)
+          // cell1.innerHTML = name
+          // cell1.className = 'dragIt'
+          // cell2.innerHTML = "NEW CELL2"
+
+          targetViewer.addTiledImage({tileSource: location, opacity: 1, x: 0, y: 0})
+        } catch (e) {
+          console.log(`%c${e.message}`, 'color: #ff6a5a;')
+        }
+      }
     }
     return false
   }
@@ -195,20 +264,4 @@ function eyeball(eye, range, layerNum, viewer) {
       range.value = '100' // Set slider to (opacity * 100)
     }
   }
-}
-
-function getViewerObject(element) {
-  let retVal
-  try {
-    // syncedImageViewers = global variable set in synchronizeViewers.js
-    for (let j = 0; j < syncedImageViewers.length; j++) {
-      if (syncedImageViewers[j].getViewer().id === element.id) {
-        retVal = syncedImageViewers[j].getViewer()
-        break
-      }
-    }
-  } catch (e) {
-    console.error(`%cgetViewerObject: ${e.message}`, 'font-size: larger;')
-  }
-  return retVal
 }
