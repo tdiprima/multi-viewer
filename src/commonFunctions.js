@@ -29,7 +29,7 @@ function setFilter(layers, viewer) {
       loadMode: 'sync'
     })
   } else {
-    console.error('%cNo viewer.world', 'font-size: larger;')
+    console.log('%cNo viewer.world', 'font-size: larger;')
   }
 }
 

@@ -3,6 +3,24 @@ let layers = function (divEl, itemsToBeDisplayed, viewer) {
   handleDragLayers(itemsToBeDisplayed)
 }
 
+function getLabel(feat, layer) {
+  const loc = layer.location
+  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
+  if (typeof layer.prefLabel !== 'undefined') {
+    return layer.prefLabel
+  } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
+    return loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+  } else if (loc.includes('TCGA')) {
+    if (loc.match(regex) !== null) {
+      return loc.match(regex)[0]
+    } else {
+      return getStringRep(loc)
+    }
+  } else {
+    return 'Feature'
+  }
+}
+
 function getSourceViewer(target) {
   // Go find the source viewer
   let layers_and_colors = target.parentElement.parentElement.parentElement.parentElement
@@ -27,107 +45,89 @@ function getViewerObject(element) {
   return retVal
 }
 
-function createLayerWidget(div, itemsToBeDisplayed, viewer) {
-  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
+function addRow(table, currentLayer, allLayers, viewer) {
+  let layerNum = currentLayer.layerNum
+
+  let tr = e('tr')
+  table.appendChild(tr)
+
+  // Feature (draggable)
+  let feat = e('span', {
+    id: `${layerNum}${makeId(5, 'feat')}`,
+    class: 'dragIt',
+    display: 'block',
+    draggable: 'true'
+  })
+  feat.innerHTML = getLabel(feat, currentLayer)
+  if (typeof currentLayer.prefLabel === 'undefined') {
+    currentLayer.prefLabel = feat.innerHTML
+    allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+  }
+  tr.appendChild(e('td', {}, [feat]))
+
+  // eyeball visibility toggle
+  let faEye = e('i', {id: makeId(5, 'eye'), class: currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
+  tr.appendChild(e('td', {}, [faEye]))
+
+  // transparency slider
+  let faAdjust = document.createElement('i')
+  faAdjust.classList.add('fas')
+  faAdjust.classList.add('fa-adjust')
+  faAdjust.classList.add('hover-light')
+  faAdjust.style.cursor = 'pointer'
+  let div = e('div', {class: 'showDiv'}, [faAdjust])
+
+  let range = e('input', {
+    type: 'range',
+    id: makeId(5, 'range'),
+    min: '0',
+    max: '100',
+    step: '0.1',
+    value: (currentLayer.opacity * 100).toString()
+  })
+
+  range.addEventListener('input', function () {
+    let worldItem = viewer.world.getItemAt(layerNum)
+    if (worldItem !== undefined) {
+      worldItem.setOpacity(this.value / 100)
+      if (this.value === '0') {
+        faEye.classList.remove('fa-eye')
+        faEye.classList.add('fa-eye-slash')
+      }
+      if (parseFloat(this.value) > 0) {
+        faEye.classList.remove('fa-eye-slash')
+        faEye.classList.add('fa-eye')
+      }
+    } else {
+      console.warn('worldItem', worldItem)
+    }
+  })
+
+  faEye.addEventListener('click', function () {
+    toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
+    eyeball(faEye, range, layerNum, viewer)
+  })
+
+  div.appendChild(e('div', {class: 'showHover'}, [range]))
+  tr.appendChild(e('td', {}, [div]))
+
+  if (layerNum > 0) {
+    let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
+    tr.appendChild(e('td', {}, [palette]))
+    let colorsUI = filters(palette, currentLayer.prefLabel, currentLayer.colors, allLayers, viewer)
+    palette.addEventListener('click', function () {
+      colorsUI.style.display = 'block'
+    })
+  } else {
+    tr.appendChild(e('td'))
+  }
+}
+
+function createLayerWidget(div, layers, viewer) {
   let table = e('table')
   div.appendChild(table)
-
-  itemsToBeDisplayed.forEach(function (layer) {
-    let layerNum = layer.layerNum
-
-    let tr = e('tr')
-    table.appendChild(tr)
-
-    // Feature (draggable)
-    let feat = e('span', {
-      id: `${layerNum}${makeId(5, 'feat')}`,
-      class: 'dragIt',
-      display: 'block',
-      draggable: 'true'
-    })
-
-    // NAME
-    let loc = layer.location
-    if (typeof layer.prefLabel !== 'undefined') {
-      feat.innerHTML = layer.prefLabel
-      // NOTE: temporary hack until we get prefLabel:
-    } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-      let name = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
-      feat.innerHTML = name
-      layer.prefLabel = name
-    } else if (loc.includes('TCGA')) {
-      if (loc.match(regex) !== null) {
-        let name = loc.match(regex)[0]
-        feat.innerHTML = name
-        layer.prefLabel = name
-      } else {
-        let name = getStringRep(loc)
-        feat.innerHTML = name
-        layer.prefLabel = name
-      }
-    } else {
-      feat.innerHTML = 'Feature'
-      layer.prefLabel = 'Feature'
-    }
-
-    tr.appendChild(e('td', {}, [feat]))
-
-    // eyeball visibility toggle
-    let faEye = e('i', {id: makeId(5, 'eye'), class: layer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
-    tr.appendChild(e('td', {}, [faEye]))
-
-    // transparency slider
-    let faAdjust = document.createElement('i')
-    faAdjust.classList.add('fas')
-    faAdjust.classList.add('fa-adjust')
-    faAdjust.classList.add('hover-light')
-    faAdjust.style.cursor = 'pointer'
-    let div = e('div', {class: 'showDiv'}, [faAdjust])
-
-    let range = e('input', {
-      type: 'range',
-      id: makeId(5, 'range'),
-      min: '0',
-      max: '100',
-      step: '0.1',
-      value: (layer.opacity * 100).toString()
-    })
-
-    range.addEventListener('input', function () {
-      let worldItem = viewer.world.getItemAt(layerNum)
-      if (worldItem !== undefined) {
-        worldItem.setOpacity(this.value / 100)
-        if (this.value === '0') {
-          faEye.classList.remove('fa-eye')
-          faEye.classList.add('fa-eye-slash')
-        }
-        if (parseFloat(this.value) > 0) {
-          faEye.classList.remove('fa-eye-slash')
-          faEye.classList.add('fa-eye')
-        }
-      } else {
-        console.warn('worldItem', worldItem)
-      }
-    })
-
-    faEye.addEventListener('click', function () {
-      toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
-      eyeball(faEye, range, layerNum, viewer)
-    })
-
-    div.appendChild(e('div', {class: 'showHover'}, [range]))
-    tr.appendChild(e('td', {}, [div]))
-
-    if (layerNum > 0) {
-      let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
-      tr.appendChild(e('td', {}, [palette]))
-      let colorsUI = filters(palette, layer.prefLabel, layer.colors, itemsToBeDisplayed, viewer)
-      palette.addEventListener('click', function () {
-        colorsUI.style.display = 'block'
-      })
-    } else {
-      tr.appendChild(e('td'))
-    }
+  layers.forEach(function (layer) {
+    addRow(table, layer, layers, viewer)
   })
 }
 
@@ -203,50 +203,64 @@ function handleDragLayers(layers) {
 
       let targetViewer = getViewerObject(targetDiv)
       if (foundMatchingSlide) {
-        targetViewer.world.getItemAt(layNum).setOpacity(1) // show
-        // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
-      } else {
         try {
-          const location = sourceViewer.tileSources[layNum].tileSource
-          const newLayNum = layers.length
-          // New draggable feature
-          let feat = e('span', {
-            id: `${newLayNum}${makeId(5, 'feat')}`,
-            class: 'dragIt',
-            display: 'block',
-            draggable: 'true'
-          })
-          feat.innerHTML = name
-
-          let addToLayers = {
-            "layerNum": layers.length,
-            "location": location,
-            "opacity": 1,
-            "colors": [
-              {
-                // "color": "rgba(75, 0, 130, 255)",
-                "color": "rgba(184, 226, 242, 255)",
-                "low": 0,
-                "hi": 255
-              }
-            ],
-            "resolutionUnit": 3,
-            "xResolution": 40000
-          }
-          layers.push(addToLayers)
-
-          let row = myTable.insertRow()
-          let cell1 = row.insertCell(0)
-          cell1.appendChild(feat)
-          // let cell2 = row.insertCell(1)
-          // cell1.innerHTML = name
-          // cell1.className = 'dragIt'
-          // cell2.innerHTML = "NEW CELL2"
-
-          targetViewer.addTiledImage({tileSource: location, opacity: 1, x: 0, y: 0})
+          console.log('set o', targetViewer.world.getItemAt(layNum))
+          targetViewer.world.getItemAt(layNum).setOpacity(1) // show
+          // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
         } catch (e) {
           console.log(`%c${e.message}`, 'color: #ff6a5a;')
         }
+
+      } else {
+        console.log('sourceViewer', sourceViewer, layNum)
+        try {
+          console.log('TS', sourceViewer.tileSources[layNum])
+        } catch (e) {
+          console.log(`%c${e.message}`, 'color: #ff6a5a;')
+        }
+
+        const location = sourceViewer.tileSources[layNum].tileSource
+        const newLayNum = layers.length
+        // New draggable feature
+        let feat = e('span', {
+          id: `${newLayNum}${makeId(5, 'feat')}`,
+          class: 'dragIt',
+          display: 'block',
+          draggable: 'true'
+        })
+        feat.innerHTML = name
+
+        let addToLayers = {
+          "layerNum": layers.length,
+          "location": location,
+          "opacity": 1,
+          "colors": [
+            {
+              "color": "rgba(75, 0, 130, 255)",
+              // "color": "rgba(184, 226, 242, 255)",
+              "low": 128,
+              "hi": 255
+            }
+          ],
+          "resolutionUnit": 3,
+          "xResolution": 40000
+        }
+        // append new value to the array
+        addToLayers.prefLabel = getLabel(feat, addToLayers)
+        layers.push(addToLayers)
+
+        addRow(myTable, addToLayers, layers, targetViewer)
+
+        // let row = myTable.insertRow()
+        // let cell1 = row.insertCell(0)
+        // cell1.appendChild(feat)
+        // let cell2 = row.insertCell(1)
+        // cell1.innerHTML = name
+        // cell1.className = 'dragIt'
+        // cell2.innerHTML = "NEW CELL2"
+
+        targetViewer.addTiledImage({tileSource: location, opacity: 1, x: 0, y: 0})
+
       }
     }
     return false
