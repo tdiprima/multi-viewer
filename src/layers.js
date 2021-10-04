@@ -5,7 +5,7 @@
  */
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
-  handleDragLayers(itemsToBeDisplayed)
+  handleDragLayers(itemsToBeDisplayed, viewer)
 }
 
 function getLabel(feat, layer) {
@@ -81,7 +81,6 @@ function addRow(table, currentLayer, allLayers, viewer) {
   })
 
   tr.appendChild(e('td', {}, [feat]))
-  // console.log('currentLayer', currentLayer)
 
   // eyeball visibility toggle
   let faEye = e('i', {id: makeId(5, 'eye'), class: currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
@@ -150,25 +149,21 @@ function createLayerWidget(div, layers, viewer) {
 }
 
 // VIEWER'S DRAGGABLE LAYERS
-function handleDragLayers(layers) {
-  // todo: fix multiple execution
+function handleDragLayers(layers, viewer) {
+  // Div containing viewer
+  let dropzone = document.getElementById(viewer.id)
+  dropzone.addEventListener('dragenter', function () { this.classList.add('over') })
+  dropzone.addEventListener('dragleave', function () { this.classList.remove('over') })
+  dropzone.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
+  dropzone.addEventListener('drop', handleDrop)
 
-  // Features in feature list
-  let features = document.querySelectorAll('.dragIt')
+  let table = dropzone.parentElement.parentElement.parentElement.parentElement
+  // The features/layers to the right of the viewer
+  let features = table.querySelectorAll('.dragIt')
   features.forEach(function (feature) {
     feature.setAttribute('draggable', 'true')
     feature.addEventListener('dragstart', handleDragStart)
     feature.addEventListener('dragend', handleDragEnd)
-  })
-
-  // Div containing viewer
-  let viewerDivs = document.querySelectorAll('.dropzone')
-  viewerDivs.forEach(function (viewerDiv) {
-    viewerDiv.addEventListener('dragenter', function () { this.classList.add('over') })
-    viewerDiv.addEventListener('dragleave', function () { this.classList.remove('over') })
-    viewerDiv.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
-    viewerDiv.addEventListener('drop', handleDrop)
-    console.log('ADD DROP')
   })
 
   function handleDragStart(evt) {
@@ -182,12 +177,9 @@ function handleDragLayers(layers) {
   function handleDragEnd() {
     // this = the draggable feature
     this.style.opacity = '1'
-    viewerDivs.forEach(function (viewerDiv) {
-      viewerDiv.classList.remove('over')
-    })
+    dropzone.classList.remove('over')
   }
 
-  // todo: handleDrop executing more than once per drop?
   function handleDrop(evt) {
     // this = dropzone viewer
     if (evt.preventDefault) evt.preventDefault()
@@ -200,7 +192,6 @@ function handleDragLayers(layers) {
 
       let layersColumn = targetDiv.parentElement.nextSibling.firstChild
       let myTable = layersColumn.firstChild
-      // console.log('myTable', myTable)
 
       let movedElemId = evt.dataTransfer.getData('text')
       let movedElem = document.getElementById(movedElemId)
@@ -211,10 +202,8 @@ function handleDragLayers(layers) {
       for (let row of myTable.rows) {
         let lay = row.cells[0].firstChild
         layNum = lay.id[0] // 1st char is array index)
-        // console.log('inner H', lay.innerHTML)
         let eye = row.cells[1].children[0]
         if (lay.innerHTML === name) {
-          // console.log('match')
           foundMatchingSlide = true
           // Highlight the layer
           lay.classList.remove('highlight') // just in case.
@@ -228,7 +217,6 @@ function handleDragLayers(layers) {
 
       let targetViewer = getViewerObject(targetDiv)
       if (foundMatchingSlide) {
-        console.log('%cFound layer', 'color: lime;')
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1) // show
           // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
@@ -237,7 +225,6 @@ function handleDragLayers(layers) {
           console.log(`%c${e.message}`, 'color: #ff6a5a;')
         }
       } else {
-        console.log('%cAdding a layer', 'color: deeppink;')
         const location = sourceViewer.tileSources[layNum].tileSource
         const newLayNum = layers.length
         // New draggable feature
