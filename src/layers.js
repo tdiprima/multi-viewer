@@ -149,8 +149,10 @@ function createLayerWidget(div, layers, viewer) {
   })
 }
 
-// DRAGGABLE LAYERS
+// VIEWER'S DRAGGABLE LAYERS
 function handleDragLayers(layers) {
+  // todo: fix multiple execution
+
   // Features in feature list
   let features = document.querySelectorAll('.dragIt')
   features.forEach(function (feature) {
@@ -166,6 +168,7 @@ function handleDragLayers(layers) {
     viewerDiv.addEventListener('dragleave', function () { this.classList.remove('over') })
     viewerDiv.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
     viewerDiv.addEventListener('drop', handleDrop)
+    console.log('ADD DROP')
   })
 
   function handleDragStart(evt) {
@@ -197,7 +200,7 @@ function handleDragLayers(layers) {
 
       let layersColumn = targetDiv.parentElement.nextSibling.firstChild
       let myTable = layersColumn.firstChild
-      console.log('myTable', myTable)
+      // console.log('myTable', myTable)
 
       let movedElemId = evt.dataTransfer.getData('text')
       let movedElem = document.getElementById(movedElemId)
@@ -208,10 +211,10 @@ function handleDragLayers(layers) {
       for (let row of myTable.rows) {
         let lay = row.cells[0].firstChild
         layNum = lay.id[0] // 1st char is array index)
-        console.log('inner H', lay.innerHTML)
+        // console.log('inner H', lay.innerHTML)
         let eye = row.cells[1].children[0]
         if (lay.innerHTML === name) {
-          console.log('match')
+          // console.log('match')
           foundMatchingSlide = true
           // Highlight the layer
           lay.classList.remove('highlight') // just in case.
@@ -252,8 +255,8 @@ function handleDragLayers(layers) {
           "opacity": 1,
           "colors": [
             {
-              "color": "rgba(75, 0, 130, 255)",
-              // "color": "rgba(184, 226, 242, 255)",
+              // "color": "rgba(75, 0, 130, 255)",
+              "color": "rgba(184, 226, 242, 255)",
               "low": 128,
               "hi": 255
             }
