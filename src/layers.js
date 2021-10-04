@@ -1,24 +1,33 @@
+/**
+ * FEATURE ELEMENTS NAMING CONVENTION
+ * 0featXXX <- 0th feature
+ * <ETC>
+ */
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
   handleDragLayers(itemsToBeDisplayed)
 }
 
 function getLabel(feat, layer) {
-  const loc = layer.location
-  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
-  if (typeof layer.prefLabel !== 'undefined') {
-    return layer.prefLabel
-  } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-    return loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
-  } else if (loc.includes('TCGA')) {
-    if (loc.match(regex) !== null) {
-      return loc.match(regex)[0]
+  return new Promise((resolve, reject) => {
+    const loc = layer.location
+    const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
+    let retVal = ''
+    if (typeof layer.prefLabel !== 'undefined') {
+      retVal = layer.prefLabel
+    } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
+      retVal = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+    } else if (loc.includes('TCGA')) {
+      if (loc.match(regex) !== null) {
+        retVal = loc.match(regex)[0]
+      } else {
+        retVal = getStringRep(loc)
+      }
     } else {
-      return getStringRep(loc)
+      retVal = 'Feature'
     }
-  } else {
-    return 'Feature'
-  }
+    resolve(retVal)
+  })
 }
 
 function getSourceViewer(target) {
@@ -58,12 +67,21 @@ function addRow(table, currentLayer, allLayers, viewer) {
     display: 'block',
     draggable: 'true'
   })
-  feat.innerHTML = getLabel(feat, currentLayer)
-  if (typeof currentLayer.prefLabel === 'undefined') {
-    currentLayer.prefLabel = feat.innerHTML
-    allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
-  }
+
+  getLabel(feat, currentLayer).then(result => {
+    feat.innerHTML = result
+    if (typeof currentLayer.prefLabel === 'undefined') {
+      currentLayer.prefLabel = feat.innerHTML
+      allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+      // todo: prefLabel is set, but it's not set #:(
+      // console.log('currentLayer', currentLayer)
+      // console.log('PF', currentLayer.prefLabel)
+      // console.log('typeof', typeof currentLayer)
+    }
+  })
+
   tr.appendChild(e('td', {}, [feat]))
+  // console.log('currentLayer', currentLayer)
 
   // eyeball visibility toggle
   let faEye = e('i', {id: makeId(5, 'eye'), class: currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
@@ -166,6 +184,7 @@ function handleDragLayers(layers) {
     })
   }
 
+  // todo: handleDrop executing more than once per drop?
   function handleDrop(evt) {
     // this = dropzone viewer
     if (evt.preventDefault) evt.preventDefault()
@@ -178,6 +197,7 @@ function handleDragLayers(layers) {
 
       let layersColumn = targetDiv.parentElement.nextSibling.firstChild
       let myTable = layersColumn.firstChild
+      console.log('myTable', myTable)
 
       let movedElemId = evt.dataTransfer.getData('text')
       let movedElem = document.getElementById(movedElemId)
@@ -188,8 +208,10 @@ function handleDragLayers(layers) {
       for (let row of myTable.rows) {
         let lay = row.cells[0].firstChild
         layNum = lay.id[0] // 1st char is array index)
+        console.log('inner H', lay.innerHTML)
         let eye = row.cells[1].children[0]
         if (lay.innerHTML === name) {
+          console.log('match')
           foundMatchingSlide = true
           // Highlight the layer
           lay.classList.remove('highlight') // just in case.
@@ -203,22 +225,16 @@ function handleDragLayers(layers) {
 
       let targetViewer = getViewerObject(targetDiv)
       if (foundMatchingSlide) {
+        console.log('%cFound layer', 'color: lime;')
         try {
-          console.log('set o', targetViewer.world.getItemAt(layNum))
           targetViewer.world.getItemAt(layNum).setOpacity(1) // show
           // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
         } catch (e) {
+          console.log('It may get here if the handler executes twice on one drop:')
           console.log(`%c${e.message}`, 'color: #ff6a5a;')
         }
-
       } else {
-        console.log('sourceViewer', sourceViewer, layNum)
-        try {
-          console.log('TS', sourceViewer.tileSources[layNum])
-        } catch (e) {
-          console.log(`%c${e.message}`, 'color: #ff6a5a;')
-        }
-
+        console.log('%cAdding a layer', 'color: deeppink;')
         const location = sourceViewer.tileSources[layNum].tileSource
         const newLayNum = layers.length
         // New draggable feature
