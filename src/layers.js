@@ -236,6 +236,7 @@ function handleDragLayers(layers, viewer) {
         })
         feat.innerHTML = name
 
+        // TODO: What color & range?
         let addToLayers = {
           "layerNum": layers.length,
           "location": location,
