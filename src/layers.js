@@ -261,6 +261,7 @@ function handleDragLayers(layers, viewer) {
         // let row = myTable.insertRow()
         // let cell1 = row.insertCell(0)
         // cell1.appendChild(feat)
+
         // let cell2 = row.insertCell(1)
         // cell1.innerHTML = name
         // cell1.className = 'dragIt'
