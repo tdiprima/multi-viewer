@@ -132,7 +132,7 @@ a:link { text-decoration: none; }
   transition: 0.3s !important;
   font-size: 17px !important;
   /* FOR LONG FILENAMES: */
-  overflow:hidden;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
