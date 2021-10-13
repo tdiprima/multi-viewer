@@ -53,6 +53,7 @@ module.exports = function (grunt) {
       target: {
         files: {
           'build/main.min.css': ['css/*.css']
+          // fontawesome all.min.css needs to stay put
         }
       }
     }
