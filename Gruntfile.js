@@ -15,7 +15,6 @@ module.exports = function (grunt) {
           'src/pageSetup.js',
           'src/editPolygon.js',
           'src/drawPolygon.js',
-          // 'src/mugshots.js',
           'src/gridOverlay.js',
           'src/mapMarker.js',
           'src/ruler.js',
@@ -33,7 +32,10 @@ module.exports = function (grunt) {
         src: ['vendor/openseadragon/openseadragon.min.js',
           'vendor/openseadragon-fabricjs-overlay.js',
           'vendor/jquery-3.5.1.min.js',
-          'vendor/color-picker.min.js'],
+          // Dependency required in vendor/fabric.adapted.js does not exist: jsdom
+          // Dependency required in vendor/openseadragon-filtering.js does not exist: openseadragon
+          'vendor/openseadragon-scalebar.js',
+          'vendor/color-picker.js'],
         dest: 'build/vendor.min.js'
       }
     },
