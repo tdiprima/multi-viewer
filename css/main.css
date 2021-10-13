@@ -116,7 +116,7 @@ a:link { text-decoration: none; }
   padding: 4px 12px;
 }
 
-/* TABS (redone as LIST) */
+/* DRAG AND DROP */
 .dropzone {
   overflow: hidden !important;
   border: 1px solid var(--ltgray) !important;
@@ -131,6 +131,10 @@ a:link { text-decoration: none; }
   padding: 14px 16px !important;
   transition: 0.3s !important;
   font-size: 17px !important;
+  /* FOR LONG FILENAMES: */
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .dropzone.over { border: 3px dotted #00ff00 !important; }
