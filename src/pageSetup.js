@@ -38,7 +38,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
       referenceNode.before(top)
 
       btnDark.addEventListener('click', function () {
-        toggleButton(awesome, 'fa-moon', 'fa-sun')
+        toggleButton(btnDark, 'fa-moon', 'fa-sun')
         document.body.classList.toggle('dark-mode')
       })
 
