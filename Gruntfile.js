@@ -26,7 +26,7 @@ module.exports = function (grunt) {
           'src/layers.js',
           'src/MultiViewer.js',
           'src/synchronizeViewers.js'],
-        dest: 'build/<%= pkg.name %>.js'
+        dest: 'dist/<%= pkg.name %>.js'
       },
       extras: {
         src: ['vendor/openseadragon/openseadragon.min.js',
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
           // Dependency required in vendor/openseadragon-filtering.js does not exist: openseadragon
           'vendor/openseadragon-scalebar.js',
           'vendor/color-picker.js'],
-        dest: 'build/vendor.min.js'
+        dest: 'dist/vendor.min.js'
       }
     },
     uglify: {
@@ -45,14 +45,14 @@ module.exports = function (grunt) {
         stripBanners: true
       },
       build: {
-        src: 'build/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        src: 'dist/<%= pkg.name %>.js',
+        dest: 'dist/<%= pkg.name %>.min.js'
       }
     },
     cssmin: {
       target: {
         files: {
-          'build/main.min.css': ['css/*.css']
+          'dist/main.min.css': ['css/*.css']
           // fontawesome all.min.css needs to stay put
         }
       }

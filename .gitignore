@@ -1,6 +1,6 @@
 json/
 node_modules/
-build/
+dist/
 .idea/
 .vscode/
 .cache
