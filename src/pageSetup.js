@@ -17,7 +17,8 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
       return resolve(opts)
     }).then(function (opts) {
       // dark-mode
-      let btnDark = e('button', {'class': 'btn'}, [e('i', {'class': 'fas fa-moon'})])
+      let awesome = e('i', {'class': 'fas fa-moon'})
+      let btnDark = e('button', {'class': 'btn'}, [awesome])
 
       // Slide name
       let name
@@ -38,7 +39,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
       referenceNode.before(top)
 
       btnDark.addEventListener('click', function () {
-        toggleButton(btnDark, 'fa-moon', 'fa-sun')
+        toggleButton(awesome, 'fa-moon', 'fa-sun')
         document.body.classList.toggle('dark-mode')
       })
 
