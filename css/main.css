@@ -131,10 +131,20 @@ a:link { text-decoration: none; }
   padding: 14px 16px !important;
   transition: 0.3s !important;
   font-size: 17px !important;
-  /* FOR LONG FILENAMES: */
+  width: 98px;
+
+  /* ELLIPSES FOR LONG NAMES*/
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
+  /* WORD-WRAP LONG NAMES */
+  /* overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto; */
 }
 
 .dropzone.over { border: 3px dotted #00ff00 !important; }
