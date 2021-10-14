@@ -3,6 +3,13 @@
  * 0featXXX <- 0th feature
  * <ETC>
  */
+
+let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
+let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
+let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
+
+let testLongWord = testLong3
+
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
   handleDragLayers(itemsToBeDisplayed, viewer)
@@ -68,17 +75,21 @@ function addRow(table, currentLayer, allLayers, viewer) {
     draggable: 'true'
   })
 
-  getLabel(feat, currentLayer).then(result => {
-    feat.innerHTML = result
-    if (typeof currentLayer.prefLabel === 'undefined') {
-      currentLayer.prefLabel = feat.innerHTML
-      allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
-      // todo: prefLabel is set, but it's not set #:(
-      // console.log('currentLayer', currentLayer)
-      // console.log('PF', currentLayer.prefLabel)
-      // console.log('typeof', typeof currentLayer)
-    }
-  })
+  feat.innerHTML = testLongWord
+  currentLayer.prefLabel = testLongWord
+  allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+
+  // getLabel(feat, currentLayer).then(result => {
+  //   feat.innerHTML = result
+  //   if (typeof currentLayer.prefLabel === 'undefined') {
+  //     currentLayer.prefLabel = feat.innerHTML
+  //     allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+  //     // todo: prefLabel is set, but it's not set #:(
+  //     // console.log('currentLayer', currentLayer)
+  //     // console.log('PF', currentLayer.prefLabel)
+  //     // console.log('typeof', typeof currentLayer)
+  //   }
+  // })
 
   tr.appendChild(e('td', {}, [feat]))
 
@@ -250,22 +261,14 @@ function handleDragLayers(layers, viewer) {
             }
           ],
           "resolutionUnit": 3,
-          "xResolution": 40000
+          "xResolution": 40000,
+          "prefLabel": 'something'  // TODO: getLabel(feat, addToLayers)
         }
         // append new value to the array
-        addToLayers.prefLabel = getLabel(feat, addToLayers)
+        // addToLayers.prefLabel = getLabel(feat, addToLayers)
         layers.push(addToLayers)
 
         addRow(myTable, addToLayers, layers, targetViewer)
-
-        // let row = myTable.insertRow()
-        // let cell1 = row.insertCell(0)
-        // cell1.appendChild(feat)
-
-        // let cell2 = row.insertCell(1)
-        // cell1.innerHTML = name
-        // cell1.className = 'dragIt'
-        // cell2.innerHTML = "NEW CELL2"
 
         targetViewer.addTiledImage({tileSource: location, opacity: 1, x: 0, y: 0})
 
