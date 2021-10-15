@@ -4,37 +4,14 @@
  * <ETC>
  */
 
-let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
-let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
-let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
-
-let testLongWord = testLong3
+// let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
+// let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
+// let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
+// let testLongWord = testLong3
 
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
   handleDragLayers(itemsToBeDisplayed, viewer)
-}
-
-function getLabel(feat, layer) {
-  return new Promise((resolve, reject) => {
-    const loc = layer.location
-    const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
-    let retVal = ''
-    if (typeof layer.prefLabel !== 'undefined') {
-      retVal = layer.prefLabel
-    } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-      retVal = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
-    } else if (loc.includes('TCGA')) {
-      if (loc.match(regex) !== null) {
-        retVal = loc.match(regex)[0]
-      } else {
-        retVal = getStringRep(loc)
-      }
-    } else {
-      retVal = 'Feature'
-    }
-    resolve(retVal)
-  })
 }
 
 function getSourceViewer(target) {
@@ -75,21 +52,33 @@ function addRow(table, currentLayer, allLayers, viewer) {
     draggable: 'true'
   })
 
-  feat.innerHTML = testLongWord
-  currentLayer.prefLabel = testLongWord
-  allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+  // feat.innerHTML = testLongWord
+  // currentLayer.prefLabel = testLongWord
+  // allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
 
-  // getLabel(feat, currentLayer).then(result => {
-  //   feat.innerHTML = result
-  //   if (typeof currentLayer.prefLabel === 'undefined') {
-  //     currentLayer.prefLabel = feat.innerHTML
-  //     allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
-  //     // todo: prefLabel is set, but it's not set #:(
-  //     // console.log('currentLayer', currentLayer)
-  //     // console.log('PF', currentLayer.prefLabel)
-  //     // console.log('typeof', typeof currentLayer)
-  //   }
-  // })
+  // NAME
+  let loc = currentLayer.location
+  if (typeof currentLayer.prefLabel !== 'undefined') {
+    feat.innerHTML = currentLayer.prefLabel
+    // NOTE: temporary hack until we get prefLabel:
+  } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
+    let name = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
+    feat.innerHTML = name
+    currentLayer.prefLabel = name
+  } else if (loc.includes('TCGA')) {
+    if (loc.match(regex) !== null) {
+      let name = loc.match(regex)[0]
+      feat.innerHTML = name
+      currentLayer.prefLabel = name
+    } else {
+      let name = getStringRep(loc)
+      feat.innerHTML = name
+      currentLayer.prefLabel = name
+    }
+  } else {
+    feat.innerHTML = 'Feature'
+    currentLayer.prefLabel = 'Feature'
+  }
 
   tr.appendChild(e('td', {}, [feat]))
 
@@ -163,9 +152,16 @@ function createLayerWidget(div, layers, viewer) {
 function handleDragLayers(layers, viewer) {
   // Div containing viewer
   let dropzone = document.getElementById(viewer.id)
-  dropzone.addEventListener('dragenter', function () { this.classList.add('over') })
-  dropzone.addEventListener('dragleave', function () { this.classList.remove('over') })
-  dropzone.addEventListener('dragover', function (evt) { if (evt.preventDefault) evt.preventDefault(); return false })
+  dropzone.addEventListener('dragenter', function () {
+    this.classList.add('over')
+  })
+  dropzone.addEventListener('dragleave', function () {
+    this.classList.remove('over')
+  })
+  dropzone.addEventListener('dragover', function (evt) {
+    if (evt.preventDefault) evt.preventDefault();
+    return false
+  })
   dropzone.addEventListener('drop', handleDrop)
 
   let table = dropzone.parentElement.parentElement.parentElement.parentElement
