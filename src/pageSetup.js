@@ -91,14 +91,14 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
               htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`
             }
 
-            htm += `<button id="btnDraw${idx}" class="btn" title="Draw"><i class="fas fa-pencil-alt"></i></button>&nbsp;
-<button id="btnEdit${idx}" class="btn" title="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
-<button id="btnGrid${idx}" class="btn" title="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
-<button id="btnGridMarker${idx}" class="btn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
-<button id="btnRuler${idx}" class="btn" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
-<button id="btnShare${idx}" class="btn" title="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
-<button id="btnCam${idx}" class="btn" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
-<button id="btnBlender${idx}" class="btn" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
+            htm += `<button id="btnDraw${idx}" class="btn" data-tooltip="Draw"><i class="fas fa-pencil-alt"></i></button>&nbsp;
+<button id="btnEdit${idx}" class="btn" data-tooltip="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
+<button id="btnGrid${idx}" class="btn" data-tooltip="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
+<button id="btnGridMarker${idx}" class="btn" data-tooltip="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
+<button id="btnRuler${idx}" class="btn" data-tooltip="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
+<button id="btnShare${idx}" class="btn" data-tooltip="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
+<button id="btnCam${idx}" class="btn" data-tooltip="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
+<button id="btnBlender${idx}" class="btn" data-tooltip="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
 <button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 <div class="mag" style="display: inline">
   <button class="dropbtn btn">
