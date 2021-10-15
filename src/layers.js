@@ -52,11 +52,12 @@ function addRow(table, currentLayer, allLayers, viewer) {
     draggable: 'true'
   })
 
+  /* Test Long Word */
   // feat.innerHTML = testLongWord
   // currentLayer.prefLabel = testLongWord
   // allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
 
-  // NAME
+  // Preferred Label
   let loc = currentLayer.location
   if (typeof currentLayer.prefLabel !== 'undefined') {
     feat.innerHTML = currentLayer.prefLabel
