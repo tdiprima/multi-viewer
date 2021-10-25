@@ -124,7 +124,7 @@ a:link {
 
 /* DRAGGABLE */
 *[draggable=true] {
-  -khtml-user-drag: element;
+  -webkit-user-drag: element;
   cursor: move;
 }
 
