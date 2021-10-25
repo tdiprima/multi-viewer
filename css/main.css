@@ -39,6 +39,7 @@ a:link {
   /*border: 2px solid blueviolet*/
 }
 
+/* DIV */
 .controls {
   width: 100%;
   /*width: 640px;*/
@@ -46,10 +47,12 @@ a:link {
   /*border: 2px solid cornflowerblue;*/
 }
 
+/* DIV */
 .buttons {
   width: 100%;
 }
 
+/* DIV */
 .viewer {
   /* W + H ARE NOW SET BY USER */
   /*width: 640px;*/
@@ -57,6 +60,7 @@ a:link {
   /*width: 100%;*/
 }
 
+/* DIV */
 .floated {
   float: left;
   margin-right: 5px;
