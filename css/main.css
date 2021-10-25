@@ -139,7 +139,7 @@ a:link {
   vertical-align: middle;
   cursor: pointer;
   color: var(--dkgray);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
   padding: 4px 12px;
 }
 
@@ -152,7 +152,7 @@ a:link {
   cursor: pointer;
   color: var(--hilite);
   border: 2px solid var(--hilite);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
   padding: 4px 12px;
 }
 
