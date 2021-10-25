@@ -1,12 +1,22 @@
 :root {
-  --hilite: rgba(81, 203, 238, 1);
+  --hilite: #74f272;
+/*--hilite: rgba(81, 203, 238, 1);*/
   --dkgray: #333;
   --ltgray: #ccc;
 }
 
-/** { border: 1px solid #333; }*/
-/*table {border: 2px solid blue;}*/
-/*td {border: 2px solid green;}*/
+/* TESTING */
+/** {*/
+/*  border: 1px solid #333;*/
+/*}*/
+
+/*table {*/
+/*  border: 2px solid blue;*/
+/*}*/
+
+/*td {*/
+/*  border: 2px solid green;*/
+/*}*/
 
 body {
   font-family: sans-serif;
@@ -22,6 +32,8 @@ a:link {
 
 /* "QUAD" */
 .divSquare {
+  /*width: 48%;*/
+  /*height: 560px;*/
   margin-right: 200px;
   float: left;
   /*border: 2px solid blueviolet*/
@@ -29,6 +41,7 @@ a:link {
 
 .controls {
   width: 100%;
+  /*width: 640px;*/
   height: 30px;
   /*border: 2px solid cornflowerblue;*/
 }
@@ -39,6 +52,9 @@ a:link {
 
 .viewer {
   /* W + H ARE NOW SET BY USER */
+  /*width: 640px;*/
+  /*height: 480px;*/
+  /*width: 100%;*/
 }
 
 .floated {
@@ -116,7 +132,7 @@ a:link {
 
 /* USER CONTROLS */
 .btn {
-  border-radius: 5px;
+  border-radius: 5px; /*added*/
   font-size: 14px;
   line-height: 20px;
   text-align: center;
@@ -128,7 +144,7 @@ a:link {
 }
 
 .btnOn {
-  border-radius: 5px;
+  border-radius: 5px; /*added*/
   font-size: 14px;
   line-height: 20px;
   text-align: center;
@@ -141,15 +157,18 @@ a:link {
 }
 
 /* DRAG AND DROP */
+/*drop_site*/
 .dropzone {
   overflow: hidden !important;
   border: 1px solid var(--ltgray) !important;
   background-color: #f1f1f1 !important;
 }
 
+/*layer_tab*/
 .dragIt {
   cursor: move !important;
-  border-radius: 7px !important;
+  border-radius: 7px !important; /*inc to 7*/
+  /*border-radius: 5px !important;*/
   float: left !important;
   border: 1px solid var(--dkgray) !important;
   padding: 14px 16px !important;
@@ -171,8 +190,10 @@ a:link {
   hyphens: auto; */
 }
 
+/*drop_site*/
 .dropzone.over {
-  border: 3px dotted #00acd6 !important;
+  border: 3px dotted #00ff00 !important;
+  /*border: 3px dotted #00acd6 !important;*/
 }
 
 /* FLOATING DIV */
@@ -183,13 +204,15 @@ a:link {
   border: 1px solid var(--ltgray);
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
   border-radius: 5px;
+  /*border-radius: 4px;*/
   display: inline-block;
   white-space: nowrap;
 }
 
 .popupHeader {
   z-index: 20;
-  background-color: rgba(81, 203, 238, 1);
+  /*background-color: rgba(81, 203, 238, 1);*/
+  background-color: var(--ltgray);
   color: var(--dkgray);
   border-radius: 5px;
   padding: 10px;
@@ -236,5 +259,6 @@ a:link {
   right: 0;
   margin-top: 5px;
   padding: 5px;
-  background-color: #00acd6;
+  background-color: lightyellow;
+  /*background-color: #00acd6;*/
 }

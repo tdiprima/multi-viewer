@@ -190,6 +190,8 @@ function handleDragLayers(layers, viewer) {
 
   function handleDrop(evt) {
     // this = dropzone viewer
+    this.classList.remove('over')
+
     if (evt.preventDefault) evt.preventDefault()
 
     if (dragSrcEl !== this) {
