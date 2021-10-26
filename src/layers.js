@@ -4,10 +4,10 @@
  * <ETC>
  */
 
-let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
+// let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
 // let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
 // let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
-let testLongWord = testLong1
+// let testLongWord = testLong1
 
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
@@ -51,35 +51,40 @@ function addRow(table, currentLayer, allLayers, viewer) {
     class: 'dragIt',
     display: 'block',
     draggable: 'true',
-    'data-tooltip': testLongWord
+    // 'data-tooltip': testLongWord
   })
 
   /* Test Long Word */
-  feat.innerHTML = testLongWord
-  currentLayer.prefLabel = testLongWord
-  allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+  // feat.innerHTML = testLongWord
+  // currentLayer.prefLabel = testLongWord
+  // allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
 
   // Preferred Label
   let loc = currentLayer.location
   if (typeof currentLayer.prefLabel !== 'undefined') {
     feat.innerHTML = currentLayer.prefLabel
+    feat['data-tooltip'] = currentLayer.prefLabel
     // NOTE: temporary hack until we get prefLabel:
   } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
     let name = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
     feat.innerHTML = name
+    feat['data-tooltip'] = name
     currentLayer.prefLabel = name
   } else if (loc.includes('TCGA')) {
     if (loc.match(regex) !== null) {
       let name = loc.match(regex)[0]
       feat.innerHTML = name
+      feat['data-tooltip'] = name
       currentLayer.prefLabel = name
     } else {
       let name = getStringRep(loc)
       feat.innerHTML = name
+      feat['data-tooltip'] = name
       currentLayer.prefLabel = name
     }
   } else {
     feat.innerHTML = 'Feature'
+    feat['data-tooltip'] = 'Feature'
     currentLayer.prefLabel = 'Feature'
   }
 
