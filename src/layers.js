@@ -39,7 +39,8 @@ function getViewerObject(element) {
 }
 
 function addRow(table, currentLayer, allLayers, viewer) {
-  let layerNum = currentLayer.layerNum
+  const layerNum = currentLayer.layerNum
+  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
 
   let tr = e('tr')
   table.appendChild(tr)
