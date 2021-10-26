@@ -258,11 +258,12 @@ a:link {
 [data-tooltip]:hover::after {
   content: attr(data-tooltip);
   position: absolute;
-  top: 100%;
+  top: 10px;
   left: 0;
-  right: 0;
+  /*transform: translate(-50%, -100%);*/
   margin-top: 5px;
   padding: 5px;
+  font-size: x-small;
   background-color: lightyellow;
   /*background-color: #00acd6;*/
 }

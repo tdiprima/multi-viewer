@@ -4,10 +4,10 @@
  * <ETC>
  */
 
-// let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
+let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
 // let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
 // let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
-// let testLongWord = testLong3
+let testLongWord = testLong1
 
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
@@ -45,17 +45,18 @@ function addRow(table, currentLayer, allLayers, viewer) {
   table.appendChild(tr)
 
   // Feature (draggable)
-  let feat = e('span', {
+  let feat = e('button', {
     id: `${layerNum}${makeId(5, 'feat')}`,
     class: 'dragIt',
     display: 'block',
-    draggable: 'true'
+    draggable: 'true',
+    'data-tooltip': testLongWord
   })
 
   /* Test Long Word */
-  // feat.innerHTML = testLongWord
-  // currentLayer.prefLabel = testLongWord
-  // allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
+  feat.innerHTML = testLongWord
+  currentLayer.prefLabel = testLongWord
+  allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
 
   // Preferred Label
   let loc = currentLayer.location
