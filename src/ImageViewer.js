@@ -32,15 +32,11 @@ class ImageViewer {
     viewer.world.addHandler('add-item', ({item}) => {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item)
-        let source = viewer.world.getItemAt(itemIndex).source
-        if (itemIndex > 0) {
-          // ADD INFO TO OUR ITEMS
-          itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel // set prefLabel
-        } else {
-          itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
-          itemsToBeDisplayed[itemIndex].resolutionUnit = source.resolutionUnit
-          itemsToBeDisplayed[itemIndex].xResolution = source.xResolution
-        }
+        const source = viewer.world.getItemAt(itemIndex).source
+        // ADD INFO TO OUR ITEMS
+        itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
+        itemsToBeDisplayed[itemIndex].resolutionUnit = source.resolutionUnit
+        itemsToBeDisplayed[itemIndex].xResolution = source.xResolution
       } catch (e) {
         console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
