@@ -6,8 +6,8 @@
 
 // let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
 // let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
-// let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
-// let testLongWord = testLong1
+let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
+let testLongWord = testLong3
 
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
@@ -67,6 +67,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // NOTE: temporary hack until we get prefLabel:
   } else {
     console.log('PREFLABEL UNDEFINED')
+    feat.innerHTML = testLongWord
+    feat['data-tooltip'] = testLongWord
   }
 
   tr.appendChild(e('td', {}, [feat]))
