@@ -51,7 +51,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     class: 'dragIt',
     display: 'block',
     draggable: 'true',
-    // 'data-tooltip': testLongWord
+    'data-tooltip': testLongWord // TEMPORARY!
   })
 
   /* Test Long Word */
@@ -64,7 +64,6 @@ function addRow(table, currentLayer, allLayers, viewer) {
   if (typeof currentLayer.prefLabel !== 'undefined') {
     feat.innerHTML = currentLayer.prefLabel
     feat['data-tooltip'] = currentLayer.prefLabel
-    // NOTE: temporary hack until we get prefLabel:
   } else {
     console.log('PREFLABEL UNDEFINED')
     feat.innerHTML = testLongWord
