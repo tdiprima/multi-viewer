@@ -65,27 +65,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     feat.innerHTML = currentLayer.prefLabel
     feat['data-tooltip'] = currentLayer.prefLabel
     // NOTE: temporary hack until we get prefLabel:
-  } else if (loc.includes('HalcyonStorage') && loc.includes('TCGA')) {
-    let name = loc.substring(loc.indexOf('HalcyonStorage') + 15, loc.indexOf('TCGA') - 1)
-    feat.innerHTML = name
-    feat['data-tooltip'] = name
-    currentLayer.prefLabel = name
-  } else if (loc.includes('TCGA')) {
-    if (loc.match(regex) !== null) {
-      let name = loc.match(regex)[0]
-      feat.innerHTML = name
-      feat['data-tooltip'] = name
-      currentLayer.prefLabel = name
-    } else {
-      let name = getStringRep(loc)
-      feat.innerHTML = name
-      feat['data-tooltip'] = name
-      currentLayer.prefLabel = name
-    }
   } else {
-    feat.innerHTML = 'Feature'
-    feat['data-tooltip'] = 'Feature'
-    currentLayer.prefLabel = 'Feature'
+    console.log('PREFLABEL UNDEFINED')
   }
 
   tr.appendChild(e('td', {}, [feat]))
