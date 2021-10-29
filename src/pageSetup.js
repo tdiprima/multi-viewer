@@ -12,7 +12,7 @@
  */
 const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) => {
   if (itemsToBeDisplayed[0] === null) {
-    document.write('<p style="color: red">You need to give me some images to display.</p><p>You provided: <code>' + JSON.stringify(itemsToBeDisplayed) + '</code></p>')
+    document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(itemsToBeDisplayed) + '</code></p>')
     console.log('%citemsToBeDisplayed', 'color: #ccff00;', itemsToBeDisplayed)
     throw new Error("Hey user - provide some images.");
   }
