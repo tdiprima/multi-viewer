@@ -225,6 +225,7 @@ function handleDragLayers(layers, viewer) {
         }
       } else {
         const location = sourceViewer.tileSources[layNum].tileSource
+        console.log('%clocation', 'color: #ccff00;', location)
         const newLayNum = layers.length
         // New draggable feature
         let feat = e('span', {
