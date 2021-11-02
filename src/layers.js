@@ -216,6 +216,7 @@ function handleDragLayers(layers, viewer) {
 
       let targetViewer = getViewerObject(targetDiv)
       if (foundMatchingSlide) {
+        console.log('%cFound matching slide', 'color: lime;')
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1) // show
           // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
@@ -224,8 +225,9 @@ function handleDragLayers(layers, viewer) {
           console.log(`%c${e.message}`, 'color: #ff6a5a;')
         }
       } else {
+        console.log('%cDid not find matching slide', 'color: deeppink;')
         const location = sourceViewer.tileSources[layNum].tileSource
-        console.log('%clocation', 'color: #ccff00;', location)
+        console.log('%csrc img', 'color: #ccff00;', location)
         const newLayNum = layers.length
         // New draggable feature
         let feat = e('span', {
