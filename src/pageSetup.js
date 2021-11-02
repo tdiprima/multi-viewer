@@ -11,6 +11,8 @@
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) => {
+  console.log('%citemsToBeDisplayed', 'color: deeppink;', itemsToBeDisplayed)
+
   if (itemsToBeDisplayed[0] === null) {
     document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(itemsToBeDisplayed) + '</code></p>')
     console.log('%citemsToBeDisplayed', 'color: #ccff00;', itemsToBeDisplayed)
