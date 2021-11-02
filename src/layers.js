@@ -65,7 +65,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     feat.innerHTML = currentLayer.prefLabel
     feat['data-tooltip'] = currentLayer.prefLabel
   } else {
-    console.log('PREFLABEL UNDEFINED')
+    console.log('%cPREFLABEL UNDEFINED', 'color: lime;')
     feat.innerHTML = testLongWord
     feat['data-tooltip'] = testLongWord
   }
