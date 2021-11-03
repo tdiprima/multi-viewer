@@ -1,10 +1,3 @@
-:root {
-  --hilite: #74f272;
-/*--hilite: rgba(81, 203, 238, 1);*/
-  --dkgray: #333;
-  --ltgray: #ccc;
-}
-
 /* TESTING */
 /** {*/
 /*  border: 1px solid #333;*/
@@ -86,9 +79,9 @@ a:link {
 
 /* OVERRIDE WICKET NAVBAR */
 .navbar a:hover, .mag:hover .dropbtn {
-  /* background-color: var(--hilite) !important; */
-  background-color: var(--ltgray) !important;
-  color: var(--dkgray) !important;
+  background-color: #ccc !important;
+  color: #333 !important;
+  /* background-color: #74f272 !important; */
 }
 
 /* POINTER */
@@ -110,12 +103,12 @@ a:link {
   animation-fill-mode: forwards;
   animation-duration: 3s;
   animation-delay: 0s;
-  background-color: var(--hilite);
+  background-color: #74f272;
 }
 
 @keyframes bckanim {
   0% {
-    background-color: var(--hilite);
+    background-color: #74f272;
   }
   100% {
     background-color: transparent;
@@ -131,7 +124,7 @@ a:link {
 /* HOVER OVER ICONS */
 .hover-light:focus,
 .hover-light:hover {
-  color: var(--hilite);
+  color: #74f272;
 }
 
 /* USER CONTROLS */
@@ -143,12 +136,12 @@ a:link {
   line-height: 20px;
   text-align: center;
   vertical-align: middle;
-  color: var(--dkgray);
+  color: #333;
   /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
 }
 
 .btnOn {
-  border: 2px solid var(--hilite);
+  border: 2px solid #74f272;
   border-radius: 5px; /*added*/
   padding: 4px 12px;
   cursor: pointer;
@@ -156,7 +149,7 @@ a:link {
   line-height: 20px;
   text-align: center;
   vertical-align: middle;
-  color: var(--hilite);
+  color: #74f272;
   /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
 }
 
@@ -164,7 +157,7 @@ a:link {
 /*drop_site*/
 .dropzone {
   overflow: hidden !important;
-  border: 1px solid var(--ltgray) !important;
+  border: 1px solid #ccc !important;
   background-color: #f1f1f1 !important;
 }
 
@@ -172,7 +165,7 @@ a:link {
 .dragIt {
   float: left !important;
   transition: 0.3s !important;
-  border: 1px solid var(--dkgray) !important;
+  border: 1px solid #333 !important;
   border-radius: 7px !important; /*inc to 7*/
   /*border-radius: 5px !important;*/
   width: 98px;
@@ -206,7 +199,7 @@ a:link {
   z-index: 10;
   display: inline-block;
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
-  border: 1px solid var(--ltgray);
+  border: 1px solid #ccc;
   border-radius: 5px;
   /*border-radius: 4px;*/
   background-color: #f1f1f1;
@@ -218,10 +211,10 @@ a:link {
   border-radius: 5px;
   padding: 10px;
   /*background-color: rgba(81, 203, 238, 1);*/
-  background-color: var(--ltgray);
+  background-color: #ccc;
   cursor: move;
   font-weight: bold;
-  color: var(--dkgray);
+  color: #333;
 }
 
 /* MAGNIFICATION */
