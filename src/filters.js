@@ -288,89 +288,79 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
   return function (context, callback) {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let pxl = imgData.data
+
+    if (false) { // temp
+      let colorArr = layerColorRanges.map(function (element) {
+        return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
+      });
+    }
+
     for (let j = 0; j < pxl.length; j += 4) {
       if (pxl[j + 3] === 255) {
-        const rc = pxl[j]
-        switch (rc) {
-          case 1:
-            // Tumor, yellow
-            pxl[j] = 255;
-            pxl[j + 1] = 255;
-            pxl[j + 2] = 0;
-            pxl[j + 3] = 255;
-            break;
-          case 2:
-            // Miscellaneous, blue
-            pxl[j] = 0;
-            pxl[j + 1] = 0;
-            pxl[j + 2] = 255;
-            pxl[j + 3] = 255;
-            break;
-          case 3:
-            // Lymphocyte, red
-            pxl[j] = 255;
-            pxl[j + 1] = 0;
-            pxl[j + 2] = 0;
-            pxl[j + 3] = 255;
-            break;
-          case 4:
-            // https://null.com/background, orange
-            pxl[j] = 255;
-            pxl[j + 1] = 165;
-            pxl[j + 2] = 0;
-            pxl[j + 3] = 255;
-            break;
-          default:
-            // console.log(pxl[j])
-            pxl[j] = 0;
-            pxl[j + 1] = 255;
-            pxl[j + 2] = 255;
-            pxl[j + 3] = 255;
+        if (false) { //temp
+          let rgba = levels(pxl[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
+          pxl[j] = rgba[0];
+          pxl[j + 1] = rgba[1];
+          pxl[j + 2] = rgba[2];
+          pxl[j + 3] = rgba[3];
+        } else {
+          const rc = pxl[j]
+          switch (rc) {
+            case 1:
+              // Tumor, yellow
+              pxl[j] = 255;
+              pxl[j + 1] = 255;
+              pxl[j + 2] = 0;
+              pxl[j + 3] = 255;
+              break;
+            case 2:
+              // Miscellaneous, blue
+              pxl[j] = 0;
+              pxl[j + 1] = 0;
+              pxl[j + 2] = 255;
+              pxl[j + 3] = 255;
+              break;
+            case 3:
+              // Lymphocyte, red
+              pxl[j] = 255;
+              pxl[j + 1] = 0;
+              pxl[j + 2] = 0;
+              pxl[j + 3] = 255;
+              break;
+            case 4:
+              // https://null.com/background, orange
+              pxl[j] = 255;
+              pxl[j + 1] = 165;
+              pxl[j + 2] = 0;
+              pxl[j + 3] = 255;
+              break;
+            default:
+              // console.log(pxl[j])
+              pxl[j] = 0;
+              pxl[j + 1] = 255;
+              pxl[j + 2] = 255;
+              pxl[j + 3] = 255;
+          }
         }
       } else {
+        // No nuclear material: set to transparent.
         pxl[j + 3] = 0;
       }
 
     }
+
+    // prob
+    function levels(value, _colors, colorArr) {
+      for (let _i = 0; _i < _colors.length; _i++) {
+        if (value >= _colors[_i].low && value <= _colors[_i].hi) {
+          return colorArr[_i]; // return color
+        }
+      }
+      // if we are here, then no match
+      return [0, 0, 0, 0];
+    }
+
     context.putImageData(imgData, 0, 0)
     callback()
   }
 }
-// let colorFilter = OpenSeadragon.Filters.GREYSCALE;
-// colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
-//   return function (context, callback) {
-//     // Read the canvas pixels
-//     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-//     let pxl = imgData.data; // Uint8ClampedArray
-//
-//     let colorArr = layerColorRanges.map(function (element) {
-//       return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
-//     });
-//
-//     for (let j = 0; j < pxl.length; j += 4) {
-//       if (pxl[j + 3] === 255) {
-//         let rgba = levels(pxl[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
-//         pxl[j] = rgba[0];
-//         pxl[j + 1] = rgba[1];
-//         pxl[j + 2] = rgba[2];
-//         pxl[j + 3] = rgba[3];
-//       } else {
-//         // No nuclear material: set to transparent.
-//         pxl[j + 3] = 0;
-//       }
-//     }
-//
-//     function levels(value, _colors, colorArr) {
-//       for (let _i = 0; _i < _colors.length; _i++) {
-//         if (value >= _colors[_i].low && value <= _colors[_i].hi) {
-//           return colorArr[_i]; // return color
-//         }
-//       }
-//       // if we are here, then no match
-//       return [0, 0, 0, 0];
-//     }
-//
-//     context.putImageData(imgData, 0, 0);
-//     callback();
-//   };
-// };
