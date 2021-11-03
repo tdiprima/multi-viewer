@@ -293,26 +293,30 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
         const rc = pxl[j]
         switch (rc) {
           case 1:
+            // Tumor, yellow
+            pxl[j] = 255;
+            pxl[j + 1] = 255;
+            pxl[j + 2] = 0;
+            pxl[j + 3] = 255;
+            break;
+          case 2:
+            // Miscellaneous, blue
             pxl[j] = 0;
             pxl[j + 1] = 0;
             pxl[j + 2] = 255;
             pxl[j + 3] = 255;
             break;
-          case 2:
-            pxl[j] = 0;
-            pxl[j + 1] = 255;
-            pxl[j + 2] = 0;
-            pxl[j + 3] = 255;
-            break;
           case 3:
+            // Lymphocyte, red
             pxl[j] = 255;
-            pxl[j + 1] = 165;
+            pxl[j + 1] = 0;
             pxl[j + 2] = 0;
             pxl[j + 3] = 255;
             break;
           case 4:
+            // https://null.com/background, orange
             pxl[j] = 255;
-            pxl[j + 1] = 255;
+            pxl[j + 1] = 165;
             pxl[j + 2] = 0;
             pxl[j + 3] = 255;
             break;
