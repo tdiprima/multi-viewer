@@ -336,10 +336,10 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
               break;
             default:
               // console.log(pxl[j])
-              pxl[j] = 0;
-              pxl[j + 1] = 255;
-              pxl[j + 2] = 255;
-              pxl[j + 3] = 255;
+              // pxl[j] = 0;
+              // pxl[j + 1] = 255;
+              // pxl[j + 2] = 255;
+              pxl[j + 3] = 0; // transparent [9,1,9], etc.???
           }
         }
       } else {
