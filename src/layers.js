@@ -6,8 +6,8 @@
 
 // let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
 // let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
-let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
-let testLongWord = testLong3
+// let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
+// let testLongWord = testLong3
 
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
@@ -45,30 +45,19 @@ function addRow(table, currentLayer, allLayers, viewer) {
   let tr = e('tr')
   table.appendChild(tr)
 
+  // Preferred Label
+  const sections = (currentLayer.location).split('/')
+  const name = sections[sections.length - 2] // filename
+
   // Feature (draggable)
   let feat = e('button', {
-    id: `${layerNum}${makeId(5, 'feat')}`,
-    class: 'dragIt',
-    display: 'block',
-    draggable: 'true',
-    'data-tooltip': testLongWord // TEMPORARY!
+    'id': `${layerNum}${makeId(5, 'feat')}`,
+    'class': 'dragIt',
+    'display': 'block',
+    'draggable': 'true',
+    'data-tooltip': name,
+    'innerHTML': name
   })
-
-  /* Test Long Word */
-  // feat.innerHTML = testLongWord
-  // currentLayer.prefLabel = testLongWord
-  // allLayers[currentLayer.layerNum].prefLabel = feat.innerHTML
-
-  // Preferred Label
-  let loc = currentLayer.location
-  if (typeof currentLayer.prefLabel !== 'undefined') {
-    feat.innerHTML = currentLayer.prefLabel
-    feat['data-tooltip'] = currentLayer.prefLabel
-  } else {
-    console.log('%cPREFLABEL UNDEFINED', 'color: lime;')
-    feat.innerHTML = testLongWord
-    feat['data-tooltip'] = testLongWord
-  }
 
   tr.appendChild(e('td', {}, [feat]))
 
