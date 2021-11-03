@@ -4,11 +4,6 @@
  * <ETC>
  */
 
-// let testLong1 = 'Rindfleischetikettierungsuberwachungsaufgabenubertragungsgesetz'
-// let testLong2 = "Rindfleisch Etikettierungs überwachungs aufgaben übertragungs gesetz"
-// let testLong3 = 'aoa9o1vxg8gehlpftbjr7xpllrvwm4mbyatj0em1gxk73nfieb2a2g9kixv61sk'
-// let testLongWord = testLong3
-
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
   handleDragLayers(itemsToBeDisplayed, viewer)
@@ -40,7 +35,6 @@ function getViewerObject(element) {
 
 function addRow(table, currentLayer, allLayers, viewer) {
   const layerNum = currentLayer.layerNum
-  const regex = /\b[a-zA-Z0-9]{2}-[a-zA-Z0-9]{4}\b/gm
 
   let tr = e('tr')
   table.appendChild(tr)
@@ -55,9 +49,9 @@ function addRow(table, currentLayer, allLayers, viewer) {
     'class': 'dragIt',
     'display': 'block',
     'draggable': 'true',
-    'data-tooltip': name,
-    'innerHTML': name
+    'data-tooltip': name
   })
+  feat.innerHTML = name
 
   tr.appendChild(e('td', {}, [feat]))
 
