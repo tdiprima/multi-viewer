@@ -11,8 +11,8 @@ class ImageViewer {
       let u = itemsToBeDisplayed[i].location
       /*
       if (i > 0) {
-        // TESTING
         // Temporarily mutate the url string
+        // Test, test, and again test.
         // u += "&foo=bar"
         u = u.replace('halcyon/?iiif', 'halcyon/?foo=bar&iiif')
         // u += "?foo=bar"
