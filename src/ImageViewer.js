@@ -8,9 +8,22 @@ class ImageViewer {
   constructor(viewerInfo, itemsToBeDisplayed) {
     let tileSources = []
     for (let i = 0; i < itemsToBeDisplayed.length; i++) {
-      // console.log(itemsToBeDisplayed[i].location)
+      let u = itemsToBeDisplayed[i].location
+      /*
+      if (i > 0) {
+        // TESTING
+        // Temporarily mutate the url string
+        // u += "&foo=bar"
+        u = u.replace('halcyon/?iiif', 'halcyon/?foo=bar&iiif')
+        // u += "?foo=bar"
+        // u = u.replace('halcyon/?iiif', 'halcyon/?renderType=byProbability&iiif')
+        // u += '&renderType=byProbability';
+        itemsToBeDisplayed[i].location = u;
+      }
+      console.log(u)
+       */
       tileSources.push({
-        tileSource: itemsToBeDisplayed[i].location,
+        tileSource: u,
         opacity: itemsToBeDisplayed[i].opacity,
         x: 0,
         y: 0
