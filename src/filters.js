@@ -19,10 +19,49 @@ const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
-  const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
+
+  /* ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
+  // TEMPORARY HACK - COLOR BY CLASS
+  */
+  const div = createDraggableDiv(widgetId, `${prefLabel} has feature`, rect.left, rect.top)
   const widgetBody = div.lastChild
-  createUI(uniqueId, widgetBody, layerColors, layers, viewer)
+  renderByClass(uniqueId, widgetBody, layerColors, layers, viewer)
+
+  // const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
+  // const widgetBody = div.lastChild
+  // createUI(uniqueId, widgetBody, layerColors, layers, viewer)
+
   return div
+}
+
+function renderByClass(uniq, div, layerColors, layers, viewer) {
+  const table = e('table')
+  div.appendChild(table)
+
+  table.innerHTML = `<table>
+<tbody>
+<tr>
+<th align="left">Color</th>
+<th align="left">Label</th>
+</tr>
+<tr>
+<td><input type="color" value="#ffff00"></td>
+<td>Tumor</td>
+</tr>
+<tr>
+<td><input type="color" value="#0000ff"></td>
+<td>Miscellaneous</td>
+</tr>
+<tr>
+<td><input type="color" value="#ff0000"></td>
+<td>Lymphocyte</td>
+</tr>
+<tr>
+<td><input type="color" value="#ffa500"></td>
+<td style="font-size: smaller">https://null.com/background</td>
+</tr>
+</tbody>
+</table>`
 }
 
 // CREATE USER INTERFACE
