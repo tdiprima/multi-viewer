@@ -75,13 +75,14 @@ function createUI(uniq, div, layerColors, layers, viewer) {
   div.appendChild(table)
 
   if (layerColors) {
-    // Sort list right away
+    // Sort list
     layerColors.sort((a, b) => b.low - a.low)
 
     table.appendChild(createHeaderRow())
 
+    // Create table row for each color rgba and range (low to hi)
+    // with UI to adjust color, low, hi, and a button to add or remove a range.
     layerColors.forEach(function (colorObject, cIdx) {
-      colorObject.tempKey = `k${uniq}${cIdx}`
       let cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
       let num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
       let num2 = createNumericInput(`hi${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
@@ -157,6 +158,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
   m.innerHTML = `#${rgba2hex(colorCode)}`
 
   const picker = new CP(m)
+  // Set up the event listener
   picker.on('change', function (r, g, b, a) {
     if (init) {
       init = false // Update the state
@@ -173,6 +175,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
   return m
 }
 
+// Our colors are in rgba - convert to hex for color picker element
 function rgba2hex(orig) {
   let a
   const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
@@ -219,11 +222,14 @@ function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer
     size: '5',
     value: id.includes('low') ? colorObject.low.toString() : colorObject.hi.toString()
   })
+  // Event listeners
   numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
   numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
   return numEl
 }
 
+// An interval has low value and high value
+// Check to see if any two intervals overlap
 function isIntersect(table) {
   let arr = []
   const cells = table.getElementsByTagName('td');
@@ -260,6 +266,7 @@ function isIntersect(table) {
   return false
 }
 
+// The outline around the inputs for numbers - red for error, clear for default
 function setOutlineStyle(a, b, style, color) {
   // For numeric element pair
   if (isRealValue(a)) {
@@ -272,6 +279,7 @@ function setOutlineStyle(a, b, style, color) {
   }
 }
 
+// The "Add color range" event
 function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
   setOutlineStyle(num1, num2, '', '') // clear error
   if (num1.value === '0' && num2.value === '0') {
@@ -285,7 +293,6 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let buttonId = `i${blah}`
     let colorObject = {'color': rgba, 'low': parseInt(num1.value), 'hi': parseInt(num2.value)}
     colors.push(colorObject) // add it to our list
-    colorObject.tempKey = `k${blah}`
     // sort
     colors.sort((a, b) => b.low - a.low)
     // reflect changes in viewer
@@ -333,7 +340,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let pxl = imgData.data
 
-    if (false) { // temp
+    if (false) { // TEMP
       let colorArr = layerColorRanges.map(function (element) {
         return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
       });
@@ -341,7 +348,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
 
     for (let j = 0; j < pxl.length; j += 4) {
       if (pxl[j + 3] === 255) {
-        if (false) { //temp
+        if (false) { // TEMP
           let rgba = levels(pxl[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
           pxl[j] = rgba[0];
           pxl[j + 1] = rgba[1];
@@ -393,7 +400,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
 
     }
 
-    // prob
+    // probability
     function levels(value, _colors, colorArr) {
       for (let _i = 0; _i < _colors.length; _i++) {
         if (value >= _colors[_i].low && value <= _colors[_i].hi) {
