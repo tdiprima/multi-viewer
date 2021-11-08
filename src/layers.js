@@ -1,9 +1,13 @@
 /**
- * FEATURE ELEMENTS NAMING CONVENTION
- * 0featXXX <- 0th feature
- * <ETC>
+ * There's a column called "layers_and_colors" to the right of each viewer.
+ * Create an HTML table there, with each row corresponding to each layer displayed in viewer.
+ * Each layer has:
+ *     a draggable item: the layer
+ *         naming convention: 0featXXX <- 0th feature
+ *     an eyeball: turn layer on & off
+ *     a slider: adjust transparency
+ *     a color palette: change colors in layer
  */
-
 let layers = function (divEl, itemsToBeDisplayed, viewer) {
   createLayerWidget(divEl, itemsToBeDisplayed, viewer)
   handleDragLayers(itemsToBeDisplayed, viewer)
