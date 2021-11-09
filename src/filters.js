@@ -39,6 +39,7 @@ const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
   return div
 }
 
+// For testing renderByClass
 function renderByClass(uniq, div, layerColors, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
@@ -69,7 +70,7 @@ function renderByClass(uniq, div, layerColors, layers, viewer) {
 </table>`
 }
 
-// CREATE USER INTERFACE
+// Create user interface
 function createUI(uniq, div, layerColors, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
@@ -115,7 +116,7 @@ function removeColor(el, ourRanges, tr, layers, viewer) {
   tr.remove()
 }
 
-// CREATE SORTABLE HEADER ROW
+// Create sortable header row
 function createHeaderRow() {
   const row = e('tr')
   const tableHeaders = ['Color', 'Low', 'High']
@@ -149,7 +150,7 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
 )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
 
-// CREATE COLOR PICKER INPUT
+// Create color picker input
 function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
   let init = true
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
@@ -196,6 +197,7 @@ function rgba2hex(orig) {
   return hex
 }
 
+// Last stop before "set filter"
 function numericEvent(numEl, colorObject, layers, viewer) {
   const intVal = parseInt(numEl.value)
 
@@ -203,15 +205,13 @@ function numericEvent(numEl, colorObject, layers, viewer) {
   if (intVal > 255) numEl.value = '255'
   if (intVal < 0) numEl.value = '0'
 
-  if (numEl.id.startsWith('low')) {
-    colorObject.low = intVal
-  } else {
-    colorObject.hi = intVal
-  }
+  if (numEl.id.startsWith('low')) colorObject.low = intVal
+  if (numEl.id.startsWith('hi')) colorObject.hi = intVal
+
   setFilter(layers, viewer)
 }
 
-// CREATE NUMERIC INPUT
+// Create numeric input
 function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
   let numEl = e('input', {
     id: id,
@@ -310,7 +310,7 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
   }
 }
 
-// EXTRA ROW FOR ADDING COLOR AND RANGE VALUES
+// Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
   let idx = colors.length
   let generic = {color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0}
@@ -333,7 +333,7 @@ function extraRow(uniq, colors, layers, viewer) {
   return tr
 }
 
-// CUSTOM FILTER
+// Custom color filter
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = function (layerColorRanges, renderType = 'byClass') {
   return function (context, callback) {
