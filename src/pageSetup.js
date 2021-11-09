@@ -2,7 +2,7 @@
  * pageSetup
  * Set up web page for multi-viewer.
  * @param divId: Main div id.
- * @param itemsToBeDisplayed
+ * @param images: Items to be displayed in viewer.
  * @param numViewers: Total number of viewers.
  * @param rows: LAYOUT: Number of rows (of viewers)
  * @param columns: LAYOUT: Number of columns (of viewers)
@@ -10,12 +10,16 @@
  * @param height: Viewer height
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
-const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, height, opts) => {
-  console.log('%citemsToBeDisplayed', 'color: #ccff00;', itemsToBeDisplayed)
+const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+  console.log('%cimages', 'color: #ccff00;', images)
 
-  if (itemsToBeDisplayed[0] === null) {
-    document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(itemsToBeDisplayed) + '</code></p>')
-    console.log('%citemsToBeDisplayed', 'color: #ccff00;', itemsToBeDisplayed)
+  numViewers = 1
+  rows = 1
+  columns = 1
+
+  if (images[0] === null) {
+    document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(images) + '</code></p>')
+    console.log('%citemsToBeDisplayed', 'color: #ccff00;', images)
     throw new Error("Hey user - provide some images.");
   }
 
@@ -30,7 +34,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
 
       // Slide name
       let name
-      let slide = itemsToBeDisplayed[0][0].location
+      let slide = images[0][0].location
       if (slide.includes('TCGA')) {
         name = `Slide: ${slide.match(/TCGA-[^%.]+/)[0]}`
       } else {
@@ -144,7 +148,7 @@ const pageSetup = (divId, itemsToBeDisplayed, numViewers, rows, columns, width, 
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          let thisData = itemsToBeDisplayed[idx] // Images to be displayed in "this" viewer
+          let thisData = images[idx] // Images to be displayed in "this" viewer
           // Create MultiViewer object and add to array
           viewers.push(new MultiViewer({"idx": idx, "divId": osdId, "len": thisData.length}, thisData, numViewers, opts))
         }
