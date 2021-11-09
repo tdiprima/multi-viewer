@@ -3,7 +3,7 @@
  * Create a popup div allowing user to adjust color ranges for that layer,
  * or adjust the colors being used to color each class in that layer.
  * There is a color filter at the bottom of this script - this is the workhorse that colors the layer in OSD.
- * 
+ *
  * POPUP DIV FOR COLOR LEVELS: NAMING CONVENTION
  * filtersXXX
  * filtersXXXHeader
@@ -28,13 +28,13 @@ const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
   /* ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
   // TEMPORARY HACK - COLOR BY CLASS
   */
-  const div = createDraggableDiv(widgetId, `${prefLabel} has feature`, rect.left, rect.top)
-  const widgetBody = div.lastChild
-  renderByClass(uniqueId, widgetBody, layerColors, layers, viewer)
+  //const div = createDraggableDiv(widgetId, `${prefLabel} has feature`, rect.left, rect.top)
+  //const widgetBody = div.lastChild
+  //renderByClass(uniqueId, widgetBody, layerColors, layers, viewer)
 
-  // const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
-  // const widgetBody = div.lastChild
-  // createUI(uniqueId, widgetBody, layerColors, layers, viewer)
+  const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
+  const widgetBody = div.lastChild
+  createUI(uniqueId, widgetBody, layerColors, layers, viewer)
 
   return div
 }
@@ -333,82 +333,67 @@ function extraRow(uniq, colors, layers, viewer) {
   return tr
 }
 
-// FILTER BY CLASS (TEST)
+// CUSTOM FILTER
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
-colorFilter.prototype.COLORLEVELS = function (layerColorRanges) {
+colorFilter.prototype.COLORLEVELS = function (layerColorRanges, renderType = 'byClass') {
   return function (context, callback) {
-    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    let pxl = imgData.data
+    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+    const pixels = imgData.data
 
-    if (false) { // TEMP
-      let colorArr = layerColorRanges.map(function (element) {
-        return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
-      });
+    function c(n, r, g, b) {
+      pixels[n] = r
+      pixels[n + 1] = g
+      pixels[n + 2] = b
     }
 
-    for (let j = 0; j < pxl.length; j += 4) {
-      if (pxl[j + 3] === 255) {
-        if (false) { // TEMP
-          let rgba = levels(pxl[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
-          pxl[j] = rgba[0];
-          pxl[j + 1] = rgba[1];
-          pxl[j + 2] = rgba[2];
-          pxl[j + 3] = rgba[3];
-        } else {
-          const rc = pxl[j]
-          switch (rc) {
-            case 1:
-              // Tumor, yellow
-              pxl[j] = 255;
-              pxl[j + 1] = 255;
-              pxl[j + 2] = 0;
-              pxl[j + 3] = 255;
-              break;
-            case 2:
-              // Miscellaneous, blue
-              pxl[j] = 0;
-              pxl[j + 1] = 0;
-              pxl[j + 2] = 255;
-              pxl[j + 3] = 255;
-              break;
-            case 3:
-              // Lymphocyte, red
-              pxl[j] = 255;
-              pxl[j + 1] = 0;
-              pxl[j + 2] = 0;
-              pxl[j + 3] = 255;
-              break;
-            case 4:
-              // https://null.com/background, orange
-              pxl[j] = 255;
-              pxl[j + 1] = 165;
-              pxl[j + 2] = 0;
-              pxl[j + 3] = 255;
-              break;
-            default:
-              // console.log(pxl[j])
-              // pxl[j] = 0;
-              // pxl[j + 1] = 255;
-              // pxl[j + 2] = 255;
-              pxl[j + 3] = 0; // transparent [9,1,9], etc.???
-          }
-        }
-      } else {
-        // No nuclear material: set to transparent.
-        pxl[j + 3] = 0;
-      }
-
-    }
-
-    // probability
     function levels(value, _colors, colorArr) {
-      for (let _i = 0; _i < _colors.length; _i++) {
-        if (value >= _colors[_i].low && value <= _colors[_i].hi) {
-          return colorArr[_i]; // return color
+      for (let k = 0; k < _colors.length; k++) {
+        if (value >= _colors[k].low && value <= _colors[k].hi) {
+          return colorArr[k]; // return color
         }
       }
       // if we are here, then no match
       return [0, 0, 0, 0];
+    }
+
+    if (renderType === 'byClass') {
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i + 3] === 255) {
+          switch (pixels[i]) {
+            case 1:
+              c(i, 255, 255, 0) // Tumor, yellow
+              break;
+            case 2:
+              c(i, 255, 0, 255) // Miscellaneous, blue
+              break;
+            case 3:
+              c(i, 255, 0, 0) // Lymphocyte, red
+              break;
+            case 4:
+              c(i, 255, 165, 0) // https://null.com/background, orange
+          }
+        } else {
+          pixels[i + 3] = 0
+        }
+      }
+    }
+
+    if (renderType === 'byProbability') {
+      let colorArr = layerColorRanges.map(function (element) {
+        return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
+      })
+      for (let j = 0; j < pixels.length; j += 4) {
+        if (pixels[j + 3] === 255) {
+          let rgba = levels(pixels[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
+          pixels[j] = rgba[0];
+          pixels[j + 1] = rgba[1];
+          pixels[j + 2] = rgba[2];
+          pixels[j + 3] = rgba[3];
+        } else {
+          // No nuclear material: set to transparent.
+          pixels[j + 3] = 0;
+        }
+      }
     }
 
     context.putImageData(imgData, 0, 0)
