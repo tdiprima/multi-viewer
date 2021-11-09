@@ -364,7 +364,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges, renderType = 'by
               c(i, 255, 255, 0) // Tumor, yellow
               break;
             case 2:
-              c(i, 255, 0, 255) // Miscellaneous, blue
+              c(i, 0, 0, 255) // Miscellaneous, blue
               break;
             case 3:
               c(i, 255, 0, 0) // Lymphocyte, red
