@@ -8,9 +8,9 @@
  *     a slider: adjust transparency
  *     a color palette: change colors in layer
  */
-let layers = function (divEl, itemsToBeDisplayed, viewer) {
-  createLayerWidget(divEl, itemsToBeDisplayed, viewer)
-  handleDragLayers(itemsToBeDisplayed, viewer)
+let layers = function (divEl, images, viewer) {
+  createLayerWidget(divEl, images, viewer)
+  handleDragLayers(images, viewer)
 }
 
 function getSourceViewer(target) {
