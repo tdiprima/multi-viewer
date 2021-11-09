@@ -357,6 +357,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges, renderType = 'by
     }
 
     if (renderType === 'byClass') {
+      console.log('byClass')
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
           switch (pixels[i]) {
@@ -379,9 +380,11 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges, renderType = 'by
     }
 
     if (renderType === 'byProbability') {
+      console.log('byProbability')
       let colorArr = layerColorRanges.map(function (element) {
         return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
       })
+
       for (let j = 0; j < pixels.length; j += 4) {
         if (pixels[j + 3] === 255) {
           let rgba = levels(pixels[j], layerColorRanges, colorArr); // r = g = b, thus we can check just r
@@ -394,6 +397,18 @@ colorFilter.prototype.COLORLEVELS = function (layerColorRanges, renderType = 'by
           pixels[j + 3] = 0;
         }
       }
+
+      // TEMP!
+      // for (let j = 0; j < pixels.length; j += 4) {
+      //   if (pixels[j + 3] === 255) {
+      //     pixels[j] = 65
+      //     pixels[j + 1] = 1
+      //     pixels[j + 2] = 147
+      //   } else {
+      //     pixels[j + 3] = 0
+      //   }
+      // }
+
     }
 
     context.putImageData(imgData, 0, 0)
