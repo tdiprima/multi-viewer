@@ -13,9 +13,9 @@
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   console.log('%cimages', 'color: #ccff00;', images)
 
-  numViewers = 1
-  rows = 1
-  columns = 1
+  // numViewers = 1
+  // rows = 1
+  // columns = 1
 
   if (images[0] === null) {
     document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(images) + '</code></p>')
