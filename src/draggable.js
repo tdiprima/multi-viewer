@@ -1,5 +1,12 @@
 /**
  * Create floating div user interface
+ * Return the created div back to the calling program
+ * Calling program will create an HTML table and attach it to the body
+ *
+ * Popup Div Naming Convention Example:
+ * filtersXXX
+ * filtersXXXHeader
+ * filtersXXXBody
  *
  * @param id: id prefix to be used in the created elements
  * @param title: header title
