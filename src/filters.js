@@ -4,42 +4,46 @@
  * or adjust the colors being used to color each class in that layer.
  * There is a color filter at the bottom of this script - this is the workhorse that colors the layer in OSD.
  *
- * POPUP DIV FOR COLOR LEVELS: NAMING CONVENTION
- * filtersXXX
- * filtersXXXHeader
- * filtersXXXBody
- * <TR>
+ * @param paletteBtn
+ * @param prefLabel
+ * @param layerColors
+ * @param layers
+ * @param viewer
+ * @returns {*}
+ *
+ * Popup Div For Color Levels Naming Convention:
  * markerXXX0 <- 0th row elements
  * lowXXX0 <- 0th row elements
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
- * <TR>
- * markerXXX1 <- 1st row elements
- * lowXXX1 <- 1st row elements
- * hiXXX1 <- 1st row elements
- * iXXX1 <- 1st row elements
- * <ETC>
  */
-const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer) {
+const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer, renderType = 'byClass') {
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
+  let div
 
-  /* ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
-  // TEMPORARY HACK - COLOR BY CLASS
-  */
-  // const div = createDraggableDiv(widgetId, `${prefLabel} has feature`, rect.left, rect.top)
-  // const widgetBody = div.lastChild
-  // renderByClass(uniqueId, widgetBody, layerColors, layers, viewer)
+  // TODO: Pass renderType to this program.
+  if (renderType === 'byClass') {
+    div = createDraggableDiv(widgetId, `${prefLabel} has feature`, rect.left, rect.top)
+    const widgetBody = div.lastChild
+    renderByClass(uniqueId, widgetBody, layerColors, layers, viewer)
+  }
 
-  const div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
-  const widgetBody = div.lastChild
-  createUI(uniqueId, widgetBody, layerColors, layers, viewer)
+  if (renderType === 'byProbability') {
+    div = createDraggableDiv(widgetId, `${prefLabel} color levels`, rect.left, rect.top)
+    const widgetBody = div.lastChild
+    createUI(uniqueId, widgetBody, layerColors, layers, viewer)
+  }
 
   return div
 }
 
-// For testing renderByClass
+/*
+ ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
+          FOR TESTING - COLOR BY CLASS
+ ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
+*/
 function renderByClass (uniq, div, layerColors, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
@@ -47,8 +51,8 @@ function renderByClass (uniq, div, layerColors, layers, viewer) {
   table.innerHTML = `<table>
 <tbody>
 <tr>
-<th align="left">Color</th>
-<th align="left">Label</th>
+<th style="text-align: left">Color</th>
+<th style="text-align: left">Label</th>
 </tr>
 <tr>
 <td><input type="color" value="#ffff00"></td>
@@ -182,8 +186,8 @@ function rgba2hex (orig) {
   const alpha = ((arr && arr[4]) || '').trim()
   let hex = arr
     ? (arr[1] | 1 << 8).toString(16).slice(1) +
-    (arr[2] | 1 << 8).toString(16).slice(1) +
-    (arr[3] | 1 << 8).toString(16).slice(1)
+(arr[2] | 1 << 8).toString(16).slice(1) +
+(arr[3] | 1 << 8).toString(16).slice(1)
     : orig
 
   if (alpha !== '') {
@@ -267,7 +271,7 @@ function isIntersect (table) {
 
 // The outline around the inputs for numbers - red for error, clear for default
 function setOutlineStyle (a, b, style, color) {
-  // For numeric element pair
+// For numeric element pair
   if (isRealValue(a)) {
     a.style.outlineStyle = style
     a.style.outlineColor = color
@@ -407,7 +411,6 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
       //     pixels[j + 3] = 0
       //   }
       // }
-
     }
 
     context.putImageData(imgData, 0, 0)
