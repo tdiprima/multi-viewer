@@ -1,14 +1,17 @@
 /**
- * ImageViewer
+ * Wrapper component around OpenSeadragon viewer
  * Set up 1 basic OSD viewer.
  * @param viewerInfo
- * @param itemsToBeDisplayed
+ * @param images
  */
 class ImageViewer {
-  constructor(viewerInfo, itemsToBeDisplayed) {
+  constructor(viewerInfo, images) {
+    // TODO: set up temp input for renderType
+    let renderType = 'byClass'
+
     let tileSources = []
-    for (let i = 0; i < itemsToBeDisplayed.length; i++) {
-      let u = itemsToBeDisplayed[i].location
+    for (let i = 0; i < images.length; i++) {
+      let u = images[i].location
       /*
       if (i > 0) {
         // Temporarily mutate the url string
@@ -18,13 +21,13 @@ class ImageViewer {
         // u += "?foo=bar"
         // u = u.replace('halcyon/?iiif', 'halcyon/?renderType=byProbability&iiif')
         // u += '&renderType=byProbability';
-        itemsToBeDisplayed[i].location = u;
+        images[i].location = u;
       }
       console.log(u)
        */
       tileSources.push({
         tileSource: u,
-        opacity: itemsToBeDisplayed[i].opacity,
+        opacity: images[i].opacity,
         x: 0,
         y: 0
       })
@@ -42,17 +45,21 @@ class ImageViewer {
 
     const vpt = viewer.viewport
 
-    viewer.world.addHandler('add-item', ({item}) => {
+    function addInfo(item) {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item)
         const source = viewer.world.getItemAt(itemIndex).source
-        // ADD INFO TO OUR ITEMS
-        itemsToBeDisplayed[itemIndex].prefLabel = source.prefLabel
-        itemsToBeDisplayed[itemIndex].resolutionUnit = source.resolutionUnit
-        itemsToBeDisplayed[itemIndex].xResolution = source.xResolution
+        images[itemIndex].prefLabel = source.prefLabel
+        images[itemIndex].resolutionUnit = source.resolutionUnit
+        images[itemIndex].xResolution = source.xResolution
       } catch (e) {
         console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
+    }
+
+    viewer.world.addHandler('add-item', ({item}) => {
+      // customTiles()
+      addInfo(item)
     })
 
     // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
@@ -119,7 +126,7 @@ class ImageViewer {
         useParams(params)
       }
       addCustomButtons()
-      setFilter(itemsToBeDisplayed, viewer)
+      setFilter(images, viewer)
       getInfoForScalebar()
     })
 
@@ -168,7 +175,7 @@ class ImageViewer {
 
     function getInfoForScalebar() {
       // Get info for scale bar
-      let item = itemsToBeDisplayed[0]
+      let item = images[0]
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
       if (isRealValue(item.resolutionUnit)) {
         if (item.resolutionUnit === 3) {

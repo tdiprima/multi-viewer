@@ -48,8 +48,8 @@ function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
-const isEmpty = function (value) {
-  const isEmptyObject = function (a) {
+const isEmpty = value => {
+  const isEmptyObject = a => {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
       const hasNonempty = Object.keys(a).some(function nonEmpty(element) {
         return !isEmpty(a[element])
@@ -194,7 +194,7 @@ function parseHash() {
   let hash = window.location.hash.replace(/^#/, '')
   if (hash) {
     let parts = hash.split('&')
-    parts.forEach(function (part) {
+    parts.forEach(part => {
       let subparts = part.split('=')
       let key = subparts[0]
       let value = parseFloat(subparts[1])

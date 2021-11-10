@@ -91,7 +91,7 @@ const mugshots = function (options) {
 
     // highlightLocation(imageRect)
 
-    imgElement.addEventListener('click', function () {
+    imgElement.addEventListener('click', () => {
       showThumbnailOnImage(imageRect)
     })
   }

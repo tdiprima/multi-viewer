@@ -356,7 +356,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
     }
 
     if (renderType === 'byClass') {
-      console.log('byClass')
+      // console.log('byClass')
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
           switch (pixels[i]) {
@@ -379,7 +379,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
     }
 
     if (renderType === 'byProbability') {
-      console.log('byProbability')
+      // console.log('byProbability')
       const colorArr = layerColors.map(function (element) {
         return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
       })

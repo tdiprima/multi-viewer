@@ -1,4 +1,4 @@
-let ruler = function (button, viewer, overlay) {
+let ruler = (button, viewer, overlay) => {
   let line, isDown
   let zoom
   let mode = 'x'
@@ -50,7 +50,7 @@ let ruler = function (button, viewer, overlay) {
       canvas.add(line)
     } else {
       setOsdMove(viewer, true)
-      canvas.forEachObject(function (o) {
+      canvas.forEachObject(o => {
         o.setCoords() // update coordinates
       })
     }
@@ -159,7 +159,7 @@ let ruler = function (button, viewer, overlay) {
     }
   }
 
-  button.addEventListener('click', function () {
+  button.addEventListener('click', () => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'))

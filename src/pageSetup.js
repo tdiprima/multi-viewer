@@ -25,9 +25,9 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
   let viewers = [] // eslint-disable-line prefer-const
   document.addEventListener('DOMContentLoaded', () => {
-    new Promise(function (resolve) {
+    new Promise(resolve => {
       return resolve(opts)
-    }).then(function (opts) {
+    }).then(opts => {
       // dark-mode
       let awesome = e('i', {'class': 'fas fa-moon'})
       let btnDark = e('button', {'class': 'btn'}, [awesome])
@@ -50,7 +50,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       let referenceNode = document.querySelector('#contentDiv')
       referenceNode.before(top)
 
-      btnDark.addEventListener('click', function () {
+      btnDark.addEventListener('click', () => {
         toggleButton(awesome, 'fa-moon', 'fa-sun')
         document.body.classList.toggle('dark-mode')
       })
@@ -155,7 +155,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       }
 
       return viewers
-    }).then(function (viewers) {
+    }).then(viewers => {
       // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
       synchronizeViewers(viewers)
     })

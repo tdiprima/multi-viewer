@@ -1,5 +1,15 @@
-let blender = function (blenderBtn, viewer) {
-  let blendModes = [
+/**
+ * Implementation of OpenSeadragon.TiledImage.setCompositeOperation
+ * [uses CanvasRenderingContext2D.globalCompositeOperation]
+ * to create different visual effects when applied to the layers.
+ * Users can play with the different effects and see if it helps to
+ * discover things from a new and different perspective.
+ *
+ * @param blenderBtn: clickable blender icon
+ * @param viewer: OpenSeadragon viewer on which to apply the effects
+ */
+const blender = (blenderBtn, viewer) => {
+  const blendModes = [
     'normal',
     'difference',
     'multiply',
@@ -19,22 +29,24 @@ let blender = function (blenderBtn, viewer) {
   ]
   let uiCreated = false
 
-  function createBlendModesUI(div, viewer) {
+  // Set up user interface
+  function createBlendModesUI (div, viewer) {
     const table = e('table')
     div.appendChild(table)
 
-    blendModes.forEach(function (item) {
-      let blendBtn = e('button', {type: 'button', id: item.replace('-', '_'), value: item, class: 'button'})
+    blendModes.forEach(item => {
+      const blendBtn = e('button', { type: 'button', id: item.replace('-', '_'), value: item, class: 'button' })
       blendBtn.innerHTML = item
       const row = e('tr', {}, [
         e('td', {}, [blendBtn, e('br')])
       ])
       table.appendChild(row)
 
-      blendBtn.addEventListener('click', function () {
+      // User interface event handler
+      blendBtn.addEventListener('click', () => {
         try {
-          let count = viewer.world.getItemCount()
-          let topImage = viewer.world.getItemAt(count - 1) // Blend all
+          const count = viewer.world.getItemCount()
+          const topImage = viewer.world.getItemAt(count - 1) // Blend all
           topImage.setCompositeOperation(blendBtn.value)
         } catch (e) {
           console.error(`%c${e.message}`, 'font-size: larger;')
@@ -43,15 +55,16 @@ let blender = function (blenderBtn, viewer) {
     })
   }
 
-  blenderBtn.addEventListener('click', function () {
+  // onClick handler for blender icon
+  blenderBtn.addEventListener('click', () => {
     if (uiCreated) {
       // Turn off
       uiCreated = false
     } else {
       // Turn on
-      let id = makeId(5, 'modes')
-      let rect = blenderBtn.getBoundingClientRect()
-      let div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top)
+      const id = makeId(5, 'modes')
+      const rect = blenderBtn.getBoundingClientRect()
+      const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top)
       div.style.display = 'block'
       createBlendModesUI(document.getElementById(`${id}Body`), viewer)
       uiCreated = true

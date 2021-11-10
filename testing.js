@@ -4,13 +4,13 @@ function brcaItems(toggle) {
   let base = {
     layerNum: 0,
     location: `${loc}/iiif/?iiif=/tcgaseg/tcgaimages/${img}.svs/info.json`,
-    opacity: 1
+    opacity: 0.9
   }
   if (toggle) {
     return [base, {
       layerNum: 1,
       location: `${loc}/iiif/?iiif=/tcgaseg/featureimages/${img}-featureimage.tif/info.json'`,
-      opacity: 1,
+      opacity: 0.9,
       colors: [{color: 'rgba(245, 0, 7, 255)', low: 0, hi: 85}, {
         color: 'rgba(92, 0, 161, 255)',
         low: 86,
@@ -21,7 +21,7 @@ function brcaItems(toggle) {
     return [base, {
       layerNum: 1,
       location: `${loc}/iiif/?iiif=/tcgaseg/featureimages/brca/TCGA-3C-AALJ-01Z-00-DX1.777C0957-255A-42F0-9EEB-A3606BCF0C96-featureimage.tif/info.json`,
-      opacity: 1,
+      opacity: 0.9,
       colors: [{color: 'rgba(254, 213, 2, 255)', low: 0, hi: 85}, {
         color: 'rgba(227, 98, 53, 255)',
         low: 86,

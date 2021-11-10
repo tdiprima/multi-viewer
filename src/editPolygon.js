@@ -1,4 +1,10 @@
-const editPolygon = function (button, overlay) {
+/**
+ * Allow user to edit the polygon that they drew
+ *
+ * @param button: edit polygon button
+ * @param overlay: target canvas
+ */
+const editPolygon = (button, overlay) => {
   button.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'btn')
     Edit(this, overlay.fabricCanvas())
@@ -40,7 +46,7 @@ function actionHandler(eventData, transform, x, y) {
 
 // Handles the object that changes dimensions, while maintaining the correct position.
 function anchorWrapper(anchorIndex, fn) {
-  return function (eventData, transform, x, y) {
+  return (eventData, transform, x, y) => {
     const fabricObject = transform.target
 
     const absolutePoint = fabric.util.transformPoint({
@@ -56,7 +62,7 @@ function anchorWrapper(anchorIndex, fn) {
     const newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y
     fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5)
     return actionPerformed
-  }
+  };
 }
 
 function getPolygon(canvas) {
@@ -91,7 +97,7 @@ function Edit(button, canvas) {
       fabricPolygon.cornerColor = 'rgba(0, 0, 255, 255)'
       fabricPolygon.cornerStyle = 'circle'
       // Create one new control for each polygon point
-      fabricPolygon.controls = fabricPolygon.points.reduce(function (acc, point, index) {
+      fabricPolygon.controls = fabricPolygon.points.reduce((acc, point, index) => {
         acc['p' + index] = new fabric.Control({
           positionHandler: polygonPositionHandler,
           actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),

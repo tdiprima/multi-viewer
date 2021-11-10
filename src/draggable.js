@@ -1,19 +1,29 @@
-function createDraggableDiv(id, title, left, top, viz) {
-  let myDiv = e('div', {id: id, class: 'popup'})
+/**
+ * Create floating div user interface
+ *
+ * @param id: id prefix to be used in the created elements
+ * @param title: header title
+ * @param left: location
+ * @param top: location
+ * @param viz: visibility
+ * @returns {*} the floating div
+ */
+function createDraggableDiv (id, title, left, top, viz = false) {
+  const myDiv = e('div', { id: id, class: 'popup' })
   myDiv.style.left = left + 'px'
   myDiv.style.top = top + 'px'
 
-  let myImg = e('img', {src: `${config.appImages}close-icon.png`, width: 25, height: 25, alt: 'close'})
+  const myImg = e('img', { src: `${config.appImages}close-icon.png`, width: 25, height: 25, alt: 'close' })
   myImg.style.cursor = 'pointer'
-  myImg.addEventListener('click', function () {
+  myImg.addEventListener('click', () => {
     myDiv.style.display = 'none'
   })
 
-  const myHeader = e('div', {id: `${id}Header`, class: 'popupHeader'},
+  const myHeader = e('div', { id: `${id}Header`, class: 'popupHeader' },
     [myImg, e('span', {}, [title])])
   myDiv.appendChild(myHeader)
 
-  let body = e('div', {id: `${id}Body`})
+  const body = e('div', { id: `${id}Body` })
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
@@ -27,10 +37,10 @@ function createDraggableDiv(id, title, left, top, viz) {
   return myDiv
 }
 
-function dragElement(_elem) {
-  let pos1 = 0;
-  let pos2 = 0;
-  let pos3 = 0;
+function dragElement (_elem) {
+  let pos1 = 0
+  let pos2 = 0
+  let pos3 = 0
   let pos4 = 0
   // Note the naming convention
   if (document.getElementById(_elem.id + 'Header')) {
@@ -42,7 +52,7 @@ function dragElement(_elem) {
   }
 
   // Mouse-down handler
-  function dragMouseDown(e) {
+  function dragMouseDown (e) {
     e = e || window.event
     e.preventDefault()
     // get the mouse cursor position at startup:
@@ -54,7 +64,7 @@ function dragElement(_elem) {
   }
 
   // Mouse-move handler
-  function elementDrag(e) {
+  function elementDrag (e) {
     e = e || window.event
     e.preventDefault()
     // calculate the new cursor position:
@@ -68,7 +78,7 @@ function dragElement(_elem) {
   }
 
   // Mouse-up handler
-  function closeDragElement() {
+  function closeDragElement () {
     // stop moving when mouse button is released:
     document.onmouseup = null
     document.onmousemove = null

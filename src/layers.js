@@ -8,7 +8,7 @@
  *     a slider: adjust transparency
  *     a color palette: change colors in layer
  */
-let layers = function (divEl, images, viewer) {
+let layers = (divEl, images, viewer) => {
   createLayerWidget(divEl, images, viewer)
   handleDragLayers(images, viewer)
 }
@@ -97,7 +97,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     }
   })
 
-  faEye.addEventListener('click', function () {
+  faEye.addEventListener('click', () => {
     toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
     eyeball(faEye, range, layerNum, viewer)
   })
@@ -110,7 +110,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     tr.appendChild(e('td', {}, [palette]))
     // let colorsUI = filters(palette, currentLayer.prefLabel, currentLayer.colors, allLayers, viewer)
     let colorsUI = filters(palette, feat.innerText, currentLayer.colors, allLayers, viewer)
-    palette.addEventListener('click', function () {
+    palette.addEventListener('click', () => {
       colorsUI.style.display = 'block'
     })
   } else {
@@ -121,7 +121,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
 function createLayerWidget(div, layers, viewer) {
   let table = e('table')
   div.appendChild(table)
-  layers.forEach(function (layer) {
+  layers.forEach(layer => {
     addRow(table, layer, layers, viewer)
   })
 }
@@ -136,7 +136,7 @@ function handleDragLayers(layers, viewer) {
   dropzone.addEventListener('dragleave', function () {
     this.classList.remove('over')
   })
-  dropzone.addEventListener('dragover', function (evt) {
+  dropzone.addEventListener('dragover', evt => {
     if (evt.preventDefault) evt.preventDefault();
     return false
   })
@@ -145,7 +145,7 @@ function handleDragLayers(layers, viewer) {
   let table = dropzone.parentElement.parentElement.parentElement.parentElement
   // The features/layers to the right of the viewer
   let features = table.querySelectorAll('.dragIt')
-  features.forEach(function (feature) {
+  features.forEach(feature => {
     feature.setAttribute('draggable', 'true')
     feature.addEventListener('dragstart', handleDragStart)
     feature.addEventListener('dragend', handleDragEnd)
