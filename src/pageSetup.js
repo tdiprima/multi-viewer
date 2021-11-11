@@ -18,9 +18,9 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   // columns = 1
 
   if (images[0] === null) {
-    document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(images) + '</code></p>')
-    console.log('%citemsToBeDisplayed', 'color: #ccff00;', images)
-    throw new Error("Hey user - provide some images.");
+    // document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(images) + '</code></p>')
+    document.write('<p style="color: red">Please log in again.</p>')
+    throw new Error("Session timed out");
   }
 
   let viewers = [] // eslint-disable-line prefer-const
