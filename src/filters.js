@@ -23,8 +23,8 @@ const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer, re
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
   let title
-  if (renderType === 'byClass') title = `Classifications by color`
-  if (renderType === 'byProbability') title = `${prefLabel} color levels`
+  if (renderType === 'byClass') title = `Classifications by color`;
+  if (renderType === 'byProbability') title = `${prefLabel} color levels`;
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
   const widgetBody = div.lastChild
   createUI(uniqueId, widgetBody, renderType, layerColors, layers, viewer)
@@ -335,13 +335,25 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
       pixels[n + 2] = b
     }
 
-    function levels(value, _colors, colorArr) {
+    const colorArr = layerColors.map(function (element) {
+      return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
+    })
+
+    function inRange(value, _colors, colorArr) {
       for (let k = 0; k < _colors.length; k++) {
         if (value >= _colors[k].low && value <= _colors[k].hi) {
           return colorArr[k] // return color
         }
       }
-      // if we are here, then no match
+      return [0, 0, 0, 0]
+    }
+
+    function inClass(value, _classes, classArr) {
+      for (let l = 0; l < _classes.length; l++) {
+        if (value === _classes[l].value) {
+          return classArr[l] // return color
+        }
+      }
       return [0, 0, 0, 0]
     }
 
@@ -349,6 +361,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
       // console.log('byClass')
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
+          // const rgba = inClass(pixels[i], layerColors, colorArr)
           switch (pixels[i]) {
             case 1:
               c(i, 255, 255, 0) // Tumor, yellow
@@ -370,13 +383,9 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
 
     if (renderType === 'byProbability') {
       // console.log('byProbability')
-      const colorArr = layerColors.map(function (element) {
-        return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
-      })
-
       for (let j = 0; j < pixels.length; j += 4) {
         if (pixels[j + 3] === 255) {
-          const rgba = levels(pixels[j], layerColors, colorArr) // r = g = b, thus we can check just r
+          const rgba = inRange(pixels[j], layerColors, colorArr) // r = g = b, thus we can check just r
           pixels[j] = rgba[0]
           pixels[j + 1] = rgba[1]
           pixels[j + 2] = rgba[2]
