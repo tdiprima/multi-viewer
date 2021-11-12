@@ -186,7 +186,8 @@ function almostEqual(a, b, absoluteError, relativeError) {
 almostEqual.DBL_EPSILON = 2.2204460492503131e-16
 
 function colorToArray(input) {
-  return input.replace(/[a-z%\s()]/g, '').split(',')
+  const arrStr = input.replace(/[a-z%\s()]/g, '').split(',')
+  return arrStr.map((i) => Number(i))
 }
 
 function parseHash() {
