@@ -51,7 +51,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
       // Slide name
       let name
-      let slide = images[0][0].location
+      let slide = images[0][0].location // layer 0 location
       if (slide.includes('TCGA')) {
         name = `Slide: ${slide.match(/TCGA-[^%.]+/)[0]}`
       } else {

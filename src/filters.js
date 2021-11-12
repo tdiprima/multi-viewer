@@ -17,12 +17,12 @@
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
  */
+// TODO: Pass renderType to this program.
 const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer, renderType = 'byClass') {
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
   let title
-  // TODO: Pass renderType to this program.
   if (renderType === 'byClass') title = `Classifications by color`
   if (renderType === 'byProbability') title = `${prefLabel} color levels`
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
@@ -42,19 +42,11 @@ function renderByClass(uniq, div, layerColors, layers, viewer) {
   div.appendChild(table)
   table.appendChild(createHeaderRow(['Color', 'Label']))
 
-  // TODO: we're gonna need a way to get this info inexpensively
-  const features = [{'value': 1, 'label': 'Tumor', 'color': 'rgba(255, 255, 0, 255)'},
-    {'value': 2, 'label': 'Miscellaneous', 'color': 'rgba(0, 0, 255, 255)'},
-    {'value': 3, 'label': 'Lymphocyte', 'color': 'rgba(255, 0, 0, 255)'},
-    {'value': 4, 'label': 'https://null.com/background', 'color': 'rgba(255, 165, 0, 255)'}
-  ]
-
-  for (let cIdx = 0; cIdx < features.length; cIdx++) {
-    const colorObject = features[cIdx]
+  for (let cIdx = 0; cIdx < layerColors.length; cIdx++) {
+    const colorObject = layerColors[cIdx]
     const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
     const tr = e('tr', {}, [
       e('td', {}, [cpEl]),
-      // e('td', {}, [colorObject.label])
       e('td', {}, [e('span', {}, [
         colorObject.label
       ])])
