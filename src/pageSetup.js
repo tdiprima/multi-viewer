@@ -12,7 +12,7 @@
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
 
-  function testing() {
+  function testRenderByColor() {
     numViewers = 1
     rows = 1
     columns = 1
@@ -31,7 +31,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     layC[3].label = 'https://null.com/background'
     console.log(images)
   }
-  testing()
+  testRenderByColor()
 
   // When Halcyon times out, you get an array with null elements
   if (images[0] === null) {
