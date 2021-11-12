@@ -108,7 +108,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   if (layerNum > 0) {
     let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
     tr.appendChild(e('td', {}, [palette]))
-    // let colorsUI = filters(palette, currentLayer.prefLabel, currentLayer.colors, allLayers, viewer)
+    // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
     let colorsUI = filters(palette, feat.innerText, currentLayer.colors, allLayers, viewer)
     palette.addEventListener('click', () => {
       colorsUI.style.display = 'block'
