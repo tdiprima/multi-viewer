@@ -11,12 +11,29 @@
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
-  console.log('%cimages', 'color: #ccff00;', images)
 
-  // numViewers = 1
-  // rows = 1
-  // columns = 1
+  function testing() {
+    numViewers = 1
+    rows = 1
+    columns = 1
+    images.splice(1)
+    let layArr = images[0]
+    layArr[0].colors = []
+    let layC = layArr[1].colors
+    layC.splice(4)
+    layC[0].color = 'rgba(255, 255, 0, 255)'
+    layC[0].label = 'Tumor'
+    layC[1].color = 'rgba(0, 0, 255, 255)'
+    layC[1].label = 'Miscellaneous'
+    layC[2].color = 'rgba(255, 0, 0, 255)'
+    layC[2].label = 'Lymphocyte'
+    layC[3].color = 'rgba(255, 165, 0, 255)'
+    layC[3].label = 'https://null.com/background'
+    console.log(images)
+  }
+  testing()
 
+  // When Halcyon times out, you get an array with null elements
   if (images[0] === null) {
     // document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(images) + '</code></p>')
     document.write('<p style="color: red">Please log in again.</p>')
