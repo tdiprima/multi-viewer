@@ -16,19 +16,28 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     numViewers = 1
     rows = 1
     columns = 1
+
     images.splice(1)
     let layArr = images[0]
     layArr[0].colors = []
     let layC = layArr[1].colors
     layC.splice(4)
+
     layC[0].color = 'rgba(255, 255, 0, 255)'
-    layC[0].label = 'Tumor'
+    layC[0].name = 'Tumor'
+    layC[0].value = 1
+
     layC[1].color = 'rgba(0, 0, 255, 255)'
-    layC[1].label = 'Miscellaneous'
+    layC[1].name = 'Miscellaneous'
+    layC[1].value = 2
+
     layC[2].color = 'rgba(255, 0, 0, 255)'
-    layC[2].label = 'Lymphocyte'
+    layC[2].name = 'Lymphocyte'
+    layC[2].value = 3
+
     layC[3].color = 'rgba(255, 165, 0, 255)'
-    layC[3].label = 'https://null.com/background'
+    layC[3].name = 'https://null.com/background'
+    layC[3].value = 4
     console.log(images)
   }
   testRenderByColor()
