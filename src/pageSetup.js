@@ -25,19 +25,19 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
     layC[0].color = 'rgba(255, 255, 0, 255)'
     layC[0].name = 'Tumor'
-    layC[0].value = 1
+    layC[0].classid = 1
 
     layC[1].color = 'rgba(0, 0, 255, 255)'
     layC[1].name = 'Miscellaneous'
-    layC[1].value = 2
+    layC[1].classid = 2
 
     layC[2].color = 'rgba(255, 0, 0, 255)'
     layC[2].name = 'Lymphocyte'
-    layC[2].value = 3
+    layC[2].classid = 3
 
     layC[3].color = 'rgba(255, 165, 0, 255)'
     layC[3].name = 'https://null.com/background'
-    layC[3].value = 4
+    layC[3].classid = 4
     console.log(images)
   }
   testRenderByColor()
