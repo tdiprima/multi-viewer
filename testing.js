@@ -18,9 +18,9 @@ A viewer contains
     "location": "http://129.49.255.69/halcyon/?iiif=file:///data/HalcyonStorage/hovernet.zip/info.json",
     "opacity": 0.3,
     "colors": [
-        { "color": "rgba(255, 140, 0, 255)", "low": 206, "hi": 255 },
-        { "color": "rgba(255, 140, 0, 255)", "low": 206, "hi": 255 },
-        { "color": "rgba(255, 140, 0, 255)", "low": 206, "hi": 255 }
+        { "color": "rgba(255, 140, 0, 255)", "low": 206, "high": 255 },
+        { "color": "rgba(255, 140, 0, 255)", "low": 206, "high": 255 },
+        { "color": "rgba(255, 140, 0, 255)", "low": 206, "high": 255 }
     ]
 }
  */
@@ -41,28 +41,28 @@ let viewer = [
           "label": "Tumor",
           "color": "rgba(255, 255, 0, 255)",
           "low": 206,
-          "hi": 255
+          "high": 255
         },
         {
           "value": 2,
           "label": "Miscellaneous",
           "color": "rgba(0, 0, 255, 255)",
           "low": 160,
-          "hi": 205
+          "high": 205
         },
         {
           "value": 3,
           "label": "Lymphocyte",
           "color": "rgba(255, 0, 0, 255)",
           "low": 151,
-          "hi": 159
+          "high": 159
         },
         {
           "value": 4,
           "label": "https://null.com/background",
           "color": "rgba(255, 165, 0, 255)",
           "low": 106,
-          "hi": 150
+          "high": 150
         }
       ]
     }]

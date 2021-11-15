@@ -71,12 +71,12 @@ function createUI(uniq, div, renderType, layerColors, layers, viewer) {
 
       table.appendChild(createHeaderRow(['Color', 'Low', 'High']))
 
-      // Create table row for each color rgba and range (low to hi)
-      // with UI to adjust color, low, hi, and a button to add or remove a range.
+      // Create table row for each color rgba and range (low to high)
+      // with UI to adjust color, low, high, and a button to add or remove a range.
       layerColors.forEach(function (colorObject, cIdx) {
         const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
         const num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
-        const num2 = createNumericInput(`hi${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
+        const num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
         const buttonId = `i${uniq}${cIdx}`
         const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
 
@@ -195,7 +195,7 @@ function numericEvent(numEl, colorObject, layers, viewer) {
   if (intVal < 0) numEl.value = '0'
 
   if (numEl.id.startsWith('low')) colorObject.low = intVal
-  if (numEl.id.startsWith('hi')) colorObject.hi = intVal
+  if (numEl.id.startsWith('high')) colorObject.high = intVal
 
   setFilter(layers, viewer)
 }
@@ -209,7 +209,7 @@ function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer
     max: '255',
     step: '1',
     size: '5',
-    value: id.includes('low') ? colorObject.low.toString() : colorObject.hi.toString()
+    value: id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
   })
   // Event listeners
   numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
@@ -230,7 +230,7 @@ function isIntersect(table) {
       if (elem.id.startsWith('low')) {
         arr.push({low: elem, lowVal: parseInt(elem.value)})
       }
-      if (elem.id.startsWith('hi')) {
+      if (elem.id.startsWith('high')) {
         const el = arr[arr.length - 1] // get last array elem
         el.high = elem
         el.highVal = parseInt(elem.value)
@@ -280,7 +280,7 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     rgba = rgba.replace(')', ', 255)') // give it default alpha
     const blah = num1.id.replace('low', '') // borrowing element id
     const buttonId = `i${blah}`
-    const colorObject = {color: rgba, low: parseInt(num1.value), hi: parseInt(num2.value)}
+    const colorObject = {color: rgba, low: parseInt(num1.value), high: parseInt(num2.value)}
     colors.push(colorObject) // add it to our list
     // sort
     colors.sort((a, b) => b.low - a.low)
@@ -302,12 +302,12 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
 // Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
   const idx = colors.length
-  const generic = {color: 'rgba(255, 255, 255, 255)', low: 0, hi: 0}
+  const generic = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
   const cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
   const num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
-  const num2 = createNumericInput(`hi${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
+  const num2 = createNumericInput(`high${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
   const addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
 
   const tr = e('tr', {}, [
@@ -335,7 +335,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
 
     function inRange(value, _colors, colorArr) {
       for (let k = 0; k < _colors.length; k++) {
-        if (value >= _colors[k].low && value <= _colors[k].hi) {
+        if (value >= _colors[k].low && value <= _colors[k].high) {
           return colorArr[k] // return color
         }
       }

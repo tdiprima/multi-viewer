@@ -236,7 +236,7 @@ function handleDragLayers(layers, viewer) {
               // "color": "rgba(75, 0, 130, 255)",
               "color": "rgba(184, 226, 242, 255)",
               "low": 128,
-              "hi": 255
+              "high": 255
             }
           ],
           "resolutionUnit": 3,
