@@ -132,11 +132,13 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
-    // probability on/off
-    let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-dice hover-light'})
+    // probability off/on
+    let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light'})
     tr.appendChild(e('td', {}, [probability]))
     probability.addEventListener('click', function () {
-      console.log('none')
+      probFlag = !probFlag;
+      toggleButton(probability, 'fa-shapes', 'fa-dice')
+      console.log('prob', probFlag)
       // setFilter(allLayers, viewer)
     })
 

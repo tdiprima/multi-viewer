@@ -221,3 +221,4 @@ function timeStamp() {
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto
 let attenuateFlag = true
+let probFlag = false
