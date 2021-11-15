@@ -329,12 +329,6 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     const pixels = imgData.data
 
-    function c(n, r, g, b) {
-      pixels[n] = r
-      pixels[n + 1] = g
-      pixels[n + 2] = b
-    }
-
     const colorArr = layerColors.map(function (element) {
       return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
     })
@@ -345,7 +339,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
           return colorArr[k] // return color
         }
       }
-      return [0, 0, 0, 0]
+      return 0
     }
 
     function inClass(value, _classes, classArr) {
@@ -354,27 +348,18 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
           return classArr[l] // return color
         }
       }
-      return [0, 0, 0, 0]
+      return 0
     }
 
     if (renderType === 'byClass') {
       // console.log('byClass')
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
-          // const rgba = inClass(pixels[i], layerColors, colorArr)
-          switch (pixels[i]) {
-            case 1:
-              c(i, 255, 255, 0) // Tumor, yellow
-              break
-            case 2:
-              c(i, 0, 0, 255) // Miscellaneous, blue
-              break
-            case 3:
-              c(i, 255, 0, 0) // Lymphocyte, red
-              break
-            case 4:
-              c(i, 255, 165, 0) // https://null.com/background, orange
-          }
+          const rgba = inClass(pixels[i], layerColors, colorArr)
+          pixels[i] = rgba[0]
+          pixels[i + 1] = rgba[1]
+          pixels[i + 2] = rgba[2]
+          pixels[i + 3] = rgba[3]
         } else {
           pixels[i + 3] = 0
         }
