@@ -355,7 +355,13 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
       // console.log('byClass')
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
-          const rgba = inClass(pixels[i], layerColors, colorArr)
+          const classId = pixels[i] // class
+          const prob = pixels[i + 1] // prob
+          let rgba = inClass(classId, layerColors, colorArr)
+          if (attenuateFlag) {
+            rgba[3] = prob // alpha = prob
+          }
+          // set pixels
           pixels[i] = rgba[0]
           pixels[i + 1] = rgba[1]
           pixels[i + 2] = rgba[2]
