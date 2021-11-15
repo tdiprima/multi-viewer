@@ -48,7 +48,7 @@ function renderByClass(uniq, div, layerColors, layers, viewer) {
     const tr = e('tr', {}, [
       e('td', {}, [cpEl]),
       e('td', {}, [e('span', {}, [
-        colorObject.label
+        colorObject.name
       ])])
     ])
     table.appendChild(tr)
