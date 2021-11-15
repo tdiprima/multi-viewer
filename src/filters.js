@@ -344,7 +344,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass
 
     function inClass(value, _classes, classArr) {
       for (let l = 0; l < _classes.length; l++) {
-        if (value === _classes[l].value) {
+        if (value === _classes[l].classid) {
           return classArr[l] // return color
         }
       }
