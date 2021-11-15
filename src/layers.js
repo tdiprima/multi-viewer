@@ -7,6 +7,7 @@
  *     an eyeball: turn layer on & off
  *     a slider: adjust transparency
  *     a color palette: change colors in layer
+ *     broadcast tower: attenuate by certainty
  */
 let layers = (divEl, images, viewer) => {
   createLayerWidget(divEl, images, viewer)
@@ -106,6 +107,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   tr.appendChild(e('td', {}, [div]))
 
   if (layerNum > 0) {
+    // color palette
     let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
     tr.appendChild(e('td', {}, [palette]))
     // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
@@ -113,6 +115,23 @@ function addRow(table, currentLayer, allLayers, viewer) {
     palette.addEventListener('click', () => {
       colorsUI.style.display = 'block'
     })
+
+    // attenuation
+    let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light'})
+    tr.appendChild(e('td', {}, [attenuation]))
+    let doggo = 'attenuated'
+    attenuation.addEventListener('click', function () {
+      if (attenuateFlag) {
+        doggo = 'solid'
+        attenuateFlag = false
+      } else {
+        doggo = 'attenuated'
+        attenuateFlag = true
+      }
+      console.log(doggo)
+      setFilter(allLayers, viewer)
+    })
+
   } else {
     tr.appendChild(e('td'))
   }
