@@ -40,7 +40,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     layC[3].classid = 4
     console.log(images)
   }
-  testRenderByColor()
+  // testRenderByColor()
 
   // When Halcyon times out, you get an array with null elements
   if (images[0] === null) {
