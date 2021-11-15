@@ -128,8 +128,16 @@ function addRow(table, currentLayer, allLayers, viewer) {
         doggo = 'attenuated'
         attenuateFlag = true
       }
-      console.log(doggo)
+      // console.log(doggo)
       setFilter(allLayers, viewer)
+    })
+
+    // probability on/off
+    let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-dice hover-light'})
+    tr.appendChild(e('td', {}, [probability]))
+    probability.addEventListener('click', function () {
+      console.log('none')
+      // setFilter(allLayers, viewer)
     })
 
   } else {
