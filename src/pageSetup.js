@@ -12,7 +12,8 @@
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
 
-  function testRenderByColor() {
+  function correctTheColors() {
+    // temp
     numViewers = 1
     rows = 1
     columns = 1
@@ -41,7 +42,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     //console.log('images', images)
 
   }
-  testRenderByColor()
+  correctTheColors()
 
   // When the 'images' parameter becomes an array with null elements,
   // it means that Halcyon timed out or is in the process of timeout.
