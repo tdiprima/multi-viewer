@@ -332,6 +332,8 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
       return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
     })
 
+
+
     function inRange(value, _colors, colorArr) {
       for (let k = 0; k < _colors.length; k++) {
         if (value >= _colors[k].low && value <= _colors[k].high) {
@@ -351,7 +353,10 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     }
 
     // set pixels
-    function setPix(idx, model) {
+    function setPix(idx, model, prob) {
+      if (attenuateFlag) {
+        model[3] = prob // alpha = prob
+      }
       pixels[idx] = model[0]
       pixels[idx + 1] = model[1]
       pixels[idx + 2] = model[2]
@@ -364,10 +369,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
           const classId = pixels[i] // class
           const prob = pixels[i + 1] // prob
           let rgba = inClass(classId, layerColors, colorArr)
-          if (attenuateFlag) {
-            rgba[3] = prob // alpha = prob
-          }
-          setPix(i, rgba)
+          setPix(i, rgba, prob)
         } else {
           pixels[i + 3] = 0
         }
@@ -375,11 +377,48 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     }
 
     if (renderType === 'byProbability') {
+      let temp = [
+        {
+          "color": "rgba(255, 0, 0, 255)",
+          "low": 231,
+          "high": 255
+        },
+        {
+          "color": "rgba(195, 0, 61, 255)",
+          "low": 205,
+          "high": 230
+        },
+        {
+          "color": "rgba(163, 0, 93, 255)",
+          "low": 179,
+          "high": 204
+        },
+        {
+          "color": "rgba(106, 0, 150, 255)",
+          "low": 154,
+          "high": 178
+        },
+        {
+          "color": "rgba(58, 0, 197, 255)",
+          "low": 129,
+          "high": 153
+        },
+        {
+          "color": "rgba(0, 0, 255, 255)",
+          "low": 0,
+          "high": 128
+        }
+      ]
+
+      const tempArr = temp.map(function (element) {
+        return colorToArray(element.color)
+      })
+
       for (let j = 0; j < pixels.length; j += 4) {
         if (pixels[j + 3] === 255) {
           const prob = pixels[j + 1] // prob
-          const rgba = inRange(prob, layerColors, colorArr)
-          setPix(j, rgba)
+          const rgba = inRange(prob, temp, tempArr)
+          setPix(j, rgba, prob)
         } else {
           // No nuclear material: set to transparent.
           pixels[j + 3] = 0
