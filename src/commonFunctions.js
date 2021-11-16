@@ -14,11 +14,11 @@ function setFilter(layers, viewer) {
     let filterOpts = []
     // Gather what we're doing for each layer
     for (let i = 0; i < itemCount; i++) {
-      if (i > 0 && typeof layers[i].colors !== 'undefined') {
+      if (i > 0 && typeof layers[i].colorscheme.colors !== 'undefined') {
         filterOpts.push({
           items: viewer.world.getItemAt(i),
           processors: [
-            colorFilter.prototype.COLORLEVELS(layers[i].colors)
+            colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors)
           ]
         })
       }
@@ -221,4 +221,4 @@ function timeStamp() {
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto
 let attenuateFlag = true
-let probFlag = false
+let renderType = 'byClass'

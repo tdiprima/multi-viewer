@@ -2,32 +2,15 @@
  * Wrapper component around OpenSeadragon viewer
  * Set up 1 basic OSD viewer.
  * @param viewerInfo
- * @param images
+ * @param layers
  */
 class ImageViewer {
-  constructor(viewerInfo, images) {
-    // TODO: set up temp input for renderType
-    let renderType = 'byClass'
-
+  constructor(viewerInfo, layers) {
     let tileSources = []
-    for (let i = 0; i < images.length; i++) {
-      let u = images[i].location
-      /*
-      if (i > 0) {
-        // Temporarily mutate the url string
-        // Test, test, and again test.
-        // u += "&foo=bar"
-        u = u.replace('halcyon/?iiif', 'halcyon/?foo=bar&iiif')
-        // u += "?foo=bar"
-        // u = u.replace('halcyon/?iiif', 'halcyon/?renderType=byProbability&iiif')
-        // u += '&renderType=byProbability';
-        images[i].location = u;
-      }
-      console.log(u)
-       */
+    for (let i = 0; i < layers.length; i++) {
       tileSources.push({
-        tileSource: u,
-        opacity: images[i].opacity,
+        tileSource: layers[i].location,
+        opacity: layers[i].opacity,
         x: 0,
         y: 0
       })
@@ -49,16 +32,15 @@ class ImageViewer {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item)
         const source = viewer.world.getItemAt(itemIndex).source
-        images[itemIndex].prefLabel = source.prefLabel
-        images[itemIndex].resolutionUnit = source.resolutionUnit
-        images[itemIndex].xResolution = source.xResolution
+        layers[itemIndex].prefLabel = source.prefLabel
+        layers[itemIndex].resolutionUnit = source.resolutionUnit
+        layers[itemIndex].xResolution = source.xResolution
       } catch (e) {
         console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
     }
 
     viewer.world.addHandler('add-item', ({item}) => {
-      // customTiles()
       addInfo(item)
     })
 
@@ -126,7 +108,7 @@ class ImageViewer {
         useParams(params)
       }
       addCustomButtons()
-      setFilter(images, viewer)
+      setFilter(layers, viewer)
       getInfoForScalebar()
     })
 
@@ -175,7 +157,7 @@ class ImageViewer {
 
     function getInfoForScalebar() {
       // Get info for scale bar
-      let item = images[0]
+      let item = layers[0]
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
       if (isRealValue(item.resolutionUnit)) {
         if (item.resolutionUnit === 3) {

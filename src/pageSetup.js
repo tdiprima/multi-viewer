@@ -18,10 +18,10 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     columns = 1
 
     images.splice(1)
+
     let layArr = images[0]
-    layArr[0].colors = []
-    let layC = layArr[1].colors
-    layC.splice(4)
+    layArr[0].colorscheme.colors = [] // 1st layer doesn't need it
+    let layC = layArr[1].colorscheme.colors // use 2nd layer
 
     layC[0].color = 'rgba(255, 255, 0, 255)'
     layC[0].name = 'Tumor'
@@ -38,7 +38,8 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     layC[3].color = 'rgba(255, 165, 0, 255)'
     layC[3].name = 'https://null.com/background'
     layC[3].classid = 4
-    console.log('images', images)
+    //console.log('images', images)
+
   }
   testRenderByColor()
 

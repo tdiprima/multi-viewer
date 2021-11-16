@@ -4,11 +4,11 @@
  * or adjust the colors being used to color each class in that layer.
  * There is a color filter at the bottom of this script - this is the workhorse that colors the layer in OSD.
  *
- * @param paletteBtn
- * @param prefLabel
- * @param layerColors
- * @param layers
- * @param viewer
+ * @param paletteBtn: dom element
+ * @param prefLabel: string
+ * @param layerColors: Array
+ * @param allLayers: Array
+ * @param viewer: OpenSeadragon Viewer
  * @returns {*}
  *
  * Popup Div For Color Levels Naming Convention:
@@ -17,8 +17,7 @@
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
  */
-// TODO: Pass renderType to this program.
-const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer, renderType = 'byClass') {
+const filters = function (paletteBtn, prefLabel, layerColors, allLayers, viewer) {
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -27,7 +26,7 @@ const filters = function (paletteBtn, prefLabel, layerColors, layers, viewer, re
   if (renderType === 'byProbability') title = `${prefLabel} color levels`;
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
   const widgetBody = div.lastChild
-  createUI(uniqueId, widgetBody, renderType, layerColors, layers, viewer)
+  createUI(uniqueId, widgetBody, renderType, layerColors, allLayers, viewer)
 
   return div
 }
@@ -324,7 +323,8 @@ function extraRow(uniq, colors, layers, viewer) {
 
 // Custom color filter
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
-colorFilter.prototype.COLORLEVELS = function (layerColors, renderType = 'byClass') {
+colorFilter.prototype.COLORLEVELS = function (layerColors) {
+  console.log('renderType', renderType)
   return function (context, callback) {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     const pixels = imgData.data

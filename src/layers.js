@@ -111,7 +111,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette'), 'title': 'color palette'})
     tr.appendChild(e('td', {}, [palette]))
     // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
-    let colorsUI = filters(palette, feat.innerText, currentLayer.colors, allLayers, viewer)
+    let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme.colors, allLayers, viewer)
     palette.addEventListener('click', () => {
       colorsUI.style.display = 'block'
     })
@@ -136,10 +136,13 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light', 'title': 'toggle: class / probability'})
     tr.appendChild(e('td', {}, [probability]))
     probability.addEventListener('click', function () {
-      probFlag = !probFlag;
+      if (renderType === 'byClass') {
+        renderType = 'byProbability'
+      } else {
+        renderType = 'byClass'
+      }
       toggleButton(probability, 'fa-shapes', 'fa-dice')
-      console.log('prob', probFlag)
-      // setFilter(allLayers, viewer)
+      setFilter(allLayers, viewer)
     })
 
   } else {
@@ -255,7 +258,7 @@ function handleDragLayers(layers, viewer) {
         })
         feat.innerHTML = name
 
-        // TODO: What color & range?
+        // TODO: this part needs to change
         let addToLayers = {
           "layerNum": layers.length,
           "location": location,
