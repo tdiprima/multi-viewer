@@ -38,15 +38,16 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     layC[3].color = 'rgba(255, 165, 0, 255)'
     layC[3].name = 'https://null.com/background'
     layC[3].classid = 4
-    console.log(images)
+    console.log('images', images)
   }
   testRenderByColor()
 
-  // When Halcyon times out, you get an array with null elements
+  // When the 'images' parameter becomes an array with null elements,
+  // it means that Halcyon timed out or is in the process of timeout.
+  // So log the user out and have them start again.
   if (images[0] === null) {
-    // document.write('<p style="color: red">Please give me some images to display.</p><p>You provided: <code>' + JSON.stringify(images) + '</code></p>')
-    document.write('<p style="color: red">Please log in again.</p>')
-    throw new Error("Session timed out");
+    // logout & redirect
+    document.write("<script>window.alert('Session timeout. Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>");
   }
 
   let viewers = [] // eslint-disable-line prefer-const
