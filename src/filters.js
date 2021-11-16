@@ -324,7 +324,6 @@ function extraRow(uniq, colors, layers, viewer) {
 // Custom color filter
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = function (layerColors) {
-  console.log('renderType', renderType)
   return function (context, callback) {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     const pixels = imgData.data
@@ -351,8 +350,15 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
       return 0
     }
 
+    // set pixels
+    function setPix(idx, model) {
+      pixels[idx] = model[0]
+      pixels[idx + 1] = model[1]
+      pixels[idx + 2] = model[2]
+      pixels[idx + 3] = model[3]
+    }
+
     if (renderType === 'byClass') {
-      // console.log('byClass')
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
           const classId = pixels[i] // class
@@ -361,11 +367,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
           if (attenuateFlag) {
             rgba[3] = prob // alpha = prob
           }
-          // set pixels
-          pixels[i] = rgba[0]
-          pixels[i + 1] = rgba[1]
-          pixels[i + 2] = rgba[2]
-          pixels[i + 3] = rgba[3]
+          setPix(i, rgba)
         } else {
           pixels[i + 3] = 0
         }
@@ -373,14 +375,11 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     }
 
     if (renderType === 'byProbability') {
-      // console.log('byProbability')
       for (let j = 0; j < pixels.length; j += 4) {
         if (pixels[j + 3] === 255) {
-          const rgba = inRange(pixels[j], layerColors, colorArr) // r = g = b, thus we can check just r
-          pixels[j] = rgba[0]
-          pixels[j + 1] = rgba[1]
-          pixels[j + 2] = rgba[2]
-          pixels[j + 3] = rgba[3]
+          const prob = pixels[j + 1] // prob
+          const rgba = inRange(prob, layerColors, colorArr)
+          setPix(j, rgba)
         } else {
           // No nuclear material: set to transparent.
           pixels[j + 3] = 0
