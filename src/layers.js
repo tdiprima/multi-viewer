@@ -61,7 +61,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   tr.appendChild(e('td', {}, [feat]))
 
   // eyeball visibility toggle
-  let faEye = e('i', {id: makeId(5, 'eye'), class: currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'})
+  let faEye = e('i', {id: makeId(5, 'eye'), class: currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye', 'title': 'toggle visibility'})
   tr.appendChild(e('td', {}, [faEye]))
 
   // transparency slider
@@ -70,7 +70,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.classList.add('fa-adjust')
   faAdjust.classList.add('hover-light')
   faAdjust.style.cursor = 'pointer'
-  let div = e('div', {class: 'showDiv'}, [faAdjust])
+  let div = e('div', {class: 'showDiv', 'title': 'transparency slider'}, [faAdjust])
 
   let range = e('input', {
     type: 'range',
@@ -108,7 +108,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
   if (layerNum > 0) {
     // color palette
-    let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette')})
+    let palette = e('i', {class: 'fas fa-palette pointer', id: makeId(5, 'palette'), 'title': 'color palette'})
     tr.appendChild(e('td', {}, [palette]))
     // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
     let colorsUI = filters(palette, feat.innerText, currentLayer.colors, allLayers, viewer)
@@ -117,7 +117,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // attenuation
-    let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light'})
+    let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light', 'title': 'toggle: color attenuation by probability'})
     tr.appendChild(e('td', {}, [attenuation]))
     let doggo = 'attenuated'
     attenuation.addEventListener('click', function () {
@@ -133,7 +133,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // probability off/on
-    let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light'})
+    let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light', 'title': 'toggle: class / probability'})
     tr.appendChild(e('td', {}, [probability]))
     probability.addEventListener('click', function () {
       probFlag = !probFlag;
