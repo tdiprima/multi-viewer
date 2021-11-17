@@ -177,9 +177,8 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          const renderType = 'byClass' // TODO: temp input for renderType
           const thisData = images[idx] // Images to be displayed in "this" viewer
-          const vInfo = { 'idx': idx, 'divId': osdId, 'len': thisData.length, 'renderType': renderType }
+          const vInfo = { 'idx': idx, 'divId': osdId, 'len': thisData.length }
           // Create MultiViewer object and add to array
           viewers.push(new MultiViewer(vInfo, thisData, numViewers, opts))
         }
