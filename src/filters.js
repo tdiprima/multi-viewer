@@ -201,7 +201,13 @@ function numericEvent(numEl, colorObject, layers, viewer) {
 
 // Create numeric input
 function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
-  console.log('colorObject', colorObject)
+    let val
+    if (!colorObject.low && !colorObject.high) {
+      val = ''
+    } else {
+      val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
+    }
+
   const numEl = e('input', {
     id: id,
     type: 'number',
@@ -209,8 +215,9 @@ function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer
     max: '255',
     step: '1',
     size: '5',
-    value: id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
+    value: val
   })
+
   // Event listeners
   numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
   numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
