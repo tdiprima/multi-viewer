@@ -1,8 +1,8 @@
 /**
  * Wrapper component around OpenSeadragon viewer
  * Set up 1 basic OSD viewer.
- * @param viewerInfo
- * @param layers
+ * @param viewerInfo: object with info specific to 'this' viewer
+ * @param layers: array of layer objects (1 image per layer)
  */
 class ImageViewer {
   constructor(viewerInfo, layers) {

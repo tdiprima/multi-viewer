@@ -332,8 +332,6 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
       return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
     })
 
-
-
     function inRange(value, _colors, colorArr) {
       for (let k = 0; k < _colors.length; k++) {
         if (value >= _colors[k].low && value <= _colors[k].high) {
