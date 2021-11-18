@@ -8,7 +8,6 @@ const config = {
 // }
 
 function setFilter(layers, viewer) {
-  console.log('layers', layers)
   if (viewer.world) {
     // SET COLOR FILTER
     let itemCount = viewer.world.getItemCount()
