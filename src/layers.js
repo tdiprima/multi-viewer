@@ -145,6 +145,26 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
+    // heatmap off/on
+    let heatmap = e('i', {'id': makeId(5, 'prob'), 'class': 'far fa-map hover-light', 'title': 'blue-red heatmap'})
+    tr.appendChild(e('td', {}, [heatmap]))
+    heatmap.addEventListener('click', function () {
+      if (heatmapFlag) {
+        heatmapFlag = false
+        if (probability.classList.contains('fa-shapes')) {
+          renderType = 'byClass'
+        }
+        if (probability.classList.contains('fa-dice')) {
+          renderType = 'byProbability'
+        }
+      } else {
+        heatmapFlag = true
+        renderType = 'byHeatmap'
+      }
+
+      setFilter(allLayers, viewer)
+    })
+
   } else {
     tr.appendChild(e('td'))
   }
