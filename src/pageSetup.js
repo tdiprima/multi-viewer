@@ -18,8 +18,20 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     rows = 1
     columns = 1
     images.splice(1)
+    let layArr = images[0]
+    let layC = layArr[1].colorscheme.colors
+    // we have a blue-red colormap, and i'm being sent red and blue
+    for (let i = 0; i < layC.length; i++) {
+      if (layC[i].color === 'rgba(255, 0, 0, 255)') {
+        layC[i].color = 'rgba(255, 0, 255, 255)'
+      }
+      if (layC[i].color === 'rgba(0, 0, 255, 255)') {
+        layC[i].color = 'rgba(0, 255, 255, 255)'
+      }
+    }
     console.log('images', images)
   }
+
   testing1()
 
   // When the 'images' parameter becomes an array with null elements,
