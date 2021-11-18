@@ -12,37 +12,15 @@
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
 
-  function correctTheColors() {
-    // temp
+  function testing1() {
+    // testing 1 image
     numViewers = 1
     rows = 1
     columns = 1
-
     images.splice(1)
-
-    let layArr = images[0]
-    layArr[0].colorscheme.colors = [] // 1st layer doesn't need it
-    let layC = layArr[1].colorscheme.colors // use 2nd layer
-
-    layC[0].color = 'rgba(255, 255, 0, 255)'
-    layC[0].name = 'Tumor'
-    layC[0].classid = 1
-
-    layC[1].color = 'rgba(0, 0, 255, 255)'
-    layC[1].name = 'Miscellaneous'
-    layC[1].classid = 2
-
-    layC[2].color = 'rgba(255, 0, 0, 255)'
-    layC[2].name = 'Lymphocyte'
-    layC[2].classid = 3
-
-    layC[3].color = 'rgba(255, 165, 0, 255)'
-    layC[3].name = 'https://null.com/background'
-    layC[3].classid = 4
-    //console.log('images', images)
-
+    console.log('images', images)
   }
-  correctTheColors()
+  testing1()
 
   // When the 'images' parameter becomes an array with null elements,
   // it means that Halcyon timed out or is in the process of timeout.
