@@ -21,22 +21,16 @@ const filters = function (paletteBtn, prefLabel, colorscheme, allLayers, viewer)
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
-  let title
-  if (renderType === 'byClass') title = `Classifications by color`;
-  if (renderType === 'byProbability') title = `${prefLabel} color levels`;
+  let title = `${prefLabel} color levels`
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
   const widgetBody = div.lastChild
-  createUI(uniqueId, widgetBody, renderType, colorscheme, allLayers, viewer)
+  createUI(uniqueId, widgetBody, colorscheme, allLayers, viewer)
 
   return div
 }
 
-/*
- ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
-          FOR TESTING - COLOR BY CLASS
- ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~
-*/
-function renderByClass(uniq, div, layerColors, layers, viewer) {
+// Color by classification UI
+function classificationUI(uniq, div, layerColors, layers, viewer) {
   const table = e('table')
   div.appendChild(table)
   table.appendChild(createHeaderRow(['Color', 'Label']))
@@ -54,46 +48,54 @@ function renderByClass(uniq, div, layerColors, layers, viewer) {
   }
 }
 
+// Color by probability UI
+function probabilityUI(uniq, div, colorRanges, layers, viewer) {
+  const table = e('table')
+  div.appendChild(table)
+
+  if (colorRanges) {
+    // Sort list
+    colorRanges.sort((a, b) => b.low - a.low)
+
+    table.appendChild(createHeaderRow(['Color', 'Low', 'High']))
+
+    // Create table row for each color rgba and range (low to high)
+    // with UI to adjust color, low, high, and a button to add or remove a range.
+    colorRanges.forEach(function (colorObject, cIdx) {
+      const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
+      const num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
+      const num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
+      const buttonId = `i${uniq}${cIdx}`
+      const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
+
+      const tr = e('tr', {}, [
+        e('td', {}, [cpEl]),
+        e('td', {}, [num1]),
+        e('td', {}, [num2]),
+        e('td', {}, [removeBtn])
+      ])
+      table.appendChild(tr)
+
+      removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colorRanges, tr, layers, viewer), {passive: true})
+    })
+
+    table.appendChild(extraRow(uniq, colorRanges, layers, viewer))
+  }
+}
+
 // Create user interface
-function createUI(uniq, div, renderType, colorscheme, layers, viewer) {
-  if (renderType === 'byClass') {
-    renderByClass(uniq, div, colorscheme.colors, layers, viewer)
-  }
+function createUI(uniq, div, colorscheme, layers, viewer) {
+  let divA = e('div', {'id': `divA${uniq}`})
+  divA.style.display = (renderType === 'byClass') ? 'block' : 'none'
+  div.appendChild(divA)
 
-  if (renderType === 'byProbability') {
-    const table = e('table')
-    div.appendChild(table)
+  classificationUI(uniq, divA, colorscheme.colors, layers, viewer)
 
-    const colorRanges = colorscheme.colorspectrum
-    if (colorRanges) {
-      // Sort list
-      colorRanges.sort((a, b) => b.low - a.low)
+  let divB = e('div', {'id': `divB${uniq}`})
+  divB.style.display = (renderType === 'byProbability') ? 'block' : 'none'
+  div.appendChild(divB)
 
-      table.appendChild(createHeaderRow(['Color', 'Low', 'High']))
-
-      // Create table row for each color rgba and range (low to high)
-      // with UI to adjust color, low, high, and a button to add or remove a range.
-      colorRanges.forEach(function (colorObject, cIdx) {
-        const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
-        const num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
-        const num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
-        const buttonId = `i${uniq}${cIdx}`
-        const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-
-        const tr = e('tr', {}, [
-          e('td', {}, [cpEl]),
-          e('td', {}, [num1]),
-          e('td', {}, [num2]),
-          e('td', {}, [removeBtn])
-        ])
-        table.appendChild(tr)
-
-        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colorRanges, tr, layers, viewer), {passive: true})
-      })
-
-      table.appendChild(extraRow(uniq, colorRanges, layers, viewer))
-    }
-  }
+  probabilityUI(uniq, divB, colorscheme.colorspectrum, layers, viewer)
 }
 
 function removeColor(el, ourRanges, tr, layers, viewer) {
@@ -431,6 +433,7 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
           pxl[i] = c[0]
           pxl[i + 1] = c[1]
           pxl[i + 2] = c[2]
+          // pxl[i + 3] = attenuateFlag ? v : 255
           pxl[i + 3] = 255
         } else {
           pxl[i + 3] = 0

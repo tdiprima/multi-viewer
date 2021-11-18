@@ -113,6 +113,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     tr.appendChild(e('td', {}, [palette]))
     // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
     let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme, allLayers, viewer)
+    console.log('%ccolorsUI', 'color: yellow;', colorsUI)
     palette.addEventListener('click', () => {
       colorsUI.style.display = 'block'
     })
@@ -129,10 +130,16 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light', 'title': 'toggle: class / probability'})
     tr.appendChild(e('td', {}, [probability]))
     probability.addEventListener('click', function () {
+      let pi = colorsUI.id.replace('filters', '')
       if (renderType === 'byClass') {
         renderType = 'byProbability'
+        document.getElementById(`divA${pi}`).style.display = 'none'
+        document.getElementById(`divB${pi}`).style.display = 'block'
+
       } else {
         renderType = 'byClass'
+        document.getElementById(`divA${pi}`).style.display = 'block'
+        document.getElementById(`divB${pi}`).style.display = 'none'
       }
       toggleButton(probability, 'fa-shapes', 'fa-dice')
       setFilter(allLayers, viewer)
