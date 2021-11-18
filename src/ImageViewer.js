@@ -40,6 +40,7 @@ class ImageViewer {
       }
     }
 
+    // When an item is added to the World, grab the info
     viewer.world.addHandler('add-item', ({item}) => {
       addInfo(item)
     })
@@ -57,11 +58,9 @@ class ImageViewer {
 
     // BOOKMARK URL with ZOOM and X,Y
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
-      let oldUrl = location.href
       let zoom = vpt.getZoom()
       let pan = vpt.getCenter()
       let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
-      // console.log(oldUrl, url)
       prompt('Share this link:', url)
     })
 
@@ -101,7 +100,7 @@ class ImageViewer {
       }
     }
 
-    // DO ONCE
+    // Image has been downloaded and can be modified before being drawn to the canvas.
     viewer.addOnceHandler('tile-loaded', function () {
       if (window.location.hash) {
         let params = parseHash()
@@ -114,7 +113,7 @@ class ImageViewer {
 
     // CUSTOM OPENSEADRAGON BUTTONS
     function addCustomButtons() {
-
+      // Zoom all the way in
       let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
         srcRest:  `${config.osdImages}zin_rest.png`,
@@ -125,6 +124,8 @@ class ImageViewer {
           vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
       })
+
+      // Zoom all the way out
       let zoutButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 0%',
         srcRest: `${config.osdImages}zout_rest.png`,
@@ -170,6 +171,14 @@ class ImageViewer {
         }
       }
     }
+
+    // Uncomment for testing
+    // viewer.addHandler('canvas-click', event => {
+    //   const webPoint = event.position
+    //   const viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+    //   const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
+    //   console.log(webPoint, viewportPoint, imagePoint)
+    // })
 
     this.viewer = viewer // SET THIS VIEWER
     this.overlay = this.viewer.fabricjsOverlay({scale: 1000})
