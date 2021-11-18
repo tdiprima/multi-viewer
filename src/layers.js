@@ -61,7 +61,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
   tr.appendChild(e('td', {}, [feat]))
 
   // eyeball visibility toggle
-  let faEye = e('i', {id: makeId(5, 'eye'), class: currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye', 'title': 'toggle visibility'})
+  let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
+  let faEye = e('i', {'id': makeId(5, 'eye'), 'class': `${cssClass} hover-light`, 'title': 'toggle visibility'})
   tr.appendChild(e('td', {}, [faEye]))
 
   // transparency slider
@@ -116,19 +117,11 @@ function addRow(table, currentLayer, allLayers, viewer) {
       colorsUI.style.display = 'block'
     })
 
-    // attenuation
-    let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light', 'title': 'toggle: color attenuation by probability'})
+    // color-attenuation by probability
+    let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light', 'title': 'toggle: color-attenuation by probability'})
     tr.appendChild(e('td', {}, [attenuation]))
-    let doggo = 'attenuated'
     attenuation.addEventListener('click', function () {
-      if (attenuateFlag) {
-        doggo = 'solid'
-        attenuateFlag = false
-      } else {
-        doggo = 'attenuated'
-        attenuateFlag = true
-      }
-      // console.log(doggo)
+      attenuateFlag = !attenuateFlag;
       setFilter(allLayers, viewer)
     })
 
