@@ -8,19 +8,29 @@ const config = {
 // }
 
 function setFilter(layers, viewer) {
+  console.log('layers', layers)
   if (viewer.world) {
     // SET COLOR FILTER
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
     // Gather what we're doing for each layer
     for (let i = 0; i < itemCount; i++) {
-      if (i > 0 && typeof layers[i].colorscheme.colors !== 'undefined') {
-        filterOpts.push({
-          items: viewer.world.getItemAt(i),
-          processors: [
-            colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors)
-          ]
-        })
+      if (i > 0) {
+        if (renderType === 'byProbability') {
+          filterOpts.push({
+            items: viewer.world.getItemAt(i),
+            processors: [
+              colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)
+            ]
+          })
+        } else {
+          filterOpts.push({
+            items: viewer.world.getItemAt(i),
+            processors: [
+              colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors)
+            ]
+          })
+        }
       }
     }
     // Set all layers at once (required)
