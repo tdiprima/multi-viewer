@@ -6,7 +6,7 @@
  *
  * @param paletteBtn: dom element
  * @param prefLabel: string
- * @param layerColors: Array
+ * @param colorscheme:
  * @param allLayers: Array
  * @param viewer: OpenSeadragon Viewer
  * @returns {*}
@@ -17,7 +17,7 @@
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
  */
-const filters = function (paletteBtn, prefLabel, layerColors, allLayers, viewer) {
+const filters = function (paletteBtn, prefLabel, colorscheme, allLayers, viewer) {
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -26,7 +26,7 @@ const filters = function (paletteBtn, prefLabel, layerColors, allLayers, viewer)
   if (renderType === 'byProbability') title = `${prefLabel} color levels`;
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
   const widgetBody = div.lastChild
-  createUI(uniqueId, widgetBody, renderType, layerColors, allLayers, viewer)
+  createUI(uniqueId, widgetBody, renderType, colorscheme, allLayers, viewer)
 
   return div
 }
@@ -55,27 +55,28 @@ function renderByClass(uniq, div, layerColors, layers, viewer) {
 }
 
 // Create user interface
-function createUI(uniq, div, renderType, layerColors, layers, viewer) {
+function createUI(uniq, div, renderType, colorscheme, layers, viewer) {
   if (renderType === 'byClass') {
-    renderByClass(uniq, div, layerColors, layers, viewer)
+    renderByClass(uniq, div, colorscheme.colors, layers, viewer)
   }
 
   if (renderType === 'byProbability') {
     const table = e('table')
     div.appendChild(table)
 
-    if (layerColors) {
+    const colorRanges = colorscheme.colorspectrum
+    if (colorRanges) {
       // Sort list
-      layerColors.sort((a, b) => b.low - a.low)
+      colorRanges.sort((a, b) => b.low - a.low)
 
       table.appendChild(createHeaderRow(['Color', 'Low', 'High']))
 
       // Create table row for each color rgba and range (low to high)
       // with UI to adjust color, low, high, and a button to add or remove a range.
-      layerColors.forEach(function (colorObject, cIdx) {
+      colorRanges.forEach(function (colorObject, cIdx) {
         const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
-        const num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
-        const num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
+        const num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
+        const num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
         const buttonId = `i${uniq}${cIdx}`
         const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
 
@@ -87,10 +88,10 @@ function createUI(uniq, div, renderType, layerColors, layers, viewer) {
         ])
         table.appendChild(tr)
 
-        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
+        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colorRanges, tr, layers, viewer), {passive: true})
       })
 
-      table.appendChild(extraRow(uniq, layerColors, layers, viewer))
+      table.appendChild(extraRow(uniq, colorRanges, layers, viewer))
     }
   }
 }
