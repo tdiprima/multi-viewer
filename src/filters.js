@@ -18,6 +18,7 @@
  * iXXX0 <- 0th row elements
  */
 const filters = function (paletteBtn, prefLabel, colorscheme, allLayers, viewer) {
+  colorscheme.colors.map(a => a.checked = true)
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
@@ -31,20 +32,29 @@ const filters = function (paletteBtn, prefLabel, colorscheme, allLayers, viewer)
 
 // Color by classification UI
 function classificationUI(uniq, div, layerColors, layers, viewer) {
+
   const table = e('table')
   div.appendChild(table)
-  table.appendChild(createHeaderRow(['Color', 'Label']))
+  table.appendChild(createHeaderRow(['', 'Color', 'Label']))
 
   for (let cIdx = 0; cIdx < layerColors.length; cIdx++) {
     const colorObject = layerColors[cIdx]
     const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
+    const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'value': colorObject.classid})
+    chk.checked = true
     const tr = e('tr', {}, [
+      e('td', {}, [chk]),
       e('td', {}, [cpEl]),
       e('td', {}, [e('span', {}, [
         colorObject.name
       ])])
     ])
     table.appendChild(tr)
+
+    chk.addEventListener('click', function () {
+      layerColors.find(x => x.classid === parseInt(chk.value)).checked = chk.checked
+      setFilter(layers, viewer)
+    })
   }
 }
 
@@ -204,12 +214,12 @@ function numericEvent(numEl, colorObject, layers, viewer) {
 
 // Create numeric input
 function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
-    let val
-    if (!colorObject.low && !colorObject.high) {
-      val = ''
-    } else {
-      val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
-    }
+  let val
+  if (!colorObject.low && !colorObject.high) {
+    val = ''
+  } else {
+    val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
+  }
 
   const numEl = e('input', {
     id: id,
@@ -339,9 +349,11 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     const pixels = imgData.data
 
-    const colorArr = layerColors.map(function (element) {
-      return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
-    })
+    function f(arr) {
+      return arr.map(function (element) {
+        return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
+      })
+    }
 
     function inRange(value, _colors, colorArr) {
       for (let k = 0; k < _colors.length; k++) {
@@ -373,11 +385,14 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     }
 
     if (renderType === 'byClass') {
+      const arr = layerColors.filter(x => x.checked === true)
+      const colorArr = f(arr)
+
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i + 3] === 255) {
           const classId = pixels[i] // class
           const prob = pixels[i + 1] // prob
-          let rgba = inClass(classId, layerColors, colorArr)
+          let rgba = inClass(classId, arr, colorArr)
           setPix(i, rgba, prob)
         } else {
           pixels[i + 3] = 0
@@ -386,11 +401,11 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     }
 
     if (renderType === 'byProbability') {
-      // console.log('byProbability')
+      const arr1 = f(layerColors)
       for (let j = 0; j < pixels.length; j += 4) {
         if (pixels[j + 3] === 255) {
           const g = pixels[j + 1]
-          const rgba = inRange(g, layerColors, colorArr)
+          const rgba = inRange(g, layerColors, arr1)
           setPix(j, rgba, g)
         } else {
           // No nuclear material: set to transparent.
