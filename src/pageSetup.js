@@ -32,7 +32,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     console.log('images', images)
   }
 
-  testing1()
+  // testing1()
 
   // When the 'images' parameter becomes an array with null elements,
   // it means that Halcyon timed out or is in the process of timeout.
