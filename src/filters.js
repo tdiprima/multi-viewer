@@ -300,7 +300,7 @@ function setOutlineStyle(a, b, style, color) {
 }
 
 // The "Add color range" event
-function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
+function addEvent(idx, num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
   setOutlineStyle(num1, num2, '', '') // clear error
   if (num1.value === '0' && num2.value === '0') {
     setOutlineStyle(num1, num2, 'solid', 'red') // set error
@@ -310,7 +310,7 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
     const buttonId = `i${num1.id.replace('low', '')}` // borrowing element id
-    const colorObject = {color: rgba, low: parseInt(num1.value), high: parseInt(num2.value)}
+    const colorObject = {'color': rgba, 'low': parseInt(num1.value), 'high': parseInt(num2.value), 'checked': true, 'classid': idx}
     colors.push(colorObject) // add it to our list
     // sort
     colors.sort((a, b) => b.low - a.low)
@@ -333,6 +333,8 @@ function addEvent(num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
 function extraRow(uniq, colors, layers, viewer) {
   const idx = colors.length
   const generic = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
+  const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true, 'value': idx})
+  chk.checked = true
   const cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
@@ -341,13 +343,14 @@ function extraRow(uniq, colors, layers, viewer) {
   const addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
 
   const tr = e('tr', {}, [
+    e('td', {}, [chk]),
     e('td', {}, [cpEl]),
     e('td', {}, [num1]),
     e('td', {}, [num2]),
     e('td', {}, [addBtn])
   ])
 
-  addBtn.addEventListener('click', addEvent.bind(null, num1, num2, cpEl, uniq, tr, colors, layers, viewer), {passive: true})
+  addBtn.addEventListener('click', addEvent.bind(null, idx, num1, num2, cpEl, uniq, tr, colors, layers, viewer), {passive: true})
 
   return tr
 }
