@@ -50,8 +50,7 @@ const mugshots = function (options) {
     ul.classList.add('thumbnail-list')
     fragment.appendChild(ul)
 
-    let j
-    for (j = 0; j < options.scrollerLength; j++) {
+    for (let j = 0; j < options.scrollerLength; j++) {
       li = document.createElement('li')
       ul.appendChild(li)
       span = document.createElement('span')
