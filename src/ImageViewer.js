@@ -47,8 +47,8 @@ class ImageViewer {
 
     // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
     let element = document.querySelector('.mag-content')
-    for (let i = 0; i < element.children.length; i++) {
-      let el = element.children[i]
+
+    for (let el of element.children) {
       el.addEventListener('click', () => {
         let attr = el.getAttribute('data-value')
         let imageZoom = parseFloat(attr)
@@ -68,8 +68,8 @@ class ImageViewer {
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', () => {
       let parent = document.getElementById(viewerInfo.divId)
       let children = parent.querySelectorAll('[id^="osd-overlaycanvas"]')
-      for (let i = 0; i < children.length; i++) {
-        let canvasEl = children[i]
+
+      for (let canvasEl of children) {
         let id = canvasEl.id
         let num = parseInt(id.slice(-1))
         if (num % 2 === 0) {
