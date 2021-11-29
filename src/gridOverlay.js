@@ -48,8 +48,7 @@ function gridHandler (button, gridProps) {
 
 function turnGridOff (gridProps) {
   const r = gridProps.canvas.getObjects('line')
-  let i
-  for (i = 0; i < r.length; i++) {
+  for (let i = 0; i < r.length; i++) {
     gridProps.canvas.remove(r[i])
   }
 }
