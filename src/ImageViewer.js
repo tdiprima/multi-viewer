@@ -7,10 +7,11 @@
 class ImageViewer {
   constructor(viewerInfo, layers) {
     let ts = []
-    for (let i = 0; i < layers.length; i++) {
+
+    for (let ll of layers) {
       ts.push({
-        tileSource: layers[i].location,
-        opacity: layers[i].opacity,
+        tileSource: ll.location,
+        opacity: ll.opacity,
         x: 0,
         y: 0
       })

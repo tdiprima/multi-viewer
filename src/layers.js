@@ -26,9 +26,9 @@ function getViewerObject(element) {
   let retVal
   try {
     // syncedImageViewers = global variable set in synchronizeViewers.js
-    for (let j = 0; j < syncedImageViewers.length; j++) {
-      if (syncedImageViewers[j].getViewer().id === element.id) {
-        retVal = syncedImageViewers[j].getViewer()
+    for (let nsync of syncedImageViewers) {
+      if (nsync.getViewer().id === element.id) {
+        retVal = nsync.getViewer()
         break
       }
     }
