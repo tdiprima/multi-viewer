@@ -21,8 +21,8 @@ class MultiViewer extends ImageViewer {
     }
 
     if (numViewers > 1) {
-      this.checkboxes.checkPan = document.getElementById('chkPan' + viewerInfo.idx)
-      this.checkboxes.checkZoom = document.getElementById('chkZoom' + viewerInfo.idx)
+      this.checkboxes.checkPan = document.getElementById(`chkPan${viewerInfo.idx}`)
+      this.checkboxes.checkZoom = document.getElementById(`chkZoom${viewerInfo.idx}`)
     }
 
     if (options.toolbarOn) {

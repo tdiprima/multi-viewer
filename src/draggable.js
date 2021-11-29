@@ -17,8 +17,8 @@
  */
 function createDraggableDiv (id, title, left, top, viz = false) {
   const myDiv = e('div', { id: id, class: 'popup' })
-  myDiv.style.left = left + 'px'
-  myDiv.style.top = top + 'px'
+  myDiv.style.left = `${left}px`
+  myDiv.style.top = `${top}px`
 
   const myImg = e('img', { src: `${config.appImages}close-icon.png`, width: 25, height: 25, alt: 'close' })
   myImg.style.cursor = 'pointer'
@@ -50,9 +50,9 @@ function dragElement (_elem) {
   let pos3 = 0
   let pos4 = 0
   // Note the naming convention
-  if (document.getElementById(_elem.id + 'Header')) {
+  if (document.getElementById(`${_elem.id}Header`)) {
     // if present, the header is where you move the DIV from:
-    document.getElementById(_elem.id + 'Header').onmousedown = dragMouseDown
+    document.getElementById(`${_elem.id}Header`).onmousedown = dragMouseDown
   } else {
     // otherwise, move the DIV from anywhere inside the DIV:
     _elem.onmousedown = dragMouseDown
@@ -80,8 +80,8 @@ function dragElement (_elem) {
     pos3 = e.clientX
     pos4 = e.clientY
     // set the element's new position:
-    _elem.style.top = (_elem.offsetTop - pos2) + 'px'
-    _elem.style.left = (_elem.offsetLeft - pos1) + 'px'
+    _elem.style.top = `${_elem.offsetTop - pos2}px`
+    _elem.style.left = `${_elem.offsetLeft - pos1}px`
   }
 
   // Mouse-up handler

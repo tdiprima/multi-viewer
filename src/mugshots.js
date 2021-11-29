@@ -108,14 +108,7 @@ const mugshots = function (options) {
   }
 
   function getImageUrl (infoUrl, imageRect) {
-    return infoUrl + '/' +
-      imageRect.getTopLeft().x + ',' +
-      imageRect.getTopLeft().y + ',' +
-      imageRect.width + ',' +
-      imageRect.height + '/' +
-      size + '/' +
-      rotation + '/' +
-      quality + '.' + format
+    return `${infoUrl}/${imageRect.getTopLeft().x},${imageRect.getTopLeft().y},${imageRect.width},${imageRect.height}/${size}/${rotation}/${quality}.${format}`;
   }
 
   function showThumbnailOnImage (imageRect) {

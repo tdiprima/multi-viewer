@@ -99,7 +99,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
           }
 
           let container = e('div', {'class': 'divSquare'})
-          container.style.width = width + 'px'
+          container.style.width = `${width}px`
           td.appendChild(container) // ADD CONTAINER TO CELL
 
           let htm = ''
@@ -160,7 +160,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
           container.innerHTML = htm
 
           // DRAW POLYGON COLOR PICKER
-          const colorPicker = new CP(document.getElementById('mark' + idx))
+          const colorPicker = new CP(document.getElementById(`mark${idx}`))
           colorPicker.on('change', function (r, g, b, a) {
             this.source.value = this.color(r, g, b, a)
             this.source.innerHTML = this.color(r, g, b, a)

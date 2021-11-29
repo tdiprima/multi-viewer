@@ -98,7 +98,7 @@ function Edit(button, canvas) {
       fabricPolygon.cornerStyle = 'circle'
       // Create one new control for each polygon point
       fabricPolygon.controls = fabricPolygon.points.reduce((acc, point, index) => {
-        acc['p' + index] = new fabric.Control({
+        acc[`p${index}`] = new fabric.Control({
           positionHandler: polygonPositionHandler,
           actionHandler: anchorWrapper(index > 0 ? index - 1 : lastControl, actionHandler),
           actionName: 'modifyPolygon',
