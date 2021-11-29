@@ -1,13 +1,13 @@
 let ruler = (button, viewer, overlay) => {
-  let line;
-  let isDown;
+  let line
+  let isDown
   let zoom
   let mode = 'x'
   let fText
   let fStart = {x: 0, y: 0}
   let fEnd = {x: 0, y: 0}
-  let oStart;
-  let oEnd;
+  let oStart
+  let oEnd
 
   let canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
