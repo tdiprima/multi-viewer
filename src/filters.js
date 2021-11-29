@@ -224,16 +224,16 @@ function numericEvent(numEl, colorObject, layers, viewer) {
 }
 
 // Create numeric input
-function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
+function createNumericInput(m_id, table, uniq, layers, colorObject, colors, viewer) {
   let val
   if (!colorObject.low && !colorObject.high) {
     val = ''
   } else {
-    val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
+    val = m_id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
   }
 
   const numEl = e('input', {
-    id: id,
+    id: m_id,
     type: 'number',
     min: '0',
     max: '255',
