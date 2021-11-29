@@ -15,11 +15,11 @@ const editPolygon = (button, overlay) => {
 function polygonPositionHandler(dim, finalMatrix, fabricObject) {
   // This function looks at the pointIndex of the control and returns the
   // current canvas position for that particular point.
-  const x = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x)
-  const y = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y)
+  const x1 = (fabricObject.points[this.pointIndex].x - fabricObject.pathOffset.x)
+  const y1 = (fabricObject.points[this.pointIndex].y - fabricObject.pathOffset.y)
 
   return fabric.util.transformPoint(
-    {x: x, y: y},
+    {x: x1, y: y1},
 
     fabric.util.multiplyTransformMatrices(
       fabricObject.canvas.viewportTransform,
