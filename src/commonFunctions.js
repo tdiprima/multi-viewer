@@ -88,8 +88,7 @@ function makeId(length, prefix) {
   let result = ''
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
-  let i
-  for (i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   if (prefix) {
@@ -102,8 +101,8 @@ function makeId(length, prefix) {
 String.prototype.hashCode = function () {
   let hash = 0
   if (this.length === 0) return hash
-  let i, char
-  for (i = 0; i < this.length; i++) {
+  let char
+  for (let i = 0; i < this.length; i++) {
     char = this.charCodeAt(i)
     hash = ((hash << 5) - hash) + char
     hash = hash & hash // Convert to 32bit integer
