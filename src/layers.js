@@ -120,7 +120,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color-attenuation by probability
     let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light', 'title': 'toggle: color-attenuation by probability'})
     tr.appendChild(e('td', {}, [attenuation]))
-    attenuation.addEventListener('click', function () {
+    attenuation.addEventListener('click', () => {
       attenuateFlag = !attenuateFlag;
       setFilter(allLayers, viewer)
     })
@@ -128,7 +128,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // probability off/on
     let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light', 'title': 'toggle: class / probability'})
     tr.appendChild(e('td', {}, [probability]))
-    probability.addEventListener('click', function () {
+    probability.addEventListener('click', () => {
       let pi = colorsUI.id.replace('filters', '')
       if (renderType === 'byClass') {
         renderType = 'byProbability'
@@ -147,7 +147,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // heatmap off/on
     let heatmap = e('i', {'id': makeId(5, 'prob'), 'class': 'far fa-map hover-light', 'title': 'blue-red heatmap'})
     tr.appendChild(e('td', {}, [heatmap]))
-    heatmap.addEventListener('click', function () {
+    heatmap.addEventListener('click', () => {
       if (heatmapFlag) {
         heatmapFlag = false
         if (probability.classList.contains('fa-shapes')) {

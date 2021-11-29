@@ -17,7 +17,7 @@
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
  */
-const filters = function (paletteBtn, prefLabel, colorscheme, allLayers, viewer) {
+const filters = (paletteBtn, prefLabel, colorscheme, allLayers, viewer) => {
   colorscheme.colors.map(a => a.checked = true)
   colorscheme.colorspectrum.forEach((element, index) => {
     element.checked = true;
@@ -35,7 +35,7 @@ const filters = function (paletteBtn, prefLabel, colorscheme, allLayers, viewer)
 }
 
 function checkboxHandler(element, arr, l, v) {
-  element.addEventListener('click', function () {
+  element.addEventListener('click', () => {
     arr.find(x => x.classid === parseInt(element.value)).checked = element.checked
     setFilter(l, v)
   })
@@ -78,7 +78,7 @@ function probabilityUI(uniq, div, colorRanges, layers, viewer) {
 
     // Create table row for each color rgba and range (low to high)
     // with UI to adjust color, low, high, and a button to add or remove a range.
-    colorRanges.forEach(function (colorObject, cIdx) {
+    colorRanges.forEach((colorObject, cIdx) => {
       const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'value': colorObject.classid})
       chk.checked = colorObject.checked
       const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
@@ -357,8 +357,8 @@ function extraRow(uniq, colors, layers, viewer) {
 
 // Custom color filter
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
-colorFilter.prototype.COLORLEVELS = function (layerColors) {
-  return function (context, callback) {
+colorFilter.prototype.COLORLEVELS = layerColors => {
+  return (context, callback) => {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     const pixels = imgData.data
 
@@ -392,9 +392,9 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
     }
 
     function f(arr) {
-      return arr.map(function (element) {
+      return arr.map(element => {
         return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
-      })
+      });
     }
 
     const arr = layerColors.filter(x => x.checked === true)
@@ -469,5 +469,5 @@ colorFilter.prototype.COLORLEVELS = function (layerColors) {
 
     context.putImageData(imgData, 0, 0)
     callback()
-  }
+  };
 }

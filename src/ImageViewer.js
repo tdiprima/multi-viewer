@@ -49,7 +49,7 @@ class ImageViewer {
     let element = document.querySelector('.mag-content')
     for (let i = 0; i < element.children.length; i++) {
       let el = element.children[i]
-      el.addEventListener('click', function () {
+      el.addEventListener('click', () => {
         let attr = el.getAttribute('data-value')
         let imageZoom = parseFloat(attr)
         vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
@@ -57,7 +57,7 @@ class ImageViewer {
     }
 
     // BOOKMARK URL with ZOOM and X,Y
-    document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', function () {
+    document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', () => {
       let zoom = vpt.getZoom()
       let pan = vpt.getCenter()
       let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
@@ -65,7 +65,7 @@ class ImageViewer {
     })
 
     // DOWNLOAD IMAGE SNAPSHOT
-    document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', function () {
+    document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', () => {
       let parent = document.getElementById(viewerInfo.divId)
       let children = parent.querySelectorAll('[id^="osd-overlaycanvas"]')
       for (let i = 0; i < children.length; i++) {
@@ -101,7 +101,7 @@ class ImageViewer {
     }
 
     // Image has been downloaded and can be modified before being drawn to the canvas.
-    viewer.addOnceHandler('tile-loaded', function () {
+    viewer.addOnceHandler('tile-loaded', () => {
       if (window.location.hash) {
         let params = parseHash()
         useParams(params)
@@ -141,7 +141,7 @@ class ImageViewer {
     }
 
     // SET UP SCALE BAR
-    let setScaleBar = function (ppm) {
+    let setScaleBar = ppm => {
       viewer.scalebar({
         type: OpenSeadragon.ScalebarType.MICROSCOPY,
         pixelsPerMeter: ppm,
