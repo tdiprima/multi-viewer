@@ -6,9 +6,9 @@
  */
 class ImageViewer {
   constructor(viewerInfo, layers) {
-    let tileSources = []
+    let ts = []
     for (let i = 0; i < layers.length; i++) {
-      tileSources.push({
+      ts.push({
         tileSource: layers[i].location,
         opacity: layers[i].opacity,
         x: 0,
@@ -22,7 +22,7 @@ class ImageViewer {
       crossOriginPolicy: 'Anonymous',
       blendTime: 0,
       prefixUrl: config.osdImages,
-      tileSources: tileSources,
+      tileSources: ts,
       maxZoomPixelRatio: 1
     })
 

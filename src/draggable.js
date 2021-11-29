@@ -15,8 +15,8 @@
  * @param viz: visibility
  * @returns {*} the floating div
  */
-function createDraggableDiv (id, title, left, top, viz = false) {
-  const myDiv = e('div', { id: id, class: 'popup' })
+function createDraggableDiv (m_id, title, left, top, viz = false) {
+  const myDiv = e('div', { id: m_id, class: 'popup' })
   myDiv.style.left = `${left}px`
   myDiv.style.top = `${top}px`
 
@@ -26,11 +26,11 @@ function createDraggableDiv (id, title, left, top, viz = false) {
     myDiv.style.display = 'none'
   })
 
-  const myHeader = e('div', { id: `${id}Header`, class: 'popupHeader' },
+  const myHeader = e('div', { id: `${m_id}Header`, class: 'popupHeader' },
     [myImg, e('span', {}, [title])])
   myDiv.appendChild(myHeader)
 
-  const body = e('div', { id: `${id}Body` })
+  const body = e('div', { id: `${m_id}Body` })
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
