@@ -1,11 +1,13 @@
 let ruler = (button, viewer, overlay) => {
-  let line, isDown
+  let line;
+  let isDown;
   let zoom
   let mode = 'x'
   let fText
   let fStart = {x: 0, y: 0}
   let fEnd = {x: 0, y: 0}
-  let oStart, oEnd
+  let oStart;
+  let oEnd;
 
   let canvas = overlay.fabricCanvas()
   fabric.Object.prototype.transparentCorners = false
@@ -177,5 +179,4 @@ let ruler = (button, viewer, overlay) => {
     }
     toggleButton(button, 'btnOn', 'btn')
   })
-
 }
