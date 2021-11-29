@@ -121,7 +121,7 @@ class ImageViewer {
         srcGroup: `${config.osdImages}zin_grouphover.png`,
         srcHover: `${config.osdImages}zin_hover.png`,
         srcDown: `${config.osdImages}zin_pressed.png`,
-        onClick: function () {
+        onClick() {
           vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
       })
@@ -133,7 +133,7 @@ class ImageViewer {
         srcGroup: `${config.osdImages}zout_grouphover.png`,
         srcHover: `${config.osdImages}zout_hover.png`,
         srcDown: `${config.osdImages}zout_pressed.png`,
-        onClick: function () {
+        onClick() {
           vpt.goHome(true)
         }
       })
