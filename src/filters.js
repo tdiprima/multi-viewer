@@ -300,7 +300,7 @@ function setOutlineStyle(a, b, style, color) {
 }
 
 // The "Add color range" event
-function addEvent(idx, num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
+function addEvent(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer) {
   setOutlineStyle(num1, num2, '', '') // clear error
   if (num1.value === '0' && num2.value === '0') {
     setOutlineStyle(num1, num2, 'solid', 'red') // set error
@@ -309,19 +309,25 @@ function addEvent(idx, num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
     const rgb = cpEl.style.backgroundColor // we get rgb back from CP
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
-    const buttonId = `i${num1.id.replace('low', '')}` // borrowing element id
+
     const colorObject = {'color': rgba, 'low': parseInt(num1.value), 'high': parseInt(num2.value), 'checked': true, 'classid': idx}
-    colors.push(colorObject) // add it to our list
+    colors.push(colorObject) // add color range to our list
+
     // sort
     colors.sort((a, b) => b.low - a.low)
+
     // reflect changes in viewer
     setFilter(layers, viewer)
 
+    const buttonId = `i${num1.id.replace('low', '')}` // borrowing element id
     const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
     // Replace + with -
     tr.lastChild.firstChild.remove() // last element in row is modifier
     tr.lastChild.appendChild(removeBtn) // replace old modifier with new one
     removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colors, tr, layers, viewer), {passive: true})
+
+    // enable checkbox
+    chkEl.disabled = false
 
     // add another empty row
     const table = tr.closest('table')
@@ -333,8 +339,8 @@ function addEvent(idx, num1, num2, cpEl, uniq, tr, colors, layers, viewer) {
 function extraRow(uniq, colors, layers, viewer) {
   const idx = colors.length
   const generic = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
-  const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true, 'value': idx})
-  chk.checked = true
+  const chkEl = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
+    'disabled': true, 'value': idx})
   const cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
@@ -343,14 +349,14 @@ function extraRow(uniq, colors, layers, viewer) {
   const addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
 
   const tr = e('tr', {}, [
-    e('td', {}, [chk]),
+    e('td', {}, [chkEl]),
     e('td', {}, [cpEl]),
     e('td', {}, [num1]),
     e('td', {}, [num2]),
     e('td', {}, [addBtn])
   ])
 
-  addBtn.addEventListener('click', addEvent.bind(null, idx, num1, num2, cpEl, uniq, tr, colors, layers, viewer), {passive: true})
+  addBtn.addEventListener('click', addEvent.bind(null, idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer), {passive: true})
 
   return tr
 }
