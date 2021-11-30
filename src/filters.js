@@ -328,6 +328,7 @@ function addEvent(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
 
     // enable checkbox
     chkEl.disabled = false
+    checkboxHandler(chkEl, colors, layers, viewer)
 
     // add another empty row
     const table = tr.closest('table')
