@@ -21,7 +21,7 @@ const filters = (paletteBtn, prefLabel, colorscheme, allLayers, viewer) => {
   colorscheme.colors.map(a => a.checked = true)
   colorscheme.colorspectrum.forEach((element, index) => {
     element.checked = true;
-    element.classid = index;
+    element.classid = index; // overloading 'classid' (to have 1 checkbox handler)
   })
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
@@ -71,7 +71,7 @@ function probabilityUI(uniq, div, colorRanges, layers, viewer) {
   div.appendChild(table)
 
   if (colorRanges) {
-    // Sort list
+    // Sort DESC
     colorRanges.sort((a, b) => b.low - a.low)
 
     table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
@@ -269,7 +269,8 @@ function isIntersect(table) {
     }
   }
 
-  // Sort DESC
+
+  // Sort before validate
   arr.sort((a, b) => {
     return b.lowVal - a.lowVal
   })
@@ -310,11 +311,9 @@ function addEvent(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
 
+    // overloading 'classid'
     const colorObject = {'color': rgba, 'low': parseInt(num1.value), 'high': parseInt(num2.value), 'checked': true, 'classid': idx}
     colors.push(colorObject) // add color range to our list
-
-    // sort
-    colors.sort((a, b) => b.low - a.low)
 
     // reflect changes in viewer
     setFilter(layers, viewer)
