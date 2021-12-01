@@ -72,7 +72,7 @@ function createUI(type, uniq, div, layerColors, layers, viewer) {
       chk.checked = colorObject.checked
       const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
 
-      let num1, num2, removeBtn
+      let tr, num1, num2, removeBtn
       if (byProb) {
         // adjust range (low to high)
         num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
@@ -80,10 +80,7 @@ function createUI(type, uniq, div, layerColors, layers, viewer) {
         const buttonId = `i${uniq}${cIdx}`
         // button to add or remove a range
         removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-      }
 
-      let tr
-      if (byProb) {
         tr = e('tr', {}, [
           e('td', {}, [chk]),
           e('td', {}, [cpEl]),
