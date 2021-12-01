@@ -175,7 +175,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
     colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-    // console.log('%ccolorObject.color', 'color: #997fff;', colorObject.color)
+    // console.log('%ccolorObject', 'color: #997fff;', colorObject)
     setFilter(layers, viewer)
   })
 
@@ -332,14 +332,39 @@ function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
   }
 }
 
+function seq(objArray) {
+  let arr = objArray.map(a => a.classid)
+  arr.sort()
+  // console.log('arr:', arr)
+  let [min, max] = [Math.min(...arr), Math.max(...arr)]
+  let out = Array.from(Array(max - min), (v, i) => i + min).filter(i => !arr.includes(i))
+  // console.log('out:', out)
+  return out
+}
+
 // Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
-  const idx = colors.length
-  const colorObject = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
+  let idx, nums
+  nums = seq(colors)
+  if (!nums || isEmpty(nums)) {
+    idx = colors.length
+  } else {
+    idx = Array.isArray(nums) ? nums[0] : nums
+  }
+
+  const colorObject = {
+    'color': 'rgba(255, 255, 255, 255)',
+    'low': 0,
+    'high': 0,
+    'checked': true,
+    'classid': idx // overloading 'classid'
+  }
+
   const chkEl = e('input', {
     'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
     'disabled': true, 'value': idx
   })
+
   const cpEl = createColorPicker(idx, uniq, colorObject, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
