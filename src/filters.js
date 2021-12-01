@@ -117,11 +117,9 @@ function createUI(type, uniq, div, layerColors, layers, viewer) {
 function removeColor(el, ourRanges, tr, layers, viewer) {
   const str = el.id
   const n = str.charAt(str.length - 1)
-  // remove from list
-  ourRanges.splice(parseInt(n), 1)
-  // reflect changes in viewer
-  setFilter(layers, viewer)
-  tr.remove()
+  ourRanges.splice(parseInt(n), 1) // remove from list
+  tr.remove() // remove table row
+  setFilter(layers, viewer) // reflect changes in viewer
 }
 
 // Create sortable header row
@@ -161,7 +159,6 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
   let init = true
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
-  // console.log(m)
   const colorCode = colorObject.color
   m.style.backgroundColor = colorCode
   m.innerHTML = `#${rgba2hex(colorCode)}`
@@ -298,55 +295,52 @@ function setOutlineStyle(a, b, style, color) {
 }
 
 // The "Add color range" event
-function addEvent(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer) {
-  setOutlineStyle(num1, num2, '', '') // clear error
+function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer) {
+  setOutlineStyle(num1, num2, '', '') // clear any error
   if (num1.value === '0' && num2.value === '0') {
-    setOutlineStyle(num1, num2, 'solid', 'red') // set error
+    // indicate 0 and 0 not allowed
+    setOutlineStyle(num1, num2, 'solid', 'red')
   } else {
-    // add to list
     const rgb = cpEl.style.backgroundColor // we get rgb back from CP
     let rgba = rgb.replace('rgb', 'rgba') // we need rgba
     rgba = rgba.replace(')', ', 255)') // give it default alpha
 
-    // overloading 'classid'
     const colorObject = {
       'color': rgba,
       'low': parseInt(num1.value),
       'high': parseInt(num2.value),
       'checked': true,
-      'classid': idx
+      'classid': idx // overloading 'classid'
     }
     colors.push(colorObject) // add color range to our list
 
-    // reflect changes in viewer
-    setFilter(layers, viewer)
-
+    // Now replace + with - in UI
     const buttonId = `i${num1.id.replace('low', '')}` // borrowing element id
     const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-    // Replace + with -
     tr.lastChild.firstChild.remove() // last element in row is modifier
     tr.lastChild.appendChild(removeBtn) // replace old modifier with new one
     removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colors, tr, layers, viewer), {passive: true})
 
-    // enable checkbox
-    chkEl.disabled = false
+    chkEl.disabled = false // enable checkbox
     checkboxHandler(chkEl, colors, layers, viewer)
 
     // add another empty row
     const table = tr.closest('table')
     table.appendChild(extraRow(uniq, colors, layers, viewer))
+
+    setFilter(layers, viewer) // reflect changes in viewer
   }
 }
 
 // Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
   const idx = colors.length
-  const generic = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
+  const colorObject = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
   const chkEl = e('input', {
     'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
     'disabled': true, 'value': idx
   })
-  const cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
+  const cpEl = createColorPicker(idx, uniq, colorObject, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
   const num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
@@ -361,7 +355,7 @@ function extraRow(uniq, colors, layers, viewer) {
     e('td', {}, [addBtn])
   ])
 
-  addBtn.addEventListener('click', addEvent.bind(null, idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer), {passive: true})
+  addBtn.addEventListener('click', addColor.bind(null, idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer), {passive: true})
 
   return tr
 }
