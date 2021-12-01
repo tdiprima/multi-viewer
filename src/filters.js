@@ -343,8 +343,8 @@ function extraRow(uniq, colors, layers, viewer) {
   const cpEl = createColorPicker(idx, uniq, colorObject, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
-  const num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
-  const num2 = createNumericInput(`high${uniq}${idx}`, t, uniq, layers, generic, colors, viewer)
+  const num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, colorObject, colors, viewer)
+  const num2 = createNumericInput(`high${uniq}${idx}`, t, uniq, layers, colorObject, colors, viewer)
   const addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
 
   const tr = e('tr', {}, [
