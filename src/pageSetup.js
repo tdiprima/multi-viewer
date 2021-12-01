@@ -20,7 +20,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     images.splice(1)
     let layArr = images[0]
     if (!layArr) {
-      throw 'Session is stuck in limbo. See ya later!'
+      throw 'Session is stuck in limbo. See you later!'
     }
     let layC = layArr[1].colorscheme.colors
     // we have a blue-red colormap, and i'm being sent red and blue
