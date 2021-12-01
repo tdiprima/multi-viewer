@@ -23,13 +23,23 @@ const filters = (paletteBtn, prefLabel, colorscheme, allLayers, viewer) => {
     element.checked = true;
     element.classid = index; // overloading 'classid' (to have 1 checkbox handler)
   })
+
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
   const rect = paletteBtn.getBoundingClientRect()
-  let title = `${prefLabel} color levels`
+  const title = `${prefLabel} color levels`
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
-  const widgetBody = div.lastChild
-  createUI(uniqueId, widgetBody, colorscheme, allLayers, viewer)
+  const widgetBody = div.lastChild // known
+
+  let divA = e('div', {'id': `divA${uniqueId}`})
+  divA.style.display = (renderType === 'byClass') ? 'block' : 'none'
+  widgetBody.appendChild(divA)
+  createUI(1, uniqueId, divA, colorscheme.colors, allLayers, viewer)
+
+  let divB = e('div', {'id': `divB${uniqueId}`})
+  divB.style.display = (renderType === 'byProbability') ? 'block' : 'none'
+  widgetBody.appendChild(divB)
+  createUI(2, uniqueId, divB, colorscheme.colorspectrum, allLayers, viewer)
 
   return div
 }
@@ -41,82 +51,70 @@ function checkboxHandler(element, arr, l, v) {
   })
 }
 
-// Color by classification UI
-function classificationUI(uniq, div, layerColors, layers, viewer) {
-  const table = e('table')
-  div.appendChild(table)
-  table.appendChild(createHeaderRow(['', 'Color', 'Label']))
-
-  for (let cIdx = 0; cIdx < layerColors.length; cIdx++) {
-    const colorObject = layerColors[cIdx]
-    const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
-    const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'value': colorObject.classid})
-    chk.checked = colorObject.checked
-    const tr = e('tr', {}, [
-      e('td', {}, [chk]),
-      e('td', {}, [cpEl]),
-      e('td', {}, [e('span', {}, [
-        colorObject.name
-      ])])
-    ])
-    table.appendChild(tr)
-
-    checkboxHandler(chk, layerColors, layers, viewer)
-  }
-}
-
-// Color by probability UI
-function probabilityUI(uniq, div, colorRanges, layers, viewer) {
+// Create user interface
+function createUI(type, uniq, div, layerColors, layers, viewer) {
+  let byProb = type === 2
   const table = e('table')
   div.appendChild(table)
 
-  if (colorRanges) {
-    // Sort DESC
-    colorRanges.sort((a, b) => b.low - a.low)
+  if (layerColors) {
+    if (byProb) {
+      // Sort DESC
+      layerColors.sort((a, b) => b.low - a.low)
+      table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
+    } else {
+      table.appendChild(createHeaderRow(['', 'Color', 'Label']))
+    }
 
-    table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
-
-    // Create table row for each color rgba and range (low to high)
-    // with UI to adjust color, low, high, and a button to add or remove a range.
-    colorRanges.forEach((colorObject, cIdx) => {
+    // Create table row for each color rgba; allow user to adjust color
+    layerColors.forEach((colorObject, cIdx) => {
       const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'value': colorObject.classid})
       chk.checked = colorObject.checked
       const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
-      const num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
-      const num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, colorRanges, viewer)
-      const buttonId = `i${uniq}${cIdx}`
-      const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
 
-      const tr = e('tr', {}, [
-        e('td', {}, [chk]),
-        e('td', {}, [cpEl]),
-        e('td', {}, [num1]),
-        e('td', {}, [num2]),
-        e('td', {}, [removeBtn])
-      ])
+      let num1, num2, removeBtn
+      if (byProb) {
+        // adjust range (low to high)
+        num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
+        num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
+        const buttonId = `i${uniq}${cIdx}`
+        // button to add or remove a range
+        removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
+      }
+
+      let tr
+      if (byProb) {
+        tr = e('tr', {}, [
+          e('td', {}, [chk]),
+          e('td', {}, [cpEl]),
+          e('td', {}, [num1]),
+          e('td', {}, [num2]),
+          e('td', {}, [removeBtn])
+        ])
+      } else {
+        tr = e('tr', {}, [
+          e('td', {}, [chk]),
+          e('td', {}, [cpEl]),
+          e('td', {}, [e('span', {}, [
+            colorObject.name
+          ])])
+        ])
+      }
       table.appendChild(tr)
 
-      checkboxHandler(chk, colorRanges, layers, viewer)
-      removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colorRanges, tr, layers, viewer), {passive: true})
+      checkboxHandler(chk, layerColors, layers, viewer)
+
+      if (byProb) {
+        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
+      }
     })
 
-    table.appendChild(extraRow(uniq, colorRanges, layers, viewer))
+    if (byProb) {
+      table.appendChild(extraRow(uniq, layerColors, layers, viewer))
+    }
+  } else {
+    console.log(`%clayer colors?`, 'color: #ff6a5a;', layerColors)
   }
-}
-
-// Create user interface
-function createUI(uniq, div, colorscheme, layers, viewer) {
-  let divA = e('div', {'id': `divA${uniq}`})
-  divA.style.display = (renderType === 'byClass') ? 'block' : 'none'
-  div.appendChild(divA)
-
-  classificationUI(uniq, divA, colorscheme.colors, layers, viewer)
-
-  let divB = e('div', {'id': `divB${uniq}`})
-  divB.style.display = (renderType === 'byProbability') ? 'block' : 'none'
-  div.appendChild(divB)
-
-  probabilityUI(uniq, divB, colorscheme.colorspectrum, layers, viewer)
 }
 
 function removeColor(el, ourRanges, tr, layers, viewer) {
@@ -166,6 +164,7 @@ const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
   let init = true
   const m = e('mark', {id: `marker${uniq}${cIdx}`})
+  // console.log(m)
   const colorCode = colorObject.color
   m.style.backgroundColor = colorCode
   m.innerHTML = `#${rgba2hex(colorCode)}`
@@ -177,11 +176,12 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
       init = false // Update the state
       return
     }
-    // console.log([r, g, b, a])
+    // console.log('%c[r, g, b, a]', 'color: #ff00cc;', [r, g, b, a])
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
     colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+    // console.log('%ccolorObject.color', 'color: #997fff;', colorObject.color)
     setFilter(layers, viewer)
   })
 
@@ -312,7 +312,13 @@ function addEvent(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
     rgba = rgba.replace(')', ', 255)') // give it default alpha
 
     // overloading 'classid'
-    const colorObject = {'color': rgba, 'low': parseInt(num1.value), 'high': parseInt(num2.value), 'checked': true, 'classid': idx}
+    const colorObject = {
+      'color': rgba,
+      'low': parseInt(num1.value),
+      'high': parseInt(num2.value),
+      'checked': true,
+      'classid': idx
+    }
     colors.push(colorObject) // add color range to our list
 
     // reflect changes in viewer
@@ -339,8 +345,10 @@ function addEvent(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
 function extraRow(uniq, colors, layers, viewer) {
   const idx = colors.length
   const generic = {color: 'rgba(255, 255, 255, 255)', low: 0, high: 0}
-  const chkEl = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
-    'disabled': true, 'value': idx})
+  const chkEl = e('input', {
+    'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
+    'disabled': true, 'value': idx
+  })
   const cpEl = createColorPicker(idx, uniq, generic, layers, viewer)
   const b = document.getElementById(`filters${uniq}Body`)
   const t = b.firstChild
