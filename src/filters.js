@@ -7,7 +7,7 @@
  * @param paletteBtn: dom element
  * @param prefLabel: string
  * @param colorscheme:
- * @param allLayers: Array
+ * @param viewerLayers: Array
  * @param viewer: OpenSeadragon Viewer
  * @returns {*}
  *
@@ -17,7 +17,8 @@
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
  */
-const filters = (paletteBtn, prefLabel, colorscheme, allLayers, viewer) => {
+const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
+  console.log('%cF%cI%cL%cT%cE%cR%cS', 'color: red;', 'color: orange;', 'color: yellow;', 'color: lime;', 'color: blue;', 'color: indigo;', 'color: violet;')
   colorscheme.colors.map(a => a.checked = true)
   colorscheme.colorspectrum.forEach((element, index) => {
     element.checked = true;
@@ -34,18 +35,19 @@ const filters = (paletteBtn, prefLabel, colorscheme, allLayers, viewer) => {
   let divA = e('div', {'id': `divA${uniqueId}`})
   divA.style.display = (renderType === 'byClass') ? 'block' : 'none'
   widgetBody.appendChild(divA)
-  createUI(1, uniqueId, divA, colorscheme.colors, allLayers, viewer)
+  createUI(1, uniqueId, divA, colorscheme.colors, viewerLayers, viewer)
 
   let divB = e('div', {'id': `divB${uniqueId}`})
   divB.style.display = (renderType === 'byProbability') ? 'block' : 'none'
   widgetBody.appendChild(divB)
-  createUI(2, uniqueId, divB, colorscheme.colorspectrum, allLayers, viewer)
+  createUI(2, uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer)
 
   return div
 }
 
 function checkboxHandler(element, arr, l, v) {
   element.addEventListener('click', () => {
+    // look up color by 'classid', set 'checked' to the state of the checkbox
     arr.find(x => x.classid === parseInt(element.value)).checked = element.checked
     setFilter(l, v)
   })
@@ -170,12 +172,12 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
       init = false // Update the state
       return
     }
-    // console.log('%c[r, g, b, a]', 'color: #ff00cc;', [r, g, b, a])
+    // console.log([r, g, b, a])
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
     colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
-    // console.log('%ccolorObject', 'color: #997fff;', colorObject)
+    // console.log('colorObject', colorObject)
     setFilter(layers, viewer)
   })
 
@@ -207,7 +209,7 @@ function rgba2hex(orig) {
 function numericEvent(numEl, colorObject, layers, viewer) {
   const intVal = parseInt(numEl.value)
 
-  // If they set it to something outside of 0-255, reset it
+  // If they set it to something outside 0-255, reset it
   if (intVal > 255) numEl.value = '255'
   if (intVal < 0) numEl.value = '0'
 
@@ -283,7 +285,7 @@ function isIntersect(table) {
 
 // The outline around the inputs for numbers - red for error, clear for default
 function setOutlineStyle(a, b, style, color) {
-// For numeric element pair
+  // For numeric element pair
   if (isRealValue(a)) {
     a.style.outlineStyle = style
     a.style.outlineColor = color
@@ -301,19 +303,6 @@ function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
     // indicate 0 and 0 not allowed
     setOutlineStyle(num1, num2, 'solid', 'red')
   } else {
-    const rgb = cpEl.style.backgroundColor // we get rgb back from CP
-    let rgba = rgb.replace('rgb', 'rgba') // we need rgba
-    rgba = rgba.replace(')', ', 255)') // give it default alpha
-
-    const colorObject = {
-      'color': rgba,
-      'low': parseInt(num1.value),
-      'high': parseInt(num2.value),
-      'checked': true,
-      'classid': idx // overloading 'classid'
-    }
-    colors.push(colorObject) // add color range to our list
-
     // Now replace + with - in UI
     const buttonId = `i${num1.id.replace('low', '')}` // borrowing element id
     const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
@@ -327,19 +316,15 @@ function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
     // add another empty row
     const table = tr.closest('table')
     table.appendChild(extraRow(uniq, colors, layers, viewer))
-
-    setFilter(layers, viewer) // reflect changes in viewer
   }
 }
 
+// sequence
 function seq(objArray) {
   let arr = objArray.map(a => a.classid)
   arr.sort()
-  // console.log('arr:', arr)
   let [min, max] = [Math.min(...arr), Math.max(...arr)]
-  let out = Array.from(Array(max - min), (v, i) => i + min).filter(i => !arr.includes(i))
-  // console.log('out:', out)
-  return out
+  return Array.from(Array(max - min), (v, i) => i + min).filter(i => !arr.includes(i))
 }
 
 // Extra row for adding color and range values
@@ -359,6 +344,7 @@ function extraRow(uniq, colors, layers, viewer) {
     'checked': true,
     'classid': idx // overloading 'classid'
   }
+  colors.push(colorObject)
 
   const chkEl = e('input', {
     'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
@@ -390,81 +376,64 @@ const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    const pixels = imgData.data
-
-    function inRange(value, _colors, colorArr) {
-      for (let k = 0; k < _colors.length; k++) {
-        if (value >= _colors[k].low && value <= _colors[k].high) {
-          return colorArr[k] // return color
-        }
-      }
-      return 0
-    }
-
-    function inClass(value, _classes, classArr) {
-      for (let l = 0; l < _classes.length; l++) {
-        if (value === _classes[l].classid) {
-          return classArr[l] // return color
-        }
-      }
-      return 0
-    }
-
-    // set pixels
-    function setPix(idx, model, prob) {
-      if (attenuateFlag) {
-        model[3] = prob // alpha = prob
-      }
-      pixels[idx] = model[0]
-      pixels[idx + 1] = model[1]
-      pixels[idx + 2] = model[2]
-      pixels[idx + 3] = model[3]
-    }
-
-    function f(arr) {
-      return arr.map(element => {
-        return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
-      });
-    }
-
+    const pxl = imgData.data
     const arr = layerColors.filter(x => x.checked === true)
-    const colorArr = f(arr)
+    const colorArr = arr.map(element => {
+      return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
+    })
+
+    const inRange = function(value, _colors, colorArr) {
+      for (let i = 0; i < _colors.length; i++) {
+        if (value >= _colors[i].low && value <= _colors[i].high) {
+          return colorArr[i] // return color
+        }
+      }
+      return [0, 0, 0, 0]
+    }
+
+    const inClass = function(value, _classes, classArr) {
+      for (let i = 0; i < _classes.length; i++) {
+        if (value === _classes[i].classid) {
+          return classArr[i] // return color
+        }
+      }
+      return [0, 0, 0, 0]
+    }
+
+    function setPix(fun, rsh) {
+      for (let i = 0; i < pxl.length; i += 4) {
+        if (pxl[i + 3] === 255) {
+          const r = pxl[i] // red channel = class
+          const g = pxl[i + 1] // green channel = probability
+          let rgba
+          if (renderType === 'byClass') {
+            rgba = fun(r, arr, colorArr)
+          }
+          else if (renderType === 'byProbability') {
+            rgba = fun(g, arr, colorArr)
+          } else {
+            rgba = rsh[g]
+          }
+          pxl[i] = rgba[0]
+          pxl[i + 1] = rgba[1]
+          pxl[i + 2] = rgba[2]
+          if (rgba[3] === 0) {
+            pxl[i + 3] = rgba[3]
+          } else {
+            pxl[i + 3] = attenuateFlag ? g : 255
+          }
+        } else {
+          pxl[i + 3] = 0 // No nuclear material
+        }
+      }
+    }
 
     if (renderType === 'byClass') {
-      for (let i = 0; i < pixels.length; i += 4) {
-        if (pixels[i + 3] === 255) {
-          const classId = pixels[i] // class
-          const prob = pixels[i + 1] // prob
-          let rgba = inClass(classId, arr, colorArr)
-          setPix(i, rgba, prob)
-        } else {
-          pixels[i + 3] = 0
-        }
-      }
+        setPix(inClass)
     }
 
     if (renderType === 'byProbability') {
-      for (let j = 0; j < pixels.length; j += 4) {
-        if (pixels[j + 3] === 255) {
-          const g = pixels[j + 1]
-          const rgba = inRange(g, arr, colorArr)
-          setPix(j, rgba, g)
-        } else {
-          // No nuclear material: set to transparent.
-          pixels[j + 3] = 0
-        }
-      }
-
-      // Temporarily shade it purple
-      // for (let j = 0; j < pixels.length; j += 4) {
-      //   if (pixels[j + 3] === 255) {
-      //     pixels[j] = 65
-      //     pixels[j + 1] = 1
-      //     pixels[j + 2] = 147
-      //   } else {
-      //     pixels[j + 3] = 0
-      //   }
-      // }
+      setPix(inRange)
     }
 
     if (renderType === 'byHeatmap') {
@@ -482,22 +451,10 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
         }
         resampledCmap[i] = cmap[position]
       }
-      const pxl = imgData.data
-      for (let i = 0; i < pxl.length; i += 4) {
-        if (pxl[i + 3] === 255) {
-          let v = (pxl[i + 1]) // green channel
-          const c = resampledCmap[v]
-          pxl[i] = c[0]
-          pxl[i + 1] = c[1]
-          pxl[i + 2] = c[2]
-          pxl[i + 3] = attenuateFlag ? v : 255
-        } else {
-          pxl[i + 3] = 0
-        }
-      }
+      setPix({}, resampledCmap)
     }
 
     context.putImageData(imgData, 0, 0)
     callback()
-  };
+  }
 }
