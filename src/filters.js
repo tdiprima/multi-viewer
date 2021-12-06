@@ -376,13 +376,94 @@ const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+    let imageData = imgData.data
+    for (let i = 0; i < imageData.length; i+= 4) {
+      if(imageData[i + 1] === 0) {
+        imageData[i + 3] = 0
+      }
+    }
+
+    // Create array that gives each pixel its own array
+    let data = imageData.reduce(
+      (pixel, key, index) =>
+        (index % 4 === 0
+          ? pixel.push([key])
+          : pixel[pixel.length - 1].push(key)) && pixel,
+      []
+    )
+
+    // Color the edge of the Polygon cyan
+    let n = 1 // nth channel
+    // let cyan = [0, 255, 255, 255]
+    for (let i = 0; i < data.length; i++) {
+      if (data[i][3] === 255) {
+        // If we have a color, but the pixel next to it is transparent, we have an edge pixel
+        try {
+          if (data[i][n] !== 0 && data[i + 1][3] === 0) {
+            data[i][0] = 0
+            data[i][1] = 0
+            data[i][2] = 255
+            data[i][3] = 255
+          }
+        } catch (e) {
+          data[i][3] = 0
+        }
+
+        try {
+          if (data[i][n] !== 0 && data[i - 1][3] === 0) {
+            data[i][0] = 0
+            data[i][1] = 0
+            data[i][2] = 255
+            data[i][3] = 255
+          }
+        } catch (e) {
+          data[i][3] = 0
+        }
+
+        try {
+          if (data[i][n] !== 0 && data[i - context.canvas.width][3] === 0) {
+            data[i][0] = 0
+            data[i][1] = 0
+            data[i][2] = 255
+            data[i][3] = 255
+          }
+        } catch (e) {
+          data[i][3] = 0
+        }
+
+        try {
+          if (data[i][n] !== 0 && data[i + context.canvas.width][3] === 0) {
+            data[i][0] = 0
+            data[i][1] = 0
+            data[i][2] = 255
+            data[i][3] = 255
+          }
+        } catch (e) {
+          data[i][3] = 0
+        }
+      } else {
+        data[i][3] = 0
+      }
+    }
+
+    // Change all green pixels in middle of polygon to transparent
+    data.forEach((px) => {
+      if (px[n] !== 0) {
+        px[0] = 0
+        px[1] = 0
+        px[2] = 0
+        px[3] = 0
+      }
+    })
+
+    /*
     const pxl = imgData.data
     const arr = layerColors.filter(x => x.checked === true)
     const colorArr = arr.map(element => {
       return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
     })
 
-    const inRange = function(value, _colors, colorArr) {
+    const inRange = function (value, _colors, colorArr) {
       for (let i = 0; i < _colors.length; i++) {
         if (value >= _colors[i].low && value <= _colors[i].high) {
           return colorArr[i] // return color
@@ -391,7 +472,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
       return [0, 0, 0, 0]
     }
 
-    const inClass = function(value, _classes, classArr) {
+    const inClass = function (value, _classes, classArr) {
       for (let i = 0; i < _classes.length; i++) {
         if (value === _classes[i].classid) {
           return classArr[i] // return color
@@ -408,8 +489,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
           let rgba
           if (renderType === 'byClass') {
             rgba = fun(r, arr, colorArr)
-          }
-          else if (renderType === 'byProbability') {
+          } else if (renderType === 'byProbability') {
             rgba = fun(g, arr, colorArr)
           } else {
             rgba = rsh[g]
@@ -429,7 +509,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     }
 
     if (renderType === 'byClass') {
-        setPix(inClass)
+      setPix(inClass)
     }
 
     if (renderType === 'byProbability') {
@@ -452,9 +532,12 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
         resampledCmap[i] = cmap[position]
       }
       setPix({}, resampledCmap)
-    }
+    }*/
 
-    context.putImageData(imgData, 0, 0)
+    let newImage = context.createImageData(context.canvas.width, context.canvas.height)
+    newImage.data.set(data.flat())
+    context.putImageData(newImage, 0, 0)
+    // context.putImageData(imgData, 0, 0)
     callback()
   }
 }
