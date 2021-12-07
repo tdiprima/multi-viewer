@@ -375,169 +375,159 @@ function extraRow(uniq, colors, layers, viewer) {
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let imageData = imgData.data
-    for (let i = 0; i < imageData.length; i+= 4) {
-      if(imageData[i + 1] === 0) {
-        imageData[i + 3] = 0
-      }
-    }
 
-    // Create array that gives each pixel its own array
-    let data = imageData.reduce(
-      (pixel, key, index) =>
-        (index % 4 === 0
-          ? pixel.push([key])
-          : pixel[pixel.length - 1].push(key)) && pixel,
-      []
-    )
-
-    // Color the edge of the Polygon cyan
-    let n = 1 // nth channel
-    // let cyan = [0, 255, 255, 255]
-    for (let i = 0; i < data.length; i++) {
-      if (data[i][3] === 255) {
-        // If we have a color, but the pixel next to it is transparent, we have an edge pixel
-        try {
-          if (data[i][n] !== 0 && data[i + 1][3] === 0) {
-            data[i][0] = 0
-            data[i][1] = 0
-            data[i][2] = 255
-            data[i][3] = 255
-          }
-        } catch (e) {
-          data[i][3] = 0
-        }
-
-        try {
-          if (data[i][n] !== 0 && data[i - 1][3] === 0) {
-            data[i][0] = 0
-            data[i][1] = 0
-            data[i][2] = 255
-            data[i][3] = 255
-          }
-        } catch (e) {
-          data[i][3] = 0
-        }
-
-        try {
-          if (data[i][n] !== 0 && data[i - context.canvas.width][3] === 0) {
-            data[i][0] = 0
-            data[i][1] = 0
-            data[i][2] = 255
-            data[i][3] = 255
-          }
-        } catch (e) {
-          data[i][3] = 0
-        }
-
-        try {
-          if (data[i][n] !== 0 && data[i + context.canvas.width][3] === 0) {
-            data[i][0] = 0
-            data[i][1] = 0
-            data[i][2] = 255
-            data[i][3] = 255
-          }
-        } catch (e) {
-          data[i][3] = 0
-        }
-      } else {
-        data[i][3] = 0
-      }
-    }
-
-    // Change all green pixels in middle of polygon to transparent
-    data.forEach((px) => {
-      if (px[n] !== 0) {
-        px[0] = 0
-        px[1] = 0
-        px[2] = 0
-        px[3] = 0
-      }
-    })
-
-    /*
-    const pxl = imgData.data
-    const arr = layerColors.filter(x => x.checked === true)
-    const colorArr = arr.map(element => {
-      return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
-    })
-
-    const inRange = function (value, _colors, colorArr) {
-      for (let i = 0; i < _colors.length; i++) {
-        if (value >= _colors[i].low && value <= _colors[i].high) {
-          return colorArr[i] // return color
+    if (outlineFlag) {
+      // Background should be completely transparent
+      // Turn off background [64, 0, 64]
+      for (let i = 0; i < imageData.length; i+= 4) {
+        if(imageData[i + 1] === 0) {
+          imageData[i + 3] = 0
         }
       }
-      return [0, 0, 0, 0]
-    }
 
-    const inClass = function (value, _classes, classArr) {
-      for (let i = 0; i < _classes.length; i++) {
-        if (value === _classes[i].classid) {
-          return classArr[i] // return color
-        }
-      }
-      return [0, 0, 0, 0]
-    }
+      // Create array that gives each pixel its own array
+      let data = imageData.reduce(
+        (pixel, key, index) =>
+          (index % 4 === 0
+            ? pixel.push([key])
+            : pixel[pixel.length - 1].push(key)) && pixel,
+        []
+      )
 
-    function setPix(fun, rsh) {
-      for (let i = 0; i < pxl.length; i += 4) {
-        if (pxl[i + 3] === 255) {
-          const r = pxl[i] // red channel = class
-          const g = pxl[i + 1] // green channel = probability
-          let rgba
-          if (renderType === 'byClass') {
-            rgba = fun(r, arr, colorArr)
-          } else if (renderType === 'byProbability') {
-            rgba = fun(g, arr, colorArr)
-          } else {
-            rgba = rsh[g]
+      // Color the edge of the Polygons blue
+      let n = 1 // nth channel
+      let blue = [0, 0, 255, 255]
+      for (let i = 0; i < data.length; i++) {
+        if (data[i][3] === 255) {
+          // If we have a color, but the pixel next to it is transparent, we have an edge pixel
+          try {
+            if (data[i][n] !== 0 && data[i + 1][3] === 0) {
+              data[i] = blue
+            }
+          } catch (e) {
+            // data[i][3] = 0
           }
-          pxl[i] = rgba[0]
-          pxl[i + 1] = rgba[1]
-          pxl[i + 2] = rgba[2]
-          if (rgba[3] === 0) {
-            pxl[i + 3] = rgba[3]
-          } else {
-            pxl[i + 3] = attenuateFlag ? g : 255
+
+          try {
+            if (data[i][n] !== 0 && data[i - 1][3] === 0) {
+              data[i] = blue
+            }
+          } catch (e) {
+            // data[i][3] = 0
+          }
+
+          try {
+            if (data[i][n] !== 0 && data[i - context.canvas.width][3] === 0) {
+              data[i] = blue
+            }
+          } catch (e) {
+            // data[i][3] = 0
+          }
+
+          try {
+            if (data[i][n] !== 0 && data[i + context.canvas.width][3] === 0) {
+              data[i] = blue
+            }
+          } catch (e) {
+            // data[i][3] = 0
           }
         } else {
-          pxl[i + 3] = 0 // No nuclear material
+          data[i][3] = 0
         }
+      }
+
+      // Change all green pixels in middle of polygon to transparent
+      data.forEach((px) => {
+        if (px[n] !== 0) {
+          px = [0, 0, 0, 0]
+        }
+      })
+
+      let newImage = context.createImageData(context.canvas.width, context.canvas.height)
+      newImage.data.set(data.flat())
+      imgData = newImage
+    } else {
+      const pxl = imageData
+      const arr = layerColors.filter(x => x.checked === true)
+      const colorArr = arr.map(element => {
+        return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
+      })
+
+      const inRange = function (value, _colors, colorArr) {
+        for (let i = 0; i < _colors.length; i++) {
+          if (value >= _colors[i].low && value <= _colors[i].high) {
+            return colorArr[i] // return color
+          }
+        }
+        return [0, 0, 0, 0]
+      }
+
+      const inClass = function (value, _classes, classArr) {
+        for (let i = 0; i < _classes.length; i++) {
+          if (value === _classes[i].classid) {
+            return classArr[i] // return color
+          }
+        }
+        return [0, 0, 0, 0]
+      }
+
+      function setPix(fun, rsh) {
+        for (let i = 0; i < pxl.length; i += 4) {
+          if (pxl[i + 3] === 255) {
+            const r = pxl[i] // red channel = class
+            const g = pxl[i + 1] // green channel = probability
+            let rgba
+            if (renderType === 'byClass') {
+              rgba = fun(r, arr, colorArr)
+            } else if (renderType === 'byProbability') {
+              rgba = fun(g, arr, colorArr)
+            } else {
+              rgba = rsh[g]
+            }
+            pxl[i] = rgba[0]
+            pxl[i + 1] = rgba[1]
+            pxl[i + 2] = rgba[2]
+            if (rgba[3] === 0) {
+              pxl[i + 3] = rgba[3]
+            } else {
+              pxl[i + 3] = attenuateFlag ? g : 255
+            }
+          } else {
+            pxl[i + 3] = 0 // No nuclear material
+          }
+        }
+      }
+
+      if (renderType === 'byClass') {
+        setPix(inClass)
+      }
+
+      if (renderType === 'byProbability') {
+        setPix(inRange)
+      }
+
+      if (renderType === 'byHeatmap') {
+        // blue to red osd-filter routine
+        const cmap = [[0, 0, 255], [1, 0, 254], [2, 0, 253], [3, 0, 252], [4, 0, 251], [5, 0, 250], [6, 0, 249], [7, 0, 248], [8, 0, 247], [9, 0, 246], [10, 0, 245], [11, 0, 244], [12, 0, 243], [13, 0, 242], [14, 0, 241], [15, 0, 240], [16, 0, 239], [17, 0, 238], [18, 0, 237], [19, 0, 236], [20, 0, 235], [21, 0, 234], [22, 0, 233], [23, 0, 232], [24, 0, 231], [25, 0, 230], [26, 0, 229], [27, 0, 228], [28, 0, 227], [29, 0, 226], [30, 0, 225], [31, 0, 224], [32, 0, 223], [33, 0, 222], [34, 0, 221], [35, 0, 220], [36, 0, 219], [37, 0, 218], [38, 0, 217], [39, 0, 216], [40, 0, 215], [41, 0, 214], [42, 0, 213], [43, 0, 212], [44, 0, 211], [45, 0, 210], [46, 0, 209], [47, 0, 208], [48, 0, 207], [49, 0, 206], [50, 0, 205], [51, 0, 204], [52, 0, 203], [53, 0, 202], [54, 0, 201], [55, 0, 200], [56, 0, 199], [57, 0, 198], [58, 0, 197], [59, 0, 196], [60, 0, 195], [61, 0, 194], [62, 0, 193], [63, 0, 192], [64, 0, 191], [65, 0, 190], [66, 0, 189], [67, 0, 188], [68, 0, 187], [69, 0, 186], [70, 0, 185], [71, 0, 184], [72, 0, 183], [73, 0, 182], [74, 0, 181], [75, 0, 180], [76, 0, 179], [77, 0, 178], [78, 0, 177], [79, 0, 176], [80, 0, 175], [81, 0, 174], [82, 0, 173], [83, 0, 172], [84, 0, 171], [85, 0, 170], [86, 0, 169], [87, 0, 168], [88, 0, 167], [89, 0, 166], [90, 0, 165], [91, 0, 164], [92, 0, 163], [93, 0, 162], [94, 0, 161], [95, 0, 160], [96, 0, 159], [97, 0, 158], [98, 0, 157], [99, 0, 156], [100, 0, 155], [101, 0, 154], [102, 0, 153], [103, 0, 152], [104, 0, 151], [105, 0, 150], [106, 0, 149], [107, 0, 148], [108, 0, 147], [109, 0, 146], [110, 0, 145], [111, 0, 144], [112, 0, 143], [113, 0, 142], [114, 0, 141], [115, 0, 140], [116, 0, 139], [117, 0, 138], [118, 0, 137], [119, 0, 136], [120, 0, 135], [121, 0, 134], [122, 0, 133], [123, 0, 132], [124, 0, 131], [125, 0, 130], [126, 0, 129], [127, 0, 128], [128, 0, 127], [129, 0, 126], [130, 0, 125], [131, 0, 124], [132, 0, 123], [133, 0, 122], [134, 0, 121], [135, 0, 120], [136, 0, 119], [137, 0, 118], [138, 0, 117], [139, 0, 116], [140, 0, 115], [141, 0, 114], [142, 0, 113], [143, 0, 112], [144, 0, 111], [145, 0, 110], [146, 0, 109], [147, 0, 108], [148, 0, 107], [149, 0, 106], [150, 0, 105], [151, 0, 104], [152, 0, 103], [153, 0, 102], [154, 0, 101], [155, 0, 100], [156, 0, 99], [157, 0, 98], [158, 0, 97], [159, 0, 96], [160, 0, 95], [161, 0, 94], [162, 0, 93], [163, 0, 92], [164, 0, 91], [165, 0, 90], [166, 0, 89], [167, 0, 88], [168, 0, 87], [169, 0, 86], [170, 0, 85], [171, 0, 84], [172, 0, 83], [173, 0, 82], [174, 0, 81], [175, 0, 80], [176, 0, 79], [177, 0, 78], [178, 0, 77], [179, 0, 76], [180, 0, 75], [181, 0, 74], [182, 0, 73], [183, 0, 72], [184, 0, 71], [185, 0, 70], [186, 0, 69], [187, 0, 68], [188, 0, 67], [189, 0, 66], [190, 0, 65], [191, 0, 64], [192, 0, 63], [193, 0, 62], [194, 0, 61], [195, 0, 60], [196, 0, 59], [197, 0, 58], [198, 0, 57], [199, 0, 56], [200, 0, 55], [201, 0, 54], [202, 0, 53], [203, 0, 52], [204, 0, 51], [205, 0, 50], [206, 0, 49], [207, 0, 48], [208, 0, 47], [209, 0, 46], [210, 0, 45], [211, 0, 44], [212, 0, 43], [213, 0, 42], [214, 0, 41], [215, 0, 40], [216, 0, 39], [217, 0, 38], [218, 0, 37], [219, 0, 36], [220, 0, 35], [221, 0, 34], [222, 0, 33], [223, 0, 32], [224, 0, 31], [225, 0, 30], [226, 0, 29], [227, 0, 28], [228, 0, 27], [229, 0, 26], [230, 0, 25], [231, 0, 24], [232, 0, 23], [233, 0, 22], [234, 0, 21], [235, 0, 20], [236, 0, 19], [237, 0, 18], [238, 0, 17], [239, 0, 16], [240, 0, 15], [241, 0, 14], [242, 0, 13], [243, 0, 12], [244, 0, 11], [245, 0, 10], [246, 0, 9], [247, 0, 8], [248, 0, 7], [249, 0, 6], [250, 0, 5], [251, 0, 4], [252, 0, 3], [253, 0, 2], [254, 0, 1], [255, 0, 0]]
+        const resampledCmap = cmap.slice(0)
+        const ctr = 128
+        const diff = 255 - ctr
+        for (let i = 0; i < 256; i++) {
+          let position = 0
+          if (i > ctr) {
+            position = Math.min((i - ctr) / diff * 128 + 128, 255) | 0
+          } else {
+            position = Math.max(0, i / (ctr / 128)) | 0
+          }
+          resampledCmap[i] = cmap[position]
+        }
+        setPix({}, resampledCmap)
       }
     }
 
-    if (renderType === 'byClass') {
-      setPix(inClass)
-    }
-
-    if (renderType === 'byProbability') {
-      setPix(inRange)
-    }
-
-    if (renderType === 'byHeatmap') {
-      // blue to red osd-filter routine
-      const cmap = [[0, 0, 255], [1, 0, 254], [2, 0, 253], [3, 0, 252], [4, 0, 251], [5, 0, 250], [6, 0, 249], [7, 0, 248], [8, 0, 247], [9, 0, 246], [10, 0, 245], [11, 0, 244], [12, 0, 243], [13, 0, 242], [14, 0, 241], [15, 0, 240], [16, 0, 239], [17, 0, 238], [18, 0, 237], [19, 0, 236], [20, 0, 235], [21, 0, 234], [22, 0, 233], [23, 0, 232], [24, 0, 231], [25, 0, 230], [26, 0, 229], [27, 0, 228], [28, 0, 227], [29, 0, 226], [30, 0, 225], [31, 0, 224], [32, 0, 223], [33, 0, 222], [34, 0, 221], [35, 0, 220], [36, 0, 219], [37, 0, 218], [38, 0, 217], [39, 0, 216], [40, 0, 215], [41, 0, 214], [42, 0, 213], [43, 0, 212], [44, 0, 211], [45, 0, 210], [46, 0, 209], [47, 0, 208], [48, 0, 207], [49, 0, 206], [50, 0, 205], [51, 0, 204], [52, 0, 203], [53, 0, 202], [54, 0, 201], [55, 0, 200], [56, 0, 199], [57, 0, 198], [58, 0, 197], [59, 0, 196], [60, 0, 195], [61, 0, 194], [62, 0, 193], [63, 0, 192], [64, 0, 191], [65, 0, 190], [66, 0, 189], [67, 0, 188], [68, 0, 187], [69, 0, 186], [70, 0, 185], [71, 0, 184], [72, 0, 183], [73, 0, 182], [74, 0, 181], [75, 0, 180], [76, 0, 179], [77, 0, 178], [78, 0, 177], [79, 0, 176], [80, 0, 175], [81, 0, 174], [82, 0, 173], [83, 0, 172], [84, 0, 171], [85, 0, 170], [86, 0, 169], [87, 0, 168], [88, 0, 167], [89, 0, 166], [90, 0, 165], [91, 0, 164], [92, 0, 163], [93, 0, 162], [94, 0, 161], [95, 0, 160], [96, 0, 159], [97, 0, 158], [98, 0, 157], [99, 0, 156], [100, 0, 155], [101, 0, 154], [102, 0, 153], [103, 0, 152], [104, 0, 151], [105, 0, 150], [106, 0, 149], [107, 0, 148], [108, 0, 147], [109, 0, 146], [110, 0, 145], [111, 0, 144], [112, 0, 143], [113, 0, 142], [114, 0, 141], [115, 0, 140], [116, 0, 139], [117, 0, 138], [118, 0, 137], [119, 0, 136], [120, 0, 135], [121, 0, 134], [122, 0, 133], [123, 0, 132], [124, 0, 131], [125, 0, 130], [126, 0, 129], [127, 0, 128], [128, 0, 127], [129, 0, 126], [130, 0, 125], [131, 0, 124], [132, 0, 123], [133, 0, 122], [134, 0, 121], [135, 0, 120], [136, 0, 119], [137, 0, 118], [138, 0, 117], [139, 0, 116], [140, 0, 115], [141, 0, 114], [142, 0, 113], [143, 0, 112], [144, 0, 111], [145, 0, 110], [146, 0, 109], [147, 0, 108], [148, 0, 107], [149, 0, 106], [150, 0, 105], [151, 0, 104], [152, 0, 103], [153, 0, 102], [154, 0, 101], [155, 0, 100], [156, 0, 99], [157, 0, 98], [158, 0, 97], [159, 0, 96], [160, 0, 95], [161, 0, 94], [162, 0, 93], [163, 0, 92], [164, 0, 91], [165, 0, 90], [166, 0, 89], [167, 0, 88], [168, 0, 87], [169, 0, 86], [170, 0, 85], [171, 0, 84], [172, 0, 83], [173, 0, 82], [174, 0, 81], [175, 0, 80], [176, 0, 79], [177, 0, 78], [178, 0, 77], [179, 0, 76], [180, 0, 75], [181, 0, 74], [182, 0, 73], [183, 0, 72], [184, 0, 71], [185, 0, 70], [186, 0, 69], [187, 0, 68], [188, 0, 67], [189, 0, 66], [190, 0, 65], [191, 0, 64], [192, 0, 63], [193, 0, 62], [194, 0, 61], [195, 0, 60], [196, 0, 59], [197, 0, 58], [198, 0, 57], [199, 0, 56], [200, 0, 55], [201, 0, 54], [202, 0, 53], [203, 0, 52], [204, 0, 51], [205, 0, 50], [206, 0, 49], [207, 0, 48], [208, 0, 47], [209, 0, 46], [210, 0, 45], [211, 0, 44], [212, 0, 43], [213, 0, 42], [214, 0, 41], [215, 0, 40], [216, 0, 39], [217, 0, 38], [218, 0, 37], [219, 0, 36], [220, 0, 35], [221, 0, 34], [222, 0, 33], [223, 0, 32], [224, 0, 31], [225, 0, 30], [226, 0, 29], [227, 0, 28], [228, 0, 27], [229, 0, 26], [230, 0, 25], [231, 0, 24], [232, 0, 23], [233, 0, 22], [234, 0, 21], [235, 0, 20], [236, 0, 19], [237, 0, 18], [238, 0, 17], [239, 0, 16], [240, 0, 15], [241, 0, 14], [242, 0, 13], [243, 0, 12], [244, 0, 11], [245, 0, 10], [246, 0, 9], [247, 0, 8], [248, 0, 7], [249, 0, 6], [250, 0, 5], [251, 0, 4], [252, 0, 3], [253, 0, 2], [254, 0, 1], [255, 0, 0]]
-      const resampledCmap = cmap.slice(0)
-      const ctr = 128
-      const diff = 255 - ctr
-      for (let i = 0; i < 256; i++) {
-        let position = 0
-        if (i > ctr) {
-          position = Math.min((i - ctr) / diff * 128 + 128, 255) | 0
-        } else {
-          position = Math.max(0, i / (ctr / 128)) | 0
-        }
-        resampledCmap[i] = cmap[position]
-      }
-      setPix({}, resampledCmap)
-    }*/
-
-    let newImage = context.createImageData(context.canvas.width, context.canvas.height)
-    newImage.data.set(data.flat())
-    context.putImageData(newImage, 0, 0)
-    // context.putImageData(imgData, 0, 0)
+    context.putImageData(imgData, 0, 0)
     callback()
   }
 }
