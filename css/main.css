@@ -133,8 +133,8 @@ a:link {
   border-radius: 5px; /*added*/
   padding: 4px 12px;
   cursor: pointer;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 18px;
   text-align: center;
   vertical-align: middle;
   color: #333;
@@ -146,8 +146,8 @@ a:link {
   border-radius: 5px; /*added*/
   padding: 4px 12px;
   cursor: pointer;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 18px;
   text-align: center;
   vertical-align: middle;
   color: #74f272;
@@ -170,9 +170,9 @@ a:link {
   border-radius: 7px !important; /*inc to 7*/
   /*border-radius: 5px !important;*/
   width: 98px;
-  padding: 14px 16px !important;
+  padding: 12px 14px !important;
   cursor: move !important;
-  font-size: 17px !important;
+  font-size: 14px !important;
 
   /* ELLIPSES FOR LONG NAMES*/
   overflow: hidden;
