@@ -85,13 +85,6 @@ a:link {
   color: #fff !important;
 }
 
-/* OVERRIDE WICKET NAVBAR */
-.navbar a:hover, .mag:hover .dropbtn {
-  background-color: #ccc !important;
-  color: #333 !important;
-  /* background-color: #74f272 !important; */
-}
-
 /* POINTER */
 .pointer {
   cursor: pointer;
