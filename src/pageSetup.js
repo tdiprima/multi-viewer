@@ -32,7 +32,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         layC[i].color = 'rgba(0, 255, 255, 255)'
       }
     }
-    console.log('images', images)
+    // console.log('images', images)
   }
 
   // testing1()
@@ -133,7 +133,6 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 <button id="btnShare${idx}" class="btn" title="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
 <button id="btnCam${idx}" class="btn" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
 <button id="btnBlender${idx}" class="btn" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
-<button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 <div class="mag" style="display: inline">
   <button class="btn">
   <i class="fas fa-search"></i>
@@ -148,6 +147,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     <a href="#" data-value="1.0" id="40">40x</a>
   </div>
 </div>
+<button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 </div>`
 
             // END
