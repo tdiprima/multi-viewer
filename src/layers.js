@@ -164,6 +164,17 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
+    // Toggle fill polygon
+    let emptyCircle = "far"
+    let filledCircle = "fas"
+    let fillPoly = e('i', {'id': makeId(5, 'fillPoly'), 'class': `${filledCircle} fa-circle hover-light`, 'title': 'fill unfill'});
+    tr.appendChild(e('td', {}, [fillPoly]));
+    fillPoly.addEventListener('click', () => {
+      outlineFlag = !outlineFlag
+      toggleButton(fillPoly, filledCircle, emptyCircle)
+      setFilter(allLayers, viewer)
+    })
+
   } else {
     tr.appendChild(e('td'))
   }
