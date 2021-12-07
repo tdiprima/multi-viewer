@@ -407,7 +407,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
               data[i] = blue
             }
           } catch (e) {
-            // data[i][3] = 0
           }
 
           try {
@@ -415,7 +414,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
               data[i] = blue
             }
           } catch (e) {
-            // data[i][3] = 0
           }
 
           try {
@@ -423,7 +421,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
               data[i] = blue
             }
           } catch (e) {
-            // data[i][3] = 0
           }
 
           try {
@@ -431,7 +428,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
               data[i] = blue
             }
           } catch (e) {
-            // data[i][3] = 0
           }
         } else {
           data[i][3] = 0
