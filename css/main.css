@@ -15,6 +15,14 @@ body {
   font-family: sans-serif;
 }
 
+table {
+  table-layout: fixed;
+}
+
+td {
+  word-wrap: break-word
+}
+
 ul {
   list-style-type: none;
 }
