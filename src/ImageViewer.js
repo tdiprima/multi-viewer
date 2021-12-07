@@ -24,7 +24,9 @@ class ImageViewer {
       blendTime: 0,
       prefixUrl: config.osdImages,
       tileSources: ts,
-      maxZoomPixelRatio: 1
+      maxZoomPixelRatio: 1,
+      // showNavigator:  true,
+      // navigatorPosition:   "BOTTOM_RIGHT",
     })
 
     const vpt = viewer.viewport
