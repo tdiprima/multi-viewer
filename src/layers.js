@@ -121,7 +121,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light', 'title': 'toggle: color-attenuation by probability'})
     tr.appendChild(e('td', {}, [attenuation]))
     attenuation.addEventListener('click', () => {
-      attenuateFlag = !attenuateFlag;
+      attenuateFlag = !attenuateFlag
+      outlineFlag = false
       setFilter(allLayers, viewer)
     })
 
@@ -134,12 +135,12 @@ function addRow(table, currentLayer, allLayers, viewer) {
         renderType = 'byProbability'
         document.getElementById(`divA${pi}`).style.display = 'none'
         document.getElementById(`divB${pi}`).style.display = 'block'
-
       } else {
         renderType = 'byClass'
         document.getElementById(`divA${pi}`).style.display = 'block'
         document.getElementById(`divB${pi}`).style.display = 'none'
       }
+      outlineFlag = false
       toggleButton(probability, 'fa-shapes', 'fa-dice')
       setFilter(allLayers, viewer)
     })
@@ -160,6 +161,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
         heatmapFlag = true
         renderType = 'byHeatmap'
       }
+      outlineFlag = false
 
       setFilter(allLayers, viewer)
     })
