@@ -149,8 +149,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let heatmap = e('i', {'id': makeId(5, 'prob'), 'class': 'far fa-map hover-light', 'title': 'blue-red heatmap'})
     tr.appendChild(e('td', {}, [heatmap]))
     heatmap.addEventListener('click', () => {
-      if (heatmapFlag) {
-        heatmapFlag = false
+      if (renderType === 'byHeatmap') {
         if (probability.classList.contains('fa-shapes')) {
           renderType = 'byClass'
         }
@@ -158,7 +157,6 @@ function addRow(table, currentLayer, allLayers, viewer) {
           renderType = 'byProbability'
         }
       } else {
-        heatmapFlag = true
         renderType = 'byHeatmap'
       }
       outlineFlag = false
