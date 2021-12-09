@@ -13,6 +13,14 @@
 
 body {
   font-family: sans-serif;
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* DARK MODE */
+.dark-mode {
+  background-color: #000 !important;
+  color: #fff !important;
 }
 
 table {
@@ -77,12 +85,6 @@ a:link {
   z-index: 30;
   display: block;
   overflow: hidden;
-}
-
-/* DARK MODE */
-.dark-mode {
-  background-color: #000 !important;
-  color: #fff !important;
 }
 
 /* POINTER */
