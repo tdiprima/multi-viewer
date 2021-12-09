@@ -436,6 +436,8 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
       // Change all green pixels in middle of polygon to transparent
       data.forEach((px) => {
         if (px[n] > 0) {
+          // Set each pixel!
+          // It is not enough to set px=[0,0,0,0]
           px[0] = 0
           px[1] = 0
           px[2] = 0
