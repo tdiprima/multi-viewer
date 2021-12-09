@@ -464,7 +464,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
         }
       })
 
-
     } else {
       const arr = layerColors.filter(x => x.checked === true)
       const colorArr = arr.map(element => {

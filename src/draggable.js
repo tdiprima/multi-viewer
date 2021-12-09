@@ -8,7 +8,7 @@
  * filtersXXXHeader
  * filtersXXXBody
  *
- * @param id: id prefix to be used in the created elements
+ * @param m_id: id prefix to be used in the created elements
  * @param title: header title
  * @param left: location
  * @param top: location
@@ -31,6 +31,7 @@ function createDraggableDiv (m_id, title, left, top, viz = false) {
   myDiv.appendChild(myHeader)
 
   const body = e('div', { id: `${m_id}Body` })
+  body.style.color = "#000"
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
