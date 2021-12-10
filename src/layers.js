@@ -55,7 +55,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   let feat = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
     'class': 'dragIt',
-    'display': 'block',
+    'style': 'display: block',
     'draggable': 'true',
     'data-tooltip': name
   })
