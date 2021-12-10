@@ -38,6 +38,9 @@ function getViewerObject(element) {
   return retVal
 }
 
+/**
+ * One row per layer
+ */
 function addRow(table, currentLayer, allLayers, viewer) {
   const layerNum = currentLayer.layerNum
 
@@ -58,6 +61,9 @@ function addRow(table, currentLayer, allLayers, viewer) {
   })
   feat.innerHTML = name
 
+  /**
+   * One column per icon
+   */
   tr.appendChild(e('td', {}, [feat]))
 
   // eyeball visibility toggle
