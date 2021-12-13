@@ -156,7 +156,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
           // CREATE VIEWER
           htm += `<table><tr><td><div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;"></div>
-</td><td style="vertical-align: top;"><span id="layers_and_colors${idx}"></span></td>
+</td><td style="vertical-align: top;"><div id="layers_and_colors${idx}"></div></td>
 </tr></table>`
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV
