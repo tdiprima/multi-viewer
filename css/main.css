@@ -39,6 +39,8 @@ a:link {
   text-decoration: none;
 }
 
+.b-controls { float:left; display:inline; padding: 5px; }
+
 /* "QUAD" */
 .divSquare {
   float: left;

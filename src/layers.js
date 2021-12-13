@@ -50,7 +50,12 @@ function getViewerObject(element) {
  * One row per layer
  */
 function addRow(table, currentLayer, allLayers, viewer) {
+//function addRow(m_div, currentLayer, allLayers, viewer) {
   const layerNum = currentLayer.layerNum
+  //'class': 'b-controls'
+  //let childDiv = e('div', {'style': 'display: inline-block'}, [])
+  //let childDiv = e('div')
+  //m_div.appendChild(childDiv)
 
   let tr = e('tr')
   table.appendChild(tr)
@@ -62,8 +67,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
   // Feature (draggable)
   let feat = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
-    'class': 'dragIt',
-    'style': 'display: block',
+    'class': 'dragIt b-controls',
+    'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
   })
@@ -73,11 +78,13 @@ function addRow(table, currentLayer, allLayers, viewer) {
    * One column per icon
    */
   tr.appendChild(e('td', {}, [feat]))
+  //childDiv.appendChild(feat)
 
   // eyeball visibility toggle
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
-  let faEye = e('i', {'id': makeId(5, 'eye'), 'class': `${cssClass} hover-light`, 'title': 'toggle visibility'})
+  let faEye = e('i', {'id': makeId(5, 'eye'), 'class': `${cssClass} hover-light b-controls`, 'title': 'toggle visibility'})
   tr.appendChild(e('td', {}, [faEye]))
+  //childDiv.appendChild(faEye)
 
   // transparency slider
   let faAdjust = document.createElement('i')
@@ -85,7 +92,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.classList.add('fa-adjust')
   faAdjust.classList.add('hover-light')
   faAdjust.style.cursor = 'pointer'
-  let div = e('div', {class: 'showDiv', 'title': 'transparency slider'}, [faAdjust])
+  let div = e('div', {class: 'showDiv b-controls', 'title': 'transparency slider'}, [faAdjust])
 
   let range = e('input', {
     type: 'range',
@@ -118,13 +125,20 @@ function addRow(table, currentLayer, allLayers, viewer) {
     eyeball(faEye, range, layerNum, viewer)
   })
 
-  div.appendChild(e('div', {class: 'showHover'}, [range]))
+  div.appendChild(e('div', {class: 'showHover b-controls'}, [range]))
   tr.appendChild(e('td', {}, [div]))
+  //childDiv.appendChild(div)
 
   if (layerNum > 0) {
     // color palette
-    let palette = e('i', {'id': makeId(5, 'palette'), 'class': 'fas fa-palette pointer hover-light', 'title': 'color palette'})
+    let palette = e('i', {
+      'id': makeId(5, 'palette'),
+      'class': 'fas fa-palette hover-light b-controls',
+      'title': 'color palette'
+    })
     tr.appendChild(e('td', {}, [palette]))
+    //childDiv.appendChild(palette)
+
     // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
     let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme, allLayers, viewer)
     palette.addEventListener('click', () => {
@@ -132,8 +146,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // color-attenuation by probability
-    let attenuation = e('i', {'id': makeId(5, 'atten'), 'class': 'fas fa-broadcast-tower hover-light', 'title': 'toggle: color-attenuation by probability'})
+    let attenuation = e('i', {
+      'id': makeId(5, 'atten'),
+      'class': 'fas fa-broadcast-tower hover-light b-controls',
+      'title': 'toggle: color-attenuation by probability'
+    })
     tr.appendChild(e('td', {}, [attenuation]))
+    //childDiv.appendChild(attenuation)
+
     attenuation.addEventListener('click', () => {
       attenuateFlag = !attenuateFlag
       outlineFlag = false
@@ -141,8 +161,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // probability off/on
-    let probability = e('i', {'id': makeId(5, 'prob'), 'class': 'fas fa-shapes hover-light', 'title': 'toggle: class / probability'})
+    let probability = e('i', {
+      'id': makeId(5, 'prob'),
+      'class': 'fas fa-shapes hover-light b-controls',
+      'title': 'toggle: class / probability'
+    })
     tr.appendChild(e('td', {}, [probability]))
+    //childDiv.appendChild(probability)
+
     probability.addEventListener('click', () => {
       let pi = colorsUI.id.replace('filters', '')
       if (renderType === 'byClass') {
@@ -160,8 +186,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // heatmap off/on
-    let heatmap = e('i', {'id': makeId(5, 'prob'), 'class': 'far fa-map hover-light', 'title': 'blue-red heatmap'})
+    let heatmap = e('i', {
+      'id': makeId(5, 'prob'),
+      'class': 'far fa-map hover-light b-controls',
+      'title': 'blue-red heatmap'
+    })
     tr.appendChild(e('td', {}, [heatmap]))
+    //childDiv.appendChild(heatmap)
+
     heatmap.addEventListener('click', () => {
       if (renderType === 'byHeatmap') {
         if (probability.classList.contains('fa-shapes')) {
@@ -181,8 +213,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // Toggle fill polygon
     let emptyCircle = "far"
     let filledCircle = "fas"
-    let fillPoly = e('i', {'id': makeId(5, 'fillPoly'), 'class': `${filledCircle} fa-circle hover-light`, 'title': 'fill unfill'});
-    tr.appendChild(e('td', {}, [fillPoly]));
+    let fillPoly = e('i', {
+      'id': makeId(5, 'fillPoly'),
+      'class': `${filledCircle} fa-circle hover-light b-controls`,
+      'title': 'fill unfill'
+    });
+    tr.appendChild(e('td', {}, [fillPoly]))
+    //childDiv.appendChild(fillPoly)
+
     fillPoly.addEventListener('click', () => {
       outlineFlag = !outlineFlag
       toggleButton(fillPoly, filledCircle, emptyCircle)
@@ -199,6 +237,7 @@ function createLayerWidget(div, layers, viewer) {
   div.appendChild(table)
   layers.forEach(layer => {
     addRow(table, layer, layers, viewer)
+    //addRow(div, layer, layers, viewer)
   })
 }
 
