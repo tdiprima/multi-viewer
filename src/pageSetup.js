@@ -12,6 +12,10 @@
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
 
+  // numViewers = 2
+  // rows = 1
+  // columns = 2
+
   function testing1() {
     // testing 1 image
     numViewers = 1
@@ -34,7 +38,6 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     }
     // console.log('images', images)
   }
-
   // testing1()
 
   // When the 'images' parameter becomes an array with null elements,
@@ -156,7 +159,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
           // CREATE VIEWER
           htm += `<table><tr><td><div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;"></div>
-</td><td style="vertical-align: top;"><div id="layers_and_colors${idx}"></div></td>
+</td><td id="layers_and_colors${idx}" style="vertical-align: top;"></td>
 </tr></table>`
 
           // ADD VIEWER & WIDGETS TO CONTAINING DIV

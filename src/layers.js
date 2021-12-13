@@ -253,11 +253,11 @@ function handleDragLayers(layers, viewer) {
       let target = evt.target // canvas upper-canvas
       let targetDiv = target.closest('.viewer') // where they dropped the feature
       if (!targetDiv) return false;
-
       // Find matching layers_and_colors div
-      let layersColumn = targetDiv.parentElement.nextSibling.firstChild
+      const td1 = targetDiv.parentElement
+      const td2 = td1.nextSibling
       // Find the corresponding table (we will add this feature here)
-      let myTable = layersColumn.firstChild
+      let myTable = td2.firstChild
 
       let movedElemId = evt.dataTransfer.getData('text')
       let movedElem = document.getElementById(movedElemId)
