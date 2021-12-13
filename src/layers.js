@@ -14,14 +14,22 @@ let layers = (divEl, images, viewer) => {
   handleDragLayers(images, viewer)
 }
 
-function getSourceViewer(target) {
-  // Go find the source viewer
-  let layers_and_colors = target.parentElement.parentElement.parentElement.parentElement
+/**
+ * Locate the source viewer
+ */
+function getSourceViewer(focusButton) {
+  // Find the layers_and_colors div close to where the user dropped the feature:
+  let layers_and_colors = focusButton.parentElement.parentElement.parentElement.parentElement
+  // Get the table row containing the viewer
   let tr = layers_and_colors.parentElement.parentElement
+  // Finally, get the source viewer's div
   let sourceViewerDiv = tr.firstElementChild.firstElementChild
   return getViewerObject(sourceViewerDiv)
 }
 
+/**
+ * Given the div containing the viewer, get the corresponding OpenSeadragonViewer object
+ */
 function getViewerObject(element) {
   let retVal
   try {
@@ -33,7 +41,7 @@ function getViewerObject(element) {
       }
     }
   } catch (e) {
-    console.error(`%cgetViewerObject: ${e.message}`, 'font-size: larger;')
+    console.error(e.message)
   }
   return retVal
 }
@@ -220,7 +228,7 @@ function handleDragLayers(layers, viewer) {
   })
 
   function handleDragStart(evt) {
-    dragSrcEl = this // The draggable feature
+    dragSrcEl = this // The draggable feature (button element)
     this.style.opacity = '0.4'
     sourceViewer = getSourceViewer(evt.target)
     evt.dataTransfer.effectAllowed = 'move'
@@ -239,13 +247,16 @@ function handleDragLayers(layers, viewer) {
 
     if (evt.preventDefault) evt.preventDefault()
 
+    // Make sure user didn't drop the button on its own viewer div
     if (dragSrcEl !== this) {
       // target
-      let target = evt.target // fabric upper-canvas
-      let targetDiv = target.closest('.viewer') // returns the real target
+      let target = evt.target // canvas upper-canvas
+      let targetDiv = target.closest('.viewer') // where they dropped the feature
       if (!targetDiv) return false;
 
+      // Find matching layers_and_colors div
       let layersColumn = targetDiv.parentElement.nextSibling.firstChild
+      // Find the corresponding table (we will add this feature here)
       let myTable = layersColumn.firstChild
 
       let movedElemId = evt.dataTransfer.getData('text')
@@ -256,7 +267,7 @@ function handleDragLayers(layers, viewer) {
       let foundMatchingSlide = false
       for (let row of myTable.rows) {
         let lay = row.cells[0].firstChild
-        layNum = lay.id[0] // 1st char is array index)
+        layNum = lay.id[0] // 1st char is array index
         let eye = row.cells[1].children[0]
         if (lay.innerHTML === name) {
           foundMatchingSlide = true
@@ -272,18 +283,17 @@ function handleDragLayers(layers, viewer) {
 
       let targetViewer = getViewerObject(targetDiv)
       if (foundMatchingSlide) {
-        console.log('%cFound matching slide', 'color: lime;')
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1) // show
           // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
         } catch (e) {
-          console.log('It may get here if the handler executes twice on one drop:')
-          console.log(`%c${e.message}`, 'color: #ff6a5a;')
+          console.warn('It may get here if the handler executes twice on one drop:')
+          console.warn(e.message)
         }
       } else {
-        console.log('%cDid not find matching slide', 'color: deeppink;')
+        console.error('Did not find matching slide')
         const location = sourceViewer.tileSources[layNum].tileSource
-        console.log('%csrc img', 'color: #ccff00;', location)
+        console.error('src img', location)
         const newLayNum = layers.length
         // New draggable feature
         let feat = e('span', {
