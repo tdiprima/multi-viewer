@@ -72,7 +72,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         e('div', {'style': 'flex: 1; text-align: right;'}, [name])
       ])
 
-      let referenceNode = document.querySelector('#contentDiv')
+      let referenceNode = document.querySelector(`#${divId}`)
       referenceNode.before(top)
 
       btnDark.addEventListener('click', () => {
@@ -82,7 +82,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
       // CREATE TABLE FOR VIEWERS
       const mainDiv = document.getElementById(divId)
-      const table = e('table', {id: 'myTable'})
+      const table = e('table', {'id': 'myTable'})
       mainDiv.appendChild(table) // TABLE ADDED TO PAGE
 
       // CREATE ROWS & COLUMNS

@@ -51,6 +51,7 @@ function getViewerObject(element) {
  */
 function addRow(table, currentLayer, allLayers, viewer) {
 //function addRow(m_div, currentLayer, allLayers, viewer) {
+  // todo: swap
   const layerNum = currentLayer.layerNum
   //'class': 'b-controls'
   //let childDiv = e('div', {'style': 'display: inline-block'}, [])
@@ -227,12 +228,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
-  } else {
+  }
+  else {
     tr.appendChild(e('td'))
   }
 }
 
 function createLayerWidget(div, layers, viewer) {
+  // todo: swap
   let table = e('table')
   div.appendChild(table)
   layers.forEach(layer => {
