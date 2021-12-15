@@ -33,9 +33,11 @@ const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
 
   let divA = e('div', {'id': `divA${uniqueId}`})
   let divB = e('div', {'id': `divB${uniqueId}`})
+  let divC = e('div', {'id': `divC${uniqueId}`, 'style': 'background: -webkit-linear-gradient(#FF0000, #0000FF);'})
+  divC.innerHTML = 'Red to blue heatmap'
 
   // <select>
-  let selectList = createDropdown(uniqueId, divA, divB, viewerLayers, viewer)
+  let selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
   widgetBody.appendChild(selectList)
 
   // By class
@@ -48,6 +50,10 @@ const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
   widgetBody.appendChild(divB)
   createUI(2, uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer)
 
+  // By heatmap
+  divC.style.display = (renderType === 'byHeatmap') ? 'block' : 'none'
+  widgetBody.appendChild(divC)
+
   return div
 }
 
@@ -59,7 +65,7 @@ function checkboxHandler(element, arr, l, v) {
   })
 }
 
-function createDropdown(uniqueId, divA, divB, allLayers, viewer) {
+function createDropdown(uniqueId, divArr, allLayers, viewer) {
   let myDiv = e('div', {'id': `myDiv${uniqueId}`, 'style': 'display: block;'})
   myDiv.innerHTML = 'Color by:&nbsp;'
   // Array of options to be added
@@ -73,9 +79,6 @@ function createDropdown(uniqueId, divA, divB, allLayers, viewer) {
     const element = document.createElement('option')
     element.setAttribute('value', choix[i])
     element.text = option
-    if (choix[i] === renderType) {
-      element.selected // todo: fix
-    }
     myList.appendChild(element)
   });
 
@@ -84,14 +87,20 @@ function createDropdown(uniqueId, divA, divB, allLayers, viewer) {
     renderType = myList.options[myList.selectedIndex].value
     // no outline for you
     outlineFlag = false // <-- for now todo
+
+    // shut all off
+    divArr.forEach(div => {
+      div.style.display = 'none'
+    })
+
+    // turn one on
     if (renderType === 'byClass') {
-      divA.style.display = 'block'
-      divB.style.display = 'none'
+      divArr[0].style.display = 'block'
     } else if (renderType === 'byProbability') {
-      divA.style.display = 'none'
-      divB.style.display = 'block'
+      divArr[1].style.display = 'block'
     } else {
-      // todo: byHeatmap
+      // byHeatmap
+      divArr[2].style.display = 'block'
     }
     // repaint the screen
     setFilter(allLayers, viewer)
