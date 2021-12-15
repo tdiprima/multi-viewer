@@ -51,24 +51,27 @@ function getViewerObject(element) {
  */
 function addRow(table, currentLayer, allLayers, viewer) {
 //function addRow(m_div, currentLayer, allLayers, viewer) {
-  // todo: swap
-  const layerNum = currentLayer.layerNum
+  // todo: swap div & tr, and function signature
   //'class': 'b-controls'
   //let childDiv = e('div', {'style': 'display: inline-block'}, [])
   //let childDiv = e('div')
   //m_div.appendChild(childDiv)
-
   let tr = e('tr')
   table.appendChild(tr)
 
+  const layerNum = currentLayer.layerNum
   // Preferred Label
   const sections = (currentLayer.location).split('/')
   const name = sections[sections.length - 2] // filename
 
+  // todo: right now, using table, so not using this class yet
+  // let myClass = 'b-controls'
+  let myClass = ''
+
   // Feature (draggable)
   let feat = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
-    'class': 'dragIt b-controls',
+    'class': 'dragIt ${myClass}',
     'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
@@ -83,7 +86,11 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
   // eyeball visibility toggle
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
-  let faEye = e('i', {'id': makeId(5, 'eye'), 'class': `${cssClass} hover-light b-controls`, 'title': 'toggle visibility'})
+  let faEye = e('i', {
+    'id': makeId(5, 'eye'),
+    'class': `${cssClass} hover-light ${myClass}`,
+    'title': 'toggle visibility'
+  })
   tr.appendChild(e('td', {}, [faEye]))
   //childDiv.appendChild(faEye)
 
@@ -93,7 +100,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.classList.add('fa-adjust')
   faAdjust.classList.add('hover-light')
   faAdjust.style.cursor = 'pointer'
-  let div = e('div', {class: 'showDiv b-controls', 'title': 'transparency slider'}, [faAdjust])
+  let div = e('div', {class: 'showDiv ${myClass}', 'title': 'transparency slider'}, [faAdjust])
 
   let range = e('input', {
     type: 'range',
@@ -126,7 +133,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     eyeball(faEye, range, layerNum, viewer)
   })
 
-  div.appendChild(e('div', {class: 'showHover b-controls'}, [range]))
+  div.appendChild(e('div', {class: 'showHover ${myClass}'}, [range]))
   tr.appendChild(e('td', {}, [div]))
   //childDiv.appendChild(div)
 
@@ -134,7 +141,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color palette
     let palette = e('i', {
       'id': makeId(5, 'palette'),
-      'class': 'fas fa-palette pointer hover-light b-controls',
+      'class': 'fas fa-palette pointer hover-light ${myClass}',
       'title': 'color palette'
     })
     tr.appendChild(e('td', {}, [palette]))
@@ -149,7 +156,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color-attenuation by probability
     let attenuation = e('i', {
       'id': makeId(5, 'atten'),
-      'class': 'fas fa-broadcast-tower hover-light b-controls',
+      'class': 'fas fa-broadcast-tower hover-light ${myClass}',
       'title': 'toggle: color-attenuation by probability'
     })
     tr.appendChild(e('td', {}, [attenuation]))
@@ -164,7 +171,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // probability off/on
     let probability = e('i', {
       'id': makeId(5, 'prob'),
-      'class': 'fas fa-shapes hover-light b-controls',
+      'class': 'fas fa-shapes hover-light ${myClass}',
       'title': 'toggle: class / probability'
     })
     tr.appendChild(e('td', {}, [probability]))
@@ -189,7 +196,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // heatmap off/on
     let heatmap = e('i', {
       'id': makeId(5, 'prob'),
-      'class': 'far fa-map hover-light b-controls',
+      'class': 'far fa-map hover-light ${myClass}',
       'title': 'blue-red heatmap'
     })
     tr.appendChild(e('td', {}, [heatmap]))
@@ -216,7 +223,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let filledCircle = "fas"
     let fillPoly = e('i', {
       'id': makeId(5, 'fillPoly'),
-      'class': `${filledCircle} fa-circle hover-light b-controls`,
+      'class': `${filledCircle} fa-circle hover-light ${myClass}`,
       'title': 'fill unfill'
     });
     tr.appendChild(e('td', {}, [fillPoly]))
@@ -228,8 +235,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
-  }
-  else {
+  } else {
     tr.appendChild(e('td'))
   }
 }
