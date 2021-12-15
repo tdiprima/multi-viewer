@@ -235,9 +235,11 @@ function addRow(table, currentLayer, allLayers, viewer) {
 }
 
 function createLayerWidget(div, layers, viewer) {
-  // todo: swap
-  div.appendChild(e('table'))
+  // todo: comment
+  let table = e('table')
+  div.appendChild(table)
   layers.forEach(layer => {
+    // todo: swap
     addRow(table, layer, layers, viewer)
     //addRow(div, layer, layers, viewer)
   })
