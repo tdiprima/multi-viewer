@@ -169,54 +169,53 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // probability off/on
-    let probability = e('i', {
-      'id': makeId(5, 'prob'),
-      'class': `fas fa-shapes hover-light ${myClass}`,
-      'title': 'toggle: class / probability'
-    })
-    tr.appendChild(e('td', {}, [probability]))
+    // let probability = e('i', {
+    //   'id': makeId(5, 'prob'),
+    //   'class': `fas fa-shapes hover-light ${myClass}`,
+    //   'title': 'toggle: class / probability'
+    // })
+    // tr.appendChild(e('td', {}, [probability]))
     //childDiv.appendChild(probability)
 
-    probability.addEventListener('click', () => {
-      let pi = colorsUI.id.replace('filters', '')
-      if (renderType === 'byClass') {
-        renderType = 'byProbability'
-        document.getElementById(`divA${pi}`).style.display = 'none'
-        document.getElementById(`divB${pi}`).style.display = 'block'
-      } else {
-        renderType = 'byClass'
-        document.getElementById(`divA${pi}`).style.display = 'block'
-        document.getElementById(`divB${pi}`).style.display = 'none'
-      }
-      outlineFlag = false
-      toggleButton(probability, 'fa-shapes', 'fa-dice')
-      setFilter(allLayers, viewer)
-    })
+    // probability.addEventListener('click', () => {
+    //   let pi = colorsUI.id.replace('filters', '')
+    //   if (renderType === 'byClass') {
+    //     renderType = 'byProbability'
+    //     document.getElementById(`divA${pi}`).style.display = 'none'
+    //     document.getElementById(`divB${pi}`).style.display = 'block'
+    //   } else {
+    //     renderType = 'byClass'
+    //     document.getElementById(`divA${pi}`).style.display = 'block'
+    //     document.getElementById(`divB${pi}`).style.display = 'none'
+    //   }
+    //   outlineFlag = false
+    //   toggleButton(probability, 'fa-shapes', 'fa-dice')
+    //   setFilter(allLayers, viewer)
+    // })
 
     // heatmap off/on
-    let heatmap = e('i', {
-      'id': makeId(5, 'prob'),
-      'class': `far fa-map hover-light ${myClass}`,
-      'title': 'blue-red heatmap'
-    })
-    tr.appendChild(e('td', {}, [heatmap]))
+    // let heatmap = e('i', {
+    //   'id': makeId(5, 'prob'),
+    //   'class': `far fa-map hover-light ${myClass}`,
+    //   'title': 'blue-red heatmap'
+    // })
+    // tr.appendChild(e('td', {}, [heatmap]))
     //childDiv.appendChild(heatmap)
-
-    heatmap.addEventListener('click', () => {
-      if (renderType === 'byHeatmap') {
-        if (probability.classList.contains('fa-shapes')) {
-          renderType = 'byClass'
-        }
-        if (probability.classList.contains('fa-dice')) {
-          renderType = 'byProbability'
-        }
-      } else {
-        renderType = 'byHeatmap'
-      }
-      outlineFlag = false
-
-      setFilter(allLayers, viewer)
-    })
+    // heatmap.addEventListener('click', () => {
+    //   if (renderType === 'byHeatmap') {
+    //     if (probability.classList.contains('fa-shapes')) {
+    //       renderType = 'byClass'
+    //     }
+    //     if (probability.classList.contains('fa-dice')) {
+    //       renderType = 'byProbability'
+    //     }
+    //   } else {
+    //     renderType = 'byHeatmap'
+    //   }
+    //   outlineFlag = false
+    //
+    //   setFilter(allLayers, viewer)
+    // })
 
     // Toggle fill polygon
     let emptyCircle = "far"

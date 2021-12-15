@@ -32,11 +32,18 @@ const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
   const widgetBody = div.lastChild // known
 
   let divA = e('div', {'id': `divA${uniqueId}`})
+  let divB = e('div', {'id': `divB${uniqueId}`})
+
+  // <select>
+  let selectList = createDropdown(uniqueId, divA, divB, viewerLayers, viewer)
+  widgetBody.appendChild(selectList)
+
+  // By class
   divA.style.display = (renderType === 'byClass') ? 'block' : 'none'
   widgetBody.appendChild(divA)
   createUI(1, uniqueId, divA, colorscheme.colors, viewerLayers, viewer)
 
-  let divB = e('div', {'id': `divB${uniqueId}`})
+  // By probability
   divB.style.display = (renderType === 'byProbability') ? 'block' : 'none'
   widgetBody.appendChild(divB)
   createUI(2, uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer)
@@ -50,6 +57,47 @@ function checkboxHandler(element, arr, l, v) {
     arr.find(x => x.classid === parseInt(element.value)).checked = element.checked
     setFilter(l, v)
   })
+}
+
+function createDropdown(uniqueId, divA, divB, allLayers, viewer) {
+  let myDiv = e('div', {'id': `myDiv${uniqueId}`, 'style': 'display: block;'})
+  myDiv.innerHTML = 'Color by:&nbsp;'
+  // Array of options to be added
+  let array = ['Class', 'Probability', 'Blue-Red Heatmap']
+  let myList = e('select')
+  myList.id = `mySelect${uniqueId}`
+  myDiv.appendChild(myList)
+
+  // Append the options
+  array.forEach((option, i) => {
+    const element = document.createElement('option')
+    element.setAttribute('value', choix[i])
+    element.text = option
+    if (choix[i] === renderType) {
+      element.selected // todo: fix
+    }
+    myList.appendChild(element)
+  });
+
+  myList.addEventListener('change', function () {
+    // set global type
+    renderType = myList.options[myList.selectedIndex].value
+    // no outline for you
+    outlineFlag = false // <-- for now todo
+    if (renderType === 'byClass') {
+      divA.style.display = 'block'
+      divB.style.display = 'none'
+    } else if (renderType === 'byProbability') {
+      divA.style.display = 'none'
+      divB.style.display = 'block'
+    } else {
+      // todo: byHeatmap
+    }
+    // repaint the screen
+    setFilter(allLayers, viewer)
+  })
+
+  return myDiv
 }
 
 // Create user interface
