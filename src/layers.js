@@ -71,7 +71,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   // Feature (draggable)
   let feat = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
-    'class': 'dragIt ${myClass}',
+    'class': `dragIt ${myClass}`,
     'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
@@ -100,7 +100,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.classList.add('fa-adjust')
   faAdjust.classList.add('hover-light')
   faAdjust.style.cursor = 'pointer'
-  let div = e('div', {class: 'showDiv ${myClass}', 'title': 'transparency slider'}, [faAdjust])
+  let div = e('div', {class: `showDiv ${myClass}`, 'title': 'transparency slider'}, [faAdjust])
 
   let range = e('input', {
     type: 'range',
@@ -133,7 +133,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     eyeball(faEye, range, layerNum, viewer)
   })
 
-  div.appendChild(e('div', {class: 'showHover ${myClass}'}, [range]))
+  div.appendChild(e('div', {class: `showHover ${myClass}`}, [range]))
   tr.appendChild(e('td', {}, [div]))
   //childDiv.appendChild(div)
 
@@ -141,7 +141,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color palette
     let palette = e('i', {
       'id': makeId(5, 'palette'),
-      'class': 'fas fa-palette pointer hover-light ${myClass}',
+      'class': `fas fa-palette pointer hover-light ${myClass}`,
       'title': 'color palette'
     })
     tr.appendChild(e('td', {}, [palette]))
@@ -156,7 +156,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color-attenuation by probability
     let attenuation = e('i', {
       'id': makeId(5, 'atten'),
-      'class': 'fas fa-broadcast-tower hover-light ${myClass}',
+      'class': `fas fa-broadcast-tower hover-light ${myClass}`,
       'title': 'toggle: color-attenuation by probability'
     })
     tr.appendChild(e('td', {}, [attenuation]))
@@ -171,7 +171,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // probability off/on
     let probability = e('i', {
       'id': makeId(5, 'prob'),
-      'class': 'fas fa-shapes hover-light ${myClass}',
+      'class': `fas fa-shapes hover-light ${myClass}`,
       'title': 'toggle: class / probability'
     })
     tr.appendChild(e('td', {}, [probability]))
@@ -196,7 +196,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // heatmap off/on
     let heatmap = e('i', {
       'id': makeId(5, 'prob'),
-      'class': 'far fa-map hover-light ${myClass}',
+      'class': `far fa-map hover-light ${myClass}`,
       'title': 'blue-red heatmap'
     })
     tr.appendChild(e('td', {}, [heatmap]))
