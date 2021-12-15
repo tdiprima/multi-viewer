@@ -153,20 +153,52 @@ function addRow(table, currentLayer, allLayers, viewer) {
       colorsUI.style.display = 'block'
     })
 
+    let tachometer = e('i', {'id': makeId(5, 'tach'),
+    'class': `fas fa-tachometer-alt hover-light ${myClass}`,
+      'title': 'options'})
+    tr.appendChild(e('td', {}, [tachometer]))
+    //childDiv.appendChild(tachometer)
+    const id = makeId(5, 'optsDiv')
+    const rect = tachometer.getBoundingClientRect()
+    const optsDiv = createDraggableDiv(id, 'Options', rect.left, rect.top)
+
+    tachometer.addEventListener('click', () => {
+      optsDiv.style.display = 'block'
+    })
+    const body = optsDiv.lastChild
+
     // color-attenuation by probability
     let attenuation = e('i', {
       'id': makeId(5, 'atten'),
       'class': `fas fa-broadcast-tower hover-light ${myClass}`,
       'title': 'toggle: color-attenuation by probability'
     })
-    tr.appendChild(e('td', {}, [attenuation]))
-    //childDiv.appendChild(attenuation)
-
+    // tr.appendChild(e('td', {}, [attenuation]))
+    // //childDiv.appendChild(attenuation)
     attenuation.addEventListener('click', () => {
       attenuateFlag = !attenuateFlag
       outlineFlag = false
       setFilter(allLayers, viewer)
     })
+
+    // Toggle fill polygon
+    let emptyCircle = "far"
+    let filledCircle = "fas"
+    let fillPoly = e('i', {
+      'id': makeId(5, 'fillPoly'),
+      'class': `${filledCircle} fa-circle hover-light ${myClass}`,
+      'title': 'fill unfill'
+    });
+    // tr.appendChild(e('td', {}, [fillPoly]))
+    // //childDiv.appendChild(fillPoly)
+    fillPoly.addEventListener('click', () => {
+      outlineFlag = !outlineFlag
+      toggleButton(fillPoly, filledCircle, emptyCircle)
+      setFilter(allLayers, viewer)
+    })
+
+    let dd = e('div', {}, [attenuation, fillPoly])
+    body.appendChild(dd)
 
     // probability off/on
     // let probability = e('i', {
@@ -175,8 +207,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     //   'title': 'toggle: class / probability'
     // })
     // tr.appendChild(e('td', {}, [probability]))
-    //childDiv.appendChild(probability)
-
+    // //childDiv.appendChild(probability)
     // probability.addEventListener('click', () => {
     //   let pi = colorsUI.id.replace('filters', '')
     //   if (renderType === 'byClass') {
@@ -200,7 +231,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     //   'title': 'blue-red heatmap'
     // })
     // tr.appendChild(e('td', {}, [heatmap]))
-    //childDiv.appendChild(heatmap)
+    // // childDiv.appendChild(heatmap)
     // heatmap.addEventListener('click', () => {
     //   if (renderType === 'byHeatmap') {
     //     if (probability.classList.contains('fa-shapes')) {
@@ -217,22 +248,6 @@ function addRow(table, currentLayer, allLayers, viewer) {
     //   setFilter(allLayers, viewer)
     // })
 
-    // Toggle fill polygon
-    let emptyCircle = "far"
-    let filledCircle = "fas"
-    let fillPoly = e('i', {
-      'id': makeId(5, 'fillPoly'),
-      'class': `${filledCircle} fa-circle hover-light ${myClass}`,
-      'title': 'fill unfill'
-    });
-    tr.appendChild(e('td', {}, [fillPoly]))
-    //childDiv.appendChild(fillPoly)
-
-    fillPoly.addEventListener('click', () => {
-      outlineFlag = !outlineFlag
-      toggleButton(fillPoly, filledCircle, emptyCircle)
-      setFilter(allLayers, viewer)
-    })
 
   } else {
     tr.appendChild(e('td'))
