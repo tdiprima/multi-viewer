@@ -134,7 +134,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color palette
     let palette = e('i', {
       'id': makeId(5, 'palette'),
-      'class': 'fas fa-palette hover-light b-controls',
+      'class': 'fas fa-palette pointer hover-light b-controls',
       'title': 'color palette'
     })
     tr.appendChild(e('td', {}, [palette]))
@@ -236,8 +236,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
 function createLayerWidget(div, layers, viewer) {
   // todo: swap
-  let table = e('table')
-  div.appendChild(table)
+  div.appendChild(e('table'))
   layers.forEach(layer => {
     addRow(table, layer, layers, viewer)
     //addRow(div, layer, layers, viewer)
@@ -325,6 +324,7 @@ function handleDragLayers(layers, viewer) {
 
       let targetViewer = getViewerObject(targetDiv)
       if (foundMatchingSlide) {
+        console.log('Found matching slide')
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1) // show
           // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
