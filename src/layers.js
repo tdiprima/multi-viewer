@@ -46,6 +46,20 @@ function getViewerObject(element) {
   return retVal
 }
 
+function getVals(slides, displayElement) {
+  // Get slider values
+  let slide1 = parseFloat(slides[0].value)
+  let slide2 = parseFloat(slides[1].value)
+  // Determine which is larger
+  if (slide1 > slide2) {
+    let tmp = slide2;
+    slide2 = slide1;
+    slide1 = tmp
+  }
+
+  displayElement.innerHTML = slide1 + ' - ' + slide2
+}
+
 /**
  * One row per layer
  */
@@ -197,7 +211,20 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
-    let dd = e('div', {}, [attenuation, fillPoly])
+    // Dual-point sliders
+    let span = e('span', {'class':'rangeValues'})
+    let input1 = e('input', {'max': '15', 'min': '0', 'step':'0.5', 'type': 'range', 'value': '5'})
+    let input2 = e('input', {'max': '15', 'min': '0', 'step':'0.5', 'type': 'range', 'value': '10'})
+    let section = e('section', {'class': 'range-slider'}, [span, input1, input2])
+
+    input1.oninput = function () {
+      getVals([input1, input2], span)
+    }
+    input2.oninput = function () {
+      getVals([input1, input2], span)
+    }
+
+    let dd = e('div', {}, [attenuation, fillPoly, section])
     body.appendChild(dd)
 
     // probability off/on
