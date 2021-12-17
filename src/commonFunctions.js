@@ -16,7 +16,6 @@ function setFilter(layers, viewer, range) {
     for (let i = 0; i < itemCount; i++) {
       if (i > 0) {
         if (range) {
-          console.log(range[0], range[1])
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
