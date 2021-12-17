@@ -7,7 +7,7 @@ const config = {
 //   appImages: 'images/'
 // }
 
-function setFilter(layers, viewer) {
+function setFilter(layers, viewer, range) {
   if (viewer.world) {
     // SET COLOR FILTER
     let itemCount = viewer.world.getItemCount()
@@ -15,20 +15,31 @@ function setFilter(layers, viewer) {
     // Gather what we're doing for each layer
     for (let i = 0; i < itemCount; i++) {
       if (i > 0) {
-        if (renderType === 'byProbability') {
+        if (range) {
+          console.log(range[0], range[1])
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
-              colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)
+              colorFilter.prototype.PROBABILITY(range[0], range[1])
             ]
           })
         } else {
-          filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [
-              colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors)
-            ]
-          })
+          if (renderType === 'byProbability') {
+            filterOpts.push({
+              items: viewer.world.getItemAt(i),
+              processors: [
+                colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)
+              ]
+            })
+          } else {
+            // byClass, byHeatmap...
+            filterOpts.push({
+              items: viewer.world.getItemAt(i),
+              processors: [
+                colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors)
+              ]
+            })
+          }
         }
       }
     }
@@ -37,8 +48,9 @@ function setFilter(layers, viewer) {
       filters: filterOpts,
       loadMode: 'sync'
     })
+    // console.log('filterOpts', filterOpts)
   } else {
-    console.log('%cNo viewer.world', 'font-size: larger;')
+    console.log('No viewer.world')
   }
 }
 
