@@ -58,6 +58,8 @@ function getVals(slides, displayElement) {
   }
 
   displayElement.innerHTML = slide1 + ' - ' + slide2
+
+  return [slide1, slide2]
 }
 
 /**
@@ -213,15 +215,18 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
     // Dual-point sliders
     let span = e('span', {'class':'rangeValues'})
-    let input1 = e('input', {'max': '15', 'min': '0', 'step':'0.5', 'type': 'range', 'value': '5'})
-    let input2 = e('input', {'max': '15', 'min': '0', 'step':'0.5', 'type': 'range', 'value': '10'})
+    let input1 = e('input', {'max': '255', 'min': '0', 'step':'1', 'type': 'range', 'value': '128'})
+    let input2 = e('input', {'max': '255', 'min': '0', 'step':'1', 'type': 'range', 'value': '255'})
     let section = e('section', {'class': 'range-slider'}, [span, input1, input2])
 
+    // input
     input1.oninput = function () {
-      getVals([input1, input2], span)
+      let d = getVals([input1, input2], span)
+      setFilter(allLayers, viewer, d)
     }
     input2.oninput = function () {
-      getVals([input1, input2], span)
+      let d = getVals([input1, input2], span)
+      setFilter(allLayers, viewer, d)
     }
 
     let dd = e('div', {}, [attenuation, fillPoly, section])
