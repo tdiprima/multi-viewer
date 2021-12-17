@@ -259,6 +259,7 @@ a:link {
 }
 
 /* RANGE SLIDER */
+/* section containing value range */
 section.range-slider {
   position: relative;
   width: 200px;
@@ -266,6 +267,7 @@ section.range-slider {
   text-align: center;
 }
 
+/* this makes the sliders overlap */
 section.range-slider input {
   pointer-events: none;
   position: absolute;
@@ -279,6 +281,7 @@ section.range-slider input {
   padding: 0;
 }
 
+/* this allows you to move the handles */
 section.range-slider input::-webkit-slider-thumb {
   pointer-events: all;
   position: relative;
@@ -286,11 +289,12 @@ section.range-slider input::-webkit-slider-thumb {
   outline: 0;
 }
 
+/* copy/pasted from webkit, and made it moz */
 section.range-slider input::-moz-range-thumb {
   pointer-events: all;
   position: relative;
   z-index: 10;
-  -moz-appearance: none;
+  outline: 0;
   width: 9px;
 }
 
