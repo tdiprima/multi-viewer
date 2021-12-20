@@ -70,7 +70,7 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
   let myDiv = e('div', {'id': `myDiv${uniqueId}`, 'style': 'display: block;'})
   myDiv.innerHTML = 'Color by:&nbsp;'
   // Array of options to be added
-  let array = ['Class', 'Probability', 'Blue-Red Heatmap']
+  let array = ['Class', 'Probability', 'Blue to Red Heatmap']
   let myList = e('select')
   myList.id = `mySelect${uniqueId}`
   myDiv.appendChild(myList)
@@ -321,7 +321,6 @@ function isIntersect(table) {
       }
     }
   }
-
 
   // Sort before validate
   arr.sort((a, b) => {
