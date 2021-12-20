@@ -50,6 +50,7 @@ function getVals(slides, displayElement) {
   // Get slider values
   let slide1 = parseFloat(slides[0].value)
   let slide2 = parseFloat(slides[1].value)
+
   // Determine which is larger
   if (slide1 > slide2) {
     let tmp = slide2;
@@ -169,9 +170,11 @@ function addRow(table, currentLayer, allLayers, viewer) {
       colorsUI.style.display = 'block'
     })
 
-    let tachometer = e('i', {'id': makeId(5, 'tach'),
-    'class': `fas fa-tachometer-alt hover-light ${myClass}`,
-      'title': 'options'})
+    let tachometer = e('i', {
+      'id': makeId(5, 'tach'),
+      'class': `fas fa-tachometer-alt hover-light ${myClass}`,
+      'title': 'options'
+    })
     tr.appendChild(e('td', {}, [tachometer]))
     //childDiv.appendChild(tachometer)
     const id = makeId(5, 'optsDiv')
@@ -214,19 +217,23 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // Dual-point sliders
-    let span = e('span', {'class':'rangeValues'})
-    let input1 = e('input', {'max': '255', 'min': '0', 'step':'1', 'type': 'range', 'value': '128'})
-    let input2 = e('input', {'max': '255', 'min': '0', 'step':'1', 'type': 'range', 'value': '255'})
+    let span = e('span', {'class': 'rangeValues'})
+    let input1 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '128'})
+    let input2 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '255'})
     let section = e('section', {'class': 'range-slider'}, [span, input1, input2])
 
-    // input
-    input1.oninput = function () {
-      let d = getVals([input1, input2], span)
-      setFilter(allLayers, viewer, d)
-    }
-    input2.oninput = function () {
-      let d = getVals([input1, input2], span)
-      setFilter(allLayers, viewer, d)
+    // Initialize Sliders
+    let sliders = [input1, input2]
+
+    for (let slider of sliders) {
+      if (slider.type === 'range') {
+        slider.oninput = function () {
+          let d = getVals([input1, input2], span)
+          setFilter(allLayers, viewer, d)
+        }
+        // Manually trigger event first time to display values (Chrome)
+        slider.oninput()
+      }
     }
 
     let dd = e('div', {}, [attenuation, fillPoly, section])
