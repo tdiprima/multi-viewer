@@ -271,14 +271,24 @@ section.range-slider {
 section.range-slider input {
   pointer-events: none;
   position: absolute;
-  overflow: hidden;
   left: 0;
   top: 15px;
   width: 200px;
-  outline: none;
   height: 18px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   margin: 0;
-  padding: 0;
+  padding: 0 2px;
+  /* Add some L/R padding to ensure box shadow of handle is shown */
+  overflow: hidden;
+  border: 0;
+  border-radius: 1px;
+  outline: none;
+  background: linear-gradient(grey, grey) no-repeat center;
+  /* Use a linear gradient to generate only the 2px height background */
+  background-size: 100% 2px;
 }
 
 /* this allows you to move the handles */
