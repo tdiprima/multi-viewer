@@ -67,13 +67,14 @@ function checkboxHandler(element, arr, l, v) {
 }
 
 function createDropdown(uniqueId, divArr, allLayers, viewer) {
-  let myDiv = e('div', {'id': `myDiv${uniqueId}`, 'style': 'display: block;'})
-  myDiv.innerHTML = 'Color by:&nbsp;'
+  let selectDiv = e('div', {'style': 'display: block;'})
+  let listId = `select${uniqueId}`
+  selectDiv.innerHTML = `<label for="${listId}">Color by:</label>&nbsp;`
   // Array of options to be added
   let array = ['Class', 'Probability', 'Blue to Red Heatmap']
   let myList = e('select')
-  myList.id = `mySelect${uniqueId}`
-  myDiv.appendChild(myList)
+  myList.id = listId
+  selectDiv.appendChild(myList)
 
   // Append the options
   array.forEach((option, i) => {
@@ -89,12 +90,12 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
     // no outline for you
     outlineFlag = false // <-- for now todo
 
-    // shut all off
+    // Shut all off...
     divArr.forEach(div => {
       div.style.display = 'none'
     })
 
-    // turn one on
+    // ...and turn one on.
     if (renderType === 'byClass') {
       divArr[0].style.display = 'block'
     } else if (renderType === 'byProbability') {
@@ -107,7 +108,7 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
     setFilter(allLayers, viewer)
   })
 
-  return myDiv
+  return selectDiv
 }
 
 // Create user interface
