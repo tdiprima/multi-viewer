@@ -33,8 +33,9 @@ const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
 
   let divA = e('div', {'id': `divA${uniqueId}`})
   let divB = e('div', {'id': `divB${uniqueId}`})
-  let divC = e('div', {'id': `divC${uniqueId}`, 'style': 'background: -webkit-linear-gradient(#FF0000, #0000FF);'})
-  divC.innerHTML = '<span style="color: #ffffff">Blue to red heatmap</span>'
+  let divC = e('div', {'id': `divC${uniqueId}`})
+  let msg = 'Color gradient where reddish colors<br>correspond to sureness and<br>bluish colors to unsureness.'
+  divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`
 
   // <select>
   let selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
