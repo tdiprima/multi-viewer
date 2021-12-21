@@ -67,12 +67,6 @@ function getVals(slides, displayElement) {
  * One row per layer
  */
 function addRow(table, currentLayer, allLayers, viewer) {
-//function addRow(m_div, currentLayer, allLayers, viewer) {
-  // todo: swap div & tr, and function signature
-  //'class': 'b-controls'
-  //let childDiv = e('div', {'style': 'display: inline-block'}, [])
-  //let childDiv = e('div')
-  //m_div.appendChild(childDiv)
   let tr = e('tr')
   table.appendChild(tr)
 
@@ -81,14 +75,10 @@ function addRow(table, currentLayer, allLayers, viewer) {
   const sections = (currentLayer.location).split('/')
   const name = sections[sections.length - 2] // filename
 
-  // todo: right now, using table, so not using this class yet
-  // let myClass = 'b-controls'
-  let myClass = ''
-
   // Feature (draggable)
   let feat = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
-    'class': `dragIt ${myClass}`,
+    'class': `dragIt`,
     'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
@@ -99,17 +89,15 @@ function addRow(table, currentLayer, allLayers, viewer) {
    * One column per icon
    */
   tr.appendChild(e('td', {}, [feat]))
-  //childDiv.appendChild(feat)
 
   // eyeball visibility toggle
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
   let faEye = e('i', {
     'id': makeId(5, 'eye'),
-    'class': `${cssClass} hover-light ${myClass}`,
+    'class': `${cssClass} hover-light`,
     'title': 'toggle visibility'
   })
   tr.appendChild(e('td', {}, [faEye]))
-  //childDiv.appendChild(faEye)
 
   // transparency slider
   let faAdjust = document.createElement('i')
@@ -117,7 +105,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.classList.add('fa-adjust')
   faAdjust.classList.add('hover-light')
   faAdjust.style.cursor = 'pointer'
-  let div = e('div', {class: `showDiv ${myClass}`, 'title': 'transparency slider'}, [faAdjust])
+  let div = e('div', {class: `showDiv`, 'title': 'transparency slider'}, [faAdjust])
 
   let range = e('input', {
     type: 'range',
@@ -150,19 +138,17 @@ function addRow(table, currentLayer, allLayers, viewer) {
     eyeball(faEye, range, layerNum, viewer)
   })
 
-  div.appendChild(e('div', {class: `showHover ${myClass}`}, [range]))
+  div.appendChild(e('div', {class: `showHover`}, [range]))
   tr.appendChild(e('td', {}, [div]))
-  //childDiv.appendChild(div)
 
   if (layerNum > 0) {
     // color palette
     let palette = e('i', {
       'id': makeId(5, 'palette'),
-      'class': `fas fa-palette pointer hover-light ${myClass}`,
+      'class': `fas fa-palette pointer hover-light`,
       'title': 'color palette'
     })
     tr.appendChild(e('td', {}, [palette]))
-    //childDiv.appendChild(palette)
 
     // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
     let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme, allLayers, viewer)
@@ -170,16 +156,17 @@ function addRow(table, currentLayer, allLayers, viewer) {
       colorsUI.style.display = 'block'
     })
 
+    // The tachometer is going to pop open 'settings'
+    // Settings will have color (or probability) attenuation, fill/un-fill poly's, range sliders.
     let tachometer = e('i', {
       'id': makeId(5, 'tach'),
-      'class': `fas fa-tachometer-alt hover-light ${myClass}`,
-      'title': 'options'
+      'class': `fas fa-tachometer-alt hover-light`,
+      'title': 'settings' // call it 'settings', 'control panel', idk.
     })
     tr.appendChild(e('td', {}, [tachometer]))
-    //childDiv.appendChild(tachometer)
     const id = makeId(5, 'optsDiv')
     const rect = tachometer.getBoundingClientRect()
-    const optsDiv = createDraggableDiv(id, 'Options', rect.left, rect.top)
+    const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
 
     tachometer.addEventListener('click', () => {
       optsDiv.style.display = 'block'
@@ -189,11 +176,9 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // color-attenuation by probability
     let attenuation = e('i', {
       'id': makeId(5, 'atten'),
-      'class': `fas fa-broadcast-tower hover-light ${myClass}`,
+      'class': `fas fa-broadcast-tower hover-light`,
       'title': 'toggle: color-attenuation by probability'
     })
-    // tr.appendChild(e('td', {}, [attenuation]))
-    // //childDiv.appendChild(attenuation)
     attenuation.addEventListener('click', () => {
       attenuateFlag = !attenuateFlag
       outlineFlag = false
@@ -205,11 +190,10 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let filledCircle = "fas"
     let fillPoly = e('i', {
       'id': makeId(5, 'fillPoly'),
-      'class': `${filledCircle} fa-circle hover-light ${myClass}`,
-      'title': 'fill unfill'
+      'class': `${filledCircle} fa-circle hover-light`,
+      'title': 'fill un-fill'
     });
-    // tr.appendChild(e('td', {}, [fillPoly]))
-    // //childDiv.appendChild(fillPoly)
+
     fillPoly.addEventListener('click', () => {
       outlineFlag = !outlineFlag
       toggleButton(fillPoly, filledCircle, emptyCircle)
@@ -245,13 +229,10 @@ function addRow(table, currentLayer, allLayers, viewer) {
 }
 
 function createLayerWidget(div, layers, viewer) {
-  // todo: if switch to divs, comment next 2 lines:
   let table = e('table')
   div.appendChild(table)
   layers.forEach(layer => {
-    // todo: ...and comment the 'table', uncomment the 'div':
     addRow(table, layer, layers, viewer)
-    //addRow(div, layer, layers, viewer)
   })
 }
 
