@@ -164,6 +164,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
       'title': 'settings' // call it 'settings', 'control panel', idk.
     })
     tr.appendChild(e('td', {}, [tachometer]))
+
     const id = makeId(5, 'optsDiv')
     const rect = tachometer.getBoundingClientRect()
     const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
@@ -202,7 +203,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
     // Dual-point sliders
     let span = e('span', {'class': 'rangeValues'})
-    let input1 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '128'})
+    let input1 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '178'})
     let input2 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '255'})
     let section = e('section', {'class': 'range-slider'}, [span, input1, input2])
 
@@ -220,7 +221,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
       }
     }
 
-    let dd = e('div', {}, [attenuation, fillPoly, section])
+    let dd = e('div', {}, [attenuation, '\n', fillPoly, section])
     body.appendChild(dd)
 
   } else {
