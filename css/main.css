@@ -306,7 +306,7 @@ a:link {
 }
 
 /* place the sliders one on top of the other */
-input[type=range] {
+.wrap input[type=range] {
   grid-column: 1/span 2;
   grid-row: 3;
   z-index: 1;
@@ -318,26 +318,28 @@ input[type=range] {
   pointer-events: none;
 }
 
-input[type=range]::-webkit-slider-runnable-track, input[type=range]::-webkit-slider-thumb, input[type=range] {
+.wrap input[type=range]::-webkit-slider-runnable-track,
+.wrap  input[type=range]::-webkit-slider-thumb,
+.wrap input[type=range] {
   -webkit-appearance: none;
 }
 
 /* Chrome track */
-input[type=range]::-webkit-slider-runnable-track {
+.wrap input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 100%;
   background: none; /* get rid of white Chrome background */
 }
 
 /* Firefox track */
-input[type=range]::-moz-range-track {
+.wrap input[type=range]::-moz-range-track {
   width: 100%;
   height: 100%;
   background: none;
 }
 
 /* Chrome thumb */
-input[type=range]::-webkit-slider-thumb {
+.wrap input[type=range]::-webkit-slider-thumb {
   border: none;
   width: 1em;
   height: 1em;
@@ -347,7 +349,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 /* Firefox thumb */
-input[type=range]::-moz-range-thumb {
+.wrap input[type=range]::-moz-range-thumb {
   border: none;
   width: 1em;
   height: 1em;
@@ -357,11 +359,11 @@ input[type=range]::-moz-range-thumb {
 }
 
 /* focus styles allows us to see which value we're currently modifying */
-input[type=range]:focus {
+.wrap input[type=range]:focus {
   z-index: 2;
 }
 
-input[type=range]:focus, input[type=range]:focus + output {
+.wrap input[type=range]:focus, input[type=range]:focus + output {
   color: darkorange;
 }
 
