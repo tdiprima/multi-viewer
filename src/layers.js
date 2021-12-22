@@ -46,7 +46,7 @@ function getViewerObject(element) {
   return retVal
 }
 
-function getVals(slides, displayElement) {
+function getVals(slides) {
   // Get slider values
   let slide1 = parseFloat(slides[0].value)
   let slide2 = parseFloat(slides[1].value)
@@ -57,8 +57,6 @@ function getVals(slides, displayElement) {
     slide2 = slide1;
     slide1 = tmp
   }
-
-  displayElement.innerHTML = slide1 + ' - ' + slide2
 
   return [slide1, slide2]
 }
@@ -202,8 +200,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // Dual-point sliders
-    let aInit = 128
-    let bInit = 255
+    let aInit = 70
+    let bInit = 185
     let min = 0
     let max = 255
     let wrapper = e('div', {
@@ -238,6 +236,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     function f(e) {
       let _t = e.target;
       _t.parentNode.style.setProperty(`--${_t.id}`, +_t.value)
+      let d = getVals([ARange, BRange])
+      setFilter(allLayers, viewer, d)
     }
     ARange.addEventListener('input', f)
     BRange.addEventListener('input', f)

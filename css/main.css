@@ -258,7 +258,10 @@ a:link {
   /*background-color: #00acd6;*/
 }
 
-/* RANGE SLIDER */
+/* RANGE SLIDERS */
+* {
+  font: inherit;
+}
 /* make the wrapper a middle-aligned grid with two rows and one column */
 .wrap {
   --dif: calc(var(--max) - var(--min));
@@ -326,7 +329,7 @@ input[type=range]::-webkit-slider-runnable-track {
   background: none; /* get rid of white Chrome background */
 }
 
-/* FireFox track */
+/* Firefox track */
 input[type=range]::-moz-range-track {
   width: 100%;
   height: 100%;
