@@ -202,26 +202,47 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // Dual-point sliders
-    let span = e('span', {'class': 'rangeValues'})
-    let input1 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '178'})
-    let input2 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '255'})
-    let section = e('section', {'class': 'range-slider'}, [span, input1, input2])
+    let aInit = 128
+    let bInit = 255
+    let min = 0
+    let max = 255
+    let wrapper = e('div', {
+      'class': 'wrap',
+      'role': 'group',
+      'aria-labelledby': 'multi-lbl',
+      'style': `--a: ${aInit}; --b: ${bInit}; --min: ${min}; --max: ${max}`
+    })
+    let title = e('div', {'id': 'multi-lbl'})
+    title.innerHTML = 'Range slider:'
+    wrapper.appendChild(title)
 
-    // Initialize Sliders
-    let sliders = [input1, input2]
+    let ALabel = e('label', {'class': 'sr-only', 'for': 'a'})
+    ALabel.innerHTML = 'Value A:'
+    let BLabel = e('label', {'class': 'sr-only', 'for': 'b'})
+    BLabel.innerHTML = 'Value B:'
 
-    for (let slider of sliders) {
-      if (slider.type === 'range') {
-        slider.oninput = function () {
-          let d = getVals([input1, input2], span)
-          setFilter(allLayers, viewer, d)
-        }
-        // Manually trigger event first time to display values (Chrome)
-        slider.oninput()
-      }
+    let ARange = e('input', {'id': 'a', 'type': 'range', 'min': min, 'max': max, 'value': aInit})
+    let BRange = e('input', {'id': 'b', 'type': 'range', 'min': min, 'max': max, 'value': bInit})
+
+    // To display the current values:
+    let outputA = e('output', {'for':'a', 'style':'--c: var(--a)'})
+    let outputB = e('output', {'for':'b', 'style':'--c: var(--b)'})
+
+    wrapper.appendChild(ALabel)
+    wrapper.appendChild(ARange)
+    wrapper.appendChild(outputA)
+    wrapper.appendChild(BLabel)
+    wrapper.appendChild(BRange)
+    wrapper.appendChild(outputB)
+
+    function f(e) {
+      let _t = e.target;
+      _t.parentNode.style.setProperty(`--${_t.id}`, +_t.value)
     }
+    ARange.addEventListener('input', f)
+    BRange.addEventListener('input', f)
 
-    let dd = e('div', {}, [attenuation, '\n', fillPoly, section])
+    let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper])
     body.appendChild(dd)
 
   } else {

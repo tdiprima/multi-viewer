@@ -259,50 +259,119 @@ a:link {
 }
 
 /* RANGE SLIDER */
-/* section containing value range */
-section.range-slider {
+/* make the wrapper a middle-aligned grid with two rows and one column */
+.wrap {
+  --dif: calc(var(--max) - var(--min));
+  display: grid;
+  grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
+  grid-template: repeat(2, max-content) 1em/1fr 1fr;
+  overflow: hidden; /* in case <label> elements overflow */
   position: relative;
-  width: 200px;
-  height: 35px;
-  text-align: center;
+  margin: 1em auto;
+  width: 20em;
+  background: linear-gradient(0deg, #ccc 1em, transparent 0); /* emulate track */
+  font-family: ubuntu mono, consolas, monaco, monospace;
 }
 
-/* this makes the sliders overlap */
-section.range-slider input {
-  pointer-events: none;
+.wrap::before, .wrap::after {
+  grid-column: 1/span 2;
+  grid-row: 3;
+  height: 100%;
+  background: #95a;
+  content: "";
+}
+
+.wrap::before {
+  margin-left: calc((var(--a) - var(--min))/var(--dif)*100%);
+  width: calc((var(--b) - var(--a))/var(--dif)*100%);
+}
+
+.wrap::after {
+  margin-left: calc((var(--b) - var(--min))/var(--dif)*100%);
+  width: calc((var(--a) - var(--b))/var(--dif)*100%);
+}
+
+[id=multi-lbl] {
+  grid-column: 1/span 2;
+}
+
+/* visually hide the <label> elements */
+.sr-only {
   position: absolute;
-  left: 0;
-  top: 15px;
-  width: 200px;
-  height: 18px;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0;
-  padding: 0 2px;
-  /* Add some L/R padding to ensure box shadow of handle is shown */
-  overflow: hidden;
-  border: 0;
-  border-radius: 1px;
-  outline: none;
-  background: linear-gradient(grey, grey) no-repeat center;
-  /* Use a linear gradient to generate only the 2px height background */
-  background-size: 100% 2px;
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
 }
 
-/* this allows you to move the handles */
-section.range-slider input::-webkit-slider-thumb {
-  pointer-events: all;
-  position: relative;
+/* place the sliders one on top of the other */
+input[type=range] {
+  grid-column: 1/span 2;
+  grid-row: 3;
   z-index: 1;
+  top: 0;
+  left: 0;
+  margin: 0;
+  background: none;
+  color: #000;
+  pointer-events: none;
 }
 
-/* same thing but moz */
-section.range-slider input::-moz-range-thumb {
-  pointer-events: all;
-  position: relative;
-  z-index: 10;
-  outline: 0;
-  width: 9px;
+input[type=range]::-webkit-slider-runnable-track, input[type=range]::-webkit-slider-thumb, input[type=range] {
+  -webkit-appearance: none;
+}
+
+/* Chrome track */
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 100%;
+  background: none; /* get rid of white Chrome background */
+}
+
+/* FireFox track */
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 100%;
+  background: none;
+}
+
+/* Chrome thumb */
+input[type=range]::-webkit-slider-thumb {
+  border: none;
+  width: 1em;
+  height: 1em;
+  border-radius: 0;
+  background: currentcolor;
+  pointer-events: auto;
+}
+
+/* Firefox thumb */
+input[type=range]::-moz-range-thumb {
+  border: none;
+  width: 1em;
+  height: 1em;
+  border-radius: 0;
+  background: currentcolor;
+  pointer-events: auto;
+}
+
+/* focus styles allows us to see which value we're currently modifying */
+input[type=range]:focus {
+  z-index: 2;
+}
+
+input[type=range]:focus, input[type=range]:focus + output {
+  color: darkorange;
+}
+
+output {
+  grid-row: 2;
+}
+
+output:last-child {
+  text-align: right;
+}
+
+/* display the values using a little counter trick */
+output::after {
+  counter-reset: c var(--c);
+  content: "--" attr(for) ": " counter(c) ";";
 }
