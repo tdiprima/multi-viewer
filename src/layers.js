@@ -109,7 +109,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.style.cursor = 'pointer'
   let div = e('div', {class: `showDiv`, 'title': 'transparency slider'}, [faAdjust])
 
-  let range = e('input', {
+  let transSlider = e('input', {
     type: 'range',
     id: makeId(5, 'range'),
     min: '0',
@@ -118,7 +118,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     value: (currentLayer.opacity * 100).toString()
   })
 
-  range.addEventListener('input', function () {
+  transSlider.addEventListener('input', function () {
     let worldItem = viewer.world.getItemAt(layerNum)
     if (worldItem !== undefined) {
       worldItem.setOpacity(this.value / 100)
@@ -137,10 +137,10 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
   faEye.addEventListener('click', () => {
     toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
-    eyeball(faEye, range, layerNum, viewer)
+    eyeball(faEye, transSlider, layerNum, viewer)
   })
 
-  div.appendChild(e('div', {class: `showHover`}, [range]))
+  div.appendChild(e('div', {class: `showHover`}, [transSlider]))
   tr.appendChild(e('td', {}, [div]))
 
   if (layerNum > 0) {

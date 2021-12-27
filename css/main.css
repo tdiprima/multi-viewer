@@ -259,7 +259,6 @@ a:link {
   padding: 5px;
   font-size: x-small;
   background-color: lightyellow;
-  /*background-color: #00acd6;*/
 }
 
 /* RANGE SLIDERS */
@@ -387,15 +386,13 @@ output::after {
 }
 
 /* RANGE SLIDER - DIFFERENT STYLE */
-/* section containing value range */
 section.range-slider {
   position: relative;
-  width: 200px;
+  width: 20em;;
   height: 35px;
   text-align: center;
 }
 
-/* this makes the sliders overlap */
 section.range-slider input {
   position: absolute;
   top: 15px;
@@ -403,30 +400,49 @@ section.range-slider input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /* Add some L/R padding to ensure box shadow of handle is shown */
   overflow: hidden;
   margin: 0;
   border: 0;
   border-radius: 1px;
   box-sizing: border-box;
-  width: 200px;
-  height: 18px;
+  width: 20em;
   padding: 0 2px;
   outline: none;
-  background: linear-gradient(grey, grey) no-repeat center;
-  /* Use a linear gradient to generate only the 2px height background */
+  background: linear-gradient(0deg, #ccc 1em, transparent 0);
   background-size: 100% 2px;
   pointer-events: none;
 }
 
-/* this allows you to move the handles */
+section.range-slider input::-webkit-slider-runnable-track,
+section.range-slider input::-webkit-slider-thumb,
+section.range-slider input {
+  -webkit-appearance: none;
+}
+
+section.range-slider input::-webkit-slider-thumb {
+  border: none;
+  border-radius: 0;
+  width: 1em;
+  height: 1em;
+  background: currentcolor;
+  pointer-events: auto;
+}
+
+section.range-slider input::-moz-range-thumb {
+  border: none;
+  border-radius: 0;
+  width: 1em;
+  height: 1em;
+  background: currentcolor;
+  pointer-events: all;
+}
+
 section.range-slider input::-webkit-slider-thumb {
   z-index: 1;
   position: relative;
   pointer-events: all;
 }
 
-/* same thing but moz */
 section.range-slider input::-moz-range-thumb {
   position: relative;
   z-index: 10;
