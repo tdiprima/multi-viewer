@@ -31,7 +31,11 @@ a:link {
   text-decoration: none;
 }
 
-.b-controls { float:left; display:inline; padding: 2px; }
+.b-controls {
+  float: left;
+  display: inline;
+  padding: 2px;
+}
 
 /* "QUAD" */
 .divSquare {
@@ -170,21 +174,21 @@ a:link {
   cursor: move !important;
   font-size: 14px !important;
 
-  /* ELLIPSES FOR LONG NAMES*/
+  /* ELLIPSES FOR LONG NAMES */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
   /* WORD-WRAP LONG NAMES */
-  /* overflow-wrap: break-word;
-  word-wrap: break-word;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  hyphens: auto; */
+  /*overflow-wrap: break-word;*/
+  /*word-wrap: break-word;*/
+  /*-webkit-hyphens: auto;*/
+  /*-ms-hyphens: auto;*/
+  /*-moz-hyphens: auto;*/
+  /*hyphens: auto;*/
 }
 
-/*drop_site*/
+/* drop_site */
 .dropzone.over {
   border: 3px dotted #00ff00 !important;
   /*border: 3px dotted #00acd6 !important;*/
@@ -262,6 +266,7 @@ a:link {
 * {
   font: inherit;
 }
+
 /* make the wrapper a middle-aligned grid with two rows and one column */
 .wrap {
   --dif: calc(var(--max) - var(--min));
@@ -285,13 +290,13 @@ a:link {
 }
 
 .wrap::before {
-  margin-left: calc((var(--a) - var(--min))/var(--dif)*100%);
-  width: calc((var(--b) - var(--a))/var(--dif)*100%);
+  margin-left: calc((var(--a) - var(--min)) / var(--dif) * 100%);
+  width: calc((var(--b) - var(--a)) / var(--dif) * 100%);
 }
 
 .wrap::after {
-  margin-left: calc((var(--b) - var(--min))/var(--dif)*100%);
-  width: calc((var(--a) - var(--b))/var(--dif)*100%);
+  margin-left: calc((var(--b) - var(--min)) / var(--dif) * 100%);
+  width: calc((var(--a) - var(--b)) / var(--dif) * 100%);
 }
 
 [id=multi-lbl] {
@@ -319,7 +324,7 @@ a:link {
 }
 
 .wrap input[type=range]::-webkit-slider-runnable-track,
-.wrap  input[type=range]::-webkit-slider-thumb,
+.wrap input[type=range]::-webkit-slider-thumb,
 .wrap input[type=range] {
   -webkit-appearance: none;
 }
@@ -379,4 +384,53 @@ output:last-child {
 output::after {
   counter-reset: c var(--c);
   content: "--" attr(for) ": " counter(c) ";";
+}
+
+/* RANGE SLIDER - DIFFERENT STYLE */
+/* section containing value range */
+section.range-slider {
+  position: relative;
+  width: 200px;
+  height: 35px;
+  text-align: center;
+}
+
+/* this makes the sliders overlap */
+section.range-slider input {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 200px;
+  height: 18px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+  padding: 0 2px;
+  /* Add some L/R padding to ensure box shadow of handle is shown */
+  overflow: hidden;
+  border: 0;
+  border-radius: 1px;
+  outline: none;
+  background: linear-gradient(grey, grey) no-repeat center;
+  /* Use a linear gradient to generate only the 2px height background */
+  background-size: 100% 2px;
+}
+
+/* this allows you to move the handles */
+section.range-slider input::-webkit-slider-thumb {
+  pointer-events: all;
+  position: relative;
+  z-index: 1;
+}
+
+/* same thing but moz */
+section.range-slider input::-moz-range-thumb {
+  pointer-events: all;
+  position: relative;
+  z-index: 10;
+  outline: 0;
+  width: 9px;
 }
