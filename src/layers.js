@@ -204,7 +204,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // Dual-point sliders
-    const d = {aInit: 70, bInit: 185, min: 0, max: 255}
+    const d = {'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255}
     const wrapper = sliderType1(d, 'In range:', allLayers, viewer)
     const section = sliderType1(d, 'Out range', allLayers, viewer)
     // const section = sliderType2(d, allLayers, viewer)
@@ -233,8 +233,8 @@ function sliderType1(d, t, allLayers, viewer) {
   let BLabel = e('label', {'class': 'sr-only', 'for': 'b'})
   BLabel.innerHTML = 'Value B:'
 
-  let ARange = e('input', {'id': 'a', 'type': 'range', 'min': min, 'max': d.max, 'value': d.aInit})
-  let BRange = e('input', {'id': 'b', 'type': 'range', 'min': min, 'max': d.max, 'value': d.bInit})
+  let ARange = e('input', {'id': 'a', 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.aInit})
+  let BRange = e('input', {'id': 'b', 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
   // To display the current values:
   let outputMe = e('span')
