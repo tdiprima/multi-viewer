@@ -205,7 +205,6 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
     // Dual-point sliders
     const wrapper = sliderType1(allLayers, viewer)
-    console.log('%cwrapper', 'color: #ccff00;', wrapper)
     const section = sliderType2(allLayers, viewer)
 
     let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper, section])
