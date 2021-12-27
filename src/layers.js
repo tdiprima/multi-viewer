@@ -204,8 +204,9 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // Dual-point sliders
-    const wrapper = sliderType1(allLayers, viewer)
-    const section = sliderType2(allLayers, viewer)
+    const d = {aInit: 70, bInit: 185, min: 0, max: 255}
+    const wrapper = sliderType1(d, allLayers, viewer)
+    const section = sliderType2(d, allLayers, viewer)
 
     let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper, section])
     body.appendChild(dd)
@@ -215,16 +216,12 @@ function addRow(table, currentLayer, allLayers, viewer) {
   }
 }
 
-function sliderType1(allLayers, viewer) {
-  let aInit = 70
-  let bInit = 185
-  let min = 0
-  let max = 255
+function sliderType1(d, allLayers, viewer) {
   let wrapper = e('div', {
     'class': 'wrap',
     'role': 'group',
     'aria-labelledby': 'multi-lbl',
-    'style': `--a: ${aInit}; --b: ${bInit}; --min: ${min}; --max: ${max}`
+    'style': `--a: ${d.aInit}; --b: ${d.bInit}; --min: ${d.min}; --max: ${d.max}`
   })
   let title = e('div', {'id': 'multi-lbl'})
   title.innerHTML = 'Range slider:'
@@ -235,24 +232,27 @@ function sliderType1(allLayers, viewer) {
   let BLabel = e('label', {'class': 'sr-only', 'for': 'b'})
   BLabel.innerHTML = 'Value B:'
 
-  let ARange = e('input', {'id': 'a', 'type': 'range', 'min': min, 'max': max, 'value': aInit})
-  let BRange = e('input', {'id': 'b', 'type': 'range', 'min': min, 'max': max, 'value': bInit})
+  let ARange = e('input', {'id': 'a', 'type': 'range', 'min': min, 'max': d.max, 'value': d.aInit})
+  let BRange = e('input', {'id': 'b', 'type': 'range', 'min': min, 'max': d.max, 'value': d.bInit})
 
   // To display the current values:
-  let outputA = e('output', {'for':'a', 'style':'--c: var(--a)'})
-  let outputB = e('output', {'for':'b', 'style':'--c: var(--b)'})
+  // let outputA = e('output', {'for':'a', 'style':'--c: var(--a)'})
+  // let outputB = e('output', {'for':'b', 'style':'--c: var(--b)'})
+  let outputMe = e('span')
+  outputMe.innerHTML = `${ARange.value} - ${BRange.value}`
 
   wrapper.appendChild(ALabel)
   wrapper.appendChild(ARange)
-  wrapper.appendChild(outputA)
+  // wrapper.appendChild(outputA)
+  wrapper.appendChild(outputMe)
   wrapper.appendChild(BLabel)
   wrapper.appendChild(BRange)
-  wrapper.appendChild(outputB)
+  // wrapper.appendChild(outputB)
 
   function f(e) {
     let _t = e.target;
     _t.parentNode.style.setProperty(`--${_t.id}`, +_t.value)
-    let d = getVals([ARange, BRange])
+    let d = getVals([ARange, BRange], outputMe)
     setFilter(allLayers, viewer, d)
   }
   ARange.addEventListener('input', f)
@@ -261,10 +261,10 @@ function sliderType1(allLayers, viewer) {
   return wrapper
 }
 
-function sliderType2(allLayers, viewer) {
+function sliderType2(d, allLayers, viewer) {
   let span = e('span', {'class': 'rangeValues'})
-  let input1 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '178'})
-  let input2 = e('input', {'max': '255', 'min': '0', 'step': '1', 'type': 'range', 'value': '255'})
+  let input1 = e('input', {'max': d.max, 'min': d.min, 'step': '1', 'type': 'range', 'value': d.aInit})
+  let input2 = e('input', {'max': d.max, 'min': d.min, 'step': '1', 'type': 'range', 'value': d.bInit})
   let section = e('section', {'class': 'range-slider'}, [span, input1, input2])
 
   // Initialize Sliders

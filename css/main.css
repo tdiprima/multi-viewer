@@ -266,21 +266,20 @@ a:link {
   font: inherit;
 }
 
-/* make the wrapper a middle-aligned grid with two rows and one column */
 .wrap {
   --dif: calc(var(--max) - var(--min));
   position: relative;
   display: grid;
   grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
   grid-template: repeat(2, max-content) 1em/1fr 1fr;
-  overflow: hidden; /* in case <label> elements overflow */
+  overflow: hidden;
   margin: 1em auto;
   width: 20em;
-  background: linear-gradient(0deg, #ccc 1em, transparent 0); /* emulate track */
-  font-family: ubuntu mono, consolas, monaco, monospace;
+  background: linear-gradient(0deg, #ccc 1em, transparent 0);
 }
 
-.wrap::before, .wrap::after {
+.wrap::before,
+.wrap::after {
   grid-column: 1/span 2;
   grid-row: 3;
   height: 100%;
@@ -309,7 +308,6 @@ a:link {
   clip-path: inset(50%);
 }
 
-/* place the sliders one on top of the other */
 .wrap input[type=range] {
   z-index: 1;
   top: 0;
@@ -328,21 +326,18 @@ a:link {
   -webkit-appearance: none;
 }
 
-/* Chrome track */
 .wrap input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 100%;
-  background: none; /* get rid of white Chrome background */
+  background: none;
 }
 
-/* Firefox track */
 .wrap input[type=range]::-moz-range-track {
   width: 100%;
   height: 100%;
   background: none;
 }
 
-/* Chrome thumb */
 .wrap input[type=range]::-webkit-slider-thumb {
   border: none;
   border-radius: 0;
@@ -352,7 +347,6 @@ a:link {
   pointer-events: auto;
 }
 
-/* Firefox thumb */
 .wrap input[type=range]::-moz-range-thumb {
   border: none;
   border-radius: 0;
@@ -362,12 +356,12 @@ a:link {
   pointer-events: auto;
 }
 
-/* focus styles allows us to see which value we're currently modifying */
 .wrap input[type=range]:focus {
   z-index: 2;
 }
 
-.wrap input[type=range]:focus, input[type=range]:focus + output {
+.wrap input[type=range]:focus,
+.wrap input[type=range]:focus+output {
   color: darkorange;
 }
 
@@ -379,7 +373,6 @@ output:last-child {
   text-align: right;
 }
 
-/* display the values using a little counter trick */
 output::after {
   counter-reset: c var(--c);
   content: "--" attr(for) ": " counter(c) ";";
