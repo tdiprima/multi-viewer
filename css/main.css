@@ -1,16 +1,3 @@
-/* TESTING */
-/** {*/
-/*  border: 1px solid aquamarine;*/
-/*}*/
-
-/*table {*/
-/*  border: 2px solid blue;*/
-/*}*/
-
-/*td {*/
-/*  border: 2px solid green;*/
-/*}*/
-
 body {
   font-family: sans-serif;
   background-color: #fff !important;
@@ -377,7 +364,7 @@ output::after {
   content: "--" attr(for) ": " counter(c) ";";
 }
 
-/* RANGE SLIDER - DIFFERENT STYLE */
+/* RANGE SLIDER - DIFFERENT */
 section.range-slider {
   position: relative;
   width: 20em;
