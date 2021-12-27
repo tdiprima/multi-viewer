@@ -205,8 +205,9 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
     // Dual-point sliders
     const d = {aInit: 70, bInit: 185, min: 0, max: 255}
-    const wrapper = sliderType1(d, allLayers, viewer)
-    const section = sliderType2(d, allLayers, viewer)
+    const wrapper = sliderType1(d, 'In range:', allLayers, viewer)
+    const section = sliderType1(d, 'Out range', allLayers, viewer)
+    // const section = sliderType2(d, allLayers, viewer)
 
     let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper, section])
     body.appendChild(dd)
@@ -216,7 +217,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   }
 }
 
-function sliderType1(d, allLayers, viewer) {
+function sliderType1(d, t, allLayers, viewer) {
   let wrapper = e('div', {
     'class': 'wrap',
     'role': 'group',
@@ -224,7 +225,7 @@ function sliderType1(d, allLayers, viewer) {
     'style': `--a: ${d.aInit}; --b: ${d.bInit}; --min: ${d.min}; --max: ${d.max}`
   })
   let title = e('div', {'id': 'multi-lbl'})
-  title.innerHTML = 'Range slider:'
+  title.innerHTML = t
   wrapper.appendChild(title)
 
   let ALabel = e('label', {'class': 'sr-only', 'for': 'a'})
@@ -236,18 +237,14 @@ function sliderType1(d, allLayers, viewer) {
   let BRange = e('input', {'id': 'b', 'type': 'range', 'min': min, 'max': d.max, 'value': d.bInit})
 
   // To display the current values:
-  // let outputA = e('output', {'for':'a', 'style':'--c: var(--a)'})
-  // let outputB = e('output', {'for':'b', 'style':'--c: var(--b)'})
   let outputMe = e('span')
   outputMe.innerHTML = `${ARange.value} - ${BRange.value}`
 
   wrapper.appendChild(ALabel)
   wrapper.appendChild(ARange)
-  // wrapper.appendChild(outputA)
   wrapper.appendChild(outputMe)
   wrapper.appendChild(BLabel)
   wrapper.appendChild(BRange)
-  // wrapper.appendChild(outputB)
 
   function f(e) {
     let _t = e.target;
