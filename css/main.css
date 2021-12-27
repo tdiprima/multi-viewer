@@ -270,11 +270,11 @@ a:link {
 /* make the wrapper a middle-aligned grid with two rows and one column */
 .wrap {
   --dif: calc(var(--max) - var(--min));
+  position: relative;
   display: grid;
   grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
   grid-template: repeat(2, max-content) 1em/1fr 1fr;
   overflow: hidden; /* in case <label> elements overflow */
-  position: relative;
   margin: 1em auto;
   width: 20em;
   background: linear-gradient(0deg, #ccc 1em, transparent 0); /* emulate track */
@@ -312,11 +312,11 @@ a:link {
 
 /* place the sliders one on top of the other */
 .wrap input[type=range] {
-  grid-column: 1/span 2;
-  grid-row: 3;
   z-index: 1;
   top: 0;
   left: 0;
+  grid-column: 1/span 2;
+  grid-row: 3;
   margin: 0;
   background: none;
   color: #000;
@@ -346,9 +346,9 @@ a:link {
 /* Chrome thumb */
 .wrap input[type=range]::-webkit-slider-thumb {
   border: none;
+  border-radius: 0;
   width: 1em;
   height: 1em;
-  border-radius: 0;
   background: currentcolor;
   pointer-events: auto;
 }
@@ -356,9 +356,9 @@ a:link {
 /* Firefox thumb */
 .wrap input[type=range]::-moz-range-thumb {
   border: none;
+  border-radius: 0;
   width: 1em;
   height: 1em;
-  border-radius: 0;
   background: currentcolor;
   pointer-events: auto;
 }
@@ -397,40 +397,40 @@ section.range-slider {
 
 /* this makes the sliders overlap */
 section.range-slider input {
-  pointer-events: none;
   position: absolute;
-  left: 0;
   top: 15px;
-  width: 200px;
-  height: 18px;
-  box-sizing: border-box;
+  left: 0;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  margin: 0;
-  padding: 0 2px;
   /* Add some L/R padding to ensure box shadow of handle is shown */
   overflow: hidden;
+  margin: 0;
   border: 0;
   border-radius: 1px;
+  box-sizing: border-box;
+  width: 200px;
+  height: 18px;
+  padding: 0 2px;
   outline: none;
   background: linear-gradient(grey, grey) no-repeat center;
   /* Use a linear gradient to generate only the 2px height background */
   background-size: 100% 2px;
+  pointer-events: none;
 }
 
 /* this allows you to move the handles */
 section.range-slider input::-webkit-slider-thumb {
-  pointer-events: all;
-  position: relative;
   z-index: 1;
+  position: relative;
+  pointer-events: all;
 }
 
 /* same thing but moz */
 section.range-slider input::-moz-range-thumb {
-  pointer-events: all;
   position: relative;
   z-index: 10;
   outline: 0;
   width: 9px;
+  pointer-events: all;
 }
