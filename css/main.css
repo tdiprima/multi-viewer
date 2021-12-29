@@ -1,3 +1,10 @@
+/* CUSTOM PROPERTIES */
+:root {
+  --hilite: #74f272;
+  --dkgray: #333;
+  --ltgray: #ccc;
+}
+
 body {
   font-family: sans-serif;
   background-color: #fff !important;
@@ -28,30 +35,17 @@ a:link {
 .divSquare {
   float: left;
   margin-right: 195px;
-  /*border: 2px solid blueviolet*/
-  /*width: 48%;*/
-  /*height: 560px;*/
 }
 
 /* DIV */
 .controls {
-  /*border: 2px solid cornflowerblue;*/
   width: 100%;
-  /*width: 640px;*/
   height: 30px;
 }
 
 /* DIV */
 .buttons {
   width: 100%;
-}
-
-/* DIV */
-.viewer {
-  /* W + H ARE NOW SET BY USER */
-  /*width: 100%;*/
-  /*width: 640px;*/
-  /*height: 480px;*/
 }
 
 /* DIV */
@@ -91,12 +85,12 @@ a:link {
   animation-fill-mode: forwards;
   animation-duration: 3s;
   animation-delay: 0s;
-  background-color: #74f272;
+  background-color: var(--hilite);
 }
 
 @keyframes bckanim {
   0% {
-    background-color: #74f272;
+    background-color: var(--hilite);
   }
   100% {
     background-color: transparent;
@@ -112,50 +106,45 @@ a:link {
 /* HOVER OVER ICONS */
 .hover-light:focus,
 .hover-light:hover {
-  color: #74f272;
+  color: var(--hilite);
 }
 
 /* USER CONTROLS */
 .btn {
-  border-radius: 5px; /*added*/
+  border-radius: 5px;
   padding: 4px 12px;
   cursor: pointer;
   font-size: 12px;
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
-  color: #333;
-  /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
+  color: var(--dkgray);
 }
 
 .btnOn {
-  border: 2px solid #74f272;
-  border-radius: 5px; /*added*/
+  border: 2px solid var(--hilite);
+  border-radius: 5px;
   padding: 4px 12px;
   cursor: pointer;
   font-size: 12px;
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
-  color: #74f272;
-  /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
+  color: var(--hilite);
 }
 
 /* DRAG AND DROP */
-/*drop_site*/
 .dropzone {
   overflow: hidden !important;
-  border: 1px solid #ccc !important;
+  border: 1px solid var(--ltgray) !important;
   background-color: #f1f1f1 !important;
 }
 
-/*layer_tab*/
 .dragIt {
   float: left !important;
   transition: 0.3s !important;
-  border: 1px solid #333 !important;
-  border-radius: 7px !important; /*inc to 7*/
-  /*border-radius: 5px !important;*/
+  border: 1px solid var(--dkgray) !important;
+  border-radius: 7px !important;
   width: 90px;
   padding: 12px 14px !important;
   cursor: move !important;
@@ -175,10 +164,8 @@ a:link {
   /*hyphens: auto;*/
 }
 
-/* drop_site */
 .dropzone.over {
   border: 3px dotted #00ff00 !important;
-  /*border: 3px dotted #00acd6 !important;*/
 }
 
 /* FLOATING DIV */
@@ -187,9 +174,8 @@ a:link {
   z-index: 10;
   display: inline-block;
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--ltgray);
   border-radius: 5px;
-  /*border-radius: 4px;*/
   background-color: #f1f1f1;
   white-space: nowrap;
 }
@@ -198,11 +184,10 @@ a:link {
   z-index: 20;
   border-radius: 5px;
   padding: 10px;
-  /*background-color: rgba(81, 203, 238, 1);*/
-  background-color: #ccc;
+  background-color: var(--ltgray);
   cursor: move;
   font-weight: bold;
-  color: #333;
+  color: var(--dkgray);
 }
 
 /* MAGNIFICATION */
@@ -262,7 +247,7 @@ a:link {
   overflow: hidden;
   margin: 1em auto;
   width: 20em;
-  background: linear-gradient(0deg, #ccc 1em, transparent 0);
+  background: linear-gradient(0deg, var(--ltgray) 1em, transparent 0);
 }
 
 .wrap::before,
@@ -387,7 +372,7 @@ section.range-slider input {
   width: 20em;
   padding: 0 2px;
   outline: none;
-  background: linear-gradient(0deg, #ccc 1em, transparent 0);
+  background: linear-gradient(0deg, var(--ltgray) 1em, transparent 0);
   background-size: 100% 2px;
   pointer-events: none;
 }
