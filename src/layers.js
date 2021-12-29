@@ -207,7 +207,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let d = {'aLab':'a', 'bLab':'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'wrap', 'type': 'inside'}
     const wrapper = sliderType1(d, 'In range:', allLayers, viewer)
     d = {'aLab':'a1', 'bLab':'b1', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'section', 'type': 'outside'}
-    const section = sliderType1(d, 'Out range', allLayers, viewer)
+    const section = sliderType1(d, 'Out range:', allLayers, viewer)
 
     let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper, section])
     body.appendChild(dd)
