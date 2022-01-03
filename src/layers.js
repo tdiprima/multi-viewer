@@ -242,11 +242,6 @@ function sliderType1(d, t, allLayers, viewer) {
   title.innerHTML = t
   wrapper.appendChild(title)
 
-  let ALabel = e('label', {'class': 'sr-only', 'for': d.aLab})
-  ALabel.innerHTML = `Value ${d.aLab.toUpperCase()}:`
-  let BLabel = e('label', {'class': 'sr-only', 'for': d.bLab})
-  BLabel.innerHTML = `Value ${d.bLab.toUpperCase()}:`
-
   let ARange = e('input', {'id': `${d.aLab}`, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.aInit})
   let BRange = e('input', {'id': `${d.bLab}`, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
@@ -258,10 +253,8 @@ function sliderType1(d, t, allLayers, viewer) {
     displayElement.innerHTML = `${ARange.value} - ${BRange.value}`
   }
 
-  wrapper.appendChild(ALabel)
   wrapper.appendChild(ARange)
   wrapper.appendChild(displayElement)
-  wrapper.appendChild(BLabel)
   wrapper.appendChild(BRange)
 
   function f(e) {
