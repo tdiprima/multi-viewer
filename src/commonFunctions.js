@@ -19,7 +19,7 @@ function setFilter(layers, viewer, range) {
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
-              colorFilter.prototype.PROBABILITY(range[0], range[1])
+              colorFilter.prototype.PROBABILITY(range)
             ]
           })
         } else {

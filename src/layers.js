@@ -214,8 +214,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     d = {
       'aLab': 'a1',
       'bLab': 'b1',
-      'aInit': 70,
-      'bInit': 185,
+      'aInit': 10,
+      'bInit': 245,
       'min': 0,
       'max': 255,
       'class': 'section',
@@ -264,10 +264,11 @@ function sliderType1(d, t, allLayers, viewer) {
 
     if (d.type === 'outside') {
       displayElement.innerHTML = `0 - ${slideVals[0]}, ${slideVals[1]} - 255`
+      setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'outside'})
     } else {
       displayElement.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
+      setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'inside'})
     }
-    setFilter(allLayers, viewer, slideVals)
   }
 
   ARange.addEventListener('input', f)

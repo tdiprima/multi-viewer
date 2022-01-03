@@ -430,24 +430,39 @@ function extraRow(uniq, colors, layers, viewer) {
 
 // Custom color filters
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
-colorFilter.prototype.PROBABILITY = (min, max) => {
-  // console.log('HERE')
+colorFilter.prototype.PROBABILITY = (data) => {
   return (context, callback) => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let pixels = imgData.data
-    for (let i = 0; i < pixels.length; i += 4) {
-      let probability = pixels[i + 1]
-      if (probability > min && probability < max) {
-        pixels[i] = 0
-        pixels[i + 1] = 255
-        pixels[i + 2] = 255
-        pixels[i + 3] = 255
+
+    if (data.type === 'inside') {
+      for (let i = 0; i < pixels.length; i += 4) {
+        let probability = pixels[i + 1]
+        // has to be gt zero (not >=)
+        if (probability > data.min && probability <= data.max) {
+          pixels[i] = 0
+          pixels[i + 1] = 255
+          pixels[i + 2] = 255
+          pixels[i + 3] = 255
+        } else {
+          pixels[i + 3] = 0
+        }
       }
-      else
-      {
-        pixels[i + 3] = 0
+    } else if (data.type === 'outside') {
+      for (let i = 0; i < pixels.length; i += 4) {
+        let probability = pixels[i + 1]
+        // has to be gt zero (not >=), zero is background
+        if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
+          pixels[i] = 0
+          pixels[i + 1] = 255
+          pixels[i + 2] = 255
+          pixels[i + 3] = 255
+        } else {
+          pixels[i + 3] = 0
+        }
       }
     }
+
     context.putImageData(imgData, 0, 0)
     callback()
   }

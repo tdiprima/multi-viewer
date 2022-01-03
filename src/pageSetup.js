@@ -12,9 +12,9 @@
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
 
-  // numViewers = 2
-  // rows = 1
-  // columns = 2
+  numViewers = 1
+  rows = 1
+  columns = 1
 
   function testing1() {
     // testing 1 image
