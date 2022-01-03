@@ -8,14 +8,14 @@
 
 body {
   font-family: sans-serif;
-  background-color: #fff !important;
-  color: #000 !important;
+  background-color: #fff;
+  color: #000;
 }
 
 /* DARK MODE */
 .dark-mode {
-  background-color: #000 !important;
-  color: #fff !important;
+  background-color: #000;
+  color: #fff;
 }
 
 ul {
@@ -104,6 +104,11 @@ a:link {
   cursor: move;
 }
 
+.hover-light {
+  color: var(--fgdark);
+  background-color: var(--bglight);
+}
+
 /* HOVER OVER ICONS */
 .hover-light:focus,
 .hover-light:hover {
@@ -113,6 +118,7 @@ a:link {
 
 /* USER CONTROLS */
 .btn {
+  border: 1px solid var(--fgdark);
   border-radius: 5px;
   padding: 4px 12px;
   cursor: pointer;
@@ -126,6 +132,7 @@ a:link {
 
 /*btn:hover {*/
 /*  color: var(--highlight);*/
+/*  border: 2px solid var(--highlight);*/
 /*}*/
 
 .btnOn {
@@ -142,20 +149,20 @@ a:link {
 
 /* DRAG AND DROP */
 .dropzone {
-  overflow: hidden !important;
-  border: 1px solid var(--bgdark) !important;
-  background-color: var(--bglight) !important;
+  overflow: hidden;
+  border: 1px solid var(--bgdark);
+  background-color: var(--bglight);
 }
 
 .dragIt {
-  float: left !important;
-  transition: 0.3s !important;
-  border: 1px solid var(--fgdark) !important;
-  border-radius: 7px !important;
+  float: left;
+  transition: 0.3s;
+  border: 1px solid var(--fgdark);
+  border-radius: 7px;
   width: 90px;
-  padding: 12px 14px !important;
-  cursor: move !important;
-  font-size: 14px !important;
+  padding: 12px 14px;
+  cursor: move;
+  font-size: 14px;
 
   /* ELLIPSES FOR LONG NAMES */
   overflow: hidden;
@@ -172,7 +179,7 @@ a:link {
 }
 
 .dropzone.over {
-  border: 3px dotted #00ff00 !important;
+  border: 3px dotted #00ff00;
 }
 
 /* FLOATING DIV */
