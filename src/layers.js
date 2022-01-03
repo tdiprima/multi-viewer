@@ -46,7 +46,7 @@ function getViewerObject(element) {
   return retVal
 }
 
-function getVals(slides, displayElement) {
+function getVals(slides) {
   // Get slider values
   let slide1 = parseFloat(slides[0].value)
   let slide2 = parseFloat(slides[1].value)
@@ -56,10 +56,6 @@ function getVals(slides, displayElement) {
     let tmp = slide2;
     slide2 = slide1;
     slide1 = tmp
-  }
-
-  if (displayElement) {
-    displayElement.innerHTML = slide1 + ' - ' + slide2
   }
 
   return [slide1, slide2]
@@ -158,7 +154,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
       colorsUI.style.display = 'block'
     })
 
-    // The tachometer is going to pop open 'settings'
+    // The tachometer is going to pop open 'settings' (or whatever we decide to call it)
     // Settings will have color (or probability) attenuation, fill/un-fill poly's, range sliders.
     let tachometer = e('i', {
       'id': makeId(5, 'tach'),
@@ -204,9 +200,27 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
 
     // Dual-point sliders
-    let d = {'aLab':'a', 'bLab':'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'wrap', 'type': 'inside'}
+    let d = {
+      'aLab': 'a',
+      'bLab': 'b',
+      'aInit': 70,
+      'bInit': 185,
+      'min': 0,
+      'max': 255,
+      'class': 'wrap',
+      'type': 'inside'
+    }
     const wrapper = sliderType1(d, 'In range:', allLayers, viewer)
-    d = {'aLab':'a1', 'bLab':'b1', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'section', 'type': 'outside'}
+    d = {
+      'aLab': 'a1',
+      'bLab': 'b1',
+      'aInit': 70,
+      'bInit': 185,
+      'min': 0,
+      'max': 255,
+      'class': 'section',
+      'type': 'outside'
+    }
     const section = sliderType1(d, 'Out range:', allLayers, viewer)
 
     let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper, section])
@@ -237,25 +251,32 @@ function sliderType1(d, t, allLayers, viewer) {
   let BRange = e('input', {'id': `${d.bLab}`, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
   // To display the current values:
-  let outputMe = e('span')
+  let displayElement = e('span')
   if (d.type === 'outside') {
-    outputMe.innerHTML = `0 - ${ARange.value}, ${BRange.value} - 255`
+    displayElement.innerHTML = `0 - ${ARange.value}, ${BRange.value} - 255`
   } else {
-    outputMe.innerHTML = `${ARange.value} - ${BRange.value}`
+    displayElement.innerHTML = `${ARange.value} - ${BRange.value}`
   }
 
   wrapper.appendChild(ALabel)
   wrapper.appendChild(ARange)
-  wrapper.appendChild(outputMe)
+  wrapper.appendChild(displayElement)
   wrapper.appendChild(BLabel)
   wrapper.appendChild(BRange)
 
   function f(e) {
     let _t = e.target;
     _t.parentNode.style.setProperty(`--${_t.id}`, +_t.value)
-    let d = getVals([ARange, BRange], outputMe)
-    setFilter(allLayers, viewer, d)
+    let slideVals = getVals([ARange, BRange])
+
+    if (d.type === 'outside') {
+      displayElement.innerHTML = `0 - ${slideVals[0]}, ${slideVals[1]} - 255`
+    } else {
+      displayElement.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
+    }
+    setFilter(allLayers, viewer, slideVals)
   }
+
   ARange.addEventListener('input', f)
   BRange.addEventListener('input', f)
 
