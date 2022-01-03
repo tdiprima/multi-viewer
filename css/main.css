@@ -7,8 +7,8 @@
 }
 
 body {
-  font-family: sans-serif;
   background-color: #fff;
+  font-family: sans-serif;
   color: #000;
 }
 
@@ -90,7 +90,7 @@ a:link {
     background-color: var(--highlight);
   }
   100% {
-    background-color: transparent;
+    background-color: var(--bglight);
   }
 }
 
@@ -102,34 +102,34 @@ a:link {
 
 .fas:focus,
 .fas:hover {
-  color: var(--highlight) !important;
   border: none !important;
+  color: var(--highlight) !important;
 }
 
 .hover-light {
-  color: var(--fgdark);
   background-color: var(--bglight);
+  color: var(--fgdark);
 }
 
 /* HOVER OVER ICONS */
 .hover-light:focus,
 .hover-light:hover {
-  color: var(--highlight);
   border: 1px solid var(--highlight);
+  color: var(--highlight);
 }
 
 /* USER CONTROLS */
 .btn {
+  padding: 4px 12px;
   border: 1px solid var(--fgdark);
   border-radius: 5px;
-  padding: 4px 12px;
-  cursor: pointer;
+  /*background: var(--background);*/
+  color: var(--fgdark);
   font-size: 12px;
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
-  color: var(--fgdark);
-  /*background: var(--background);*/
+  cursor: pointer;
 }
 
 /*btn:hover {*/
