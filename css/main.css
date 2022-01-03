@@ -45,14 +45,10 @@ a:link {
 }
 
 /* DIV */
-.buttons {
-  width: 100%;
-}
-
-/* DIV */
 .floated {
   float: left;
   margin-right: 5px;
+  width: 100%;
 }
 
 /* DISPLAY TOOLS ON HOVER */
@@ -104,6 +100,12 @@ a:link {
   cursor: move;
 }
 
+.fas:focus,
+.fas:hover {
+  color: var(--highlight) !important;
+  border: none !important;
+}
+
 .hover-light {
   color: var(--fgdark);
   background-color: var(--bglight);
@@ -113,7 +115,7 @@ a:link {
 .hover-light:focus,
 .hover-light:hover {
   color: var(--highlight);
-  /*border: 1px solid var(--highlight);*/
+  border: 1px solid var(--highlight);
 }
 
 /* USER CONTROLS */

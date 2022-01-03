@@ -55,7 +55,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     }).then(opts => {
       // dark-mode
       let awesome = e('i', {'class': 'fas fa-moon'})
-      let btnDark = e('button', {'class': 'btn'}, [awesome])
+      let btnDark = e('button', {'class': 'btn hover-light'}, [awesome])
 
       // Slide name
       let name
@@ -120,7 +120,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
 
             // ANNOTATION TOOLS
-            htm += `<div class="floated buttons">`
+            htm += `<div class="floated">`
 
             if (opts && opts.paintbrushColor) {
               htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
@@ -128,16 +128,16 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
               htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`
             }
 
-            htm += `<button id="btnDraw${idx}" class="btn" title="Draw"><i class="fas fa-pencil-alt"></i></button>&nbsp;
-<button id="btnEdit${idx}" class="btn" title="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
-<button id="btnGrid${idx}" class="btn" title="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
-<button id="btnGridMarker${idx}" class="btn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
-<button id="btnRuler${idx}" class="btn" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
-<button id="btnShare${idx}" class="btn" title="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
-<button id="btnCam${idx}" class="btn" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
-<button id="btnBlender${idx}" class="btn" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
+            htm += `<button id="btnDraw${idx}" class="btn hover-light" title="Draw"><i class="fas fa-pencil-alt"></i></button>&nbsp;
+<button id="btnEdit${idx}" class="btn hover-light" title="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
+<button id="btnGrid${idx}" class="btn hover-light" title="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
+<button id="btnGridMarker${idx}" class="btn hover-light" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
+<button id="btnRuler${idx}" class="btn hover-light" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
+<button id="btnShare${idx}" class="btn hover-light" title="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
+<button id="btnCam${idx}" class="btn hover-light" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
+<button id="btnBlender${idx}" class="btn hover-light" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
 <div class="mag" style="display: inline">
-  <button class="btn">
+  <button class="btn hover-light">
   <i class="fas fa-search"></i>
   </button>
   <div class="mag-content">
@@ -150,7 +150,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     <a href="#" data-value="1.0" id="40">40x</a>
   </div>
 </div>
-<button id="btnMapMarker" class="btn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
+<button id="btnMapMarker" class="btn hover-light" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 </div>`
 
             // END
