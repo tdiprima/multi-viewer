@@ -1,8 +1,9 @@
 /* CUSTOM PROPERTIES */
 :root {
-  --hilite: #74f272;
-  --dkgray: #333;
-  --ltgray: #ccc;
+  --highlight: #74f272;
+  --fgdark: #333;
+  --bgdark: #ccc;
+  --bglight: #f1f1f1;
 }
 
 body {
@@ -85,12 +86,12 @@ a:link {
   animation-fill-mode: forwards;
   animation-duration: 3s;
   animation-delay: 0s;
-  background-color: var(--hilite);
+  background-color: var(--highlight);
 }
 
 @keyframes bckanim {
   0% {
-    background-color: var(--hilite);
+    background-color: var(--highlight);
   }
   100% {
     background-color: transparent;
@@ -106,7 +107,8 @@ a:link {
 /* HOVER OVER ICONS */
 .hover-light:focus,
 .hover-light:hover {
-  color: var(--hilite);
+  color: var(--highlight);
+  /*border: 1px solid var(--highlight);*/
 }
 
 /* USER CONTROLS */
@@ -118,11 +120,16 @@ a:link {
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
-  color: var(--dkgray);
+  color: var(--fgdark);
+  /*background: var(--background);*/
 }
 
+/*btn:hover {*/
+/*  color: var(--highlight);*/
+/*}*/
+
 .btnOn {
-  border: 2px solid var(--hilite);
+  border: 2px solid var(--highlight);
   border-radius: 5px;
   padding: 4px 12px;
   cursor: pointer;
@@ -130,20 +137,20 @@ a:link {
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
-  color: var(--hilite);
+  color: var(--highlight);
 }
 
 /* DRAG AND DROP */
 .dropzone {
   overflow: hidden !important;
-  border: 1px solid var(--ltgray) !important;
-  background-color: #f1f1f1 !important;
+  border: 1px solid var(--bgdark) !important;
+  background-color: var(--bglight) !important;
 }
 
 .dragIt {
   float: left !important;
   transition: 0.3s !important;
-  border: 1px solid var(--dkgray) !important;
+  border: 1px solid var(--fgdark) !important;
   border-radius: 7px !important;
   width: 90px;
   padding: 12px 14px !important;
@@ -174,9 +181,9 @@ a:link {
   z-index: 10;
   display: inline-block;
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
-  border: 1px solid var(--ltgray);
+  border: 1px solid var(--bgdark);
   border-radius: 5px;
-  background-color: #f1f1f1;
+  background-color: var(--bglight);
   white-space: nowrap;
 }
 
@@ -184,10 +191,10 @@ a:link {
   z-index: 20;
   border-radius: 5px;
   padding: 10px;
-  background-color: var(--ltgray);
+  background-color: var(--bgdark);
   cursor: move;
   font-weight: bold;
-  color: var(--dkgray);
+  color: var(--fgdark);
 }
 
 /* MAGNIFICATION */
@@ -247,7 +254,7 @@ a:link {
   overflow: hidden;
   margin: 1em auto;
   width: 20em;
-  background: linear-gradient(0deg, var(--ltgray) 1em, transparent 0);
+  background: linear-gradient(0deg, var(--bgdark) 1em, transparent 0);
 }
 
 .wrap::before,
