@@ -123,7 +123,6 @@ a:link {
   padding: 4px 12px;
   border: 1px solid var(--fgdark);
   border-radius: 5px;
-  /*background: var(--background);*/
   color: var(--fgdark);
   font-size: 12px;
   line-height: 18px;
@@ -131,11 +130,6 @@ a:link {
   vertical-align: middle;
   cursor: pointer;
 }
-
-/*btn:hover {*/
-/*  color: var(--highlight);*/
-/*  border: 2px solid var(--highlight);*/
-/*}*/
 
 .btnOn {
   border: 2px solid var(--highlight);
@@ -170,6 +164,8 @@ a:link {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+
+  /* OR: */
 
   /* WORD-WRAP LONG NAMES */
   /*overflow-wrap: break-word;*/
@@ -247,7 +243,6 @@ th, span {
   position: absolute;
   top: 0;
   left: 0;
-  /*transform: translate(-50%, -100%);*/
   margin-top: 0;
   padding: 5px;
   font-size: x-small;
