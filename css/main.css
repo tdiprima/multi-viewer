@@ -294,12 +294,6 @@ th, span {
   grid-column: 1/span 2;
 }
 
-.sr-only {
-  position: absolute;
-  -webkit-clip-path: inset(50%);
-  clip-path: inset(50%);
-}
-
 .wrap input[type=range] {
   z-index: 1;
   top: 0;
@@ -350,6 +344,7 @@ th, span {
 
 .wrap input[type=range]:focus {
   z-index: 2;
+  outline: dotted 1px currentcolor;
 }
 
 .wrap input[type=range]:focus,
@@ -357,17 +352,10 @@ th, span {
   color: darkorange;
 }
 
-output {
-  grid-row: 2;
-}
-
-output:last-child {
-  text-align: right;
-}
-
-output::after {
-  counter-reset: c var(--c);
-  content: "--" attr(for) ": " counter(c) ";";
+span {
+  text-align: center;
+  text-align: -moz-center;
+  text-align: -webkit-center;
 }
 
 /* SECTION */
@@ -440,6 +428,7 @@ output::after {
 
 .section input[type=range]:focus {
   z-index: 2;
+  outline: dotted 1px currentcolor;
 }
 
 .section input[type=range]:focus,
