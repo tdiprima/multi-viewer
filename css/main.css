@@ -184,6 +184,10 @@ a:link {
   border: 3px dotted #00ff00;
 }
 
+th, span {
+  color: var(--fgdark);
+}
+
 /* FLOATING DIV */
 .popup {
   position: absolute;
@@ -193,6 +197,7 @@ a:link {
   border: 1px solid var(--bgdark);
   border-radius: 5px;
   background-color: var(--bglight);
+  color: var(--fgdark);
   white-space: nowrap;
 }
 

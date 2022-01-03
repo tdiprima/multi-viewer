@@ -30,13 +30,20 @@ const blender = (blenderBtn, viewer) => {
   let uiCreated = false
 
   // Set up user interface
-  function createBlendModesUI (div, viewer) {
+  function createBlendModesUI(div, viewer) {
     const table = e('table')
     div.appendChild(table)
 
     blendModes.forEach(item => {
-      const blendBtn = e('button', { type: 'button', id: item.replace('-', '_'), value: item, class: 'button' })
+      const blendBtn = e('button', {
+        'type': 'button',
+        'id': item.replace('-', '_'),
+        'value': item,
+        'class': 'btn hover-light',
+        'style': 'width: 120px'
+      })
       blendBtn.innerHTML = item
+
       const row = e('tr', {}, [
         e('td', {}, [blendBtn, e('br')])
       ])
@@ -49,7 +56,7 @@ const blender = (blenderBtn, viewer) => {
           const topImage = viewer.world.getItemAt(count - 1) // Blend all
           topImage.setCompositeOperation(blendBtn.value)
         } catch (e) {
-          console.error(`%c${e.message}`, 'font-size: larger;')
+          console.error(e.message)
         }
       })
     })
