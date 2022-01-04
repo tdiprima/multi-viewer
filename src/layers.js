@@ -175,7 +175,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // COLOR ATTENUATION BY PROBABILITY
     let attId = makeId(5, 'atten')
     let label1 = e('label', {'for': attId})
-    label1.innerHTML = "&#58; color-attenuation by probability<br>"
+    label1.innerHTML = "&nbsp;&#58;&nbsp;color-attenuation by probability<br>"
     let attenuation = e('i', {
       'id': attId,
       'class': `fas fa-broadcast-tower hover-light`,
@@ -190,7 +190,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     // UN/FILL POLYGON
     let fillId = makeId(5, 'fill')
     let label2 = e('label', {'for': fillId})
-    label2.innerHTML = "&#58; un/fill polygon<br>"
+    label2.innerHTML = "&nbsp;&nbsp;&#58;&nbsp;un/fill polygon<br>"
 
     let emptyCircle = 'far'
     let filledCircle = 'fas'
