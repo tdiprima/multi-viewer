@@ -32,11 +32,11 @@ function setFilter(layers, viewer, range) {
           })
         } else {
           if (outlineFlag) {
-            // OUTLINE POLYS IN INDIGO!
+            // OUTLINE POLYS!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
-                colorFilter.prototype.OUTLINE(63, 15, 183)
+                colorFilter.prototype.OUTLINE(0, 0, 255)
               ]
             })
           } else if (renderType === 'byProbability') {

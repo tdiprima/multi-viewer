@@ -434,19 +434,17 @@ function extraRow(uniq, colors, layers, viewer) {
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
-    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let imageData = imgData.data
-    console.log('%cr, g, b', 'color: deeppink;', r, g, b)
 
     // Make background transparent
-    for (let i = 0; i < imageData.length; i += 4) {
-      if (imageData[i + 1] === 0) {
-        // [64, 0, 64, 255] -> [64, 0, 64, 0]
+    for (let i = 0; i < imageData.length; i+= 4) {
+      if(imageData[i + 1] === 0) {
         imageData[i + 3] = 0
       }
     }
 
-    // Reduce data to 2D array of pixels
+    // Create array that gives each pixel its own array
     let data = imageData.reduce(
       (pixel, key, index) =>
         (index % 4 === 0
@@ -455,53 +453,49 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
       []
     )
 
-    // Color the edge of the Polygons
+    function sett(i) {
+      data[i][0] = r
+      data[i][1] = g
+      data[i][2] = b
+      data[i][3] = 255
+    }
+
+    // Color the edge of the Polygon cyan
     let n = 1 // nth channel
+    // let cyan = [0, 255, 255, 255]
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
         // If we have a color, but the pixel next to it is transparent, we have an edge pixel
         try {
           if (data[i][n] !== 0 && data[i + 1][3] === 0) {
-            data[i][0] = r
-            data[i][1] = g
-            data[i][2] = b
-            data[i][3] = 255
+            sett(i)
           }
         } catch (e) {
-          // this may fail when zoomed in
+          //data[i][3] = 0
         }
 
         try {
           if (data[i][n] !== 0 && data[i - 1][3] === 0) {
-            data[i][0] = r
-            data[i][1] = g
-            data[i][2] = b
-            data[i][3] = 255
+            sett(i)
           }
         } catch (e) {
-          // ditto
+          //data[i][3] = 0
         }
 
         try {
           if (data[i][n] !== 0 && data[i - context.canvas.width][3] === 0) {
-            data[i][0] = r
-            data[i][1] = g
-            data[i][2] = b
-            data[i][3] = 255
+            sett(i)
           }
         } catch (e) {
-          // catch
+          //data[i][3] = 0
         }
 
         try {
           if (data[i][n] !== 0 && data[i + context.canvas.width][3] === 0) {
-            data[i][0] = r
-            data[i][1] = g
-            data[i][2] = b
-            data[i][3] = 255
+            sett(i)
           }
         } catch (e) {
-          // catch
+          //data[i][3] = 0
         }
       } else {
         // Set each pixel
@@ -514,9 +508,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     // Change all green pixels in middle of polygon to transparent
     data.forEach((px) => {
+      // !== filled in :\
+      // > outlined :thumbs_up:
       if (px[n] > 0) {
-        // Set each pixel!
-        // It is not enough to set px=[0,0,0,0]
         px[0] = 0
         px[1] = 0
         px[2] = 0
@@ -524,7 +518,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
       }
     })
 
-    context.putImageData(imgData, 0, 0)
+    let newImage = context.createImageData(context.canvas.width, context.canvas.height)
+    newImage.data.set(data.flat())
+    context.putImageData(newImage, 0, 0)
+    // context.putImageData(imgData, 0, 0)
     callback()
   };
 }
