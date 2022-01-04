@@ -436,18 +436,17 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let imageData = imgData.data
-    let ON = 255
-    let OFF = 0
+    console.log('%cr, g, b', 'color: deeppink;', r, g, b)
 
-    // Make background completely transparent (currently [64, 0, 64])
+    // Make background transparent
     for (let i = 0; i < imageData.length; i += 4) {
       if (imageData[i + 1] === 0) {
-        imageData[i + 3] = OFF
+        // [64, 0, 64, 255] -> [64, 0, 64, 0]
+        imageData[i + 3] = 0
       }
     }
 
     // Reduce data to 2D array of pixels
-    // (easier to work with)
     let data = imageData.reduce(
       (pixel, key, index) =>
         (index % 4 === 0
@@ -459,15 +458,14 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     // Color the edge of the Polygons
     let n = 1 // nth channel
     for (let i = 0; i < data.length; i++) {
-      if (data[i][3] === ON) {
+      if (data[i][3] === 255) {
         // If we have a color, but the pixel next to it is transparent, we have an edge pixel
         try {
           if (data[i][n] !== 0 && data[i + 1][3] === 0) {
-
             data[i][0] = r
             data[i][1] = g
             data[i][2] = b
-            data[i][3] = ON
+            data[i][3] = 255
           }
         } catch (e) {
           // this may fail when zoomed in
@@ -478,7 +476,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             data[i][0] = r
             data[i][1] = g
             data[i][2] = b
-            data[i][3] = ON
+            data[i][3] = 255
           }
         } catch (e) {
           // ditto
@@ -489,7 +487,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             data[i][0] = r
             data[i][1] = g
             data[i][2] = b
-            data[i][3] = ON
+            data[i][3] = 255
           }
         } catch (e) {
           // catch
@@ -500,7 +498,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             data[i][0] = r
             data[i][1] = g
             data[i][2] = b
-            data[i][3] = ON
+            data[i][3] = 255
           }
         } catch (e) {
           // catch
