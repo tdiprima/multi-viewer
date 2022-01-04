@@ -440,6 +440,7 @@ colorFilter.prototype.PROBABILITY = (data) => {
         let probability = pixels[i + 1]
         // has to be gt zero (not >=)
         if (probability > data.min && probability <= data.max) {
+          // Color: cyan
           pixels[i] = 0
           pixels[i + 1] = 255
           pixels[i + 2] = 255
@@ -453,8 +454,9 @@ colorFilter.prototype.PROBABILITY = (data) => {
         let probability = pixels[i + 1]
         // has to be gt zero (not >=), zero is background
         if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
+          // Color: blue
           pixels[i] = 0
-          pixels[i + 1] = 255
+          pixels[i + 1] = 0
           pixels[i + 2] = 255
           pixels[i + 3] = 255
         } else {
@@ -492,17 +494,18 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     )
 
     if (outlineFlag) {
-      // Color the edge of the Polygons blue
+      // Color the edge of the Polygons
       let n = 1 // nth channel
       for (let i = 0; i < data.length; i++) {
         if (data[i][3] === 255) {
           // If we have a color, but the pixel next to it is transparent, we have an edge pixel
           try {
             if (data[i][n] !== 0 && data[i + 1][3] === 0) {
-              data[i][0] = 0
-              data[i][1] = 0
-              data[i][2] = 255
-              data[i][3] = 255
+              // Indigo; #3F0FB7; rgba(63, 15, 183, 1);
+              data[i][0] = 63
+              data[i][1] = 15
+              data[i][2] = 183
+              data[i][3] = 255 // OSD needs 255; not 1.
             }
           } catch (e) {
             // this may fail when zoomed in
@@ -510,9 +513,9 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 
           try {
             if (data[i][n] !== 0 && data[i - 1][3] === 0) {
-              data[i][0] = 0
-              data[i][1] = 0
-              data[i][2] = 255
+              data[i][0] = 63
+              data[i][1] = 15
+              data[i][2] = 183
               data[i][3] = 255
             }
           } catch (e) {
@@ -521,9 +524,9 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 
           try {
             if (data[i][n] !== 0 && data[i - context.canvas.width][3] === 0) {
-              data[i][0] = 0
-              data[i][1] = 0
-              data[i][2] = 255
+              data[i][0] = 63
+              data[i][1] = 15
+              data[i][2] = 183
               data[i][3] = 255
             }
           } catch (e) {
@@ -532,15 +535,16 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 
           try {
             if (data[i][n] !== 0 && data[i + context.canvas.width][3] === 0) {
-              data[i][0] = 0
-              data[i][1] = 0
-              data[i][2] = 255
+              data[i][0] = 63
+              data[i][1] = 15
+              data[i][2] = 183
               data[i][3] = 255
             }
           } catch (e) {
             // catch
           }
         } else {
+          // Set each pixel
           data[i][0] = 0
           data[i][1] = 0
           data[i][2] = 0
@@ -586,7 +590,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 
       function setPix(fun, cmap) {
         for (let i = 0; i < data.length; i++) {
-          // 255 = nuclear material exists here
+          // Alpha 255 means that nuclear material exists here
           if (data[i][3] === 255) {
             const r = data[i][0] // red channel = class
             const g = data[i][1] // green channel = probability

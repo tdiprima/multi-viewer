@@ -223,7 +223,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     }
     const section = sliderType1(d, 'Out range:', allLayers, viewer)
 
-    let dd = e('div', {}, [attenuation, '\n', fillPoly, wrapper, section])
+    let dd = e('div', {}, [attenuation, '\n', fillPoly, section, wrapper])
     body.appendChild(dd)
 
   } else {
