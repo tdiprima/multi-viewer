@@ -181,10 +181,9 @@ class ImageViewer {
 
     // Uncomment for testing
     // viewer.addHandler('canvas-click', event => {
-    //   const webPoint = event.position
-    //   const viewportPoint = viewer.viewport.pointFromPixel(webPoint)
+    //   const viewportPoint = viewer.viewport.pointFromPixel(event.position)
     //   const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
-    //   console.log(webPoint, viewportPoint, imagePoint)
+    //   console.log('imagePoint', Math.round(imagePoint.x), Math.round(imagePoint.y))
     // })
 
     this.viewer = viewer // SET THIS VIEWER
