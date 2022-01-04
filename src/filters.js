@@ -460,9 +460,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
       data[i][3] = 255
     }
 
-    // Color the edge of the Polygon cyan
+    // Outline edge of polygon
     let n = 1 // nth channel
-    // let cyan = [0, 255, 255, 255]
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
         // If we have a color, but the pixel next to it is transparent, we have an edge pixel
@@ -471,7 +470,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             sett(i)
           }
         } catch (e) {
-          //data[i][3] = 0
+          // catch
         }
 
         try {
@@ -479,7 +478,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             sett(i)
           }
         } catch (e) {
-          //data[i][3] = 0
+          // catch
         }
 
         try {
@@ -487,7 +486,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             sett(i)
           }
         } catch (e) {
-          //data[i][3] = 0
+          // catch
         }
 
         try {
@@ -495,7 +494,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             sett(i)
           }
         } catch (e) {
-          //data[i][3] = 0
+          // catch
         }
       } else {
         // Set each pixel
@@ -508,9 +507,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     // Change all green pixels in middle of polygon to transparent
     data.forEach((px) => {
-      // !== filled in :\
-      // > outlined :thumbs_up:
+      // If use !== then filled in :\
+      // Use > then outlined :thumbs_up:
       if (px[n] > 0) {
+        // Set each pixel! It's not enough to set px=[0,0,0,0]
         px[0] = 0
         px[1] = 0
         px[2] = 0
@@ -521,7 +521,6 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     let newImage = context.createImageData(context.canvas.width, context.canvas.height)
     newImage.data.set(data.flat())
     context.putImageData(newImage, 0, 0)
-    // context.putImageData(imgData, 0, 0)
     callback()
   };
 }
