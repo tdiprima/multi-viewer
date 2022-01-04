@@ -9,29 +9,46 @@ const config = {
 
 function setFilter(layers, viewer, range) {
   if (viewer.world) {
-    // SET COLOR FILTER
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
-    // Gather what we're doing for each layer
+
     for (let i = 0; i < itemCount; i++) {
       if (i > 0) {
         if (range) {
+          // USE RANGE VALUES!
+          let r, g, b
+          if (range.type === 'inside') {
+            // Color: cyan
+            r = 0;  g = 255; b = 255;
+          } else {
+            // Color: blue
+            r = 0;  g = 0; b = 255;
+          }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: [
-              colorFilter.prototype.PROBABILITY(range)
+              colorFilter.prototype.PROBABILITY(range, r, g, b)
             ]
           })
         } else {
-          if (renderType === 'byProbability') {
+          if (outlineFlag) {
+            // OUTLINE POLYS IN INDIGO!
+            filterOpts.push({
+              items: viewer.world.getItemAt(i),
+              processors: [
+                colorFilter.prototype.OUTLINE(63, 15, 183)
+              ]
+            })
+          } else if (renderType === 'byProbability') {
+            // USE COLORSPECTRUM!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
                 colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)
               ]
             })
-          } else {
-            // byClass, byHeatmap...
+          } else if (renderType === 'byClass' || renderType === 'byHeatmap') {
+            // USE COLORSCHEME!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
@@ -47,7 +64,6 @@ function setFilter(layers, viewer, range) {
       filters: filterOpts,
       loadMode: 'sync'
     })
-    // console.log('filterOpts', filterOpts)
   } else {
     console.log('No viewer.world')
   }

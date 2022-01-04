@@ -172,9 +172,12 @@ function addRow(table, currentLayer, allLayers, viewer) {
     })
     const body = optsDiv.lastChild
 
-    // color-attenuation by probability
+    // COLOR ATTENUATION BY PROBABILITY
+    let attId = makeId(5, 'atten')
+    let label1 = e('label', {'for': attId})
+    label1.innerHTML = "&#58; color-attenuation by probability<br>"
     let attenuation = e('i', {
-      'id': makeId(5, 'atten'),
+      'id': attId,
       'class': `fas fa-broadcast-tower hover-light`,
       'title': 'toggle: color-attenuation by probability'
     })
@@ -184,11 +187,15 @@ function addRow(table, currentLayer, allLayers, viewer) {
       setFilter(allLayers, viewer)
     })
 
-    // Toggle fill polygon
-    let emptyCircle = "far"
-    let filledCircle = "fas"
+    // UN/FILL POLYGON
+    let fillId = makeId(5, 'fill')
+    let label2 = e('label', {'for': fillId})
+    label2.innerHTML = "&#58; un/fill polygon<br>"
+
+    let emptyCircle = 'far'
+    let filledCircle = 'fas'
     let fillPoly = e('i', {
-      'id': makeId(5, 'fillPoly'),
+      'id': fillId,
       'class': `${filledCircle} fa-circle hover-light`,
       'title': 'fill un-fill'
     });
@@ -223,7 +230,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     }
     const section = sliderType1(d, 'Out range:', allLayers, viewer)
 
-    let dd = e('div', {}, [attenuation, '\n', fillPoly, section, wrapper])
+    let dd = e('div', {}, [attenuation, label1, fillPoly, label2, section, wrapper])
     body.appendChild(dd)
 
   } else {
