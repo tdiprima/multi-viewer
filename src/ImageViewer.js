@@ -64,6 +64,10 @@ class ImageViewer {
       let zoom = vpt.getZoom()
       let pan = vpt.getCenter()
       let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
+      let I = viewer.world.getItemAt(0)
+      console.log('image coords', I.viewportToImageCoordinates(pan))
+      console.log('url', url)
+
       prompt('Share this link:', url)
     })
 
