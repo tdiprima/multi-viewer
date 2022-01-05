@@ -97,7 +97,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   })
   tr.appendChild(e('td', {}, [faEye]))
 
-  // transparency slider
+  // Trans slider ICON
   let faAdjust = document.createElement('i')
   faAdjust.classList.add('fas')
   faAdjust.classList.add('fa-adjust')
@@ -105,13 +105,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
   faAdjust.style.cursor = 'pointer'
   let div = e('div', {class: `showDiv`, 'title': 'transparency slider'}, [faAdjust])
 
+  // TRANSPARENCY SLIDER
   let transSlider = e('input', {
-    type: 'range',
-    id: makeId(5, 'range'),
-    min: '0',
-    max: '100',
-    step: '0.1',
-    value: (currentLayer.opacity * 100).toString()
+    'type': 'range',
+    'id': makeId(5, 'range'),
+    'min': '0',
+    'max': '100',
+    'step': '0.1',
+    'value': (currentLayer.opacity * 100).toString()
   })
 
   transSlider.addEventListener('input', function () {
@@ -131,6 +132,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     }
   })
 
+  // VISIBILITY
   faEye.addEventListener('click', () => {
     toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
     eyeball(faEye, transSlider, layerNum, viewer)
@@ -140,7 +142,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   tr.appendChild(e('td', {}, [div]))
 
   if (layerNum > 0) {
-    // color palette
+    // COLOR PALETTE
     let palette = e('i', {
       'id': makeId(5, 'palette'),
       'class': `fas fa-palette pointer hover-light`,
@@ -254,9 +256,9 @@ function sliderType1(d, t, allLayers, viewer) {
   let BRange = e('input', {'id': `${d.bLab}`, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
   // To display the current values:
-  let displayElement = e('span')
+  let displayElement = e('output')
   if (d.type === 'outside') {
-    displayElement.innerHTML = `0 - ${ARange.value}, ${BRange.value} - 255`
+    displayElement.innerHTML = `0 - ${ARange.value} and ${BRange.value} - 255`
   } else {
     displayElement.innerHTML = `${ARange.value} - ${BRange.value}`
   }
@@ -266,12 +268,16 @@ function sliderType1(d, t, allLayers, viewer) {
   wrapper.appendChild(BRange)
 
   function f(e) {
-    let _t = e.target;
-    _t.parentNode.style.setProperty(`--${_t.id}`, +_t.value)
+    const input = e.target
+    const wrapper = input.parentNode
+    wrapper.style.setProperty(`--${input.id}`, +input.value)
+
+    // Get values:
     let slideVals = getVals([ARange, BRange])
 
+    // Display values:
     if (d.type === 'outside') {
-      displayElement.innerHTML = `0 - ${slideVals[0]}, ${slideVals[1]} - 255`
+      displayElement.innerHTML = `0 - ${slideVals[0]} and ${slideVals[1]} - 255`
       setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'outside'})
     } else {
       displayElement.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
@@ -387,8 +393,8 @@ function handleDragLayers(layers, viewer) {
         const location = sourceViewer.tileSources[layNum].tileSource
         console.error('src img', location)
         const newLayNum = layers.length
-        // New draggable feature
-        let feat = e('span', {
+        // DRAGGABLE
+        let feat = e('div', {
           id: `${newLayNum}${makeId(5, 'feat')}`,
           class: 'dragIt',
           display: 'block',

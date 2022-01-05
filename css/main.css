@@ -343,14 +343,8 @@ th, span {
 }
 
 .wrap input[type=range]:focus,
-.wrap input[type=range]:focus+output {
+.wrap input[type=range]:focus {
   color: darkorange;
-}
-
-span {
-  text-align: center;
-  text-align: -moz-center;
-  text-align: -webkit-center;
 }
 
 /* SECTION */
@@ -427,6 +421,6 @@ span {
 }
 
 .section input[type=range]:focus,
-.section input[type=range]:focus+output {
+.section input[type=range]:focus {
   color: darkorange;
 }
