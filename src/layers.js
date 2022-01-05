@@ -166,11 +166,11 @@ function addRow(table, currentLayer, allLayers, viewer) {
     const id = makeId(5, 'optsDiv')
     const rect = tachometer.getBoundingClientRect()
     const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
+    const divBody = optsDiv.lastChild
 
     tachometer.addEventListener('click', () => {
       optsDiv.style.display = 'block'
     })
-    const body = optsDiv.lastChild
 
     // COLOR ATTENUATION BY PROBABILITY
     let attId = makeId(5, 'atten')
@@ -205,6 +205,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
       toggleButton(fillPoly, filledCircle, emptyCircle)
       setFilter(allLayers, viewer)
     })
+    divBody.appendChild(e('div', {}, [attenuation, label1, fillPoly, label2]))
 
     // Dual-point sliders
     let d = {
@@ -230,8 +231,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     }
     const section = sliderType1(d, 'Out range:', allLayers, viewer)
 
-    let dd = e('div', {}, [attenuation, label1, fillPoly, label2, section, wrapper])
-    body.appendChild(dd)
+    let dd = e('div', {}, [section, wrapper])
+    divBody.appendChild(dd)
 
   } else {
     tr.appendChild(e('td'))
