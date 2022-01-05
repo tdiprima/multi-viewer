@@ -16,22 +16,21 @@
  * @returns {*} the floating div
  */
 function createDraggableDiv (m_id, title, left, top, viz = false) {
-  const myDiv = e('div', { id: m_id, class: 'popup' })
+  const myDiv = e('div', { 'id': m_id, 'class': 'popup' })
   myDiv.style.left = `${left}px`
   myDiv.style.top = `${top}px`
 
-  const myImg = e('img', { src: `${config.appImages}close-icon.png`, width: 25, height: 25, alt: 'close' })
+  const myImg = e('img', { 'src': `${config.appImages}close-icon.png`, 'width': 25, 'height': 25, 'alt': 'close' })
   myImg.style.cursor = 'pointer'
   myImg.addEventListener('click', () => {
     myDiv.style.display = 'none'
   })
 
-  const myHeader = e('div', { id: `${m_id}Header`, class: 'popupHeader' },
+  const myHeader = e('div', { 'id': `${m_id}Header`, 'class': 'popupHeader' },
     [myImg, e('span', {}, [title])])
   myDiv.appendChild(myHeader)
 
-  const body = e('div', { id: `${m_id}Body` })
-  body.style.color = "#000"
+  const body = e('div', { 'id': `${m_id}Body`, 'style': 'padding: 10px; color: rgb(0, 0, 0);' })
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
