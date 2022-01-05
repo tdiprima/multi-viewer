@@ -25,8 +25,9 @@ class ImageViewer {
       prefixUrl: config.osdImages,
       tileSources: ts,
       maxZoomPixelRatio: 1,
-      // showNavigator:  true,
-      // navigatorPosition:   "BOTTOM_RIGHT",
+      // showNavigationControl: false,
+      // showNavigator: true,
+      // navigatorPosition: "BOTTOM_RIGHT",
     })
 
     const vpt = viewer.viewport
@@ -123,7 +124,7 @@ class ImageViewer {
       // Zoom all the way in
       let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest:  `${config.osdImages}zin_rest.png`,
+        srcRest: `${config.osdImages}zin_rest.png`,
         srcGroup: `${config.osdImages}zin_grouphover.png`,
         srcHover: `${config.osdImages}zin_hover.png`,
         srcDown: `${config.osdImages}zin_pressed.png`,
@@ -181,8 +182,11 @@ class ImageViewer {
 
     // Uncomment for testing
     // viewer.addHandler('canvas-click', event => {
-    //   const viewportPoint = viewer.viewport.pointFromPixel(event.position)
-    //   const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint)
+    //   const webPoint = event.position
+    //   const viewportPoint = vpt.pointFromPixel(webPoint)
+    //   const I = viewer.world.getItemAt(0)
+    //   const imagePoint = I.viewportToImageCoordinates(viewportPoint)
+    //   console.log('webPoint', Math.round(webPoint.x), Math.round(webPoint.y))
     //   console.log('imagePoint', Math.round(imagePoint.x), Math.round(imagePoint.y))
     // })
 
