@@ -10,7 +10,7 @@
  *     broadcast tower: attenuate by certainty
  */
 let layers = (divEl, images, viewer) => {
-  createLayerWidget(divEl, images, viewer)
+  createLayerElements(divEl, images, viewer)
   handleDragLayers(images, viewer)
 }
 
@@ -326,7 +326,7 @@ function sliderWrapper(d, t, allLayers, viewer) {
   return wrapper
 }
 
-function createLayerWidget(div, layers, viewer) {
+function createLayerElements(div, layers, viewer) {
   let table = e('table')
   div.appendChild(table)
   layers.forEach(layer => {
