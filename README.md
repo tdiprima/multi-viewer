@@ -17,7 +17,7 @@ npm install; grunt
 
 ## Usage
 
-Explore & run the html files for usage examples.
+Explore & run the html files for example usage.
 
 ## Meta
 
