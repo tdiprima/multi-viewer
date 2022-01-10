@@ -61,19 +61,8 @@ function getVals(slides) {
   return [slide1, slide2]
 }
 
-/**
- * One row per layer
- */
-function addRow(table, currentLayer, allLayers, viewer) {
-  let tr = e('tr')
-  table.appendChild(tr)
-
-  const layerNum = currentLayer.layerNum
-  // Preferred Label
-  const sections = (currentLayer.location).split('/')
-  const name = sections[sections.length - 2] // filename
-
-  // Feature (draggable)
+// Feature (draggable)
+function featureElem(layerNum, name) {
   let feat = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
     'class': `dragIt`,
@@ -82,31 +71,28 @@ function addRow(table, currentLayer, allLayers, viewer) {
     'data-tooltip': name
   })
   feat.innerHTML = name
+  return feat
+}
 
-  /**
-   * One column per icon
-   */
-  tr.appendChild(e('td', {}, [feat]))
-
-  // eyeball visibility toggle
+// Eyeball visibility toggle
+function visibilityToggle(currentLayer) {
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
-  let faEye = e('i', {
+  return e('i', {
     'id': makeId(5, 'eye'),
     'class': `${cssClass} hover-light`,
     'title': 'toggle visibility'
   })
-  tr.appendChild(e('td', {}, [faEye]))
+}
 
+function transSlider(currentLayer, faEye, viewer) {
   // Trans slider ICON
-  let faAdjust = document.createElement('i')
-  faAdjust.classList.add('fas')
-  faAdjust.classList.add('fa-adjust')
-  faAdjust.classList.add('hover-light')
-  faAdjust.style.cursor = 'pointer'
-  let div = e('div', {class: `showDiv`, 'title': 'transparency slider'}, [faAdjust])
+  let icon = document.createElement('i')
+  icon.classList.add('fas')
+  icon.classList.add('fa-adjust')
+  icon.classList.add('hover-light')
+  icon.style.cursor = 'pointer'
 
-  // TRANSPARENCY SLIDER
-  let transSlider = e('input', {
+  let element = e('input', {
     'type': 'range',
     'id': makeId(5, 'range'),
     'min': '0',
@@ -115,8 +101,8 @@ function addRow(table, currentLayer, allLayers, viewer) {
     'value': (currentLayer.opacity * 100).toString()
   })
 
-  transSlider.addEventListener('input', function () {
-    let worldItem = viewer.world.getItemAt(layerNum)
+  element.addEventListener('input', function () {
+    let worldItem = viewer.world.getItemAt(currentLayer.layerNum)
     if (worldItem !== undefined) {
       worldItem.setOpacity(this.value / 100)
       if (this.value === '0') {
@@ -131,107 +117,156 @@ function addRow(table, currentLayer, allLayers, viewer) {
       console.warn('worldItem', worldItem)
     }
   })
+  return [icon, element]
+}
+
+// Eyeball visibility handler
+function handleVisibility(faEye, range, layerNum, viewer) {
+  toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
+  let l = viewer.world.getItemAt(layerNum)
+  if (l) {
+    if (faEye.classList.contains('fa-eye-slash')) {
+      l.setOpacity(0) // Turn off layer
+      range.value = '0' // Set slider to 0
+    } else {
+      l.setOpacity(1) // Turn on layer
+      range.value = '100' // Set slider to (opacity * 100)
+    }
+  }
+}
+
+// Color palette
+function colorPalette(feat, currentLayer, allLayers, viewer) {
+  let palette = e('i', {
+    'id': makeId(5, 'palette'),
+    'class': `fas fa-palette pointer hover-light`,
+    'title': 'color palette'
+  })
+  // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
+  let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme, allLayers, viewer)
+  palette.addEventListener('click', () => {
+    colorsUI.style.display = 'block'
+  })
+  return palette
+}
+
+function attenuation(allLayers, viewer) {
+  let attId = makeId(5, 'atten')
+  let label = e('label', {'for': attId})
+  label.innerHTML = "&nbsp;&#58;&nbsp;color-attenuation by probability<br>"
+  // Icon
+  let element = e('i', {
+    'id': attId,
+    'class': `fas fa-broadcast-tower hover-light`,
+    'title': 'toggle: color-attenuation by probability'
+  })
+  // Event listener
+  element.addEventListener('click', () => {
+    attenuateFlag = !attenuateFlag
+    outlineFlag = false
+    setFilter(allLayers, viewer)
+  })
+  return [label, element]
+}
+
+function fillUnfill(allLayers, viewer) {
+  let fillId = makeId(5, 'fill')
+  let label = e('label', {'for': fillId})
+  label.innerHTML = "&nbsp;&nbsp;&#58;&nbsp;un/fill polygon<br>"
+  let emptyCircle = 'far'
+  let filledCircle = 'fas'
+  // Icon
+  let element = e('i', {
+    'id': fillId,
+    'class': `${filledCircle} fa-circle hover-light`,
+    'title': 'fill un-fill'
+  });
+  // Event listener
+  element.addEventListener('click', () => {
+    outlineFlag = !outlineFlag
+    toggleButton(element, filledCircle, emptyCircle)
+    setFilter(allLayers, viewer)
+  })
+  return [label, element]
+}
+
+/**
+ * The tachometer is going to pop open 'settings' (or whatever we decide to call it)
+ * Settings will have color (or probability) attenuation, fill/un-fill poly's, range sliders.
+ */
+function tachometer() {
+  let element = e('i', {
+    'id': makeId(5, 'tach'),
+    'class': `fas fa-tachometer-alt hover-light`,
+    'title': 'settings' // call it 'settings', 'control panel', idk.
+  })
+
+  const id = makeId(5, 'optsDiv')
+  const rect = element.getBoundingClientRect()
+  const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
+  const divBody = optsDiv.lastChild
+
+  element.addEventListener('click', () => {
+    optsDiv.style.display = 'block'
+  })
+
+  return [element, divBody]
+}
+
+/**
+ * One row per layer
+ * One column per icon
+ */
+function addRow(table, currentLayer, allLayers, viewer) {
+  let tr = e('tr')
+  table.appendChild(tr)
+
+  const layerNum = currentLayer.layerNum
+  // Preferred Label
+  const sections = (currentLayer.location).split('/')
+  const name = sections[sections.length - 2] // filename
+
+  // Feature (draggable)
+  let feat = featureElem(layerNum, name)
+  tr.appendChild(e('td', {}, [feat]))
+
+  // Eyeball visibility toggle
+  let faEye = visibilityToggle(currentLayer)
+  tr.appendChild(e('td', {}, [faEye]))
+
+  // TRANSPARENCY SLIDER
+  let [faAdjust, xSlider] = transSlider(currentLayer, faEye, viewer)
+  let div = e('div', {'class': `showDiv`, 'title': 'transparency slider'}, [faAdjust])
 
   // VISIBILITY
   faEye.addEventListener('click', () => {
-    toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
-    eyeball(faEye, transSlider, layerNum, viewer)
+    handleVisibility(faEye, xSlider, layerNum, viewer)
   })
 
-  div.appendChild(e('div', {class: `showHover`}, [transSlider]))
+  div.appendChild(e('div', {class: `showHover`}, [xSlider]))
   tr.appendChild(e('td', {}, [div]))
 
   if (layerNum > 0) {
     // COLOR PALETTE
-    let palette = e('i', {
-      'id': makeId(5, 'palette'),
-      'class': `fas fa-palette pointer hover-light`,
-      'title': 'color palette'
-    })
-    tr.appendChild(e('td', {}, [palette]))
+    tr.appendChild(e('td', {}, [colorPalette(feat, currentLayer, allLayers, viewer)]))
 
-    // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
-    let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme, allLayers, viewer)
-    palette.addEventListener('click', () => {
-      colorsUI.style.display = 'block'
-    })
-
-    // The tachometer is going to pop open 'settings' (or whatever we decide to call it)
-    // Settings will have color (or probability) attenuation, fill/un-fill poly's, range sliders.
-    let tachometer = e('i', {
-      'id': makeId(5, 'tach'),
-      'class': `fas fa-tachometer-alt hover-light`,
-      'title': 'settings' // call it 'settings', 'control panel', idk.
-    })
-    tr.appendChild(e('td', {}, [tachometer]))
-
-    const id = makeId(5, 'optsDiv')
-    const rect = tachometer.getBoundingClientRect()
-    const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
-    const divBody = optsDiv.lastChild
-
-    tachometer.addEventListener('click', () => {
-      optsDiv.style.display = 'block'
-    })
+    // TACHOMETER
+    let [tach, divBody] = tachometer()
+    tr.appendChild(e('td', {}, [tach]))
 
     // COLOR ATTENUATION BY PROBABILITY
-    let attId = makeId(5, 'atten')
-    let label1 = e('label', {'for': attId})
-    label1.innerHTML = "&nbsp;&#58;&nbsp;color-attenuation by probability<br>"
-    let attenuation = e('i', {
-      'id': attId,
-      'class': `fas fa-broadcast-tower hover-light`,
-      'title': 'toggle: color-attenuation by probability'
-    })
-    attenuation.addEventListener('click', () => {
-      attenuateFlag = !attenuateFlag
-      outlineFlag = false
-      setFilter(allLayers, viewer)
-    })
+    let [label1, atten] = attenuation(allLayers, viewer)
 
     // UN/FILL POLYGON
-    let fillId = makeId(5, 'fill')
-    let label2 = e('label', {'for': fillId})
-    label2.innerHTML = "&nbsp;&nbsp;&#58;&nbsp;un/fill polygon<br>"
+    let [label2, fillPoly] = fillUnfill(allLayers, viewer)
+    divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]))
 
-    let emptyCircle = 'far'
-    let filledCircle = 'fas'
-    let fillPoly = e('i', {
-      'id': fillId,
-      'class': `${filledCircle} fa-circle hover-light`,
-      'title': 'fill un-fill'
-    });
+    // DUAL-POINT SLIDERS
+    let d = { 'aLab': 'a', 'bLab': 'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'wrap', 'type': 'inside' }
+    const wrapper = sliderWrapper(d, 'In range:', allLayers, viewer)
 
-    fillPoly.addEventListener('click', () => {
-      outlineFlag = !outlineFlag
-      toggleButton(fillPoly, filledCircle, emptyCircle)
-      setFilter(allLayers, viewer)
-    })
-    divBody.appendChild(e('div', {}, [attenuation, label1, fillPoly, label2]))
-
-    // Dual-point sliders
-    let d = {
-      'aLab': 'a',
-      'bLab': 'b',
-      'aInit': 70,
-      'bInit': 185,
-      'min': 0,
-      'max': 255,
-      'class': 'wrap',
-      'type': 'inside'
-    }
-    const wrapper = sliderType1(d, 'In range:', allLayers, viewer)
-    d = {
-      'aLab': 'a1',
-      'bLab': 'b1',
-      'aInit': 10,
-      'bInit': 245,
-      'min': 0,
-      'max': 255,
-      'class': 'section',
-      'type': 'outside'
-    }
-    const section = sliderType1(d, 'Out range:', allLayers, viewer)
+    d = { 'aLab': 'a1', 'bLab': 'b1', 'aInit': 10, 'bInit': 245, 'min': 0, 'max': 255, 'class': 'section', 'type': 'outside' }
+    const section = sliderWrapper(d, 'Out range:', allLayers, viewer)
 
     let dd = e('div', {}, [section, wrapper])
     divBody.appendChild(dd)
@@ -241,7 +276,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   }
 }
 
-function sliderType1(d, t, allLayers, viewer) {
+function sliderWrapper(d, t, allLayers, viewer) {
   let wrapper = e('div', {
     'class': d.class,
     'role': 'group',
@@ -430,18 +465,5 @@ function handleDragLayers(layers, viewer) {
       }
     }
     return false
-  }
-}
-
-function eyeball(eye, range, layerNum, viewer) {
-  let l = viewer.world.getItemAt(layerNum)
-  if (l) {
-    if (eye.classList.contains('fa-eye-slash')) {
-      l.setOpacity(0) // Turn off layer
-      range.value = '0' // Set slider to 0
-    } else {
-      l.setOpacity(1) // Turn on layer
-      range.value = '100' // Set slider to (opacity * 100)
-    }
   }
 }
