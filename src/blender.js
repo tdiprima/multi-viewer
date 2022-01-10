@@ -11,12 +11,12 @@
 const blender = (blenderBtn, viewer) => {
   const blendModes = [
     ['normal', 'normal'],
-    ['difference', 'The Difference blend mode subtracts the pixels of the base and blend layers and the result is the greater brightness value.'],
-    ['multiply', 'The Multiply mode multiplies the colors of the blending layer and the base layers, resulting in a darker color.'],
-    ['screen','With Screen blend mode, the values of the pixels in the layers are inverted, multiplied, and then inverted again. The result is the opposite of Multiply: wherever either layer was darker than white, the composite is brighter.'],
-    ['overlay', 'The Overlay blend mode both multiplies dark areas and screens light areas at the same time, so dark areas become darker and light areas become lighter.'],
-    ['darken', 'The Darken blending mode does not blend pixels; it only compares the layers and keeps the darkest.'],
-    ['lighten', 'The Lighten blending mode takes a look at the layers, and it keeps whichever is lightest.'],
+    ['difference', 'The Difference blend mode subtracts the pixels of the base and blend layers and the result is the greater brightness value. When you subtract two pixels with the same value, the result is black.'],
+    ['multiply', 'The Multiply mode multiplies the colors of the blending layer and the base layers, resulting in a darker color. This mode is useful for coloring shadows.'],
+    ['screen', 'With Screen blend mode, the values of the pixels in the layers are inverted, multiplied, and then inverted again. The result is the opposite of Multiply: wherever either layer was darker than white, the composite is brighter.'],
+    ['overlay', 'The Overlay blend mode both multiplies dark areas and screens light areas at the same time, so dark areas become darker and light areas become lighter. Anything that is 50% gray completely disappears from view.'],
+    ['darken', 'The Darken Blending Mode looks at the luminance values in each of the RGB channels and selects the color of whichever layer is darkest.'],
+    ['lighten', 'The Lighten Blending Mode takes a look at color of the layers, and keeps whichever one is lightest.'],
     ['color-dodge', 'The Color Dodge blend mode divides the bottom layer by the inverted top layer.'],
     ['color-burn', 'The Color Burn Blending Mode gives you a darker result than Multiply by increasing the contrast between the base and the blend colors resulting in more highly saturated mid-tones and reduced highlights.'],
     ['hard-light', 'Hard Light combines the Multiply and Screen Blending Modes using the brightness values of the Blend layer to make its calculations. The results with Hard Light tend to be intense.'],
