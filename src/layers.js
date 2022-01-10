@@ -62,16 +62,16 @@ function getVals(slides) {
 }
 
 // Feature (draggable)
-function featureElem(layerNum, name) {
-  let feat = e('button', {
+function draggableFeature(layerNum, name) {
+  let element = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
     'class': `dragIt`,
     'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
   })
-  feat.innerHTML = name
-  return feat
+  element.innerHTML = name
+  return element
 }
 
 // Eyeball visibility toggle
@@ -84,14 +84,16 @@ function visibilityToggle(currentLayer) {
   })
 }
 
+// Transparency slider
 function transSlider(currentLayer, faEye, viewer) {
-  // Trans slider ICON
+  // Icon
   let icon = document.createElement('i')
   icon.classList.add('fas')
   icon.classList.add('fa-adjust')
   icon.classList.add('hover-light')
   icon.style.cursor = 'pointer'
 
+  // Slider element
   let element = e('input', {
     'type': 'range',
     'id': makeId(5, 'range'),
@@ -121,54 +123,56 @@ function transSlider(currentLayer, faEye, viewer) {
 }
 
 // Eyeball visibility handler
-function handleVisibility(faEye, range, layerNum, viewer) {
-  toggleButton(faEye, 'fa-eye', 'fa-eye-slash')
+function handleVisibility(icon, slider, layerNum, viewer) {
+  toggleButton(icon, 'fa-eye', 'fa-eye-slash')
   let l = viewer.world.getItemAt(layerNum)
   if (l) {
-    if (faEye.classList.contains('fa-eye-slash')) {
+    if (icon.classList.contains('fa-eye-slash')) {
       l.setOpacity(0) // Turn off layer
-      range.value = '0' // Set slider to 0
+      slider.value = '0' // Set slider to 0
     } else {
       l.setOpacity(1) // Turn on layer
-      range.value = '100' // Set slider to (opacity * 100)
+      slider.value = '100' // Set slider to (opacity * 100)
     }
   }
 }
 
 // Color palette
-function colorPalette(feat, currentLayer, allLayers, viewer) {
-  let palette = e('i', {
+function colorPalette(featureElem, currentLayer, allLayers, viewer) {
+  let icon = e('i', {
     'id': makeId(5, 'palette'),
     'class': `fas fa-palette pointer hover-light`,
     'title': 'color palette'
   })
-  // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of feat.innerText
-  let colorsUI = filters(palette, feat.innerText, currentLayer.colorscheme, allLayers, viewer)
-  palette.addEventListener('click', () => {
+  // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
+  let colorsUI = filters(icon, featureElem.innerText, currentLayer.colorscheme, allLayers, viewer)
+  icon.addEventListener('click', () => {
     colorsUI.style.display = 'block'
   })
-  return palette
+  return icon
 }
 
+// Color attenuation by probability
 function attenuation(allLayers, viewer) {
   let attId = makeId(5, 'atten')
   let label = e('label', {'for': attId})
   label.innerHTML = "&nbsp;&#58;&nbsp;color-attenuation by probability<br>"
   // Icon
-  let element = e('i', {
+  let icon = e('i', {
     'id': attId,
     'class': `fas fa-broadcast-tower hover-light`,
     'title': 'toggle: color-attenuation by probability'
   })
   // Event listener
-  element.addEventListener('click', () => {
+  icon.addEventListener('click', () => {
     attenuateFlag = !attenuateFlag
     outlineFlag = false
     setFilter(allLayers, viewer)
   })
-  return [label, element]
+  return [label, icon]
 }
 
+// un/fill polygon
 function fillUnfill(allLayers, viewer) {
   let fillId = makeId(5, 'fill')
   let label = e('label', {'for': fillId})
@@ -176,18 +180,18 @@ function fillUnfill(allLayers, viewer) {
   let emptyCircle = 'far'
   let filledCircle = 'fas'
   // Icon
-  let element = e('i', {
+  let icon = e('i', {
     'id': fillId,
     'class': `${filledCircle} fa-circle hover-light`,
     'title': 'fill un-fill'
   });
   // Event listener
-  element.addEventListener('click', () => {
+  icon.addEventListener('click', () => {
     outlineFlag = !outlineFlag
-    toggleButton(element, filledCircle, emptyCircle)
+    toggleButton(icon, filledCircle, emptyCircle)
     setFilter(allLayers, viewer)
   })
-  return [label, element]
+  return [label, icon]
 }
 
 /**
@@ -195,22 +199,22 @@ function fillUnfill(allLayers, viewer) {
  * Settings will have color (or probability) attenuation, fill/un-fill poly's, range sliders.
  */
 function tachometer() {
-  let element = e('i', {
+  let icon = e('i', {
     'id': makeId(5, 'tach'),
     'class': `fas fa-tachometer-alt hover-light`,
     'title': 'settings' // call it 'settings', 'control panel', idk.
   })
 
   const id = makeId(5, 'optsDiv')
-  const rect = element.getBoundingClientRect()
+  const rect = icon.getBoundingClientRect()
   const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
   const divBody = optsDiv.lastChild
 
-  element.addEventListener('click', () => {
+  icon.addEventListener('click', () => {
     optsDiv.style.display = 'block'
   })
 
-  return [element, divBody]
+  return [icon, divBody]
 }
 
 /**
@@ -226,11 +230,11 @@ function addRow(table, currentLayer, allLayers, viewer) {
   const sections = (currentLayer.location).split('/')
   const name = sections[sections.length - 2] // filename
 
-  // Feature (draggable)
-  let feat = featureElem(layerNum, name)
+  // FEATURE
+  let feat = draggableFeature(layerNum, name)
   tr.appendChild(e('td', {}, [feat]))
 
-  // Eyeball visibility toggle
+  // VISIBILITY TOGGLE
   let faEye = visibilityToggle(currentLayer)
   tr.appendChild(e('td', {}, [faEye]))
 
