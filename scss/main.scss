@@ -1,11 +1,8 @@
-// https://css2sass.herokuapp.com/
-/* CUSTOM PROPERTIES */
-
 :root {
-  --highlight:#74f272;
-  --fgdark:#333;
-  --bgdark:#ccc;
-  --bglight:#f1f1f1;
+  --highlight: #74f272;
+  --fgdark: #333;
+  --bgdark: #ccc;
+  --bglight: #f1f1f1;
 }
 
 body {
@@ -13,8 +10,6 @@ body {
   font-family: sans-serif;
   color: #000;
 }
-
-/* DARK MODE */
 
 .dark-mode {
   background-color: #000;
@@ -31,33 +26,24 @@ a:link {
 
 .b-controls {
   float: left;
-  display: inline;
   padding: 2px;
 }
-
-/* "QUAD" */
 
 .divSquare {
   float: left;
   margin-right: 195px;
 }
 
-/* DIV */
-
 .controls {
   width: 100%;
   height: 30px;
 }
-
-/* DIV */
 
 .floated {
   float: left;
   margin-right: 5px;
   width: 100%;
 }
-
-/* DISPLAY TOOLS ON HOVER */
 
 .showHover {
   display: none;
@@ -70,21 +56,9 @@ a:link {
   overflow: hidden;
 }
 
-/* POINTER */
-
 .pointer {
   cursor: pointer;
 }
-
-.none {
-  cursor: none;
-}
-
-.not-allowed {
-  cursor: not-allowed;
-}
-
-/* HIGHLIGHT ON DROP */
 
 .highlight {
   animation-name: bckanim;
@@ -104,15 +78,15 @@ a:link {
   }
 }
 
-/* DRAGGABLE */
-
 *[draggable=true] {
   -webkit-user-drag: element;
   cursor: move;
 }
 
 .fas {
-  &:focus, &:hover {
+
+  &:focus,
+  &:hover {
     border: none !important;
     color: var(--highlight) !important;
   }
@@ -122,15 +96,12 @@ a:link {
   background-color: var(--bglight);
   color: var(--fgdark);
 
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     border: 1px solid var(--highlight);
     color: var(--highlight);
   }
 }
-
-/* HOVER OVER ICONS */
-
-/* USER CONTROLS */
 
 .btn {
   padding: 4px 12px;
@@ -155,8 +126,6 @@ a:link {
   vertical-align: middle;
   color: var(--highlight);
 }
-
-/* DRAG AND DROP */
 
 .dropzone {
   overflow: hidden;
@@ -194,11 +163,10 @@ a:link {
   border: 3px dotted #00ff00;
 }
 
-th, span {
+th,
+span {
   color: var(--fgdark);
 }
-
-/* FLOATING DIV */
 
 .popup {
   position: absolute;
@@ -222,13 +190,14 @@ th, span {
   color: var(--fgdark);
 }
 
-/* MAGNIFICATION */
-
 .mag-content {
   z-index: 1;
   display: none;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   min-width: 160px;
+  background-color: rgb(249, 249, 249);
+
+  /* fallback bg color */
   background-color: rgba(249, 249, 249, 0.5);
 
   a {
@@ -249,14 +218,13 @@ th, span {
   background-color: #ddd;
 }
 
-/* RANGE SLIDERS */
-
 * {
   font: inherit;
 }
 
-.wrap, .section {
-  --dif:calc(var(--max) - var(--min));
+.wrap,
+.section {
+  --dif: calc(var(--max) - var(--min));
   position: relative;
   display: grid;
   grid-template: repeat(2, -webkit-max-content) 1em / 1fr 1fr;
@@ -268,7 +236,9 @@ th, span {
 }
 
 .wrap {
-  &::before, &::after {
+
+  &::before,
+  &::after {
     grid-column: 1/span 2;
     grid-row: 3;
     height: 100%;
@@ -302,19 +272,24 @@ th, span {
   color: #000;
   pointer-events: none;
 
-  &::-webkit-slider-runnable-track, &::-webkit-slider-thumb {
+  &::-webkit-slider-runnable-track,
+  &::-webkit-slider-thumb {
     -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
   -webkit-appearance: none;
+  -moz-appearance: none;
 
-  &::-webkit-slider-runnable-track, &::-moz-range-track {
+  &::-webkit-slider-runnable-track,
+  &::-moz-range-track {
     width: 100%;
     height: 100%;
     background: none;
   }
 
-  &::-webkit-slider-thumb, &::-moz-range-thumb {
+  &::-webkit-slider-thumb,
+  &::-moz-range-thumb {
     border: none;
     border-radius: 0;
     width: 1em;
@@ -330,10 +305,10 @@ th, span {
   }
 }
 
-/* SECTION */
-
 .section {
-  &::before, &::after {
+
+  &::before,
+  &::after {
     grid-column: 1/span 2;
     grid-row: 3;
     height: 100%;
@@ -362,19 +337,24 @@ th, span {
     color: #000;
     pointer-events: none;
 
-    &::-webkit-slider-runnable-track, &::-webkit-slider-thumb {
+    &::-webkit-slider-runnable-track,
+    &::-webkit-slider-thumb {
       -webkit-appearance: none;
+      -moz-appearance: none;
     }
 
     -webkit-appearance: none;
+    -moz-appearance: none;
 
-    &::-webkit-slider-runnable-track, &::-moz-range-track {
+    &::-webkit-slider-runnable-track,
+    &::-moz-range-track {
       width: 100%;
       height: 100%;
       background: none;
     }
 
-    &::-webkit-slider-thumb, &::-moz-range-thumb {
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb {
       border: none;
       border-radius: 0;
       width: 1em;
@@ -390,8 +370,6 @@ th, span {
     }
   }
 }
-
-/* TOOLTIP */
 
 [data-tooltip] {
   position: relative;
@@ -428,4 +406,3 @@ th, span {
     color: #fff;
   }
 }
-
