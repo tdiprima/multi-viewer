@@ -1,4 +1,3 @@
-/* CUSTOM PROPERTIES */
 :root {
   --highlight: #74f272;
   --fgdark: #333;
@@ -12,7 +11,6 @@ body {
   color: #000;
 }
 
-/* DARK MODE */
 .dark-mode {
   background-color: #000;
   color: #fff;
@@ -28,30 +26,25 @@ a:link {
 
 .b-controls {
   float: left;
-  display: inline;
   padding: 2px;
 }
 
-/* "QUAD" */
 .divSquare {
   float: left;
   margin-right: 195px;
 }
 
-/* DIV */
 .controls {
   width: 100%;
   height: 30px;
 }
 
-/* DIV */
 .floated {
   float: left;
   margin-right: 5px;
   width: 100%;
 }
 
-/* DISPLAY TOOLS ON HOVER */
 .showHover {
   display: none;
 }
@@ -63,7 +56,6 @@ a:link {
   overflow: hidden;
 }
 
-/* POINTER */
 .pointer {
   cursor: pointer;
 }
@@ -72,11 +64,6 @@ a:link {
   cursor: none;
 }
 
-.not-allowed {
-  cursor: not-allowed;
-}
-
-/* HIGHLIGHT ON DROP */
 .highlight {
   animation-name: bckanim;
   animation-fill-mode: forwards;
@@ -94,7 +81,6 @@ a:link {
   }
 }
 
-/* DRAGGABLE */
 *[draggable=true] {
   -webkit-user-drag: element;
   cursor: move;
@@ -111,14 +97,12 @@ a:link {
   color: var(--fgdark);
 }
 
-/* HOVER OVER ICONS */
 .hover-light:focus,
 .hover-light:hover {
   border: 1px solid var(--highlight);
   color: var(--highlight);
 }
 
-/* USER CONTROLS */
 .btn {
   padding: 4px 12px;
   border: 1px solid var(--fgdark);
@@ -143,7 +127,6 @@ a:link {
   color: var(--highlight);
 }
 
-/* DRAG AND DROP */
 .dropzone {
   overflow: hidden;
   border: 1px solid var(--bgdark);
@@ -184,7 +167,6 @@ th, span {
   color: var(--fgdark);
 }
 
-/* FLOATING DIV */
 .popup {
   position: absolute;
   z-index: 10;
@@ -207,12 +189,12 @@ th, span {
   color: var(--fgdark);
 }
 
-/* MAGNIFICATION */
 .mag-content {
   z-index: 1;
   display: none;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   min-width: 160px;
+  background-color: rgb(249, 249, 249); /* fallback bg color */
   background-color: rgba(249, 249, 249, 0.5);
 }
 
@@ -233,7 +215,6 @@ th, span {
   background-color: #ddd;
 }
 
-/* RANGE SLIDERS */
 * {
   font: inherit;
 }
@@ -289,6 +270,7 @@ th, span {
 .wrap input[type=range]::-webkit-slider-thumb,
 .wrap input[type=range] {
   -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .wrap input[type=range]::-webkit-slider-runnable-track {
@@ -331,7 +313,6 @@ th, span {
   color: darkorange;
 }
 
-/* SECTION */
 .section::before,
 .section::after {
   grid-column: 1/span 2;
@@ -367,6 +348,7 @@ th, span {
 .section input[type=range]::-webkit-slider-thumb,
 .section input[type=range] {
   -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .section input[type=range]::-webkit-slider-runnable-track {
