@@ -4,6 +4,8 @@ Multiple synchronized OpenSeadragon viewers
 
 Renders colorized segmentations, heatmaps, etc.
 
+The code uses JavaScript ES6, SCSS, the npm package manager, Grunt automation...
+
 <!-- Segmentation layer color ordering:<br>
 ![](images/color-ordering.png) -->
 
