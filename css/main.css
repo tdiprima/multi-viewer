@@ -1,6 +1,5 @@
-/* https://css2sass.herokuapp.com/ */
 :root {
-  --highlight: #74f272;
+  --highlight: #408bbd;
   --fgdark: #333;
   --bgdark: #ccc;
   --bglight: #f1f1f1;
@@ -203,7 +202,8 @@ span {
   -webkit-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   min-width: 160px;
-  background-color: #f9f9f9; /* fallback bg color */
+  background-color: #f9f9f9;
+  /* fallback bg color */
   background-color: rgba(249, 249, 249, 0.5);
 }
 
@@ -235,6 +235,8 @@ span {
   display: -ms-grid;
   display: grid;
   grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
+  -ms-grid-rows: (-webkit-max-content)[2] 1em;
+  -ms-grid-rows: (max-content)[2] 1em;
   -ms-grid-columns: 1fr 1fr;
       grid-template: repeat(2, max-content) 1em/1fr 1fr;
   overflow: hidden;
