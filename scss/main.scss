@@ -1,9 +1,4 @@
-:root {
-  --highlight: #74f272;
-  --fgdark: #333;
-  --bgdark: #ccc;
-  --bglight: #f1f1f1;
-}
+@import 'vars';
 
 body {
   background-color: #fff;
