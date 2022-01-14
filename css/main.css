@@ -1,20 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
 :root {
+  /*--highlight: #74f272;*/
+  /*--highlight: #00ffff;*/
   --highlight: #61b0e7;
-  --fgdark: #333;
+  /*--primary-color: #21242f;*/
+  --primary-color: #408bbd;
   --bgdark: #ccc;
   --bglight: #f1f1f1;
-  --primary-color: #408bbd;
+}
+
+.sun {
+  color: #ffd475;
+  cursor: pointer;
+  size: 20px;
+}
+
+.moon {
+  color: #3e4e53;
+  cursor: pointer;
 }
 
 body {
-  background-color: #f4f4f4;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #222;
+  background-color: #eeeceb;
+  color: #21242f;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .dark-mode {
-  background-color: #222;
-  color: #f4f4f4;
+  background-color: #21242f;
+  color: #cac3bc;
 }
 
 ul {
@@ -83,48 +98,45 @@ a:link {
   cursor: move;
 }
 
+/*
 .fas {
   color: var(--primary-color);
-}
+}*/
 
 .fas:focus,
 .fas:hover {
   border: none !important;
-  color: var(--highlight) !important;
+  /*color: var(--highlight) !important;*/
 }
 
 .hover-light {
-  background-color: var(--bglight);
+  /*background-color: var(--bglight);*/
   color: var(--primary-color);
 }
 
 .hover-light:focus,
 .hover-light:hover {
-  border: 1px solid var(--highlight);
+  border: 2px solid var(--highlight);
   color: var(--highlight);
 }
 
-.btn {
+button {
   padding: 4px 12px;
-  border: 1px solid var(--primary-color);
   border-radius: 5px;
-  color: var(--primary-color);
   font-size: 12px;
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
+  color: var(--primary-color);
+}
+
+.btn {
+  border: 1px solid var(--primary-color);
 }
 
 .btnOn {
   border: 2px solid var(--highlight);
-  border-radius: 5px;
-  padding: 4px 12px;
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 18px;
-  text-align: center;
-  vertical-align: middle;
   color: var(--highlight);
 }
 
@@ -138,7 +150,6 @@ a:link {
   float: left;
   transition: 0.3s;
   border: 1px solid var(--primary-color);
-  color: var(--primary-color);
   border-radius: 7px;
   width: 90px;
   padding: 12px 14px;
@@ -162,11 +173,12 @@ a:link {
 }
 
 .dropzone.over {
-  border: 3px dotted var(--primary-color);
+  border: 3px dotted var(--highlight)
+  /* border: 3px dotted var(--primary-color); */
 }
 
 th, span {
-  color: var(--fgdark);
+  color: var(--primary-color);
 }
 
 .popup {
@@ -177,7 +189,7 @@ th, span {
   border: 1px solid var(--bgdark);
   border-radius: 5px;
   background-color: var(--bglight);
-  color: var(--fgdark);
+  color: var(--primary-color);
   white-space: nowrap;
 }
 
@@ -188,7 +200,7 @@ th, span {
   background-color: var(--bgdark);
   cursor: move;
   font-weight: bold;
-  color: var(--fgdark);
+  color: var(--primary-color);
 }
 
 .mag-content {
