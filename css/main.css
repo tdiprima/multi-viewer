@@ -4,10 +4,22 @@
   /*--highlight: #74f272;*/
   /*--highlight: #00ffff;*/
   --highlight: #61b0e7;
-  /*--primary-color: #21242f;*/
-  --primary-color: #408bbd;
+  --primary-color: #21242f;
+  /*--primary-color: #408bbd;*/
   --bgdark: #ccc;
   --bglight: #f1f1f1;
+
+
+}
+
+.theme--default {
+  color: #3e4e53;
+  background: #F5F4F3;
+}
+
+.theme--dark {
+  color: #cac3bc;
+  background: #272b38;
 }
 
 .sun {
@@ -23,14 +35,14 @@
 
 body {
   background-color: #eeeceb;
-  color: #21242f;
+  color: var(--primary-color);
   font-family: Arial, Helvetica, sans-serif;
   /*font-family: "Open Sans", sans-serif;*/
   /*font-family: "Montserrat-SemiBold", "Montserrat", "Open Sans", "Helvetica", "Arial", "sans-serif";*/
 }
 
 .dark-mode {
-  background-color: #21242f;
+  background-color: var(--primary-color);
   color: #cac3bc;
 }
 
@@ -113,7 +125,7 @@ a:link {
 
 .hover-light {
   /*background-color: var(--bglight);*/
-  color: var(--primary-color);
+  /*color: var(--primary-color);*/
 }
 
 .hover-light:focus,
@@ -130,11 +142,11 @@ button {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  color: var(--primary-color);
+  /*color: var(--primary-color);*/
 }
 
 .btn {
-  border: 1px solid var(--primary-color);
+  /*border: 1px solid var(--primary-color);*/
 }
 
 .btnOn {
@@ -145,7 +157,7 @@ button {
 .dragIt {
   float: left;
   transition: 0.3s;
-  border: 1px solid var(--primary-color);
+  /*border: 1px solid var(--primary-color);*/
   border-radius: 7px;
   width: 90px;
   padding: 12px 14px;
@@ -174,7 +186,7 @@ button {
 }
 
 th, span {
-  color: var(--primary-color);
+  /*color: var(--primary-color);*/
 }
 
 .popup {
@@ -185,7 +197,7 @@ th, span {
   border: 1px solid var(--bgdark);
   border-radius: 5px;
   background-color: var(--bglight);
-  color: var(--primary-color);
+  /*color: var(--primary-color);*/
   white-space: nowrap;
 }
 
@@ -196,7 +208,7 @@ th, span {
   background-color: var(--bgdark);
   cursor: move;
   font-weight: bold;
-  color: var(--primary-color);
+  /*color: var(--primary-color);*/
 }
 
 .mag-content {

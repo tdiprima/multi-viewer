@@ -53,6 +53,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     new Promise(resolve => {
       return resolve(opts)
     }).then(opts => {
+      document.body.classList.add("theme--default")
       // dark-mode
       let awesome = e('i', {'class': 'fas fa-moon moon'})
       // let btnDark = e('button', {'class': 'btn'}, [awesome])
@@ -78,7 +79,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       awesome.addEventListener('click', () => {
         toggleButton(awesome, 'fa-moon', 'fa-sun')
         toggleButton(awesome, 'moon', 'sun')
-        document.body.classList.toggle('dark-mode')
+        document.body.classList.toggle("theme--dark")
       })
 
       // CREATE TABLE FOR VIEWERS
