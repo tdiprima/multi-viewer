@@ -54,8 +54,8 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       return resolve(opts)
     }).then(opts => {
       // dark-mode
-      let awesome = e('i', {'class': 'fas fa-moon'})
-      let btnDark = e('button', {'class': 'btn hover-light'}, [awesome])
+      let awesome = e('i', {'class': 'fas fa-moon moon'})
+      // let btnDark = e('button', {'class': 'btn'}, [awesome])
 
       // Slide name
       let name
@@ -68,15 +68,16 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       }
 
       let top = e('div', {'style': 'display: flex'}, [
-        e('div', {'style': 'flex: 1'}, [btnDark]),
+        e('div', {'style': 'flex: 1'}, [awesome]),
         e('div', {'style': 'flex: 1; text-align: right;'}, [name])
       ])
 
       let referenceNode = document.querySelector(`#${divId}`)
       referenceNode.before(top)
 
-      btnDark.addEventListener('click', () => {
+      awesome.addEventListener('click', () => {
         toggleButton(awesome, 'fa-moon', 'fa-sun')
+        toggleButton(awesome, 'moon', 'sun')
         document.body.classList.toggle('dark-mode')
       })
 
