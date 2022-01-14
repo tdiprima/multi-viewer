@@ -1,25 +1,24 @@
-/*@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');*/
-
 :root {
   /*--highlight: #74f272;*/
   /*--highlight: #00ffff;*/
   --highlight: #61b0e7;
-  --primary-color: #21242f;
-  /*--primary-color: #408bbd;*/
-  --bgdark: #ccc;
-  --bglight: #f1f1f1;
+  --primary-color: #408bbd;
 
+  --bg-dark: #272b38;
+  --text-dark: #cac3bc;
 
+  --bg-light: #f5f4f3;
+  --text-light: #242d30;
 }
 
 .theme--default {
-  color: #3e4e53;
-  background: #F5F4F3;
+  color: var(--text-light);
+  background-color: var(--bg-light);
 }
 
 .theme--dark {
-  color: #cac3bc;
-  background: #272b38;
+  color: var(--text-dark);
+  background-color: var(--bg-dark);
 }
 
 .sun {
@@ -34,16 +33,9 @@
 }
 
 body {
-  background-color: #eeeceb;
-  color: var(--primary-color);
   font-family: Arial, Helvetica, sans-serif;
   /*font-family: "Open Sans", sans-serif;*/
   /*font-family: "Montserrat-SemiBold", "Montserrat", "Open Sans", "Helvetica", "Arial", "sans-serif";*/
-}
-
-.dark-mode {
-  background-color: var(--primary-color);
-  color: #cac3bc;
 }
 
 ul {
@@ -103,7 +95,7 @@ a:link {
     background-color: var(--highlight);
   }
   100% {
-    background-color: var(--bglight);
+    background-color: transparent; /* todo */
   }
 }
 
@@ -112,20 +104,9 @@ a:link {
   cursor: move;
 }
 
-/*
-.fas {
-  color: var(--primary-color);
-}*/
-
 .fas:focus,
 .fas:hover {
   border: none !important;
-  /*color: var(--highlight) !important;*/
-}
-
-.hover-light {
-  /*background-color: var(--bglight);*/
-  /*color: var(--primary-color);*/
 }
 
 .hover-light:focus,
@@ -142,11 +123,6 @@ button {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  /*color: var(--primary-color);*/
-}
-
-.btn {
-  /*border: 1px solid var(--primary-color);*/
 }
 
 .btnOn {
@@ -157,7 +133,6 @@ button {
 .dragIt {
   float: left;
   transition: 0.3s;
-  /*border: 1px solid var(--primary-color);*/
   border-radius: 7px;
   width: 90px;
   padding: 12px 14px;
@@ -182,7 +157,6 @@ button {
 
 .dropzone.over {
   border: 3px dotted var(--highlight)
-  /* border: 3px dotted var(--primary-color); */
 }
 
 th, span {
@@ -194,10 +168,10 @@ th, span {
   z-index: 10;
   display: inline-block;
   box-shadow: rgba(0, 0, 0, 0.2) 0 0 15px;
-  border: 1px solid var(--bgdark);
+  border: 1px solid var(--text-light);
   border-radius: 5px;
-  background-color: var(--bglight);
-  /*color: var(--primary-color);*/
+  background-color: var(--bg-light);
+  color: var(--text-light);
   white-space: nowrap;
 }
 
@@ -205,10 +179,10 @@ th, span {
   z-index: 20;
   border-radius: 5px;
   padding: 10px;
-  background-color: var(--bgdark);
+  background-color: var(--bg-dark);
   cursor: move;
   font-weight: bold;
-  /*color: var(--primary-color);*/
+  color: var(--bg-light);
 }
 
 .mag-content {
@@ -234,7 +208,7 @@ th, span {
 }
 
 .mag-content a:hover {
-  background-color: #ddd;
+  background-color: var(--highlight)
 }
 
 * {
@@ -250,7 +224,7 @@ th, span {
   overflow: hidden;
   margin: 1em auto;
   width: 20em;
-  background: linear-gradient(0deg, var(--bgdark) 1em, transparent 0);
+  background: linear-gradient(0deg, #ccc 1em, transparent 0);
 }
 
 .wrap::before,
