@@ -29,7 +29,7 @@ function createDraggableDiv (m_id, title, left, top, viz = false) {
   const myHeader = e('div', { 'class': 'popupHeader', 'id': `${m_id}Header` }, [myImg, e('span', {}, [title])])
   myDiv.appendChild(myHeader)
 
-  const body = e('div', { 'id': `${m_id}Body`, 'style': 'padding: 10px; color: rgb(0, 0, 0);' })
+  const body = e('div', { 'id': `${m_id}Body`, 'style': 'padding: 10px;' })
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)

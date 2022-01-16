@@ -65,7 +65,7 @@ function getVals(slides) {
 function draggableFeature(layerNum, name) {
   let element = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
-    'class': `dragIt`,
+    'class': 'dragIt hover-light',
     'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
