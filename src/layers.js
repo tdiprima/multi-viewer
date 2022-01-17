@@ -65,7 +65,7 @@ function getVals(slides) {
 function draggableFeature(layerNum, name) {
   let element = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
-    'class': 'dragIt hover-light',
+    'class': 'dragIt myButton',
     'style': 'display: inline-block',
     'draggable': 'true',
     'data-tooltip': name
@@ -79,7 +79,7 @@ function visibilityToggle(currentLayer) {
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
   return e('i', {
     'id': makeId(5, 'eye'),
-    'class': `${cssClass} hover-light`,
+    'class': `${cssClass}`,
     'title': 'toggle visibility'
   })
 }
@@ -90,7 +90,6 @@ function transSlider(currentLayer, faEye, viewer) {
   let icon = document.createElement('i')
   icon.classList.add('fas')
   icon.classList.add('fa-adjust')
-  icon.classList.add('hover-light')
   icon.style.cursor = 'pointer'
 
   // Slider element
@@ -141,7 +140,7 @@ function handleVisibility(icon, slider, layerNum, viewer) {
 function colorPalette(featureElem, currentLayer, allLayers, viewer) {
   let icon = e('i', {
     'id': makeId(5, 'palette'),
-    'class': `fas fa-palette pointer hover-light`,
+    'class': `fas fa-palette pointer`,
     'title': 'color palette'
   })
   // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
@@ -160,7 +159,7 @@ function attenuation(allLayers, viewer) {
   // Icon
   let icon = e('i', {
     'id': attId,
-    'class': `fas fa-broadcast-tower hover-light`,
+    'class': `fas fa-broadcast-tower`,
     'title': 'toggle: color-attenuation by probability'
   })
   // Event listener
@@ -182,7 +181,7 @@ function fillUnfill(allLayers, viewer) {
   // Icon
   let icon = e('i', {
     'id': fillId,
-    'class': `${filledCircle} fa-circle hover-light`,
+    'class': `${filledCircle} fa-circle`,
     'title': 'fill un-fill'
   });
   // Event listener
@@ -201,7 +200,7 @@ function fillUnfill(allLayers, viewer) {
 function tachometer() {
   let icon = e('i', {
     'id': makeId(5, 'tach'),
-    'class': `fas fa-tachometer-alt hover-light`,
+    'class': `fas fa-tachometer-alt`,
     'title': 'settings' // call it 'settings', 'control panel', idk.
   })
 
