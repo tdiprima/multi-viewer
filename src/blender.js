@@ -41,7 +41,7 @@ const blender = (blenderBtn, viewer) => {
         'type': 'button',
         'id': name.replace('-', '_'),
         'value': name,
-        'class': 'btn myButton css-tooltip',
+        'class': 'btn hover-light css-tooltip',
         'style': 'width: 120px',
         'data-tooltip': def
       })

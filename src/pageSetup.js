@@ -130,16 +130,16 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
               htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`
             }
 
-            htm += `<button id="btnDraw${idx}" class="btn myButton" title="Draw"><i class="fas fa-pencil-alt"></i></button>&nbsp;
-<button id="btnEdit${idx}" class="btn myButton" title="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
-<button id="btnGrid${idx}" class="btn myButton" title="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
-<button id="btnGridMarker${idx}" class="btn myButton" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
-<button id="btnRuler${idx}" class="btn myButton" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
-<button id="btnShare${idx}" class="btn myButton" title="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
-<button id="btnCam${idx}" class="btn myButton" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
-<button id="btnBlender${idx}" class="btn myButton" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
+            htm += `<button id="btnDraw${idx}" class="btn hover-light" title="Draw"><i class="fas fa-pencil-alt"></i></button>&nbsp;
+<button id="btnEdit${idx}" class="btn hover-light" title="Edit"><i class="fas fa-draw-polygon"></i></button>&nbsp;
+<button id="btnGrid${idx}" class="btn hover-light" title="Grid"><i class="fas fa-border-all"></i></button>&nbsp;
+<button id="btnGridMarker${idx}" class="btn hover-light" title="Mark grid"><i class="fas fa-paint-brush"></i></button>&nbsp;
+<button id="btnRuler${idx}" class="btn hover-light" title="Measure in microns"><i class="fas fa-ruler"></i></button>&nbsp;
+<button id="btnShare${idx}" class="btn hover-light" title="Share this link"><i class="fas fa-share-alt"></i></button>&nbsp;
+<button id="btnCam${idx}" class="btn hover-light" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
+<button id="btnBlender${idx}" class="btn hover-light" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
 <div class="mag" style="display: inline">
-  <button class="btn myButton">
+  <button class="btn hover-light">
   <i class="fas fa-search"></i>
   </button>
   <div class="mag-content">
@@ -152,7 +152,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     <a href="#" data-value="1.0" id="40">40x</a>
   </div>
 </div>
-<button id="btnMapMarker" class="btn myButton" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
+<button id="btnMapMarker" class="btn hover-light" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 </div>`
 
             // END
