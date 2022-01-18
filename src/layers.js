@@ -209,7 +209,6 @@ function tachometer(row) {
 
   const id = makeId(5, 'optsDiv')
   const rect = icon.getBoundingClientRect()
-  console.log('%crect', 'color: yellow;', rect)
   const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
   const divBody = optsDiv.lastChild
 
