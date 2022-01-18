@@ -101,7 +101,7 @@ a:link {
 
 .hover-light:focus,
 .hover-light:hover {
-  border: 2px solid var(--highlight);
+  border: 1px solid var(--highlight);
   color: var(--highlight);
 }
 
@@ -117,7 +117,7 @@ button {
 }
 
 .btnOn {
-  border: 2px solid var(--highlight);
+  border: 1px solid var(--highlight);
   color: var(--highlight);
 }
 
