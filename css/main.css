@@ -321,7 +321,8 @@ output:last-child {
 
 output::after {
   counter-reset: c var(--c);
-  content: "--" attr(for) ": " counter(c) ";";
+  /* content: "--" attr(for) ": " counter(c) ";"; */
+  content: counter(c);
 }
 
 .dualSlider1::before,
