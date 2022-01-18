@@ -1,11 +1,26 @@
 :root {
-  --highlight: #00C6B9;
+  --highlight: #00c6b9;
 
   --bg-dark: #272b38;
+  --bg-dark1: #343844;
+  --bg-dark-top: #272b38;
   --text-dark: #cac3bc;
+  --text-imp-dark: #e8e4e0;
+  --hover-dark: transparentize(#fff, .9);
+  --border-dark: 1px solid #4b5061;
+  --primary-dark: #3e4e53;
 
   --bg-light: #f5f4f3;
-  --text-light: #27374C;
+  --bg-light1: #f7f7f6;
+  --text-light: #27374c;
+  --text-imp-light: #242d30;
+  --border-light: 1px solid #e0ddda;
+  --primary-light: #b45139;
+  --secondary-light: #ca6d56;
+
+  --sun: #ffd475;
+  --tooltip: #fff7d6;
+  --no-frills: #ccc;
 }
 
 .theme--default {
@@ -19,13 +34,11 @@
 }
 
 .sun {
-  color: #ffd475;
+  color: var(--sun);
   cursor: pointer;
-  size: 20px;
 }
 
 .moon {
-  color: var(--text-light);
   cursor: pointer;
 }
 
@@ -92,7 +105,6 @@ a:link {
 *[draggable=true] {
   -webkit-user-drag: element;
   -moz-user-drag: element;
-  user-drag: element;
   cursor: move;
 }
 
@@ -162,7 +174,7 @@ button {
   position: absolute;
   z-index: 10;
   display: inline-block;
-  box-shadow: var(--text-light);
+  box-shadow: 5px 5px 5px var(--text-light);
   border: 1px solid var(--text-light);
   border-radius: 7px;
   background-color: var(--bg-light);
@@ -183,9 +195,8 @@ button {
 .mag-content {
   z-index: 1;
   display: none;
-  box-shadow: var(--text-light);
+  box-shadow: 5px 5px 5px var(--text-light);
   min-width: 160px;
-  background-color: rgb(125, 125, 125); /* fallback bg color */
   background-color: rgba(249, 249, 249, 0.5);
 }
 
@@ -203,7 +214,7 @@ button {
 }
 
 .mag-content a:hover {
-  background-color: #ddd;
+  background-color: rgba(249, 249, 249, 0.9);
 }
 
 .dualSlider, .dualSlider1, .singleSlider, input {
@@ -220,8 +231,8 @@ button {
   overflow: hidden;
   margin: 1em auto;
   width: 20em;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(1em, #ccc), color-stop(0, transparent));
-  background: linear-gradient(0deg, #ccc 1em, transparent 0);
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(1em, var(--no-frills)), color-stop(0, transparent));
+  background: linear-gradient(0deg, var(--no-frills) 1em, transparent 0);
 }
 
 .dualSlider::before,
@@ -416,12 +427,9 @@ output::after {
 
 .singleSlider {
   -webkit-appearance: none;
-  /*background: var(--highlight);*/
-  background: rgb(255, 255, 255);
-  background: -webkit-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
-  background: -moz-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#27374c", GradientType=1);
+  background: -webkit-linear-gradient(90deg, #ffffff 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background: -moz-linear-gradient(90deg, #ffffff 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background: linear-gradient(90deg, #ffffff 0%, var(--highlight) 35%, var(--text-light) 100%);
   height: 12px;
   opacity: 2;
 }
@@ -457,7 +465,7 @@ output::after {
   margin-top: 0;
   padding: 5px;
   font-size: x-small;
-  background-color: #FFF7D6;
+  background-color: var(--tooltip);
 }
 
 .css-tooltip {
