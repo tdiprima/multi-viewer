@@ -91,6 +91,8 @@ a:link {
 
 *[draggable=true] {
   -webkit-user-drag: element;
+  -moz-user-drag: element;
+  user-drag: element;
   cursor: move;
 }
 
@@ -141,8 +143,8 @@ button {
   /*overflow-wrap: break-word;*/
   /*word-wrap: break-word;*/
   /*-webkit-hyphens: auto;*/
-  /*-ms-hyphens: auto;*/
   /*-moz-hyphens: auto;*/
+  /*-ms-hyphens: auto;*/
   /*hyphens: auto;*/
 }
 
@@ -199,7 +201,7 @@ button {
   background-color: #ddd;
 }
 
-* {
+.dualSlider, .dualSlider1, .singleSlider, input {
   font: inherit;
 }
 
@@ -208,6 +210,7 @@ button {
   position: relative;
   display: grid;
   grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
+  grid-template: repeat(2, -moz-max-content) 1em/1fr 1fr;
   grid-template: repeat(2, max-content) 1em/1fr 1fr;
   overflow: hidden;
   margin: 1em auto;
@@ -255,6 +258,7 @@ button {
 .dualSlider input[type=range] {
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
 }
 
 .dualSlider input[type=range]::-webkit-slider-runnable-track {
@@ -293,8 +297,8 @@ button {
 }
 
 .dualSlider input[type=range]:focus,
-.dualSlider input[type=range]:focus {
-  color: #DEA01E;
+.dualSlider input[type=range]:focus + output {
+  color: darkorange;
 }
 
 .dualSlider1::before,
@@ -333,6 +337,7 @@ button {
 .dualSlider1 input[type=range] {
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
 }
 
 .dualSlider1 input[type=range]::-webkit-slider-runnable-track {
@@ -371,18 +376,16 @@ button {
 }
 
 .dualSlider1 input[type=range]:focus,
-.dualSlider1 input[type=range]:focus {
-  color: #DEA01E;
-  /*color: #FFF7D6;*/
-  /*color: #DCF2FF;*/
+.dualSlider1 input[type=range]:focus + output {
+  color: darkorange;
 }
 
 .singleSlider {
   -webkit-appearance: none;
   /*background: var(--highlight);*/
   background: rgb(255, 255, 255);
-  background: -moz-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
   background: -webkit-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
+  background: -moz-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
   background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#27374c", GradientType=1);
   height: 12px;
@@ -391,6 +394,8 @@ button {
 
 .singleSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   cursor: pointer;
   background: var(--text-dark);
   width: 12px;
