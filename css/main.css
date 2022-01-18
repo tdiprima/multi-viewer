@@ -123,6 +123,12 @@ button {
   color: var(--highlight);
 }
 
+.dropzone {
+  overflow: hidden;
+  border: 1px solid var(--text-light);
+  background-color: var(--bg-light);
+}
+
 .dragIt {
   float: left;
   transition: 0.3s;
