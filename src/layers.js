@@ -96,6 +96,7 @@ function transSlider(currentLayer, faEye, viewer) {
   // Slider element
   let element = e('input', {
     'type': 'range',
+    'class': 'singleSlider',
     'id': makeId(5, 'range'),
     'min': '0',
     'max': '100',
@@ -266,10 +267,10 @@ function addRow(table, currentLayer, allLayers, viewer) {
     divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]))
 
     // DUAL-POINT SLIDERS
-    let d = { 'aLab': 'a', 'bLab': 'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'wrap', 'type': 'inside' }
+    let d = { 'aLab': 'a', 'bLab': 'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'dualSlider', 'type': 'inside' }
     const wrapper = sliderWrapper(d, 'In range:', allLayers, viewer)
 
-    d = { 'aLab': 'a1', 'bLab': 'b1', 'aInit': 10, 'bInit': 245, 'min': 0, 'max': 255, 'class': 'section', 'type': 'outside' }
+    d = { 'aLab': 'a1', 'bLab': 'b1', 'aInit': 10, 'bInit': 245, 'min': 0, 'max': 255, 'class': 'dualSlider1', 'type': 'outside' }
     const section = sliderWrapper(d, 'Out range:', allLayers, viewer)
 
     let dd = e('div', {}, [section, wrapper])
