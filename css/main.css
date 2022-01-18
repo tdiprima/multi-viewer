@@ -208,7 +208,6 @@ button {
   --dif: calc(var(--max) - var(--min));
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr;
   grid-template: repeat(2, -webkit-max-content) 1em/ 1fr 1fr;
   grid-template: repeat(2, -moz-max-content) 1em/1fr 1fr;
   grid-template: repeat(2, max-content) 1em/ 1fr 1fr;
@@ -321,7 +320,6 @@ output:last-child {
 
 output::after {
   counter-reset: c var(--c);
-  /* content: "--" attr(for) ": " counter(c) ";"; */
   content: counter(c);
 }
 
