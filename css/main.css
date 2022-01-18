@@ -107,7 +107,7 @@ a:link {
 
 button {
   padding: 4px 12px;
-  border-radius: 5px;
+  border-radius: 7px;
   font-size: 12px;
   line-height: 18px;
   text-align: center;
@@ -157,7 +157,7 @@ button {
   display: inline-block;
   box-shadow: var(--text-light);
   border: 1px solid var(--text-light);
-  border-radius: 5px;
+  border-radius: 7px;
   background-color: var(--bg-light);
   color: var(--text-light);
   white-space: nowrap;
@@ -165,7 +165,7 @@ button {
 
 .popupHeader {
   z-index: 20;
-  border-radius: 5px;
+  /* border-radius: 7px; */
   padding: 10px;
   background-color: var(--bg-dark);
   cursor: move;
@@ -378,27 +378,32 @@ button {
 }
 
 .singleSlider {
-    -webkit-appearance: none;
-    background: var(--highlight);
-    height: 12px;
-    opacity: 2;
-  }
+  -webkit-appearance: none;
+  /* background: var(--highlight); */
+  background: rgb(255, 255, 255);
+  background: -moz-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
+  background: -webkit-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#27374c", GradientType=1);
+  height: 12px;
+  opacity: 2;
+}
 
-  .singleSlider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    cursor: pointer;
-    background: var(--text-light);
-    width: 12px;
-    height: 12px;
-  }
+.singleSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: var(--text-dark);
+  width: 12px;
+  height: 12px;
+}
 
-  .singleSlider:hover {
-    opacity: 1;
-  }
+.singleSlider:hover {
+  opacity: 1;
+}
 
-  .singleSlider input[type=range]::-moz-range-thumb {
-    background-color: var(--text-light);
-  }
+/*.singleSlider input[type=range]::-moz-range-thumb {*/
+/*  background: var(--text-light);*/
+/*}*/
 
 /* TOOLTIP */
 [data-tooltip] {
