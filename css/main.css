@@ -179,7 +179,7 @@ button {
   display: none;
   box-shadow: var(--text-light);
   min-width: 160px;
-  background-color: rgb(249, 249, 249); /* fallback bg color */
+  background-color: rgb(125, 125, 125); /* fallback bg color */
   background-color: rgba(249, 249, 249, 0.5);
 }
 
