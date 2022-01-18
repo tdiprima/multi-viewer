@@ -139,18 +139,18 @@ function handleVisibility(icon, slider, layerNum, viewer) {
 }
 
 // Color palette
-function colorPalette(featureElem, currentLayer, allLayers, viewer) {
+function colorPalette(row, featureElem, currentLayer, allLayers, viewer) {
   let icon = e('i', {
     'id': makeId(5, 'palette'),
     'class': `fas fa-palette pointer hover-light`,
     'title': 'color palette'
   })
+  row.appendChild(e('td', {}, [icon]))
   // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
   let colorsUI = filters(icon, featureElem.innerText, currentLayer.colorscheme, allLayers, viewer)
   icon.addEventListener('click', () => {
     colorsUI.style.display = 'block'
   })
-  return icon
 }
 
 // Color attenuation by probability
@@ -199,15 +199,17 @@ function fillUnfill(allLayers, viewer) {
  * The tachometer is going to pop open 'settings' (or whatever we decide to call it)
  * Settings will have color (or probability) attenuation, fill/un-fill poly's, range sliders.
  */
-function tachometer() {
+function tachometer(row) {
   let icon = e('i', {
     'id': makeId(5, 'tach'),
     'class': `fas fa-tachometer-alt hover-light`,
     'title': 'settings' // call it 'settings', 'control panel', idk.
   })
+  row.appendChild(e('td', {}, [icon]))
 
   const id = makeId(5, 'optsDiv')
   const rect = icon.getBoundingClientRect()
+  console.log('%crect', 'color: yellow;', rect)
   const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
   const divBody = optsDiv.lastChild
 
@@ -215,7 +217,7 @@ function tachometer() {
     optsDiv.style.display = 'block'
   })
 
-  return [icon, divBody]
+  return divBody
 }
 
 /**
@@ -253,11 +255,10 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
   if (layerNum > 0) {
     // COLOR PALETTE
-    tr.appendChild(e('td', {}, [colorPalette(feat, currentLayer, allLayers, viewer)]))
+    colorPalette(tr, feat, currentLayer, allLayers, viewer)
 
     // TACHOMETER
-    let [tach, divBody] = tachometer()
-    tr.appendChild(e('td', {}, [tach]))
+    let divBody = tachometer(tr)
 
     // COLOR ATTENUATION BY PROBABILITY
     let [label1, atten] = attenuation(allLayers, viewer)
