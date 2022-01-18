@@ -379,7 +379,7 @@ button {
 
 .singleSlider {
   -webkit-appearance: none;
-  /* background: var(--highlight); */
+  /*background: var(--highlight);*/
   background: rgb(255, 255, 255);
   background: -moz-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
   background: -webkit-linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(0, 198, 185, 1) 35%, rgba(39, 55, 76, 1) 100%);
@@ -401,9 +401,9 @@ button {
   opacity: 1;
 }
 
-/*.singleSlider input[type=range]::-moz-range-thumb {*/
-/*  background: var(--text-light);*/
-/*}*/
+.singleSlider input[type=range]::-moz-range-thumb {
+  background: var(--text-light);
+}
 
 /* TOOLTIP */
 [data-tooltip] {
