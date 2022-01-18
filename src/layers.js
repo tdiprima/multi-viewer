@@ -282,30 +282,38 @@ function addRow(table, currentLayer, allLayers, viewer) {
 }
 
 function sliderWrapper(d, t, allLayers, viewer) {
+  // Wrapper DIV
   let wrapper = e('div', {
     'class': d.class,
     'role': 'group',
     'aria-labelledby': 'multi-lbl',
     'style': `--${d.aLab}: ${d.aInit}; --${d.bLab}: ${d.bInit}; --min: ${d.min}; --max: ${d.max}`
   })
+
+  // multi-label
   let title = e('div', {'id': 'multi-lbl'})
   title.innerHTML = t
   wrapper.appendChild(title)
 
-  let ARange = e('input', {'id': `${d.aLab}`, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.aInit})
-  let BRange = e('input', {'id': `${d.bLab}`, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
+  // Inputs
+  let ARange = e('input', {'id': d.aLab, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.aInit})
+  let BRange = e('input', {'id': d.bLab, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
   // To display the current values:
-  let displayElement = e('output')
-  if (d.type === 'outside') {
-    displayElement.innerHTML = `0 - ${ARange.value} and ${BRange.value} - 255`
-  } else {
-    displayElement.innerHTML = `${ARange.value} - ${BRange.value}`
-  }
+  // let displayElement = e('output')
+  // if (d.type === 'outside') {
+  //   displayElement.innerHTML = `0 - ${ARange.value} and ${BRange.value} - 255`
+  // } else {
+  //   displayElement.innerHTML = `${ARange.value} - ${BRange.value}`
+  // }
+
+  let output1 = e('output', {'for': d.aLab, 'style': `--c: var(--${d.aLab})`})
+  let output2 = e('output', {'for': d.bLab, 'style': `--c: var(--${d.bLab})`})
 
   wrapper.appendChild(ARange)
-  wrapper.appendChild(displayElement)
+  wrapper.appendChild(output1)
   wrapper.appendChild(BRange)
+  wrapper.appendChild(output2)
 
   function f(e) {
     const input = e.target
@@ -317,10 +325,10 @@ function sliderWrapper(d, t, allLayers, viewer) {
 
     // Display values:
     if (d.type === 'outside') {
-      displayElement.innerHTML = `0 - ${slideVals[0]} and ${slideVals[1]} - 255`
+      // output1.innerHTML = `0 - ${slideVals[0]} and ${slideVals[1]} - 255`
       setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'outside'})
     } else {
-      displayElement.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
+      // output1.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
       setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'inside'})
     }
   }

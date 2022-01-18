@@ -310,6 +310,20 @@ button {
   color: darkorange;
 }
 
+output {
+  -ms-grid-row: 2;
+  grid-row: 2;
+}
+
+output:last-child {
+  text-align: right;
+}
+
+output::after {
+  counter-reset: c var(--c);
+  content: "--" attr(for) ": " counter(c) ";";
+}
+
 .dualSlider1::before,
 .dualSlider1::after {
   -ms-grid-column: 1;
