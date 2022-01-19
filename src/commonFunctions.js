@@ -1,11 +1,11 @@
-// const config = {
-//   osdImages: '/multi-viewer/vendor/openseadragon/images/',
-//   appImages: '/multi-viewer/images/',
-// }
 const config = {
-  osdImages: 'vendor/openseadragon/images/',
-  appImages: 'images/'
+  osdImages: '/multi-viewer/vendor/openseadragon/images/',
+  appImages: '/multi-viewer/images/',
 }
+// const config = {
+//   osdImages: 'vendor/openseadragon/images/',
+//   appImages: 'images/'
+// }
 
 function setFilter(layers, viewer, range) {
   if (viewer.world) {
