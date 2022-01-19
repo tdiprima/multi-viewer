@@ -189,7 +189,7 @@ button {
   z-index: 20;
   /* border-radius: 7px; */
   padding: 10px;
-  background-color: var(--bg-dark);
+  background-color: var(--text-light);
   cursor: move;
   font-weight: bold;
   color: var(--text-dark);
