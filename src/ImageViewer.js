@@ -180,6 +180,21 @@ class ImageViewer {
       }
     }
 
+    function displayCrosshairs() {
+      let center = vpt.getCenter()
+      let pin = e('a', { 'href': '#', 'id': 'pin', 'class': 'fas fa-crosshairs pointer' })
+      pin.style = 'text-decoration: none; font-size: 22px; color: red;'
+      pin.dataset.href = '#'
+      viewer.addOverlay({
+        element: pin,
+        location: center,
+        placement: 'CENTER',
+        checkResize: false
+      })
+      // viewer.addOverlay(pin, center, 'CENTER')
+    }
+    // displayCrosshairs()
+
     // Uncomment for testing
     // viewer.addHandler('canvas-click', event => {
     //   const webPoint = event.position
