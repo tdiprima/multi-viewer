@@ -191,7 +191,7 @@ class ImageViewer {
         placement: 'CENTER',
         checkResize: false
       })
-      // viewer.addOverlay(pin, center, 'CENTER')
+      viewer.addOverlay(pin, center, OpenSeadragon.Placement.CENTER)
     }
     // displayCrosshairs()
 
