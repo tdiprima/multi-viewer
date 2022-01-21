@@ -197,16 +197,15 @@ class ImageViewer {
 
       fabric.Image.fromURL('/images/crosshairs.png', function (oImg) {
         canvas.add(oImg.set({
-          width: 100,
+          width: 50,
           hasControls: false,
           selection: false,
           lockRotation: false,
           hoverCursor: 'default',
           hasRotatingPoint: false,
           hasBorders: false,
-          height: 100,
+          height: 50,
           angle: 0,
-          cornerSize: 10,
           left: 0,
           top: 0
         }))
