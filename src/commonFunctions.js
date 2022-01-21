@@ -253,6 +253,37 @@ function timeStamp() {
   return `${a}_${b}`
 }
 
+/**
+ * Store json object to preferences
+ * Create a json object, add values to it, save to preferences with stringify
+ */
+function storeDataToPref() {
+  // getPreferences('localpref')
+  // let jsonObject = JSON.parse(string)
+  // edit
+  // key/value: putString('pref_data', JSON.stringify(jsonObject)).commit()
+  try {
+
+  } catch (e) {
+
+  }
+}
+
+/**
+ * Getting result from stored preferences
+ * Read string, convert into json object, get desired value/s.
+ */
+function getDataFromPref() {
+  // getPreferences('localpref')
+  // preferences.getString('pref_data', '')
+  // jsonObject = /get this /get that
+  try {
+
+  } catch (e) {
+
+  }
+}
+
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto
 let attenuateFlag = false
