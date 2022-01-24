@@ -180,62 +180,63 @@ class ImageViewer {
       }
     }
 
-    // <i class="fas fa-crosshairs"></i>
-    // function displayCrosshairs() {
-    //   let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
-    //   function repositionRect(obj) {
-    //     obj.left = obj.left - canvas._offset.left
-    //     obj.top = obj.top - canvas._offset.top
-    //     canvas.renderAll()
-    //     obj.setCoords()
-    //   }
-    //
-    //   canvas.on('after:render', function () {
-    //     canvas.calcOffset()
-    //   })
-    //
-    //   fabric.Image.fromURL('/images/crosshairs.png', function (oImg) {
-    //     canvas.add(oImg.set({
-    //       width: 50,
-    //       hasControls: false,
-    //       selection: false,
-    //       lockRotation: false,
-    //       hoverCursor: 'default',
-    //       hasRotatingPoint: false,
-    //       hasBorders: false,
-    //       height: 50,
-    //       angle: 0,
-    //       left: 0,
-    //       top: 0
-    //     }))
-    //
-    //     // Set the object to be centered to the Canvas
-    //     canvas.centerObject(oImg)
-    //     canvas.setActiveObject(oImg)
-    //     canvas.renderAll()
-    //     oImg.setCoords()
-    //
-    //     repositionRect(oImg)
-    //
-    //   })
-    // }
+    function drawBox() {
+      let size = 50
+      let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
+      let canvasCenter = canvas.getCenter()
+      console.log('canvasCenter', canvasCenter)
+      let top1 = canvasCenter.top - (size / 2)
+      let left1 = canvasCenter.left - (size / 2)
+      console.log('canvasCenter', left1, top1)
 
-// function displayCrosshairs1() {
-//   const link = e('a', {href: '#', id: 'pin', class: 'fas fa-crosshairs pointer'})
-//   link.style = 'text-decoration: none; font-size: 22px; color: red;'
-//   link.dataset.href = '#'
+      // Start with window coordinates.
+      let rect = new fabric.Rect({
+        left: left1,
+        top: top1,
+        stroke: 'red',
+        strokeWidth: 2,
+        fill: '',
+        width: size,
+        height: size
+      })
+      canvas.add(rect)
+    }
+    // drawBox()
 
-//   console.log(viewer.viewport.getCenter(false))
-//   viewer.addOverlay({
-//     element: link,
-//     location: viewer.viewport.getCenter(false),
-//     placement: 'BOTTOM',
-//     checkResize: false
-//   })
-// }
-// displayCrosshairs1()
+    function displayCrosshairs() {
+      let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
 
-    // Uncomment for testing
+      canvas.on('after:render', function () {
+        canvas.calcOffset()
+      })
+
+      fabric.Image.fromURL('/images/crosshairs.png', function (oImg) {
+        canvas.add(oImg.set({
+          width: 50,
+          hasControls: false,
+          selection: false,
+          lockRotation: false,
+          hoverCursor: 'default',
+          hasRotatingPoint: false,
+          hasBorders: false,
+          height: 50,
+          angle: 0,
+          cornerSize: 10,
+          left: 0,
+          top: 0
+        }))
+
+        // Set the object to be centered to the Canvas
+        canvas.centerObject(oImg)
+        canvas.setActiveObject(oImg)
+        canvas.renderAll()
+        oImg.setCoords()
+
+      })
+    }
+    displayCrosshairs()
+
+    // Uncomment for testing:
     // viewer.addHandler('canvas-click', event => {
     //   const webPoint = event.position
     //   const viewportPoint = vpt.pointFromPixel(webPoint)
