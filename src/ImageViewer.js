@@ -180,46 +180,60 @@ class ImageViewer {
       }
     }
 
+    // <i class="fas fa-crosshairs"></i>
+    // function displayCrosshairs() {
+    //   let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
+    //   function repositionRect(obj) {
+    //     obj.left = obj.left - canvas._offset.left
+    //     obj.top = obj.top - canvas._offset.top
+    //     canvas.renderAll()
+    //     obj.setCoords()
+    //   }
+    //
+    //   canvas.on('after:render', function () {
+    //     canvas.calcOffset()
+    //   })
+    //
+    //   fabric.Image.fromURL('/images/crosshairs.png', function (oImg) {
+    //     canvas.add(oImg.set({
+    //       width: 100,
+    //       hasControls: false,
+    //       selection: false,
+    //       lockRotation: false,
+    //       hoverCursor: 'default',
+    //       hasRotatingPoint: false,
+    //       hasBorders: false,
+    //       height: 100,
+    //       angle: 0,
+    //       left: 0,
+    //       top: 0
+    //     }))
+    //
+    //     // Set the object to be centered to the Canvas
+    //     canvas.centerObject(oImg)
+    //     canvas.setActiveObject(oImg)
+    //     canvas.renderAll()
+    //     oImg.setCoords()
+    //
+    //     repositionRect(oImg)
+    //
+    //   })
+    // }
 
-
-    function displayCrosshairs() {
-      let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
-      function repositionRect(obj) {
-        obj.left = obj.left - canvas._offset.left
-        obj.top = obj.top - canvas._offset.top
-        canvas.renderAll()
-        obj.setCoords()
-      }
-
-      canvas.on('after:render', function () {
-        canvas.calcOffset()
-      })
-
-      fabric.Image.fromURL('/images/crosshairs.png', function (oImg) {
-        canvas.add(oImg.set({
-          width: 100,
-          hasControls: false,
-          selection: false,
-          lockRotation: false,
-          hoverCursor: 'default',
-          hasRotatingPoint: false,
-          hasBorders: false,
-          height: 100,
-          angle: 0,
-          left: 0,
-          top: 0
-        }))
-
-        // Set the object to be centered to the Canvas
-        canvas.centerObject(oImg)
-        canvas.setActiveObject(oImg)
-        canvas.renderAll()
-        oImg.setCoords()
-
-        repositionRect(oImg)
-
-      })
-    }
+    // <i class="fas fa-crosshairs"></i>
+    // function displayCrosshairs() {
+    //   const link = e('a', {href: '#', id: 'pin', class: 'fas fa-crosshairs pointer'})
+    //   link.style = 'text-decoration: none; font-size: 22px; color: red;'
+    //   link.dataset.href = '#'
+    //
+    //   console.log(viewer.viewport.getCenter(false))
+    //   viewer.addOverlay({
+    //     element: link,
+    //     location: viewer.viewport.getCenter(false),
+    //     placement: 'BOTTOM',
+    //     checkResize: false
+    //   })
+    // }
     // displayCrosshairs()
 
     // Uncomment for testing
