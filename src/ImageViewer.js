@@ -220,21 +220,20 @@ class ImageViewer {
     //   })
     // }
 
-    // <i class="fas fa-crosshairs"></i>
-    // function displayCrosshairs() {
-    //   const link = e('a', {href: '#', id: 'pin', class: 'fas fa-crosshairs pointer'})
-    //   link.style = 'text-decoration: none; font-size: 22px; color: red;'
-    //   link.dataset.href = '#'
-    //
-    //   console.log(viewer.viewport.getCenter(false))
-    //   viewer.addOverlay({
-    //     element: link,
-    //     location: viewer.viewport.getCenter(false),
-    //     placement: 'BOTTOM',
-    //     checkResize: false
-    //   })
-    // }
-    // displayCrosshairs()
+// function displayCrosshairs1() {
+//   const link = e('a', {href: '#', id: 'pin', class: 'fas fa-crosshairs pointer'})
+//   link.style = 'text-decoration: none; font-size: 22px; color: red;'
+//   link.dataset.href = '#'
+
+//   console.log(viewer.viewport.getCenter(false))
+//   viewer.addOverlay({
+//     element: link,
+//     location: viewer.viewport.getCenter(false),
+//     placement: 'BOTTOM',
+//     checkResize: false
+//   })
+// }
+// displayCrosshairs1()
 
     // Uncomment for testing
     // viewer.addHandler('canvas-click', event => {
