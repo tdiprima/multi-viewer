@@ -14,13 +14,13 @@ const mapMarker = (osdViewer, multiViewerArray) => {
   handleButtonShowHide()
 }
 
-function overrideRightClickMenu (viewerDiv) {
+function overrideRightClickMenu(viewerDiv) {
   viewerDiv.addEventListener('contextmenu', mouseEvent => {
     mouseEvent.preventDefault()
   })
 }
 
-function handleMarkerDisplay (osdViewer, multiViewerArray) {
+function handleMarkerDisplay(osdViewer, multiViewerArray) {
   osdViewer.addHandler('canvas-nonprimary-press', osdEvent => {
     if (isRightClick(osdEvent)) {
       const clickPosition = osdEvent.position
@@ -35,11 +35,11 @@ function handleMarkerDisplay (osdViewer, multiViewerArray) {
   })
 }
 
-function isRightClick (evt) {
+function isRightClick(evt) {
   return (evt.button === 2)
 }
 
-function displayMapMarker (point, osdViewer, multiViewerArray) {
+function displayMapMarker(point, osdViewer, multiViewerArray) {
   multiViewerArray.forEach(item => {
     const viewer = item.getViewer()
     if (viewer.id === osdViewer.id) {
@@ -49,7 +49,7 @@ function displayMapMarker (point, osdViewer, multiViewerArray) {
   })
 }
 
-function addMarkerToViewer (point, viewer) {
+function addMarkerToViewer(point, viewer) {
   const link = createLink()
   viewer.addOverlay({
     element: link,
@@ -59,14 +59,14 @@ function addMarkerToViewer (point, viewer) {
   })
 }
 
-function createLink () {
-  const link = e('a', { href: '#', id: 'pin', class: 'fas fa-map-marker pointer' })
+function createLink() {
+  const link = e('a', {href: '#', id: 'pin', class: 'fas fa-map-marker pointer'})
   link.style = 'text-decoration: none; font-size: 22px; color: red;'
   link.dataset.href = '#'
   return link
 }
 
-function handleButtonShowHide () {
+function handleButtonShowHide() {
   const buttons = document.querySelectorAll('#btnMapMarker')
   buttons.forEach(elem => {
     let markersHaveBeenDrawn = false
