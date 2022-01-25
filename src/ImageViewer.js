@@ -180,63 +180,50 @@ class ImageViewer {
       }
     }
 
-    function drawBox() {
-      let size = 50
-      let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
-      let canvasCenter = canvas.getCenter()
-      console.log('canvasCenter', canvasCenter)
-      let top1 = canvasCenter.top - (size / 2)
-      let left1 = canvasCenter.left - (size / 2)
-      console.log('canvasCenter', left1, top1)
+    let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
+    canvas.on('after:render', function () {
+      canvas.calcOffset()
+    })
 
-      // Start with window coordinates.
-      let rect = new fabric.Rect({
-        left: left1,
-        top: top1,
-        stroke: 'red',
-        strokeWidth: 2,
-        fill: '',
-        width: size,
-        height: size
-      })
-      canvas.add(rect)
+    function displayCrosshairs(display) {
+      if (!display) {
+        let blah = canvas.getActiveObject()
+        canvas.remove(blah)
+      } else {
+        fabric.Image.fromURL('/images/crosshairs-red.png', function (oImg) {
+          canvas.add(oImg.set({
+            width: 50,
+            hasControls: false,
+            selection: false,
+            lockRotation: false,
+            hoverCursor: 'default',
+            hasRotatingPoint: false,
+            hasBorders: false,
+            height: 50,
+            angle: 0,
+            cornerSize: 10,
+            left: 0,
+            top: 0
+          }))
+
+          // Set the object to be centered to the Canvas
+          canvas.centerObject(oImg)
+          canvas.setActiveObject(oImg)
+          canvas.renderAll()
+          oImg.setCoords()
+        })
+      }
     }
-    // drawBox()
 
     let btnCrosshairs = document.getElementById(`btnCrosshairs${viewerInfo.idx}`)
-    console.log(btnCrosshairs)
-    function displayCrosshairs() {
-      let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
-
-      canvas.on('after:render', function () {
-        canvas.calcOffset()
-      })
-
-      fabric.Image.fromURL('/images/crosshairs-red.png', function (oImg) {
-        canvas.add(oImg.set({
-          width: 50,
-          hasControls: false,
-          selection: false,
-          lockRotation: false,
-          hoverCursor: 'default',
-          hasRotatingPoint: false,
-          hasBorders: false,
-          height: 50,
-          angle: 0,
-          cornerSize: 10,
-          left: 0,
-          top: 0
-        }))
-
-        // Set the object to be centered to the Canvas
-        canvas.centerObject(oImg)
-        canvas.setActiveObject(oImg)
-        canvas.renderAll()
-        oImg.setCoords()
-
-      })
-    }
-    displayCrosshairs()
+    btnCrosshairs.addEventListener('click', () => {
+      if (btnCrosshairs.classList.contains('btnOn')) {
+        displayCrosshairs(false)
+      } else {
+        displayCrosshairs(true)
+      }
+      toggleButton(btnCrosshairs, 'btnOn', 'btn')
+    })
 
     // Uncomment for testing:
     // viewer.addHandler('canvas-click', event => {
