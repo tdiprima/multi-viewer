@@ -16,32 +16,8 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   //rows = 1
   //columns = 1
 
-  function testing1() {
-    // testing 1 image
-    numViewers = 1
-    rows = 1
-    columns = 1
-    images.splice(1)
-    let layArr = images[0]
-    if (!layArr) {
-      throw 'Session is stuck in limbo. See you later!'
-    }
-    let layC = layArr[1].colorscheme.colors
-    // we have a blue-red colormap, and i'm being sent red and blue
-    for (let i = 0; i < layC.length; i++) {
-      if (layC[i].color === 'rgba(255, 0, 0, 255)') {
-        layC[i].color = 'rgba(255, 0, 255, 255)'
-      }
-      if (layC[i].color === 'rgba(0, 0, 255, 255)') {
-        layC[i].color = 'rgba(0, 255, 255, 255)'
-      }
-    }
-    // console.log('images', images)
-  }
-  // testing1()
-
   // When the 'images' parameter becomes an array with null elements,
-  // it means that Halcyon timed out or is in the process of timeout.
+  // it means that the session timed out or is in the process of timeout.
   // So log the user out and have them start again.
   if (images[0] === null) {
     // logout & redirect
