@@ -203,6 +203,8 @@ class ImageViewer {
     }
     // drawBox()
 
+    let btnCrosshairs = document.getElementById(`btnCrosshairs${viewerInfo.idx}`)
+    console.log(btnCrosshairs)
     function displayCrosshairs() {
       let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
 
