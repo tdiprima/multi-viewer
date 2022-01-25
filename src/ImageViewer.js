@@ -224,6 +224,11 @@ class ImageViewer {
       }
       toggleButton(btnCrosshairs, 'btnOn', 'btn')
     })
+    
+    let btnSave = document.getElementById(`btnSave${viewerInfo.idx}`)
+    btnSave.addEventListener('click', () => {
+      alertMessage(serializeCanvas(canvas))
+    })
 
     // Uncomment for testing:
     // viewer.addHandler('canvas-click', event => {
