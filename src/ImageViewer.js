@@ -210,7 +210,7 @@ class ImageViewer {
         canvas.calcOffset()
       })
 
-      fabric.Image.fromURL('/images/crosshairs.png', function (oImg) {
+      fabric.Image.fromURL('/images/crosshairs-red.png', function (oImg) {
         canvas.add(oImg.set({
           width: 50,
           hasControls: false,
