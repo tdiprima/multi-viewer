@@ -257,16 +257,19 @@ function timeStamp() {
  * Store json object to preferences
  * Create a json object, add values to it, save to preferences with stringify
  */
-function storeDataToPref() {
-  // getPreferences('localpref')
-  // let jsonObject = JSON.parse(string)
-  // edit
-  // key/value: putString('pref_data', JSON.stringify(jsonObject)).commit()
+function storeDataToPref(str) {
   try {
+    // 'localpref'
+    let jsonObject = {
+      'pref_data': str
+    }
+    // JSON.stringify(jsonObject))
+    // commit()
 
   } catch (e) {
-
+    console.err(e.message)
   }
+
 }
 
 /**
@@ -278,10 +281,15 @@ function getDataFromPref() {
   // preferences.getString('pref_data', '')
   // jsonObject = /get this /get that
   try {
-
+      let jsonObject = JSON.parse('string')
   } catch (e) {
-
+    console.err(e.message)
   }
+}
+
+// data for all objects on your canvas
+function serializeCanvas(c) {
+  return JSON.stringify(c)
 }
 
 let pix_per_micron = 4 // default; actual value set later
