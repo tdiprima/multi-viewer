@@ -115,6 +115,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 <button id="btnCam${idx}" class="btn hover-light" title="Snapshot"><i class="fas fa-camera"></i></button>&nbsp;
 <button id="btnBlender${idx}" class="btn hover-light" title="Blend-modes"><i class="fas fa-blender"></i></button>&nbsp;
 <button id="btnCrosshairs${idx}" class="btn hover-light" title="Crosshairs"><i class="fas fa-crosshairs"></i></button>&nbsp;
+<button id="btnSave${idx}" class="btn hover-light" title="Save"><i class="fas fa-save"></i></button>&nbsp;
 <div class="mag" style="display: inline">
   <button class="btn hover-light">
   <i class="fas fa-search"></i>
