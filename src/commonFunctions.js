@@ -267,7 +267,7 @@ function storeDataToPref(str) {
     // commit()
 
   } catch (e) {
-    console.err(e.message)
+    console.error(e.message)
   }
 
 }
@@ -283,13 +283,23 @@ function getDataFromPref() {
   try {
       let jsonObject = JSON.parse('string')
   } catch (e) {
-    console.err(e.message)
+    console.error(e.message)
   }
 }
 
 // data for all objects on your canvas
 function serializeCanvas(c) {
   return JSON.stringify(c)
+}
+
+function getCanvasJson(canvas) {
+  return {
+    colorA: document.getElementById('blah').value,
+    colorB: document.getElementById('blah').value,
+    canvasWidth: canvas.original.width,
+    canvasHeight: canvas.original.height,
+    state: canvas.toJSON()
+  }
 }
 
 let pix_per_micron = 4 // default; actual value set later
