@@ -168,15 +168,19 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     })
   })
 
+  // Hot keys
   window.addEventListener('keydown', (e) => {
     const key = e.key.toLocaleLowerCase()
+    // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
     if (key === 'escape' || key === 'esc') {
       e.preventDefault()
+      // Button-reset
       let buttons = document.getElementsByClassName('btnOn')
       for (let i = 0; i < buttons.length; i++) {
         buttons[i].click()
       }
     }
+    // control-r for 'ruler'
     if (e.ctrlKey && key === 'r') {
       e.preventDefault()
       for (let i = 0; i < viewers.length; i++) {
