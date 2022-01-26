@@ -167,6 +167,7 @@ function attenuation(allLayers, viewer) {
   // Event listener
   icon.addEventListener('click', () => {
     state.attenuate = !state.attenuate
+    // Either outline is on or attenuate is on; not both. #attenuate
     state.outline = false
     setFilter(allLayers, viewer)
   })
@@ -174,7 +175,7 @@ function attenuation(allLayers, viewer) {
 }
 
 // un/fill polygon
-function fillUnfill(allLayers, viewer) {
+function outlineFun(allLayers, viewer) {
   let fillId = makeId(5, 'fill')
   let label = e('label', {'for': fillId})
   label.innerHTML = "&nbsp;&nbsp;&#58;&nbsp;un/fill polygon<br>"
@@ -189,6 +190,8 @@ function fillUnfill(allLayers, viewer) {
   // Event listener
   icon.addEventListener('click', () => {
     state.outline = !state.outline
+    // Either outline is on or attenuate is on; not both. #outline
+    state.attenuate = false
     toggleButton(icon, filledCircle, emptyCircle)
     setFilter(allLayers, viewer)
   })
@@ -263,7 +266,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     let [label1, atten] = attenuation(allLayers, viewer)
 
     // UN/FILL POLYGON
-    let [label2, fillPoly] = fillUnfill(allLayers, viewer)
+    let [label2, fillPoly] = outlineFun(allLayers, viewer)
     divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]))
 
     // DUAL-POINT SLIDERS

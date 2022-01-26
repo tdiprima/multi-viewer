@@ -93,7 +93,7 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
     // set global type
     state.renderType = myList.options[myList.selectedIndex].value
     // no outline for you
-    state.outline = false // <-- for now todo
+    state.outline = false
 
     // Shut all off...
     divArr.forEach(div => {
@@ -175,7 +175,7 @@ function createUI(type, uniq, div, layerColors, layers, viewer) {
       table.appendChild(extraRow(uniq, layerColors, layers, viewer))
     }
   } else {
-    console.log(`%clayer colors?`, 'color: #ff6a5a;', layerColors)
+    console.warn('Layer colors?', layerColors)
   }
 }
 

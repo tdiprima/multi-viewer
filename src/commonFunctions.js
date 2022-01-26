@@ -9,12 +9,6 @@ const config = {
 
 function setFilter(layers, viewer, range) {
   if (viewer.world) {
-
-    // todo: cleanup
-    console.log('%cattenuate', 'color: deeppink;', state.attenuate)
-    console.log('%coutline', 'color: lime;', state.outline)
-    console.log('%crenderType', 'color: violet;', state.renderType)
-
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
 
@@ -315,6 +309,5 @@ const choix = ['byClass', 'byProbability', 'byHeatmap']
 let state = {
   'attenuate': false,
   'outline': false,
-  'renderType': choix[0],
-  'fill': true
+  'renderType': choix[0]
 }
