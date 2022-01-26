@@ -9,6 +9,12 @@ const config = {
 
 function setFilter(layers, viewer, range) {
   if (viewer.world) {
+
+    // todo: cleanup
+    console.log('%cattenuate', 'color: deeppink;', state.attenuate)
+    console.log('%coutline', 'color: lime;', state.outline)
+    console.log('%crenderType', 'color: violet;', state.renderType)
+
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
 
@@ -31,7 +37,7 @@ function setFilter(layers, viewer, range) {
             ]
           })
         } else {
-          if (outlineFlag) {
+          if (state.outline) {
             // OUTLINE POLYS!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
@@ -39,7 +45,7 @@ function setFilter(layers, viewer, range) {
                 colorFilter.prototype.OUTLINE(0, 0, 255)
               ]
             })
-          } else if (renderType === 'byProbability') {
+          } else if (state.renderType === 'byProbability') {
             // USE COLORSPECTRUM!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
@@ -47,7 +53,7 @@ function setFilter(layers, viewer, range) {
                 colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)
               ]
             })
-          } else if (renderType === 'byClass' || renderType === 'byHeatmap') {
+          } else if (state.renderType === 'byClass' || state.renderType === 'byHeatmap') {
             // USE COLORSCHEME!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
@@ -304,7 +310,11 @@ function getCanvasJson(canvas) {
 
 let pix_per_micron = 4 // default; actual value set later
 let microns_per_pix = 0.25 // ditto
-let attenuateFlag = false
-let outlineFlag = false
+
 const choix = ['byClass', 'byProbability', 'byHeatmap']
-let renderType = choix[0]
+let state = {
+  'attenuate': false,
+  'outline': false,
+  'renderType': choix[0],
+  'fill': true
+}

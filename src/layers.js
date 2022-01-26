@@ -166,8 +166,8 @@ function attenuation(allLayers, viewer) {
   })
   // Event listener
   icon.addEventListener('click', () => {
-    attenuateFlag = !attenuateFlag
-    outlineFlag = false
+    state.attenuate = !state.attenuate
+    state.outline = false
     setFilter(allLayers, viewer)
   })
   return [label, icon]
@@ -188,7 +188,7 @@ function fillUnfill(allLayers, viewer) {
   });
   // Event listener
   icon.addEventListener('click', () => {
-    outlineFlag = !outlineFlag
+    state.outline = !state.outline
     toggleButton(icon, filledCircle, emptyCircle)
     setFilter(allLayers, viewer)
   })
