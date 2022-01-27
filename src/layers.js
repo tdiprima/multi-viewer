@@ -318,7 +318,8 @@ function sliderWrapper(d, t, allLayers, viewer) {
   wrapper.appendChild(BRange)
   wrapper.appendChild(output2)
 
-  function f(e) {
+  // Update custom properties on wrapper
+  function updateProps(e) {
     const input = e.target
     const wrapper = input.parentNode
     wrapper.style.setProperty(`--${input.id}`, +input.value)
@@ -336,8 +337,8 @@ function sliderWrapper(d, t, allLayers, viewer) {
     }
   }
 
-  ARange.addEventListener('input', f)
-  BRange.addEventListener('input', f)
+  ARange.addEventListener('input', updateProps)
+  BRange.addEventListener('input', updateProps)
 
   return wrapper
 }
