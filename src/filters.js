@@ -19,7 +19,7 @@
  */
 const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
   // colorscheme.colors: is an array of class-colors objects
-  // Now, add a flag called checked, and set it to true for use later:
+  // Now, add a flag called 'checked', and set it to true for use later:
   colorscheme.colors.map(a => a.checked = true)
   
   // colorscheme.colorspectrum: is an array of color objects for probability
