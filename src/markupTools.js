@@ -7,7 +7,7 @@
  *     len: num images to display
  * @param viewer
  */
-const markupTools = (viewerInfo, viewer) => {
+const markupTools = (viewerInfo, options, viewer) => {
   const overlay = viewer.fabricjsOverlay({scale: 1, static: false})
   const idx = viewerInfo.idx
 
@@ -29,8 +29,7 @@ const markupTools = (viewerInfo, viewer) => {
   // SAVE
   let btnSave = document.getElementById(`btnSave${viewerInfo.idx}`)
   btnSave.addEventListener('click', () => {
-    console.log('%cstringify canvas', 'color: deeppink;', JSON.stringify(canvas))
-    console.log('%ccanvas toObject', 'color: lime;', canvas.toObject())
+    saveSettings(canvas, options)
   })
 
 }

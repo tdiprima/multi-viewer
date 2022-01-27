@@ -253,14 +253,14 @@ function timeStamp() {
   return `${a}_${b}`
 }
 
-function getCanvasJson(canvas) {
-  return {
-    colorA: document.getElementById('blah').value,
-    colorB: document.getElementById('blah').value,
-    canvasWidth: canvas.original.width,
-    canvasHeight: canvas.original.height,
-    state: canvas.toJSON()
+function saveSettings(canvas, options) {
+  let jsonObject = {
+    canvas: canvas.toJSON(),
+    state: state,
+    options: options
   }
+  console.log('settings', jsonObject)
+  // todo: post object to server
 }
 
 let pix_per_micron = 4 // default; actual value set later
