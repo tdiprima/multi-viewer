@@ -20,4 +20,17 @@ const markupTools = (viewerInfo, viewer) => {
   ruler(document.getElementById(`btnRuler${idx}`), viewer, overlay)
 
   blender(document.getElementById(`btnBlender${idx}`), viewer)
+
+  let canvas = overlay.fabricCanvas()
+  canvas.on('after:render', function () {
+    canvas.calcOffset()
+  })
+
+  // SAVE
+  let btnSave = document.getElementById(`btnSave${viewerInfo.idx}`)
+  btnSave.addEventListener('click', () => {
+    console.log('%cstringify canvas', 'color: deeppink;', JSON.stringify(canvas))
+    console.log('%ccanvas toObject', 'color: lime;', canvas.toObject())
+  })
+
 }

@@ -225,12 +225,6 @@ class ImageViewer {
       toggleButton(btnCrosshairs, 'btnOn', 'btn')
     })
 
-    let btnSave = document.getElementById(`btnSave${viewerInfo.idx}`)
-    btnSave.addEventListener('click', () => {
-      console.log('%cstringify canvas', 'color: deeppink;', JSON.stringify(canvas))
-      console.log('%ccanvas toObject', 'color: lime;', canvas.toObject())
-    })
-
     // Uncomment for testing:
     // viewer.addHandler('canvas-click', event => {
     //   const webPoint = event.position
