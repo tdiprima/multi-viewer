@@ -32,7 +32,6 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       document.body.classList.add("theme--default")
       // dark-mode
       let awesome = e('i', {'class': 'fas fa-moon moon'})
-      // let btnDark = e('button', {'class': 'btn'}, [awesome])
 
       // Slide name
       let name
