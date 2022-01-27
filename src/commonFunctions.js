@@ -253,45 +253,6 @@ function timeStamp() {
   return `${a}_${b}`
 }
 
-/**
- * Store json object to preferences
- * Create a json object, add values to it, save to preferences with stringify
- */
-function storeDataToPref(str) {
-  try {
-    // 'localpref'
-    let jsonObject = {
-      'pref_data': str
-    }
-    // JSON.stringify(jsonObject))
-    // commit()
-
-  } catch (e) {
-    console.error(e.message)
-  }
-
-}
-
-/**
- * Getting result from stored preferences
- * Read string, convert into json object, get desired value/s.
- */
-function getDataFromPref() {
-  // getPreferences('localpref')
-  // preferences.getString('pref_data', '')
-  // jsonObject = /get this /get that
-  try {
-      let jsonObject = JSON.parse('string')
-  } catch (e) {
-    console.error(e.message)
-  }
-}
-
-// data for all objects on your canvas
-function serializeCanvas(c) {
-  return JSON.stringify(c)
-}
-
 function getCanvasJson(canvas) {
   return {
     colorA: document.getElementById('blah').value,
