@@ -8,15 +8,15 @@
  * filtersXXXHeader
  * filtersXXXBody
  *
- * @param m_id: id prefix to be used in the created elements
+ * @param prfx: id prefix to be used in the created elements
  * @param title: header title
  * @param left: location
  * @param top: location
  * @param viz: visibility
  * @returns {*} the floating div
  */
-function createDraggableDiv (m_id, title, left, top, viz = false) {
-  const myDiv = e('div', { 'class': 'popup', 'id': m_id })
+function createDraggableDiv (prfx, title, left, top, viz = false) {
+  const myDiv = e('div', { class: 'popup', 'id': prfx })
   myDiv.style.left = `${left}px`
   myDiv.style.top = `${top}px`
 
@@ -26,10 +26,10 @@ function createDraggableDiv (m_id, title, left, top, viz = false) {
     myDiv.style.display = 'none'
   })
 
-  const myHeader = e('div', { 'class': 'popupHeader', 'id': `${m_id}Header` }, [myImg, e('span', {}, [title])])
+  const myHeader = e('div', { 'class': 'popupHeader', 'id': `${prfx}Header` }, [myImg, e('span', {}, [title])])
   myDiv.appendChild(myHeader)
 
-  const body = e('div', { 'id': `${m_id}Body`, 'style': 'padding: 10px;' })
+  const body = e('div', { 'id': `${prfx}Body`, 'style': 'padding: 10px;' })
   // "body" to be filled in by calling function
   myDiv.appendChild(body)
   document.body.appendChild(myDiv)
