@@ -21,15 +21,15 @@ const filters = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
   // colorscheme.colors: is an array of class-colors objects
   // Now, add a flag called 'checked', and set it to true for use later:
   colorscheme.colors.map(function (a) {
-    return a.checked = true;
-  });
+    return a.checked = true
+  })
 
   // colorscheme.colorspectrum: is an array of color objects for probability
   // Add 'checked'. Add 'classid' - set value to current index in array.
   colorscheme.colorspectrum.forEach(function (element, index) {
-    element.checked = true;
-    element.classid = index; // 'classid' also exists in colorscheme.colors.  We're overloading the variable, so we can have 1 checkbox handler for both.
-  });
+    element.checked = true
+    element.classid = index // 'classid' also exists in colorscheme.colors.  We're overloading the variable, so we can have 1 checkbox handler for both.
+  })
 
   const uniqueId = getRandomInt(100, 999)
   const widgetId = `filters${uniqueId}`
