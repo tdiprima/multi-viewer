@@ -55,14 +55,14 @@ function anchorWrapper(anchorIndex, fn) {
     }, fabricObject.calcTransformMatrix())
     const actionPerformed = fn(eventData, transform, x, y)
     // IMPORTANT!  VARIABLE 'newDim' NEEDS TO EXIST. Otherwise, the bounding box gets borked:
-
+    /* eslint-disable no-unused-vars */
     const newDim = fabricObject._setPositionDimensions({}) // DO NOT TOUCH THIS VARIABLE.
     const polygonBaseSize = fabricObject._getNonTransformedDimensions()
     const newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x
     const newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y
     fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5)
     return actionPerformed
-  };
+  }
 }
 
 function getPolygon(canvas) {
