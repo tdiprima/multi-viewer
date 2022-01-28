@@ -4,9 +4,9 @@
  * Calling program will create an HTML table and attach it to the body
  *
  * Popup Div Naming Convention Example:
- * filtersXXX
- * filtersXXXHeader
- * filtersXXXBody
+ * nameXXX
+ * nameXXXHeader
+ * nameXXXBody
  *
  * @param prfx: id prefix to be used in the created elements
  * @param title: header title
