@@ -1,5 +1,5 @@
 /**
- * There's a column called "layers_and_colors" to the right of each viewer.
+ * There's a column called "layersAndColors" to the right of each viewer.
  * Create an HTML table there, with each row corresponding to each layer displayed in viewer.
  * Each layer has:
  *     a draggable item: the layer
@@ -18,10 +18,10 @@ let layers = (divEl, images, viewer) => {
  * Locate the source viewer
  */
 function getSourceViewer(focusButton) {
-  // Find the layers_and_colors div close to where the user dropped the feature:
-  let layers_and_colors = focusButton.parentElement.parentElement.parentElement.parentElement
+  // Find the layersAndColors div close to where the user dropped the feature:
+  let layersAndColors = focusButton.parentElement.parentElement.parentElement.parentElement
   // Get the table row containing the viewer
-  let tr = layers_and_colors.parentElement.parentElement
+  let tr = layersAndColors.parentElement.parentElement
   // Finally, get the source viewer's div
   let sourceViewerDiv = tr.firstElementChild.firstElementChild
   return getViewerObject(sourceViewerDiv)
@@ -33,8 +33,8 @@ function getSourceViewer(focusButton) {
 function getViewerObject(element) {
   let retVal
   try {
-    // syncedImageViewers = global variable set in synchronizeViewers.js
-    for (let nsync of syncedImageViewers) {
+    /* eslint-disable no-undef */
+    for (const nsync of SYNCED_IMAGE_VIEWERS) {
       if (nsync.getViewer().id === element.id) {
         retVal = nsync.getViewer()
         break
@@ -166,9 +166,9 @@ function attenuation(allLayers, viewer) {
   })
   // Event listener
   icon.addEventListener('click', () => {
-    state.attenuate = !state.attenuate
+    STATE.attenuate = !STATE.attenuate
     // Either outline is on or attenuate is on; not both. #attenuate
-    state.outline = false
+    STATE.outline = false
     setFilter(allLayers, viewer)
   })
   return [label, icon]
@@ -189,9 +189,9 @@ function outlineFun(allLayers, viewer) {
   });
   // Event listener
   icon.addEventListener('click', () => {
-    state.outline = !state.outline
+    STATE.outline = !STATE.outline
     // Either outline is on or attenuate is on; not both. #outline
-    state.attenuate = false
+    STATE.attenuate = false
     toggleButton(icon, filledCircle, emptyCircle)
     setFilter(allLayers, viewer)
   })
@@ -376,9 +376,11 @@ function handleDragLayers(layers, viewer) {
     feature.addEventListener('dragend', handleDragEnd)
   })
 
-  function handleDragStart(evt) {
+  function handleDragStart (evt) {
+    /* eslint-disable no-undef */
     dragSrcEl = this // The draggable feature (button element)
     this.style.opacity = '0.4'
+    /* eslint-disable no-undef */
     sourceViewer = getSourceViewer(evt.target)
     evt.dataTransfer.effectAllowed = 'move'
     evt.dataTransfer.setData('text', evt.target.id)
@@ -402,7 +404,7 @@ function handleDragLayers(layers, viewer) {
       let target = evt.target // canvas upper-canvas
       let targetDiv = target.closest('.viewer') // where they dropped the feature
       if (!targetDiv) return false;
-      // Find matching layers_and_colors div
+      // Find matching layersAndColors div
       const td1 = targetDiv.parentElement
       const td2 = td1.nextSibling
       // Find the corresponding table (we will add this feature here)
