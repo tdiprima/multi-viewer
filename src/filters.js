@@ -285,18 +285,18 @@ function numericEvent(numEl, colorObject, layers, viewer) {
 }
 
 // Create numeric input
-function createNumericInput (prfx, table, uniq, layers, colorObject, colors, viewer) {
+function createNumericInput (id, table, uniq, layers, colorObject, colors, viewer) {
   let val
   if (!colorObject.low && !colorObject.high) {
     val = ''
   } else {
-    val = prfx.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
+    val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
   }
 
   // todo: check
-  console.log('prfx', 'color: #ff6a5a; font-size: larger;', prfx)
+  console.log('%cid', 'color: #ff6a5a; font-size: larger;', id)
   const numEl = e('input', {
-    id: prfx,
+    id: id,
     type: 'number',
     min: '0',
     max: '255',
