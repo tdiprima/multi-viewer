@@ -243,7 +243,7 @@ function saveSettings(canvas, options) {
     state: STATE,
     options: options
   }
-  console.log('settings', jsonObject)
+  // console.log('settings', jsonObject)
   // todo: post object to server
 }
 
