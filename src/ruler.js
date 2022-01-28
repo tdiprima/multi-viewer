@@ -111,7 +111,7 @@ let ruler = (button, viewer, overlay) => {
 
     let w = difference(oStart.x, oEnd.x)
     let h = difference(oStart.y, oEnd.y)
-    let hypot = getHypotenuseLength(w, h, microns_per_pix)
+    let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX)
     let t = valueWithUnit(hypot)
 
     let pointer = canvas.getPointer(event)
@@ -151,11 +151,12 @@ let ruler = (button, viewer, overlay) => {
     line.setCoords()
     canvas.remove(fText)
     isDown = false
+    console.log('%co', 'color: #ff6a5a; font-size: larger;', o)
 
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;')
-      let pointer = canvas.getPointer(event)
+      let pointer = canvas.getPointer(event) // todo: o.e? 'event' is not defined.
       drawText(pointer.x, pointer.y, fText.text, zoom < 100)
       canvas.renderAll()
     }
