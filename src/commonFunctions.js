@@ -249,7 +249,7 @@ function saveSettings(canvas, options) {
 
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
 
-const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap'] // todo: rename
+const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap']
 const STATE = {
   attenuate: false,
   outline: false,
