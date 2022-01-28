@@ -19,9 +19,9 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   // When the 'images' parameter becomes an array with null elements,
   // it means that the session timed out or is in the process of timeout.
   // So log the user out and have them start again.
-  if (!isRealValue(images) || (images.length >=1  && images[0] === null)) {
+  if (!isRealValue(images) || (images.length >= 1 && images[0] === null)) {
     // logout & redirect
-    document.write("<script>window.alert('Session timeout. Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>");
+    document.write("<script>window.alert('Session timeout. Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>")
   }
 
   let viewers = [] // eslint-disable-line prefer-const
@@ -29,7 +29,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     new Promise(resolve => {
       return resolve(opts)
     }).then(opts => {
-      document.body.classList.add("theme--default")
+      document.body.classList.add('theme--default')
       // dark-mode
       let awesome = e('i', {'class': 'fas fa-moon moon'})
 
@@ -37,7 +37,11 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       let name
       let slide = images[0][0].location // layer 0 location
       if (slide.includes('TCGA')) {
-        name = `Slide: ${slide.match(/TCGA-[^%.]+/)[0]}`
+        // name = `Slide: ${slide.match(/TCGA-[^%.]+/)[0]}`
+        // todo: Unexpected template string expression.
+        const str = slide.match(/TCGA-[^%.]+/)[0]
+        console.log(`%c${e.message}`, 'color: #ff6a5a; font-size: larger;')
+        name = `Slide: ${str}`
       } else {
         let arr = slide.split('/')
         name = `Slide: ${arr[arr.length - 1]}`
@@ -54,7 +58,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       awesome.addEventListener('click', () => {
         toggleButton(awesome, 'fa-moon', 'fa-sun')
         toggleButton(awesome, 'moon', 'sun')
-        document.body.classList.toggle("theme--dark")
+        document.body.classList.toggle('theme--dark')
       })
 
       // CREATE TABLE FOR VIEWERS
@@ -97,7 +101,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
 
             // ANNOTATION TOOLS
-            htm += `<div class="floated">`
+            htm += '<div class="floated">'
 
             if (opts && opts.paintbrushColor) {
               htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
@@ -133,7 +137,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 </div>`
 
             // END
-            htm += `</div></div>`
+            htm += '</div></div>'
           }
 
           // CREATE VIEWER
