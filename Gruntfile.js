@@ -21,9 +21,11 @@ module.exports = function (grunt) {
           'src/blender.js',
           'src/markupTools.js',
           'src/draggable.js',
+          'src/filterPopup.js',
           'src/filters.js',
           'src/ImageViewer.js',
-          'src/layers.js',
+          'src/layerUI.js',
+          'src/layerPopup.js',
           'src/MultiViewer.js',
           'src/synchronizeViewers.js'],
         dest: 'dist/<%= pkg.name %>.js'
