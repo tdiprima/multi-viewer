@@ -53,8 +53,8 @@ function getVals(slides) {
 
   // Determine which is larger
   if (slide1 > slide2) {
-    let tmp = slide2;
-    slide2 = slide1;
+    let tmp = slide2
+    slide2 = slide1
     slide1 = tmp
   }
 

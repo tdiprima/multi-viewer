@@ -1,6 +1,6 @@
 const config = {
   osdImages: '/multi-viewer/vendor/openseadragon/images/',
-  appImages: '/multi-viewer/images/',
+  appImages: '/multi-viewer/images/'
 }
 // const config = {
 //   osdImages: 'vendor/openseadragon/images/',
@@ -19,10 +19,10 @@ function setFilter(layers, viewer, range) {
           let r, g, b
           if (range.type === 'inside') {
             // Color: cyan
-            r = 0;  g = 255; b = 255;
+            r = 0; g = 255; b = 255;
           } else {
             // Color: blue
-            r = 0;  g = 0; b = 255;
+            r = 0; g = 0; b = 255;
           }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
@@ -240,7 +240,7 @@ function timeStamp() {
 function saveSettings(canvas, options) {
   let jsonObject = {
     canvas: canvas.toJSON(),
-    state: state,
+    state: STATE,
     options: options
   }
   console.log('settings', jsonObject)
