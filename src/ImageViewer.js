@@ -24,7 +24,7 @@ class ImageViewer {
       blendTime: 0,
       prefixUrl: config.osdImages,
       tileSources: ts,
-      maxZoomPixelRatio: 1,
+      maxZoomPixelRatio: 1
       // showNavigationControl: false,
       // showNavigator: true,
       // navigatorPosition: "BOTTOM_RIGHT",
@@ -170,10 +170,9 @@ class ImageViewer {
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
       if (isRealValue(item.resolutionUnit)) {
         if (item.resolutionUnit === 3) {
-          let pix_per_cm = item.xResolution
-          setScaleBar(pix_per_cm * 100)
-          pix_per_micron = pix_per_cm / 10000 // 1 cm = 10000 µ
-          microns_per_pix = 10000 / pix_per_cm
+          const pixPerCm = item.xResolution
+          setScaleBar(pixPerCm * 100)
+          MICRONS_PER_PIX = 10000 / pixPerCm
         } else {
           console.warn('resolutionUnit <> 3', item.resolutionUnit)
         }
@@ -187,8 +186,8 @@ class ImageViewer {
 
     function displayCrosshairs(display) {
       if (!display) {
-        let blah = canvas.getActiveObject()
-        canvas.remove(blah)
+        let cross = canvas.getActiveObject()
+        canvas.remove(cross)
       } else {
         fabric.Image.fromURL('/images/crosshairs-red.png', function (oImg) {
           canvas.add(oImg.set({
