@@ -156,7 +156,7 @@ let ruler = (button, viewer, overlay) => {
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;')
-      let pointer = canvas.getPointer(event) // todo: o.e? 'event' is not defined.
+      let pointer = canvas.getPointer(o.e)
       drawText(pointer.x, pointer.y, fText.text, zoom < 100)
       canvas.renderAll()
     }
