@@ -403,7 +403,7 @@ function handleDragLayers(layers, viewer) {
       // target
       let target = evt.target // canvas upper-canvas
       let targetDiv = target.closest('.viewer') // where they dropped the feature
-      if (!targetDiv) return false;
+      if (!targetDiv) return false
       // Find matching layersAndColors div
       const td1 = targetDiv.parentElement
       const td2 = td1.nextSibling

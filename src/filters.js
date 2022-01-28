@@ -530,7 +530,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     newImage.data.set(data.flat())
     context.putImageData(newImage, 0, 0)
     callback()
-  };
+  }
 }
 
 colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
@@ -568,7 +568,7 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
 
     context.putImageData(imgData, 0, 0)
     callback()
-  };
+  }
 }
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
@@ -653,5 +653,5 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     newImage.data.set(data.flat())
     context.putImageData(newImage, 0, 0)
     callback()
-  };
+  }
 }
