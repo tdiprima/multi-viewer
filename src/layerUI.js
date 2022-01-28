@@ -147,7 +147,7 @@ function colorPalette(row, featureElem, currentLayer, allLayers, viewer) {
   })
   row.appendChild(e('td', {}, [icon]))
   // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
-  let colorsUI = filterUI(icon, featureElem.innerText, currentLayer.colorscheme, allLayers, viewer)
+  let colorsUI = filterPopup(icon, featureElem.innerText, currentLayer.colorscheme, allLayers, viewer)
   icon.addEventListener('click', () => {
     colorsUI.style.display = 'block'
   })

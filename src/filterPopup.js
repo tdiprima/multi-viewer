@@ -17,7 +17,7 @@
  * hiXXX0 <- 0th row elements
  * iXXX0 <- 0th row elements
  */
-const filterUI = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
+const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
   // colorscheme.colors: is an array of class-colors objects
   // Now, add a flag called 'checked', and set it to true for use later:
   colorscheme.colors.map(function (a) {
