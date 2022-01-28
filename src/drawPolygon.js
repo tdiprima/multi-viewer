@@ -134,7 +134,6 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     })
     canvas.add(poly)
     // todo: test
-    // poly['setControlVisible']('tr', false)
     poly.setControlVisible('tr', false)
     canvas.setActiveObject(poly)
     canvas.remove(pathObject)
