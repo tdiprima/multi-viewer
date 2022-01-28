@@ -31,7 +31,7 @@ function setFilter(layers, viewer, range) {
             ]
           })
         } else {
-          if (state.outline) {
+          if (STATE.outline) {
             // OUTLINE POLYS!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
@@ -39,7 +39,7 @@ function setFilter(layers, viewer, range) {
                 colorFilter.prototype.OUTLINE(0, 0, 255)
               ]
             })
-          } else if (state.renderType === 'byProbability') {
+          } else if (STATE.renderType === 'byProbability') {
             // USE COLORSPECTRUM!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
@@ -47,7 +47,7 @@ function setFilter(layers, viewer, range) {
                 colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)
               ]
             })
-          } else if (state.renderType === 'byClass' || state.renderType === 'byHeatmap') {
+          } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
             // USE COLORSCHEME!
             filterOpts.push({
               items: viewer.world.getItemAt(i),
@@ -135,22 +135,6 @@ String.prototype.hashCode = function () {
     hash = hash & hash // Convert to 32bit integer
   }
   return hash
-}
-
-function getStringRep(_input) {
-  let _md5 = _input.hashCode()
-  if (_md5 < 0) {
-    _md5 *= -1
-  }
-  const _text = _md5.toString(16)
-  return _text.toUpperCase()
-}
-
-// async function
-async function fetchAsync(url) {
-  const response = await fetch(url) // await response of fetch call
-  const data = await response.json() // only proceed once promise is resolved
-  return data // only proceed once second promise is resolved
 }
 
 // Item name is unique
@@ -263,12 +247,11 @@ function saveSettings(canvas, options) {
   // todo: post object to server
 }
 
-let pix_per_micron = 4 // default; actual value set later
-let microns_per_pix = 0.25 // ditto
+let MICRONS_PER_PIX = 0.25 // default; actual value set later
 
-const choix = ['byClass', 'byProbability', 'byHeatmap']
-let state = {
-  'attenuate': false,
-  'outline': false,
-  'renderType': choix[0]
+const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap'] // todo: rename
+const STATE = {
+  attenuate: false,
+  outline: false,
+  renderType: RENDER_TYPES[0]
 }
