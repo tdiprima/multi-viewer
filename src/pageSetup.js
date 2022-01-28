@@ -37,13 +37,10 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       let name
       let slide = images[0][0].location // layer 0 location
       if (slide.includes('TCGA')) {
-        // name = `Slide: ${slide.match(/TCGA-[^%.]+/)[0]}`
-        // todo: Unexpected template string expression.
         const str = slide.match(/TCGA-[^%.]+/)[0]
-        console.log(`%c${e.message}`, 'color: #ff6a5a; font-size: larger;')
         name = `Slide: ${str}`
       } else {
-        let arr = slide.split('/')
+        const arr = slide.split('/')
         name = `Slide: ${arr[arr.length - 1]}`
       }
 
