@@ -29,7 +29,7 @@ class MultiViewer extends ImageViewer {
       markupTools(viewerInfo, options, super.getViewer())
     }
 
-    layers(document.getElementById(`layersAndColors${viewerInfo.idx}`), itemsToBeDisplayed, super.getViewer())
+    layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), itemsToBeDisplayed, super.getViewer())
 
   }
 
