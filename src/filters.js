@@ -293,8 +293,6 @@ function createNumericInput (id, table, uniq, layers, colorObject, colors, viewe
     val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
   }
 
-  // todo: check
-  console.log('%cid', 'color: #ff6a5a; font-size: larger;', id)
   const numEl = e('input', {
     id: id,
     type: 'number',
