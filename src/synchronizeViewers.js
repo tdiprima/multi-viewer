@@ -7,7 +7,7 @@ const synchronizeViewers = function (multiViewerArray) {
   const isGood = checkData(multiViewerArray)
 
   if (isGood) {
-    this.syncedImageViewers = []
+    this.SYNCED_IMAGE_VIEWERS = []
     this.activeViewerId = null
     this.numViewers = multiViewerArray.length
 
@@ -17,7 +17,7 @@ const synchronizeViewers = function (multiViewerArray) {
       setPanZoomCurrent(currentViewer, handler)
 
       // set this up while we're here
-      mapMarker(currentViewer, this.syncedImageViewers)
+      mapMarker(currentViewer, this.SYNCED_IMAGE_VIEWERS)
 
       function handler () {
         if (!isActive(currentViewer.id)) {
@@ -29,7 +29,7 @@ const synchronizeViewers = function (multiViewerArray) {
         resetFlag()
       }
 
-      this.syncedImageViewers.push(imageViewer)
+      this.SYNCED_IMAGE_VIEWERS.push(imageViewer)
     })
   }
 }
@@ -75,7 +75,7 @@ function isZoomOn (imageViewer) {
 function setPanZoomOthers (imageViewer) {
   const currentViewer = imageViewer.getViewer()
 
-  this.syncedImageViewers.forEach(syncedObject => {
+  this.SYNCED_IMAGE_VIEWERS.forEach(syncedObject => {
     const syncedViewer = syncedObject.getViewer()
 
     if (syncedViewer.id === currentViewer.id) {
