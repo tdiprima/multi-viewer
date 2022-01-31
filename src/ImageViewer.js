@@ -19,6 +19,8 @@ class ImageViewer {
 
     // SET UP VIEWER
     let viewer
+    console.log('OSD complaining about @context property in .../hovernet.zip/info.json', ts)
+
     try {
       viewer = OpenSeadragon({
         id: viewerInfo.divId,
