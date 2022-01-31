@@ -33,7 +33,7 @@ function setFilter(layers, viewer, range) {
         } else {
           if (STATE.outline) {
             // OUTLINE POLYS!
-            // Color must be either #FF00FF or #0000FF; no green.
+            // TODO: NOTE: Color must be either #FF00FF or #0000FF; no green.
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
