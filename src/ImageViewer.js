@@ -18,17 +18,22 @@ class ImageViewer {
     }
 
     // SET UP VIEWER
-    let viewer = OpenSeadragon({
-      id: viewerInfo.divId,
-      crossOriginPolicy: 'Anonymous',
-      blendTime: 0,
-      prefixUrl: config.osdImages,
-      tileSources: ts,
-      maxZoomPixelRatio: 1
-      // showNavigationControl: false,
-      // showNavigator: true,
-      // navigatorPosition: "BOTTOM_RIGHT",
-    })
+    let viewer
+    try {
+      viewer = OpenSeadragon({
+        id: viewerInfo.divId,
+        crossOriginPolicy: 'Anonymous',
+        blendTime: 0,
+        prefixUrl: CONFIG.osdImages,
+        tileSources: ts,
+        maxZoomPixelRatio: 1
+        // showNavigationControl: false,
+        // showNavigator: true,
+        // navigatorPosition: "BOTTOM_RIGHT",
+      })
+    } catch (e) {
+      console.error(e.message)
+    }
 
     const vpt = viewer.viewport
 
@@ -124,10 +129,10 @@ class ImageViewer {
       // Zoom all the way in
       let zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest: `${config.osdImages}zin_rest.png`,
-        srcGroup: `${config.osdImages}zin_grouphover.png`,
-        srcHover: `${config.osdImages}zin_hover.png`,
-        srcDown: `${config.osdImages}zin_pressed.png`,
+        srcRest: `${CONFIG.osdImages}zin_rest.png`,
+        srcGroup: `${CONFIG.osdImages}zin_grouphover.png`,
+        srcHover: `${CONFIG.osdImages}zin_hover.png`,
+        srcDown: `${CONFIG.osdImages}zin_pressed.png`,
         onClick() {
           vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
         }
@@ -136,10 +141,10 @@ class ImageViewer {
       // Zoom all the way out
       let zoutButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 0%',
-        srcRest: `${config.osdImages}zout_rest.png`,
-        srcGroup: `${config.osdImages}zout_grouphover.png`,
-        srcHover: `${config.osdImages}zout_hover.png`,
-        srcDown: `${config.osdImages}zout_pressed.png`,
+        srcRest: `${CONFIG.osdImages}zout_rest.png`,
+        srcGroup: `${CONFIG.osdImages}zout_grouphover.png`,
+        srcHover: `${CONFIG.osdImages}zout_hover.png`,
+        srcDown: `${CONFIG.osdImages}zout_pressed.png`,
         onClick() {
           vpt.goHome(true)
         }
