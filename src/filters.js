@@ -36,7 +36,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     }
 
     // Outline edge of polygon
-    let n = 1 // nth channel
+    const n = 1 // nth channel
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
         // If we have a color, but the pixel next to it is transparent, we have an edge pixel.
