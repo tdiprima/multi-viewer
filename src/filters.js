@@ -39,9 +39,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     const n = 1 // nth channel
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
-        // If we have a color, but the pixel next to it is transparent, we have an edge pixel.
         try {
-          if (data[i][n] !== 0 && data[i + 1][3] === 0) {
+          // right
+          if (data[i][n] > 0 && data[i + 1][3] === 0) {
             sett(i)
           }
         } catch (e) {
@@ -49,7 +49,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         }
 
         try {
-          if (data[i][n] !== 0 && data[i - 1][3] === 0) {
+          // left
+          if (data[i][n] > 0 && data[i - 1][3] === 0) {
             sett(i)
           }
         } catch (e) {
@@ -57,7 +58,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         }
 
         try {
-          if (data[i][n] !== 0 && data[i - context.canvas.width][3] === 0) {
+          // up 1
+          if (data[i][n] > 0 && data[i - context.canvas.width][3] === 0) {
             sett(i)
           }
         } catch (e) {
@@ -65,7 +67,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         }
 
         try {
-          if (data[i][n] !== 0 && data[i + context.canvas.width][3] === 0) {
+          // down 1
+          if (data[i][n] > 0 && data[i + context.canvas.width][3] === 0) {
             sett(i)
           }
         } catch (e) {
@@ -82,10 +85,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     // Change all green pixels in middle of polygon to transparent
     data.forEach((px) => {
-      // If use !== then filled in :\
-      // Use > then outlined :thumbs_up:
       if (px[n] > 0) {
-        // Set each pixel! It's not enough to set px=[0,0,0,0]
+        // Set each pixel; it's not enough to set px=[0,0,0,0].
         px[0] = 0
         px[1] = 0
         px[2] = 0
