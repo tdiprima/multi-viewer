@@ -2,21 +2,10 @@
   --highlight: #00c6b9;
 
   --bg-dark: #272b38;
-  --bg-dark1: #343844;
-  --bg-dark-top: #272b38;
   --text-dark: #cac3bc;
-  --text-secondary: #e8e4e0;
-  --hover-dark: transparentize(#fff, .9);
-  --border-dark: 1px solid #4b5061;
-  --primary-dark: #3e4e53;
 
   --bg-light: #f5f4f3;
-  --bg-light1: #f7f7f6;
   --text-light: #27374c;
-  --text-important: #242d30;
-  --border-light: 1px solid #e0ddda;
-  --primary-light: #b45139;
-  --secondary-light: #ca6d56;
 
   --sun: #ffd475;
   --tooltip: #fff7d6;
