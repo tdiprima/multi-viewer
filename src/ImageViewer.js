@@ -19,7 +19,7 @@ class ImageViewer {
 
     // SET UP VIEWER
     let viewer
-    console.log('OSD complaining about @context property in .../hovernet.zip/info.json', ts)
+    console.log('OSD complaining about @context property in .../hovernet.zip/info.json', 'color: #ff6a5a; font-size: larger;', ts)
 
     try {
       viewer = OpenSeadragon({
