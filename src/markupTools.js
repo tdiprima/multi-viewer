@@ -5,6 +5,7 @@
  *     divId: id for viewer div HTML element
  *     idx: viewer index (array of viewers)
  *     len: num images to display
+ * @param options
  * @param viewer
  */
 const markupTools = (viewerInfo, options, viewer) => {

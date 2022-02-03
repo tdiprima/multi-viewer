@@ -17,10 +17,12 @@ class ImageViewer {
       })
     }
 
+    // OSD does not throw this error, so even putting a try...catch block (see below) doesn't catch it.
+    // That's why I'm providing info here.
+    console.log('Check @context property in hovernet.zip/info.json', ts)
+
     // SET UP VIEWER
     let viewer
-    console.log('OSD complaining about @context property in .../hovernet.zip/info.json', 'color: #ff6a5a; font-size: larger;', ts)
-
     try {
       viewer = OpenSeadragon({
         id: viewerInfo.divId,

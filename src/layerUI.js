@@ -304,7 +304,7 @@ function handleDragLayers(layers, viewer) {
         if (lay.innerHTML === name) {
           foundMatchingSlide = true
           // Highlight the layer
-          lay.classList.remove('highlight') // just in case.
+          lay.classList.remove('highlight')
           lay.classList.add('highlight')
           // Toggle eyeball
           eye.classList.remove('fa-eye-slash')

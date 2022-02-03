@@ -105,25 +105,32 @@ a:link {
   border: none !important;
 }
 
-.hover-light:focus,
+/*.hover-light:focus,*/
 .hover-light:hover {
   border: 1px solid var(--highlight);
   color: var(--highlight);
 }
 
 button {
-  padding: 4px 12px;
   border-radius: 7px;
+  padding: 4px 12px;
+  cursor: pointer;
   font-size: 12px;
   line-height: 18px;
   text-align: center;
   vertical-align: middle;
-  cursor: pointer;
   color: var(--text-light)
+}
+
+.btn {
+  border: 1px solid var(--text-light);
+  background-color: var(--bg-light);
+  color: var(--text-light);
 }
 
 .btnOn {
   border: 1px solid var(--highlight);
+  background-color: var(--bg-light);
   color: var(--highlight);
 }
 

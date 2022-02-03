@@ -9,14 +9,10 @@ let bgTrans = function (imageData) {
       imageData[i + 3] = 0
     }
   }
-  // Create array that gives each pixel its own array
-  return imageData.reduce(
-    (pixel, key, index) =>
-      (index % 4 === 0
-        ? pixel.push([key])
-        : pixel[pixel.length - 1].push(key)) && pixel,
-    []
-  )
+  // Image to 2D array
+  return imageData.reduce(function (pixel, key, index) {
+    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;
+  }, [])
 }
 
 /**********************
@@ -75,11 +71,11 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
           // catch
         }
       } else {
-        // Set each pixel
-        data[i][0] = 0
-        data[i][1] = 0
-        data[i][2] = 0
-        data[i][3] = 0
+       // Set each pixel
+       data[i][0] = 0
+       data[i][1] = 0
+       data[i][2] = 0
+       data[i][3] = 0
       }
     }
 
