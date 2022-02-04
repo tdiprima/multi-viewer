@@ -1,8 +1,8 @@
-const CONFIG = {
+let CONFIG = {
   osdImages: '/multi-viewer/vendor/openseadragon/images/',
   appImages: '/multi-viewer/images/'
 }
-// const CONFIG = {
+// let CONFIG = {
 //   osdImages: 'vendor/openseadragon/images/',
 //   appImages: 'images/'
 // }
