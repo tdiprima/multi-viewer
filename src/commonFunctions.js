@@ -240,6 +240,7 @@ function timeStamp() {
 
 function saveSettings(canvas, options) {
   let jsonObject = {
+    theme: document.body.className,
     canvas: canvas.toJSON(),
     state: STATE,
     options: options
