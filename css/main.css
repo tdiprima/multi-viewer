@@ -199,6 +199,7 @@ button {
   z-index: 1;
   display: none;
   box-shadow: 5px 5px 5px var(--text-light);
+  border-radius: 7px;
   min-width: 160px;
   background-color: rgba(249, 249, 249, 0.5);
 }
