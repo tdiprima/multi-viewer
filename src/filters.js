@@ -10,9 +10,9 @@ let bgTrans = function (imageData) {
     }
   }
   // Image to 2D array
-  return imageData.reduce(function (pixel, key, index) {
-    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;
-  }, [])
+  return imageData.reduce((pixel, key, index) => {
+    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel
+  }, []);
 }
 
 /**********************
@@ -71,11 +71,11 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
           // catch
         }
       } else {
-       // Set each pixel
-       data[i][0] = 0
-       data[i][1] = 0
-       data[i][2] = 0
-       data[i][3] = 0
+        // Set each pixel
+        data[i][0] = 0
+        data[i][1] = 0
+        data[i][2] = 0
+        data[i][3] = 0
       }
     }
 
@@ -140,42 +140,42 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let data = bgTrans(imgData.data)
 
-    const arr = layerColors.filter(x => x.checked === true)
-    const colorArr = arr.map(element => {
+    const colorGroup = layerColors.filter(x => x.checked === true)
+    const rgbas = colorGroup.map(element => {
       return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
     })
 
-    const inRange = function (value, _colors, colorArr) {
-      for (let i = 0; i < _colors.length; i++) {
-        if (value >= _colors[i].low && value <= _colors[i].high) {
-          return colorArr[i] // return color
+    const inRange = (channelValue, colorRanges, rgbas) => {
+      for (let i = 0; i < colorRanges.length; i++) {
+        if (channelValue >= colorRanges[i].low && channelValue <= colorRanges[i].high) {
+          return rgbas[i] // return color
         }
       }
       return [0, 0, 0, 0]
     }
 
-    const inClass = function (value, _classes, classArr) {
-      for (let i = 0; i < _classes.length; i++) {
-        if (value === _classes[i].classid) {
-          return classArr[i] // return color
+    const getClassColor = (channelValue, classifications, rgbas) => {
+      for (let i = 0; i < classifications.length; i++) {
+        if (channelValue === classifications[i].classid) {
+          return rgbas[i]
         }
       }
       return [0, 0, 0, 0]
     }
 
-    function setPix(fun, cmap) {
+    function setPix(myFunction, colorMap) {
       for (let i = 0; i < data.length; i++) {
         // Alpha 255 means that nuclear material exists here
         if (data[i][3] === 255) {
-          const r = data[i][0] // red channel = class
-          const g = data[i][1] // green channel = probability
+          const redChannel = data[i][0] // red channel = class
+          const greenChannel = data[i][1] // green channel = probability
           let rgba
           if (STATE.renderType === 'byClass') {
-            rgba = fun(r, arr, colorArr)
+            rgba = myFunction(redChannel, colorGroup, rgbas)
           } else if (STATE.renderType === 'byProbability') {
-            rgba = fun(g, arr, colorArr)
+            rgba = myFunction(greenChannel, colorGroup, rgbas)
           } else if (STATE.renderType === 'byHeatmap') {
-            rgba = cmap[g]
+            rgba = colorMap[greenChannel]
           } else {
             console.error('renderType?', STATE.renderType)
             return
@@ -188,7 +188,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
           if (rgba[3] > 0) {
             // If attenuation is on,
             // then use green channel value for the alpha value
-            data[i][3] = STATE.attenuate ? g : 255
+            data[i][3] = STATE.attenuate ? greenChannel : 255
           }
         } else {
           // No nuclear material
@@ -201,7 +201,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     }
 
     if (STATE.renderType === 'byClass') {
-      setPix(inClass)
+      setPix(getClassColor)
     }
 
     if (STATE.renderType === 'byProbability') {
