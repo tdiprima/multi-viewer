@@ -121,7 +121,7 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
 // Create user interface
 function createUI(type, uniq, div, layerColors, layers, viewer) {
   let byProb = type === 2
-  const table = e('table')
+  const table = e('table', {'class': 'popupBody'})
   div.appendChild(table)
 
   if (layerColors) {
