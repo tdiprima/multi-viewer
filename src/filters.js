@@ -145,7 +145,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
       return colorToArray(element.color) // Save the [r, g, b, a]'s for access later
     })
 
-    const inRange = (channelValue, colorRanges, rgbas) => {
+    const getRangeColor = (channelValue, colorRanges, rgbas) => {
       for (let i = 0; i < colorRanges.length; i++) {
         if (channelValue >= colorRanges[i].low && channelValue <= colorRanges[i].high) {
           return rgbas[i] // return color
@@ -205,7 +205,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     }
 
     if (STATE.renderType === 'byProbability') {
-      setPix(inRange)
+      setPix(getRangeColor)
     }
 
     if (STATE.renderType === 'byHeatmap') {
