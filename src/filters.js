@@ -2,17 +2,20 @@
  * filters.js
  * Custom color filters
  */
-let bgTrans = function (imageData) {
+let imageTo2DArray = function (imageData) {
+  return imageData.reduce((pixel, key, index) => {
+    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel
+  }, []);
+}
+
+let correctTheBackground = function (imageData) {
   // Make background transparent
   for (let i = 0; i < imageData.length; i += 4) {
     if (imageData[i + 1] === 0) {
       imageData[i + 3] = 0
     }
   }
-  // Image to 2D array
-  return imageData.reduce((pixel, key, index) => {
-    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel
-  }, []);
+  return imageData
 }
 
 /**********************
@@ -22,7 +25,8 @@ const colorFilter = OpenSeadragon.Filters.GREYSCALE
 colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    let data = bgTrans(imgData.data)
+    let correctedData = correctTheBackground(imgData.data)
+    let data = imageTo2DArray(correctedData)
 
     function sett(i) {
       data[i][0] = r
@@ -138,7 +142,7 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    let data = bgTrans(imgData.data)
+    let data = imageTo2DArray(imgData.data)
 
     const colorGroup = layerColors.filter(x => x.checked === true)
     const rgbas = colorGroup.map(element => {
