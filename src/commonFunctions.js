@@ -42,7 +42,7 @@ function setFilter(layers, viewer, range) {
               ]
             })
           } else if (STATE.renderType === 'byProbability') {
-            // USE COLORSPECTRUM!
+            // USE COLORSPECTRUM
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
@@ -50,7 +50,7 @@ function setFilter(layers, viewer, range) {
               ]
             })
           } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
-            // USE COLORSCHEME!
+            // USE COLORSCHEME
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
