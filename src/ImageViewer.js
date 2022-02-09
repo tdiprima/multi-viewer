@@ -17,9 +17,14 @@ class ImageViewer {
       })
     }
 
-    // OSD does not throw this error, so even putting a try...catch block (see below) doesn't catch it.
-    // That's why I'm providing info here.
-    console.log('Check @context property in hovernet.zip/info.json', ts)
+    for (let i = 0; i < layers.length; i++) {
+      const layer = layers[i]//location
+      if (layer.location.includes('hovernet.zip')) {
+        // OSD does not throw this error, so even putting a try...catch block (see below) doesn't catch it.
+        // That's why I'm providing info here.
+        console.log('Check @context property in hovernet.zip/info.json', ts)
+      }
+    }
 
     // SET UP VIEWER
     let viewer
