@@ -15,14 +15,14 @@ function setFilter(layers, viewer, range) {
     for (let i = 0; i < itemCount; i++) {
       if (i > 0) {
         if (range) {
-          // USE RANGE VALUES!
+          // USE RANGE VALUES
           let r, g, b
           if (range.type === 'inside') {
-            // Color: cyan
+            // Color #00FFFF is cyan
             r = 0; g = 255; b = 255;
           } else {
-            // Color: blue
-            r = 0; g = 0; b = 255;
+            // Color #4A00B4 is Purple Heart
+            r = 74; g = 0; b = 180;
           }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
@@ -32,8 +32,8 @@ function setFilter(layers, viewer, range) {
           })
         } else {
           if (STATE.outline) {
-            // OUTLINE POLYS!
-            // TODO: NOTE: Color must be either #FF00FF or #0000FF; no green.
+            // OUTLINE POLYS
+            // NOTE: Color can not have green in it.
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
