@@ -2,78 +2,102 @@
  * filters.js
  * Custom color filters
  */
-let imageTo2DArray = function (imageData) {
-  return imageData.reduce((pixel, key, index) => {
+const img2array = function img2array(imgData) {
+  let matrix = imgData.data.reduce((pixel, key, index) => {
     return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel
-  }, []);
+  }, [])
+  return matrix
 }
 
-let correctTheBackground = function (imageData) {
+const backgroundCorrection = function backgroundCorrection(data) {
   // Make background transparent
-  for (let i = 0; i < imageData.length; i += 4) {
-    if (imageData[i + 1] === 0) {
-      imageData[i + 3] = 0
+  data.forEach(px => {
+    if (px[1] === 0) {
+      px[0] = 0
+      px[1] = 0
+      px[2] = 0
+      px[3] = 0
     }
-  }
-  return imageData
+  })
+  return data
+}
+
+const zeroGreen = data => {
+  // Change the remaining green pixels (middle of polygon) to transparent
+  data.forEach(px => {
+    if (px[1] > 0) {
+      px[0] = 0
+      px[1] = 0
+      px[2] = 0
+      px[3] = 0
+    }
+  })
+  return data
 }
 
 /**********************
  CUSTOM COLOR FILTERS
  **********************/
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
+
+// Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    let correctedData = correctTheBackground(imgData.data)
-    let data = imageTo2DArray(correctedData)
+    const width = context.canvas.width
+    const height = context.canvas.height
+    const imgData = context.getImageData(0, 0, width, height)
 
-    function sett(i) {
-      data[i][0] = r
-      data[i][1] = g
-      data[i][2] = b
-      data[i][3] = 255
-    }
+    let matrix = img2array(imgData)
+    let data = backgroundCorrection(matrix)
 
-    // Outline edge of polygon
-    const n = 1 // nth channel
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
+        // right
         try {
-          // right
-          if (data[i][n] > 0 && data[i + 1][3] === 0) {
-            sett(i)
+          if (data[i][1] > 0 && data[i + 1][3] === 0) {
+            data[i][0] = r
+            data[i][1] = g
+            data[i][2] = b
+            data[i][3] = 255
           }
         } catch (e) {
-          // catch
+          // It's okay.
+        }
+
+        // left
+        try {
+          if (data[i][1] > 0 && data[i - 1][3] === 0) {
+            data[i][0] = r
+            data[i][1] = g
+            data[i][2] = b
+            data[i][3] = 255
+          }
+        } catch (e) {
+          // These things happen. ¯\_(ツ)_/¯
         }
 
         try {
-          // left
-          if (data[i][n] > 0 && data[i - 1][3] === 0) {
-            sett(i)
+          // up
+          if (data[i][1] > 0 && data[i - width][3] === 0) {
+            data[i][0] = r
+            data[i][1] = g
+            data[i][2] = b
+            data[i][3] = 255
           }
         } catch (e) {
-          // catch
         }
 
         try {
-          // up 1
-          if (data[i][n] > 0 && data[i - context.canvas.width][3] === 0) {
-            sett(i)
+          // down
+          if (data[i][1] > 0 && data[i + width][3] === 0) {
+            data[i][0] = r
+            data[i][1] = g
+            data[i][2] = b
+            data[i][3] = 255
           }
         } catch (e) {
-          // catch
         }
 
-        try {
-          // down 1
-          if (data[i][n] > 0 && data[i + context.canvas.width][3] === 0) {
-            sett(i)
-          }
-        } catch (e) {
-          // catch
-        }
       } else {
         // Set each pixel
         data[i][0] = 0
@@ -83,19 +107,12 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
       }
     }
 
-    // Change all green pixels in middle of polygon to transparent
-    data.forEach((px) => {
-      if (px[n] > 0) {
-        // Set each pixel; it's not enough to set px=[0,0,0,0].
-        px[0] = 0
-        px[1] = 0
-        px[2] = 0
-        px[3] = 0
-      }
-    })
+    let m = zeroGreen(data)
+    // zeroGreen(data)
 
-    let newImage = context.createImageData(context.canvas.width, context.canvas.height)
-    newImage.data.set(data.flat())
+    let newImage = context.createImageData(width, height)
+    newImage.data.set(m.flat())
+    // newImage.data.set(data.flat())
     context.putImageData(newImage, 0, 0)
     callback()
   }
@@ -142,7 +159,7 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    let data = imageTo2DArray(imgData.data)
+    let data = img2array(imgData)
 
     const colorGroup = layerColors.filter(x => x.checked === true)
     const rgbas = colorGroup.map(element => {
