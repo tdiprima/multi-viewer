@@ -17,8 +17,7 @@ class ImageViewer {
       })
     }
 
-    for (let i = 0; i < layers.length; i++) {
-      const layer = layers[i]//location
+    for (const layer of layers) {
       if (layer.location.includes('hovernet.zip')) {
         // OSD does not throw this error, so even putting a try...catch block (see below) doesn't catch it.
         // That's why I'm providing info here.
