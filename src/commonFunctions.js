@@ -34,6 +34,7 @@ function setFilter(layers, viewer, range) {
           if (STATE.outline) {
             // OUTLINE POLYS
             // NOTE: Color can not have green in it.
+            // Color #0000FF is blue
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
