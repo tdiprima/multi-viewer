@@ -2,12 +2,13 @@
  * Wrapper component around OpenSeadragon viewer
  * Set up 1 basic OSD viewer.
  * @param viewerInfo: object with info specific to 'this' viewer
- * @param layers: array of layer objects (1 image per layer)
  */
 class ImageViewer {
-  constructor(viewerInfo, layers) {
-    let ts = []
+  constructor(viewerInfo) {
+    const layers = viewerInfo.layers
 
+    // Array of tileSources for the viewer
+    let ts = []
     for (let ll of layers) {
       ts.push({
         tileSource: ll.location,
@@ -250,6 +251,7 @@ class ImageViewer {
     this.viewer = viewer // SET THIS VIEWER
     this.overlay = this.viewer.fabricjsOverlay({scale: 1000})
     this.canvas = this.overlay.fabricCanvas()
+    this.vInfo = viewerInfo
   }
 
   getViewer() {
@@ -262,5 +264,9 @@ class ImageViewer {
 
   getCanvas() {
     return this.canvas
+  }
+
+  getViewerInfo() {
+    return this.vInfo
   }
 }

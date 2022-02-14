@@ -3,13 +3,12 @@
  * Set up OSD viewer to allow for multiple viewer control.
  *
  * @param viewerInfo
- * @param itemsToBeDisplayed
  * @param numViewers: Total number of viewers.
  * @param options: Filters, paintbrush, etc.
  */
 class MultiViewer extends ImageViewer {
-  constructor(viewerInfo, itemsToBeDisplayed, numViewers, options) {
-    super(viewerInfo, itemsToBeDisplayed)
+  constructor(viewerInfo, numViewers, options) {
+    super(viewerInfo)
 
     if (typeof options === 'undefined') {
       options = {}
@@ -29,12 +28,16 @@ class MultiViewer extends ImageViewer {
       markupTools(viewerInfo, options, super.getViewer())
     }
 
-    layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), itemsToBeDisplayed, super.getViewer())
+    layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), viewerInfo.layers, super.getViewer())
 
   }
 
   getViewer() {
     return super.getViewer()
+  }
+
+  getViewerInfo() {
+    return super.getViewerInfo()
   }
 
   getPanZoom() {
