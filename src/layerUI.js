@@ -33,10 +33,10 @@ function getSourceViewer(focusButton) {
 function getViewerObject(element) {
   let retVal
   try {
-    const vv = getMultiViewers()
+    const vv = getViewers()
     for (const v of vv) {
-      if (v.getViewer().id === element.id) {
-        retVal = v.getViewer()
+      if (v.viewer.id === element.id) {
+        retVal = v.viewer
         break
       }
     }

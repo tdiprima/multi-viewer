@@ -153,7 +153,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          const vInfo = { 'idx': idx, 'divId': osdId, 'layers': images[idx]}
+          const vInfo = { 'idx': idx, 'osdId': osdId, 'layers': images[idx]}
           // Create MultiViewer object and add to array
           viewers.push(new MultiViewer(vInfo, numViewers, opts))
         }

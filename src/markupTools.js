@@ -1,12 +1,5 @@
 /**
  * Create the fabric.js overlay and pass it to the markup tools.
- *
- * @param viewerInfo
- *     divId: id for viewer div HTML element
- *     idx: viewer index (array of viewers)
- *     len: num images to display
- * @param options
- * @param viewer
  */
 const markupTools = (viewerInfo, options, viewer) => {
   const overlay = viewer.fabricjsOverlay({scale: 1, static: false})
