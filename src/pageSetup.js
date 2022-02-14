@@ -11,7 +11,6 @@
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
-
   //numViewers = 1
   //rows = 1
   //columns = 1
@@ -154,10 +153,9 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             this.source.style.backgroundColor = this.color(r, g, b, a)
           })
 
-          const thisData = images[idx] // Images to be displayed in "this" viewer
-          const vInfo = { 'idx': idx, 'divId': osdId, 'len': thisData.length }
+          const vInfo = { 'idx': idx, 'divId': osdId, 'layers': images[idx]}
           // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer(vInfo, thisData, numViewers, opts))
+          viewers.push(new MultiViewer(vInfo, numViewers, opts))
         }
       }
 
@@ -190,4 +188,5 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       }
     }
   })
+
 }
