@@ -254,6 +254,14 @@ function getMultiViewers() {
   return SYNCED_IMAGE_VIEWERS
 }
 
+function getViewersInfo() {
+  let arr = []
+  for (const multiViewer of SYNCED_IMAGE_VIEWERS) {
+    arr.push(multiViewer.vInfo)
+  }
+  return arr
+}
+
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
 
 const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap']
