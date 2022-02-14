@@ -33,10 +33,10 @@ function getSourceViewer(focusButton) {
 function getViewerObject(element) {
   let retVal
   try {
-    /* eslint-disable no-undef */
-    for (const nsync of SYNCED_IMAGE_VIEWERS) {
-      if (nsync.getViewer().id === element.id) {
-        retVal = nsync.getViewer()
+    const vv = getMultiViewers()
+    for (const v of vv) {
+      if (v.getViewer().id === element.id) {
+        retVal = v.getViewer()
         break
       }
     }

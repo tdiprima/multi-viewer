@@ -250,6 +250,10 @@ function saveSettings(canvas, options) {
   // todo: post object to server
 }
 
+function getMultiViewers() {
+  return SYNCED_IMAGE_VIEWERS
+}
+
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
 
 const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap']
