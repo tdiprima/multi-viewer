@@ -236,15 +236,31 @@ function saveSettings(canvas, options) {
   // todo: post object to server
 }
 
-function getViewersInfos() {
-  let arr = []
-  for (const multiViewer of SYNCED_IMAGE_VIEWERS) {
-    arr.push({
-      'viewer': multiViewer.viewer,
-      'vInfo': multiViewer.vInfo
-    })
+function getViewers() {
+  let result = []
+  for (let i = 0; i < SYNCED_IMAGE_VIEWERS.length; i++) {
+    const info = SYNCED_IMAGE_VIEWERS[i].vInfo
+    let viewerObject = {
+      'type': 'MultiViewer Viewer',
+      'index': info.idx,
+      'osdId': info.osdId
+    }
+    let layers = info.layers
+    let newLayers = []
+    for (let i = 0; i < layers.length; i++) {
+      const layer = layers[i]
+      newLayers.push({
+        'type': 'Layer',
+        'layerNum': layer.layerNum,
+        'colors': layer.colorscheme.colors,
+        'colorspectrum': layer.colorscheme.colorspectrum
+      })
+    }
+    viewerObject.layers = newLayers
+    result.push(viewerObject)
   }
-  return arr
+
+  return result
 }
 
 let MICRONS_PER_PIX = 0.25 // default; actual value set later

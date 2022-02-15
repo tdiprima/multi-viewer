@@ -64,31 +64,3 @@ function f() {
 }
 
 f()
-
-function f1() {
-  const arr = getViewersInfos()
-  arr.forEach(item => {
-    console.log('%c\nViewer:', 'color: #997fff;', item.viewer)
-    console.log('%cInfo:', 'color: #997fff;', item.vInfo)
-
-    console.log('%c\nInfo details:', 'color: blue')
-    const object = item.vInfo
-    for (const property in object) {
-      console.log(`${property}:`, object[property])
-    }
-
-    console.log('%c\nLayers:', 'color: lime')
-    const layers = object.layers
-    Array.isArray(layers)
-    layers.forEach(layer => {
-      console.log(layer)
-      console.log('%c\nLayer details:', 'color: orange')
-      for (const item in layers[0]) {
-        console.log(`${item}:`, layers[0][item])
-      }
-    });
-
-    console.log('%c\nColor schemes:', 'color: #ff00cc;')
-  });
-
-}
