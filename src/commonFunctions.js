@@ -250,15 +250,15 @@ function saveSettings(canvas, options) {
   // todo: post object to server
 }
 
-function getViewersInfos() {
-  let arr = []
-  for (const multiViewer of SYNCED_IMAGE_VIEWERS) {
-    arr.push(multiViewer.vInfo)
-  }
-  return arr
-}
+// function getViewersInfos() {
+//   let arr = []
+//   for (const multiViewer of SYNCED_IMAGE_VIEWERS) {
+//     arr.push(multiViewer.vInfo)
+//   }
+//   return arr
+// }
 
-function getViewers() {
+function getViewersInfos() {
   let arr = []
   for (const multiViewer of SYNCED_IMAGE_VIEWERS) {
     arr.push({
