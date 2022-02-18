@@ -36,7 +36,7 @@ const cleanup = data => {
 }
 
 // Deep copy
-function deepCopy (obj) {
+function deepCopy(obj) {
   let r
   if (typeof obj === 'object') {
     if (Array.isArray(obj)) {
@@ -72,7 +72,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     let matrix = img2array(imgData)
     let data = backgroundCorrection(matrix)
-    const cloneData = deepCopy(data)
+    // const cloneData = deepCopy(data)
 
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
