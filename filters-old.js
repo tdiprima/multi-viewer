@@ -2,14 +2,14 @@
  * filters.js
  * Custom color filters
  */
-const img2array = imgData => {
+const img2array = function img2array(imgData) {
   let matrix = imgData.data.reduce((pixel, key, index) => {
     return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel
   }, [])
   return matrix
 }
 
-const backgroundCorrection = data => {
+const backgroundCorrection = function backgroundCorrection(data) {
   // Make background transparent
   data.forEach(px => {
     if (px[1] === 0) {
@@ -22,46 +22,18 @@ const backgroundCorrection = data => {
   return data
 }
 
-// Deep copy
-function deepCopy(obj) {
-  if (typeof obj == 'object') {
-    if (isArray(obj)) {
-      var l = obj.length;
-      var r = new Array(l);
-      for (var i = 0; i < l; i++) {
-        r[i] = deepCopy(obj[i]);
-      }
-      return r;
-    } else {
-      var r = {};
-      r.prototype = obj.prototype;
-      for (var k in obj) {
-        r[k] = deepCopy(obj[k]);
-      }
-      return r;
+const zeroGreen = data => {
+  // Change the remaining green pixels (middle of polygon) to transparent
+  data.forEach(px => {
+    if (px[1] > 0) {
+      px[0] = 0
+      px[1] = 0
+      px[2] = 0
+      px[3] = 0
     }
-  }
-  return obj;
+  })
+  return data
 }
-
-var ARRAY_PROPS = {
-  length: 'number',
-  sort: 'function',
-  slice: 'function',
-  splice: 'function'
-};
-
-function isArray(obj) {
-  if (obj instanceof Array)
-    return true;
-  // Otherwise, guess:
-  for (var k in ARRAY_PROPS) {
-    if (!(k in obj && typeof obj[k] === ARRAY_PROPS[k]))
-      return false;
-  }
-  return true;
-}
-
 
 /**********************
  CUSTOM COLOR FILTERS
@@ -77,7 +49,6 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     let matrix = img2array(imgData)
     let data = backgroundCorrection(matrix)
-    const cloneData = deepCopy(data)
 
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
@@ -102,7 +73,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
             data[i][3] = 255
           }
         } catch (e) {
-          // These things happen.
+          // These things happen. ¬Ø\_(„ÉÑ)_/¬Ø
         }
 
         try {
@@ -136,31 +107,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
       }
     }
 
-    // make transparent everything that's not been replaced
-    data.forEach((px) => {
-      if (px[0] !== 77 && px[1] !== 77 && px[2] !== 77 && px[3] !== 77) {
-        px[0] = 0;
-        px[1] = 0;
-        px[2] = 0;
-        px[3] = 0;
-      }
-    });
-
-    /* now we get to the good part */
-
-    for (let i = 0; i < data.length; i++) {
-      if (data[i][3] > 0) {
-        if (data[i][0] === 77 && data[i][1] === 77 && data[i][2] === 77 && data[i][3] === 77) {
-          data[i][0] = cloneData[i][0];
-          data[i][1] = cloneData[i][1];
-          data[i][2] = cloneData[i][2];
-          data[i][3] = 255;
-        }
-      }
-    }
-
+    let m = zeroGreen(data)
     let newImage = context.createImageData(width, height)
-    newImage.data.set(data.flat())
+    newImage.data.set(m.flat())
     context.putImageData(newImage, 0, 0)
     callback()
   }
@@ -180,10 +129,10 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
         const probability = data[i][1]
         // Has to be > zero (not >=); zero is background.
         if (probability > d.min && probability <= d.max) {
-          data[i][0] = r
-          data[i][1] = g
-          data[i][2] = b
-          data[i][3] = 255
+            data[i][0] = r
+            data[i][1] = g
+            data[i][2] = b
+            data[i][3] = 255
         } else {
           data[i][3] = 0
         }
@@ -193,10 +142,10 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
         const probability = data[i][1]
         // Has to be > zero.
         if ((probability > 0 && probability <= d.min) || (probability <= 255 && probability >= d.max)) {
-          data[i][0] = r
-          data[i][1] = g
-          data[i][2] = b
-          data[i][3] = 255
+            data[i][0] = r
+            data[i][1] = g
+            data[i][2] = b
+            data[i][3] = 255
         } else {
           data[i][3] = 0
         }
@@ -294,3 +243,4 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     callback()
   }
 }
+
