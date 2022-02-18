@@ -22,7 +22,7 @@ const backgroundCorrection = data => {
   return data
 }
 
-const zeroGreen = data => {
+const cleanup = data => {
   // Change the remaining green pixels (middle of polygon) to transparent
   data.forEach(px => {
     if (px[1] > 0) {
@@ -151,7 +151,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     //     }
     //   }
     // }
-    let m = zeroGreen(data)
+    let m = cleanup(data)
 
     let newImage = context.createImageData(width, height)
     // newImage.data.set(data.flat())
