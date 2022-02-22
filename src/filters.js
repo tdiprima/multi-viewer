@@ -72,19 +72,19 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     let matrix = img2array(imgData)
     let data = backgroundCorrection(matrix)
-    const cloneData = deepCopy(data)
+    // const cloneData = deepCopy(data)
 
-    const num = 77
+    // const num = 77
     for (let i = 0; i < data.length; i++) {
       if (data[i][3] === 255) {
         // right
         try {
           if (data[i][1] > 0 && data[i + 1][3] === 0) {
             // I'm making it weird.
-            data[i][0] = num; // r
-            data[i][1] = num; // g
-            data[i][2] = num; // b
-            data[i][3] = num; // 255
+            data[i][0] = r; // num
+            data[i][1] = g; // num
+            data[i][2] = b; // num
+            data[i][3] = 255; // num
           }
         } catch (e) {
           // It's okay.
@@ -93,10 +93,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         // left
         try {
           if (data[i][1] > 0 && data[i - 1][3] === 0) {
-            data[i][0] = num; // r
-            data[i][1] = num; // g
-            data[i][2] = num; // b
-            data[i][3] = num; // 255
+            data[i][0] = r; // num
+            data[i][1] = g; // num
+            data[i][2] = b; // num
+            data[i][3] = 255; // num
           }
         } catch (e) {
           // These things happen.
@@ -105,10 +105,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         try {
           // up
           if (data[i][1] > 0 && data[i - width][3] === 0) {
-            data[i][0] = num; // r
-            data[i][1] = num; // g
-            data[i][2] = num; // b
-            data[i][3] = num; // 255
+            data[i][0] = r; // num
+            data[i][1] = g; // num
+            data[i][2] = b; // num
+            data[i][3] = 255; // num
           }
         } catch (e) {
         }
@@ -116,10 +116,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         try {
           // down
           if (data[i][1] > 0 && data[i + width][3] === 0) {
-            data[i][0] = num; // r
-            data[i][1] = num; // g
-            data[i][2] = num; // b
-            data[i][3] = num; // 255
+            data[i][0] = r; // num
+            data[i][1] = g; // num
+            data[i][2] = b; // num
+            data[i][3] = 255; // num
           }
         } catch (e) {
         }
@@ -134,30 +134,31 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     }
 
     // make transparent everything that's not been replaced
-    data.forEach((px) => {
-      if (px[0] !== 77 && px[1] !== 77 && px[2] !== 77 && px[3] !== 77) {
-        px[0] = 0;
-        px[1] = 0;
-        px[2] = 0;
-        px[3] = 0;
-      }
-    });
+    // data.forEach((px) => {
+    //   if (px[0] !== 77 && px[1] !== 77 && px[2] !== 77 && px[3] !== 77) {
+    //     px[0] = 0;
+    //     px[1] = 0;
+    //     px[2] = 0;
+    //     px[3] = 0;
+    //   }
+    // });
 
     /* now we get to the good part */
-    for (let i = 0; i < data.length; i++) {
-      if (data[i][3] > 0) {
-        if (data[i][0] === num && data[i][1] === num && data[i][2] === num && data[i][3] === num) {
-          data[i][0] = cloneData[i][0];
-          data[i][1] = cloneData[i][1];
-          data[i][2] = cloneData[i][2];
-          data[i][3] = 255;
-        }
-      }
-    }
+    // for (let i = 0; i < data.length; i++) {
+    //   if (data[i][3] > 0) {
+    //     if (data[i][0] === num && data[i][1] === num && data[i][2] === num && data[i][3] === num) {
+    //       data[i][0] = cloneData[i][0];
+    //       data[i][1] = cloneData[i][1];
+    //       data[i][2] = cloneData[i][2];
+    //       data[i][3] = 255;
+    //     }
+    //   }
+    // }
+    let m = cleanup(data)
 
-    // let data = cleanup(data)
     let newImage = context.createImageData(width, height)
-    newImage.data.set(data.flat())
+    // newImage.data.set(data.flat())
+    newImage.data.set(m.flat())
     context.putImageData(newImage, 0, 0)
     callback()
   }
