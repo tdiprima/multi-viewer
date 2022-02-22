@@ -68,10 +68,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
     const width = context.canvas.width
     const height = context.canvas.height
-    const imgData = context.getImageData(0, 0, width, height)
 
-    let matrix = img2array(imgData)
-    let data = backgroundCorrection(matrix)
+    let data = backgroundCorrection(img2array(context.getImageData(0, 0, width, height)))
     // const cloneData = deepCopy(data)
 
     // const num = 77
