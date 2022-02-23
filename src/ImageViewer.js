@@ -195,7 +195,7 @@ class ImageViewer {
         let cross = canvas.getActiveObject()
         canvas.remove(cross)
       } else {
-        fabric.Image.fromURL('/images/crosshairs-red.png', function (oImg) {
+        fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
           canvas.add(oImg.set({
             width: 50,
             hasControls: false,
