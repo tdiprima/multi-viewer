@@ -3,10 +3,9 @@
  * Custom color filters
  */
 const img2array = imgData => {
-  let matrix = imgData.data.reduce((pixel, key, index) => {
+  return imgData.data.reduce((pixel, key, index) => {
     return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel
   }, [])
-  return matrix
 }
 
 const backgroundCorrection = data => {
