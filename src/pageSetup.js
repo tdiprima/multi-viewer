@@ -18,7 +18,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   // When the 'images' parameter becomes an array with null elements,
   // it means that the session timed out or is in the process of timeout.
   // So log the user out and have them start again.
-  if (!isRealValue(images) || (images.length >= 1 && images[0] === null)) {
+  if (!isRealValue(images) || images[0] === null) {
     // logout & redirect
     document.write("<script>window.alert('Session timeout. Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>")
   }
