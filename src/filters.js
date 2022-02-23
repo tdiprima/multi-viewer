@@ -21,19 +21,6 @@ const backgroundCorrection = data => {
   return data
 }
 
-const cleanup = data => {
-  // Change the remaining green pixels (middle of polygon) to transparent
-  data.forEach(px => {
-    if (px[1] > 0) {
-      px[0] = 0
-      px[1] = 0
-      px[2] = 0
-      px[3] = 0
-    }
-  })
-  return data
-}
-
 // Deep copy
 function deepCopy(obj) {
   let r
@@ -61,6 +48,8 @@ function deepCopy(obj) {
  CUSTOM COLOR FILTERS
  **********************/
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
+const colorChannel = 1
+const alphaChannel = 3
 
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = (r, g, b) => {
@@ -73,10 +62,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     // const num = 77
     for (let i = 0; i < data.length; i++) {
-      if (data[i][3] === 255) {
+      if (data[i][alphaChannel] === 255) {
         // right
         try {
-          if (data[i][1] > 0 && data[i + 1][3] === 0) {
+          if (data[i][colorChannel] > 0 && data[i + 1][alphaChannel] === 0) {
             // I'm making it weird.
             data[i][0] = r; // num
             data[i][1] = g; // num
@@ -89,7 +78,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
         // left
         try {
-          if (data[i][1] > 0 && data[i - 1][3] === 0) {
+          if (data[i][colorChannel] > 0 && data[i - 1][alphaChannel] === 0) {
             data[i][0] = r; // num
             data[i][1] = g; // num
             data[i][2] = b; // num
@@ -101,7 +90,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
         try {
           // up
-          if (data[i][1] > 0 && data[i - width][3] === 0) {
+          if (data[i][colorChannel] > 0 && data[i - width][alphaChannel] === 0) {
             data[i][0] = r; // num
             data[i][1] = g; // num
             data[i][2] = b; // num
@@ -112,7 +101,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
         try {
           // down
-          if (data[i][1] > 0 && data[i + width][3] === 0) {
+          if (data[i][colorChannel] > 0 && data[i + width][alphaChannel] === 0) {
             data[i][0] = r; // num
             data[i][1] = g; // num
             data[i][2] = b; // num
@@ -132,18 +121,17 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     // make transparent everything that's not been replaced
     // data.forEach((px) => {
-    //   if (px[0] !== 77 && px[1] !== 77 && px[2] !== 77 && px[3] !== 77) {
+    //   if (px[0] !== num && px[1] !== num && px[2] !== num && px[3] !== num) {
     //     px[0] = 0;
     //     px[1] = 0;
     //     px[2] = 0;
     //     px[3] = 0;
     //   }
     // });
-
     /* now we get to the good part */
     // for (let i = 0; i < data.length; i++) {
-    //   if (data[i][3] > 0) {
-    //     if (data[i][0] === num && data[i][1] === num && data[i][2] === num && data[i][3] === num) {
+    //   if (data[i][alphaChannel] > 0) {
+    //     if (data[i][0] === num && data[i][colorChannel] === num && data[i][2] === num && data[i][3] === num) {
     //       data[i][0] = cloneData[i][0];
     //       data[i][1] = cloneData[i][1];
     //       data[i][2] = cloneData[i][2];
@@ -151,11 +139,20 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     //     }
     //   }
     // }
-    let m = cleanup(data)
+
+    // Change the remaining green pixels (middle of polygon) to transparent
+    data.forEach(px => {
+      if (px[colorChannel] > 0) {
+        px[0] = 0
+        px[1] = 0
+        px[2] = 0
+        px[3] = 0
+      }
+    })
 
     let newImage = context.createImageData(width, height)
-    // newImage.data.set(data.flat())
-    newImage.data.set(m.flat())
+    newImage.data.set(data.flat())
+    // newImage.data.set(m.flat())
     context.putImageData(newImage, 0, 0)
     callback()
   }
@@ -172,7 +169,7 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
 
     if (d.type === 'inside') {
       for (let i = 0; i < data.length; i++) {
-        const probability = data[i][1]
+        const probability = data[i][colorChannel]
         // Has to be > zero (not >=); zero is background.
         if (probability > d.min && probability <= d.max) {
           data[i][0] = r
@@ -185,7 +182,7 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
       }
     } else if (d.type === 'outside') {
       for (let i = 0; i < data.length; i++) {
-        const probability = data[i][1]
+        const probability = data[i][colorChannel]
         // Has to be > zero.
         if ((probability > 0 && probability <= d.min) || (probability <= 255 && probability >= d.max)) {
           data[i][0] = r
@@ -236,7 +233,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     function setPix(myFunction, colorMap) {
       for (let i = 0; i < data.length; i++) {
         // Alpha 255 means that nuclear material exists here
-        if (data[i][3] === 255) {
+        if (data[i][alphaChannel] === 255) {
           const redChannel = data[i][0] // red channel = class
           const greenChannel = data[i][1] // green channel = probability
           let rgba
@@ -255,7 +252,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
           data[i][1] = rgba[1]
           data[i][2] = rgba[2]
           data[i][3] = rgba[3]
-          if (rgba[3] > 0) {
+          if (rgba[alphaChannel] > 0) {
             // If attenuation is on,
             // then use green channel value for the alpha value
             data[i][3] = STATE.attenuate ? greenChannel : 255
