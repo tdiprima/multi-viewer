@@ -42,9 +42,12 @@ class ImageViewer {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item)
         const source = viewer.world.getItemAt(itemIndex).source
-        layers[itemIndex].prefLabel = source.prefLabel
-        layers[itemIndex].resolutionUnit = source.resolutionUnit
-        layers[itemIndex].xResolution = source.xResolution
+        if (typeof source.prefLabel !== 'undefined')
+          layers[itemIndex].prefLabel = source.prefLabel
+        if (typeof source.resolutionUnit !== 'undefined')
+          layers[itemIndex].resolutionUnit = source.resolutionUnit
+        if (typeof source.xResolution !== 'undefined')
+          layers[itemIndex].xResolution = source.xResolution
       } catch (e) {
         console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
