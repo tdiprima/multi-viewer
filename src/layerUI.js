@@ -177,6 +177,21 @@ function tachometer(row) {
   return divBody
 }
 
+function getName(layer) {
+  let loc
+  if (typeof layer.location === 'string') {
+    loc = layer.location
+  } else {
+    loc = layer.location.url
+  }
+
+  let urlObj = new URL(loc)
+  let url = urlObj.searchParams.get('iiif')
+
+  const sections = (url).split('/')
+  return sections[sections.length - 2] // filename
+}
+
 /**
  * One row per layer
  * One column per icon
@@ -186,16 +201,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   table.appendChild(tr)
 
   const layerNum = currentLayer.layerNum
-  let currentLayerLocation
-  // Preferred Label
-  if (typeof currentLayer.location === 'string') {
-    currentLayerLocation = currentLayer.location
-  } else {
-    currentLayerLocation = currentLayer.location.url
-  }
-  const sections = (currentLayerLocation).split('/')
-  console.log('sections', sections)
-  const name = sections[sections.length - 2] // filename
+  const name = getName(currentLayer)
 
   // FEATURE
   let feat = draggableFeature(layerNum, name)
