@@ -194,6 +194,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
     currentLayerLocation = currentLayer.location.url
   }
   const sections = (currentLayerLocation).split('/')
+  console.log('sections', sections)
   const name = sections[sections.length - 2] // filename
 
   // FEATURE

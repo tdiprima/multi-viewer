@@ -22,6 +22,7 @@ const backgroundCorrection = data => {
 }
 
 // Deep copy
+/*
 function deepCopy(obj) {
   let r
   if (typeof obj === 'object') {
@@ -43,7 +44,9 @@ function deepCopy(obj) {
   }
   return obj
 }
+*/
 
+/*
 function arraysAreIdentical(arr1, arr2) {
   if (arr1.length !== arr2.length) return false;
   for (let i = 0, len = arr1.length; i < len; i++) {
@@ -53,6 +56,7 @@ function arraysAreIdentical(arr1, arr2) {
   }
   return true;
 }
+*/
 
 /**********************
  CUSTOM COLOR FILTERS
@@ -62,6 +66,7 @@ console.log('%cYAY.', 'color: magenta;')
 const colorChannel = 1
 const alphaChannel = 3
 
+/*
 colorFilter.prototype.SMILEY = (r, g, b) => {
   return (context, callback) => {
     console.log('%cDUMDUM!', 'color: lime;')
@@ -132,6 +137,7 @@ colorFilter.prototype.SMILEY = (r, g, b) => {
   }
 
 }
+*/
 
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = (r, g, b) => {
@@ -225,7 +231,6 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     //     px[3] = 0;
     //   }
     // });
-    /* now we get to the good part */
     // for (let i = 0; i < data.length; i++) {
     //   if (data[i][alphaChannel] > 0) {
     //     if (data[i][0] === num && data[i][colorChannel] === num && data[i][2] === num && data[i][3] === num) {
