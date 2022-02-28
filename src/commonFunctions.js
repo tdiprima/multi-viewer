@@ -8,6 +8,7 @@ let CONFIG = {
 // }
 
 function setFilter(layers, viewer, range) {
+  // console.log('layers len', layers.length)
   if (viewer.world) {
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
