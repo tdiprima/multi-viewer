@@ -13,7 +13,10 @@ function setFilter(layers, viewer, range) {
     let filterOpts = []
 
     for (let i = 0; i < itemCount; i++) {
-      if (i > 0) {
+      // let tiledImage = viewer.world.getItemAt(i);
+      // let source = tiledImage.source;
+      // console.log('aspectRatio', source.aspectRatio)
+      if (i > 0) { //comment here
         if (range) {
           // USE RANGE VALUES
           let r, g, b
@@ -55,11 +58,12 @@ function setFilter(layers, viewer, range) {
               items: viewer.world.getItemAt(i),
               processors: [
                 colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors)
+                // colorFilter.prototype.SMILEY(0, 0, 255) // uncomment here
               ]
             })
           }
         }
-      }
+      } //comment here
     }
     // Set all layers at once (required)
     viewer.setFilterOptions({

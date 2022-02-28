@@ -11,6 +11,9 @@
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+  // const div = document.createElement('div')
+  // div.innerText = JSON.stringify(images)
+  // document.body.appendChild(div)
   //numViewers = 1
   //rows = 1
   //columns = 1

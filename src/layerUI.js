@@ -186,8 +186,14 @@ function addRow(table, currentLayer, allLayers, viewer) {
   table.appendChild(tr)
 
   const layerNum = currentLayer.layerNum
+  let currentLayerLocation
   // Preferred Label
-  const sections = (currentLayer.location).split('/')
+  if (typeof currentLayer.location === 'string') {
+    currentLayerLocation = currentLayer.location
+  } else {
+    currentLayerLocation = currentLayer.location.url
+  }
+  const sections = (currentLayerLocation).split('/')
   const name = sections[sections.length - 2] // filename
 
   // FEATURE
@@ -257,7 +263,7 @@ function handleDragLayers(layers, viewer) {
     feature.addEventListener('dragend', handleDragEnd)
   })
 
-  function handleDragStart (evt) {
+  function handleDragStart(evt) {
     /* eslint-disable no-undef */
     dragSrcEl = this // The draggable feature (button element)
     this.style.opacity = '0.4'

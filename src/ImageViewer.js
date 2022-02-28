@@ -17,16 +17,41 @@ class ImageViewer {
         y: 0
       })
     }
+    // console.log('tileSources', JSON.stringify(ts))
 
     // SET UP VIEWER
     let viewer
     try {
+      // let baseUrl = "http://129.49.255.69:8888/iiif/?iiif=http://129.49.255.69:8888/HalcyonStorage/demo1/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.svs/info.json"
+      // let layer = "/multi-viewer/images/transparent.png"
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
         crossOriginPolicy: 'Anonymous',
         blendTime: 0,
         prefixUrl: CONFIG.osdImages,
         tileSources: ts,
+
+        // *** Working with smaller overlays helps performance. ***
+        /*
+        tileSources: [
+          {
+            "tileSource": baseUrl,
+            "opacity": 1.0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "tileSource": {
+              "type": "image",
+              "url": layer // `${CONFIG.appImages}/smiley_scaled_smaller.png` // todo: it's fine with an even smaller image
+            },
+            "opacity": 1.0,
+            "x": 0,
+            "y": 0
+          }
+        ],
+        */
+
         maxZoomPixelRatio: 1
         // showNavigationControl: false,
         // showNavigator: true,
@@ -42,12 +67,19 @@ class ImageViewer {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item)
         const source = viewer.world.getItemAt(itemIndex).source
+
         if (typeof source.prefLabel !== 'undefined')
           layers[itemIndex].prefLabel = source.prefLabel
         if (typeof source.resolutionUnit !== 'undefined')
           layers[itemIndex].resolutionUnit = source.resolutionUnit
         if (typeof source.xResolution !== 'undefined')
           layers[itemIndex].xResolution = source.xResolution
+
+        /*
+        // console.log('\nsource', source)
+        console.log('\naspectRatio', viewer.source.aspectRatio)
+        console.log('dimensions', viewer.source.dimensions)
+        */
       } catch (e) {
         console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
