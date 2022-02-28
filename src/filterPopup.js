@@ -66,7 +66,7 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
 }
 
 function checkboxHandler(element, arr, l, v) {
-  element.addEventListener('click', () => {
+  element.addEventListener('click', function () {
     // look up color by 'classid', set 'checked' to the state of the checkbox
     arr.find(x => x.classid === parseInt(element.value)).checked = element.checked
     setFilter(l, v)

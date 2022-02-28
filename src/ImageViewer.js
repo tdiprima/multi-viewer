@@ -8,14 +8,10 @@ class ImageViewer {
     const layers = viewerInfo.layers
 
     // Array of tileSources for the viewer
-    let ts = []
-    for (let ll of layers) {
-      ts.push({
-        tileSource: ll.location,
-        opacity: ll.opacity,
-        x: 0,
-        y: 0
-      })
+    let tileSources = []
+    for (let i = 0; i < layers.length; i++) {
+      const layer = layers[i]
+      tileSources.push({tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0})
     }
     // console.log('tileSources', JSON.stringify(ts))
 
@@ -29,7 +25,7 @@ class ImageViewer {
         crossOriginPolicy: 'Anonymous',
         blendTime: 0,
         prefixUrl: CONFIG.osdImages,
-        tileSources: ts,
+        tileSources: tileSources,
 
         // *** Working with smaller overlays helps performance. ***
         /*
