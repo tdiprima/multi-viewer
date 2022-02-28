@@ -273,5 +273,5 @@ const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap']
 const STATE = {
   attenuate: false,
   outline: false,
-  renderType: RENDER_TYPES[0]
+  renderType: RENDER_TYPES[1]
 }
