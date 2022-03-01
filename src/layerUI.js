@@ -130,10 +130,11 @@ function handleVisibility(icon, slider, layerNum, viewer) {
   if (typeof tiledImage !== 'undefined') {
     if (icon.classList.contains('fa-eye-slash')) {
       tiledImage.setOpacity(0) // Turn off layer
-      slider.value = '0' // Set slider to 0
+      // slider.value = '0' // Set slider to 0
     } else {
-      tiledImage.setOpacity(1) // Turn on layer
-      slider.value = '100' // Set slider to (opacity * 100)
+      tiledImage.setOpacity(slider.value / 100)
+      // tiledImage.setOpacity(1) // Turn on layer
+      // slider.value = '100' // Set slider to (opacity * 100)
     }
   }
 }
