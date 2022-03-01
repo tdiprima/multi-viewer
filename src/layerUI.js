@@ -126,13 +126,13 @@ function transSlider(currentLayer, faEye, viewer) {
 // Eyeball visibility handler
 function handleVisibility(icon, slider, layerNum, viewer) {
   toggleButton(icon, 'fa-eye', 'fa-eye-slash')
-  let l = viewer.world.getItemAt(layerNum)
-  if (l) {
+  let tiledImage = viewer.world.getItemAt(layerNum)
+  if (tiledImage) {
     if (icon.classList.contains('fa-eye-slash')) {
-      l.setOpacity(0) // Turn off layer
+      tiledImage.setOpacity(0) // Turn off layer
       slider.value = '0' // Set slider to 0
     } else {
-      l.setOpacity(1) // Turn on layer
+      tiledImage.setOpacity(1) // Turn on layer
       slider.value = '100' // Set slider to (opacity * 100)
     }
   }
