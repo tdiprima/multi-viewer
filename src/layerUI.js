@@ -28,7 +28,7 @@ function getSourceViewer(focusButton) {
 }
 
 /**
- * Given the div containing the viewer, get the corresponding OpenSeadragonViewer object
+ * Given the div containing the viewer, get the corresponding OpenSeadragon.Viewer object
  */
 function getViewerObject(element) {
   let retVal
