@@ -306,7 +306,7 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    console.log('%cCOLORLEVELS', 'color: goldenrod;')
+    // console.log('%cCOLORLEVELS', 'color: goldenrod;')
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let data = img2array(imgData)
 
