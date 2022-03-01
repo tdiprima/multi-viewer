@@ -127,7 +127,7 @@ function transSlider(currentLayer, faEye, viewer) {
 function handleVisibility(icon, slider, layerNum, viewer) {
   toggleButton(icon, 'fa-eye', 'fa-eye-slash')
   let tiledImage = viewer.world.getItemAt(layerNum)
-  if (tiledImage) {
+  if (typeof tiledImage !== 'undefined') {
     if (icon.classList.contains('fa-eye-slash')) {
       tiledImage.setOpacity(0) // Turn off layer
       slider.value = '0' // Set slider to 0
