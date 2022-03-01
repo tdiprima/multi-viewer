@@ -75,7 +75,7 @@ function draggableFeature(layerNum, name) {
 }
 
 // Eyeball visibility toggle
-function visibilityToggle(currentLayer) {
+function createEyeball(currentLayer) {
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
   return e('i', {
     'id': makeId(5, 'eye'),
@@ -208,7 +208,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
   tr.appendChild(e('td', {}, [feat]))
 
   // VISIBILITY TOGGLE
-  let faEye = visibilityToggle(currentLayer)
+  let faEye = createEyeball(currentLayer)
   tr.appendChild(e('td', {}, [faEye]))
 
   // TRANSPARENCY SLIDER
