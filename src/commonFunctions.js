@@ -269,10 +269,9 @@ function getViewers() {
 }
 
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
-
-const RENDER_TYPES = ['byClass', 'byProbability', 'byHeatmap']
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
 const STATE = {
   attenuate: false,
   outline: false,
-  renderType: RENDER_TYPES[1]
+  renderType: RENDER_TYPES[0]
 }

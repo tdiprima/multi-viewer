@@ -79,13 +79,12 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
   let listId = `select${uniqueId}`
   selectDiv.innerHTML = `<label for="${listId}">Color by:</label>&nbsp;`
   // Array of options to be added
-  let array = ['Class', 'Probability', 'Blue to Red Heatmap']
   let myList = e('select')
   myList.id = listId
   selectDiv.appendChild(myList)
 
   // Append the options
-  array.forEach((option, i) => {
+  RENDER_TYPES.forEach((option, i) => {
     const element = document.createElement('option')
     element.setAttribute('value', RENDER_TYPES[i])
     element.text = option
