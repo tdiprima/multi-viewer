@@ -259,7 +259,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
   }
 }
 
-// This one handles 'inside' and 'outside' sliders
+// Handles 'inside' and 'outside' sliders
 colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
   return (context, callback) => {
     console.log('%cPROBABILITY', 'color: lime;')
