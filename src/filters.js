@@ -62,7 +62,7 @@ function arraysAreIdentical(arr1, arr2) {
  CUSTOM COLOR FILTERS
  **********************/
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
-console.log('%cYAY.', 'color: magenta;')
+// console.log('%cYAY.', 'color: magenta;')
 const colorChannel = 1
 const alphaChannel = 3
 
@@ -306,7 +306,7 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    console.log('%coriginal COLORLEVELS', 'color: goldenrod;')
+    console.log('%cCOLORLEVELS', 'color: goldenrod;')
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let data = img2array(imgData)
 
