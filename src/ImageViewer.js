@@ -20,6 +20,7 @@ class ImageViewer {
     try {
       // let baseUrl = "http://129.49.255.69:8888/iiif/?iiif=http://129.49.255.69:8888/HalcyonStorage/demo1/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.svs/info.json"
       // let layer = "/multi-viewer/images/transparent.png"
+      // let layer = "/multi-viewer/images/default.png"
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
         crossOriginPolicy: 'Anonymous',
