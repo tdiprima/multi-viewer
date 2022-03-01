@@ -57,6 +57,11 @@ class ImageViewer {
       console.error(e.message)
     }
 
+    // let canvas = viewer.drawer.canvas;
+    let drawer = viewer.drawer
+    drawer.imageSmoothingEnabled = false
+    drawer._imageSmoothingEnabled = false
+    // console.log('drawer', drawer)
     const vpt = viewer.viewport
 
     function addInfo(item) {
