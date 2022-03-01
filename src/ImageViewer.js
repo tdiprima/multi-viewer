@@ -25,8 +25,11 @@ class ImageViewer {
         crossOriginPolicy: 'Anonymous',
         blendTime: 0,
         prefixUrl: CONFIG.osdImages,
-        tileSources: tileSources,
-
+        maxZoomPixelRatio: 1,
+        // showNavigationControl: false,
+        // showNavigator: true,
+        // navigatorPosition: "BOTTOM_RIGHT",
+        tileSources: tileSources
         // *** Working with smaller overlays helps performance. ***
         /*
         tileSources: [
@@ -45,24 +48,14 @@ class ImageViewer {
             "x": 0,
             "y": 0
           }
-        ],
+        ]
         */
-
-        maxZoomPixelRatio: 1
-        // showNavigationControl: false,
-        // showNavigator: true,
-        // navigatorPosition: "BOTTOM_RIGHT",
       })
     } catch (e) {
       console.error(e.message)
     }
 
-    // let canvas = viewer.drawer.canvas;
-    let drawer = viewer.drawer
-    drawer.imageSmoothingEnabled = false
-    drawer._imageSmoothingEnabled = false
-    // console.log('drawer', drawer)
-    const vpt = viewer.viewport
+    let vpt, drawer
 
     function addInfo(item) {
       try {
@@ -75,7 +68,6 @@ class ImageViewer {
           layers[itemIndex].resolutionUnit = source.resolutionUnit
         if (typeof source.xResolution !== 'undefined')
           layers[itemIndex].xResolution = source.xResolution
-
         /*
         // console.log('\nsource', source)
         console.log('\naspectRatio', viewer.source.aspectRatio)
@@ -91,9 +83,35 @@ class ImageViewer {
       addInfo(item)
     })
 
+    // Image has been downloaded and can be modified before being drawn to the canvas.
+    viewer.addOnceHandler('tile-loaded', () => {
+      drawer = viewer.drawer
+      drawer.imageSmoothingEnabled = false
+      drawer._imageSmoothingEnabled = false
+      //console.log('drawer', drawer)
+      vpt = viewer.viewport
+
+      if (window.location.hash) {
+        let params = parseHash()
+        useParams(params)
+      }
+      addCustomButtons()
+      setFilter(layers, viewer)
+      getInfoForScalebar()
+    })
+
+    // Uncomment for testing:
+    // viewer.addHandler('canvas-click', event => {
+    //   const webPoint = event.position
+    //   const viewportPoint = vpt.pointFromPixel(webPoint)
+    //   const I = viewer.world.getItemAt(0)
+    //   const imagePoint = I.viewportToImageCoordinates(viewportPoint)
+    //   console.log('webPoint', Math.round(webPoint.x), Math.round(webPoint.y))
+    //   console.log('imagePoint', Math.round(imagePoint.x), Math.round(imagePoint.y))
+    // })
+
     // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
     let element = document.querySelector('.mag-content')
-
     for (let el of element.children) {
       el.addEventListener('click', () => {
         let attr = el.getAttribute('data-value')
@@ -149,17 +167,6 @@ class ImageViewer {
         vpt.panTo(point, true)
       }
     }
-
-    // Image has been downloaded and can be modified before being drawn to the canvas.
-    viewer.addOnceHandler('tile-loaded', () => {
-      if (window.location.hash) {
-        let params = parseHash()
-        useParams(params)
-      }
-      addCustomButtons()
-      setFilter(layers, viewer)
-      getInfoForScalebar()
-    })
 
     // CUSTOM OPENSEADRAGON BUTTONS
     function addCustomButtons() {
@@ -265,16 +272,6 @@ class ImageViewer {
       }
       toggleButton(btnCrosshairs, 'btnOn', 'btn')
     })
-
-    // Uncomment for testing:
-    // viewer.addHandler('canvas-click', event => {
-    //   const webPoint = event.position
-    //   const viewportPoint = vpt.pointFromPixel(webPoint)
-    //   const I = viewer.world.getItemAt(0)
-    //   const imagePoint = I.viewportToImageCoordinates(viewportPoint)
-    //   console.log('webPoint', Math.round(webPoint.x), Math.round(webPoint.y))
-    //   console.log('imagePoint', Math.round(imagePoint.x), Math.round(imagePoint.y))
-    // })
 
     this.viewer = viewer // SET THIS VIEWER
     this.overlay = this.viewer.fabricjsOverlay({scale: 1000})
