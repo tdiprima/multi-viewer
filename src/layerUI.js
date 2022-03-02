@@ -23,7 +23,7 @@ function getSourceViewer(focusButton) {
   // Get the table row containing the viewer
   let tr = layersAndColors.parentElement.parentElement
   // Finally, get the source viewer's div
-  let sourceViewerDiv = tr.firstElementChild.firstElementChild
+  let sourceViewerDiv = tr.firstElementChild.firstElementChild.firstChild
   return getViewerObject(sourceViewerDiv)
 }
 
@@ -33,15 +33,17 @@ function getSourceViewer(focusButton) {
 function getViewerObject(element) {
   let retVal
   try {
-    const vv = getViewers()
-    for (const v of vv) {
-      if (v.viewer.id === element.id) {
-        retVal = v.viewer
+    for (let sync of SYNCED_IMAGE_VIEWERS) {
+      if (sync.getViewer().id === element.id) {
+        retVal = sync.getViewer()
         break
       }
     }
   } catch (e) {
-    console.error(e.message)
+    console.log('%cmessage:', 'color: #ff6a5a;', e.message)
+    console.log('%cname:', 'color: #ff6a5a;', e.name)
+    console.log('%cfilename', 'color: #ff6a5a;', e.fileName)
+    console.log('%clineNumber', 'color: #ff6a5a;', e.lineNumber)
   }
   return retVal
 }
