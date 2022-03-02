@@ -179,18 +179,29 @@ function tachometer(row) {
 }
 
 function getName(layer) {
-  let loc
-  if (typeof layer.location === 'string') {
-    loc = layer.location
+  let url, name
+  let loc = extractLocation(layer)
+
+  if (isValidURL(loc)) {
+    let urlObj = new URL(loc)
+
+    if (isEmpty(urlObj.searchParams)) {
+      url = urlObj.href
+    } else {
+      url = urlObj.searchParams.get('iiif')
+    }
+
+    let sections = (url).split('/')
+    name = sections[sections.length - 2]
+
   } else {
-    loc = layer.location.url
+    if (loc)
+      name = loc
+    else if (layer.location)
+      name = layer.location
   }
 
-  let urlObj = new URL(loc)
-  let url = urlObj.searchParams.get('iiif')
-
-  const sections = (url).split('/')
-  return sections[sections.length - 2] // filename
+  return name
 }
 
 /**

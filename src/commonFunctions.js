@@ -23,10 +23,14 @@ function setFilter(layers, viewer, range) {
           let r, g, b
           if (range.type === 'inside') {
             // Color #00FFFF is cyan
-            r = 0; g = 255; b = 255;
+            r = 0;
+            g = 255;
+            b = 255;
           } else {
             // Color #4A00B4 is Purple Heart
-            r = 74; g = 0; b = 180;
+            r = 74;
+            g = 0;
+            b = 180;
           }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
@@ -90,6 +94,10 @@ function toggleButton(element, class0, class1) {
 function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
+
+// function isRealValue(val) {
+//   return (val === undefined || val == null || val.length <= 0) ? true : false;
+// }
 
 const isEmpty = value => {
   const isEmptyObject = a => {
@@ -265,6 +273,31 @@ function getViewers() {
     result.push(viewerObject)
   }
 
+  return result
+}
+
+function extractLocation(layer) {
+  let loc
+  if (typeof layer.location === 'string') {
+    loc = layer.location
+  } else if (typeof layer.location === 'object') {
+    loc = layer.location.url
+  } else {
+    throw new TypeError('Unidentified URL type...', layer.location)
+  }
+  return loc
+}
+
+function isValidURL(string) {
+  let result, url
+  try {
+    url = new URL(string)
+    result = true
+  } catch (e) {
+    result = false
+    console.log(`%c${e.message}`, 'color: #ff6a5a;', url)
+    console.log(`%cscript:`, 'color: #ff6a5a;', `${e.fileName}:${e.lineNumber}`)
+  }
   return result
 }
 
