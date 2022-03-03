@@ -43,7 +43,7 @@ class ImageViewer {
           {
             "tileSource": {
               "type": "image",
-              "url": layer // `${CONFIG.appImages}smiley_scaled_smaller.png`
+              "url": layer // `${CONFIG.appImages}smiley.png`
             },
             "opacity": 1.0,
             "x": 0,
