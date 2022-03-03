@@ -203,6 +203,7 @@ function getName(layer) {
       name = layer.location
   }
 
+  // console.log('name', name)
   return name
 }
 
