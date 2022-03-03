@@ -80,9 +80,7 @@ function draggableFeature(layerNum, name) {
 function createEyeball(currentLayer) {
   let cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye'
   return e('i', {
-    'id': makeId(5, 'eye'),
-    'class': `${cssClass} hover-light`,
-    'title': 'toggle visibility'
+    'id': makeId(5, 'eye'), 'class': `${cssClass} hover-light`, 'title': 'toggle visibility'
   })
 }
 
@@ -144,9 +142,7 @@ function handleVisibility(icon, slider, layerNum, viewer) {
 // Color palette
 function colorPalette(row, featureElem, currentLayer, allLayers, viewer) {
   let icon = e('i', {
-    'id': makeId(5, 'palette'),
-    'class': `fas fa-palette pointer hover-light`,
-    'title': 'color palette'
+    'id': makeId(5, 'palette'), 'class': `fas fa-palette pointer hover-light`, 'title': 'color palette'
   })
   row.appendChild(e('td', {}, [icon]))
   // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
@@ -162,9 +158,7 @@ function colorPalette(row, featureElem, currentLayer, allLayers, viewer) {
  */
 function tachometer(row) {
   let icon = e('i', {
-    'id': makeId(5, 'tach'),
-    'class': `fas fa-tachometer-alt hover-light`,
-    'title': 'settings' // call it 'settings', 'control panel', idk.
+    'id': makeId(5, 'tach'), 'class': `fas fa-tachometer-alt hover-light`, 'title': 'settings' // call it 'settings', 'control panel', idk.
   })
   row.appendChild(e('td', {}, [icon]))
 
@@ -181,7 +175,7 @@ function tachometer(row) {
 }
 
 function getName(layer) {
-  let url, name
+  let name
   let loc = extractLocation(layer)
   /*
   if (isValidURL(loc)) {
@@ -215,6 +209,8 @@ function getName(layer) {
   return name
 }
 
+let myEyeArray = []
+
 /**
  * One row per layer
  * One column per icon
@@ -232,6 +228,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
 
   // VISIBILITY TOGGLE
   let faEye = createEyeball(currentLayer)
+  myEyeArray.push(faEye)
   tr.appendChild(e('td', {}, [faEye]))
 
   // TRANSPARENCY SLIDER
@@ -261,10 +258,39 @@ function addRow(table, currentLayer, allLayers, viewer) {
 }
 
 function createLayerElements(div, layers, viewer) {
+  let toggle = false;
+  let vNum = div.id.slice(-1)
+  // 'fas fa-eye-slash' : 'fas fa-eye'
+  let b = e('i', {
+    'id': `eyeTog${vNum}`, 'style': 'display: inline-block', 'class': 'fas fa-eye'  // 'data-tooltip': 'eye toggle'
+  })
+
   let table = e('table')
   div.appendChild(table)
+  let tr = e('tr')
+  table.appendChild(tr)
+  tr.appendChild(e('td'))
+  tr.appendChild(e('td', {}, [b]))
+
+  // now create the layer elements
   layers.forEach(layer => {
     addRow(table, layer, layers, viewer)
+  })
+
+  b.addEventListener('click', function () {
+    // console.log(myEyeArray)
+    myEyeArray.forEach(eye => {
+      eye.click(e)
+    })
+
+    if (toggle) {
+      this.classList.remove('fa-eye-slash')
+      this.classList.add('fa-eye')
+    } else {
+      this.classList.remove('fa-eye')
+      this.classList.add('fa-eye-slash')
+    }
+    toggle = !toggle;
   })
 }
 
@@ -366,29 +392,16 @@ function handleDragLayers(layers, viewer) {
         const newLayNum = layers.length
         // DRAGGABLE
         let feat = e('div', {
-          id: `${newLayNum}${makeId(5, 'feat')}`,
-          class: 'dragIt',
-          display: 'block',
-          draggable: 'true'
+          id: `${newLayNum}${makeId(5, 'feat')}`, class: 'dragIt', display: 'block', draggable: 'true'
         })
         feat.innerHTML = name
 
         // TODO: this part needs to change
         let addToLayers = {
-          "layerNum": layers.length,
-          "location": location,
-          "opacity": 1,
-          "colors": [
-            {
-              // "color": "rgba(75, 0, 130, 255)",
-              "color": "rgba(184, 226, 242, 255)",
-              "low": 128,
-              "high": 255
-            }
-          ],
-          "resolutionUnit": 3,
-          "xResolution": 40000,
-          "prefLabel": 'something'  // TODO: getLabel(feat, addToLayers)
+          "layerNum": layers.length, "location": location, "opacity": 1, "colors": [{
+            // "color": "rgba(75, 0, 130, 255)",
+            "color": "rgba(184, 226, 242, 255)", "low": 128, "high": 255
+          }], "resolutionUnit": 3, "xResolution": 40000, "prefLabel": 'something'  // TODO: getLabel(feat, addToLayers)
         }
         // append new value to the array
         // addToLayers.prefLabel = getLabel(feat, addToLayers)
