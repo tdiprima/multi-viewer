@@ -183,27 +183,35 @@ function tachometer(row) {
 function getName(layer) {
   let url, name
   let loc = extractLocation(layer)
-
+  /*
   if (isValidURL(loc)) {
     let urlObj = new URL(loc)
-
     if (isEmpty(urlObj.searchParams)) {
       url = urlObj.href
     } else {
       url = urlObj.searchParams.get('iiif')
     }
-
     let sections = (url).split('/')
     name = sections[sections.length - 2]
-
   } else {
     if (loc)
       name = loc
     else if (layer.location)
       name = layer.location
   }
-
-  // console.log('name', name)
+  */
+  const sections = (url).split('/')
+  const re = /^(?:[a-z]+:)?\b/gm
+  if (url.match(re)) {
+    // Absolute URL
+    console.log('absolute')
+    name = sections[sections.length - 2] // filename
+  } else {
+    // Relative URL
+    console.log('relative')
+    name = sections[sections.length - 1] // filename
+  }
+  console.log('name', name)
   return name
 }
 
