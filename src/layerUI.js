@@ -200,18 +200,18 @@ function getName(layer) {
       name = layer.location
   }
   */
-  const sections = (url).split('/')
+  const sections = (loc).split('/')
   const re = /^(?:[a-z]+:)?\b/gm
-  if (url.match(re)) {
+  if (loc.match(re)) {
     // Absolute URL
-    console.log('absolute')
+    // console.log('absolute')
     name = sections[sections.length - 2] // filename
   } else {
     // Relative URL
-    console.log('relative')
+    // console.log('relative')
     name = sections[sections.length - 1] // filename
   }
-  console.log('name', name)
+  // console.log('name', name)
   return name
 }
 
