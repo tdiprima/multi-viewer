@@ -95,10 +95,6 @@ function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined'
 }
 
-// function isRealValue(val) {
-//   return (val === undefined || val == null || val.length <= 0) ? true : false;
-// }
-
 const isEmpty = value => {
   const isEmptyObject = a => {
     if (typeof a.length === 'undefined') { // it's an Object, not an Array
