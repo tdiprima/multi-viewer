@@ -23,6 +23,7 @@ class ImageViewer {
       // baseUrl = layers[0].location
       // layer = `${CONFIG.appImages}transparent.png`
       // layer = `${CONFIG.appImages}default.png`
+      // layer = `${CONFIG.appImages}smiley.png`
 
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
@@ -46,7 +47,7 @@ class ImageViewer {
           {
             "tileSource": {
               "type": "image",
-              "url": layer // `${CONFIG.appImages}smiley.png`
+              "url": layer
             },
             "opacity": 1.0,
             "x": 0,
