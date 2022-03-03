@@ -18,9 +18,12 @@ class ImageViewer {
     // SET UP VIEWER
     let viewer
     try {
-      // let baseUrl = "http://129.49.255.69:8888/iiif/?iiif=http://129.49.255.69:8888/HalcyonStorage/demo1/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.svs/info.json"
-      // let layer = `${CONFIG.appImages}transparent.png`
-      // let layer = `${CONFIG.appImages}default.png`
+      // let baseUrl, layer
+      // baseUrl = "http://129.49.255.69:8888/iiif/?iiif=http://129.49.255.69:8888/HalcyonStorage/demo1/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.svs/info.json"
+      // baseUrl = layers[0].location
+      // layer = `${CONFIG.appImages}transparent.png`
+      // layer = `${CONFIG.appImages}default.png`
+
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
         crossOriginPolicy: 'Anonymous',
