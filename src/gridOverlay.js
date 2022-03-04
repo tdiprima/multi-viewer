@@ -160,16 +160,16 @@ function grandCross(btn, obj) {
       let midWidth = canvas.width / 2
       let midHeight = canvas.height / 2
       // Draw a line from x,0 to x,canvas.height.
-      lineArray.push(line(midWidth, 0, midWidth, canvas.height))
+      line(midWidth, 0, midWidth, canvas.height)
       // Draw a line from 0,y to width,y.
-      lineArray.push(line(0, midHeight, canvas.width, midHeight))
+      line(0, midHeight, canvas.width, midHeight)
 
       function line(x1, y1, x2, y2) {
         const line = new fabric.Line([x1, y1, x2, y2], {
-          stroke: 'yellow'
+          stroke: 'yellow',
+          selectable: false
         })
         canvas.add(line)
-        return line
       }
       // CROSS IMAGE:
       // fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
