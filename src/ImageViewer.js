@@ -233,51 +233,6 @@ class ImageViewer {
       }
     }
 
-    let canvas = viewer.fabricjsOverlay({scale: 1000}).fabricCanvas()
-    canvas.on('after:render', function () {
-      canvas.calcOffset()
-    })
-
-    function displayCrosshairs(display) {
-      if (!display) {
-        let cross = canvas.getActiveObject()
-        canvas.remove(cross)
-      } else {
-        fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
-          canvas.add(oImg.set({
-            width: 50,
-            hasControls: false,
-            selection: false,
-            lockRotation: false,
-            hoverCursor: 'default',
-            hasRotatingPoint: false,
-            hasBorders: false,
-            height: 50,
-            angle: 0,
-            cornerSize: 10,
-            left: 0,
-            top: 0
-          }))
-
-          // Set the object to be centered to the Canvas
-          canvas.centerObject(oImg)
-          canvas.setActiveObject(oImg)
-          canvas.renderAll()
-          oImg.setCoords()
-        })
-      }
-    }
-
-    let btnCrosshairs = document.getElementById(`btnCrosshairs${viewerInfo.idx}`)
-    btnCrosshairs.addEventListener('click', () => {
-      if (btnCrosshairs.classList.contains('btnOn')) {
-        displayCrosshairs(false)
-      } else {
-        displayCrosshairs(true)
-      }
-      toggleButton(btnCrosshairs, 'btnOn', 'btn')
-    })
-
     this.viewer = viewer // SET THIS VIEWER
     this.overlay = this.viewer.fabricjsOverlay({scale: 1000})
     this.canvas = this.overlay.fabricCanvas()
