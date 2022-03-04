@@ -459,21 +459,6 @@ output::after {
 }
 
 /* TOOLTIP */
-[data-tooltip] {
-  position: relative;
-}
-
-[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin-top: 0;
-  padding: 5px;
-  font-size: smaller;
-  background-color: var(--tooltip);
-}
-
 .css-tooltip {
   position: relative;
 }
@@ -489,6 +474,7 @@ output::after {
   border-radius: 3px;
   min-width: 150px;
   padding: 5px;
+  background-color: var(--tooltip);
   font-size: 0.825rem;
   text-align: center;
 }
