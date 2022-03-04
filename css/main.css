@@ -144,7 +144,7 @@ button {
   transition: 0.3s;
   border-radius: 7px;
   width: 90px;
-  padding: 0.9em 1em;
+  padding: 0.5em 1em;
   cursor: move;
   /* font-size: 14px; */
   font-size: 100%;
