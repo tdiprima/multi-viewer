@@ -70,7 +70,7 @@ function draggableFeature(layerNum, name) {
     'class': 'dragIt hover-light',
     'style': 'display: inline-block',
     'draggable': 'true',
-    'data-tooltip': name
+    'title': name
   })
   element.innerHTML = name
   return element
