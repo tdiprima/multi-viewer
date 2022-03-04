@@ -147,20 +147,18 @@ function grandCross(btn, obj) {
   })
 
   function displayCrosshairs(display) {
-    let lineArray = []
     if (!display) {
-      lineArray.forEach(line => {
-        canvas.remove(line)
-      })
-      lineArray = []
+      canvas.remove(...canvas.getItemsByName('cross'))
       // For image:
       // let cross = canvas.getActiveObject()
       // canvas.remove(cross)
     } else {
       let midWidth = canvas.width / 2
       let midHeight = canvas.height / 2
+
       // Draw a line from x,0 to x,canvas.height.
       line(midWidth, 0, midWidth, canvas.height)
+
       // Draw a line from 0,y to width,y.
       line(0, midHeight, canvas.width, midHeight)
 
@@ -168,7 +166,9 @@ function grandCross(btn, obj) {
         const line = new fabric.Line([x1, y1, x2, y2], {
           stroke: 'yellow',
           selectable: false,
-          hoverCursor: 'default'
+          hoverCursor: 'default',
+          evented: false,
+          name: 'cross'
         })
         canvas.add(line)
       }
