@@ -113,12 +113,9 @@ a:link {
 
 button {
   border-radius: 7px;
-  /* padding: 4px 12px; */
-  padding: 0.4em 1em;
+  padding: 0.2em 0.5em;
   cursor: pointer;
   font-size: 100%;
-  /* font-size: 12px; */
-  /* line-height: 18px; */
   text-align: center;
   vertical-align: middle;
   color: var(--text-light)
