@@ -11,6 +11,7 @@ const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
 
   const gridProps = {
     canvas: overlay.fabricCanvas(),
+    overlay: overlay,
     canvasWidth: Math.ceil(overlay.fabricCanvas().width),
     canvasHeight: Math.ceil(overlay.fabricCanvas().height),
     cellWidth: cellSize,
@@ -29,7 +30,7 @@ const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
     markerHandler(this, gridProps)
   })
 
-  grandCross(gridProps)
+  grandCross(btnGrid, gridProps)
 }
 
 function gridHandler(button, gridProps) {
@@ -133,9 +134,9 @@ function markerHandler(button, gridProps) {
   }
 }
 
-function grandCross(obj) {
+function grandCross(btn, obj) {
   const canvas = obj.canvas
-  let btnCrosshairs = document.getElementById(`btnCrosshairs0`)
+  let btnCrosshairs = document.getElementById(`btnCrosshairs${btn.id.slice(-1)}`)
   btnCrosshairs.addEventListener('click', () => {
     if (btnCrosshairs.classList.contains('btnOn')) {
       displayCrosshairs(false)
