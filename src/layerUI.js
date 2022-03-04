@@ -277,7 +277,6 @@ function createLayerElements(div, layers, viewer) {
   })
 
   b.addEventListener('click', function () {
-    // console.log(myEyeArray)
     myEyeArray.forEach(eye => {
       eye.click(e)
     })
@@ -358,19 +357,23 @@ function handleDragLayers(layers, viewer) {
 
       let layNum
       let foundMatchingSlide = false
-      for (let row of myTable.rows) {
-        let lay = row.cells[0].firstChild
-        layNum = lay.id[0] // 1st char is array index
-        let eye = row.cells[1].children[0]
-        if (lay.innerHTML === name) {
-          foundMatchingSlide = true
-          // Highlight the layer
-          lay.classList.remove('highlight')
-          lay.classList.add('highlight')
-          // Toggle eyeball
-          eye.classList.remove('fa-eye-slash')
-          eye.classList.add('fa-eye')
-          break
+      for (let i = 0; i < myTable.rows.length; i++) {
+        // Skip first row (globals)
+        if (i > 0) {
+          const row = myTable.rows[i]
+          let lay = row.cells[0].firstChild
+          layNum = lay.id[0] // 1st char is array index
+          let eye = row.cells[1].children[0]
+          if (lay.innerHTML === name) {
+            foundMatchingSlide = true
+            // Highlight the layer
+            lay.classList.remove('highlight')
+            lay.classList.add('highlight')
+            // Toggle eyeball
+            eye.classList.remove('fa-eye-slash')
+            eye.classList.add('fa-eye')
+            break
+          }
         }
       }
 
