@@ -209,13 +209,11 @@ function getName(layer) {
   return name
 }
 
-let myEyeArray = []
-
 /**
  * One row per layer
  * One column per icon
  */
-function addRow(table, currentLayer, allLayers, viewer) {
+function addRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   let tr = e('tr')
   table.appendChild(tr)
 
@@ -258,6 +256,7 @@ function addRow(table, currentLayer, allLayers, viewer) {
 }
 
 function createLayerElements(div, layers, viewer) {
+  let myEyeArray = []
   let toggle = false;
   let vNum = div.id.slice(-1)
   // 'fas fa-eye-slash' : 'fas fa-eye'
@@ -274,7 +273,7 @@ function createLayerElements(div, layers, viewer) {
 
   // now create the layer elements
   layers.forEach(layer => {
-    addRow(table, layer, layers, viewer)
+    addRow(myEyeArray, table, layer, layers, viewer)
   })
 
   b.addEventListener('click', function () {
