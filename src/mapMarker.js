@@ -1,7 +1,6 @@
 /**
  * For the spot that was right-clicked in viewer A, place a marker
- * at that location on all other viewers.
- * Might be helpful, not sure.
+ * at that location on all viewers.
  *
  * @param osdViewer: the OpenSeadragon viewer that has the focus
  * @param multiViewerArray: array of MultiViewers
@@ -41,21 +40,12 @@ function isRightClick(evt) {
 
 function displayMapMarker(point, osdViewer, multiViewerArray) {
   multiViewerArray.forEach(item => {
-    const viewer = item.getViewer()
-    if (viewer.id === osdViewer.id) {
-      return
-    }
-    addMarkerToViewer(point, viewer)
-  })
-}
-
-function addMarkerToViewer(point, viewer) {
-  const link = createLink()
-  viewer.addOverlay({
-    element: link,
-    location: point,
-    placement: 'BOTTOM',
-    checkResize: false
+    item.getViewer().addOverlay({
+      element: createLink(),
+      location: point,
+      placement: 'BOTTOM',
+      checkResize: false
+    })
   })
 }
 
