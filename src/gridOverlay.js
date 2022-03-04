@@ -11,7 +11,6 @@ const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
 
   const gridProps = {
     canvas: overlay.fabricCanvas(),
-    overlay: overlay,
     canvasWidth: Math.ceil(overlay.fabricCanvas().width),
     canvasHeight: Math.ceil(overlay.fabricCanvas().height),
     cellWidth: cellSize,
@@ -136,6 +135,7 @@ function markerHandler(button, gridProps) {
 
 function grandCross(btn, obj) {
   const canvas = obj.canvas
+  let toggle = false
   let btnCrosshairs = document.getElementById(`btnCrosshairs${btn.id.slice(-1)}`)
   btnCrosshairs.addEventListener('click', () => {
     if (btnCrosshairs.classList.contains('btnOn')) {
@@ -147,32 +147,52 @@ function grandCross(btn, obj) {
   })
 
   function displayCrosshairs(display) {
+    let lineArray = []
     if (!display) {
-      let cross = canvas.getActiveObject()
-      canvas.remove(cross)
-    } else {
-      fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
-        canvas.add(oImg.set({
-          width: 50,
-          hasControls: false,
-          selection: false,
-          lockRotation: false,
-          hoverCursor: 'default',
-          hasRotatingPoint: false,
-          hasBorders: false,
-          height: 50,
-          angle: 0,
-          cornerSize: 10,
-          left: 0,
-          top: 0
-        }))
-
-        // Set the object to be centered to the Canvas
-        canvas.centerObject(oImg)
-        canvas.setActiveObject(oImg)
-        canvas.renderAll()
-        oImg.setCoords()
+      lineArray.forEach(line => {
+        canvas.remove(line)
       })
+      lineArray = []
+      // For image:
+      // let cross = canvas.getActiveObject()
+      // canvas.remove(cross)
+    } else {
+      let midWidth = canvas.width / 2
+      let midHeight = canvas.height / 2
+      // Draw a line from x,0 to x,canvas.height.
+      lineArray.push(line(midWidth, 0, midWidth, canvas.height))
+      // Draw a line from 0,y to width,y.
+      lineArray.push(line(0, midHeight, canvas.width, midHeight))
+
+      function line(x1, y1, x2, y2) {
+        const line = new fabric.Line([x1, y1, x2, y2], {
+          stroke: 'yellow'
+        })
+        canvas.add(line)
+        return line
+      }
+      // CROSS IMAGE:
+      // fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
+      //   canvas.add(oImg.set({
+      //     width: 50,
+      //     hasControls: false,
+      //     selection: false,
+      //     lockRotation: false,
+      //     hoverCursor: 'default',
+      //     hasRotatingPoint: false,
+      //     hasBorders: false,
+      //     height: 50,
+      //     angle: 0,
+      //     cornerSize: 10,
+      //     left: 0,
+      //     top: 0
+      //   }))
+      //   // Set the object to be centered to the Canvas
+      //   canvas.centerObject(oImg)
+      //   canvas.setActiveObject(oImg)
+      //   canvas.renderAll()
+      //   oImg.setCoords()
+      // })
     }
   }
 }
