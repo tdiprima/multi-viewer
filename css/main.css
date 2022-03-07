@@ -77,23 +77,6 @@ a:link {
   cursor: pointer;
 }
 
-.highlight {
-  animation-name: bckanim;
-  animation-fill-mode: forwards;
-  animation-duration: 3s;
-  animation-delay: 0s;
-  background-color: var(--highlight);
-}
-
-@keyframes bckanim {
-  0% {
-    background-color: var(--highlight);
-  }
-  100% {
-    background-color: transparent; /* todo */
-  }
-}
-
 *[draggable=true] {
   -webkit-user-drag: element;
   -moz-user-drag: element;
@@ -139,6 +122,10 @@ button {
   background-color: var(--bg-light);
 }
 
+.dropzone.over {
+  border: 3px dotted var(--highlight)
+}
+
 .dragIt {
   float: left;
   transition: 0.3s;
@@ -163,10 +150,6 @@ button {
   /*-moz-hyphens: auto;*/
   /*-ms-hyphens: auto;*/
   /*hyphens: auto;*/
-}
-
-.dropzone.over {
-  border: 3px dotted var(--highlight)
 }
 
 .popup {
