@@ -18,7 +18,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
    */
   if (!isRealValue(images) || images[0] === null) {
     // logout & redirect
-    document.write("<script>window.alert('Session timeout. Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>")
+    document.write("<script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>")
   }
 
   let viewers = [] // eslint-disable-line prefer-const
