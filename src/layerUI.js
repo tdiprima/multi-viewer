@@ -9,21 +9,25 @@
  *     a color palette: change colors in layer
  *     broadcast tower: attenuate by certainty
  */
-let layerUI = (divEl, images, viewer) => {
-  createLayerElements(divEl, images, viewer)
+let layerUI = (layersColumn, images, viewer) => {
+  createLayerElements(layersColumn, images, viewer)
   handleDragLayers(images, viewer)
 }
 
 /**
  * Locate the source viewer
  */
-function getSourceViewer(focusButton) {
-  // Find the layersAndColors div close to where the user dropped the feature:
-  let layersAndColors = focusButton.parentElement.parentElement.parentElement.parentElement
-  // Get the table row containing the viewer
-  let tr = layersAndColors.parentElement.parentElement
+function getSourceViewer(evt) {
+  let draggedLayer = evt.target
+
+  // Find the layersAndColors column that this came from
+  let layersColumn = draggedLayer.closest('table').parentElement
+
+  // Get the table containing the viewer
+  let table = layersColumn.parentElement.closest('table')
+
   // Finally, get the source viewer's div
-  let sourceViewerDiv = tr.firstElementChild.firstElementChild.firstChild
+  let sourceViewerDiv = table.firstElementChild.firstElementChild.firstChild
   return getViewerObject(sourceViewerDiv)
 }
 
@@ -162,13 +166,13 @@ function tachometer(row) {
   })
   row.appendChild(e('td', {}, [icon]))
 
-  const id = makeId(5, 'optsDiv')
+  const id = makeId(5, 'pop')
   const rect = icon.getBoundingClientRect()
-  const optsDiv = createDraggableDiv(id, 'Settings', rect.left, rect.top)
-  const divBody = optsDiv.lastChild
+  const popup = createDraggableDiv(id, 'Settings', rect.left, rect.top)
+  const divBody = popup.lastChild
 
   icon.addEventListener('click', () => {
-    optsDiv.style.display = 'block'
+    popup.style.display = 'block'
   })
 
   return divBody
@@ -255,17 +259,17 @@ function addRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   }
 }
 
-function createLayerElements(div, layers, viewer) {
+function createLayerElements(layersColumn, layers, viewer) {
   let myEyeArray = []
   let toggle = false;
-  let vNum = div.id.slice(-1)
+  let vNum = layersColumn.id.slice(-1)
   // 'fas fa-eye-slash' : 'fas fa-eye'
   let b = e('i', {
     'id': `eyeTog${vNum}`, 'style': 'display: inline-block', 'class': 'fas fa-eye'  // 'data-tooltip': 'eye toggle'
   })
 
   let table = e('table')
-  div.appendChild(table)
+  layersColumn.appendChild(table)
   let tr = e('tr')
   table.appendChild(tr)
   tr.appendChild(e('td'))
@@ -296,6 +300,7 @@ function createLayerElements(div, layers, viewer) {
 function handleDragLayers(layers, viewer) {
   // Div containing viewer
   let dropzone = document.getElementById(viewer.id)
+  // console.log('dropzone', dropzone, viewer.id)
   dropzone.addEventListener('dragenter', function () {
     this.classList.add('over')
   })
@@ -308,21 +313,21 @@ function handleDragLayers(layers, viewer) {
   })
   dropzone.addEventListener('drop', handleDrop)
 
-  let table = dropzone.parentElement.parentElement.parentElement.parentElement
+  let table = dropzone.closest('table')
+
   // The features/layers to the right of the viewer
   let features = table.querySelectorAll('.dragIt')
   features.forEach(feature => {
-    feature.setAttribute('draggable', 'true')
     feature.addEventListener('dragstart', handleDragStart)
     feature.addEventListener('dragend', handleDragEnd)
   })
 
   function handleDragStart(evt) {
     /* eslint-disable no-undef */
-    dragSrcEl = this // The draggable feature (button element)
+    draggedElement = this // The draggable feature (button element)
     this.style.opacity = '0.4'
     /* eslint-disable no-undef */
-    sourceViewer = getSourceViewer(evt.target)
+    sourceViewer = getSourceViewer(evt)
     evt.dataTransfer.effectAllowed = 'move'
     evt.dataTransfer.setData('text', evt.target.id)
   }
@@ -334,86 +339,59 @@ function handleDragLayers(layers, viewer) {
   }
 
   function handleDrop(evt) {
-    // this = dropzone viewer
-    this.classList.remove('over')
+    let targetElement = evt.target // canvas upper-canvas
+    this.classList.remove('over') // this = dropzone viewer
 
     if (evt.preventDefault) evt.preventDefault()
 
-    // Make sure user didn't drop the button on its own viewer div
-    if (dragSrcEl !== this) {
-      // target
-      let target = evt.target // canvas upper-canvas
-      let targetDiv = target.closest('.viewer') // where they dropped the feature
-      if (!targetDiv) return false
-      // Find matching layersAndColors div
-      const td1 = targetDiv.parentElement
-      const td2 = td1.nextSibling
-      // Find the corresponding table (we will add this feature here)
-      let myTable = td2.firstChild
+    let viewerDiv = targetElement.closest('.viewer') // where they dropped the feature
 
-      let movedElemId = evt.dataTransfer.getData('text')
-      let movedElem = document.getElementById(movedElemId)
-      let name = movedElem.innerHTML
+    if (!viewerDiv) return false
 
-      let layNum
-      let foundMatchingSlide = false
-      for (let i = 0; i < myTable.rows.length; i++) {
-        // Skip first row (globals)
-        if (i > 0) {
-          const row = myTable.rows[i]
-          let lay = row.cells[0].firstChild
-          layNum = lay.id[0] // 1st char is array index
-          let eye = row.cells[1].children[0]
-          if (lay.innerHTML === name) {
-            foundMatchingSlide = true
-            // Highlight the layer
-            lay.classList.remove('highlight')
-            lay.classList.add('highlight')
-            // Toggle eyeball
-            eye.classList.remove('fa-eye-slash')
-            eye.classList.add('fa-eye')
-            break
-          }
+    // Find neighboring layersColumn
+    const td1 = viewerDiv.parentElement
+    const td2 = td1.nextSibling
+
+    // Find the neighboring table (we will add this feature here)
+    let myTable = td2.firstChild
+
+    let movedElemId = evt.dataTransfer.getData('text')
+    let movedElem = document.getElementById(movedElemId)
+    let name = movedElem.innerHTML
+
+    let layNum
+    let foundMatchingSlide = false
+    for (let i = 0; i < myTable.rows.length; i++) {
+      // Skip first row (globals)
+      if (i > 0) {
+        const row = myTable.rows[i]
+        let lay = row.cells[0].firstChild
+        layNum = lay.id[0] // 1st char is array index
+        let eye = row.cells[1].children[0]
+        if (lay.innerHTML === name) {
+          foundMatchingSlide = true
+          // Toggle eyeball
+          eye.classList.remove('fa-eye-slash')
+          eye.classList.add('fa-eye')
+          break
         }
       }
+    }
 
-      let targetViewer = getViewerObject(targetDiv)
-      if (foundMatchingSlide) {
-        console.log('Found matching slide')
-        try {
-          targetViewer.world.getItemAt(layNum).setOpacity(1) // show
-          // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
-        } catch (e) {
-          console.warn('It may get here if the handler executes twice on one drop:')
-          console.warn(e.message)
-        }
-      } else {
-        console.error('Did not find matching slide')
-        const location = sourceViewer.tileSources[layNum].tileSource
-        console.error('src img', location)
-        const newLayNum = layers.length
-        // DRAGGABLE
-        let feat = e('div', {
-          id: `${newLayNum}${makeId(5, 'feat')}`, class: 'dragIt', display: 'block', draggable: 'true'
-        })
-        feat.innerHTML = name
-
-        // TODO: this part needs to change
-        let addToLayers = {
-          "layerNum": layers.length, "location": location, "opacity": 1, "colors": [{
-            // "color": "rgba(75, 0, 130, 255)",
-            "color": "rgba(184, 226, 242, 255)", "low": 128, "high": 255
-          }], "resolutionUnit": 3, "xResolution": 40000, "prefLabel": 'something'  // TODO: getLabel(feat, addToLayers)
-        }
-        // append new value to the array
-        // addToLayers.prefLabel = getLabel(feat, addToLayers)
-        layers.push(addToLayers)
-
-        addRow(myTable, addToLayers, layers, targetViewer)
-
-        targetViewer.addTiledImage({tileSource: location, opacity: 1, x: 0, y: 0})
-
+    let targetViewer = getViewerObject(viewerDiv)
+    if (foundMatchingSlide) {
+      console.log('Found matching slide')
+      try {
+        targetViewer.world.getItemAt(layNum).setOpacity(1) // show
+        // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
+      } catch (e) {
+        console.warn('It may get here if the handler executes twice on one drop:')
+        console.warn(e.message)
       }
+    } else {
+      const location = sourceViewer.tileSources[layNum].tileSource
+      console.error('Did not find matching slide')
+      console.log('%clocation', 'color: #ff6a5a;', location)
     }
     return false
   }
