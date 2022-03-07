@@ -133,23 +133,10 @@ button {
   width: 90px;
   padding: 0.5em 1em;
   cursor: move;
-  /* font-size: 14px; */
   font-size: 100%;
-
-  /* ELLIPSES FOR LONG NAMES */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  /* OR: */
-
-  /* WORD-WRAP LONG NAMES */
-  /*overflow-wrap: break-word;*/
-  /*word-wrap: break-word;*/
-  /*-webkit-hyphens: auto;*/
-  /*-moz-hyphens: auto;*/
-  /*-ms-hyphens: auto;*/
-  /*hyphens: auto;*/
 }
 
 .popup {
@@ -166,12 +153,18 @@ button {
 
 .popupHeader {
   z-index: 20;
-  /* border-radius: 7px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 300px;
   padding: 10px;
   background-color: var(--text-light);
   cursor: move;
   font-weight: bold;
   color: var(--text-dark);
+
+
+
 }
 
 .popupBody {
