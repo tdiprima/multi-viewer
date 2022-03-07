@@ -2,9 +2,6 @@ let baseUrl, layer, arr, appImages
 appImages = 'images/'
 // appImages = '/multi-viewer/images/'
 
-// baseUrl = 'http://129.49.255.69/iiif/?iiif=http://129.49.255.69/HalcyonStorage/TCGA-2J-AAB1-01Z-00-DX1.F3B4818F-9C3B-4C66-8241-0570B2873EC9.svs/info.json'
-// layer = 'http://129.49.255.69/halcyon/?iiif=file:///data/HalcyonStorage/hovernet.zip/info.json'
-
 baseUrl = layer = 'http://openseadragon.github.io/example-images/duomo/duomo.dzi'
 // baseUrl = "http://openseadragon.github.io/example-images/duomo/duomo.dzi"
 // baseUrl = '/images/grand-canyon-landscape-overlooking.jpg'
