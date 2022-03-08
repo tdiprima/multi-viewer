@@ -85,8 +85,8 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
   // Append the options
   RENDER_TYPES.forEach((option, i) => {
     const element = document.createElement('option')
-    element.setAttribute('value', RENDER_TYPES[i])
-    element.text = option
+    element.setAttribute('value', option)
+    element.text = option.startsWith('by') ? option.replace('by', '') : option
     myList.appendChild(element)
   })
 
