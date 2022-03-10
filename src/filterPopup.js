@@ -240,6 +240,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
+    // todo: test 1 (osd)
     colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
     // console.log('colorObject', colorObject)
     setFilter(layers, viewer)
@@ -273,8 +274,8 @@ function rgba2hex(orig) {
 function numericEvent(numEl, colorObject, layers, viewer) {
   const intVal = parseInt(numEl.value)
 
-  // If they set it to something outside 0-255, reset it
-  if (intVal > 255) numEl.value = '255'
+  // If they set it to something outside 0-MAX, reset it
+  if (intVal > MAX) numEl.value = MAX.toString()
   if (intVal < 0) numEl.value = '0'
 
   if (numEl.id.startsWith('low')) colorObject.low = intVal
@@ -296,7 +297,7 @@ function createNumericInput (id, table, uniq, layers, colorObject, colors, viewe
     id: id,
     type: 'number',
     min: '0',
-    max: '255',
+    max: MAX.toString(),
     step: '1',
     size: '5',
     value: val

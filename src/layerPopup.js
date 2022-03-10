@@ -62,14 +62,6 @@ let layerPopup = function (divBody, allLayers, viewer) {
     let ARange = e('input', {'id': d.aLab, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.aInit})
     let BRange = e('input', {'id': d.bLab, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
-    // To display the current values:
-    // let displayElement = e('output')
-    // if (d.type === 'outside') {
-    //   displayElement.innerHTML = `0 - ${ARange.value} and ${BRange.value} - 255`
-    // } else {
-    //   displayElement.innerHTML = `${ARange.value} - ${BRange.value}`
-    // }
-
     let output1 = e('output', {'for': d.aLab, 'style': `--c: var(--${d.aLab})`})
     let output2 = e('output', {'for': d.bLab, 'style': `--c: var(--${d.bLab})`})
 
@@ -89,7 +81,6 @@ let layerPopup = function (divBody, allLayers, viewer) {
 
       // Display values:
       if (d.type === 'outside') {
-        // output1.innerHTML = `0 - ${slideVals[0]} and ${slideVals[1]} - 255`
         setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'outside'})
       } else {
         // output1.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
@@ -111,10 +102,11 @@ let layerPopup = function (divBody, allLayers, viewer) {
   divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]))
 
   // DUAL-POINT SLIDERS
-  let d = { 'aLab': 'a', 'bLab': 'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': 255, 'class': 'dualSlider', 'type': 'inside' }
+  // todo: scale initial values
+  let d = { 'aLab': 'a', 'bLab': 'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': MAX, 'class': 'dualSlider', 'type': 'inside' }
   const wrapper = sliderWrapper(d, 'In range:', allLayers, viewer)
 
-  d = { 'aLab': 'a1', 'bLab': 'b1', 'aInit': 10, 'bInit': 245, 'min': 0, 'max': 255, 'class': 'dualSlider1', 'type': 'outside' }
+  d = { 'aLab': 'a1', 'bLab': 'b1', 'aInit': 10, 'bInit': 245, 'min': 0, 'max': MAX, 'class': 'dualSlider1', 'type': 'outside' }
   const section = sliderWrapper(d, 'Out range:', allLayers, viewer)
 
   let dd = e('div', {}, [section, wrapper])

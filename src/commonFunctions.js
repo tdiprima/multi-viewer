@@ -302,6 +302,7 @@ function scale(val) {
   return val / 255 * 100
 }
 
+let MAX = 255
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
 const STATE = {
