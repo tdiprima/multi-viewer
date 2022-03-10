@@ -297,6 +297,11 @@ function isValidURL(string) {
   return result
 }
 
+// scale rgb colors to percentage
+function scale(val) {
+  return val / 255 * 100
+}
+
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
 const STATE = {
