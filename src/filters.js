@@ -62,14 +62,12 @@ function arraysAreIdentical(arr1, arr2) {
  CUSTOM COLOR FILTERS
  **********************/
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
-// console.log('%cYAY.', 'color: magenta;')
 const colorChannel = 1
 const alphaChannel = 3
 
 /*
 colorFilter.prototype.SMILEY = (r, g, b) => {
   return (context, callback) => {
-    console.log('%cDUMDUM!', 'color: lime;')
     const width = context.canvas.width
     let c = context.canvas
     let size = 170;
@@ -142,7 +140,6 @@ colorFilter.prototype.SMILEY = (r, g, b) => {
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
-    console.log('%cOUTLINE', 'color: blue;')
     const width = context.canvas.width
     const height = context.canvas.height
 
@@ -262,7 +259,6 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 // Handles 'inside' and 'outside' sliders
 colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
   return (context, callback) => {
-    console.log('%cPROBABILITY', 'color: lime;')
     const width = context.canvas.width
     const height = context.canvas.height
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
@@ -306,7 +302,6 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    // console.log('%cCOLORLEVELS', 'color: goldenrod;')
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let data = img2array(imgData)
 
