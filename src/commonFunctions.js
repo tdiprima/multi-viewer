@@ -297,9 +297,12 @@ function isValidURL(string) {
   return result
 }
 
-// scale rgb colors to percentage
-function scale(val) {
-  return val / 255 * 100
+let scaleToPct = num => {
+  return num / 255 * 100
+}
+
+let scaleToRgb = num => {
+  return num * 255 / 100
 }
 
 let MAX = 255
