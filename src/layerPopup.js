@@ -1,15 +1,19 @@
+// Create popup interface and handle events
 let layerPopup = function (divBody, allLayers, viewer) {
-  // Color attenuation by probability
-  function attenuation(allLayers, viewer) {
+
+  function createAttenuationBtn(allLayers, viewer) {
+    // Color attenuation by probability
     let attId = makeId(5, 'atten')
     let label = e('label', {'for': attId})
     label.innerHTML = "&nbsp;&#58;&nbsp;color-attenuation by probability<br>"
+
     // Icon
     let icon = e('i', {
       'id': attId,
       'class': `fas fa-broadcast-tower hover-light`,
       'title': 'toggle: color-attenuation by probability'
     })
+
     // Event listener
     icon.addEventListener('click', () => {
       STATE.attenuate = !STATE.attenuate
@@ -21,18 +25,20 @@ let layerPopup = function (divBody, allLayers, viewer) {
   }
 
   // un/fill polygon
-  function outlineFun(allLayers, viewer) {
+  function createOutlineBtn(allLayers, viewer) {
     let fillId = makeId(5, 'fill')
     let label = e('label', {'for': fillId})
     label.innerHTML = "&nbsp;&nbsp;&#58;&nbsp;un/fill polygon<br>"
     let emptyCircle = 'far'
     let filledCircle = 'fas'
+
     // Icon
     let icon = e('i', {
       'id': fillId,
       'class': `${filledCircle} fa-circle hover-light`,
       'title': 'fill un-fill'
     });
+
     // Event listener
     icon.addEventListener('click', () => {
       STATE.outline = !STATE.outline
@@ -44,7 +50,7 @@ let layerPopup = function (divBody, allLayers, viewer) {
     return [label, icon]
   }
 
-  function sliderWrapper(d, t, allLayers, viewer) {
+  function createSlider(d, t, allLayers, viewer) {
     // Wrapper DIV
     let wrapper = e('div', {
       'class': d.class,
@@ -70,8 +76,7 @@ let layerPopup = function (divBody, allLayers, viewer) {
     wrapper.appendChild(BRange)
     wrapper.appendChild(output2)
 
-    // Update custom properties on wrapper
-    function updateProps(e) {
+    function updateDisplay(e) {
       const input = e.target
       const wrapper = input.parentNode
       wrapper.style.setProperty(`--${input.id}`, +input.value)
@@ -83,31 +88,27 @@ let layerPopup = function (divBody, allLayers, viewer) {
       if (d.type === 'outside') {
         setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'outside'})
       } else {
-        // output1.innerHTML = `${slideVals[0]} - ${slideVals[1]}`
         setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'inside'})
       }
     }
 
-    ARange.addEventListener('input', updateProps)
-    BRange.addEventListener('input', updateProps)
+    ARange.addEventListener('input', updateDisplay)
+    BRange.addEventListener('input', updateDisplay)
 
     return wrapper
   }
 
-  // COLOR ATTENUATION BY PROBABILITY
-  let [label1, atten] = attenuation(allLayers, viewer)
-
-  // UN/FILL POLYGON
-  let [label2, fillPoly] = outlineFun(allLayers, viewer)
+  // NOW APPEND TO BODY
+  let [label1, atten] = createAttenuationBtn(allLayers, viewer)
+  let [label2, fillPoly] = createOutlineBtn(allLayers, viewer)
   divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]))
 
-  // DUAL-POINT SLIDERS
   // todo: scale initial values
   let d = { 'aLab': 'a', 'bLab': 'b', 'aInit': 70, 'bInit': 185, 'min': 0, 'max': MAX, 'class': 'dualSlider', 'type': 'inside' }
-  const wrapper = sliderWrapper(d, 'In range:', allLayers, viewer)
+  const wrapper = createSlider(d, 'In range:', allLayers, viewer)
 
   d = { 'aLab': 'a1', 'bLab': 'b1', 'aInit': 10, 'bInit': 245, 'min': 0, 'max': MAX, 'class': 'dualSlider1', 'type': 'outside' }
-  const section = sliderWrapper(d, 'Out range:', allLayers, viewer)
+  const section = createSlider(d, 'Out range:', allLayers, viewer)
 
   let dd = e('div', {}, [section, wrapper])
   divBody.appendChild(dd)
