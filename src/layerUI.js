@@ -1,7 +1,7 @@
 // Create 1 control panel row per layer
 let layerUI = (layersColumn, images, viewer) => {
   createLayerElements(layersColumn, images, viewer)
-  handleDragLayers(images, viewer)
+  handleButtonDrag(images, viewer)
 }
 
 function createLayerElements(layersColumn, layers, viewer) {
@@ -20,9 +20,8 @@ function createLayerElements(layersColumn, layers, viewer) {
   tr.appendChild(e('td'))
   tr.appendChild(e('td', {}, [b]))
 
-  // now create the layer elements
   layers.forEach(layer => {
-    addRow(myEyeArray, table, layer, layers, viewer)
+    addIconRow(myEyeArray, table, layer, layers, viewer)
   })
 
   b.addEventListener('click', function () {
@@ -42,10 +41,11 @@ function createLayerElements(layersColumn, layers, viewer) {
 }
 
 // VIEWER'S DRAGGABLE LAYERS
-function handleDragLayers(layers, viewer) {
+function handleButtonDrag(layers, viewer) {
   // Div containing viewer
   let dropzone = document.getElementById(viewer.id)
   // console.log('dropzone', dropzone, viewer.id)
+  let num = viewer.id.slice(-1)
 
   dropzone.addEventListener('dragenter', function () {
     this.classList.add('over')
@@ -75,13 +75,13 @@ function handleDragLayers(layers, viewer) {
     draggedElement = this // The draggable feature (button element)
     this.style.opacity = '0.4'
     /* eslint-disable no-undef */
-    sourceViewer = getSourceViewer(evt)
+    sourceViewer = getOsdViewer(evt)
     evt.dataTransfer.effectAllowed = 'move'
     evt.dataTransfer.setData('text', evt.target.id)
   }
 
   function handleDragEnd() {
-    // this = the draggable feature
+    // this = the draggable feature btn
     this.style.opacity = '1'
     dropzone.classList.remove('over')
   }
@@ -116,6 +116,7 @@ function handleDragLayers(layers, viewer) {
         let lay = row.cells[0].firstChild
         layNum = lay.id[0] // 1st char is array index
         let eye = row.cells[1].children[0]
+        // console.log(name, lay.innerHTML)
         if (lay.innerHTML === name) {
           foundMatchingSlide = true
           // Toggle eyeball
@@ -126,33 +127,35 @@ function handleDragLayers(layers, viewer) {
       }
     }
 
-    let targetViewer = getViewerObject(viewerDiv)
-    if (foundMatchingSlide) {
-      console.log('Found matching slide')
-      try {
-        targetViewer.world.getItemAt(layNum).setOpacity(1) // show
-        // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
-      } catch (e) {
-        console.warn('It may get here if the handler executes twice on one drop:')
-        console.warn(e.message)
+    let targetViewer = getOsdViewer(evt)
+    if (targetViewer !== null) {
+      if (foundMatchingSlide) {
+        console.log('Found matching slide')
+        try {
+          targetViewer.world.getItemAt(layNum).setOpacity(1) // show
+          // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
+        } catch (e) {
+          // It may get here if the handler executes twice on one drop
+          console.warn(e.message)
+        }
+      } else {
+        const location = sourceViewer.tileSources[layNum].tileSource
+        console.log('%cDid not find matching slide\nlocation', 'color: #ff6a5a;', location)
       }
-    } else {
-      const location = sourceViewer.tileSources[layNum].tileSource
-      console.log('%cDid not find matching slide\nlocation', 'color: #ff6a5a;', location)
     }
     return false
   }
 }
 
-function addRow(myEyeArray, table, currentLayer, allLayers, viewer) {
+function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   let tr = e('tr')
   table.appendChild(tr)
 
   const layerNum = currentLayer.layerNum
-  const name = getName(currentLayer)
+  const name = getPreferredLabel(currentLayer)
 
   // FEATURE
-  let feat = draggableFeature(layerNum, name)
+  let feat = createDraggableBtn(layerNum, name)
   tr.appendChild(e('td', {}, [feat]))
 
   // VISIBILITY TOGGLE
@@ -161,7 +164,7 @@ function addRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   tr.appendChild(e('td', {}, [faEye]))
 
   // TRANSPARENCY SLIDER
-  let [faAdjust, xSlider] = transSlider(currentLayer, faEye, viewer)
+  let [faAdjust, xSlider] = createTransparencySlider(currentLayer, faEye, viewer)
   let div = e('div', {'class': `showDiv`, 'title': 'transparency slider'}, [faAdjust])
 
   // VISIBILITY
@@ -174,10 +177,10 @@ function addRow(myEyeArray, table, currentLayer, allLayers, viewer) {
 
   if (layerNum > 0) {
     // COLOR PALETTE
-    colorPalette(tr, feat, currentLayer, allLayers, viewer)
+    createColorPalette(tr, feat, currentLayer, allLayers, viewer)
 
     // TACHOMETER
-    let divBody = tachometer(tr)
+    let divBody = createTachometer(tr)
 
     layerPopup(divBody, allLayers, viewer)
 
@@ -186,7 +189,7 @@ function addRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   }
 }
 
-function getName(layer) {
+function getPreferredLabel(layer) {
   let name
   let loc = extractLocation(layer)
   /*
@@ -221,7 +224,7 @@ function getName(layer) {
 }
 
 // Feature (draggable)
-function draggableFeature(layerNum, name) {
+function createDraggableBtn(layerNum, name) {
   let element = e('button', {
     'id': `${layerNum}${makeId(5, 'feat')}`,
     'class': 'dragIt hover-light css-tooltip',
@@ -241,8 +244,7 @@ function createEyeball(currentLayer) {
   })
 }
 
-// Transparency slider
-function transSlider(currentLayer, faEye, viewer) {
+function createTransparencySlider(currentLayer, faEye, viewer) {
   // Icon
   let icon = document.createElement('i')
   icon.classList.add('fas')
@@ -281,20 +283,20 @@ function transSlider(currentLayer, faEye, viewer) {
 }
 
 // Color palette
-function colorPalette(row, featureElem, currentLayer, allLayers, viewer) {
+function createColorPalette(row, featureElem, currentLayer, allLayers, viewer) {
   let icon = e('i', {
     'id': makeId(5, 'palette'), 'class': `fas fa-palette pointer hover-light`, 'title': 'color palette'
   })
   row.appendChild(e('td', {}, [icon]))
 
-  // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
+// TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
   let colorsUI = filterPopup(icon, featureElem.innerText, currentLayer.colorscheme, allLayers, viewer)
   icon.addEventListener('click', () => {
     colorsUI.style.display = 'block'
   })
 }
 
-function tachometer(row) {
+function createTachometer(row) {
   let icon = e('i', {
     'id': makeId(5, 'tach'), 'class': `fas fa-tachometer-alt hover-light`, 'title': 'settings' // call it 'settings', 'control panel', idk.
   })
@@ -312,36 +314,33 @@ function tachometer(row) {
   return divBody
 }
 
-function getSourceViewer(evt) {
-  let draggedLayer = evt.target
+function getOsdViewer(evt) {
+  let targetElement = evt.target
 
-  // Find the layersAndColors column that this came from
-  let layersColumn = draggedLayer.closest('table').parentElement
+  if (targetElement.tagName.toLowerCase() === 'canvas') {
+    let table = targetElement.closest('table')
+    let tr = table.firstChild.firstChild
+    let td = tr.firstChild
+    let sourceViewerDiv = td.firstChild
 
-  // Get the table containing the viewer
-  let table = layersColumn.parentElement.closest('table')
-
-  // Finally, get the source viewer's div
-  let sourceViewerDiv = table.firstElementChild.firstElementChild.firstChild
-  return getViewerObject(sourceViewerDiv)
-}
-
-function getViewerObject(element) {
-  let retVal
-  try {
-    for (let sync of SYNCED_IMAGE_VIEWERS) {
-      if (sync.getViewer().id === element.id) {
-        retVal = sync.getViewer()
-        break
+    let retVal
+    try {
+      for (let sync of SYNCED_IMAGE_VIEWERS) {
+        if (sync.getViewer().id === sourceViewerDiv.id) {
+          retVal = sync.getViewer()
+          break
+        }
       }
+    } catch (e) {
+      console.log('%cmessage:', 'color: #ff6a5a;', e.message)
+      console.log('%cname:', 'color: #ff6a5a;', e.name)
+      console.log('%cfilename', 'color: #ff6a5a;', e.fileName)
+      console.log('%clineNumber', 'color: #ff6a5a;', e.lineNumber)
     }
-  } catch (e) {
-    console.log('%cmessage:', 'color: #ff6a5a;', e.message)
-    console.log('%cname:', 'color: #ff6a5a;', e.name)
-    console.log('%cfilename', 'color: #ff6a5a;', e.fileName)
-    console.log('%clineNumber', 'color: #ff6a5a;', e.lineNumber)
+    return retVal
+  } else {
+    return null
   }
-  return retVal
 }
 
 function getVals(slides) {
