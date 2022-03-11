@@ -51,7 +51,7 @@ let layerPopup = function (divBody, allLayers, viewer) {
   }
 
   function createSlider(d, t, allLayers, viewer) {
-    // Wrapper DIV
+    // Create range slider with two handles
     let wrapper = e('div', {
       'class': d.class,
       'role': 'group',
@@ -59,12 +59,10 @@ let layerPopup = function (divBody, allLayers, viewer) {
       'style': `--${d.aLab}: ${d.aInit}; --${d.bLab}: ${d.bInit}; --min: ${d.min}; --max: ${d.max}`
     })
 
-    // multi-label
     let title = e('div', {'id': 'multi-lbl'})
     title.innerHTML = t
     wrapper.appendChild(title)
 
-    // Inputs
     let ARange = e('input', {'id': d.aLab, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.aInit})
     let BRange = e('input', {'id': d.bLab, 'type': 'range', 'min': d.min, 'max': d.max, 'value': d.bInit})
 
@@ -81,10 +79,8 @@ let layerPopup = function (divBody, allLayers, viewer) {
       const wrapper = input.parentNode
       wrapper.style.setProperty(`--${input.id}`, +input.value)
 
-      // Get values:
       let slideVals = getVals([ARange, BRange])
 
-      // Display values:
       if (d.type === 'outside') {
         setFilter(allLayers, viewer, {'min': slideVals[0], 'max': slideVals[1], 'type': 'outside'})
       } else {
@@ -98,7 +94,7 @@ let layerPopup = function (divBody, allLayers, viewer) {
     return wrapper
   }
 
-  // NOW APPEND TO BODY
+  // Append to body
   let [label1, atten] = createAttenuationBtn(allLayers, viewer)
   let [label2, fillPoly] = createOutlineBtn(allLayers, viewer)
   divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]))
