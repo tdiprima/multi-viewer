@@ -13,16 +13,19 @@
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   /*
   When the 'images' parameter becomes an array with null elements,
-  it means that the session timed out or is in the process of timeout.
+  it usually means that the session timed out or is in the process of timeout.
   So log the user out and have them start again.
    */
+  let viewers = [] // eslint-disable-line prefer-const
   if (!isRealValue(images) || images[0] === null) {
     // logout & redirect
     document.write("<script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>")
   }
 
-  let viewers = [] // eslint-disable-line prefer-const
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', setUp)
+  window.addEventListener('keydown', hotKeysHandler)
+
+  function setUp() {
     new Promise(resolve => {
       return resolve(opts)
     }).then(opts => {
@@ -162,10 +165,10 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
       synchronizeViewers(viewers)
     })
-  })
+  }
 
   // Hot keys
-  window.addEventListener('keydown', (e) => {
+  function hotKeysHandler(e) {
     const key = e.key.toLocaleLowerCase()
     // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
     if (key === 'escape' || key === 'esc') {
@@ -185,5 +188,5 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         })
       }
     }
-  })
+  }
 }
