@@ -21,121 +21,12 @@ const backgroundCorrection = data => {
   return data
 }
 
-// Deep copy
-/*
-function deepCopy(obj) {
-  let r
-  if (typeof obj === 'object') {
-    if (Array.isArray(obj)) {
-      const l = obj.length
-      r = new Array(l)
-      for (let i = 0; i < l; i++) {
-        r[i] = deepCopy(obj[i])
-      }
-      return r
-    } else {
-      r = {}
-      r.prototype = obj.prototype
-      for (const k in obj) {
-        r[k] = deepCopy(obj[k])
-      }
-      return r
-    }
-  }
-  return obj
-}
-*/
-
-/*
-function arraysAreIdentical(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false;
-  for (let i = 0, len = arr1.length; i < len; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-*/
-
 /**********************
  CUSTOM COLOR FILTERS
  **********************/
 const colorFilter = OpenSeadragon.Filters.GREYSCALE
 const colorChannel = 1
 const alphaChannel = 3
-
-/*
-colorFilter.prototype.SMILEY = (r, g, b) => {
-  return (context, callback) => {
-    const width = context.canvas.width
-    let c = context.canvas
-    let size = 170;
-    let thresh = 250;
-
-    let imgData = context.getImageData(0, 0, c.width, c.height);
-    // Reduce to an RGBA array
-    let data = imgData.data.reduce(
-      (pixel, key, index) =>
-        (index % 4 === 0
-          ? pixel.push([key])
-          : pixel[pixel.length - 1].push(key)) && pixel,
-      []
-    );
-
-    // If we have a red, and the pixel next to it is transparent, we have an edge pixel.
-    for (let i = 0; i < data.length; i++) {
-      // right
-      if (data[i][0] >= thresh && data[i + 1][3] === 0) {
-        data[i][0] = 0;
-        data[i][1] = 0;
-        data[i][2] = 255;
-        data[i][3] = 255;
-      }
-
-      // left
-      if (data[i][0] >= thresh && data[i - 1][3] === 0) {
-        data[i][0] = 0;
-        data[i][1] = 0;
-        data[i][2] = 255;
-        data[i][3] = 255;
-      }
-
-      // up
-      if (data[i][0] >= thresh && data[i - width][3] === 0) {
-        data[i][0] = 0;
-        data[i][1] = 0;
-        data[i][2] = 255;
-        data[i][3] = 255;
-      }
-
-      // down
-      if (data[i][0] >= thresh && data[i + width][3] === 0) {
-        data[i][0] = 0;
-        data[i][1] = 0;
-        data[i][2] = 255;
-        data[i][3] = 255;
-      }
-    }
-
-    // make transparent the remaining red
-    data.forEach((px) => {
-      if (px[0] >= thresh) {
-        px[0] = 0;
-        px[1] = 0;
-        px[2] = 0;
-        px[3] = 0;
-      }
-    });
-
-    // new image
-    let newImage = context.createImageData(c.width, c.height)
-    newImage.data.set(data.flat());
-    context.putImageData(newImage, 0, 0);
-  }
-
-}
-*/
 
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = (r, g, b) => {
@@ -144,23 +35,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     const height = context.canvas.height
 
     let data = backgroundCorrection(img2array(context.getImageData(0, 0, width, height)))
-    // const cloneData = deepCopy(data)
-    /*
-    // let cloneData = deepCopy(data)
-    let cloneData = context._originalImageData
-    if (isRealValue(cloneData)) {
-        console.log('originalImageData is real')
-    } else {
-        console.log('originalImageData is not real :(')
-    }
-    // console.log('context._originalImageData.data', cloneData)
-    let matrix = img2array(cloneData)
-    cloneData = backgroundCorrection(matrix) // maybe take this out?
-    console.log('empty', isEmpty(cloneData))
-    console.log('arraysAreIdentical', arraysAreIdentical(data, cloneData))
-    */
 
-    // const num = 77
     for (let i = 0; i < data.length; i++) {
       if (data[i][alphaChannel] === 255) {
         // right
@@ -218,26 +93,6 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         data[i][3] = 0
       }
     }
-
-    // make transparent everything that's not been replaced
-    // data.forEach((px) => {
-    //   if (px[0] !== num && px[1] !== num && px[2] !== num && px[3] !== num) {
-    //     px[0] = 0;
-    //     px[1] = 0;
-    //     px[2] = 0;
-    //     px[3] = 0;
-    //   }
-    // });
-    // for (let i = 0; i < data.length; i++) {
-    //   if (data[i][alphaChannel] > 0) {
-    //     if (data[i][0] === num && data[i][colorChannel] === num && data[i][2] === num && data[i][3] === num) {
-    //       data[i][0] = cloneData[i][0];
-    //       data[i][1] = cloneData[i][1];
-    //       data[i][2] = cloneData[i][2];
-    //       data[i][3] = 255;
-    //     }
-    //   }
-    // }
 
     // Change the remaining green pixels (middle of polygon) to transparent
     data.forEach(px => {
