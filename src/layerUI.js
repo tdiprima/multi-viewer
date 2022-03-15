@@ -74,7 +74,7 @@ function handleButtonDrag(layers, viewer) {
     draggedElement = this // The draggable feature (button element)
     this.style.opacity = '0.4'
     /* eslint-disable no-undef */
-    sourceViewer = getOsdViewer(evt)
+    // sourceViewer = getOsdViewer(evt)
     evt.dataTransfer.effectAllowed = 'move'
     evt.dataTransfer.setData('text', evt.target.id)
   }
@@ -93,7 +93,10 @@ function handleButtonDrag(layers, viewer) {
 
     let viewerDiv = targetElement.closest('.viewer') // where they dropped the feature
 
-    if (!viewerDiv) return false
+    if (!viewerDiv) {
+      console.error("!viewerDiv")
+      return false
+    }
 
     // Find neighboring layersColumn
     const td1 = viewerDiv.parentElement
@@ -138,8 +141,9 @@ function handleButtonDrag(layers, viewer) {
           console.warn(e.message)
         }
       } else {
-        const location = sourceViewer.tileSources[layNum].tileSource
-        console.error('Did not find matching slide\nLocation:', location)
+        console.error('Did not find matching slide')
+        // const location = sourceViewer.tileSources[layNum].tileSource
+        // console.error('Did not find matching slide\nLocation:', location)
       }
     }
     return false
@@ -317,7 +321,7 @@ function getOsdViewer(evt) {
         }
       }
     } catch (e) {
-      console.error('%cmessage:', e.message)
+      console.error('message:', e.message)
     }
     return retVal
   } else {
