@@ -139,8 +139,9 @@ button {
     background-color: var(--highlight);
   }
   100% {
-    background-color: var(--bg-light);
-    /*background-color: transparent;*/
+    background-color: #e9e9ed; /*button-color*/
+    /* background-color: var(--bg-light); */
+    /* background-color: transparent; */
   }
 }
 
