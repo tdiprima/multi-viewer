@@ -9,7 +9,7 @@ function createLayerElements(layersColumn, layers, viewer) {
   let toggle = false;
   let vNum = layersColumn.id.slice(-1)
   // 'fas fa-eye-slash' : 'fas fa-eye'
-  let b = e('i', {
+  let globalEyeToggle = e('i', {
     'id': `eyeTog${vNum}`, 'style': 'display: inline-block', 'class': 'fas fa-eye'  // 'data-tooltip': 'eye toggle'
   })
 
@@ -18,13 +18,13 @@ function createLayerElements(layersColumn, layers, viewer) {
   let tr = e('tr')
   table.appendChild(tr)
   tr.appendChild(e('td'))
-  tr.appendChild(e('td', {}, [b]))
+  tr.appendChild(e('td', {}, [globalEyeToggle]))
 
   layers.forEach(layer => {
     addIconRow(myEyeArray, table, layer, layers, viewer)
   })
 
-  b.addEventListener('click', function () {
+  globalEyeToggle.addEventListener('click', function () {
     myEyeArray.forEach(eye => {
       eye.click(e)
     })
