@@ -126,6 +126,23 @@ button {
   border: 3px dotted var(--highlight)
 }
 
+.light-up {
+  animation-name: bckanim;
+  animation-fill-mode: forwards;
+  animation-duration: 3s;
+  animation-delay: 0s;
+  background-color: var(--highlight);
+}
+
+@keyframes bckanim {
+  0% {
+    background-color: var(--highlight);
+  }
+  100% {
+    background-color: var(--bg-light);
+  }
+}
+
 .dragIt {
   float: left;
   transition: 0.3s;
