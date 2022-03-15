@@ -18,13 +18,6 @@ class ImageViewer {
     // SET UP VIEWER
     let viewer
     try {
-      // let baseUrl, layer
-      // baseUrl = "http://129.49.255.69:8888/iiif/?iiif=http://129.49.255.69:8888/HalcyonStorage/demo1/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.svs/info.json"
-      // baseUrl = layers[0].location
-      // layer = `${CONFIG.appImages}transparent.png`
-      // layer = `${CONFIG.appImages}default.png`
-      // layer = `${CONFIG.appImages}smiley.png`
-
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
         crossOriginPolicy: 'Anonymous',
@@ -35,26 +28,6 @@ class ImageViewer {
         // showNavigator: true,
         // navigatorPosition: "BOTTOM_RIGHT",
         tileSources: tileSources
-        // *** Working with smaller overlays helps performance. ***
-        /*
-        tileSources: [
-          {
-            "tileSource": baseUrl,
-            "opacity": 1.0,
-            "x": 0,
-            "y": 0
-          },
-          {
-            "tileSource": {
-              "type": "image",
-              "url": layer
-            },
-            "opacity": 1.0,
-            "x": 0,
-            "y": 0
-          }
-        ]
-        */
       })
     } catch (e) {
       console.error(e.message)
@@ -73,11 +46,6 @@ class ImageViewer {
           layers[itemIndex].resolutionUnit = source.resolutionUnit
         if (typeof source.xResolution !== 'undefined')
           layers[itemIndex].xResolution = source.xResolution
-        /*
-        // console.log('\nsource', source)
-        console.log('\naspectRatio', viewer.source.aspectRatio)
-        console.log('dimensions', viewer.source.dimensions)
-        */
       } catch (e) {
         console.log(`%c${e.message}`, 'color: #ff6a5a;')
       }
@@ -104,16 +72,6 @@ class ImageViewer {
       setFilter(layers, viewer)
       getInfoForScalebar()
     })
-
-    // Uncomment for testing:
-    // viewer.addHandler('canvas-click', event => {
-    //   const webPoint = event.position
-    //   const viewportPoint = vpt.pointFromPixel(webPoint)
-    //   const I = viewer.world.getItemAt(0)
-    //   const imagePoint = I.viewportToImageCoordinates(viewportPoint)
-    //   console.log('webPoint', Math.round(webPoint.x), Math.round(webPoint.y))
-    //   console.log('imagePoint', Math.round(imagePoint.x), Math.round(imagePoint.y))
-    // })
 
     // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
     let element = document.querySelector('.mag-content')
