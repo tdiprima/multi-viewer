@@ -122,8 +122,8 @@ function handleButtonDrag(layers, viewer) {
         if (lay.innerHTML === name) {
           foundMatchingSlide = true
           // Highlight the layer
-          lay.classList.remove('light-up')
-          lay.classList.add('light-up')
+          lay.classList.remove('highlight')
+          lay.classList.add('highlight')
           // Toggle eyeball
           eye.classList.remove('fa-eye-slash')
           eye.classList.add('fa-eye')

@@ -126,7 +126,7 @@ button {
   border: 3px dotted var(--highlight)
 }
 
-.light-up {
+.highlight {
   animation-name: bckanim;
   animation-fill-mode: forwards;
   animation-duration: 3s;
