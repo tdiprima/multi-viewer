@@ -139,7 +139,7 @@ function handleButtonDrag(layers, viewer) {
         }
       } else {
         const location = sourceViewer.tileSources[layNum].tileSource
-        console.log('%cDid not find matching slide\nlocation', 'color: #ff6a5a;', location)
+        console.error('Did not find matching slide\nLocation:', location)
       }
     }
     return false
@@ -151,7 +151,6 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   table.appendChild(tr)
 
   const layerNum = currentLayer.layerNum
-  console.log('layerNum', layerNum)
   const name = getPreferredLabel(currentLayer)
 
   // FEATURE
