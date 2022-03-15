@@ -140,6 +140,7 @@ button {
   }
   100% {
     background-color: var(--bg-light);
+    /*background-color: transparent;*/
   }
 }
 
