@@ -212,6 +212,10 @@ function getPreferredLabel(layer) {
     name = sections[sections.length - 1]
   }
 
+  if (name.includes('.')) {
+    name = name.substring(0, name.indexOf('.'))
+  }
+
   return name
 }
 
