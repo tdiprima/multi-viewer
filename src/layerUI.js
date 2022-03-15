@@ -45,7 +45,6 @@ function handleButtonDrag(layers, viewer) {
   // Div containing viewer
   let dropzone = document.getElementById(viewer.id)
   // console.log('dropzone', dropzone, viewer.id)
-  let num = viewer.id.slice(-1)
 
   dropzone.addEventListener('dragenter', function () {
     this.classList.add('over')
@@ -152,6 +151,7 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   table.appendChild(tr)
 
   const layerNum = currentLayer.layerNum
+  console.log('layerNum', layerNum)
   const name = getPreferredLabel(currentLayer)
 
   // FEATURE
@@ -160,7 +160,10 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
 
   // VISIBILITY TOGGLE
   let faEye = createEyeball(currentLayer)
-  myEyeArray.push(faEye)
+  if (layerNum > 0) {
+    myEyeArray.push(faEye)
+  }
+
   tr.appendChild(e('td', {}, [faEye]))
 
   // TRANSPARENCY SLIDER
@@ -192,32 +195,15 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
 function getPreferredLabel(layer) {
   let name
   let loc = extractLocation(layer)
-  /*
-  if (isValidURL(loc)) {
-  let urlObj = new URL(loc)
-  if (isEmpty(urlObj.searchParams)) {
-  url = urlObj.href
-  } else {
-  url = urlObj.searchParams.get('iiif')
-  }
-  let sections = (url).split('/')
-  name = sections[sections.length - 2]
-  } else {
-  if (loc)
-  name = loc
-  else if (layer.location)
-  name = layer.location
-  }
-  */
   const sections = (loc).split('/')
   const re = /^(?:[a-z]+:)?\b/gm
 
   if (loc.match(re)) {
     // Absolute URL
-    name = sections[sections.length - 2] // filename
+    name = sections[sections.length - 2]
   } else {
     // Relative URL
-    name = sections[sections.length - 1] // filename
+    name = sections[sections.length - 1]
   }
 
   return name
@@ -332,10 +318,7 @@ function getOsdViewer(evt) {
         }
       }
     } catch (e) {
-      console.log('%cmessage:', 'color: #ff6a5a;', e.message)
-      console.log('%cname:', 'color: #ff6a5a;', e.name)
-      console.log('%cfilename', 'color: #ff6a5a;', e.fileName)
-      console.log('%clineNumber', 'color: #ff6a5a;', e.lineNumber)
+      console.error('%cmessage:', e.message)
     }
     return retVal
   } else {
