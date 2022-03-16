@@ -307,7 +307,7 @@ let scaleToRgb = num => {
 
 let MAX = 255
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold']
 const STATE = {
   attenuate: false,
   outline: false,
