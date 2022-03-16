@@ -41,11 +41,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         // right
         try {
           if (data[i][colorChannel] > 0 && data[i + 1][alphaChannel] === 0) {
-            // I'm making it weird.
-            data[i][0] = r; // num
-            data[i][1] = g; // num
-            data[i][2] = b; // num
-            data[i][3] = 255; // num
+            data[i][0] = r;
+            data[i][1] = g;
+            data[i][2] = b;
+            data[i][3] = 255;
           }
         } catch (e) {
           // It's okay.
@@ -54,10 +53,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         // left
         try {
           if (data[i][colorChannel] > 0 && data[i - 1][alphaChannel] === 0) {
-            data[i][0] = r; // num
-            data[i][1] = g; // num
-            data[i][2] = b; // num
-            data[i][3] = 255; // num
+            data[i][0] = r;
+            data[i][1] = g;
+            data[i][2] = b;
+            data[i][3] = 255;
           }
         } catch (e) {
           // These things happen.
@@ -66,10 +65,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         try {
           // up
           if (data[i][colorChannel] > 0 && data[i - width][alphaChannel] === 0) {
-            data[i][0] = r; // num
-            data[i][1] = g; // num
-            data[i][2] = b; // num
-            data[i][3] = 255; // num
+            data[i][0] = r;
+            data[i][1] = g;
+            data[i][2] = b;
+            data[i][3] = 255;
           }
         } catch (e) {
         }
@@ -77,19 +76,19 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         try {
           // down
           if (data[i][colorChannel] > 0 && data[i + width][alphaChannel] === 0) {
-            data[i][0] = r; // num
-            data[i][1] = g; // num
-            data[i][2] = b; // num
-            data[i][3] = 255; // num
+            data[i][0] = r;
+            data[i][1] = g;
+            data[i][2] = b;
+            data[i][3] = 255;
           }
         } catch (e) {
         }
 
       } else {
         // Set each pixel
-        data[i][0] = 0
-        data[i][1] = 0
-        data[i][2] = 0
+        // data[i][0] = 0
+        // data[i][1] = 0
+        // data[i][2] = 0
         data[i][3] = 0
       }
     }
@@ -97,9 +96,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     // Change the remaining green pixels (middle of polygon) to transparent
     data.forEach(px => {
       if (px[colorChannel] > 0) {
-        px[0] = 0
-        px[1] = 0
-        px[2] = 0
+        // px[0] = 0
+        // px[1] = 0
+        // px[2] = 0
         px[3] = 0
       }
     })
@@ -212,9 +211,9 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
           }
         } else {
           // No nuclear material
-          data[i][0] = 0
-          data[i][1] = 0
-          data[i][2] = 0
+          // data[i][0] = 0
+          // data[i][1] = 0
+          // data[i][2] = 0
           data[i][3] = 0
         }
       }
