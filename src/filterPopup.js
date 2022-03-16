@@ -41,26 +41,35 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   let divA = e('div', {'id': `divA${uniqueId}`})
   let divB = e('div', {'id': `divB${uniqueId}`})
   let divC = e('div', {'id': `divC${uniqueId}`})
-  let msg = 'Color gradient where reddish colors<br>correspond to sureness and<br>bluish colors to unsureness.'
-  divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`
+  // let divD = e('div', {'id': `divD${uniqueId}`})
 
   // <select>
-  let selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
+  // const selectList = createDropdown(uniqueId, [divA, divB, divC, divD], viewerLayers, viewer)
+  const selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
   widgetBody.appendChild(selectList)
 
   // By class
   divA.style.display = (STATE.renderType === 'byClass') ? 'block' : 'none'
   widgetBody.appendChild(divA)
-  createUI(1, uniqueId, divA, colorscheme.colors, viewerLayers, viewer)
+  createUI(uniqueId, divA, colorscheme.colors, viewerLayers, viewer, 'byClass')
 
   // By probability
   divB.style.display = (STATE.renderType === 'byProbability') ? 'block' : 'none'
   widgetBody.appendChild(divB)
-  createUI(2, uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer)
+  createUI(uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer, 'byProbability')
 
   // By heatmap
+  // Blue to red HM
+  let msg = 'Color gradient where reddish colors<br>correspond to sureness and<br>bluish colors to unsureness.'
   divC.style.display = (STATE.renderType === 'byHeatmap') ? 'block' : 'none'
   widgetBody.appendChild(divC)
+  divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`
+
+  // By threshold #7e0100
+  // divD.style.display = (STATE.renderType === 'byThreshold') ? 'block' : 'none'
+  // widgetBody.appendChild(divD)
+  // msg = 'TBA'
+  // divD.innerHTML = `<p>${msg}</p>`
 
   return div
 }
@@ -77,22 +86,24 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
   let selectDiv = e('div', {'style': 'display: block;'})
   let listId = `select${uniqueId}`
   selectDiv.innerHTML = `<label for="${listId}">Color by:</label>&nbsp;`
+
   // Array of options to be added
-  let myList = e('select')
-  myList.id = listId
-  selectDiv.appendChild(myList)
+  const selectList = e('select')
+  selectList.id = listId
+  selectDiv.appendChild(selectList)
 
   // Append the options
   RENDER_TYPES.forEach((option, i) => {
     const element = document.createElement('option')
     element.setAttribute('value', option)
     element.text = option.startsWith('by') ? option.replace('by', '') : option
-    myList.appendChild(element)
+    selectList.appendChild(element)
   })
 
-  myList.addEventListener('change', function () {
+  selectList.addEventListener('change', function () {
+
     // set global type
-    STATE.renderType = myList.options[myList.selectedIndex].value
+    STATE.renderType = selectList.options[selectList.selectedIndex].value
     // no outline for you
     STATE.outline = false
 
@@ -106,11 +117,12 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
       divArr[0].style.display = 'block'
     } else if (STATE.renderType === 'byProbability') {
       divArr[1].style.display = 'block'
-    } else {
-      // byHeatmap
+    } else if (STATE.renderType === 'byHeatmap') {
       divArr[2].style.display = 'block'
     }
-    // repaint the screen
+    // else if (STATE.renderType === 'byThreshold') {
+    //   divArr[3].style.display = 'block'
+    // }
     setFilter(allLayers, viewer)
   })
 
@@ -118,34 +130,38 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
 }
 
 // Create user interface
-function createUI(type, uniq, div, layerColors, layers, viewer) {
-  let byProb = type === 2
+function createUI(uniq, div, layerColors, layers, viewer, type) {
   const table = e('table', {'class': 'popupBody'})
   div.appendChild(table)
 
   if (layerColors) {
-    if (byProb) {
-      // Sort DESC
-      layerColors.sort((a, b) => b.low - a.low)
-      table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
-    } else {
-      table.appendChild(createHeaderRow(['', 'Color', 'Label']))
+
+    // Different headers
+    if (type) {
+      if (type === 'byClass') {
+        table.appendChild(createHeaderRow(['', 'Color', 'Label']))
+      } else if (type === 'byProbability') {
+        layerColors.sort((a, b) => b.low - a.low)
+        table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
+      }
     }
 
     // Create table row for each color rgba; allow user to adjust color
     layerColors.forEach((colorObject, cIdx) => {
       const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'value': colorObject.classid})
       chk.checked = colorObject.checked
+
       const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
 
       let tr, num1, num2, removeBtn
-      if (byProb) {
+      if (type === 'byProbability') {
         // adjust range (low to high)
         num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
         num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
         const buttonId = `i${uniq}${cIdx}`
         // button to add or remove a range
         removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
+        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
 
         tr = e('tr', {}, [
           e('td', {}, [chk]),
@@ -154,7 +170,7 @@ function createUI(type, uniq, div, layerColors, layers, viewer) {
           e('td', {}, [num2]),
           e('td', {}, [removeBtn])
         ])
-      } else {
+      } else if (type === 'byClass') {
         tr = e('tr', {}, [
           e('td', {}, [chk]),
           e('td', {}, [cpEl]),
@@ -167,14 +183,13 @@ function createUI(type, uniq, div, layerColors, layers, viewer) {
 
       checkboxHandler(chk, layerColors, layers, viewer)
 
-      if (byProb) {
-        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
-      }
     })
 
-    if (byProb) {
+    // After all that is done...
+    if (type === 'byProbability') {
       table.appendChild(extraRow(uniq, layerColors, layers, viewer))
     }
+
   } else {
     console.warn('Layer colors?', layerColors)
   }
@@ -193,8 +208,9 @@ function createHeaderRow(tableHeaders) {
   const row = e('tr')
 
   for (let i = 0; i < tableHeaders.length; i++) {
+    const header = tableHeaders[i]
     const th = e('th', {class: 'pointer'})
-    th.innerHTML = tableHeaders[i]
+    th.innerHTML = header
     row.appendChild(th)
 
     th.addEventListener('click', () => {
@@ -285,7 +301,7 @@ function numericEvent(numEl, colorObject, layers, viewer) {
 }
 
 // Create numeric input
-function createNumericInput (id, table, uniq, layers, colorObject, colors, viewer) {
+function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
   let val
   if (!colorObject.low && !colorObject.high) {
     val = ''
