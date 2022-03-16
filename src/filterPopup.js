@@ -321,7 +321,7 @@ function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer
   })
 
   // Event listeners
-  numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
+  // numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
   numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
   return numEl
 }
