@@ -41,9 +41,9 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   let divA = e('div', {'id': `divA${uniqueId}`})
   let divB = e('div', {'id': `divB${uniqueId}`})
   let divC = e('div', {'id': `divC${uniqueId}`})
-  // let divD = e('div', {'id': `divD${uniqueId}`})
+  // let divD = e('div', {'id': `divD${uniqueId}`}) // todo
 
-  // <select>
+  // <select>  // todo
   // const selectList = createDropdown(uniqueId, [divA, divB, divC, divD], viewerLayers, viewer)
   const selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
   widgetBody.appendChild(selectList)
@@ -65,7 +65,7 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   widgetBody.appendChild(divC)
   divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`
 
-  // By threshold #7e0100
+  // By threshold #7e0100  // todo
   // divD.style.display = (STATE.renderType === 'byThreshold') ? 'block' : 'none'
   // widgetBody.appendChild(divD)
   // msg = 'TBA'
@@ -120,6 +120,7 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
     } else if (STATE.renderType === 'byHeatmap') {
       divArr[2].style.display = 'block'
     }
+    // todo
     // else if (STATE.renderType === 'byThreshold') {
     //   divArr[3].style.display = 'block'
     // }

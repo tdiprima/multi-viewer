@@ -8,15 +8,13 @@ let CONFIG = {
 // }
 
 function setFilter(layers, viewer, range) {
-  // console.log('layers len', layers.length)
+
   if (viewer.world) {
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
 
     for (let i = 0; i < itemCount; i++) {
-      // let tiledImage = viewer.world.getItemAt(i);
-      // let source = tiledImage.source;
-      // console.log('aspectRatio', source.aspectRatio)
+
       if (i > 0) { //comment here
         if (range) {
           // USE RANGE VALUES
@@ -67,6 +65,10 @@ function setFilter(layers, viewer, range) {
               ]
             })
           }
+          // todo
+          // else if (STATE.renderType === 'byThreshold') {
+          //   code block
+          // }
         }
       } //comment here
     }
@@ -307,6 +309,7 @@ let scaleToRgb = num => {
 
 let MAX = 255
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
+// todo
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap'] //, 'byThreshold']
 const STATE = {
   attenuate: false,
