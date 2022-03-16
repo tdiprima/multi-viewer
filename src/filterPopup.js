@@ -402,7 +402,7 @@ function extraRow(uniq, colors, layers, viewer) {
   }
 
   const colorObject = {
-    'color': 'rgba(255, 255, 255, 255)',
+    'color': 'rgba(255, 255, 255, 0)',
     'low': 0,
     'high': 0,
     'checked': true,
