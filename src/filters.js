@@ -242,6 +242,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
   }
 }
 
+/*
 colorFilter.prototype.THRESHOLDING = (threshold) => {
   return (context, callback) => {
     const width = context.canvas.width
@@ -266,6 +267,32 @@ colorFilter.prototype.THRESHOLDING = (threshold) => {
     let newImage = context.createImageData(width, height)
     newImage.data.set(data.flat())
     context.putImageData(newImage, 0, 0)
+    callback()
+  }
+}
+*/
+
+colorFilter.prototype.THRESHOLDING = function (threshold) {
+  return function (context, callback) {
+    let imgData = context.getImageData(
+      0, 0, context.canvas.width, context.canvas.height)
+    let pixels = imgData.data
+
+    for (let i = 0; i < pixels.length; i += 4) {
+
+      // if (pixels[i + 3] > 250 && pixels[i + 1] >= threshold) {
+      if (pixels[i + 1] >= threshold && !(pixels[0] !== 1 && pixels[1] !== 0 && pixels[2] !== 0)) {
+        // #7e0100 = rgba(126, 1, 0, 255)
+        pixels[i] = 126
+        pixels[i + 1] = 1
+        pixels[i + 2] = 0
+        pixels[i + 3] = 255
+      } else {
+        pixels[i + 3] = 0
+      }
+
+    }
+    context.putImageData(imgData, 0, 0)
     callback()
   }
 }
