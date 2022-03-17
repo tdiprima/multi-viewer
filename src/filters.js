@@ -113,44 +113,42 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 }
 
 // Handles 'inside' and 'outside' sliders
-colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
+colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
   return (context, callback) => {
     const width = context.canvas.width
     const height = context.canvas.height
     const imgData = context.getImageData(0, 0, width, height)
-    let data = backgroundCorrection(img2array(imgData))
+    let pixels = imgData.data
 
-    if (d.type === 'inside') {
-      for (let i = 0; i < data.length; i++) {
-        const probability = data[i][colorChannel]
-        // Has to be > zero (not >=); zero is background.
-        if (probability > d.min && probability <= d.max) {
-          data[i][0] = r
-          data[i][1] = g
-          data[i][2] = b
-          data[i][3] = 255
+    if (data.type === 'inside') {
+      for (let i = 0; i < pixels.length; i += 4) {
+        const probability = pixels[i + 1]
+        // has to be gt zero (not >=)
+        if (probability > data.min && probability <= data.max) {
+          pixels[i] = r
+          pixels[i + 1] = g
+          pixels[i + 2] = b
+          pixels[i + 3] = 255
         } else {
-          data[i][3] = 0
+          pixels[i + 3] = 0
         }
       }
-    } else if (d.type === 'outside') {
-      for (let i = 0; i < data.length; i++) {
-        const probability = data[i][colorChannel]
+    } else if (data.type === 'outside') {
+      for (let i = 0; i < pixels.length; i += 4) {
+        let probability = pixels[i + 1]
         // Has to be > zero.
-        if ((probability > 0 && probability <= d.min) || (probability <= 255 && probability >= d.max)) {
-          data[i][0] = r
-          data[i][1] = g
-          data[i][2] = b
-          data[i][3] = 255
+        if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
+          pixels[i] = r
+          pixels[i + 1] = g
+          pixels[i + 2] = b
+          pixels[i + 3] = 255
         } else {
-          data[i][3] = 0
+          pixels[i + 3] = 0
         }
       }
     }
 
-    let newImage = context.createImageData(width, height)
-    newImage.data.set(data.flat())
-    context.putImageData(newImage, 0, 0)
+    context.putImageData(imgData, 0, 0)
     callback()
   }
 }
