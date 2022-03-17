@@ -115,9 +115,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 // Handles 'inside' and 'outside' sliders
 colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
   return (context, callback) => {
-    const width = context.canvas.width
-    const height = context.canvas.height
-    const imgData = context.getImageData(0, 0, width, height)
+    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let pixels = imgData.data
 
     if (data.type === 'inside') {
@@ -155,9 +153,7 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    const width = context.canvas.width
-    const height = context.canvas.height
-    const imgData = context.getImageData(0, 0, width, height)
+    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
     let data = backgroundCorrection(img2array(imgData))
 
     const colorGroup = layerColors.filter(x => x.checked === true)
@@ -239,36 +235,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     callback()
   }
 }
-
-/*
-colorFilter.prototype.THRESHOLDING = (threshold) => {
-  return (context, callback) => {
-    const width = context.canvas.width
-    const height = context.canvas.height
-    const imgData = context.getImageData(0, 0, width, height)
-    let data = backgroundCorrection(img2array(imgData))
-
-    for (let i = 0; i < data.length; i++) {
-      const probability = data[i][colorChannel]
-      // if (data[i][3] > 250 && data[i][1] >= threshold) {
-      // if (data[i][1] >= threshold && !(data[i][0] !== 1 && data[i][1] !== 0 && data[i][2] !== 0)) {
-      if (data[i][1] >= threshold && data[i][3] >= 250) {
-        // #7e0100 = rgba(126, 1, 0, 255)
-        data[i][0] = 126
-        data[i][1] = 1
-        data[i][2] = 0
-        data[i][3] = 255
-      } else {
-        data[i][3] = 0
-      }
-    }
-    let newImage = context.createImageData(width, height)
-    newImage.data.set(data.flat())
-    context.putImageData(newImage, 0, 0)
-    callback()
-  }
-}
-*/
 
 colorFilter.prototype.THRESHOLDING = function (threshold) {
   return function (context, callback) {
