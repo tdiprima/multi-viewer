@@ -41,11 +41,11 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   let divA = e('div', {'id': `divA${uniqueId}`})
   let divB = e('div', {'id': `divB${uniqueId}`})
   let divC = e('div', {'id': `divC${uniqueId}`})
-  // let divD = e('div', {'id': `divD${uniqueId}`}) // todo
+  let divD = e('div', {'id': `divD${uniqueId}`}) // todo
 
   // <select>  // todo
-  // const selectList = createDropdown(uniqueId, [divA, divB, divC, divD], viewerLayers, viewer)
-  const selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
+  const selectList = createDropdown(uniqueId, [divA, divB, divC, divD], viewerLayers, viewer)
+  // const selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
   widgetBody.appendChild(selectList)
 
   // By class
@@ -65,11 +65,40 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   widgetBody.appendChild(divC)
   divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`
 
-  // By threshold #7e0100  // todo
-  // divD.style.display = (STATE.renderType === 'byThreshold') ? 'block' : 'none'
-  // widgetBody.appendChild(divD)
-  // msg = 'TBA'
-  // divD.innerHTML = `<p>${msg}</p>`
+  // By threshold // todo
+  divD.style.display = (STATE.renderType === 'byThreshold') ? 'block' : 'none'
+  widgetBody.appendChild(divD)
+  const val = '128'
+  const numEl = e('input', {
+    id: `thresh-n${uniqueId}`,
+    type: 'number',
+    min: '0',
+    max: MAX.toString(),
+    step: '1',
+    size: '5',
+    value: val
+  })
+  const slider = e('input', {
+    id: `thresh-s${uniqueId}`,
+    type: 'range',
+    min: '0',
+    max: MAX.toString(),
+    step: '1',
+    size: '5',
+    value: val
+  })
+  // slider.max = 1
+  // slider.value = 0.5
+  // slider.step = 0.1
+  divD.appendChild(e('div', {}, [numEl, slider]))
+  numEl.addEventListener('input', function () {
+    slider.value = this.value
+    setFilter(viewerLayers, viewer, {}, this.value)
+  })
+  slider.addEventListener('input', function () {
+    numEl.value = this.value
+    setFilter(viewerLayers, viewer, {}, this.value)
+  })
 
   return div
 }
@@ -100,8 +129,8 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
     selectList.appendChild(element)
   })
 
+  // An option was selected
   selectList.addEventListener('change', function () {
-
     // set global type
     STATE.renderType = selectList.options[selectList.selectedIndex].value
     // no outline for you
@@ -121,10 +150,16 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
       divArr[2].style.display = 'block'
     }
     // todo
-    // else if (STATE.renderType === 'byThreshold') {
-    //   divArr[3].style.display = 'block'
-    // }
-    setFilter(allLayers, viewer)
+    else if (STATE.renderType === 'byThreshold') {
+      divArr[3].style.display = 'block'
+    }
+
+    // Initial values set
+    if (STATE.renderType === 'byThreshold') {
+      setFilter(allLayers, viewer, {}, 128)
+    } else {
+      setFilter(allLayers, viewer)
+    }
   })
 
   return selectDiv
@@ -257,7 +292,6 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
     this.source.value = this.color(r, g, b, a)
     this.source.innerHTML = this.color(r, g, b, a)
     this.source.style.backgroundColor = this.color(r, g, b, a)
-    // todo: test 1 (osd)
     colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
     // console.log('colorObject', colorObject)
     setFilter(layers, viewer)

@@ -11,7 +11,9 @@ const img2array = imgData => {
 const backgroundCorrection = data => {
   // Make background transparent
   data.forEach(px => {
-    if (px[1] === 0) {
+    if (px[3] === 0
+      || px[1] === 0
+      || (px[0] === 1 && px[1] === 0 && px[2] === 0)) {
       px[0] = 0
       px[1] = 0
       px[2] = 0
@@ -33,8 +35,8 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
   return (context, callback) => {
     const width = context.canvas.width
     const height = context.canvas.height
-
-    let data = backgroundCorrection(img2array(context.getImageData(0, 0, width, height)))
+    const imgData = context.getImageData(0, 0, width, height)
+    let data = backgroundCorrection(img2array(imgData))
 
     for (let i = 0; i < data.length; i++) {
       if (data[i][alphaChannel] === 255) {
@@ -86,9 +88,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
       } else {
         // Set each pixel
-        // data[i][0] = 0
-        // data[i][1] = 0
-        // data[i][2] = 0
+        data[i][0] = 0
+        data[i][1] = 0
+        data[i][2] = 0
         data[i][3] = 0
       }
     }
@@ -96,9 +98,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
     // Change the remaining green pixels (middle of polygon) to transparent
     data.forEach(px => {
       if (px[colorChannel] > 0) {
-        // px[0] = 0
-        // px[1] = 0
-        // px[2] = 0
+        px[0] = 0
+        px[1] = 0
+        px[2] = 0
         px[3] = 0
       }
     })
@@ -115,9 +117,8 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
   return (context, callback) => {
     const width = context.canvas.width
     const height = context.canvas.height
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-
-    let data = img2array(imgData)
+    const imgData = context.getImageData(0, 0, width, height)
+    let data = backgroundCorrection(img2array(imgData))
 
     if (d.type === 'inside') {
       for (let i = 0; i < data.length; i++) {
@@ -156,8 +157,10 @@ colorFilter.prototype.PROBABILITY = (d, r, g, b) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height)
-    let data = img2array(imgData)
+    const width = context.canvas.width
+    const height = context.canvas.height
+    const imgData = context.getImageData(0, 0, width, height)
+    let data = backgroundCorrection(img2array(imgData))
 
     const colorGroup = layerColors.filter(x => x.checked === true)
     const rgbas = colorGroup.map(element => {
@@ -211,9 +214,9 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
           }
         } else {
           // No nuclear material
-          // data[i][0] = 0
-          // data[i][1] = 0
-          // data[i][2] = 0
+          data[i][0] = 0
+          data[i][1] = 0
+          data[i][2] = 0
           data[i][3] = 0
         }
       }
@@ -233,6 +236,34 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     }
 
     let newImage = context.createImageData(context.canvas.width, context.canvas.height)
+    newImage.data.set(data.flat())
+    context.putImageData(newImage, 0, 0)
+    callback()
+  }
+}
+
+colorFilter.prototype.THRESHOLDING = (threshold) => {
+  return (context, callback) => {
+    const width = context.canvas.width
+    const height = context.canvas.height
+    const imgData = context.getImageData(0, 0, width, height)
+    let data = backgroundCorrection(img2array(imgData))
+
+    for (let i = 0; i < data.length; i++) {
+      const probability = data[i][colorChannel]
+      // if (data[i][3] > 250 && data[i][1] >= threshold) {
+      // if (data[i][1] >= threshold && !(data[i][0] !== 1 && data[i][1] !== 0 && data[i][2] !== 0)) {
+      if (data[i][1] >= threshold && data[i][3] >= 250) {
+        // #7e0100 = rgba(126, 1, 0, 255)
+        data[i][0] = 126
+        data[i][1] = 1
+        data[i][2] = 0
+        data[i][3] = 255
+      } else {
+        data[i][3] = 0
+      }
+    }
+    let newImage = context.createImageData(width, height)
     newImage.data.set(data.flat())
     context.putImageData(newImage, 0, 0)
     callback()

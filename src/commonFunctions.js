@@ -7,16 +7,18 @@ let CONFIG = {
 //   appImages: 'images/'
 // }
 
-function setFilter(layers, viewer, range) {
+function setFilter(layers, viewer, range, thresh) {
 
   if (viewer.world) {
     let itemCount = viewer.world.getItemCount()
     let filterOpts = []
 
+    // Because one does not simply color the affected layer.
+    // No. You have to do all of them.
     for (let i = 0; i < itemCount; i++) {
 
       if (i > 0) { //comment here
-        if (range) {
+        if (!isEmpty(range)) {
           // USE RANGE VALUES
           let r, g, b
           if (range.type === 'inside') {
@@ -48,7 +50,7 @@ function setFilter(layers, viewer, range) {
               ]
             })
           } else if (STATE.renderType === 'byProbability') {
-            // USE COLORSPECTRUM
+            // USE COLOR SPECTRUM
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
@@ -56,7 +58,7 @@ function setFilter(layers, viewer, range) {
               ]
             })
           } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
-            // USE COLORSCHEME
+            // USE COLOR SCHEME
             filterOpts.push({
               items: viewer.world.getItemAt(i),
               processors: [
@@ -66,9 +68,13 @@ function setFilter(layers, viewer, range) {
             })
           }
           // todo
-          // else if (STATE.renderType === 'byThreshold') {
-          //   code block
-          // }
+          else if (STATE.renderType === 'byThreshold') {
+            filterOpts.push({
+              items: viewer.world.getItemAt(i),
+              processors: colorFilter.prototype.THRESHOLDING(thresh)
+              // processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
+            })
+          }
         }
       } //comment here
     }
@@ -310,7 +316,8 @@ let scaleToRgb = num => {
 let MAX = 255
 let MICRONS_PER_PIX = 0.25 // default; actual value set later
 // todo
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap'] //, 'byThreshold']
+// const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold']
 const STATE = {
   attenuate: false,
   outline: false,
