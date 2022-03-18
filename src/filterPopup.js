@@ -169,17 +169,17 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
 function createUI(uniq, div, layerColors, layers, viewer, type) {
   const table = e('table', {'class': 'popupBody'})
   div.appendChild(table)
+  const byProb = (type === 'byProbability')
+  const byClass = (type === 'byClass')
 
   if (layerColors) {
 
     // Different headers
-    if (type) {
-      if (type === 'byClass') {
-        table.appendChild(createHeaderRow(['', 'Color', 'Label']))
-      } else if (type === 'byProbability') {
-        layerColors.sort((a, b) => b.low - a.low)
-        table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
-      }
+    if (byClass) {
+      table.appendChild(createHeaderRow(['', 'Color', 'Label']))
+    } else if (byProb) {
+      layerColors.sort((a, b) => b.low - a.low)
+      table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
     }
 
     // Create table row for each color rgba; allow user to adjust color
@@ -190,14 +190,13 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
       const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
 
       let tr, num1, num2, removeBtn
-      if (type === 'byProbability') {
+      if (byProb) {
         // adjust range (low to high)
         num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
         num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
         const buttonId = `i${uniq}${cIdx}`
         // button to add or remove a range
         removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
 
         tr = e('tr', {}, [
           e('td', {}, [chk]),
@@ -206,7 +205,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [num2]),
           e('td', {}, [removeBtn])
         ])
-      } else if (type === 'byClass') {
+      } else if (byClass) {
         tr = e('tr', {}, [
           e('td', {}, [chk]),
           e('td', {}, [cpEl]),
@@ -219,10 +218,14 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
 
       checkboxHandler(chk, layerColors, layers, viewer)
 
+      if (byProb) {
+        // TR has been defined, now we can use it
+        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
+      }
     })
 
     // After all that is done...
-    if (type === 'byProbability') {
+    if (byProb) {
       table.appendChild(extraRow(uniq, layerColors, layers, viewer))
     }
 
