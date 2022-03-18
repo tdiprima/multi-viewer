@@ -97,7 +97,9 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 
     // Change the remaining green pixels (middle of polygon) to transparent
     data.forEach(px => {
+      // Use greater than
       if (px[colorChannel] > 0) {
+        // Set each pixel
         px[0] = 0
         px[1] = 0
         px[2] = 0
@@ -134,7 +136,7 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
     } else if (data.type === 'outside') {
       for (let i = 0; i < pixels.length; i += 4) {
         let probability = pixels[i + 1]
-        // Has to be > zero.
+        // Has to be > zero; not >=.
         if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
           pixels[i] = r
           pixels[i + 1] = g
