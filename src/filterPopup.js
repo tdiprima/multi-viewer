@@ -247,9 +247,8 @@ function createHeaderRow(tableHeaders) {
   const row = e('tr')
 
   for (let i = 0; i < tableHeaders.length; i++) {
-    const header = tableHeaders[i]
     const th = e('th', {class: 'pointer'})
-    th.innerHTML = header
+    th.innerHTML = tableHeaders[i]
     row.appendChild(th)
 
     th.addEventListener('click', () => {
