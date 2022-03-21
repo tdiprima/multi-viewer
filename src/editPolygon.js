@@ -21,7 +21,10 @@ function polygonPositionHandler(dim, finalMatrix, fabricObject) {
   return fabric.util.transformPoint(
     { x: x1, y: y1 },
 
-    fabric.util.multiplyTransformMatrices(fabricObject.canvas.viewportTransform, fabricObject.calcTransformMatrix())
+    fabric.util.multiplyTransformMatrices(
+      fabricObject.canvas.viewportTransform,
+      fabricObject.calcTransformMatrix(),
+    )
   );
 }
 
