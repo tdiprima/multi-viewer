@@ -31,8 +31,14 @@ const blender = (blenderBtn, viewer) => {
       'darken',
       'The Darken Blending Mode looks at the luminance values in each of the RGB channels and selects the color of whichever layer is darkest.',
     ],
-    ['lighten', 'The Lighten Blending Mode takes a look at color of the layers, and keeps whichever one is lightest.'],
-    ['color-dodge', 'The Color Dodge blend mode divides the bottom layer by the inverted top layer.'],
+    [
+      'lighten',
+      'The Lighten Blending Mode takes a look at color of the layers, and keeps whichever one is lightest.',
+    ],
+    [
+      'color-dodge',
+      'The Color Dodge blend mode divides the bottom layer by the inverted top layer.',
+    ],
     [
       'color-burn',
       'The Color Burn Blending Mode gives you a darker result than Multiply by increasing the contrast between the base and the blend colors resulting in more highly saturated mid-tones and reduced highlights.',
