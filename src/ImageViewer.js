@@ -33,7 +33,8 @@ class ImageViewer {
       console.error(e.message);
     }
 
-    let vpt, drawer;
+    let vpt;
+    let drawer;
 
     function addInfo(item) {
       try {
@@ -122,7 +123,11 @@ class ImageViewer {
         vpt.zoomTo(params.zoom, null, true);
       }
 
-      if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
+      if (
+        params.x !== undefined
+        && params.y !== undefined
+        && (params.x !== pan.x || params.y !== pan.y)
+      ) {
         const point = new OpenSeadragon.Point(params.x, params.y);
         vpt.panTo(point, true);
       }
