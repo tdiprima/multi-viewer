@@ -1,4 +1,5 @@
-const CONFIG = {
+// eslint-disable-next-line prefer-const
+let CONFIG = {
   osdImages: '/multi-viewer/vendor/openseadragon/images/',
   appImages: '/multi-viewer/images/'
 };
@@ -19,7 +20,9 @@ function setFilter(layers, viewer, range, thresh) {
         // comment here
         if (!isEmpty(range)) {
           // USE RANGE VALUES
-          let r, g, b;
+          let r;
+          let g;
+          let b;
           if (range.type === 'inside') {
             // Color #00FFFF is cyan
             r = 0;
@@ -292,8 +295,8 @@ function extractLocation(layer) {
 }
 
 function isValidURL(string) {
-  let result, 
-url;
+  let result;
+  let url;
   try {
     url = new URL(string);
     result = true;
@@ -314,6 +317,7 @@ const scaleToRgb = num => {
 };
 
 const MAX = 255;
+// eslint-disable-next-line prefer-const
 let MICRONS_PER_PIX = 0.25; // default; actual value set later
 // todo
 // const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
