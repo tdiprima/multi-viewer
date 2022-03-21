@@ -69,7 +69,10 @@ function createHorizontalLines(gridProps, lineProps) {
   let y;
   for (y = 0; y < Math.ceil(gridProps.canvasHeight / gridProps.cellHeight); ++y) {
     gridProps.canvas.add(
-      new fabric.Line([0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight], lineProps),
+      new fabric.Line(
+        [0, y * gridProps.cellHeight, gridProps.canvasWidth, y * gridProps.cellHeight],
+        lineProps,
+      ),
     );
     gridProps.cellY[y + 1] = y * gridProps.cellHeight; // and keep track of the y cells
   }
@@ -79,7 +82,10 @@ function createVerticalLines(gridProps, lineProps) {
   let x;
   for (x = 0; x < Math.ceil(gridProps.canvasWidth / gridProps.cellWidth); ++x) {
     gridProps.canvas.add(
-      new fabric.Line([x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight], lineProps),
+      new fabric.Line(
+        [x * gridProps.cellWidth, 0, x * gridProps.cellWidth, gridProps.canvasHeight],
+        lineProps,
+      ),
     );
     gridProps.cellX[x + 1] = x * gridProps.cellWidth; // and keep track of the x cells
   }
@@ -139,7 +145,7 @@ function markerHandler(button, gridProps) {
 
 function grandCross(btn, obj) {
   const canvas = obj.canvas;
-  let toggle = false;
+  let toggle = false; // eslint-disable-line prefer-const
   const btnCrosshairs = document.getElementById(`btnCrosshairs${btn.id.slice(-1)}`);
   btnCrosshairs.addEventListener('click', () => {
     if (btnCrosshairs.classList.contains('btnOn')) {
