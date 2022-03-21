@@ -2,28 +2,27 @@
  * Create the fabric.js overlay and pass it to the markup tools.
  */
 const markupTools = (viewerInfo, options, viewer) => {
-  const overlay = viewer.fabricjsOverlay({scale: 1, static: false})
-  const idx = viewerInfo.idx
+  const overlay = viewer.fabricjsOverlay({ scale: 1, static: false });
+  const idx = viewerInfo.idx;
 
-  drawPolygon(viewerInfo, viewer, overlay)
+  drawPolygon(viewerInfo, viewer, overlay);
 
-  editPolygon(document.getElementById(`btnEdit${idx}`), overlay)
+  editPolygon(document.getElementById(`btnEdit${idx}`), overlay);
 
-  gridOverlay(document.getElementById(`btnGrid${idx}`), document.getElementById(`btnGridMarker${idx}`), overlay)
+  gridOverlay(document.getElementById(`btnGrid${idx}`), document.getElementById(`btnGridMarker${idx}`), overlay);
 
-  ruler(document.getElementById(`btnRuler${idx}`), viewer, overlay)
+  ruler(document.getElementById(`btnRuler${idx}`), viewer, overlay);
 
-  blender(document.getElementById(`btnBlender${idx}`), viewer)
+  blender(document.getElementById(`btnBlender${idx}`), viewer);
 
-  let canvas = overlay.fabricCanvas()
-  canvas.on('after:render', function () {
-    canvas.calcOffset()
-  })
+  const canvas = overlay.fabricCanvas();
+  canvas.on('after:render', () => {
+    canvas.calcOffset();
+  });
 
   // SAVE
-  let btnSave = document.getElementById(`btnSave${viewerInfo.idx}`)
+  const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {
-    saveSettings(canvas, options)
-  })
-
-}
+    saveSettings(canvas, options);
+  });
+};

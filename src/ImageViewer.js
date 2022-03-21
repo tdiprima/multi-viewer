@@ -5,18 +5,18 @@
  */
 class ImageViewer {
   constructor(viewerInfo) {
-    const layers = viewerInfo.layers
+    const layers = viewerInfo.layers;
 
     // Array of tileSources for the viewer
-    let tileSources = []
+    const tileSources = [];
     for (let i = 0; i < layers.length; i++) {
-      const layer = layers[i]
-      tileSources.push({tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0})
+      const layer = layers[i];
+      tileSources.push({ tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0 });
     }
     // console.log('tileSources', JSON.stringify(ts))
 
     // SET UP VIEWER
-    let viewer
+    let viewer;
     try {
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
@@ -27,141 +27,138 @@ class ImageViewer {
         // showNavigationControl: false,
         // showNavigator: true,
         // navigatorPosition: "BOTTOM_RIGHT",
-        tileSources: tileSources
-      })
+        tileSources,
+      });
     } catch (e) {
-      console.error(e.message)
+      console.error(e.message);
     }
 
-    let vpt, drawer
+    let vpt, drawer;
 
     function addInfo(item) {
       try {
-        const itemIndex = viewer.world.getIndexOfItem(item)
-        const source = viewer.world.getItemAt(itemIndex).source
+        const itemIndex = viewer.world.getIndexOfItem(item);
+        const source = viewer.world.getItemAt(itemIndex).source;
 
-        if (typeof source.prefLabel !== 'undefined')
-          layers[itemIndex].prefLabel = source.prefLabel
-        if (typeof source.resolutionUnit !== 'undefined')
-          layers[itemIndex].resolutionUnit = source.resolutionUnit
-        if (typeof source.xResolution !== 'undefined')
-          layers[itemIndex].xResolution = source.xResolution
+        if (typeof source.prefLabel !== 'undefined') layers[itemIndex].prefLabel = source.prefLabel;
+        if (typeof source.resolutionUnit !== 'undefined') layers[itemIndex].resolutionUnit = source.resolutionUnit;
+        if (typeof source.xResolution !== 'undefined') layers[itemIndex].xResolution = source.xResolution;
       } catch (e) {
-        console.log(`%c${e.message}`, 'color: #ff6a5a;')
+        console.log(`%c${e.message}`, 'color: #ff6a5a;');
       }
     }
 
     // When an item is added to the World, grab the info
-    viewer.world.addHandler('add-item', ({item}) => {
-      addInfo(item)
-    })
+    viewer.world.addHandler('add-item', ({ item }) => {
+      addInfo(item);
+    });
 
     // Image has been downloaded and can be modified before being drawn to the canvas.
     viewer.addOnceHandler('tile-loaded', () => {
-      drawer = viewer.drawer
-      drawer.imageSmoothingEnabled = false
-      drawer._imageSmoothingEnabled = false
-      //console.log('drawer', drawer)
-      vpt = viewer.viewport
+      drawer = viewer.drawer;
+      drawer.imageSmoothingEnabled = false;
+      drawer._imageSmoothingEnabled = false;
+      // console.log('drawer', drawer)
+      vpt = viewer.viewport;
 
       if (window.location.hash) {
-        let params = parseHash()
-        useParams(params)
+        const params = parseHash();
+        useParams(params);
       }
-      addCustomButtons()
-      setFilter(layers, viewer)
-      getInfoForScalebar()
-    })
+      addCustomButtons();
+      setFilter(layers, viewer);
+      getInfoForScalebar();
+    });
 
     // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
-    let element = document.querySelector('.mag-content')
-    for (let el of element.children) {
+    const element = document.querySelector('.mag-content');
+    for (const el of element.children) {
       el.addEventListener('click', () => {
-        let attr = el.getAttribute('data-value')
-        let imageZoom = parseFloat(attr)
-        vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom))
-      })
+        const attr = el.getAttribute('data-value');
+        const imageZoom = parseFloat(attr);
+        vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom));
+      });
     }
 
     // BOOKMARK URL with ZOOM and X,Y
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', () => {
-      let zoom = vpt.getZoom()
-      let pan = vpt.getCenter()
-      let url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`
-      let I = viewer.world.getItemAt(0)
-      console.log('image coords', I.viewportToImageCoordinates(pan))
-      console.log('url', url)
+      const zoom = vpt.getZoom();
+      const pan = vpt.getCenter();
+      const url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`;
+      const I = viewer.world.getItemAt(0);
+      // console.log('image coords', I.viewportToImageCoordinates(pan));
+      // console.log('url', url);
 
-      prompt('Share this link:', url)
-    })
+      prompt('Share this link:', url);
+    });
 
     // DOWNLOAD IMAGE SNAPSHOT
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', () => {
-      let parent = document.getElementById(viewerInfo.osdId)
-      let children = parent.querySelectorAll('[id^="osd-overlaycanvas"]')
+      const parent = document.getElementById(viewerInfo.osdId);
+      const children = parent.querySelectorAll('[id^="osd-overlaycanvas"]');
 
-      for (let canvasEl of children) {
-        let id = canvasEl.id
-        let num = parseInt(id.slice(-1))
+      for (const canvasEl of children) {
+        const id = canvasEl.id;
+        const num = parseInt(id.slice(-1));
         if (num % 2 === 0) {
-          let ctx = viewer.drawer.context
-          ctx.drawImage(canvasEl, 0, 0)
-          let osdImg = viewer.drawer.canvas.toDataURL('image/png')
-          let downloadLink = document.createElement('a')
-          downloadLink.href = osdImg
-          downloadLink.download = `img_${timeStamp()}`
-          downloadLink.click()
-          break
+          const ctx = viewer.drawer.context;
+          ctx.drawImage(canvasEl, 0, 0);
+          const osdImg = viewer.drawer.canvas.toDataURL('image/png');
+          const downloadLink = document.createElement('a');
+          downloadLink.href = osdImg;
+          downloadLink.download = `img_${timeStamp()}`;
+          downloadLink.click();
+          break;
         }
       }
-    })
+    });
 
     function useParams(params) {
-      let zoom = vpt.getZoom()
-      let pan = vpt.getCenter()
+      const zoom = vpt.getZoom();
+      const pan = vpt.getCenter();
 
       // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
       if (params.zoom !== undefined && params.zoom !== zoom) {
-        vpt.zoomTo(params.zoom, null, true)
+        vpt.zoomTo(params.zoom, null, true);
       }
 
       if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
-        let point = new OpenSeadragon.Point(params.x, params.y)
-        vpt.panTo(point, true)
+        const point = new OpenSeadragon.Point(params.x, params.y);
+        vpt.panTo(point, true);
       }
     }
 
     // CUSTOM OPENSEADRAGON BUTTONS
     function addCustomButtons() {
       // Zoom all the way in
-      let zinButton = new OpenSeadragon.Button({
+      const zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
         srcRest: `${CONFIG.osdImages}zin_rest.png`,
         srcGroup: `${CONFIG.osdImages}zin_grouphover.png`,
         srcHover: `${CONFIG.osdImages}zin_hover.png`,
         srcDown: `${CONFIG.osdImages}zin_pressed.png`,
         onClick() {
-          vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0))
+          vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
         }
-      })
+      });
 
       // Zoom all the way out
-      let zoutButton = new OpenSeadragon.Button({
+      const zoutButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 0%',
         srcRest: `${CONFIG.osdImages}zout_rest.png`,
         srcGroup: `${CONFIG.osdImages}zout_grouphover.png`,
         srcHover: `${CONFIG.osdImages}zout_hover.png`,
         srcDown: `${CONFIG.osdImages}zout_pressed.png`,
         onClick() {
-          vpt.goHome(true)
+          vpt.goHome(true);
         }
-      })
-      viewer.addControl(zinButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
-      viewer.addControl(zoutButton.element, {anchor: OpenSeadragon.ControlAnchor.TOP_LEFT})
+      });
+      viewer.addControl(zinButton.element, { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
+      viewer.addControl(zoutButton.element, { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
     }
 
     // SET UP SCALE BAR
-    let setScaleBar = ppm => {
+    const setScaleBar = ppm => {
       viewer.scalebar({
         type: OpenSeadragon.ScalebarType.MICROSCOPY,
         pixelsPerMeter: ppm,
@@ -173,43 +170,43 @@ class ImageViewer {
         fontColor: 'rgb(100, 100, 100)',
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         barThickness: 2
-      })
-    }
+      });
+    };
 
     function getInfoForScalebar() {
       // Get info for scale bar
-      let item = layers[0]
+      const item = layers[0];
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
       if (isRealValue(item.resolutionUnit)) {
         if (item.resolutionUnit === 3) {
-          const pixPerCm = item.xResolution
-          setScaleBar(pixPerCm * 100)
-          MICRONS_PER_PIX = 10000 / pixPerCm
+          const pixPerCm = item.xResolution;
+          setScaleBar(pixPerCm * 100);
+          MICRONS_PER_PIX = 10000 / pixPerCm;
         } else {
-          console.warn('resolutionUnit <> 3', item.resolutionUnit)
+          console.warn('resolutionUnit <> 3', item.resolutionUnit);
         }
       }
     }
 
-    this.viewer = viewer // SET THIS VIEWER
-    this.overlay = this.viewer.fabricjsOverlay({scale: 1000})
-    this.canvas = this.overlay.fabricCanvas()
-    this.vInfo = viewerInfo
+    this.viewer = viewer; // SET THIS VIEWER
+    this.overlay = this.viewer.fabricjsOverlay({ scale: 1000 });
+    this.canvas = this.overlay.fabricCanvas();
+    this.vInfo = viewerInfo;
   }
 
   getViewer() {
-    return this.viewer
+    return this.viewer;
   }
 
   getOverlay() {
-    return this.overlay
+    return this.overlay;
   }
 
   getCanvas() {
-    return this.canvas
+    return this.canvas;
   }
 
   getViewerInfo() {
-    return this.vInfo
+    return this.vInfo;
   }
 }

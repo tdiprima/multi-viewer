@@ -16,97 +16,100 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   it usually means that the session timed out or is in the process of timeout.
   So log the user out and have them start again.
    */
-  let viewers = [] // eslint-disable-line prefer-const
+  let viewers = []; // eslint-disable-line prefer-const
   if (!isRealValue(images) || images[0] === null) {
     // logout & redirect
-    document.write("<script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>")
+    document.write(
+      "<script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>",
+    );
   }
 
-  document.addEventListener('DOMContentLoaded', setUp)
-  window.addEventListener('keydown', hotKeysHandler)
+  document.addEventListener('DOMContentLoaded', setUp);
+  window.addEventListener('keydown', hotKeysHandler);
 
   function setUp() {
     new Promise(resolve => {
-      return resolve(opts)
-    }).then(opts => {
-      document.body.classList.add('theme--default')
-      // dark-mode
-      let awesome = e('i', {'class': 'fas fa-moon moon'})
+      return resolve(opts);
+    })
+      .then(opts => {
+        document.body.classList.add('theme--default');
+        // dark-mode
+        const awesome = e('i', { class: 'fas fa-moon moon' });
 
-      // Slide name
-      let name
-      let slide = images[0][0].location // layer 0 location
-      if (slide.includes('TCGA')) {
-        const str = slide.match(/TCGA-[^%.]+/)[0]
-        name = `Slide: ${str}`
-      } else {
-        const arr = slide.split('/')
-        name = `Slide: ${arr[arr.length - 1]}`
-      }
+        // Slide name
+        let name;
+        const slide = images[0][0].location; // layer 0 location
+        if (slide.includes('TCGA')) {
+          const str = slide.match(/TCGA-[^%.]+/)[0];
+          name = `Slide: ${str}`;
+        } else {
+          const arr = slide.split('/');
+          name = `Slide: ${arr[arr.length - 1]}`;
+        }
 
-      let top = e('div', {'style': 'display: flex'}, [
-        e('div', {'style': 'flex: 1'}, [awesome]),
-        e('div', {'style': 'flex: 1; text-align: right;'}, [name])
-      ])
+        const top = e('div', { style: 'display: flex' }, [
+          e('div', { style: 'flex: 1' }, [awesome]),
+          e('div', { style: 'flex: 1; text-align: right;' }, [name])
+        ]);
 
-      let referenceNode = document.querySelector(`#${divId}`)
-      referenceNode.before(top)
+        const referenceNode = document.querySelector(`#${divId}`);
+        referenceNode.before(top);
 
-      awesome.addEventListener('click', () => {
-        toggleButton(awesome, 'fa-moon', 'fa-sun')
-        toggleButton(awesome, 'moon', 'sun')
-        document.body.classList.toggle('theme--dark')
-      })
+        awesome.addEventListener('click', () => {
+          toggleButton(awesome, 'fa-moon', 'fa-sun');
+          toggleButton(awesome, 'moon', 'sun');
+          document.body.classList.toggle('theme--dark');
+        });
 
-      // CREATE TABLE FOR VIEWERS
-      const mainDiv = document.getElementById(divId)
-      const table = e('table', {'id': 'myTable'})
-      mainDiv.appendChild(table) // TABLE ADDED TO PAGE
+        // CREATE TABLE FOR VIEWERS
+        const mainDiv = document.getElementById(divId);
+        const table = e('table', { id: 'myTable' });
+        mainDiv.appendChild(table); // TABLE ADDED TO PAGE
 
-      // CREATE ROWS & COLUMNS
-      let r
-      const num = rows * columns
-      let count = 0
-      for (r = 0; r < rows; r++) {
-        const tr = table.insertRow(r)
-        let c
-        for (c = 0; c < columns; c++) {
-          const td = tr.insertCell(c)
-          const osdId = makeId(11) // DIV ID REQUIRED FOR OSD
-          // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
-          let idx = count
-          count++
+        // CREATE ROWS & COLUMNS
+        let r;
+        const num = rows * columns;
+        let count = 0;
+        for (r = 0; r < rows; r++) {
+          const tr = table.insertRow(r);
+          let c;
+          for (c = 0; c < columns; c++) {
+            const td = tr.insertCell(c);
+            const osdId = makeId(11); // DIV ID REQUIRED FOR OSD
+            // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
+            const idx = count;
+            count++;
 
-          if (numViewers < num && (count - 1 === numViewers)) {
-            // we've done our last viewer
-            break
-          }
-
-          let container = e('div', {'class': 'divSquare'})
-          container.style.width = `${width}px`
-          td.appendChild(container) // ADD CONTAINER TO CELL
-
-          let htm = ''
-
-          // NAVIGATION TOOLS
-          if (numViewers > 1) {
-            htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
-<input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;&nbsp;`
-          }
-
-          if (opts && opts.toolbarOn) {
-            htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`
-
-            // ANNOTATION TOOLS
-            htm += '<div class="floated">'
-
-            if (opts && opts.paintbrushColor) {
-              htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`
-            } else {
-              htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`
+            if (numViewers < num && count - 1 === numViewers) {
+              // we've done our last viewer
+              break;
             }
 
-            htm += `<button id="btnDraw${idx}" class="btn hover-light" title="Draw"><i class="fas fa-pencil-alt"></i></button>
+            const container = e('div', { class: 'divSquare' });
+            container.style.width = `${width}px`;
+            td.appendChild(container); // ADD CONTAINER TO CELL
+
+            let htm = '';
+
+            // NAVIGATION TOOLS
+            if (numViewers > 1) {
+              htm += `<input type="checkbox" id="chkPan${idx}" checked=""><label for="chkPan${idx}">Match Pan</label>&nbsp;
+<input type="checkbox" id="chkZoom${idx}" checked=""><label for="chkZoom${idx}">Match Zoom</label>&nbsp;&nbsp;`;
+            }
+
+            if (opts && opts.toolbarOn) {
+              htm += `<div class="controls showDiv" id="hideTools${idx}"><div id="tools${idx}" class="showHover">`;
+
+              // ANNOTATION TOOLS
+              htm += '<div class="floated">';
+
+              if (opts && opts.paintbrushColor) {
+                htm += `<mark id="mark${idx}">${opts.paintbrushColor}</mark>&nbsp;`;
+              } else {
+                htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`;
+              }
+
+              htm += `<button id="btnDraw${idx}" class="btn hover-light" title="Draw"><i class="fas fa-pencil-alt"></i></button>
 <button id="btnEdit${idx}" class="btn hover-light" title="Edit"><i class="fas fa-draw-polygon"></i></button>
 <button id="btnGrid${idx}" class="btn hover-light" title="Grid"><i class="fas fa-border-all"></i></button>
 <button id="btnGridMarker${idx}" class="btn hover-light" title="Mark grid"><i class="fas fa-paint-brush"></i></button>
@@ -131,62 +134,63 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   </div>
 </div>
 <button id="btnMapMarker" class="btn hover-light" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
-</div>`
+</div>`;
 
-            // END
-            htm += '</div></div>'
-          }
+              // END
+              htm += '</div></div>';
+            }
 
-          // CREATE VIEWER
-          htm += `<table><tr><td><div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;"></div>
+            // CREATE VIEWER
+            htm += `<table><tr><td><div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;"></div>
 </td><td id="layersAndColors${idx}" style="vertical-align: top;"></td>
-</tr></table>`
-          // <td id="layersAndColors${idx}" style="vertical-align: top; display: inline-block"></td>
+</tr></table>`;
+            // <td id="layersAndColors${idx}" style="vertical-align: top; display: inline-block"></td>
 
-          // ADD VIEWER & WIDGETS TO CONTAINING DIV
-          container.innerHTML = htm
+            // ADD VIEWER & WIDGETS TO CONTAINING DIV
+            container.innerHTML = htm;
 
-          // DRAW POLYGON COLOR PICKER
-          const colorPicker = new CP(document.getElementById(`mark${idx}`))
-          colorPicker.on('change', function (r, g, b, a) {
-            this.source.value = this.color(r, g, b, a)
-            this.source.innerHTML = this.color(r, g, b, a)
-            this.source.style.backgroundColor = this.color(r, g, b, a)
-          })
+            // DRAW POLYGON COLOR PICKER
+            const colorPicker = new CP(document.getElementById(`mark${idx}`));
+            colorPicker.on('change', function(r, g, b, a) {
+              this.source.value = this.color(r, g, b, a);
+              this.source.innerHTML = this.color(r, g, b, a);
+              this.source.style.backgroundColor = this.color(r, g, b, a);
+            });
 
-          const vInfo = {'idx': idx, 'osdId': osdId, 'layers': images[idx]}
-          // Create MultiViewer object and add to array
-          viewers.push(new MultiViewer(vInfo, numViewers, opts))
+            const vInfo = { idx, osdId, layers: images[idx] };
+            // Create MultiViewer object and add to array
+            viewers.push(new MultiViewer(vInfo, numViewers, opts));
+          }
         }
-      }
 
-      return viewers
-    }).then(viewers => {
-      // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
-      synchronizeViewers(viewers)
-    })
+        return viewers;
+      })
+      .then(viewers => {
+        // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
+        synchronizeViewers(viewers);
+      });
   }
 
   // Hot keys
   function hotKeysHandler(e) {
-    const key = e.key.toLocaleLowerCase()
+    const key = e.key.toLocaleLowerCase();
     // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
     if (key === 'escape' || key === 'esc') {
-      e.preventDefault()
+      e.preventDefault();
       // Button-reset
-      let buttons = document.getElementsByClassName('btnOn')
+      const buttons = document.getElementsByClassName('btnOn');
       for (let i = 0; i < buttons.length; i++) {
-        buttons[i].click()
+        buttons[i].click();
       }
     }
     // control-r for 'ruler'
     if (e.ctrlKey && key === 'r') {
-      e.preventDefault()
+      e.preventDefault();
       for (let i = 0; i < viewers.length; i++) {
         document.querySelectorAll('[id^="btnRuler"]').forEach(node => {
-          node.click()
-        })
+          node.click();
+        });
       }
     }
   }
-}
+};

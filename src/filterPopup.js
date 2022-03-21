@@ -20,55 +20,55 @@
 const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
   // colorscheme.colors: is an array of class-colors objects
   // Now, add a flag called 'checked', and set it to true for use later:
-  colorscheme.colors.map(function (a) {
-    return a.checked = true
-  })
+  colorscheme.colors.map(a => {
+    return (a.checked = true);
+  });
 
   // colorscheme.colorspectrum: is an array of color objects for probability
   // Add 'checked'. Add 'classid' - set value to current index in array.
-  colorscheme.colorspectrum.forEach(function (element, index) {
-    element.checked = true
-    element.classid = index // 'classid' also exists in colorscheme.colors.  We're overloading the variable, so we can have 1 checkbox handler for both.
-  })
+  colorscheme.colorspectrum.forEach((element, index) => {
+    element.checked = true;
+    element.classid = index; // 'classid' also exists in colorscheme.colors.  We're overloading the variable, so we can have 1 checkbox handler for both.
+  });
 
-  const uniqueId = getRandomInt(100, 999)
-  const widgetId = `filters${uniqueId}`
-  const rect = paletteBtn.getBoundingClientRect()
-  const title = `${prefLabel} color levels`
-  const div = createDraggableDiv(widgetId, title, rect.left, rect.top)
-  const widgetBody = div.lastChild // known
+  const uniqueId = getRandomInt(100, 999);
+  const widgetId = `filters${uniqueId}`;
+  const rect = paletteBtn.getBoundingClientRect();
+  const title = `${prefLabel} color levels`;
+  const div = createDraggableDiv(widgetId, title, rect.left, rect.top);
+  const widgetBody = div.lastChild; // known
 
-  let divA = e('div', {'id': `divA${uniqueId}`})
-  let divB = e('div', {'id': `divB${uniqueId}`})
-  let divC = e('div', {'id': `divC${uniqueId}`})
-  let divD = e('div', {'id': `divD${uniqueId}`}) // todo
+  const divA = e('div', { id: `divA${uniqueId}` });
+  const divB = e('div', { id: `divB${uniqueId}` });
+  const divC = e('div', { id: `divC${uniqueId}` });
+  const divD = e('div', { id: `divD${uniqueId}` }); // todo
 
   // <select>  // todo
-  const selectList = createDropdown(uniqueId, [divA, divB, divC, divD], viewerLayers, viewer)
+  const selectList = createDropdown(uniqueId, [divA, divB, divC, divD], viewerLayers, viewer);
   // const selectList = createDropdown(uniqueId, [divA, divB, divC], viewerLayers, viewer)
-  widgetBody.appendChild(selectList)
+  widgetBody.appendChild(selectList);
 
   // By class
-  divA.style.display = (STATE.renderType === 'byClass') ? 'block' : 'none'
-  widgetBody.appendChild(divA)
-  createUI(uniqueId, divA, colorscheme.colors, viewerLayers, viewer, 'byClass')
+  divA.style.display = STATE.renderType === 'byClass' ? 'block' : 'none';
+  widgetBody.appendChild(divA);
+  createUI(uniqueId, divA, colorscheme.colors, viewerLayers, viewer, 'byClass');
 
   // By probability
-  divB.style.display = (STATE.renderType === 'byProbability') ? 'block' : 'none'
-  widgetBody.appendChild(divB)
-  createUI(uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer, 'byProbability')
+  divB.style.display = STATE.renderType === 'byProbability' ? 'block' : 'none';
+  widgetBody.appendChild(divB);
+  createUI(uniqueId, divB, colorscheme.colorspectrum, viewerLayers, viewer, 'byProbability');
 
   // By heatmap
   // Blue to red HM
-  let msg = 'Color gradient where reddish colors<br>correspond to sureness and<br>bluish colors to unsureness.'
-  divC.style.display = (STATE.renderType === 'byHeatmap') ? 'block' : 'none'
-  widgetBody.appendChild(divC)
-  divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`
+  const msg = 'Color gradient where reddish colors<br>correspond to sureness and<br>bluish colors to unsureness.';
+  divC.style.display = STATE.renderType === 'byHeatmap' ? 'block' : 'none';
+  widgetBody.appendChild(divC);
+  divC.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`;
 
   // By threshold // todo
-  divD.style.display = (STATE.renderType === 'byThreshold') ? 'block' : 'none'
-  widgetBody.appendChild(divD)
-  const val = '128'
+  divD.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
+  widgetBody.appendChild(divD);
+  const val = '128';
   const numEl = e('input', {
     id: `thresh-n${uniqueId}`,
     type: 'number',
@@ -77,7 +77,7 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
     step: '1',
     size: '5',
     value: val
-  })
+  });
   const slider = e('input', {
     id: `thresh-s${uniqueId}`,
     type: 'range',
@@ -86,117 +86,119 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
     step: '1',
     size: '5',
     value: val
-  })
+  });
   // slider.max = 1
   // slider.value = 0.5
   // slider.step = 0.1
-  divD.appendChild(e('div', {}, [numEl, slider]))
-  numEl.addEventListener('input', function () {
-    slider.value = this.value
-    setFilter(viewerLayers, viewer, {}, this.value)
-  })
-  slider.addEventListener('input', function () {
-    numEl.value = this.value
-    setFilter(viewerLayers, viewer, {}, this.value)
-  })
+  divD.appendChild(e('div', {}, [numEl, slider]));
+  numEl.addEventListener('input', function() {
+    slider.value = this.value;
+    setFilter(viewerLayers, viewer, {}, this.value);
+  });
+  slider.addEventListener('input', function() {
+    numEl.value = this.value;
+    setFilter(viewerLayers, viewer, {}, this.value);
+  });
 
-  return div
-}
+  return div;
+};
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer) {
-  checkboxElement.addEventListener('click', function () {
+  checkboxElement.addEventListener('click', () => {
     // look up color by 'classid', set 'checked' to the state of the checkbox
-    displayColors.find(x => x.classid === parseInt(checkboxElement.value)).checked = checkboxElement.checked
-    setFilter(layers, viewer)
-  })
+    displayColors.find(x => x.classid === parseInt(checkboxElement.value)).checked = checkboxElement.checked;
+    setFilter(layers, viewer);
+  });
 }
 
 function createDropdown(uniqueId, divArr, allLayers, viewer) {
-  let selectDiv = e('div', {'style': 'display: block;'})
-  let listId = `select${uniqueId}`
-  selectDiv.innerHTML = `<label for="${listId}">Color by:</label>&nbsp;`
+  const selectDiv = e('div', { style: 'display: block;' });
+  const listId = `select${uniqueId}`;
+  selectDiv.innerHTML = `<label for="${listId}">Color by:</label>&nbsp;`;
 
   // Array of options to be added
-  const selectList = e('select')
-  selectList.id = listId
-  selectDiv.appendChild(selectList)
+  const selectList = e('select');
+  selectList.id = listId;
+  selectDiv.appendChild(selectList);
 
   // Append the options
   RENDER_TYPES.forEach((option, i) => {
-    const element = document.createElement('option')
-    element.setAttribute('value', option)
-    element.text = option.startsWith('by') ? option.replace('by', '') : option
-    selectList.appendChild(element)
-  })
+    const element = document.createElement('option');
+    element.setAttribute('value', option);
+    element.text = option.startsWith('by') ? option.replace('by', '') : option;
+    selectList.appendChild(element);
+  });
 
   // An option was selected
-  selectList.addEventListener('change', function () {
+  selectList.addEventListener('change', () => {
     // set global type
-    STATE.renderType = selectList.options[selectList.selectedIndex].value
+    STATE.renderType = selectList.options[selectList.selectedIndex].value;
     // no outline for you
-    STATE.outline = false
+    STATE.outline = false;
 
     // Shut all off...
     divArr.forEach(div => {
-      div.style.display = 'none'
-    })
+      div.style.display = 'none';
+    });
 
     // ...and turn one on.
     if (STATE.renderType === 'byClass') {
-      divArr[0].style.display = 'block'
+      divArr[0].style.display = 'block';
     } else if (STATE.renderType === 'byProbability') {
-      divArr[1].style.display = 'block'
+      divArr[1].style.display = 'block';
     } else if (STATE.renderType === 'byHeatmap') {
-      divArr[2].style.display = 'block'
+      divArr[2].style.display = 'block';
     }
     // todo
     else if (STATE.renderType === 'byThreshold') {
-      divArr[3].style.display = 'block'
+      divArr[3].style.display = 'block';
     }
 
     // Initial values set
     if (STATE.renderType === 'byThreshold') {
-      setFilter(allLayers, viewer, {}, 128)
+      setFilter(allLayers, viewer, {}, 128);
     } else {
-      setFilter(allLayers, viewer)
+      setFilter(allLayers, viewer);
     }
-  })
+  });
 
-  return selectDiv
+  return selectDiv;
 }
 
 // Create user interface
 function createUI(uniq, div, layerColors, layers, viewer, type) {
-  const table = e('table', {'class': 'popupBody'})
-  div.appendChild(table)
-  const byProb = (type === 'byProbability')
-  const byClass = (type === 'byClass')
+  const table = e('table', { class: 'popupBody' });
+  div.appendChild(table);
+  const byProb = type === 'byProbability';
+  const byClass = type === 'byClass';
 
   if (layerColors) {
-
     // Different headers
     if (byClass) {
-      table.appendChild(createHeaderRow(['', 'Color', 'Label']))
+      table.appendChild(createHeaderRow(['', 'Color', 'Label']));
     } else if (byProb) {
-      layerColors.sort((a, b) => b.low - a.low)
-      table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']))
+      layerColors.sort((a, b) => b.low - a.low);
+      table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']));
     }
 
     // Create table row for each color rgba; allow user to adjust color
     layerColors.forEach((colorObject, cIdx) => {
-      const chk = e('input', {'type': 'checkbox', 'name': `classes${uniq}`, 'value': colorObject.classid})
-      chk.checked = colorObject.checked
+      const chk = e('input', { type: 'checkbox', name: `classes${uniq}`, value: colorObject.classid });
+      chk.checked = colorObject.checked;
 
-      const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer)
+      const cpEl = createColorPicker(cIdx, uniq, colorObject, layers, viewer);
 
-      let tr, num1, num2, removeBtn
+      let tr, 
+num1, 
+num2, 
+removeBtn;
       if (byProb) {
         // adjust range (low to high)
-        num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
-        num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer)
-        const buttonId = `i${uniq}${cIdx}`
+        num1 = createNumericInput(`low${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer);
+        num2 = createNumericInput(`high${uniq}${cIdx}`, table, uniq, layers, colorObject, layerColors, viewer);
+        const buttonId = `i${uniq}${cIdx}`;
         // button to add or remove a range
-        removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
+        removeBtn = e('i', { id: buttonId, class: 'fas fa-minus pointer' });
 
         tr = e('tr', {}, [
           e('td', {}, [chk]),
@@ -204,276 +206,276 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [num1]),
           e('td', {}, [num2]),
           e('td', {}, [removeBtn])
-        ])
+        ]);
       } else if (byClass) {
-        tr = e('tr', {}, [
-          e('td', {}, [chk]),
-          e('td', {}, [cpEl]),
-          e('td', {}, [e('span', {}, [
-            colorObject.name
-          ])])
-        ])
+        tr = e('tr', {}, [e('td', {}, [chk]), e('td', {}, [cpEl]), e('td', {}, [e('span', {}, [colorObject.name])])]);
       }
-      table.appendChild(tr)
+      table.appendChild(tr);
 
-      checkboxHandler(chk, layerColors, layers, viewer)
+      checkboxHandler(chk, layerColors, layers, viewer);
 
       if (byProb) {
         // TR has been defined, now we can use it
-        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {passive: true})
+        removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer), {
+          passive: true
+        });
       }
-    })
+    });
 
     // After all that is done...
     if (byProb) {
-      table.appendChild(extraRow(uniq, layerColors, layers, viewer))
+      table.appendChild(extraRow(uniq, layerColors, layers, viewer));
     }
-
   } else {
-    console.warn('Layer colors?', layerColors)
+    console.warn('Layer colors?', layerColors);
   }
 }
 
 function removeColor(el, ourRanges, tr, layers, viewer) {
-  const str = el.id
-  const n = str.charAt(str.length - 1)
-  ourRanges.splice(parseInt(n), 1) // remove from list
-  tr.remove() // remove table row
-  setFilter(layers, viewer) // reflect changes in viewer
+  const str = el.id;
+  const n = str.charAt(str.length - 1);
+  ourRanges.splice(parseInt(n), 1); // remove from list
+  tr.remove(); // remove table row
+  setFilter(layers, viewer); // reflect changes in viewer
 }
 
 // Create sortable header row
 function createHeaderRow(tableHeaders) {
-  const row = e('tr')
+  const row = e('tr');
 
   for (let i = 0; i < tableHeaders.length; i++) {
-    const th = e('th', {class: 'pointer'})
-    th.innerHTML = tableHeaders[i]
-    row.appendChild(th)
+    const th = e('th', { class: 'pointer' });
+    th.innerHTML = tableHeaders[i];
+    row.appendChild(th);
 
     th.addEventListener('click', () => {
-      const table = th.closest('table')
+      const table = th.closest('table');
       Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
-        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-        .forEach(tr => table.appendChild(tr))
-    })
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), (this.asc = !this.asc)))
+        .forEach(tr => table.appendChild(tr));
+    });
   }
 
-  return row
+  return row;
 }
 
 const getCellValue = (tr, idx) => {
-  const td = tr.children[idx]
+  const td = tr.children[idx];
   if (td.children[0].type === 'number') {
-    return td.children[0].value
-  } else {
-    return td.innerText || td.textContent
+    return td.children[0].value;
   }
-}
+  return td.innerText || td.textContent;
+};
 
-const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-)(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx))
+const comparer = (idx, asc) => (a, b) => ((v1, v2) => (v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)))(
+    getCellValue(asc ? a : b, idx),
+    getCellValue(asc ? b : a, idx),
+  );
 
 // Create color picker input
 function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
-  let init = true
-  const m = e('mark', {id: `marker${uniq}${cIdx}`})
-  const colorCode = colorObject.color
-  m.style.backgroundColor = colorCode
-  m.innerHTML = `#${rgba2hex(colorCode)}`
+  let init = true;
+  const m = e('mark', { id: `marker${uniq}${cIdx}` });
+  const colorCode = colorObject.color;
+  m.style.backgroundColor = colorCode;
+  m.innerHTML = `#${rgba2hex(colorCode)}`;
 
-  const picker = new CP(m)
+  const picker = new CP(m);
   // Set up the event listener
-  picker.on('change', function (r, g, b, a) {
+  picker.on('change', function(r, g, b, a) {
     if (init) {
-      init = false // Update the state
-      return
+      init = false; // Update the state
+      return;
     }
     // console.log([r, g, b, a])
-    this.source.value = this.color(r, g, b, a)
-    this.source.innerHTML = this.color(r, g, b, a)
-    this.source.style.backgroundColor = this.color(r, g, b, a)
-    colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`
+    this.source.value = this.color(r, g, b, a);
+    this.source.innerHTML = this.color(r, g, b, a);
+    this.source.style.backgroundColor = this.color(r, g, b, a);
+    colorObject.color = `rgba(${r}, ${g}, ${b}, ${a * 255})`;
     // console.log('colorObject', colorObject)
-    setFilter(layers, viewer)
-  })
+    setFilter(layers, viewer);
+  });
 
-  return m
+  return m;
 }
 
 // Our colors are in rgba - convert to hex for color picker element
 function rgba2hex(orig) {
-  let a
-  const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i)
-  const alpha = ((arr && arr[4]) || '').trim()
+  let a;
+  const arr = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i);
+  const alpha = ((arr && arr[4]) || '').trim();
   let hex = arr
-    ? (arr[1] | 1 << 8).toString(16).slice(1) +
-    (arr[2] | 1 << 8).toString(16).slice(1) +
-    (arr[3] | 1 << 8).toString(16).slice(1)
-    : orig
+    ? (arr[1] | (1 << 8)).toString(16).slice(1) +
+      (arr[2] | (1 << 8)).toString(16).slice(1) +
+      (arr[3] | (1 << 8)).toString(16).slice(1)
+    : orig;
 
   if (alpha !== '') {
-    a = alpha
+    a = alpha;
   } else {
-    a = 1
+    a = 1;
   }
-  a = (a | 1 << 8).toString(16).slice(1)
-  hex = hex + a
-  return hex
+  a = (a | (1 << 8)).toString(16).slice(1);
+  hex += a;
+  return hex;
 }
 
 // Last stop before "set filter"
 function numericEvent(numEl, colorObject, layers, viewer) {
-  const intVal = parseInt(numEl.value)
+  const intVal = parseInt(numEl.value);
 
   // If they set it to something outside 0-MAX, reset it
-  if (intVal > MAX) numEl.value = MAX.toString()
-  if (intVal < 0) numEl.value = '0'
+  if (intVal > MAX) numEl.value = MAX.toString();
+  if (intVal < 0) numEl.value = '0';
 
-  if (numEl.id.startsWith('low')) colorObject.low = intVal
-  if (numEl.id.startsWith('high')) colorObject.high = intVal
+  if (numEl.id.startsWith('low')) colorObject.low = intVal;
+  if (numEl.id.startsWith('high')) colorObject.high = intVal;
 
-  setFilter(layers, viewer)
+  setFilter(layers, viewer);
 }
 
 // Create numeric input
 function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer) {
-  let val
+  let val;
   if (!colorObject.low && !colorObject.high) {
-    val = ''
+    val = '';
   } else {
-    val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString()
+    val = id.includes('low') ? colorObject.low.toString() : colorObject.high.toString();
   }
 
   const numEl = e('input', {
-    id: id,
+    id,
     type: 'number',
     min: '0',
     max: MAX.toString(),
     step: '1',
     size: '5',
     value: val
-  })
+  });
 
   // Event listeners
   // numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
-  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), {passive: true})
-  return numEl
+  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer), { passive: true });
+  return numEl;
 }
 
 // An interval has low value and high value
 // Check to see if any two intervals overlap
 function isIntersect(table) {
-  const arr = []
-  const cells = table.getElementsByTagName('td')
+  const arr = [];
+  const cells = table.getElementsByTagName('td');
   for (const cell of cells) {
-    const elem = cell.children[0]
+    const elem = cell.children[0];
     if (elem.type === 'number') {
-      elem.style.outlineStyle = ''
-      elem.style.outlineColor = ''
+      elem.style.outlineStyle = '';
+      elem.style.outlineColor = '';
       if (elem.id.startsWith('low')) {
-        arr.push({low: elem, lowVal: parseInt(elem.value)})
+        arr.push({ low: elem, lowVal: parseInt(elem.value) });
       }
       if (elem.id.startsWith('high')) {
-        const el = arr[arr.length - 1] // get last array elem
-        el.high = elem
-        el.highVal = parseInt(elem.value)
+        const el = arr[arr.length - 1]; // get last array elem
+        el.high = elem;
+        el.highVal = parseInt(elem.value);
       }
     }
   }
 
   // Sort before validate
   arr.sort((a, b) => {
-    return b.lowVal - a.lowVal
-  })
-  const n = arr.length - 1
+    return b.lowVal - a.lowVal;
+  });
+  const n = arr.length - 1;
   for (let i = 0; i < n; i++) {
-    const notZeroes = (arr[i].lowVal !== 0 && arr[i + 1].highVal !== 0)
+    const notZeroes = arr[i].lowVal !== 0 && arr[i + 1].highVal !== 0;
     // If low <= high of next, then overlap
-    if ((arr[i].lowVal <= arr[i + 1].highVal) && notZeroes) {
-      setOutlineStyle(arr[i].low, arr[i + 1].high, 'solid', 'red')
-      return true
+    if (arr[i].lowVal <= arr[i + 1].highVal && notZeroes) {
+      setOutlineStyle(arr[i].low, arr[i + 1].high, 'solid', 'red');
+      return true;
     }
   }
 
-  return false
+  return false;
 }
 
 // The outline around the inputs for numbers - red for error, clear for default
 function setOutlineStyle(a, b, style, color) {
   // For numeric element pair
   if (isRealValue(a)) {
-    a.style.outlineStyle = style
-    a.style.outlineColor = color
+    a.style.outlineStyle = style;
+    a.style.outlineColor = color;
   }
   if (isRealValue(b)) {
-    b.style.outlineStyle = style
-    b.style.outlineColor = color
+    b.style.outlineStyle = style;
+    b.style.outlineColor = color;
   }
 }
 
 // The "Add color range" event
 function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer) {
-  setOutlineStyle(num1, num2, '', '') // clear any error
+  setOutlineStyle(num1, num2, '', ''); // clear any error
   if (num1.value === '0' && num2.value === '0') {
     // indicate 0 and 0 not allowed
-    setOutlineStyle(num1, num2, 'solid', 'red')
+    setOutlineStyle(num1, num2, 'solid', 'red');
   } else {
     // Now replace + with - in UI
-    const buttonId = `i${num1.id.replace('low', '')}` // borrowing element id
-    const removeBtn = e('i', {id: buttonId, class: 'fas fa-minus pointer'})
-    tr.lastChild.firstChild.remove() // last element in row is modifier
-    tr.lastChild.appendChild(removeBtn) // replace old modifier with new one
-    removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colors, tr, layers, viewer), {passive: true})
+    const buttonId = `i${num1.id.replace('low', '')}`; // borrowing element id
+    const removeBtn = e('i', { id: buttonId, class: 'fas fa-minus pointer' });
+    tr.lastChild.firstChild.remove(); // last element in row is modifier
+    tr.lastChild.appendChild(removeBtn); // replace old modifier with new one
+    removeBtn.addEventListener('click', removeColor.bind(null, removeBtn, colors, tr, layers, viewer), {
+      passive: true
+    });
 
-    chkEl.disabled = false // enable checkbox
-    checkboxHandler(chkEl, colors, layers, viewer)
+    chkEl.disabled = false; // enable checkbox
+    checkboxHandler(chkEl, colors, layers, viewer);
 
     // add another empty row
-    const table = tr.closest('table')
-    table.appendChild(extraRow(uniq, colors, layers, viewer))
+    const table = tr.closest('table');
+    table.appendChild(extraRow(uniq, colors, layers, viewer));
   }
 }
 
 // sequence
 function seq(objArray) {
-  let arr = objArray.map(a => a.classid)
-  arr.sort()
-  let [min, max] = [Math.min(...arr), Math.max(...arr)]
-  return Array.from(Array(max - min), (v, i) => i + min).filter(i => !arr.includes(i))
+  const arr = objArray.map(a => a.classid);
+  arr.sort();
+  const [min, max] = [Math.min(...arr), Math.max(...arr)];
+  return Array.from(Array(max - min), (v, i) => i + min).filter(i => !arr.includes(i));
 }
 
 // Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
-  let idx
-  const nums = seq(colors) // Use 'const'.
+  let idx;
+  const nums = seq(colors); // Use 'const'.
   if (!nums || isEmpty(nums)) {
-    idx = colors.length
+    idx = colors.length;
   } else {
-    idx = Array.isArray(nums) ? nums[0] : nums
+    idx = Array.isArray(nums) ? nums[0] : nums;
   }
 
   const colorObject = {
-    'color': 'rgba(255, 255, 255, 0)',
-    'low': 0,
-    'high': 0,
-    'checked': true,
-    'classid': idx // overloading 'classid'
-  }
-  colors.push(colorObject)
+    color: 'rgba(255, 255, 255, 0)',
+    low: 0,
+    high: 0,
+    checked: true,
+    classid: idx // overloading 'classid'
+  };
+  colors.push(colorObject);
 
   const chkEl = e('input', {
-    'type': 'checkbox', 'name': `classes${uniq}`, 'checked': true,
-    'disabled': true, 'value': idx
-  })
+    type: 'checkbox',
+    name: `classes${uniq}`,
+    checked: true,
+    disabled: true,
+    value: idx
+  });
 
-  const cpEl = createColorPicker(idx, uniq, colorObject, layers, viewer)
-  const b = document.getElementById(`filters${uniq}Body`)
-  const t = b.firstChild
-  const num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, colorObject, colors, viewer)
-  const num2 = createNumericInput(`high${uniq}${idx}`, t, uniq, layers, colorObject, colors, viewer)
-  const addBtn = e('i', {id: `i${uniq}${idx}`, class: 'fas fa-plus pointer'})
+  const cpEl = createColorPicker(idx, uniq, colorObject, layers, viewer);
+  const b = document.getElementById(`filters${uniq}Body`);
+  const t = b.firstChild;
+  const num1 = createNumericInput(`low${uniq}${idx}`, t, uniq, layers, colorObject, colors, viewer);
+  const num2 = createNumericInput(`high${uniq}${idx}`, t, uniq, layers, colorObject, colors, viewer);
+  const addBtn = e('i', { id: `i${uniq}${idx}`, class: 'fas fa-plus pointer' });
 
   const tr = e('tr', {}, [
     e('td', {}, [chkEl]),
@@ -481,9 +483,13 @@ function extraRow(uniq, colors, layers, viewer) {
     e('td', {}, [num1]),
     e('td', {}, [num2]),
     e('td', {}, [addBtn])
-  ])
+  ]);
 
-  addBtn.addEventListener('click', addColor.bind(null, idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer), {passive: true})
+  addBtn.addEventListener(
+    'click',
+    addColor.bind(null, idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer),
+    { passive: true },
+  );
 
-  return tr
+  return tr;
 }

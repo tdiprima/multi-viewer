@@ -1,45 +1,45 @@
-let ruler = (button, viewer, overlay) => {
-  let line
-  let isDown
-  let zoom
-  let mode = 'x'
-  let fText
-  let fStart = {x: 0, y: 0}
-  let fEnd = {x: 0, y: 0}
-  let oStart
-  let oEnd
+const ruler = (button, viewer, overlay) => {
+  let line;
+  let isDown;
+  let zoom;
+  let mode = 'x';
+  let fText;
+  const fStart = { x: 0, y: 0 };
+  const fEnd = { x: 0, y: 0 };
+  let oStart;
+  let oEnd;
 
-  let canvas = overlay.fabricCanvas()
-  fabric.Object.prototype.transparentCorners = false
+  const canvas = overlay.fabricCanvas();
+  fabric.Object.prototype.transparentCorners = false;
   // let canvas = this.__canvas = overlay.fabricCanvas()
 
   function clear() {
-    fStart.x = 0.0
-    fEnd.x = 0.0
-    fStart.y = 0.0
-    fEnd.y = 0.0
+    fStart.x = 0.0;
+    fEnd.x = 0.0;
+    fStart.y = 0.0;
+    fEnd.y = 0.0;
   }
 
   function mouseDownHandler(o) {
-    clear()
-    zoom = viewer.viewport.getZoom(true)
+    clear();
+    zoom = viewer.viewport.getZoom(true);
     if (mode === 'draw') {
-      setOsdMove(viewer, false)
-      isDown = true
-      let event = o.e
+      setOsdMove(viewer, false);
+      isDown = true;
+      const event = o.e;
 
-      let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
+      const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
       try {
-        let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
-        oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
+        const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+        oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
       } catch (e) {
-        console.error(`%c${e.message}`, 'font-size: larger;')
+        console.error(`%c${e.message}`, 'font-size: larger;');
       }
 
-      let pointer = canvas.getPointer(event)
-      let points = [pointer.x, pointer.y, pointer.x, pointer.y]
-      fStart.x = pointer.x
-      fStart.y = pointer.y
+      const pointer = canvas.getPointer(event);
+      const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      fStart.x = pointer.x;
+      fStart.y = pointer.y;
       line = new fabric.Line(points, {
         strokeWidth: 2 / zoom,
         stroke: '#0f0',
@@ -48,13 +48,13 @@ let ruler = (button, viewer, overlay) => {
         selectable: false,
         evented: false,
         name: 'ruler'
-      })
-      canvas.add(line)
+      });
+      canvas.add(line);
     } else {
-      setOsdMove(viewer, true)
+      setOsdMove(viewer, true);
       canvas.forEachObject(o => {
-        o.setCoords() // update coordinates
-      })
+        o.setCoords(); // update coordinates
+      });
     }
   }
 
@@ -63,11 +63,11 @@ let ruler = (button, viewer, overlay) => {
   }
 
   function getHypotenuseLength(a, b, mpp) {
-    return Math.sqrt((a * a * mpp * mpp) + (b * b * mpp * mpp))
+    return Math.sqrt(a * a * mpp * mpp + b * b * mpp * mpp);
   }
 
   function drawText(x, y, text, showRect) {
-    let rect = new fabric.Rect({
+    const rect = new fabric.Rect({
       left: x,
       top: y,
       width: 150 / zoom,
@@ -79,7 +79,7 @@ let ruler = (button, viewer, overlay) => {
       selectable: false,
       evented: false,
       name: 'ruler'
-    })
+    });
 
     fText = new fabric.Text(text, {
       left: x,
@@ -89,95 +89,95 @@ let ruler = (button, viewer, overlay) => {
       selectable: false,
       evented: false,
       name: 'ruler'
-    })
-    fText.scaleToWidth(rect.width)
+    });
+    fText.scaleToWidth(rect.width);
 
     if (showRect) {
-      canvas.add(rect)
+      canvas.add(rect);
     }
-    canvas.add(fText)
+    canvas.add(fText);
   }
 
   function mouseMoveHandler(o) {
-    if (!isDown) return
-    canvas.remove(fText) // remove text element before re-adding it
-    canvas.renderAll()
+    if (!isDown) return;
+    canvas.remove(fText); // remove text element before re-adding it
+    canvas.renderAll();
 
-    let event = o.e
-    let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY)
+    const event = o.e;
+    const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
     // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
-    let viewportPoint = viewer.viewport.pointFromPixel(webPoint)
-    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint)
+    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
 
-    let w = difference(oStart.x, oEnd.x)
-    let h = difference(oStart.y, oEnd.y)
-    let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX)
-    let t = valueWithUnit(hypot)
+    const w = difference(oStart.x, oEnd.x);
+    const h = difference(oStart.y, oEnd.y);
+    const hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
+    const t = valueWithUnit(hypot);
 
-    let pointer = canvas.getPointer(event)
-    line.set({x2: pointer.x, y2: pointer.y})
-    fEnd.x = pointer.x
-    fEnd.y = pointer.y
+    const pointer = canvas.getPointer(event);
+    line.set({ x2: pointer.x, y2: pointer.y });
+    fEnd.x = pointer.x;
+    fEnd.y = pointer.y;
 
     if (mode === 'draw') {
       // Show info while drawing line
-      drawText(fEnd.x, fEnd.y, t, false)
+      drawText(fEnd.x, fEnd.y, t, false);
     }
-    canvas.renderAll()
+    canvas.renderAll();
   }
 
   function valueWithUnit(value) {
     if (value < 0.000001) {
       // 1 µ = 1e+9 fm
-      return `${(value * 1000000000).toFixed(3)} fm`
+      return `${(value * 1000000000).toFixed(3)} fm`;
     }
     if (value < 0.001) {
       // 1 µ = 1e+6 pm
-      return `${(value * 1000000).toFixed(3)} pm`
+      return `${(value * 1000000).toFixed(3)} pm`;
     }
     if (value < 1) {
       // 1 µ = 1000 nm
-      return `${(value * 1000).toFixed(3)} nm`
+      return `${(value * 1000).toFixed(3)} nm`;
     }
     if (value >= 1000) {
       // 1 µ = 0.001 mm
-      return `${(value / 1000).toFixed(3)} mm`
+      return `${(value / 1000).toFixed(3)} mm`;
     }
     // 1 µ
-    return `${(value).toFixed(3)} \u00B5m`
+    return `${value.toFixed(3)} \u00B5m`;
   }
 
   function mouseUpHandler(o) {
-    line.setCoords()
-    canvas.remove(fText)
-    isDown = false
-    console.log('%co', 'color: #ff6a5a; font-size: larger;', o)
+    line.setCoords();
+    canvas.remove(fText);
+    isDown = false;
+    // console.log('%co', 'color: #ff6a5a; font-size: larger;', o);
 
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
-      console.log(`%clength: ${fText.text}`, 'color: #ccff00;')
-      let pointer = canvas.getPointer(o.e)
-      drawText(pointer.x, pointer.y, fText.text, zoom < 100)
-      canvas.renderAll()
+      console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
+      const pointer = canvas.getPointer(o.e);
+      drawText(pointer.x, pointer.y, fText.text, zoom < 100);
+      canvas.renderAll();
     }
   }
 
   button.addEventListener('click', () => {
     if (mode === 'draw') {
       // Turn off
-      canvas.remove(...canvas.getItemsByName('ruler'))
+      canvas.remove(...canvas.getItemsByName('ruler'));
       // canvas.remove(...canvas.getObjects())
-      mode = 'x'
-      canvas.off('mouse:down', mouseDownHandler)
-      canvas.off('mouse:move', mouseMoveHandler)
-      canvas.off('mouse:up', mouseUpHandler)
+      mode = 'x';
+      canvas.off('mouse:down', mouseDownHandler);
+      canvas.off('mouse:move', mouseMoveHandler);
+      canvas.off('mouse:up', mouseUpHandler);
     } else {
       // Turn on
-      mode = 'draw'
-      canvas.on('mouse:down', mouseDownHandler)
-      canvas.on('mouse:move', mouseMoveHandler)
-      canvas.on('mouse:up', mouseUpHandler)
+      mode = 'draw';
+      canvas.on('mouse:down', mouseDownHandler);
+      canvas.on('mouse:move', mouseMoveHandler);
+      canvas.on('mouse:up', mouseUpHandler);
     }
-    toggleButton(button, 'btnOn', 'btn')
-  })
-}
+    toggleButton(button, 'btnOn', 'btn');
+  });
+};
