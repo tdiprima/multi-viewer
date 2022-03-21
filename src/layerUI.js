@@ -1,4 +1,16 @@
-// Create 1 control panel row per layer
+/**
+ * Create 1 control panel row per layer.
+ *
+ * There's a column called "layersAndColors" to the right of each viewer.
+ * Create an HTML table there, with each row corresponding to each layer displayed in viewer.
+ * Each layer has:
+ *     a draggable item: the layer
+ *         naming convention: 0featXXX <- 0th feature
+ *     an eyeball: turn layer on & off
+ *     a slider: adjust transparency
+ *     a color palette: change colors in layer
+ *     a tachometer: adjust visualizations in layer
+ */
 const layerUI = (layersColumn, images, viewer) => {
   createLayerElements(layersColumn, images, viewer);
   handleButtonDrag(images, viewer);
