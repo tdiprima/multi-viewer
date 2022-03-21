@@ -9,7 +9,11 @@ const markupTools = (viewerInfo, options, viewer) => {
 
   editPolygon(document.getElementById(`btnEdit${idx}`), overlay);
 
-  gridOverlay(document.getElementById(`btnGrid${idx}`), document.getElementById(`btnGridMarker${idx}`), overlay);
+  gridOverlay(
+    document.getElementById(`btnGrid${idx}`),
+    document.getElementById(`btnGridMarker${idx}`),
+    overlay,
+  );
 
   ruler(document.getElementById(`btnRuler${idx}`), viewer, overlay);
 
