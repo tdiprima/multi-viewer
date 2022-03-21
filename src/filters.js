@@ -131,7 +131,10 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
       for (let i = 0; i < pixels.length; i += 4) {
         const probability = pixels[i + 1];
         // Has to be > zero; not >=.
-        if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
+        if (
+          (probability > 0 && probability <= data.min)
+          || (probability <= 255 && probability >= data.max)
+        ) {
           pixels[i] = r;
           pixels[i + 1] = g;
           pixels[i + 2] = b;
