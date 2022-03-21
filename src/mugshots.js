@@ -48,9 +48,9 @@ const mugshots = function(options) {
   createScroller(options.imgDims);
 
   function createScroller(data) {
-    let ul, 
-li, 
-span;
+    let ul;
+    let li;
+    let span;
 
     const fragment = document.createDocumentFragment();
     ul = document.createElement('ul');
