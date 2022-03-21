@@ -62,8 +62,20 @@ const layerPopup = function(divBody, allLayers, viewer) {
     title.innerHTML = t;
     wrapper.appendChild(title);
 
-    const ARange = e('input', { id: d.aLab, type: 'range', min: d.min, max: d.max, value: d.aInit });
-    const BRange = e('input', { id: d.bLab, type: 'range', min: d.min, max: d.max, value: d.bInit });
+    const ARange = e('input', {
+      id: d.aLab,
+      type: 'range',
+      min: d.min,
+      max: d.max,
+      value: d.aInit,
+    });
+    const BRange = e('input', {
+      id: d.bLab,
+      type: 'range',
+      min: d.min,
+      max: d.max,
+      value: d.bInit,
+    });
 
     const output1 = e('output', { for: d.aLab, style: `--c: var(--${d.aLab})` });
     const output2 = e('output', { for: d.bLab, style: `--c: var(--${d.bLab})` });
@@ -99,10 +111,28 @@ const layerPopup = function(divBody, allLayers, viewer) {
   divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]));
 
   // todo: scale initial values
-  let d = { aLab: 'a', bLab: 'b', aInit: 70, bInit: 185, min: 0, max: MAX, class: 'dualSlider', type: 'inside' };
+  let d = {
+    aLab: 'a',
+    bLab: 'b',
+    aInit: 70,
+    bInit: 185,
+    min: 0,
+    max: MAX,
+    class: 'dualSlider',
+    type: 'inside',
+  };
   const wrapper = createSlider(d, 'In range:', allLayers, viewer);
 
-  d = { aLab: 'a1', bLab: 'b1', aInit: 10, bInit: 245, min: 0, max: MAX, class: 'dualSlider1', type: 'outside' };
+  d = {
+    aLab: 'a1',
+    bLab: 'b1',
+    aInit: 10,
+    bInit: 245,
+    min: 0,
+    max: MAX,
+    class: 'dualSlider1',
+    type: 'outside',
+  };
   const section = createSlider(d, 'Out range:', allLayers, viewer);
 
   const dd = e('div', {}, [section, wrapper]);
