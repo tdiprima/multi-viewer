@@ -60,8 +60,8 @@ function handleButtonShowHide() {
   const buttons = document.querySelectorAll('#btnMapMarker');
   buttons.forEach(elem => {
     let markersHaveBeenDrawn = false;
-    let style, 
-html;
+    let style;
+    let html;
     elem.addEventListener('click', function() {
       if (markersHaveBeenDrawn) {
         style = 'block';
