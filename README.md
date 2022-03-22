@@ -19,13 +19,13 @@ npm install; grunt
 
 ## Usage
 
-Explore & run the html files for example usage.
+Explore & run the HTML files for example usage.
 
 ## Meta
 
-Tammy DiPrima tammy.diprima@stonybrook.edu
+Tammy DiPrima tammy.diprima&#64;stonybrook.edu
 
-Distributed under the BSD 3-Clause License license. See [LICENSE.txt](LICENSE.txt) for more information.
+Distributed under the BSD 3-Clause License. See [LICENSE.txt](LICENSE.txt) for more information.
 
 ## Contributing
 
@@ -36,4 +36,8 @@ Distributed under the BSD 3-Clause License license. See [LICENSE.txt](LICENSE.tx
 5. Create a new Pull Request
 
 ## Linting code
-node_modules/.bin/yarn lint:write
+
+```sh
+npm run lint:write
+```
+<!-- node_modules/.bin/yarn lint:write -->
