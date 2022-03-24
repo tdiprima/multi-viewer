@@ -191,7 +191,8 @@ button {
 
   overflow: hidden;
 
-  width: 475px;
+  /*width: 475px; TODO*/
+  width: 300px;
   padding: 10px;
 
   cursor: move;

@@ -241,13 +241,13 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [removeBtn]),
         ]);
       } else if (byClass) {
-        let d = e('div')
-        createThresh(createId(5), d, layers, viewer)
+        // let d = e('div'); TODO
+        // createThresh(createId(5), d, layers, viewer)
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
           e('td', {}, [e('span', {}, [colorObject.name])]),
-          e('td', {}, [d]),
+          // e('td', {}, [d]), TODO
         ]);
       }
       table.appendChild(tr);
