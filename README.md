@@ -37,7 +37,13 @@ Distributed under the BSD 3-Clause License. See [LICENSE.txt](LICENSE.txt) for m
 
 ## Linting code
 
+**JavaScript**
+
 ```sh
 npm run lint:write
 ```
 <!-- node_modules/.bin/yarn lint:write -->
+
+**CSS**
+
+Run via Visual Studio Code.
