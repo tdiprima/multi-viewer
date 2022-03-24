@@ -40,10 +40,10 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top);
   const widgetBody = div.lastChild; // known
 
-  const classDiv = e('div', { id: `divA${uniqueId}` });
-  const probabilityDiv = e('div', { id: `divB${uniqueId}` });
-  const heatmapDiv = e('div', { id: `divC${uniqueId}` });
-  const thresholdDiv = e('div', { id: `divD${uniqueId}` });
+  const classDiv = e('div', { id: `classDiv${uniqueId}` });
+  const probabilityDiv = e('div', { id: `probabilityDiv${uniqueId}` });
+  const heatmapDiv = e('div', { id: `heatmapDiv${uniqueId}` });
+  const thresholdDiv = e('div', { id: `thresholdDiv${uniqueId}` });
 
   // <select>
   const selectList = createDropdown(uniqueId, [classDiv, probabilityDiv, heatmapDiv, thresholdDiv], viewerLayers, viewer);
