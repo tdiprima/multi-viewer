@@ -17,26 +17,19 @@ function setFilter(layers, viewer, range, thresh) {
     // No. You have to do all of them.
     for (let i = 0; i < itemCount; i++) {
       if (i > 0) {
-        // comment here
         if (!isEmpty(range)) {
           // USE RANGE VALUES
-          let r;
-          let g;
-          let b;
+          let rgba
           if (range.type === 'inside') {
             // Color #00FFFF is cyan
-            r = 0;
-            g = 255;
-            b = 255;
+            rgba = [0, 255, 255, 255]
           } else {
             // Color #4A00B4 is Purple Heart
-            r = 74;
-            g = 0;
-            b = 180;
+            rgba = [74, 0, 180, 255]
           }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
-            processors: [colorFilter.prototype.PROBABILITY(range, r, g, b)]
+            processors: [colorFilter.prototype.PROBABILITY(range, rgba)]
           });
         } else if (STATE.outline) {
           // OUTLINE POLYS
@@ -44,7 +37,7 @@ function setFilter(layers, viewer, range, thresh) {
           // Color #0000FF is blue
           filterOpts.push({
             items: viewer.world.getItemAt(i),
-            processors: [colorFilter.prototype.OUTLINE(0, 0, 255)],
+            processors: [colorFilter.prototype.OUTLINE([0, 0, 255, 255])],
           });
         } else if (STATE.renderType === 'byProbability') {
           // USE COLOR SPECTRUM
@@ -62,15 +55,15 @@ function setFilter(layers, viewer, range, thresh) {
             ],
           });
         }
-        // todo
         else if (STATE.renderType === 'byThreshold') {
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: colorFilter.prototype.THRESHOLDING(thresh),
+            // processors: colorFilter.prototype.THRESHOLDING(thresh, [255, 0, 0, 255]),
             // processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
           });
         }
-      } // comment here
+      }
     }
     // Set all layers at once (required)
     viewer.setFilterOptions({
@@ -129,7 +122,7 @@ function getRandomInt(minm, maxm) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
 }
 
-function makeId(length, prefix) {
+function createId(length, prefix) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;

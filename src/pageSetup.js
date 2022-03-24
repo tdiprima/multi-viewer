@@ -75,7 +75,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
           let c;
           for (c = 0; c < columns; c++) {
             const td = tr.insertCell(c);
-            const osdId = makeId(11); // DIV ID REQUIRED FOR OSD
+            const osdId = createId(11); // DIV ID REQUIRED FOR OSD
             // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
             const idx = count;
             count++;

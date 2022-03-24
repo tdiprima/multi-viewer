@@ -2,7 +2,7 @@
 const layerPopup = function(divBody, allLayers, viewer) {
   function createAttenuationBtn(allLayers, viewer) {
     // Color attenuation by probability
-    const attId = makeId(5, 'atten');
+    const attId = createId(5, 'atten');
     const label = e('label', { for: attId });
     label.innerHTML = '&nbsp;&#58;&nbsp;color-attenuation by probability<br>';
 
@@ -25,7 +25,7 @@ const layerPopup = function(divBody, allLayers, viewer) {
 
   // un/fill polygon
   function createOutlineBtn(allLayers, viewer) {
-    const fillId = makeId(5, 'fill');
+    const fillId = createId(5, 'fill');
     const label = e('label', { for: fillId });
     label.innerHTML = '&nbsp;&nbsp;&#58;&nbsp;un/fill polygon<br>';
     const emptyCircle = 'far';

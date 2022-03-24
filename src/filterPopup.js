@@ -71,21 +71,12 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   thresholdDiv.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
   widgetBody.appendChild(thresholdDiv);
 
-  let [numEl, slider] = createThresh(uniqueId);
-  thresholdDiv.appendChild(e('div', {}, [numEl, slider]));
-  numEl.addEventListener('input', function() {
-    slider.value = this.value;
-    setFilter(viewerLayers, viewer, {}, this.value);
-  });
-  slider.addEventListener('input', function() {
-    numEl.value = this.value;
-    setFilter(viewerLayers, viewer, {}, this.value);
-  });
+  createThresh(uniqueId, thresholdDiv, viewerLayers, viewer);
 
   return div;
 };
 
-function createThresh(id) {
+function createThresh(id, div, layers, viewer) {
   const val = '128';
 
   const number = e('input', {
@@ -108,7 +99,17 @@ function createThresh(id) {
     value: val,
   });
 
-  return [number, range];
+  div.appendChild(e('div', {}, [number, range]));
+  number.addEventListener('input', function() {
+    range.value = this.value;
+    setFilter(layers, viewer, {}, this.value);
+  });
+
+  range.addEventListener('input', function() {
+    number.value = this.value;
+    setFilter(layers, viewer, {}, this.value);
+  });
+
 }
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer) {
@@ -240,11 +241,13 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [removeBtn]),
         ]);
       } else if (byClass) {
+        // let d = e('div'); TODO
+        // createThresh(createId(5), d, layers, viewer)
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
           e('td', {}, [e('span', {}, [colorObject.name])]),
-          // e('td', {}, ["YAY"]), //TODO
+          // e('td', {}, [d]), TODO
         ]);
       }
       table.appendChild(tr);
@@ -270,6 +273,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
   } else {
     console.warn('Layer colors?', layerColors);
   }
+  // Done.
 }
 
 function removeColor(el, ourRanges, tr, layers, viewer) {

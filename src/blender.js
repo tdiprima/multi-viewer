@@ -115,7 +115,7 @@ const blender = (blenderBtn, viewer) => {
       uiCreated = false;
     } else {
       // Turn on
-      const id = makeId(5, 'modes');
+      const id = createId(5, 'modes');
       const rect = blenderBtn.getBoundingClientRect();
       const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top);
       div.style.display = 'block';
