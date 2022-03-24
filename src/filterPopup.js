@@ -241,11 +241,13 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [removeBtn]),
         ]);
       } else if (byClass) {
+        let d = e('div')
+        createThresh(makeId(5), d, layers, viewer)
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
           e('td', {}, [e('span', {}, [colorObject.name])]),
-          // e('td', {}, ["YAY"]), //TODO
+          e('td', {}, [d]),
         ]);
       }
       table.appendChild(tr);
@@ -271,6 +273,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
   } else {
     console.warn('Layer colors?', layerColors);
   }
+  // Done.
 }
 
 function removeColor(el, ourRanges, tr, layers, viewer) {
