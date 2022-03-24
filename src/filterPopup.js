@@ -242,7 +242,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
         ]);
       } else if (byClass) {
         let d = e('div')
-        createThresh(makeId(5), d, layers, viewer)
+        createThresh(createId(5), d, layers, viewer)
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),

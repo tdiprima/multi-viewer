@@ -129,7 +129,7 @@ function getRandomInt(minm, maxm) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
 }
 
-function makeId(length, prefix) {
+function createId(length, prefix) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;

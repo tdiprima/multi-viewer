@@ -235,7 +235,7 @@ function getPreferredLabel(layer) {
 // Feature (draggable)
 function createDraggableBtn(layerNum, name) {
   const element = e('button', {
-    id: `${layerNum}${makeId(5, 'feat')}`,
+    id: `${layerNum}${createId(5, 'feat')}`,
     class: 'dragIt hover-light css-tooltip',
     style: 'display: inline-block',
     draggable: 'true',
@@ -249,7 +249,7 @@ function createDraggableBtn(layerNum, name) {
 function createEyeball(currentLayer) {
   const cssClass = currentLayer.opacity === 0 ? 'fas fa-eye-slash' : 'fas fa-eye';
   return e('i', {
-    id: makeId(5, 'eye'),
+    id: createId(5, 'eye'),
     class: `${cssClass} hover-light`,
     title: 'toggle visibility'
   });
@@ -267,7 +267,7 @@ function createTransparencySlider(currentLayer, faEye, viewer) {
   const element = e('input', {
     type: 'range',
     class: 'singleSlider',
-    id: makeId(5, 'range'),
+    id: createId(5, 'range'),
     min: '0',
     max: '100',
     step: '0.1',
@@ -296,7 +296,7 @@ function createTransparencySlider(currentLayer, faEye, viewer) {
 // Color palette
 function createColorPalette(row, featureElem, currentLayer, allLayers, viewer) {
   const icon = e('i', {
-    id: makeId(5, 'palette'),
+    id: createId(5, 'palette'),
     class: 'fas fa-palette pointer hover-light',
     title: 'color palette'
   });
@@ -317,13 +317,13 @@ function createColorPalette(row, featureElem, currentLayer, allLayers, viewer) {
 
 function createTachometer(row) {
   const icon = e('i', {
-    id: makeId(5, 'tach'),
+    id: createId(5, 'tach'),
     class: 'fas fa-tachometer-alt hover-light',
     title: 'settings' // call it 'settings', 'control panel', idk.
   });
   row.appendChild(e('td', {}, [icon]));
 
-  const id = makeId(5, 'pop');
+  const id = createId(5, 'pop');
   const rect = icon.getBoundingClientRect();
   const popup = createDraggableDiv(id, 'Settings', rect.left, rect.top);
   const divBody = popup.lastChild;
