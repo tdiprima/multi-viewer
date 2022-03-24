@@ -30,7 +30,7 @@ const colorChannel = 1;
 const alphaChannel = 3;
 
 // Outline the edge of the polygon
-colorFilter.prototype.OUTLINE = (r, g, b) => {
+colorFilter.prototype.OUTLINE = (rgba) => {
   return (context, callback) => {
     const width = context.canvas.width;
     const height = context.canvas.height;
@@ -42,10 +42,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         // right
         try {
           if (data[i + 1][alphaChannel] === 0) {
-            data[i][0] = r;
-            data[i][1] = g;
-            data[i][2] = b;
-            data[i][3] = 255;
+            data[i][0] = rgba[0]
+            data[i][1] = rgba[1]
+            data[i][2] = rgba[2]
+            data[i][3] = rgba[3]
           }
         } catch (e) {
           // It's okay.
@@ -54,10 +54,10 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         // left
         try {
           if (data[i - 1][alphaChannel] === 0) {
-            data[i][0] = r;
-            data[i][1] = g;
-            data[i][2] = b;
-            data[i][3] = 255;
+            data[i][0] = rgba[0]
+            data[i][1] = rgba[1]
+            data[i][2] = rgba[2]
+            data[i][3] = rgba[3]
           }
         } catch (e) {
           // These things happen.
@@ -66,20 +66,20 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
         try {
           // up
           if (data[i - width][alphaChannel] === 0) {
-            data[i][0] = r;
-            data[i][1] = g;
-            data[i][2] = b;
-            data[i][3] = 255;
+            data[i][0] = rgba[0]
+            data[i][1] = rgba[1]
+            data[i][2] = rgba[2]
+            data[i][3] = rgba[3]
           }
         } catch (e) {}
 
         try {
           // down
           if (data[i + width][alphaChannel] === 0) {
-            data[i][0] = r;
-            data[i][1] = g;
-            data[i][2] = b;
-            data[i][3] = 255;
+            data[i][0] = rgba[0]
+            data[i][1] = rgba[1]
+            data[i][2] = rgba[2]
+            data[i][3] = rgba[3]
           }
         } catch (e) {}
       } else {
@@ -111,7 +111,7 @@ colorFilter.prototype.OUTLINE = (r, g, b) => {
 };
 
 // Handles 'inside' and 'outside' sliders
-colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
+colorFilter.prototype.PROBABILITY = (data, rgba) => {
   return (context, callback) => {
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     let pixels = imgData.data;
@@ -122,10 +122,10 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
         // has to be gt zero (not >=)
         if (probability > data.min &&
             probability <= data.max) {
-          pixels[i] = r;
-          pixels[i + 1] = g;
-          pixels[i + 2] = b;
-          pixels[i + 3] = 255;
+          pixels[i] = rgba[0];
+          pixels[i + 1] = rgba[1];
+          pixels[i + 2] = rgba[2];
+          pixels[i + 3] = rgba[3];
         } else {
           pixels[i + 3] = 0;
         }
@@ -136,10 +136,10 @@ colorFilter.prototype.PROBABILITY = (data, r, g, b) => {
         // Has to be > zero; not >=.
         if ((probability > 0 && probability <= data.min) ||
             (probability <= 255 && probability >= data.max)) {
-          pixels[i] = r;
-          pixels[i + 1] = g;
-          pixels[i + 2] = b;
-          pixels[i + 3] = 255;
+          pixels[i] = rgba[0];
+          pixels[i + 1] = rgba[1];
+          pixels[i + 2] = rgba[2];
+          pixels[i + 3] = rgba[3];
         } else {
           pixels[i + 3] = 0;
         }
@@ -236,10 +236,16 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
   };
 };
 
-colorFilter.prototype.THRESHOLDING = threshold => {
+colorFilter.prototype.THRESHOLDING = (threshold, rgba) => {
   return (context, callback) => {
     let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     let pixels = imgData.data;
+    let color;
+    if (!rgba) {
+      color = [126, 1, 0, 255]; // #7e0100
+    } else {
+      color = rgba;
+    }
 
     for (let i = 0; i < pixels.length; i += 4) {
       // Test green channel value above threshold.
@@ -247,11 +253,10 @@ colorFilter.prototype.THRESHOLDING = threshold => {
       // TODO: They need to fix the overlay, because [1, 0, 0] is essentially
       //  incorrect; should be [0, 0, 0]
       if (pixels[i + 1] >= threshold && !(pixels[0] !== 1 && pixels[1] !== 0 && pixels[2] !== 0)) {
-        // #7e0100 = rgba(126, 1, 0, 255)
-        pixels[i] = 126;
-        pixels[i + 1] = 1;
-        pixels[i + 2] = 0;
-        pixels[i + 3] = 255;
+        pixels[i] = color[0];
+        pixels[i + 1] = color[1];
+        pixels[i + 2] = color[2];
+        pixels[i + 3] = color[3];
       } else {
         pixels[i + 3] = 0;
       }
