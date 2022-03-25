@@ -312,8 +312,6 @@ const scaleToRgb = num => {
 const MAX = 255;
 // eslint-disable-next-line prefer-const
 let MICRONS_PER_PIX = 0.25; // default; actual value set later
-// todo
-// const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap']
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
 const STATE = {
   attenuate: false,
