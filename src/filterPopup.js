@@ -40,10 +40,10 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   const div = createDraggableDiv(widgetId, title, rect.left, rect.top);
   const widgetBody = div.lastChild; // known
 
-  const classDiv = e('div', { id: `classDiv${uniqueId}` });
-  const probabilityDiv = e('div', { id: `probabilityDiv${uniqueId}` });
-  const heatmapDiv = e('div', { id: `heatmapDiv${uniqueId}` });
-  const thresholdDiv = e('div', { id: `thresholdDiv${uniqueId}` });
+  const classDiv = e('div');
+  const probabilityDiv = e('div');
+  const heatmapDiv = e('div');
+  const thresholdDiv = e('div');
 
   // <select>
   const selectList = createDropdown(uniqueId, [classDiv, probabilityDiv, heatmapDiv, thresholdDiv], viewerLayers, viewer);
@@ -71,16 +71,15 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   thresholdDiv.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
   widgetBody.appendChild(thresholdDiv);
 
-  createThresh(uniqueId, thresholdDiv, viewerLayers, viewer);
+  createThresh(thresholdDiv, viewerLayers, viewer);
 
   return div;
 };
 
-function createThresh(id, div, layers, viewer) {
+function createThresh(div, layers, viewer) {
   const val = '128';
 
   const number = e('input', {
-    id: `thresh-n${id}`,
     type: 'number',
     min: '0',
     max: MAX.toString(),
@@ -90,7 +89,6 @@ function createThresh(id, div, layers, viewer) {
   });
 
   const range = e('input', {
-    id: `thresh-s${id}`,
     type: 'range',
     min: '0',
     max: MAX.toString(),
@@ -242,7 +240,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
         ]);
       } else if (byClass) {
         // let d = e('div'); TODO
-        // createThresh(createId(5), d, layers, viewer)
+        // createThresh(d, layers, viewer)
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
