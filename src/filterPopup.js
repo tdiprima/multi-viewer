@@ -117,14 +117,14 @@ function createThresh(div, layers, viewer, colorPicker) {
   div.appendChild(e('div', {}, [number, range]));
   number.addEventListener('input', function() {
     range.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color }); // todo
-    console.log('number input');
+    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color });
+    // console.log('number input');
   });
 
   range.addEventListener('input', function() {
     number.value = this.value;
     setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color });
-    console.log('range input');
+    // console.log('range input');
   });
 
 }
