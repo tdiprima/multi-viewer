@@ -176,6 +176,7 @@ function grandCross(btn, obj) {
         const line = new fabric.Line([x1, y1, x2, y2], {
           stroke: 'yellow',
           selectable: false,
+          strokeWidth: 2,
           hoverCursor: 'default',
           evented: false,
           name: 'cross'
