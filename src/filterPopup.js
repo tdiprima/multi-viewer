@@ -18,28 +18,10 @@
  * iXXX0 <- 0th row elements
  */
 const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
-  // colorscheme.colors: is an array of class-colors objects
-  // Now, add a flag called 'checked', and set it to true for use later:
-  colorscheme.colors.map(a => {
-    // eslint-disable-next-line no-return-assign
-    return (a.checked = true);
-  });
-
-  // colorscheme.colorspectrum: is an array of color objects for probability
-  // Add 'checked'. Add 'classid' - set value to current index in array.
-  colorscheme.colorspectrum.forEach((element, index) => {
-    element.checked = true;
-    element.classid = index; // 'classid' also exists in colorscheme.colors.
-    // We're overloading the variable, so we can have 1 checkbox handler for both.
-  });
-
+  setChecked(colorscheme)
   const uniqueId = getRandomInt(100, 999);
-  const widgetId = `filters${uniqueId}`;
-  const rect = paletteBtn.getBoundingClientRect();
-  const title = `${prefLabel} color levels`;
-  const div = createDraggableDiv(widgetId, title, rect.left, rect.top);
-  const widgetBody = div.lastChild; // known
-
+  const widget = createWidget(uniqueId, paletteBtn, prefLabel)
+  const widgetBody = widget.lastChild; // known
   const classDiv = e('div');
   const probabilityDiv = e('div');
   const heatmapDiv = e('div');
@@ -71,13 +53,48 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   thresholdDiv.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
   widgetBody.appendChild(thresholdDiv);
 
-  createThresh(thresholdDiv, viewerLayers, viewer);
+  createThresh(thresholdDiv, viewerLayers, viewer, null); // no cp
 
-  return div;
+  return widget;
 };
 
-function createThresh(div, layers, viewer) {
+function createWidget(uniqueId, paletteBtn, prefLabel) {
+
+  const widgetId = `filters${uniqueId}`;
+  const rect = paletteBtn.getBoundingClientRect();
+  const title = `${prefLabel} color levels`;
+
+  return createDraggableDiv(widgetId, title, rect.left, rect.top);
+}
+
+function setChecked(colorscheme) {
+  // colorscheme.colors: is an array of class-colors objects
+  // Now, add a flag called 'checked', and set it to true for use later:
+  colorscheme.colors.map(a => {
+    // eslint-disable-next-line no-return-assign
+    return (a.checked = true);
+  });
+
+  // colorscheme.colorspectrum: is an array of color objects for probability
+  // Add 'checked'. Add 'classid' - set value to current index in array.
+  colorscheme.colorspectrum.forEach((element, index) => {
+    element.checked = true;
+    element.classid = index; // 'classid' also exists in colorscheme.colors.
+    // We're overloading the variable, so we can have 1 checkbox handler for both.
+  });
+}
+
+function createThresh(div, layers, viewer, colorPicker) {
   const val = '128';
+  let color;
+  if (colorPicker) {
+    color = colorToArray(colorPicker.style.backgroundColor)
+    if (color.length === 3) {
+      color.push(255)
+    }
+  } else {
+    color = [126, 1, 0, 255];
+  }
 
   const number = e('input', {
     type: 'number',
@@ -100,12 +117,14 @@ function createThresh(div, layers, viewer) {
   div.appendChild(e('div', {}, [number, range]));
   number.addEventListener('input', function() {
     range.value = this.value;
-    setFilter(layers, viewer, {}, this.value);
+    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color }); // todo
+    console.log('number input');
   });
 
   range.addEventListener('input', function() {
     number.value = this.value;
-    setFilter(layers, viewer, {}, this.value);
+    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color });
+    console.log('range input');
   });
 
 }
@@ -163,7 +182,9 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
 
     // Initial values set
     if (STATE.renderType === 'byThreshold') {
-      setFilter(allLayers, viewer, {}, 128);
+      setFilter(allLayers, viewer, {}, {val: 128, rgba: [126, 1, 0, 255]});
+      // setFilter(allLayers, viewer, {}, {val: 128});
+      // setFilter(allLayers, viewer, {}, 128);
     } else {
       setFilter(allLayers, viewer);
     }
@@ -182,8 +203,8 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
   if (layerColors) {
     // Different headers
     if (byClass) {
-      table.appendChild(createHeaderRow(['', 'Color', 'Label']));
-      // table.appendChild(createHeaderRow(['', 'Color', 'Label', 'Thresh']));
+      // table.appendChild(createHeaderRow(['', 'Color', 'Label']));
+      table.appendChild(createHeaderRow(['', 'Color', 'Label', 'Pixels >= this level of certainty']));
     } else if (byProb) {
       layerColors.sort((a, b) => b.low - a.low);
       table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']));
@@ -239,13 +260,13 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [removeBtn]),
         ]);
       } else if (byClass) {
-        // let d = e('div'); TODO
-        // createThresh(d, layers, viewer)
+        let d = e('div');
+        createThresh(d, layers, viewer, colorPicker)
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
           e('td', {}, [e('span', {}, [colorObject.name])]),
-          // e('td', {}, [d]), TODO
+          e('td', {}, [d])
         ]);
       }
       table.appendChild(tr);
@@ -322,7 +343,7 @@ const comparer = (idx, asc) => (a, b) =>
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2))(
       getCellValue(asc ? a : b, idx),
       getCellValue(asc ? b : a, idx)
-);
+    );
 
 // Create color picker input
 function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
@@ -560,4 +581,3 @@ function extraRow(uniq, colors, layers, viewer) {
 
   return tr;
 }
-
