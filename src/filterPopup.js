@@ -203,8 +203,8 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
   if (layerColors) {
     // Different headers
     if (byClass) {
-      // table.appendChild(createHeaderRow(['', 'Color', 'Label']));
-      table.appendChild(createHeaderRow(['', 'Color', 'Label', 'Pixels >= this level of certainty']));
+      table.appendChild(createHeaderRow(['', 'Color', 'Label']));
+      // table.appendChild(createHeaderRow(['', 'Color', 'Label', 'Pixels >= this level of certainty']));
     } else if (byProb) {
       layerColors.sort((a, b) => b.low - a.low);
       table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']));
@@ -266,7 +266,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
           e('td', {}, [e('span', {}, [colorObject.name])]),
-          e('td', {}, [d])
+          // e('td', {}, [d])
         ]);
       }
       table.appendChild(tr);
