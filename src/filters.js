@@ -29,27 +29,6 @@ const backgroundCorrection = data => {
   return data;
 };
 
-function test(pixels, classId = 1) {
-  // classId = classId || 1
-  let notOneCount = 0;
-  let oneCount = 0;
-  for (let i = 0; i < pixels.length; i += 4) {
-    if (pixels[i + 3] === 255) {
-      // Class
-      if (pixels[i] === 1) {
-        // Probability
-        if (pixels[i + 1] > 1) {
-          notOneCount++;
-        } else {
-          oneCount++;
-        }
-      }
-    }
-  }
-  console.log('\nnotOneCount', notOneCount)
-  console.log('oneCount', oneCount)
-}
-
 /** ********************
  CUSTOM COLOR FILTERS
  ********************* */
@@ -251,12 +230,10 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
     }
 
     if (STATE.renderType === 'byClass') {
-      // test(data)
       setPix(getClassColor);
     }
 
     if (STATE.renderType === 'byProbability') {
-      // test(data)
       setPix(getRangeColor);
     }
 
@@ -284,8 +261,6 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
     }
 
     let classId = parseInt(thresh.classId)
-    // test(pixels, classId ? classId : 1)
-
     if (typeof classId !== 'undefined') {
       for (let i = 0; i < pixels.length; i += 4) {
         if (pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val) {
