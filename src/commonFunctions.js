@@ -19,13 +19,13 @@ function setFilter(layers, viewer, range, thresh) {
       if (i > 0) {
         if (!isEmpty(range)) {
           // USE RANGE VALUES
-          let rgba
+          let rgba;
           if (range.type === 'inside') {
             // Color #00FFFF is cyan
-            rgba = [0, 255, 255, 255]
+            rgba = [0, 255, 255, 255];
           } else {
             // Color #4A00B4 is Purple Heart
-            rgba = [74, 0, 180, 255]
+            rgba = [74, 0, 180, 255];
           }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
@@ -46,20 +46,24 @@ function setFilter(layers, viewer, range, thresh) {
             processors: [colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)],
           });
         } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
-          // USE COLOR SCHEME
+          let processor;
+          if (thresh) {
+            // USE THRESHOLD
+            processor = colorFilter.prototype.THRESHOLDING(thresh);
+            // console.log('thresh')
+          } else {
+            // USE COLOR SCHEME
+            processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
+            // console.log('colorlev')
+          }
           filterOpts.push({
             items: viewer.world.getItemAt(i),
-            processors: [
-              colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors),
-              // colorFilter.prototype.SMILEY(0, 0, 255) // uncomment here
-            ],
+            processors: [processor],
           });
-        }
-        else if (STATE.renderType === 'byThreshold') {
+        } else if (STATE.renderType === 'byThreshold') {
           filterOpts.push({
             items: viewer.world.getItemAt(i),
             processors: colorFilter.prototype.THRESHOLDING(thresh),
-            // processors: colorFilter.prototype.THRESHOLDING(thresh, [255, 0, 0, 255]),
             // processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
           });
         }
@@ -299,6 +303,15 @@ function isValidURL(string) {
     console.log('%cscript:', 'color: #ff6a5a;', `${e.fileName}:${e.lineNumber}`);
   }
   return result;
+}
+
+function extractChannel(x, pixels) {
+  let newArray = [];
+  for (let i = 0; i < pixels.length; i += 4) {
+    newArray.push(pixels[i]);
+  }
+  let uniqueArray = [...new Set(newArray)];
+  console.log('uniqueArray', uniqueArray);
 }
 
 const scaleToPct = num => {

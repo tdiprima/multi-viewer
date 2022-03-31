@@ -39,6 +39,8 @@ function createLayerElements(layersColumn, layers, viewer) {
   });
 
   globalEyeToggle.addEventListener('click', function() {
+    // class="fas fa-eye"
+    // class="fas fa-eye-slash"
     myEyeArray.forEach(eye => {
       eye.click(e);
     });

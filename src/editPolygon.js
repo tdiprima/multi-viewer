@@ -61,8 +61,8 @@ function anchorWrapper(anchorIndex, fn) {
     /* eslint-disable no-unused-vars */
     const newDim = fabricObject._setPositionDimensions({}); // DO NOT TOUCH THIS VARIABLE.
     const polygonBaseSize = fabricObject._getNonTransformedDimensions();
-    const newX = (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x;
-    const newY = (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
+    const newX =      (fabricObject.points[anchorIndex].x - fabricObject.pathOffset.x) / polygonBaseSize.x;
+    const newY =      (fabricObject.points[anchorIndex].y - fabricObject.pathOffset.y) / polygonBaseSize.y;
     fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5);
     return actionPerformed;
   };

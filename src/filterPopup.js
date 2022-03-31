@@ -17,9 +17,9 @@
  * iXXX0 <- 0th row elements
  */
 const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
-  setChecked(colorscheme)
+  setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
-  const widget = createWidget(uniqueId, paletteBtn, prefLabel)
+  const widget = createWidget(uniqueId, paletteBtn, prefLabel);
   const widgetBody = widget.lastChild; // known
   const classDiv = e('div');
   const probabilityDiv = e('div');
@@ -27,7 +27,12 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   const thresholdDiv = e('div');
 
   // <select>
-  const selectList = createDropdown(uniqueId, [classDiv, probabilityDiv, heatmapDiv, thresholdDiv], viewerLayers, viewer);
+  const selectList = createDropdown(
+    uniqueId,
+    [classDiv, probabilityDiv, heatmapDiv, thresholdDiv],
+    viewerLayers,
+    viewer,
+  );
   widgetBody.appendChild(selectList);
 
   // By class
@@ -38,7 +43,14 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   // By probability
   probabilityDiv.style.display = STATE.renderType === 'byProbability' ? 'block' : 'none';
   widgetBody.appendChild(probabilityDiv);
-  createUI(uniqueId, probabilityDiv, colorscheme.colorspectrum, viewerLayers, viewer, 'byProbability');
+  createUI(
+    uniqueId,
+    probabilityDiv,
+    colorscheme.colorspectrum,
+    viewerLayers,
+    viewer,
+    'byProbability',
+  );
 
   // By heatmap, blue to red
   const msg = "Color gradient where reddish colors<br>" +
@@ -52,18 +64,17 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   thresholdDiv.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
   widgetBody.appendChild(thresholdDiv);
 
-  createThresh(thresholdDiv, viewerLayers, viewer, null); // no cp
+  createThresh(thresholdDiv, viewerLayers, viewer); // no cp
 
   return widget;
 };
 
 function createWidget(uniqueId, paletteBtn, prefLabel) {
-
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
-  const title = `${prefLabel} color levels`;
-
-  return createDraggableDiv(widgetId, title, rect.left, rect.top);
+  // const title = `${prefLabel} color levels`;
+  // return createDraggableDiv(widgetId, title, rect.left, rect.top);
+  return createDraggableDiv(widgetId, prefLabel, rect.left, rect.top);
 }
 
 function setChecked(colorscheme) {
@@ -83,18 +94,19 @@ function setChecked(colorscheme) {
   });
 }
 
-function createThresh(div, layers, viewer, colorPicker) {
-  const val = '128';
+function createThresh(div, layers, viewer, colorPicker, classId) {
+  const val = '1'; // 128
   let color;
   if (colorPicker) {
-    color = colorToArray(colorPicker.style.backgroundColor)
+    color = colorToArray(colorPicker.style.backgroundColor);
     if (color.length === 3) {
-      color.push(255)
+      color.push(255);
     }
   } else {
     color = [126, 1, 0, 255];
   }
 
+  // slider value
   const number = e('input', {
     type: 'number',
     min: '0',
@@ -104,28 +116,27 @@ function createThresh(div, layers, viewer, colorPicker) {
     value: val,
   });
 
+  // slider
   const range = e('input', {
     type: 'range',
     min: '0',
     max: MAX.toString(),
     step: '1',
-    size: '5',
     value: val,
   });
 
   div.appendChild(e('div', {}, [number, range]));
   number.addEventListener('input', function() {
     range.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color });
+    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
     // console.log('number input');
   });
 
   range.addEventListener('input', function() {
     number.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color });
+    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
     // console.log('range input');
   });
-
 }
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer) {
@@ -174,16 +185,13 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
       divArr[1].style.display = 'block';
     } else if (STATE.renderType === 'byHeatmap') {
       divArr[2].style.display = 'block';
-    }
-    else if (STATE.renderType === 'byThreshold') {
+    } else if (STATE.renderType === 'byThreshold') {
       divArr[3].style.display = 'block';
     }
 
     // Initial values set
     if (STATE.renderType === 'byThreshold') {
-      setFilter(allLayers, viewer, {}, {val: 128, rgba: [126, 1, 0, 255]});
-      // setFilter(allLayers, viewer, {}, {val: 128});
-      // setFilter(allLayers, viewer, {}, 128);
+      setFilter(allLayers, viewer, {}, { val: 1, rgba: [126, 1, 0, 255] }); // 128
     } else {
       setFilter(allLayers, viewer);
     }
@@ -202,8 +210,7 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
   if (layerColors) {
     // Different headers
     if (byClass) {
-      table.appendChild(createHeaderRow(['', 'Color', 'Label']));
-      // table.appendChild(createHeaderRow(['', 'Color', 'Label', 'Pixels >= this level of certainty']));
+      table.appendChild(createHeaderRow(['', 'Color', 'Label', 'Pixels with certainty >= n']));
     } else if (byProb) {
       layerColors.sort((a, b) => b.low - a.low);
       table.appendChild(createHeaderRow(['', 'Color', 'Low', 'High']));
@@ -260,12 +267,12 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
         ]);
       } else if (byClass) {
         let d = e('div');
-        createThresh(d, layers, viewer, colorPicker)
+        createThresh(d, layers, viewer, colorPicker, colorObject.classid);
         tr = e('tr', {}, [
           e('td', {}, [checkbox]),
           e('td', {}, [colorPicker]),
           e('td', {}, [e('span', {}, [colorObject.name])]),
-          // e('td', {}, [d])
+          e('td', {}, [d])
         ]);
       }
       table.appendChild(tr);
@@ -331,18 +338,17 @@ const getCellValue = (tr, idx) => {
     }
     // sort by alpha
     return td.innerText || td.textContent;
-  } else {
-    // disable for this column
-    return ''
   }
+  // disable for this column
+  return '';
 };
 
 const comparer = (idx, asc) => (a, b) =>
   ((v1, v2) =>
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2))(
-      getCellValue(asc ? a : b, idx),
-      getCellValue(asc ? b : a, idx)
-    );
+  getCellValue(asc ? a : b, idx),
+  getCellValue(asc ? b : a, idx)
+);
 
 // Create color picker input
 function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
