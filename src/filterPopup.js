@@ -2,7 +2,6 @@
  * Clicking the color palette icon brings you here.
  * Create a popup div allowing user to adjust color ranges for that layer,
  * or adjust the colors being used to color each class in that layer.
- * There is a color filter at the bottom of this script - this is the workhorse that colors the layer in OSD.
  *
  * @param paletteBtn: dom element
  * @param prefLabel: string
