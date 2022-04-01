@@ -159,7 +159,12 @@ function handleButtonDrag(layers, viewer) {
         // console.log('targetViewer', targetViewer)
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
+          // We already turned on target feature eyeball
           sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
+          let eye1 = draggedFeature.parentNode.nextSibling.firstChild
+          // Toggle eyeball on source feature
+          eye1.classList.remove('fa-eye');
+          eye1.classList.add('fa-eye-slash');
         } catch (e) {
           // It may get here if the handler executes twice on one drop
           console.warn(e.message);
