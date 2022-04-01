@@ -59,24 +59,24 @@ function createLayerElements(layersColumn, layers, viewer) {
 // VIEWER'S DRAGGABLE LAYERS
 function handleButtonDrag(layers, viewer) {
   // Div containing viewer
-  const dropzone = document.getElementById(viewer.id);
-  // console.log('dropzone', dropzone, viewer.id)
+  const osdDiv = document.getElementById(viewer.id);
 
-  dropzone.addEventListener('dragenter', function() {
+  osdDiv.addEventListener('dragenter', function(evt) {
     this.classList.add('over');
   });
 
-  dropzone.addEventListener('dragleave', function() {
+  osdDiv.addEventListener('dragleave', function() {
     this.classList.remove('over');
   });
 
-  dropzone.addEventListener('dragover', evt => {
+  osdDiv.addEventListener('dragover', evt => {
+    // dragover target = canvas; class "upper-canvas"
     if (evt.preventDefault) evt.preventDefault();
     return false;
   });
-  dropzone.addEventListener('drop', handleDrop);
+  osdDiv.addEventListener('drop', handleDrop);
 
-  const table = dropzone.closest('table');
+  const table = osdDiv.closest('table');
 
   // The features/layers to the right of the viewer
   const features = table.querySelectorAll('.dragIt');
@@ -87,26 +87,28 @@ function handleButtonDrag(layers, viewer) {
 
   function handleDragStart(evt) {
     /* eslint-disable no-undef */
-    draggedElement = this; // The draggable feature (button element)
-    this.style.opacity = '0.4';
+    sourceViewer = viewer
     /* eslint-disable no-undef */
-    // sourceViewer = getOsdViewer(evt)
+    draggedFeature = this; // The draggable feature (button element)
+    draggedFeature.style.opacity = '0.4';
     evt.dataTransfer.effectAllowed = 'move';
     evt.dataTransfer.setData('text', evt.target.id);
   }
 
-  function handleDragEnd() {
+  function handleDragEnd(evt) {
     // this = the draggable feature btn
     this.style.opacity = '1';
-    dropzone.classList.remove('over');
+    osdDiv.classList.remove('over');
   }
 
   function handleDrop(evt) {
+    // targetElement is correct
     const targetElement = evt.target; // canvas upper-canvas
-    this.classList.remove('over'); // this = dropzone viewer
+    this.classList.remove('over'); // this = dropzone (osdDiv) viewer
 
     if (evt.preventDefault) evt.preventDefault();
 
+    // viewerDiv is correct
     const viewerDiv = targetElement.closest('.viewer'); // where they dropped the feature
 
     if (!viewerDiv) {
@@ -115,27 +117,27 @@ function handleButtonDrag(layers, viewer) {
     }
 
     // Find neighboring layersColumn
-    const td1 = viewerDiv.parentElement;
-    const td2 = td1.nextSibling;
+    const columnWithViewer = viewerDiv.parentElement;
+    const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
 
     // Find the neighboring table (we will add this feature here)
-    const myTable = td2.firstChild;
-
-    const movedElemId = evt.dataTransfer.getData('text');
-    const movedElem = document.getElementById(movedElemId);
-    const name = movedElem.innerHTML;
+    const tableLayAndColor = columnLayAndCol.firstChild;
+    const movedFeatId = evt.dataTransfer.getData('text');
+    const movedFeature = document.getElementById(movedFeatId);
+    const featureName = movedFeature.innerHTML;
 
     let layNum;
     let foundMatchingSlide = false;
-    for (let i = 0; i < myTable.rows.length; i++) {
+    // Iterate table rows
+    for (let i = 0; i < tableLayAndColor.rows.length; i++) {
       // Skip first row (globals)
       if (i > 0) {
-        const row = myTable.rows[i];
+        const row = tableLayAndColor.rows[i];
         const lay = row.cells[0].firstChild;
         layNum = lay.id[0]; // 1st char is array index
         const eye = row.cells[1].children[0];
-        // console.log(name, lay.innerHTML)
-        if (lay.innerHTML === name) {
+
+        if (lay.innerHTML === featureName) {
           foundMatchingSlide = true;
           // Highlight the layer
           lay.classList.remove('highlight');
@@ -149,20 +151,27 @@ function handleButtonDrag(layers, viewer) {
     }
 
     const targetViewer = getOsdViewer(evt);
+    // targetViewer is correct.
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
         console.log('Found matching slide');
+        // console.log('sourceViewer', sourceViewer)
+        // console.log('targetViewer', targetViewer)
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
-          // sourceViewer.world.getItemAt(XXX).setOpacity(0) // hide
+          sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
         } catch (e) {
           // It may get here if the handler executes twice on one drop
           console.warn(e.message);
         }
       } else {
-        console.error('Did not find matching slide');
-        // const location = sourceViewer.tileSources[layNum].tileSource
-        // console.error('Did not find matching slide\nLocation:', location)
+        let location
+        try {
+          location = sourceViewer.tileSources[layNum].tileSource
+        } catch (e) {
+          console.error('oops.', e.message)
+        }
+        console.error('Did not find matching slide\nLocation:', location)
       }
     }
     return false;
@@ -174,10 +183,10 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   table.appendChild(tr);
 
   const layerNum = currentLayer.layerNum;
-  const name = getPreferredLabel(currentLayer);
+  const featureName = getPreferredLabel(currentLayer);
 
   // FEATURE
-  const feat = createDraggableBtn(layerNum, name);
+  const feat = createDraggableBtn(layerNum, featureName);
   tr.appendChild(e('td', {}, [feat]));
 
   // VISIBILITY TOGGLE
@@ -214,36 +223,36 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
 }
 
 function getPreferredLabel(layer) {
-  let name;
+  let featureName;
   const loc = extractLocation(layer);
   const sections = loc.split('/');
   const re = /^(?:[a-z]+:)?\b/gm;
 
   if (loc.match(re)) {
     // Absolute URL
-    name = sections[sections.length - 2];
+    featureName = sections[sections.length - 2];
   } else {
     // Relative URL
-    name = sections[sections.length - 1];
+    featureName = sections[sections.length - 1];
   }
 
-  if (name.includes('.')) {
-    name = name.substring(0, name.indexOf('.'));
+  if (featureName.includes('.')) {
+    featureName = featureName.substring(0, featureName.indexOf('.'));
   }
 
-  return name;
+  return featureName;
 }
 
 // Feature (draggable)
-function createDraggableBtn(layerNum, name) {
+function createDraggableBtn(layerNum, featureName) {
   const element = e('button', {
     id: `${layerNum}${createId(5, 'feat')}`,
     class: 'dragIt hover-light css-tooltip',
     style: 'display: inline-block',
     draggable: 'true',
-    title: name
+    title: featureName
   });
-  element.innerHTML = name;
+  element.innerHTML = featureName;
   return element;
 }
 
@@ -339,8 +348,9 @@ function createTachometer(row) {
 
 function getOsdViewer(evt) {
   const targetElement = evt.target;
+  const tagName = targetElement.tagName.toLowerCase();
 
-  if (targetElement.tagName.toLowerCase() === 'canvas') {
+  if (tagName === 'canvas') {
     const table = targetElement.closest('table');
     const tr = table.firstChild.firstChild;
     const td = tr.firstChild;
@@ -358,6 +368,30 @@ function getOsdViewer(evt) {
       console.error('message:', e.message);
     }
     return retVal;
+  } else if (tagName === 'button') {
+    console.warn('got button')
+    // walk up the dom tree to get source viewer
+    // let td = targetElement.parentNode;
+    // let tr = td.parentNode
+    // let table = tr.closest('table');
+    // let layersAndColors = table.parentNode
+    // let tr1 = layersAndColors.parentNode
+    // let table1 = tr1.parentNode.parentNode
+    // let tbody = table1.firstElementChild
+    // let tr2 = tbody.firstElementChild
+    // let td1 = tr2.firstElementChild
+    // let sourceViewerDiv = td1.firstElementChild
+    // // sourceViewerDiv is correct
+    // // console.log('sourceViewerDiv', sourceViewerDiv)
+    // for (const sync of SYNCED_IMAGE_VIEWERS) {
+    //   if (sync.getViewer().id === sourceViewerDiv.id) {
+    //     sourceViewer = sync.getViewer();
+    //     // console.log('sourceViewer', sourceViewer) // got it
+    //     break;
+    //   }
+    // }
+  } else {
+    console.log('got canvas?', targetElement.tagName, targetElement)
   }
   return null;
 }
