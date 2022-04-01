@@ -305,15 +305,6 @@ function isValidURL(string) {
   return result;
 }
 
-function extractChannel(x, pixels) {
-  let newArray = [];
-  for (let i = 0; i < pixels.length; i += 4) {
-    newArray.push(pixels[i]);
-  }
-  let uniqueArray = [...new Set(newArray)];
-  console.log('uniqueArray', uniqueArray);
-}
-
 const scaleToPct = num => {
   return (num / 255) * 100;
 };
