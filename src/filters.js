@@ -165,7 +165,6 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
     // console.log('colorlevels')
     const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    // let data = backgroundCorrection(img2array(imgData));
     const data = bgTrans(imgData.data);
 
     const colorGroup = layerColors.filter(x => x.checked === true);

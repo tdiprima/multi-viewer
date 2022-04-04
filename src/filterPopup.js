@@ -223,7 +223,12 @@ function createUI(uniq, div, layerColors, layers, viewer, type) {
         name: `classes${uniq}`,
         value: colorObject.classid
       });
-      checkbox.checked = colorObject.checked;
+
+      if (colorObject.checked) {
+        checkbox.setAttribute('checked', true);
+      } else {
+        checkbox.removeAttribute('checked');
+      }
 
       const colorPicker = createColorPicker(cIdx, uniq, colorObject, layers, viewer);
 
@@ -511,7 +516,6 @@ function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
       }
     );
 
-    chkEl.disabled = false; // enable checkbox
     checkboxHandler(chkEl, colors, layers, viewer);
 
     // add another empty row
@@ -539,10 +543,10 @@ function extraRow(uniq, colors, layers, viewer) {
   }
 
   const colorObject = {
-    color: 'rgba(255, 255, 255, 0)',
+    color: 'rgba(255, 255, 255, 255)',
     low: 0,
     high: 0,
-    checked: true,
+    checked: false,
     classid: idx, // overloading 'classid'
   };
   colors.push(colorObject);
@@ -550,10 +554,9 @@ function extraRow(uniq, colors, layers, viewer) {
   const chkEl = e('input', {
     type: 'checkbox',
     name: `classes${uniq}`,
-    checked: true,
-    disabled: true,
     value: idx,
   });
+  checkboxHandler(chkEl, colors, layers, viewer);
 
   const cpEl = createColorPicker(idx, uniq, colorObject, layers, viewer);
   const b = document.getElementById(`filters${uniq}Body`);

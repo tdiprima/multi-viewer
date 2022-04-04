@@ -61,7 +61,7 @@ function handleButtonDrag(layers, viewer) {
   // Div containing viewer
   const osdDiv = document.getElementById(viewer.id);
 
-  osdDiv.addEventListener('dragenter', function(evt) {
+  osdDiv.addEventListener('dragenter', function() {
     this.classList.add('over');
   });
 
@@ -95,7 +95,7 @@ function handleButtonDrag(layers, viewer) {
     evt.dataTransfer.setData('text', evt.target.id);
   }
 
-  function handleDragEnd(evt) {
+  function handleDragEnd() {
     // this = the draggable feature btn
     this.style.opacity = '1';
     osdDiv.classList.remove('over');
