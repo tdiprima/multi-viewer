@@ -16,6 +16,9 @@ function setFilter(layers, viewer, range, thresh) {
     // Because one does not simply color the affected layer.
     // No. You have to do all of them.
     for (let i = 0; i < itemCount; i++) {
+      // ToDo: Skip base, skip opacity 0.
+      const tiledImage = viewer.world.getItemAt(i);
+      // if (i > 0 && tiledImage.opacity > 0) {
       if (i > 0) {
         if (!isEmpty(range)) {
           // USE RANGE VALUES
@@ -28,22 +31,22 @@ function setFilter(layers, viewer, range, thresh) {
             rgba = [74, 0, 180, 255];
           }
           filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [colorFilter.prototype.PROBABILITY(range, rgba)]
+            items: tiledImage,
+            processors: colorFilter.prototype.PROBABILITY(range, rgba)
           });
         } else if (STATE.outline) {
           // OUTLINE POLYS
           // NOTE: Color can not have green in it.
           // Color #0000FF is blue
           filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [colorFilter.prototype.OUTLINE([0, 0, 255, 255])],
+            items: tiledImage,
+            processors: colorFilter.prototype.OUTLINE([0, 0, 255, 255]),
           });
         } else if (STATE.renderType === 'byProbability') {
           // USE COLOR SPECTRUM
           filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum)],
+            items: tiledImage,
+            processors: colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum),
           });
         } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
           let processor;
@@ -57,23 +60,32 @@ function setFilter(layers, viewer, range, thresh) {
             // console.log('colorlev')
           }
           filterOpts.push({
-            items: viewer.world.getItemAt(i),
-            processors: [processor],
+            items: tiledImage,
+            processors: processor,
           });
         } else if (STATE.renderType === 'byThreshold') {
           filterOpts.push({
-            items: viewer.world.getItemAt(i),
+            items: tiledImage,
             processors: colorFilter.prototype.THRESHOLDING(thresh),
             // processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
           });
         }
       }
     }
-    // Set all layers at once (required)
-    viewer.setFilterOptions({
-      filters: filterOpts,
-      loadMode: 'sync'
-    });
+
+    if (!isEmpty(filterOpts)) {
+      try {
+        // Set all layers at once (required)
+        viewer.setFilterOptions({
+          filters: filterOpts,
+          loadMode: 'sync'
+        });
+      } catch (e) {
+        console.error(e.message)
+      }
+
+    }
+
   } else {
     console.log('No viewer.world');
   }
@@ -98,9 +110,10 @@ const isEmpty = value => {
   const isEmptyObject = a => {
     if (typeof a.length === 'undefined') {
       // it's an Object, not an Array
-      const hasNonempty = Object.keys(a).some(element => {
-        return !isEmpty(a[element]);
-      });
+      const hasNonempty = Object.keys(a)
+        .some(element => {
+          return !isEmpty(a[element]);
+        });
       return hasNonempty ? false : isEmptyObject(Object.keys(a));
     }
 
@@ -172,9 +185,10 @@ const e = (name, properties = {}, children = []) => {
   const element = document.createElement(name);
 
   // Apply properties
-  Object.keys(properties).forEach(property => {
-    element.setAttribute(property, properties[property]);
-  });
+  Object.keys(properties)
+    .forEach(property => {
+      element.setAttribute(property, properties[property]);
+    });
 
   // Append children
   children.forEach(c => {
