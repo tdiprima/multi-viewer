@@ -3,6 +3,7 @@ let CONFIG = {
   osdImages: '/multi-viewer/vendor/openseadragon/images/',
   appImages: '/multi-viewer/images/'
 };
+
 // let CONFIG = {
 //   osdImages: 'vendor/openseadragon/images/',
 //   appImages: 'images/'
@@ -264,33 +265,6 @@ function saveSettings(canvas, options) {
   };
   console.log('settings', jsonObject);
   // todo: post object to server
-}
-
-function getViewers() {
-  const result = [];
-  for (let i = 0; i < SYNCED_IMAGE_VIEWERS.length; i++) {
-    const info = SYNCED_IMAGE_VIEWERS[i].vInfo;
-    const viewerObject = {
-      type: 'MultiViewer Viewer',
-      index: info.idx,
-      osdId: info.osdId
-    };
-    const layers = info.layers;
-    const newLayers = [];
-    for (let i = 0; i < layers.length; i++) {
-      const layer = layers[i];
-      newLayers.push({
-        type: 'Layer',
-        layerNum: layer.layerNum,
-        colors: layer.colorscheme.colors,
-        colorspectrum: layer.colorscheme.colorspectrum
-      });
-    }
-    viewerObject.layers = newLayers;
-    result.push(viewerObject);
-  }
-
-  return result;
 }
 
 function extractLocation(layer) {
