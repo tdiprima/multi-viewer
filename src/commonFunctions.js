@@ -11,6 +11,10 @@ let CONFIG = {
 
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
+    let start = performance.now()
+    let caller = setFilter.caller
+    console.log('%ccaller', 'color: yellow;', caller)
+
     const itemCount = viewer.world.getItemCount();
     const filterOpts = [];
 
@@ -84,11 +88,13 @@ function setFilter(layers, viewer, range, thresh) {
       } catch (e) {
         console.error(e.message)
       }
-
     }
 
+    let end = performance.now()
+    console.log(`setFilter exec time: ${end - start} ms`)
+
   } else {
-    console.log('No viewer.world');
+    console.warn('No viewer.world');
   }
 }
 
