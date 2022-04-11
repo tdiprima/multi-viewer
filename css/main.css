@@ -97,10 +97,10 @@ a:link {
 
 button {
   font-size: 100%;
-
   padding: .2em .5em;
 
   cursor: pointer;
+  transform: skew(-20deg);
   text-align: center;
   vertical-align: middle;
 
