@@ -1,7 +1,5 @@
-json/
 node_modules/
 dist/
 .idea/
 .vscode/
-.cache
 .DS_Store
