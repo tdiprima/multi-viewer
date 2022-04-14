@@ -100,7 +100,6 @@ button {
   padding: .2em .5em;
 
   cursor: pointer;
-  transform: skew(-20deg);
   text-align: center;
   vertical-align: middle;
 
@@ -152,21 +151,46 @@ button {
   }
 }
 
-.dragIt {
+.dragIt
+{
+  font-family: Arial;
+  /*font-size: 17px;*/
   font-size: 100%;
 
+  display: inline-block;
   float: left;
   overflow: hidden;
 
   width: 90px;
+  /*padding: 7px 25px;*/
   padding: .5em 1em;
 
   cursor: move;
   transition: .3s;
+  transform: skew(-10deg);
   white-space: nowrap;
+  text-decoration: none;
   text-overflow: ellipsis;
 
-  border-radius: 7px;
+  color: #3a8a9e;
+  border: 1px solid #d6bcd6;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+  background-color: #ededed;
+  box-shadow: 3px 4px 0 0 #899599;
+  text-shadow: 0 1px 0 #e1e2ed;
+}
+
+.dragIt:hover
+{
+  background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+  background-color: #bab1ba;
+}
+
+.dragIt:active
+{
+  position: relative;
+  top: 1px;
 }
 
 .popup {
