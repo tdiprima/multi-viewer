@@ -29,7 +29,9 @@ Distributed under the BSD 3-Clause License. See [LICENSE.txt](LICENSE.txt) for m
 
 ## Contributing
 
-1. Fork it to your repo
+When contributing, please attempt to match the code style already in the codebase.
+
+1. Fork this repo
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
@@ -46,4 +48,6 @@ npm run lint:write
 
 **CSS**
 
-Run via Visual Studio Code.
+```sh
+csscomb file.css
+```
