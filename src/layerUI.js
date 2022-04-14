@@ -250,7 +250,7 @@ function getPreferredLabel(layer) {
 function createDraggableBtn(layerNum, featureName) {
   const element = e('button', {
     id: `${layerNum}${createId(5, 'feat')}`,
-    class: 'dragIt hover-light css-tooltip',
+    class: 'dragIt',
     style: 'display: inline-block',
     draggable: 'true',
     title: featureName
