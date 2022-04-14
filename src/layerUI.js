@@ -192,7 +192,7 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
 
   // FEATURE
   const feat = createDraggableBtn(layerNum, featureName);
-  tr.appendChild(e('td', {}, [feat]));
+  tr.appendChild(e('td', {style: 'padding: 3px'}, [feat]));
 
   // VISIBILITY TOGGLE
   const faEye = createEyeball(currentLayer);
