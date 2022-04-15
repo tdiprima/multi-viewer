@@ -1,6 +1,5 @@
 :root {
   --highlight: #00c6b9;
-  /*--highlight: #3a8a9e;*/
   --bg-dark: #272b38;
   --text-dark: #cac3bc;
   --bg-light: #f5f4f3;
@@ -120,34 +119,33 @@ a:link {
   border-radius: 5px;
 }
 
-.annotationBtn:hover,
-.layerBtn:hover {
-  background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
-  background-color: #bab1ba;
-}
-
-.annotationBtn:active,
-.layerBtn:active {
+.annotationBtn:active, .layerBtn:active {
   position: relative;
   top: 1px;
 }
 
+/*background-color: #ffffff;*/
+/*background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);*/
+
 .annotationBtn {
-  padding: .2em .5em;
+  padding: .2em .7em;
 
   cursor: pointer;
 
   color: #666;
-  /*color: #3a8a9e;*/
-  border: #dcdcdc;
-  background: linear-gradient(to bottom, #fff 5%, #f6f6f6 100%);
+  /*border: #dcdcdc;*/
+  border: #ddd;
+  /*background: linear-gradient(to bottom, #fff 5%, #f6f6f6 100%);*/
+  background: linear-gradient(to bottom, #fff 0%, #d7e1ec 74%);
   background-color: #fff;
   /* box-shadow: .5px 1px 0 0 #888; */
   text-shadow: 0 1px 0 #fff;
 }
 
 .annotationBtn:hover {
-  color: #3a8a9e;
+  /*color: #3a8a9e;*/
+  color: #537895;
+  background: linear-gradient(to bottom, #d7e1ec 0%, #fff 74%);
 }
 
 .layerBtn {
@@ -171,6 +169,11 @@ a:link {
   background-color: #ededed;
   box-shadow: 3px 4px 0 0 #899599;
   text-shadow: 0 1px 0 #e1e2ed;
+}
+
+.layerBtn:hover {
+  background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+  background-color: #bab1ba;
 }
 
 .dropzone {
@@ -205,16 +208,6 @@ a:link {
   }
 }
 
-.annotationBtn:hover, .layerBtn:hover {
-  background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
-  background-color: #bab1ba;
-}
-
-.annotationBtn:hover, .layerBtn:active {
-  position: relative;
-  top: 1px;
-}
-
 .popup {
   position: absolute;
   z-index: 10;
@@ -239,7 +232,7 @@ a:link {
 
   /*width: 475px;*/
   /*width: 300px;*/
-  width: 100%; /* TODO */
+  width: 100%;
   padding: 10px;
 
   cursor: move;
