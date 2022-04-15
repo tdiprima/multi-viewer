@@ -12,8 +12,8 @@ let CONFIG = {
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
     let start = performance.now()
-    let caller = setFilter.caller
-    console.log('%ccaller', 'color: yellow;', caller)
+    // let caller = setFilter.caller
+    // console.log('caller', caller)
 
     const itemCount = viewer.world.getItemCount();
     const filterOpts = [];

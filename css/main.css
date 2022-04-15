@@ -95,7 +95,7 @@ a:link {
   border: 1px solid var(--highlight);
 }
 
-button {
+/* button {
   font-size: 100%;
   padding: .2em .5em;
 
@@ -105,18 +105,36 @@ button {
 
   color: var(--text-light);
   border-radius: 7px;
+} */
+
+.myButton {
+  font-family: Arial;
+  font-size: 100%;
+
+  display: inline-block;
+
+  padding: .2em .5em;
+
+  cursor: pointer;
+  text-decoration: none;
+
+  color: #3a8a9e;
+  border: 1px solid #d6bcd6;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+  background-color: #ededed;
+  /* box-shadow: .5px 1px 0 0 #899599; */
+  text-shadow: 0 1px 0 #e1e2ed;
 }
 
-.btn {
-  color: var(--text-light);
-  border: 1px solid var(--text-light);
-  background-color: var(--bg-light);
+.myButton:hover {
+  background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+  background-color: #bab1ba;
 }
 
-.btnOn {
-  color: var(--highlight);
-  border: 1px solid var(--highlight);
-  background-color: var(--bg-light);
+.myButton:active {
+  position: relative;
+  top: 1px;
 }
 
 .dropzone {
