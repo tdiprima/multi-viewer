@@ -79,7 +79,7 @@ function handleButtonDrag(layers, viewer) {
   const table = osdDiv.closest('table');
 
   // The features/layers to the right of the viewer
-  const features = table.querySelectorAll('.dragIt');
+  const features = table.querySelectorAll('.layerBtn');
   features.forEach(feature => {
     feature.addEventListener('dragstart', handleDragStart);
     feature.addEventListener('dragend', handleDragEnd);
@@ -250,7 +250,7 @@ function getPreferredLabel(layer) {
 function createDraggableBtn(layerNum, featureName) {
   const element = e('button', {
     id: `${layerNum}${createId(5, 'feat')}`,
-    class: 'dragIt',
+    class: 'layerBtn',
     style: 'display: inline-block',
     draggable: 'true',
     title: featureName
