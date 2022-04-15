@@ -82,7 +82,7 @@ a:link {
   cursor: move;
 
   -webkit-user-drag: element;
-  -moz-user-drag: element;
+     -moz-user-drag: element;
 }
 
 .fas:focus,
@@ -297,7 +297,7 @@ input {
 .dualSlider,
 .dualSlider1 {
   display: -ms-grid;
-  display: grid;
+  display:   grid;
   overflow: hidden;
 
   width: 20em;
@@ -322,9 +322,9 @@ input {
 
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
-  grid-column: 1/ span 2;
+    grid-column: 1/ span 2;
   -ms-grid-row: 3;
-  grid-row: 3;
+    grid-row: 3;
 }
 
 .dualSlider::before {
@@ -340,7 +340,7 @@ input {
 [id='multi-lbl'] {
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
-  grid-column: 1/ span 2;
+    grid-column: 1/ span 2;
 }
 
 .dualSlider input[type='range'] {
@@ -357,17 +357,17 @@ input {
 
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
-  grid-column: 1/ span 2;
+    grid-column: 1/ span 2;
   -ms-grid-row: 3;
-  grid-row: 3;
+    grid-row: 3;
 }
 
 .dualSlider input[type='range']::-webkit-slider-runnable-track,
 .dualSlider input[type='range']::-webkit-slider-thumb,
 .dualSlider input[type='range'] {
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+      appearance: none;
 }
 
 .dualSlider input[type='range']::-webkit-slider-runnable-track {
@@ -419,7 +419,7 @@ input {
 
 output {
   -ms-grid-row: 2;
-  grid-row: 2;
+    grid-row: 2;
 }
 
 output:last-child {
@@ -441,9 +441,9 @@ output::after {
 
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
-  grid-column: 1/ span 2;
+    grid-column: 1/ span 2;
   -ms-grid-row: 3;
-  grid-row: 3;
+    grid-row: 3;
 }
 
 .dualSlider1::before {
@@ -470,17 +470,17 @@ output::after {
 
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
-  grid-column: 1/ span 2;
+    grid-column: 1/ span 2;
   -ms-grid-row: 3;
-  grid-row: 3;
+    grid-row: 3;
 }
 
 .dualSlider1 input[type='range']::-webkit-slider-runnable-track,
 .dualSlider1 input[type='range']::-webkit-slider-thumb,
 .dualSlider1 input[type='range'] {
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+      appearance: none;
 }
 
 .dualSlider1 input[type='range']::-webkit-slider-runnable-track {
@@ -536,8 +536,8 @@ output::after {
   opacity: 2;
   background: var(--rgb-on);
   background: -webkit-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background: -moz-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background: linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background:  -moz-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background:     linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
 
   -webkit-appearance: none;
 }
@@ -551,8 +551,8 @@ output::after {
   background: var(--text-dark);
 
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+      appearance: none;
 }
 
 .singleSlider:hover {
