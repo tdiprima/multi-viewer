@@ -16,7 +16,7 @@ function setFilter(layers, viewer, range, thresh) {
     // console.log('caller', caller)
 
     const itemCount = viewer.world.getItemCount();
-    const filterOpts = [];
+    let filterOpts = [];
 
     // Because one does not simply color the affected layer.
     // No. You have to do all of them.
