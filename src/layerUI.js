@@ -143,8 +143,9 @@ function handleButtonDrag(layers, viewer) {
         if (lay.innerHTML === featureName) {
           foundMatchingSlide = true;
           // Highlight the layer
-          lay.classList.remove('highlight');
-          lay.classList.add('highlight');
+          lay.classList.toggle('highlight');
+          // lay.classList.remove('highlight');
+          // lay.classList.add('highlight');
           // Toggle eyeball
           eye.classList.remove('fa-eye-slash');
           eye.classList.add('fa-eye');
