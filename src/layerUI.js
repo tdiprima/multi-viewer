@@ -104,7 +104,7 @@ function handleButtonDrag(layers, viewer) {
   function handleDrop(evt) {
     // targetElement is correct
     const targetElement = evt.target; // canvas upper-canvas
-    this.classList.remove('over'); // this = dropzone (osdDiv) viewer
+    this.classList.remove('over'); // this = osdDiv viewer ("dropzone")
 
     if (evt.preventDefault) evt.preventDefault();
 
@@ -119,6 +119,7 @@ function handleButtonDrag(layers, viewer) {
     // Find neighboring layersColumn
     const columnWithViewer = viewerDiv.parentElement;
     const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
+    // console.log('columnLayAndCol', columnLayAndCol)
 
     // Find the neighboring table (we will add this feature here)
     const tableLayAndColor = columnLayAndCol.firstChild;

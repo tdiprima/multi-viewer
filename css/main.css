@@ -95,17 +95,19 @@ a:link {
   border: 1px solid var(--highlight);
 }
 
-/* button {
-  font-size: 100%;
-  padding: .2em .5em;
+div.scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  cursor: pointer;
-  text-align: center;
-  vertical-align: middle;
+  width: 500px;
+  height: 110px;
+  margin: 4px;
+  padding: 4px;
 
-  color: var(--text-light);
-  border-radius: 7px;
-} */
+  text-align: justify;
+
+  background-color: green;
+}
 
 .annotationBtn,
 .layerBtn {
