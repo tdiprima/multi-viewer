@@ -28,7 +28,8 @@ function createLayerElements(layersColumn, layers, viewer) {
   });
 
   const table = e('table');
-  layersColumn.appendChild(table);
+  layersColumn.appendChild(e('div', { "class": "scroll"}, [table]));
+
   const tr = e('tr');
   table.appendChild(tr);
   tr.appendChild(e('td'));
@@ -119,10 +120,11 @@ function handleButtonDrag(layers, viewer) {
     // Find neighboring layersColumn
     const columnWithViewer = viewerDiv.parentElement;
     const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
-    // console.log('columnLayAndCol', columnLayAndCol)
 
     // Find the neighboring table (we will add this feature here)
-    const tableLayAndColor = columnLayAndCol.firstChild;
+    const divClassScroll = columnLayAndCol.firstChild;
+    const tableLayAndColor = divClassScroll.firstChild;
+
     const movedFeatId = evt.dataTransfer.getData('text');
     const movedFeature = document.getElementById(movedFeatId);
     const featureName = movedFeature.innerHTML;
@@ -156,13 +158,15 @@ function handleButtonDrag(layers, viewer) {
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
         console.log('Found matching slide');
-        // console.log('sourceViewer', sourceViewer)
-        // console.log('targetViewer', targetViewer)
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
           // We already turned on target feature eyeball
-          sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
+
+          // TODO: Uncomment if we want "move" instead of "copy":
+          // sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
+
           let eye1 = draggedFeature.parentNode.nextSibling.firstChild
+
           // Toggle eyeball on source feature
           eye1.classList.remove('fa-eye');
           eye1.classList.add('fa-eye-slash');

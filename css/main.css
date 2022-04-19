@@ -99,14 +99,13 @@ div.scroll {
   overflow-x: hidden;
   overflow-y: auto;
 
-  width: 500px;
-  height: 110px;
+  width: 200px; 
+  height: 475px;
   margin: 4px;
   padding: 4px;
 
   text-align: justify;
-
-  background-color: green;
+  /*background-color: green;*/
 }
 
 .annotationBtn,
