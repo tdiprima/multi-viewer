@@ -164,12 +164,10 @@ function handleButtonDrag(layers, viewer) {
 
           // TODO: Uncomment if we want "move" instead of "copy":
           // sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
-
-          let eye1 = draggedFeature.parentNode.nextSibling.firstChild
-
+          // let eye1 = draggedFeature.parentNode.nextSibling.firstChild
           // Toggle eyeball on source feature
-          eye1.classList.remove('fa-eye');
-          eye1.classList.add('fa-eye-slash');
+          // eye1.classList.remove('fa-eye');
+          // eye1.classList.add('fa-eye-slash');
         } catch (e) {
           // It may get here if the handler executes twice on one drop
           console.warn(e.message);
