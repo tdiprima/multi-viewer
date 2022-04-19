@@ -63,7 +63,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         // CREATE TABLE FOR VIEWERS
         const mainDiv = document.getElementById(divId);
-        const table = e('table', { id: 'myTable' });
+        const table = e('table');
         mainDiv.appendChild(table); // TABLE ADDED TO PAGE
 
         // CREATE ROWS & COLUMNS
