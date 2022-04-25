@@ -89,7 +89,6 @@ a:link {
   border: none !important;
 }
 
-/*.hover-light:focus,*/
 .hover-light:hover {
   color: var(--highlight);
   border: 1px solid var(--highlight);
@@ -99,7 +98,7 @@ div.scroll {
   overflow-x: hidden;
   overflow-y: auto;
 
-  width: 200px; 
+  width: 200px;
   height: 475px;
   margin: 4px;
   padding: 4px;
@@ -131,16 +130,13 @@ div.scroll {
   cursor: pointer;
 
   color: #666;
-  /*border: #dcdcdc;*/
   border: #ddd;
-  /*background: linear-gradient(to bottom, #fff 5%, #f6f6f6 100%);*/
   background: linear-gradient(to bottom, #fff 0%, #d7e1ec 74%);
   background-color: #fff;
 
 }
 
 .annotationBtn:hover {
-  /*color: #3a8a9e;*/
   color: #537895;
   background: linear-gradient(to bottom, #d7e1ec 0%, #fff 74%);
 }
@@ -155,7 +151,6 @@ div.scroll {
   padding: .5em 1em;
 
   cursor: move;
-  transition: .3s;
   transform: skew(-10deg);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -184,25 +179,40 @@ div.scroll {
   border: 3px dotted var(--highlight);
 }
 
-.highlight {
-  animation-name: bckanim;
-  animation-duration: 3s;
-  animation-delay: 0s;
+/* css transition: .block, .orange-fade */
+.block {
+  display: block;
 
-  background-color: var(--highlight);
+  width: 90px;
+  padding: .5em 1em;
 
-  animation-fill-mode: forwards;
+  cursor: move;
+  -webkit-transition: background-color 1000ms linear;
+  -moz-transition: background-color 1000ms linear;
+  -ms-transition: background-color 1000ms linear;
+  -o-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
+  transform: skew(-10deg);
 }
 
-@keyframes bckanim {
-  0% {
-    background-color: var(--highlight);
-  }
-  100% {
-    background-color: #e9e9ed; /*button-color*/
-    /* background-color: var(--bg-light); */
-    /* background-color: transparent; */
-  }
+.orange-fade {
+  width: 90px;
+  padding: .5em 1em;
+
+  cursor: move;
+  -webkit-transition: background-color 1000ms linear;
+  -moz-transition: background-color 1000ms linear;
+  -ms-transition: background-color 1000ms linear;
+  -o-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
+  transform: skew(-10deg);
+
+  color: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: var(--highlight);
+  box-shadow: 3px 4px 0 0 #899599;
+  text-shadow: 0 1px 0 #e1e2ed;
 }
 
 .popup {
@@ -227,8 +237,6 @@ div.scroll {
 
   overflow: hidden;
 
-  /*width: 475px;*/
-  /*width: 300px;*/
   width: 100%;
   padding: 10px;
 
@@ -259,7 +267,6 @@ div.scroll {
 .mag-content a {
   display: block;
   float: none;
-  /* padding: 12px 16px; */
 
   padding: .4em 1em;
 
