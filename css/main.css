@@ -94,7 +94,7 @@ a:link {
   border: 1px solid var(--highlight);
 }
 
-div.scroll {
+/* div.scroll {
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -105,7 +105,7 @@ div.scroll {
 
   text-align: justify;
   background-color: green;
-}
+} */
 
 .annotationBtn,
 .layerBtn {

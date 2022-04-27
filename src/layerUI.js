@@ -28,7 +28,8 @@ function createLayerElements(layersColumn, layers, viewer) {
   });
 
   const table = e("table");
-  layersColumn.appendChild(e("div", { "class": "scroll" }, [table]));
+  // layersColumn.appendChild(e("div", { "class": "scroll" }, [table]));
+  layersColumn.appendChild(e("div", {}, [table]));
 
   const tr = e("tr");
   table.appendChild(tr);
