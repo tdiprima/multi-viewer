@@ -11,7 +11,7 @@ let CONFIG = {
 
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
-    let start = performance.now()
+    // let start = performance.now()
     // let caller = setFilter.caller
     // console.log('caller', caller)
 
@@ -90,8 +90,8 @@ function setFilter(layers, viewer, range, thresh) {
       }
     }
 
-    let end = performance.now()
-    console.log(`setFilter exec time: ${end - start} ms`)
+    // let end = performance.now()
+    // console.log(`setFilter exec time: ${end - start} ms`)
 
   } else {
     console.warn('No viewer.world');
