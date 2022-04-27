@@ -18,6 +18,11 @@ const layerPopup = function(divBody, allLayers, viewer) {
       STATE.attenuate = !STATE.attenuate;
       // Either outline is on or attenuate is on; not both. #attenuate
       STATE.outline = false;
+      // Attenuate on prob, class, or heatmap, for now.
+      // PTF: Switch to something else if it's by threshold.
+      if (STATE.renderType === 'byThreshold') {
+        STATE.renderType = 'byProbability';
+      }
       setFilter(allLayers, viewer);
     });
     return [label, icon];
