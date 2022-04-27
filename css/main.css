@@ -188,10 +188,10 @@ div.scroll {
 
   cursor: move;
   -webkit-transition: background-color 1000ms linear;
-  -moz-transition: background-color 1000ms linear;
-  -ms-transition: background-color 1000ms linear;
-  -o-transition: background-color 1000ms linear;
-  transition: background-color 1000ms linear;
+     -moz-transition: background-color 1000ms linear;
+      -ms-transition: background-color 1000ms linear;
+       -o-transition: background-color 1000ms linear;
+          transition: background-color 1000ms linear;
   transform: skew(-10deg);
 }
 
@@ -201,10 +201,10 @@ div.scroll {
 
   cursor: move;
   -webkit-transition: background-color 1000ms linear;
-  -moz-transition: background-color 1000ms linear;
-  -ms-transition: background-color 1000ms linear;
-  -o-transition: background-color 1000ms linear;
-  transition: background-color 1000ms linear;
+     -moz-transition: background-color 1000ms linear;
+      -ms-transition: background-color 1000ms linear;
+       -o-transition: background-color 1000ms linear;
+          transition: background-color 1000ms linear;
   transform: skew(-10deg);
 
   color: #ccc;
@@ -364,7 +364,7 @@ input {
 .dualSlider input[type='range'] {
   -webkit-appearance: none;
      -moz-appearance: none;
-      appearance: none;
+          appearance: none;
 }
 
 .dualSlider input[type='range']::-webkit-slider-runnable-track {
@@ -477,7 +477,7 @@ output::after {
 .dualSlider1 input[type='range'] {
   -webkit-appearance: none;
      -moz-appearance: none;
-      appearance: none;
+          appearance: none;
 }
 
 .dualSlider1 input[type='range']::-webkit-slider-runnable-track {
@@ -533,8 +533,8 @@ output::after {
   opacity: 2;
   background: var(--rgb-on);
   background: -webkit-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background:  -moz-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background:     linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background:    -moz-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background:         linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
 
   -webkit-appearance: none;
 }
@@ -549,7 +549,7 @@ output::after {
 
   -webkit-appearance: none;
      -moz-appearance: none;
-      appearance: none;
+          appearance: none;
 }
 
 .singleSlider:hover {
