@@ -248,48 +248,53 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 
 colorFilter.prototype.THRESHOLDING = (thresh) => {
   return (context, callback) => {
-    // console.log('thresh', thresh)
-    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    let pixels = imgData.data;
 
-    let color;
-    if (typeof thresh.rgba !== 'undefined') {
-      color = thresh.rgba;
-    } else {
-      color = [126, 1, 0, 255]; // #7e0100
-    }
+    if (typeof thresh !== 'undefined') {
+      // console.log('thresh', thresh)
+      let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+      let pixels = imgData.data;
 
-    if (typeof thresh.classId !== 'undefined') {
+      let color;
+      if (typeof thresh.rgba !== 'undefined') {
+        color = thresh.rgba;
+      } else {
+        color = [126, 1, 0, 255]; // #7e0100
+      }
 
-      let classId = parseInt(thresh.classId)
-      // console.log('classId', classId)
+      if (typeof thresh.classId !== 'undefined') {
 
-      for (let i = 0; i < pixels.length; i += 4) {
-        if (pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val) {
-          pixels[i] = color[0];
-          pixels[i + 1] = color[1];
-          pixels[i + 2] = color[2];
-          pixels[i + 3] = color[3];
-        } else {
-          pixels[i + 3] = 0;
+        let classId = parseInt(thresh.classId)
+        // console.log('classId', classId)
+
+        for (let i = 0; i < pixels.length; i += 4) {
+          if (pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val) {
+            pixels[i] = color[0];
+            pixels[i + 1] = color[1];
+            pixels[i + 2] = color[2];
+            pixels[i + 3] = color[3];
+          } else {
+            pixels[i + 3] = 0;
+          }
+        }
+      } else {
+        // console.log('here')
+        for (let i = 0; i < pixels.length; i += 4) {
+          // Test green channel value above threshold.
+          if (pixels[i + 1] >= thresh.val) {
+            pixels[i] = color[0];
+            pixels[i + 1] = color[1];
+            pixels[i + 2] = color[2];
+            pixels[i + 3] = color[3];
+          } else {
+            pixels[i + 3] = 0;
+          }
         }
       }
-    } else {
-      // console.log('here')
-      for (let i = 0; i < pixels.length; i += 4) {
-        // Test green channel value above threshold.
-        if (pixels[i + 1] >= thresh.val) {
-          pixels[i] = color[0];
-          pixels[i + 1] = color[1];
-          pixels[i + 2] = color[2];
-          pixels[i + 3] = color[3];
-        } else {
-          pixels[i + 3] = 0;
-        }
-      }
-    }
 
-    context.putImageData(imgData, 0, 0);
-    callback();
+      context.putImageData(imgData, 0, 0);
+      callback();
+    } else {
+      console.warn("thresh is undefined")
+    }
   };
 };
