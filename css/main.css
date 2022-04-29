@@ -67,7 +67,7 @@ a:link {
 
 .showDiv:hover .showHover {
   position: absolute;
-  z-index: 30;
+  z-index: 1080;
 
   display: block;
   overflow: hidden;
@@ -94,7 +94,7 @@ a:link {
   border: 1px solid var(--highlight);
 }
 
-/* div.scroll {
+div.scroll {
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -104,8 +104,9 @@ a:link {
   padding: 4px;
 
   text-align: justify;
-  background-color: green;
-} */
+  /* green */
+  background-color: lightcyan;
+}
 
 .annotationBtn,
 .layerBtn {
@@ -217,7 +218,7 @@ a:link {
 
 .popup {
   position: absolute;
-  z-index: 10;
+  z-index: 1060;
 
   display: inline-block;
 
@@ -233,7 +234,7 @@ a:link {
 .popupHeader {
   font-weight: bold;
 
-  z-index: 20;
+  z-index: 1070;
 
   overflow: hidden;
 
@@ -253,7 +254,7 @@ a:link {
 }
 
 .mag-content {
-  z-index: 1;
+  z-index: 1000;
 
   display: none;
 
@@ -341,7 +342,7 @@ input {
 }
 
 .dualSlider input[type='range'] {
-  z-index: 1;
+  z-index: 1020;
   top: 0;
   left: 0;
 
@@ -404,7 +405,7 @@ input {
 }
 
 .dualSlider input[type='range']:focus {
-  z-index: 2;
+  z-index: 1030;
 
   outline: dotted 1px currentcolor;
 }
@@ -454,7 +455,7 @@ output::after {
 }
 
 .dualSlider1 input[type='range'] {
-  z-index: 1;
+  z-index: 1040;
   top: 0;
   left: 0;
 
@@ -517,7 +518,7 @@ output::after {
 }
 
 .dualSlider1 input[type='range']:focus {
-  z-index: 2;
+  z-index: 1050;
 
   outline: dotted 1px currentcolor;
 }
