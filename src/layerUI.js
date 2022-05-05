@@ -90,18 +90,15 @@ function handleButtonDrag(layers, viewer) {
   });
 
   function handleDragStart(evt) {
-    /* eslint-disable no-undef */
-    sourceViewer = viewer;
-    /* eslint-disable no-undef */
-    draggedFeature = this; // The draggable feature (button element)
-    draggedFeature.style.opacity = "0.4";
+    this.style.opacity = "0.4";
+    sourceViewer = viewer; // eslint-disable-line no-undef
+    draggedFeature = this; // eslint-disable-line no-undef
     evt.dataTransfer.effectAllowed = "move";
-    evt.dataTransfer.setData("text", evt.target.id);
+    evt.dataTransfer.setData("text/plain", evt.target.id);
   }
 
   function handleDragEnd() {
-    // this = the draggable feature btn
-    this.style.opacity = "1";
+    this.style.opacity = "1"; // this = the draggable feature
     osdDiv.classList.remove("drag-over");
   }
 
