@@ -107,7 +107,6 @@ function handleButtonDrag(layers, viewer) {
     evt.target.classList.remove('drag-over') // restore style
     const targetElement = evt.target; // canvas upper-canvas
 
-    // viewerDiv is correct
     const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
     if (!viewerDiv) {
@@ -163,7 +162,6 @@ function handleButtonDrag(layers, viewer) {
     }
 
     const targetViewer = getOsdViewer(evt);
-    // targetViewer is correct.
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
         console.log("Found matching slide");
