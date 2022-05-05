@@ -13,7 +13,7 @@
  */
 const layerUI = (layersColumn, images, viewer) => {
   createLayerElements(layersColumn, images, viewer);
-  handleButtonDrag(images, viewer);
+  handleDrag(images, viewer);
 };
 
 function createLayerElements(layersColumn, layers, viewer) {
@@ -59,7 +59,7 @@ function createLayerElements(layersColumn, layers, viewer) {
 }
 
 // VIEWER'S DRAGGABLE LAYERS
-function handleButtonDrag(layers, viewer) {
+function handleDrag(layers, viewer) {
   // Div containing viewer
   const osdDiv = document.getElementById(viewer.id);
 
@@ -83,7 +83,7 @@ function handleButtonDrag(layers, viewer) {
   const table = osdDiv.closest("table");
 
   // The features/layers to the right of the viewer
-  const features = table.querySelectorAll(".layerBtn");
+  const features = table.querySelectorAll(".layer");
   features.forEach(feature => {
     feature.addEventListener("dragstart", handleDragStart);
     feature.addEventListener("dragend", handleDragEnd);
@@ -142,7 +142,7 @@ function handleButtonDrag(layers, viewer) {
           foundMatchingSlide = true;
 
           // Highlight the layer
-          lay.classList.remove("layerBtn");
+          lay.classList.remove("layer");
           lay.classList.add("block");
           lay.classList.add("orange-fade");
 
@@ -150,7 +150,7 @@ function handleButtonDrag(layers, viewer) {
           setTimeout(function() {
             lay.classList.remove("orange-fade");
             lay.classList.remove("block");
-            lay.classList.add("layerBtn");
+            lay.classList.add("layer");
           }, 2000);
 
           // Toggle eyeball
@@ -264,7 +264,7 @@ function getPreferredLabel(layer) {
 function createDraggableBtn(layerNum, featureName) {
   const element = e("button", {
     id: `${layerNum}${createId(5, "feat")}`,
-    class: "layerBtn",
+    class: "layer",
     style: "display: inline-block",
     draggable: "true",
     title: featureName

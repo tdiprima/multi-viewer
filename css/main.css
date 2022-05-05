@@ -126,7 +126,7 @@ a:link {
 }
 
 .annotationBtn,
-.layerBtn {
+.layer {
   font-size: 100%;
 
   display: inline-block;
@@ -137,7 +137,7 @@ a:link {
   border-radius: 5px;
 }
 
-.annotationBtn:active, .layerBtn:active {
+.annotationBtn:active, .layer:active {
   position: relative;
   top: 1px;
 }
@@ -159,7 +159,7 @@ a:link {
   background: linear-gradient(to bottom, #d7e1ec 0%, #fff 74%);
 }
 
-.layerBtn {
+.layer {
   font-family: Arial, Helvetica, sans-serif;
 
   float: left;
@@ -181,7 +181,7 @@ a:link {
   text-shadow: 0 1px 0 #e1e2ed;
 }
 
-.layerBtn:hover {
+.layer:hover {
   background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
   background-color: #bab1ba;
 }
