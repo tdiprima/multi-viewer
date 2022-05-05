@@ -165,7 +165,7 @@ function handleDrag(layers, viewer) {
       }
     }
 
-    const targetViewer = getOsdViewer(evt);
+    const targetViewer = getOsdViewer(evt, viewerDiv);
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
         console.log("Found matching slide");
@@ -369,7 +369,7 @@ function createTachometer(row, featureName) {
   return divBody;
 }
 
-function getOsdViewer(evt) {
+function getOsdViewer(evt, sourceViewerDiv) {
   const targetElement = evt.target;
   const tagName = targetElement.tagName.toLowerCase();
   console.log('targetElement', targetElement)
@@ -377,12 +377,6 @@ function getOsdViewer(evt) {
 
   if (tagName === "canvas") {
     try {
-      const table = targetElement.closest(".table");
-    console.log("table", table);
-    const tr = table.firstChild.firstChild;
-    const td = tr.firstChild;
-    const sourceViewerDiv = td.firstChild;
-
     let retVal;
     try {
       for (const sync of SYNCED_IMAGE_VIEWERS) {
