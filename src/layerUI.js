@@ -62,7 +62,6 @@ function createLayerElements(layersColumn, layers, viewer) {
 function handleDrag(layers, viewer) {
   // Div containing viewer
   const osdDiv = document.getElementById(viewer.id);
-
   osdDiv.addEventListener("dragenter", function(evt) {
     if (evt.preventDefault) evt.preventDefault();
     evt.target.classList.add('drag-over'); // change border style
@@ -80,7 +79,7 @@ function handleDrag(layers, viewer) {
 
   osdDiv.addEventListener("drop", handleDrop);
 
-  const table = osdDiv.closest("table");
+  const table = osdDiv.closest("table"); // todo
 
   // The features/layers to the right of the viewer
   const features = table.querySelectorAll(".layer");
@@ -106,7 +105,6 @@ function handleDrag(layers, viewer) {
     if (evt.preventDefault) evt.preventDefault(); // bc Firefox.
     evt.target.classList.remove('drag-over') // restore style
     const targetElement = evt.target; // canvas upper-canvas
-
     const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
     if (!viewerDiv) {
@@ -114,7 +112,7 @@ function handleDrag(layers, viewer) {
       return false;
     }
 
-    // Find neighboring layersColumn
+    // Find neighboring layersColumn todo
     const columnWithViewer = viewerDiv.parentElement;
     const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
 
@@ -228,10 +226,10 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
 
   if (layerNum > 0) {
     // COLOR PALETTE
-    createColorPalette(tr, feat, currentLayer, allLayers, viewer);
+    createColorPalette(tr, featureName, currentLayer, allLayers, viewer);
 
     // TACHOMETER
-    const divBody = createTachometer(tr);
+    const divBody = createTachometer(tr, featureName);
 
     layerPopup(divBody, allLayers, viewer);
   } else {
@@ -322,28 +320,29 @@ function createTransparencySlider(currentLayer, faEye, viewer) {
 }
 
 // Color palette
-function createColorPalette(row, featureElem, currentLayer, allLayers, viewer) {
+function createColorPalette(row, featureName, currentLayer, allLayers, viewer) {
   const icon = e("i", {
     id: createId(5, "palette"),
     class: "fas fa-palette pointer hover-light",
     title: "color palette"
   });
+
+  icon.addEventListener("click", () => {
+    colorsUI.style.display = "block";
+  });
+
   row.appendChild(e("td", {}, [icon]));
 
-  // TODO: when we get prefLabel, then we can pass currentLayer.prefLabel instead of featureElem.innerText
   const colorsUI = filterPopup(
     icon,
-    featureElem.innerText,
+    `${featureName} colors`,
     currentLayer.colorscheme,
     allLayers,
     viewer
   );
-  icon.addEventListener("click", () => {
-    colorsUI.style.display = "block";
-  });
 }
 
-function createTachometer(row) {
+function createTachometer(row, featureName) {
   const icon = e("i", {
     id: createId(5, "tach"),
     class: "fas fa-tachometer-alt hover-light",
@@ -353,7 +352,7 @@ function createTachometer(row) {
 
   const id = createId(5, "pop");
   const rect = icon.getBoundingClientRect();
-  const popup = createDraggableDiv(id, "Settings", rect.left, rect.top);
+  const popup = createDraggableDiv(id, `${featureName} settings`, rect.left, rect.top);
   const divBody = popup.lastChild;
 
   icon.addEventListener("click", () => {
