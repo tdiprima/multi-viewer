@@ -103,6 +103,7 @@ function handleDrag(layers, viewer) {
 
   function handleDrop(evt) {
     if (evt.preventDefault) evt.preventDefault(); // bc Firefox.
+    if (evt.stopPropagation) evt.stopPropagation();
     evt.target.classList.remove('drag-over') // restore style
     const targetElement = evt.target; // canvas upper-canvas
     const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
@@ -124,16 +125,23 @@ function handleDrag(layers, viewer) {
     const movedFeature = document.getElementById(movedFeatId);
     const featureName = movedFeature.innerHTML;
 
+    let row;
+    let cells;
+    let lay;
     let layNum;
+    let eye;
     let foundMatchingSlide = false;
+
     // Iterate table rows
-    for (let i = 0; i < tableLayAndColor.rows.length; i++) {
+    let myHTMLCollection = tableLayAndColor.children
+    for (let i = 0; i < myHTMLCollection.length; i++) {
       // Skip first row (globals)
       if (i > 0) {
-        const row = tableLayAndColor.rows[i];
-        const lay = row.cells[0].firstChild;
+        row = myHTMLCollection[i];
+        cells = row.children
+        lay = cells[0].firstChild;
         layNum = lay.id[0]; // 1st char is array index
-        const eye = row.cells[1].children[0];
+        eye = cells[1].children[0];
 
         // css transition: .block, .orange-fade
         if (lay.innerHTML === featureName) {
@@ -164,8 +172,7 @@ function handleDrag(layers, viewer) {
       if (foundMatchingSlide) {
         console.log("Found matching slide");
         try {
-          targetViewer.world.getItemAt(layNum)
-            .setOpacity(1); // show
+          targetViewer.world.getItemAt(layNum).setOpacity(1); // show
           // We already turned on target feature eyeball
 
           // TODO: Uncomment if we want "move" instead of "copy":
@@ -367,9 +374,13 @@ function createTachometer(row, featureName) {
 function getOsdViewer(evt) {
   const targetElement = evt.target;
   const tagName = targetElement.tagName.toLowerCase();
+  console.log('targetElement', targetElement)
+  console.log('tagName', tagName)
 
   if (tagName === "canvas") {
-    const table = targetElement.closest("table");
+    try {
+      const table = targetElement.closest(".table");
+    console.log("table", table);
     const tr = table.firstChild.firstChild;
     const td = tr.firstChild;
     const sourceViewerDiv = td.firstChild;
@@ -386,6 +397,9 @@ function getOsdViewer(evt) {
       console.error("message:", e.message);
     }
     return retVal;
+    } catch (e) {
+      console.error(e.message)
+    }
   }
   return null;
 }
