@@ -372,8 +372,6 @@ function createTachometer(row, featureName) {
 function getOsdViewer(evt, sourceViewerDiv) {
   const targetElement = evt.target;
   const tagName = targetElement.tagName.toLowerCase();
-  console.log('targetElement', targetElement)
-  console.log('tagName', tagName)
 
   if (tagName === "canvas") {
     try {
