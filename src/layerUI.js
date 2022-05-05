@@ -63,19 +63,21 @@ function handleButtonDrag(layers, viewer) {
   // Div containing viewer
   const osdDiv = document.getElementById(viewer.id);
 
-  osdDiv.addEventListener("dragenter", function() {
-    this.classList.add("over");
-  });
-
-  osdDiv.addEventListener("dragleave", function() {
-    this.classList.remove("over");
+  osdDiv.addEventListener("dragenter", function(evt) {
+    if (evt.preventDefault) evt.preventDefault();
+    evt.target.classList.add('drag-over'); // change border style
   });
 
   osdDiv.addEventListener("dragover", evt => {
     // dragover target = canvas; class "upper-canvas"
     if (evt.preventDefault) evt.preventDefault();
-    return false;
+    evt.target.classList.add('drag-over') // change border style
   });
+
+  osdDiv.addEventListener("dragleave", function(evt) {
+    evt.target.classList.remove('drag-over') // restore style
+  });
+
   osdDiv.addEventListener("drop", handleDrop);
 
   const table = osdDiv.closest("table");
@@ -100,15 +102,13 @@ function handleButtonDrag(layers, viewer) {
   function handleDragEnd() {
     // this = the draggable feature btn
     this.style.opacity = "1";
-    osdDiv.classList.remove("over");
+    osdDiv.classList.remove("drag-over");
   }
 
   function handleDrop(evt) {
-    // targetElement is correct
+    if (evt.preventDefault) evt.preventDefault(); // bc Firefox.
+    evt.target.classList.remove('drag-over') // restore style
     const targetElement = evt.target; // canvas upper-canvas
-    this.classList.remove("over"); // this = osdDiv viewer ("dropzone")
-
-    if (evt.preventDefault) evt.preventDefault();
 
     // viewerDiv is correct
     const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature

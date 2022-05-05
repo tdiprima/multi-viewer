@@ -61,13 +61,44 @@ a:link {
   margin-right: 5px;
 }
 
+/* TABLE to DIV */
+.table {
+  display: table;
+}
+
+.row {
+  display: table-row;
+}
+
+.col {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* SCROLL */
+
+.scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* overflow: auto; */
+
+  width: 200px;
+  height: 475px;
+  /* margin: 4px; */
+  /* padding: 4px; */
+
+  /* text-align: justify; */
+}
+
+/* HOVER */
 .showHover {
+  z-index: 1080 !important;
   display: none;
 }
 
 .showDiv:hover .showHover {
   position: absolute;
-  z-index: 1080;
+  z-index: 1090 !important;
 
   display: block;
   overflow: hidden;
@@ -92,20 +123,6 @@ a:link {
 .hover-light:hover {
   color: var(--highlight);
   border: 1px solid var(--highlight);
-}
-
-div.scroll {
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  width: 200px;
-  height: 475px;
-  margin: 4px;
-  padding: 4px;
-
-  text-align: justify;
-  /* green */
-  /* background-color: lightcyan; */
 }
 
 .annotationBtn,
@@ -176,7 +193,7 @@ div.scroll {
   background-color: var(--bg-light);
 }
 
-.dropzone.over {
+.drag-over {
   border: 3px dotted var(--highlight);
 }
 
