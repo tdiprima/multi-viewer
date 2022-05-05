@@ -58,7 +58,7 @@ function createLayerElements(layersColumn, layers, viewer) {
 
 // VIEWER'S DRAGGABLE LAYERS
 function handleDrag(layers, viewer) {
-  // Div containing viewer
+  // Div containing viewer (Remember this is executed for each viewer.)
   const osdDiv = document.getElementById(viewer.id);
 
   // TODO: one of these fires a lot?
@@ -79,10 +79,8 @@ function handleDrag(layers, viewer) {
 
   osdDiv.addEventListener("drop", handleDrop);
 
-  const table = osdDiv.closest("table"); // todo
-
   // The features/layers to the right of the viewer
-  const features = table.querySelectorAll(".layer");
+  const features = document.querySelectorAll(".layer");
   features.forEach(feature => {
     feature.addEventListener("dragstart", handleDragStart);
     feature.addEventListener("dragend", handleDragEnd);
