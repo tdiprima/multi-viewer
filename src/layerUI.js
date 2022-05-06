@@ -61,30 +61,14 @@ function handleDrag(layers, viewer) {
   // Div containing viewer (Remember this is executed for each viewer.)
   const osdDiv = document.getElementById(viewer.id);
 
-  // TODO: one of these fires a lot?
-  osdDiv.addEventListener("dragenter", function(evt) {
-    if (evt.preventDefault) evt.preventDefault();
-    evt.target.classList.add('drag-over'); // change border style
-  });
-
-  osdDiv.addEventListener("dragover", evt => {
-    // dragover target = canvas; class "upper-canvas"
-    if (evt.preventDefault) evt.preventDefault();
-    evt.target.classList.add('drag-over') // change border style
-  });
-
-  osdDiv.addEventListener("dragleave", function(evt) {
-    evt.target.classList.remove('drag-over') // restore style
-  });
-
-  osdDiv.addEventListener("drop", handleDrop);
-
   // The features/layers to the right of the viewer
   const features = document.querySelectorAll(".layer");
   features.forEach(feature => {
     feature.addEventListener("dragstart", handleDragStart);
     feature.addEventListener("dragend", handleDragEnd);
   });
+
+  /* events fired on the draggable target */
 
   function handleDragStart(evt) {
     evt.target.style.opacity = "0.4";
@@ -99,11 +83,33 @@ function handleDrag(layers, viewer) {
     osdDiv.classList.remove("drag-over");
   }
 
+  /* events fired on the drop targets */
+
+  osdDiv.addEventListener("dragover", evt => {
+    // prevent default to allow drop
+    evt.preventDefault();
+    return false;
+  });
+
+  osdDiv.addEventListener("dragenter", function(evt) {
+    // highlight potential drop target when the draggable element enters it
+    evt.target.classList.add('drag-over');
+  });
+
+  osdDiv.addEventListener("dragleave", function(evt) {
+    // reset border of potential drop target when the draggable element leaves it
+    evt.target.classList.remove('drag-over')
+  });
+
+  osdDiv.addEventListener("drop", handleDrop);
+
   function handleDrop(evt) {
-    if (evt.preventDefault) evt.preventDefault(); // bc Firefox.
-    if (evt.stopPropagation) evt.stopPropagation();
+    // prevent default action (open as link for some elements)
+    evt.preventDefault();
+    evt.stopPropagation();
+
     evt.target.classList.remove('drag-over') // restore style
-    const targetElement = evt.target; // canvas upper-canvas
+    const targetElement = evt.target;
     const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
     if (!viewerDiv) {
@@ -111,7 +117,7 @@ function handleDrag(layers, viewer) {
       return false;
     }
 
-    // Find neighboring layersColumn todo
+    // Find neighboring layersColumn
     const columnWithViewer = viewerDiv.parentElement;
     const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
 
@@ -141,18 +147,18 @@ function handleDrag(layers, viewer) {
         layNum = lay.id[0]; // 1st char is array index
         eye = cells[1].children[0];
 
-        // css transition: .block, .orange-fade
+        // css transition: .block, .color-fade
         if (lay.innerHTML === featureName) {
           foundMatchingSlide = true;
 
           // Highlight the layer
           lay.classList.remove("layer");
           lay.classList.add("block");
-          lay.classList.add("orange-fade");
+          lay.classList.add("color-fade");
 
           /** timeout to turn it back to normal **/
           setTimeout(function() {
-            lay.classList.remove("orange-fade");
+            lay.classList.remove("color-fade");
             lay.classList.remove("block");
             lay.classList.add("layer");
           }, 2000);
@@ -217,7 +223,6 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   tr.appendChild(e("div", { class: "col" }, [faEye]));
 
   // TRANSPARENCY SLIDER
-  // TODO: TJD
   const [icon, slider] = createTransparencySlider(currentLayer, faEye, viewer);
 
   // .showDiv
@@ -353,7 +358,7 @@ function createTachometer(row, featureName) {
   const icon = e("i", {
     id: createId(5, "tach"),
     class: "fas fa-tachometer-alt hover-light",
-    title: "settings" // call it 'settings', 'control panel', idk.
+    title: "settings" // call it "settings", "control panel", idk.
   });
   row.appendChild(e("div", { class: "col" }, [icon]));
 
@@ -416,11 +421,11 @@ function handleVisibility(icon, slider, layerNum, viewer) {
   if (typeof tiledImage !== "undefined") {
     if (icon.classList.contains("fa-eye-slash")) {
       tiledImage.setOpacity(0); // Turn off layer
-      // slider.value = '0' // Set slider to 0
+      // slider.value = "0" // Set slider to 0
     } else {
       tiledImage.setOpacity(slider.value / 100);
       // tiledImage.setOpacity(1) // Turn on layer
-      // slider.value = '100' // Set slider to (opacity * 100)
+      // slider.value = "100" // Set slider to (opacity * 100)
     }
   }
 }
