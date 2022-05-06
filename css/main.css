@@ -201,7 +201,7 @@ a:link {
   border: 3px dotted var(--highlight);
 }
 
-/* css transition: .block, .orange-fade */
+/* css transition: .block, .color-fade */
 .block {
   display: block;
 
@@ -217,7 +217,7 @@ a:link {
   transform: skew(-10deg);
 }
 
-.orange-fade {
+.color-fade {
   width: 90px;
   padding: .5em 1em;
 
