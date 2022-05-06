@@ -171,11 +171,11 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   }
 
   // Hot keys
-  function hotKeysHandler(e) {
-    const key = e.key.toLocaleLowerCase();
+  function hotKeysHandler(evt) {
+    const key = evt.key.toLocaleLowerCase();
     // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
     if (key === 'escape' || key === 'esc') {
-      e.preventDefault();
+      evt.preventDefault();
       // Button-reset
       const buttons = document.getElementsByClassName('btnOn');
       for (let i = 0; i < buttons.length; i++) {
@@ -183,8 +183,8 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       }
     }
     // control-r for 'ruler'
-    if (e.ctrlKey && key === 'r') {
-      e.preventDefault();
+    if (evt.ctrlKey && key === 'r') {
+      evt.preventDefault();
       for (let i = 0; i < viewers.length; i++) {
         document.querySelectorAll('[id^="btnRuler"]').forEach(node => {
           node.click();
