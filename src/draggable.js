@@ -66,26 +66,24 @@ function dragElement(_elem) {
   }
 
   // Mouse-down handler
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
+  function dragMouseDown(evt) {
+    evt.preventDefault();
     // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
+    pos3 = evt.clientX;
+    pos4 = evt.clientY;
     document.onmouseup = closeDragElement;
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
   }
 
   // Mouse-move handler
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
+  function elementDrag(evt) {
+    evt.preventDefault();
     // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
+    pos1 = pos3 - evt.clientX;
+    pos2 = pos4 - evt.clientY;
+    pos3 = evt.clientX;
+    pos4 = evt.clientY;
     // set the element's new position:
     _elem.style.top = `${_elem.offsetTop - pos2}px`;
     _elem.style.left = `${_elem.offsetLeft - pos1}px`;
