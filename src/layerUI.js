@@ -87,15 +87,15 @@ function handleDrag(layers, viewer) {
   });
 
   function handleDragStart(evt) {
-    this.style.opacity = "0.4";
+    evt.target.style.opacity = "0.4";
     sourceViewer = viewer; // eslint-disable-line no-undef
     draggedFeature = this; // eslint-disable-line no-undef
     evt.dataTransfer.effectAllowed = "move";
     evt.dataTransfer.setData("text/plain", evt.target.id);
   }
 
-  function handleDragEnd() {
-    this.style.opacity = "1"; // this = the draggable feature
+  function handleDragEnd(evt) {
+    evt.target.style.opacity = "1"; // this = the draggable feature
     osdDiv.classList.remove("drag-over");
   }
 
