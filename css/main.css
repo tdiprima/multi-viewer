@@ -90,7 +90,7 @@ a:link {
 
 .hide {
   display: none;
-  position: absolute;
+  /* position: absolute; */
 }
 
 /*.myDIV {*/
@@ -98,7 +98,9 @@ a:link {
 /*}*/
 
 .myDIV:hover .hide {
+  position: absolute;
   display: block;
+  /* display: inline; */
 }
 
 .showHover {
