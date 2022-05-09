@@ -229,10 +229,10 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   const [icon, slider] = createTransparencySlider(currentLayer, faEye, viewer);
 
   // .showDiv
-  const div = e("div", { class: "showDiv", title: "transparency slider" }, [icon]);
+  const div = e("div", { class: "myDIV", title: "transparency slider" }, [icon]);
 
   // .showHover
-  div.appendChild(e("div", { class: "showHover" }, [slider]));
+  div.appendChild(e("div", { class: "hide" }, [slider]));
 
   // VISIBILITY
   faEye.addEventListener("click", handleVisibility.bind(null, faEye, slider, layerNum, viewer), false);
