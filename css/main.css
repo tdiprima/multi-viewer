@@ -75,9 +75,10 @@ a:link {
 }
 
 .scroll {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   width: 200px;
-  height: 375px;
+  height: 475px;
 }
 
 .hide {
@@ -85,7 +86,8 @@ a:link {
 }
 
 .myDIV:hover .hide {
-  /*position: absolute;*/
+  /*position: absolute; !* need it, but it interferes with scroll *!*/
+  /*z-index: 1100 !important; !* seems to have no effect *!*/
   display: block;
 }
 

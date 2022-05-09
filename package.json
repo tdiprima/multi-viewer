@@ -10,12 +10,6 @@
     "lint:write": "eslint --debug ./ --fix",
     "prettier": "prettier --write ./**/*.js"
   },
-  "lint-staged": {
-    "*.(js|jsx)": [
-      "npm run lint:write",
-      "git add"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tdiprima/multi-viewer.git"
