@@ -61,7 +61,6 @@ a:link {
   margin-right: 5px;
 }
 
-/* TABLE to DIV */
 .divTable {
   display: table;
 }
@@ -75,32 +74,19 @@ a:link {
   vertical-align: middle;
 }
 
-/* .scroll {
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 200px;
-  height: 475px;
-} */
-
 .scroll {
   overflow: scroll;
   width: 200px;
-  height: 475px;
+  height: 375px;
 }
 
 .hide {
   display: none;
-  /* position: absolute; */
 }
 
-/*.myDIV {*/
-/*  position: absolute;*/
-/*}*/
-
 .myDIV:hover .hide {
-  position: absolute;
-  /* display: block; */
-  display: inline;
+  /*position: absolute;*/
+  display: block;
 }
 
 .showHover {
