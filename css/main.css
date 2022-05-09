@@ -75,10 +75,15 @@ a:link {
   vertical-align: middle;
 }
 
-.scroll {
-  /* overflow: scroll; */
+/* .scroll {
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
+  width: 200px;
+  height: 475px;
+} */
+
+.scroll {
+  overflow: scroll;
   width: 200px;
   height: 475px;
 }
@@ -88,7 +93,6 @@ a:link {
 }
 
 .myDIV:hover .hide {
-  position: absolute;
   display: block;
 }
 
