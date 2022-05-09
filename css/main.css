@@ -90,12 +90,12 @@ a:link {
 
 .hide {
   display: none;
-  /*position: absolute;*/
-}
-
-.myDIV {
   position: absolute;
 }
+
+/*.myDIV {*/
+/*  position: absolute;*/
+/*}*/
 
 .myDIV:hover .hide {
   display: block;
