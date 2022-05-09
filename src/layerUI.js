@@ -27,16 +27,16 @@ function createLayerElements(layersColumn, layers, viewer) {
     class: "fas fa-eye" // 'data-tooltip': 'eye toggle'
   });
 
-  const table = e("div", { class: "table" });
-  layersColumn.appendChild(e("div", { "class": "scroll" }, [table]));
+  const divTable = e("div", { class: "divTable" });
+  layersColumn.appendChild(e("div", { "class": "scroll" }, [divTable]));
 
-  const tr = e("div", { class: "row" });
-  table.appendChild(tr);
-  tr.appendChild(e("div", { class: "col" }));
-  tr.appendChild(e("div", { class: "col" }, [globalEyeToggle]));
+  const divTableRow = e("div", { class: "divTableRow" });
+  divTable.appendChild(divTableRow);
+  divTableRow.appendChild(e("div", { class: "divTableCell" }));
+  divTableRow.appendChild(e("div", { class: "divTableCell" }, [globalEyeToggle]));
 
   layers.forEach(layer => {
-    addIconRow(myEyeArray, table, layer, layers, viewer);
+    addIconRow(myEyeArray, divTable, layer, layers, viewer);
   });
 
   globalEyeToggle.addEventListener("click", function() {
@@ -204,16 +204,16 @@ function handleDrag(layers, viewer) {
   }
 }
 
-function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
-  const tr = e("div", { class: "row" });
-  table.appendChild(tr);
+function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
+  const divTableRow = e("div", { class: "divTableRow" });
+  divTable.appendChild(divTableRow);
 
   const layerNum = currentLayer.layerNum;
   const featureName = getPreferredLabel(currentLayer);
 
   // FEATURE
   const feat = createDraggableBtn(layerNum, featureName);
-  tr.appendChild(e("div", { class: "col", style: "padding: 3px" }, [feat]));
+  divTableRow.appendChild(e("div", { class: "divTableCell", style: "padding: 3px" }, [feat]));
 
   // VISIBILITY TOGGLE
   const faEye = createEyeball(currentLayer);
@@ -221,7 +221,7 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
     myEyeArray.push(faEye);
   }
 
-  tr.appendChild(e("div", { class: "col" }, [faEye]));
+  divTableRow.appendChild(e("div", { class: "divTableCell" }, [faEye]));
 
   // TRANSPARENCY SLIDER
   const [icon, slider] = createTransparencySlider(currentLayer, faEye, viewer);
@@ -235,18 +235,18 @@ function addIconRow(myEyeArray, table, currentLayer, allLayers, viewer) {
   // VISIBILITY
   faEye.addEventListener("click", handleVisibility.bind(null, faEye, slider, layerNum, viewer), false);
 
-  tr.appendChild(e("div", { class: "col" }, [div]));
+  divTableRow.appendChild(e("div", { class: "divTableCell" }, [div]));
 
   if (layerNum > 0) {
     // COLOR PALETTE
-    createColorPalette(tr, featureName, currentLayer, allLayers, viewer);
+    createColorPalette(divTableRow, featureName, currentLayer, allLayers, viewer);
 
     // TACHOMETER
-    const divBody = createTachometer(tr, featureName);
+    const divBody = createTachometer(divTableRow, featureName);
 
     layerPopup(divBody, allLayers, viewer);
   } else {
-    tr.appendChild(e("div", { class: "col" }));
+    divTableRow.appendChild(e("div", { class: "divTableCell" }));
   }
 }
 
@@ -344,7 +344,7 @@ function createColorPalette(row, featureName, currentLayer, allLayers, viewer) {
     colorsUI.style.display = "block";
   });
 
-  row.appendChild(e("div", { class: "col" }, [icon]));
+  row.appendChild(e("div", { class: "divTableCell" }, [icon]));
 
   const colorsUI = filterPopup(
     icon,
@@ -361,7 +361,7 @@ function createTachometer(row, featureName) {
     class: "fas fa-tachometer-alt hover-light",
     title: "settings" // call it "settings", "control panel", idk.
   });
-  row.appendChild(e("div", { class: "col" }, [icon]));
+  row.appendChild(e("div", { class: "divTableCell" }, [icon]));
 
   const id = createId(5, "pop");
   const rect = icon.getBoundingClientRect();

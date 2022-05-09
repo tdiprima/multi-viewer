@@ -62,39 +62,42 @@ a:link {
 }
 
 /* TABLE to DIV */
-.table {
+.divTable {
   display: table;
 }
 
-.row {
+.divTableRow {
   display: table-row;
 }
 
-.col {
+.divTableCell {
   display: table-cell;
-  vertical-align: middle;
+  padding: 3px 10px;
+  /* vertical-align: middle; */
 }
 
-/* SCROLL */
-
-.scroll {
+/* .scroll {
   overflow-x: hidden;
   overflow-y: auto;
-  /* overflow: auto; */
-
   width: 200px;
   height: 475px;
-  /* margin: 4px; */
-  /* padding: 4px; */
+} */
 
-  /* text-align: justify; */
-  /* green */
-  /* background-color: lightcyan; */
-  /* background-color: chartreuse; */
-  /* background-color: darkorchid; */
+.scroll {
+  overflow: scroll;
+  width: 220px;
+  height: 250px;
+  border: 1px solid;
 }
 
-/* HOVER */
+.hide {
+  display: none;
+}
+
+.myDIV:hover .hide {
+  display: block;
+}
+
 .showHover {
   z-index: 1080 !important;
   display: none;
@@ -103,7 +106,6 @@ a:link {
 .showDiv:hover .showHover {
   position: absolute;
   z-index: 1090 !important;
-
   display: block;
   overflow: hidden;
 }
