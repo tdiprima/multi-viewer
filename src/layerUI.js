@@ -32,6 +32,7 @@ function createLayerElements(layersColumn, layers, viewer) {
 
   const tr = e("div", { class: "row" });
   table.appendChild(tr);
+  tr.appendChild(e("div"));
   tr.appendChild(e("div", { class: "col" }, [globalEyeToggle]));
 
   layers.forEach(layer => {
