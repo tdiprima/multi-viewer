@@ -99,8 +99,8 @@ a:link {
 
 .myDIV:hover .hide {
   position: absolute;
-  display: block;
-  /* display: inline; */
+  /* display: block; */
+  display: inline;
 }
 
 .showHover {
