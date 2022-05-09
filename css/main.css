@@ -23,7 +23,6 @@
 
 .sun {
   cursor: pointer;
-
   color: var(--sun);
 }
 
@@ -45,7 +44,6 @@ a:link {
 
 .divSquare {
   float: left;
-
   margin-right: 195px;
 }
 
@@ -56,7 +54,6 @@ a:link {
 
 .floated {
   float: left;
-
   width: 100%;
   margin-right: 5px;
 }
@@ -110,7 +107,6 @@ a:link {
 
 *[draggable=true] {
   cursor: move;
-
   -webkit-user-drag: element;
      -moz-user-drag: element;
 }
@@ -128,11 +124,8 @@ a:link {
 .annotationBtn,
 .layer {
   font-size: 100%;
-
   display: inline-block;
-
   text-decoration: none;
-
   border: 1px solid;
   border-radius: 5px;
 }
@@ -144,14 +137,11 @@ a:link {
 
 .annotationBtn {
   padding: .2em .7em;
-
   cursor: pointer;
-
   color: #666;
   border: #ddd;
   background: linear-gradient(to bottom, #fff 0%, #d7e1ec 74%);
   background-color: #fff;
-
 }
 
 .annotationBtn:hover {
@@ -161,18 +151,14 @@ a:link {
 
 .layer {
   font-family: Arial, Helvetica, sans-serif;
-
   float: left;
   overflow: hidden;
-
   width: 90px;
   padding: .5em 1em;
-
   cursor: move;
   transform: skew(-10deg);
   white-space: nowrap;
   text-overflow: ellipsis;
-
   color: #3a8a9e;
   border: #d6bcd6;
   background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
@@ -188,7 +174,6 @@ a:link {
 
 .dropzone {
   overflow: hidden;
-
   border: 1px solid var(--text-light);
   background-color: var(--bg-light);
 }
@@ -200,7 +185,6 @@ a:link {
 /* css transition: .block, .color-fade */
 .block {
   display: block;
-
   width: 90px;
   padding: .5em 1em;
 
@@ -236,11 +220,8 @@ a:link {
 .popup {
   position: absolute;
   z-index: 1060;
-
   display: inline-block;
-
   white-space: nowrap;
-
   color: var(--text-light);
   border: 1px solid var(--text-light);
   border-radius: 7px;
@@ -250,18 +231,13 @@ a:link {
 
 .popupHeader {
   font-weight: bold;
-
   z-index: 1070;
-
   overflow: hidden;
-
   width: 100%;
   padding: 10px;
-
   cursor: move;
   white-space: nowrap;
   text-overflow: ellipsis;
-
   color: var(--text-dark);
   background-color: var(--text-light);
 }
@@ -272,11 +248,8 @@ a:link {
 
 .mag-content {
   z-index: 1000;
-
   display: none;
-
   min-width: 160px;
-
   border-radius: 7px;
   background-color: rgba(249, 249, 249, .5);
   box-shadow: 5px 5px 5px var(--text-light);
@@ -285,12 +258,9 @@ a:link {
 .mag-content a {
   display: block;
   float: none;
-
   padding: .4em 1em;
-
   text-align: left;
   text-decoration: none;
-
   color: var(--text-light);
 }
 
@@ -314,7 +284,6 @@ input {
   display: -ms-grid;
   display:   grid;
   overflow: hidden;
-
   width: 20em;
   margin: 1em auto;
 
@@ -330,9 +299,7 @@ input {
 .dualSlider::before,
 .dualSlider::after {
   height: 100%;
-
   content: '';
-
   background: var(--highlight);
 
   -ms-grid-column: 1;
@@ -362,11 +329,8 @@ input {
   z-index: 1020;
   top: 0;
   left: 0;
-
   margin: 0;
-
   pointer-events: none;
-
   color: var(--text-light);
   background: none;
 
@@ -388,23 +352,19 @@ input {
 .dualSlider input[type='range']::-webkit-slider-runnable-track {
   width: 100%;
   height: 100%;
-
   background: none;
 }
 
 .dualSlider input[type='range']::-moz-range-track {
   width: 100%;
   height: 100%;
-
   background: none;
 }
 
 .dualSlider input[type='range']::-webkit-slider-thumb {
   width: 1em;
   height: 1em;
-
   pointer-events: auto;
-
   border: none;
   border-radius: 0;
   background: currentcolor;
@@ -413,9 +373,7 @@ input {
 .dualSlider input[type='range']::-moz-range-thumb {
   width: 1em;
   height: 1em;
-
   pointer-events: auto;
-
   border: none;
   border-radius: 0;
   background: currentcolor;
@@ -423,7 +381,6 @@ input {
 
 .dualSlider input[type='range']:focus {
   z-index: 1030;
-
   outline: dotted 1px currentcolor;
 }
 
@@ -449,9 +406,7 @@ output::after {
 .dualSlider1::before,
 .dualSlider1::after {
   height: 100%;
-
   content: '';
-
   background: var(--highlight);
 
   -ms-grid-column: 1;
@@ -475,9 +430,7 @@ output::after {
   z-index: 1040;
   top: 0;
   left: 0;
-
   margin: 0;
-
   pointer-events: none;
 
   color: var(--text-light);
@@ -501,23 +454,19 @@ output::after {
 .dualSlider1 input[type='range']::-webkit-slider-runnable-track {
   width: 100%;
   height: 100%;
-
   background: none;
 }
 
 .dualSlider1 input[type='range']::-moz-range-track {
   width: 100%;
   height: 100%;
-
   background: none;
 }
 
 .dualSlider1 input[type='range']::-webkit-slider-thumb {
   width: 1em;
   height: 1em;
-
   pointer-events: auto;
-
   border: none;
   border-radius: 0;
   background: currentcolor;
@@ -526,9 +475,7 @@ output::after {
 .dualSlider1 input[type='range']::-moz-range-thumb {
   width: 1em;
   height: 1em;
-
   pointer-events: auto;
-
   border: none;
   border-radius: 0;
   background: currentcolor;
@@ -536,7 +483,6 @@ output::after {
 
 .dualSlider1 input[type='range']:focus {
   z-index: 1050;
-
   outline: dotted 1px currentcolor;
 }
 
@@ -547,8 +493,8 @@ output::after {
 
 .singleSlider {
   height: 12px;
-
   opacity: 2;
+
   background: var(--rgb-on);
   background: -webkit-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
   background:    -moz-linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
@@ -560,9 +506,7 @@ output::after {
 .singleSlider::-webkit-slider-thumb {
   width: 12px;
   height: 12px;
-
   cursor: pointer;
-
   background: var(--text-dark);
 
   -webkit-appearance: none;
@@ -584,21 +528,16 @@ output::after {
 
 .css-tooltip:hover:after {
   font-size: .825rem;
-
   position: absolute;
   top: 0;
   left: 135%;
-
   display: inline-block;
-
   min-width: 150px;
   margin: 0 auto;
   padding: 5px;
-
   content: attr(data-tooltip);
   transform: translateX(-15%);
   text-align: center;
-
   border-radius: 3px;
   background-color: var(--tooltip);
 }
