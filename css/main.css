@@ -88,6 +88,7 @@ a:link {
 }
 
 .myDIV:hover .hide {
+  position: absolute;
   display: block;
 }
 
