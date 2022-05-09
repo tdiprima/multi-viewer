@@ -75,18 +75,12 @@ a:link {
   vertical-align: middle;
 }
 
-/* .scroll {
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 200px;
-  height: 475px;
-} */
-
 .scroll {
   overflow: scroll;
-  width: 220px;
-  height: 250px;
-  border: 1px solid;
+  /* overflow-x: hidden;
+  overflow-y: auto; */
+  width: 200px;
+  height: 475px;
 }
 
 .hide {
