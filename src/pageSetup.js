@@ -11,12 +11,6 @@
  * @param opts: Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
-  if (window.location.href.includes("129")) {
-    images = images.slice(0, 1);
-    numViewers = 1;
-    rows = 1;
-    columns = 1;
-  }
   /*
   When the 'images' parameter becomes an array with null elements,
   it usually means that the session timed out or is in the process of timeout.
