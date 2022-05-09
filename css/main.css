@@ -76,9 +76,9 @@ a:link {
 }
 
 .scroll {
-  overflow: scroll;
-  /* overflow-x: hidden;
-  overflow-y: auto; */
+  /* overflow: scroll; */
+  overflow-x: hidden;
+  overflow-y: scroll;
   width: 200px;
   height: 475px;
 }
