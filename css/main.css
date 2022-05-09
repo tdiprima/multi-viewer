@@ -86,6 +86,7 @@ a:link {
 }
 
 .myDIV:hover .hide {
+  position: absolute;
   /*position: absolute; !* need it, but it interferes with scroll *!*/
   /*z-index: 1100 !important; !* seems to have no effect *!*/
   display: block;
