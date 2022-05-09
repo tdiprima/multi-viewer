@@ -28,15 +28,17 @@ function createLayerElements(layersColumn, layers, viewer) {
   });
 
   const divTable = e("div", { class: "divTable" });
-  layersColumn.appendChild(e("div", { "class": "scroll" }, [divTable]));
+  const scrollDiv = e("div", { class: "divTableBody scroll" });
+  layersColumn.appendChild(divTable);
+  divTable.appendChild(scrollDiv);
 
   const divTableRow = e("div", { class: "divTableRow" });
-  divTable.appendChild(divTableRow);
+  scrollDiv.appendChild(divTableRow);
   divTableRow.appendChild(e("div", { class: "divTableCell" }));
   divTableRow.appendChild(e("div", { class: "divTableCell" }, [globalEyeToggle]));
 
   layers.forEach(layer => {
-    addIconRow(myEyeArray, divTable, layer, layers, viewer);
+    addIconRow(myEyeArray, scrollDiv, layer, layers, viewer);
   });
 
   globalEyeToggle.addEventListener("click", function() {

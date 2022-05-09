@@ -72,8 +72,7 @@ a:link {
 
 .divTableCell {
   display: table-cell;
-  padding: 3px 10px;
-  /* vertical-align: middle; */
+  vertical-align: middle;
 }
 
 /* .scroll {
