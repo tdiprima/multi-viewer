@@ -79,11 +79,13 @@ a:link {
 }
 
 .hide {
+  z-index: 10;
   display: none;
 }
 
 .myDIV:hover .hide {
   position: absolute;
+  z-index: 9;
   /*position: absolute; !* need it, but it interferes with scroll *!*/
   /*z-index: 1100 !important; !* seems to have no effect *!*/
   display: block;
@@ -233,12 +235,13 @@ a:link {
   font-weight: bold;
   z-index: 1070;
   overflow: hidden;
-  width: 100%;
   padding: 10px;
   cursor: move;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--text-dark);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
   background-color: var(--text-light);
 }
 
