@@ -277,7 +277,7 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
           }
         }
       } else {
-        // console.log('here')
+        // console.log('classId undefined')
         for (let i = 0; i < pixels.length; i += 4) {
           // Test green channel value above threshold.
           if (pixels[i + 1] >= thresh.val) {

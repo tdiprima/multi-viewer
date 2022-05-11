@@ -86,7 +86,7 @@ const blender = (blenderBtn, viewer) => {
         type: 'button',
         id: name.replace('-', '_'),
         value: name,
-        class: 'btn hover-light css-tooltip',
+        class: 'annotationBtn css-tooltip',
         style: 'width: 120px',
         'data-tooltip': def
       });
@@ -122,6 +122,6 @@ const blender = (blenderBtn, viewer) => {
       createBlendModesUI(document.getElementById(`${id}Body`), viewer);
       uiCreated = true;
     }
-    toggleButton(blenderBtn, 'btnOn', 'btn');
+    toggleButton(blenderBtn, 'btnOn', 'annotationBtn');
   });
 };

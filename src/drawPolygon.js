@@ -27,7 +27,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   btnDraw.addEventListener('click', function() {
-    toggleButton(this, 'btnOn', 'btn');
+    toggleButton(this, 'btnOn', 'annotationBtn');
     // Toggle drawing
     if (canvas.isDrawingMode) {
       turnDrawingOff(canvas, viewer);
@@ -57,7 +57,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {
     convertPathToPolygon(options.path, canvas, paintBrush);
     customizePolygonControls(options.path, canvas, viewer);
-    toggleButton(button, 'btn', 'btnOn');
+    toggleButton(button, 'annotationBtn', 'btnOn');
     canvas.off('path:created', () => {
       pathCreatedHandler(options, button, canvas, paintBrush, viewer);
     });

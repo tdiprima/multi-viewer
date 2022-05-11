@@ -109,18 +109,18 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
                 htm += `<mark id="mark${idx}">#00f</mark>&nbsp;`;
               }
 
-              htm += `<button id="btnDraw${idx}" class="btn annotationBtn" title="Draw"><i class="fas fa-pencil-alt"></i></button>
-<button id="btnEdit${idx}" class="btn annotationBtn" title="Edit"><i class="fas fa-draw-polygon"></i></button>
-<button id="btnGrid${idx}" class="btn annotationBtn" title="Grid"><i class="fas fa-border-all"></i></button>
-<button id="btnGridMarker${idx}" class="btn annotationBtn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>
-<button id="btnRuler${idx}" class="btn annotationBtn" title="Measure in microns"><i class="fas fa-ruler"></i></button>
-<button id="btnShare${idx}" class="btn annotationBtn" title="Share this link"><i class="fas fa-share-alt"></i></button>
-<button id="btnCam${idx}" class="btn annotationBtn" title="Snapshot"><i class="fas fa-camera"></i></button>
-<button id="btnBlender${idx}" class="btn annotationBtn" title="Blend-modes"><i class="fas fa-blender"></i></button>
-<button id="btnCrosshairs${idx}" class="btn annotationBtn" title="Crosshairs"><i class="fas fa-crosshairs"></i></button>
-<button id="btnSave${idx}" class="btn annotationBtn" title="Save"><i class="fas fa-save"></i></button>
+              htm += `<button id="btnDraw${idx}" class="annotationBtn" title="Draw"><i class="fas fa-pencil-alt"></i></button>
+<button id="btnEdit${idx}" class="annotationBtn" title="Edit"><i class="fas fa-draw-polygon"></i></button>
+<button id="btnGrid${idx}" class="annotationBtn" title="Grid"><i class="fas fa-border-all"></i></button>
+<button id="btnGridMarker${idx}" class="annotationBtn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>
+<button id="btnRuler${idx}" class="annotationBtn" title="Measure in microns"><i class="fas fa-ruler"></i></button>
+<button id="btnShare${idx}" class="annotationBtn" title="Share this link"><i class="fas fa-share-alt"></i></button>
+<button id="btnCam${idx}" class="annotationBtn" title="Snapshot"><i class="fas fa-camera"></i></button>
+<button id="btnBlender${idx}" class="annotationBtn" title="Blend-modes"><i class="fas fa-blender"></i></button>
+<button id="btnCrosshairs${idx}" class="annotationBtn" title="Crosshairs"><i class="fas fa-crosshairs"></i></button>
+<button id="btnSave${idx}" class="annotationBtn" title="Save"><i class="fas fa-save"></i></button>
 <div class="mag" style="display: inline">
-  <button class="btn annotationBtn">
+  <button class="annotationBtn">
   <i class="fas fa-search"></i>
   </button>
   <div class="mag-content">
@@ -133,7 +133,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     <a href="#" data-value="1.0" id="40">40x</a>
   </div>
 </div>
-<button id="btnMapMarker" class="btn annotationBtn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
+<button id="btnMapMarker" class="annotationBtn" style="display: none"><i class="fas fa-map-marker-alt"></i> Hide markers</button>
 </div>`;
 
               // END

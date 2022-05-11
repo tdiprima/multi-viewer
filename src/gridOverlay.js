@@ -33,7 +33,7 @@ const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
 };
 
 function gridHandler(button, gridProps) {
-  toggleButton(button, 'btnOn', 'btn');
+  toggleButton(button, 'btnOn', 'annotationBtn');
   const on = button.classList.contains('btnOn');
   if (on) {
     turnGridOn(gridProps);
@@ -121,7 +121,7 @@ function getCellPosition(mousePosition) {
 }
 
 function markerHandler(button, gridProps) {
-  toggleButton(button, 'btnOn', 'btn');
+  toggleButton(button, 'btnOn', 'annotationBtn');
   const on = button.classList.contains('btnOn');
 
   if (!on) {
@@ -137,7 +137,7 @@ function markerHandler(button, gridProps) {
       });
       // button.innerHTML = '<i class="fas fa-paint-brush"></i> Done marking'
     } else {
-      toggleButton(button, 'btnOn', 'btn'); // turn it back off; we're not letting them do this
+      toggleButton(button, 'btnOn', 'annotationBtn'); // turn it back off; we're not letting them do this
       alertMessage('Please draw a grid first.');
     }
   }
@@ -153,7 +153,7 @@ function grandCross(btn, obj) {
     } else {
       displayCrosshairs(true);
     }
-    toggleButton(btnCrosshairs, 'btnOn', 'btn');
+    toggleButton(btnCrosshairs, 'btnOn', 'annotationBtn');
   });
 
   function displayCrosshairs(display) {

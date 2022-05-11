@@ -123,7 +123,13 @@ a:link {
   border: 1px solid var(--highlight);
 }
 
+.btnOn {
+  color: #15f4ee;
+  padding: .2em .7em;
+}
+
 .annotationBtn,
+.btnOn,
 .layer {
   font-size: 100%;
   display: inline-block;

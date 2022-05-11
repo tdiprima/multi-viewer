@@ -190,8 +190,7 @@ const e = (name, properties = {}, children = []) => {
   const element = document.createElement(name);
 
   // Apply properties
-  Object.keys(properties)
-    .forEach(property => {
+  Object.keys(properties).forEach(property => {
       element.setAttribute(property, properties[property]);
     });
 

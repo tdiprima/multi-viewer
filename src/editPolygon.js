@@ -6,7 +6,7 @@
  */
 const editPolygon = (button, overlay) => {
   button.addEventListener('click', function() {
-    toggleButton(this, 'btnOn', 'btn');
+    toggleButton(this, 'btnOn', 'annotationBtn');
     Edit(this, overlay.fabricCanvas());
   });
 };
@@ -115,7 +115,7 @@ function Edit(button, canvas) {
     fabricPolygon.hasBorders = !fabricPolygon.edit;
     canvas.requestRenderAll();
   } else {
-    toggleButton(button, 'btnOn', 'btn');
+    toggleButton(button, 'btnOn', 'annotationBtn');
     alertMessage('Please select a polygon for editing.');
   }
 }

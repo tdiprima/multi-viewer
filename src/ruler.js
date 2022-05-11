@@ -178,6 +178,6 @@ const ruler = (button, viewer, overlay) => {
       canvas.on('mouse:move', mouseMoveHandler);
       canvas.on('mouse:up', mouseUpHandler);
     }
-    toggleButton(button, 'btnOn', 'btn');
+    toggleButton(button, 'btnOn', 'annotationBtn');
   });
 };
