@@ -300,8 +300,7 @@ input {
 
 .dualSlider,
 .dualSlider1 {
-  display: -ms-grid;
-  display:   grid;
+  display: grid;
   overflow: hidden;
   width: 20em;
   margin: 1em auto;
@@ -310,12 +309,9 @@ input {
   background: linear-gradient(0deg, var(--no-frills) 1em, transparent 0);
 
   --dif: calc(var(--max) - var(--min));
-  grid-template: repeat(2, -webkit-max-content) 1em/ 1fr 1fr;
+  grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
   grid-template: repeat(2, -moz-max-content) 1em/1fr 1fr;
-  /*-ms-grid-rows: (-webkit-max-content)[2] 1em;*/
-  /*-ms-grid-rows: (max-content)[2] 1em;*/
-  /*-ms-grid-columns: 1fr 1fr;*/
-      grid-template: repeat(2, max-content) 1em/ 1fr 1fr;
+  grid-template: repeat(2, max-content) 1em/1fr 1fr;
 }
 
 .dualSlider::before,
@@ -323,12 +319,8 @@ input {
   height: 100%;
   content: '';
   background: var(--highlight);
-
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 2;
-    grid-column: 1/ span 2;
-  -ms-grid-row: 3;
-    grid-row: 3;
+  grid-column: 1/span 2;
+  grid-row: 3;
 }
 
 .dualSlider::before {
@@ -342,9 +334,7 @@ input {
 }
 
 [id='multi-lbl'] {
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 2;
-    grid-column: 1/ span 2;
+  grid-column: 1/span 2;
 }
 
 .dualSlider input[type='range'] {
@@ -355,12 +345,8 @@ input {
   pointer-events: none;
   color: var(--text-light);
   background: none;
-
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 2;
-    grid-column: 1/ span 2;
-  -ms-grid-row: 3;
-    grid-row: 3;
+  grid-column: 1/span 2;
+  grid-row: 3;
 }
 
 .dualSlider input[type='range']::-webkit-slider-runnable-track,
@@ -412,8 +398,7 @@ input {
 }
 
 output {
-  -ms-grid-row: 2;
-    grid-row: 2;
+  grid-row: 2;
 }
 
 output:last-child {
@@ -430,12 +415,8 @@ output::after {
   height: 100%;
   content: '';
   background: var(--highlight);
-
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 2;
-    grid-column: 1/ span 2;
-  -ms-grid-row: 3;
-    grid-row: 3;
+  grid-column: 1/span 2;
+  grid-row: 3;
 }
 
 .dualSlider1::before {
@@ -454,15 +435,10 @@ output::after {
   left: 0;
   margin: 0;
   pointer-events: none;
-
   color: var(--text-light);
   background: none;
-
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 2;
-    grid-column: 1/ span 2;
-  -ms-grid-row: 3;
-    grid-row: 3;
+  grid-column: 1/span 2;
+  grid-row: 3;
 }
 
 .dualSlider1 input[type='range']::-webkit-slider-runnable-track,
@@ -518,9 +494,9 @@ output::after {
   opacity: 2;
 
   background: var(--rgb-on);
-  background:         -webkit-gradient(linear, left top, right top, from(var(--rgba-on)), color-stop(35%, var(--highlight)), to(var(--text-light)));
-  background:         -o-linear-gradient(left, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background:         linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background: -webkit-gradient(linear, left top, right top, from(var(--rgba-on)), color-stop(35%, var(--highlight)), to(var(--text-light)));
+  background: -o-linear-gradient(left, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background: linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
 
   -webkit-appearance: none;
 }
@@ -565,4 +541,3 @@ output::after {
   border-radius: 3px;
   background-color: var(--tooltip);
 }
-
