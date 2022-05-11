@@ -21,9 +21,8 @@ function setFilter(layers, viewer, range, thresh) {
     // Because one does not simply color the affected layer.
     // No. You have to do all of them.
     for (let i = 0; i < itemCount; i++) {
-      // ToDo: Skip base, skip opacity 0.
       const tiledImage = viewer.world.getItemAt(i);
-      // if (i > 0 && tiledImage.opacity > 0) {
+      // Skip base
       if (i > 0) {
         if (!isEmpty(range)) {
           // USE RANGE VALUES
@@ -117,8 +116,7 @@ const isEmpty = value => {
   const isEmptyObject = a => {
     if (typeof a.length === 'undefined') {
       // it's an Object, not an Array
-      const hasNonempty = Object.keys(a)
-        .some(element => {
+      const hasNonempty = Object.keys(a).some(element => {
           return !isEmpty(a[element]);
         });
       return hasNonempty ? false : isEmptyObject(Object.keys(a));
