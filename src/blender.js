@@ -72,7 +72,7 @@ const blender = (blenderBtn, viewer) => {
       'The Luminosity blend mode preserves the hue and chroma of the bottom layers, while adopting the luma of the top layer.',
     ]
   ];
-  let uiCreated = false;
+  // let uiCreated = false;
 
   // Set up user interface
   function createBlendModesUI(div, viewer) {
@@ -92,7 +92,7 @@ const blender = (blenderBtn, viewer) => {
       });
       blendBtn.innerHTML = name;
 
-      const row = e('tr', {}, [e('td', { class: 'tooltip' }, [blendBtn, e('br')])]);
+      const row = e('tr', {}, [e('td', {class: 'tooltip'}, [blendBtn, e('br')])]);
       table.appendChild(row);
 
       // User interface event handler
@@ -110,18 +110,18 @@ const blender = (blenderBtn, viewer) => {
 
   // onClick handler for blender icon
   blenderBtn.addEventListener('click', () => {
-    if (uiCreated) {
-      // Turn off
-      uiCreated = false;
-    } else {
-      // Turn on
-      const id = createId(5, 'modes');
-      const rect = blenderBtn.getBoundingClientRect();
-      const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top);
-      div.style.display = 'block';
-      createBlendModesUI(document.getElementById(`${id}Body`), viewer);
-      uiCreated = true;
-    }
-    toggleButton(blenderBtn, 'btnOn', 'annotationBtn');
+    // if (uiCreated) {
+    //   // Turn off
+    //   uiCreated = false;
+    // } else {
+    // Turn on
+    const id = createId(5, 'modes');
+    const rect = blenderBtn.getBoundingClientRect();
+    const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top);
+    div.style.display = 'block';
+    createBlendModesUI(document.getElementById(`${id}Body`), viewer);
+    // uiCreated = true;
+    // }
+    // toggleButton(blenderBtn, 'btnOn', 'annotationBtn');
   });
 };
