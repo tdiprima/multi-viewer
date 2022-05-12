@@ -22,11 +22,13 @@
 }
 
 .sun {
+  padding: 7px;
   cursor: pointer;
   color: var(--sun);
 }
 
 .moon {
+  padding: 7px;
   cursor: pointer;
 }
 
@@ -34,7 +36,6 @@ body {
   font-family: effra,Verdana,Tahoma,'DejaVu Sans',sans-serif !important;
   /* font-family: Poppins, sans-serif !important; */
   font-size: 1rem !important;
-  /* font-size: 16px !important; */
   font-weight: 400 !important;
   line-height: 1.438rem !important;
 }
@@ -51,17 +52,18 @@ a:link {
   overflow: hidden;
 
   -webkit-transition: background-color .2s linear;
-  -o-transition: background-color .2s linear;
-  transition: background-color .2s linear;
+       -o-transition: background-color .2s linear;
+          transition: background-color .2s linear;
   -webkit-animation: 1s ease-out 0s 1 slide-in-from-top;
-  animation: 1s ease-out 0s 1 slide-in-from-top;
+          animation: 1s ease-out 0s 1 slide-in-from-top;
 
-  background-color: #666;
+  background-color: var(--text-light);
 }
 
 .navbar a:hover,
 .dropdown:hover .dropbtn {
-  background-color: #537895;
+  color: var(--text-light);
+  background-color: var(--text-dark);;
 }
 
 @-webkit-keyframes slide-in-from-top {
