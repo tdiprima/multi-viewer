@@ -47,6 +47,44 @@ a:link {
   text-decoration: none;
 }
 
+.navbar {
+  overflow: hidden;
+
+  -webkit-transition: background-color .2s linear;
+  -o-transition: background-color .2s linear;
+  transition: background-color .2s linear;
+  -webkit-animation: 1s ease-out 0s 1 slide-in-from-top;
+  animation: 1s ease-out 0s 1 slide-in-from-top;
+
+  background-color: #666;
+}
+
+.navbar a:hover,
+.dropdown:hover .dropbtn {
+  background-color: #537895;
+}
+
+@-webkit-keyframes slide-in-from-top {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@keyframes slide-in-from-top {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
 .divSquare {
   float: left;
   margin-right: 195px;
