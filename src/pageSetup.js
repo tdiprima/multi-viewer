@@ -34,7 +34,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
       .then(opts => {
         document.body.classList.add('theme--default');
         // dark-mode
-        const awesome = e('i', { class: 'fas fa-moon moon' });
+        const modeToggle = e('i', { class: 'fas fa-moon moon' });
 
         // Slide name
         let name;
@@ -48,16 +48,16 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         }
 
         const top = e('div', { style: 'display: flex' }, [
-          e('div', { style: 'flex: 1' }, [awesome]),
+          e('div', { style: 'flex: 1' }, [modeToggle]),
           e('div', { style: 'flex: 1; text-align: right;' }, [name])
         ]);
 
         const referenceNode = document.querySelector(`#${divId}`);
         referenceNode.before(top);
 
-        awesome.addEventListener('click', () => {
-          toggleButton(awesome, 'fa-moon', 'fa-sun');
-          toggleButton(awesome, 'moon', 'sun');
+        modeToggle.addEventListener('click', () => {
+          toggleButton(modeToggle, 'fa-moon', 'fa-sun');
+          toggleButton(modeToggle, 'moon', 'sun');
           document.body.classList.toggle('theme--dark');
         });
 
