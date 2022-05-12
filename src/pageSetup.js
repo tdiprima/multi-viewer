@@ -55,10 +55,23 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         const referenceNode = document.querySelector(`#${divId}`);
         referenceNode.before(top);
 
+        const getMode = localStorage.getItem('mode');
+        if (getMode && getMode === 'dark-mode') {
+          toggleButton(document.body, "theme--default", "theme--dark");
+        }
+
+        // toggle dark and light mode
         modeToggle.addEventListener('click', () => {
           toggleButton(modeToggle, 'fa-moon', 'fa-sun');
           toggleButton(modeToggle, 'moon', 'sun');
-          document.body.classList.toggle('theme--dark');
+          toggleButton(document.body, "theme--default", "theme--dark");
+
+          // Keep user's selected mode even on page refresh
+          if (!document.body.classList.contains('theme--dark')) {
+            localStorage.setItem('mode', 'light-mode');
+          } else {
+            localStorage.setItem('mode', 'dark-mode');
+          }
         });
 
         // CREATE TABLE FOR VIEWERS
