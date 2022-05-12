@@ -62,8 +62,8 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         // toggle dark and light mode
         modeToggle.addEventListener('click', () => {
-          toggleButton(modeToggle, 'fa-moon', 'fa-sun');
-          toggleButton(modeToggle, 'moon', 'sun');
+          toggleButton(modeToggle, "fa-sun", "fa-moon");
+          toggleButton(modeToggle, "sun", "moon");
           toggleButton(document.body, "theme--default", "theme--dark");
 
           // Keep user's selected mode even on page refresh
