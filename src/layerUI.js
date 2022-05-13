@@ -309,7 +309,7 @@ function globalEye(layersColumn) {
   return e("i", {
     id: `eyeTog${vNum}`,
     style: "display: inline-block",
-    class: "fas fa-eye"
+    class: "fas fa-eye layer-icons"
   });
 }
 
