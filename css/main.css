@@ -1,5 +1,5 @@
 :root {
-  --highlight: #00c6b9;
+  --highlight: #537895;
   --bg-dark: #272b38;
   --text-dark: #cac3bc;
   --bg-light: #f5f4f3;
@@ -200,7 +200,7 @@ a:link {
 }
 
 .annotationBtn:hover {
-  color: #537895;
+  color: var(--highlight);
   background: -webkit-gradient(linear, left top, left bottom, from(#d7e1ec), color-stop(74%, #fff));
   background: -o-linear-gradient(top, #d7e1ec 0%, #fff 74%);
   background: linear-gradient(to bottom, #d7e1ec 0%, #fff 74%);
@@ -219,7 +219,6 @@ a:link {
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
   color: var(--text-light);
-  border: var(--text-light);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), to(#bab1ba));
   background: -o-linear-gradient(top, #ededed 5%, #bab1ba 100%);
   background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
@@ -230,7 +229,7 @@ a:link {
 }
 
 .layer:hover {
-  color: #537895;
+  color: var(--highlight);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #bab1ba), to(#ededed));
   background: -o-linear-gradient(top, #bab1ba 5%, #ededed 100%);
   background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
