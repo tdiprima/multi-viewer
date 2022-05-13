@@ -195,7 +195,7 @@ a:link {
 .annotationBtn {
   padding: .2em .7em;
   cursor: pointer;
-  color: #666;
+  color: var(--text-light);
   border: #ddd;
   background: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(74%, #d7e1ec));
   background: -o-linear-gradient(top, #fff 0%, #d7e1ec 74%);
