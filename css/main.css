@@ -218,8 +218,8 @@ a:link {
   white-space: nowrap;
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
-  color: #3a8a9e;
-  border: #d6bcd6;
+  color: var(--text-light);
+  border: var(--text-light);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), to(#bab1ba));
   background: -o-linear-gradient(top, #ededed 5%, #bab1ba 100%);
   background: linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
@@ -230,6 +230,7 @@ a:link {
 }
 
 .layer:hover {
+  color: #537895;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #bab1ba), to(#ededed));
   background: -o-linear-gradient(top, #bab1ba 5%, #ededed 100%);
   background: linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
