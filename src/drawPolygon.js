@@ -8,9 +8,9 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   const idx = viewerInfo.idx;
   const btnDraw = document.getElementById(`btnDraw${idx}`);
   const mark = document.getElementById(`mark${idx}`);
-  const canvas = (this.__canvas = overlay.fabricCanvas());
-  const paintBrush = (canvas.freeDrawingBrush = new fabric.PencilBrush(canvas));
-  paintBrush.decimate = 20;
+  const canvas = this.__canvas = overlay.fabricCanvas();
+  const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+  paintBrush.decimate = 20; // TODO: 10, maybe.
   paintBrush.color = mark.innerHTML;
 
   canvas.on('mouse:over', evt => {
