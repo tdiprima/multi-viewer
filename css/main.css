@@ -118,12 +118,13 @@ a:link {
   vertical-align: middle;
 }
 
-.scroll {
+/* scroll interferes with visibility slider... */
+/* .scroll {
   overflow-y: auto;
   overflow-x: hidden;
   width: 200px;
   height: 475px;
-}
+} */
 
 .hide {
   z-index: 10;
@@ -133,8 +134,6 @@ a:link {
 .myDIV:hover .hide {
   position: absolute;
   z-index: 9;
-  /*position: absolute; !* need it, but it interferes with scroll *!*/
-  /*z-index: 1100 !important; !* seems to have no effect *!*/
   display: block;
 }
 

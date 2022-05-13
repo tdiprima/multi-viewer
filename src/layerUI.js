@@ -22,7 +22,8 @@ function createLayerElements(layersColumn, layers, viewer) {
   const globalEyeball = globalEye(layersColumn)
 
   const divTable = e("div", {class: "divTable"});
-  const scrollDiv = e("div", {class: "divTableBody scroll"});
+  // const scrollDiv = e("div", {class: "divTableBody scroll"});
+  const scrollDiv = e("div", {class: "divTableBody"});
   layersColumn.appendChild(divTable);
   divTable.appendChild(scrollDiv);
 
