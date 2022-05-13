@@ -272,7 +272,7 @@ function layerEye(currentLayer) {
   const cssClass = currentLayer.opacity === 0 ? "fas fa-eye-slash" : "fas fa-eye";
   return e("i", {
     id: createId(5, "eye"),
-    class: `${cssClass} hover-light`,
+    class: `${cssClass} layer-icons`,
     title: "toggle visibility"
   });
 }
@@ -349,7 +349,7 @@ function transparencySlider(currentLayer, faEye, viewer) {
   const icon = document.createElement("i");
   icon.classList.add("fas");
   icon.classList.add("fa-adjust");
-  icon.classList.add("hover-light");
+  icon.classList.add("layer-icons");
   icon.style.cursor = "pointer";
 
   // Slider element
@@ -386,7 +386,7 @@ function transparencySlider(currentLayer, faEye, viewer) {
 function createColorPalette(row, featureName, currentLayer, allLayers, viewer) {
   const icon = e("i", {
     id: createId(5, "palette"),
-    class: "fas fa-palette pointer hover-light",
+    class: "fas fa-palette pointer layer-icons",
     title: "color palette"
   });
 
@@ -408,7 +408,7 @@ function createColorPalette(row, featureName, currentLayer, allLayers, viewer) {
 function createTachometer(row, featureName) {
   const icon = e("i", {
     id: createId(5, "tach"),
-    class: "fas fa-tachometer-alt hover-light",
+    class: "fas fa-tachometer-alt layer-icons",
     title: "settings" // call it "settings", "control panel", idk.
   });
   row.appendChild(e("div", {class: "divTableCell"}, [icon]));

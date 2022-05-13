@@ -9,7 +9,7 @@ const layerPopup = function(divBody, allLayers, viewer) {
     // Icon
     const icon = e('i', {
       id: attId,
-      class: 'fas fa-broadcast-tower hover-light',
+      class: 'fas fa-broadcast-tower layer-icons',
       title: 'toggle: color-attenuation by probability'
     });
 
@@ -39,7 +39,7 @@ const layerPopup = function(divBody, allLayers, viewer) {
     // Icon
     const icon = e('i', {
       id: fillId,
-      class: `${filledCircle} fa-circle hover-light`,
+      class: `${filledCircle} fa-circle layer-icons`,
       title: 'fill un-fill'
     });
 

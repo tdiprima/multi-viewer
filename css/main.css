@@ -163,7 +163,11 @@ a:link {
   border: none !important;
 }
 
-.hover-light:hover {
+.layer-icons {
+  padding: .5px;
+}
+
+.layer-icons:hover {
   color: var(--highlight);
   border: 1px solid var(--highlight);
 }
