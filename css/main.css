@@ -10,6 +10,7 @@
   --rgb-on: rgb(255, 255, 255);
   --rgba-on: rgba(255, 255, 255, 1);
   --grad: #d7e1ec;
+  --shadow: #899599;
 }
 
 .theme--default {
@@ -228,8 +229,8 @@ a:link {
   background: -o-linear-gradient(top, #ededed 5%, var(--grad) 100%);
   background: linear-gradient(to bottom, #ededed 5%, var(--grad) 100%);
   background-color: #ededed;
-  -webkit-box-shadow: 3px 4px 0 0 #899599;
-          box-shadow: 3px 4px 0 0 #899599;
+  -webkit-box-shadow: 3px 4px 0 0 var(--shadow);
+          box-shadow: 3px 4px 0 0 var(--shadow);
   text-shadow: 0 1px 0 #e1e2ed;
 }
 
@@ -282,8 +283,8 @@ a:link {
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: var(--highlight);
-  -webkit-box-shadow: 3px 4px 0 0 #899599;
-          box-shadow: 3px 4px 0 0 #899599;
+  -webkit-box-shadow: 3px 4px 0 0 var(--shadow);
+          box-shadow: 3px 4px 0 0 var(--shadow);
   text-shadow: 0 1px 0 #e1e2ed;
 }
 
