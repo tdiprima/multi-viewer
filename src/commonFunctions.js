@@ -11,9 +11,9 @@ let CONFIG = {
 
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
-    // let start = performance.now()
-    // let caller = setFilter.caller
-    // console.log('caller', caller)
+    let start = performance.now();
+    // let caller = setFilter.caller;
+    // console.log('caller', caller);
 
     const itemCount = viewer.world.getItemCount();
     let filterOpts = [];
@@ -57,11 +57,9 @@ function setFilter(layers, viewer, range, thresh) {
           if (thresh) {
             // USE THRESHOLD
             processor = colorFilter.prototype.THRESHOLDING(thresh);
-            // console.log('thresh')
           } else {
             // USE COLOR SCHEME
             processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
-            // console.log('colorlev')
           }
           filterOpts.push({
             items: tiledImage,
@@ -70,8 +68,7 @@ function setFilter(layers, viewer, range, thresh) {
         } else if (STATE.renderType === 'byThreshold') {
           filterOpts.push({
             items: tiledImage,
-            processors: colorFilter.prototype.THRESHOLDING(thresh),
-            // processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
+            processors: colorFilter.prototype.THRESHOLDING(thresh)
           });
         }
       }
@@ -85,12 +82,13 @@ function setFilter(layers, viewer, range, thresh) {
           loadMode: 'sync'
         });
       } catch (e) {
-        console.error(e.message)
+        console.error(e.message);
       }
     }
 
-    // let end = performance.now()
-    // console.log(`setFilter exec time: ${end - start} ms`)
+    let end = performance.now();
+    // console.log("start:", start, "end:", end);
+    console.log(`exec: ${end - start}`);
 
   } else {
     console.warn('No viewer.world');
