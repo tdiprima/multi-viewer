@@ -24,8 +24,6 @@ const markupTools = (viewerInfo, options, viewer) => {
     canvas.calcOffset();
   });
 
-  // destructoTest(canvas);
-
   // SAVE
   const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {
