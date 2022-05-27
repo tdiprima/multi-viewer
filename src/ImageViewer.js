@@ -23,10 +23,8 @@ class ImageViewer {
         crossOriginPolicy: 'Anonymous',
         blendTime: 0,
         prefixUrl: CONFIG.osdImages,
-        maxZoomPixelRatio: 1,
-        // showNavigationControl: false,
-        // showNavigator: true,
-        // navigatorPosition: "BOTTOM_RIGHT",
+        minZoomImageRatio: 1,
+        maxZoomPixelRatio: 1, // when the user zooms all the way in they are at 100%
         tileSources,
       });
     } catch (e) {
