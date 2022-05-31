@@ -31,7 +31,6 @@ class ImageViewer {
       console.error(e.message);
     }
 
-    let vpt;
     let drawer;
 
     function addInfo(item) {
@@ -58,7 +57,6 @@ class ImageViewer {
       drawer.imageSmoothingEnabled = false;
       drawer._imageSmoothingEnabled = false;
       // console.log('drawer', drawer)
-      vpt = viewer.viewport;
 
       if (window.location.hash) {
         const params = parseHash();
@@ -75,14 +73,14 @@ class ImageViewer {
       el.addEventListener('click', () => {
         const attr = el.getAttribute('data-value');
         const imageZoom = parseFloat(attr);
-        vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom));
+        viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom));
       });
     }
 
     // BOOKMARK URL with ZOOM and X,Y
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', () => {
-      const zoom = vpt.getZoom();
-      const pan = vpt.getCenter();
+      const zoom = viewer.viewport.getZoom();
+      const pan = viewer.viewport.getCenter();
       const url = `${location.origin}${location.pathname}#zoom=${zoom}&x=${pan.x}&y=${pan.y}`;
       const I = viewer.world.getItemAt(0);
       // console.log('image coords', I.viewportToImageCoordinates(pan));
@@ -113,12 +111,12 @@ class ImageViewer {
     });
 
     function useParams(params) {
-      const zoom = vpt.getZoom();
-      const pan = vpt.getCenter();
+      const zoom = viewer.viewport.getZoom();
+      const pan = viewer.viewport.getCenter();
 
       // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
       if (params.zoom !== undefined && params.zoom !== zoom) {
-        vpt.zoomTo(params.zoom, null, true);
+        viewer.viewport.zoomTo(params.zoom, null, true);
       }
 
       if (
@@ -127,7 +125,7 @@ class ImageViewer {
         && (params.x !== pan.x || params.y !== pan.y)
       ) {
         const point = new OpenSeadragon.Point(params.x, params.y);
-        vpt.panTo(point, true);
+        viewer.viewport.panTo(point, true);
       }
     }
 
@@ -142,7 +140,7 @@ class ImageViewer {
         srcDown: `${CONFIG.osdImages}zin_pressed.png`,
         onClick() {
           viewer.viewport.zoomTo(viewer.viewport.getMaxZoom());
-          // vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
+          // viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
         }
       });
 
@@ -154,7 +152,7 @@ class ImageViewer {
         srcHover: `${CONFIG.osdImages}zout_hover.png`,
         srcDown: `${CONFIG.osdImages}zout_pressed.png`,
         onClick() {
-          vpt.goHome(true);
+          viewer.viewport.goHome(true);
           // viewer.viewport.zoomTo(viewer.viewport.getHomeZoom());
         }
       });
