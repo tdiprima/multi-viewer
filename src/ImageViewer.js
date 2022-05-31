@@ -141,7 +141,8 @@ class ImageViewer {
         srcHover: `${CONFIG.osdImages}zin_hover.png`,
         srcDown: `${CONFIG.osdImages}zin_pressed.png`,
         onClick() {
-          vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
+          viewer.viewport.zoomTo(viewer.viewport.getMaxZoom());
+          // vpt.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
         }
       });
 
