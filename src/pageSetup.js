@@ -136,6 +136,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   <button class="annotationBtn">
   <i class="fas fa-search"></i>
   </button>
+  <!-- data-value = image zoom -->
   <div class="mag-content">
     <a href="#" data-value="0.025" id="1">1x</a>
     <a href="#" data-value="0.05" id="2">2x</a>
