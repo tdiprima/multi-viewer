@@ -154,7 +154,8 @@ class ImageViewer {
         srcHover: `${CONFIG.osdImages}zout_hover.png`,
         srcDown: `${CONFIG.osdImages}zout_pressed.png`,
         onClick() {
-          vpt.goHome(true);
+          viewer.viewport.zoomTo(viewer.viewport.getHomeZoom());
+          // vpt.goHome(true);
         }
       });
       viewer.addControl(zinButton.element, { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
