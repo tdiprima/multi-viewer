@@ -141,7 +141,6 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     <a href="#" data-value="0.025" id="1">1x</a>
     <a href="#" data-value="0.05" id="2">2x</a>
     <a href="#" data-value="0.1" id="4">4x</a>
-    <a href="#" data-value="0.2" id="8">8x</a>
     <a href="#" data-value="0.25" id="10">10x</a>
     <a href="#" data-value="0.5" id="20">20x</a>
     <a href="#" data-value="1.0" id="40">40x</a>
