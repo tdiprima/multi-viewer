@@ -67,15 +67,41 @@ class ImageViewer {
       getInfoForScalebar();
     });
 
-    // ZOOM TO MAGNIFICATION - 10x, 20x, etc.
-    const element = document.querySelector('.mag-content');
-    for (const el of element.children) {
-      el.addEventListener('click', () => {
-        const attr = el.getAttribute('data-value');
-        const imageZoom = parseFloat(attr);
-        viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom));
+    // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
+    viewer.addOnceHandler("open", e => {
+      let minImgZoom = viewer.viewport.viewportToImageZoom(viewer.viewport.getMinZoom());
+      let arr = [1, 0.5, 0.25];
+      let n = 1;
+      let imgZoom = [];
+      do {
+        imgZoom = [...imgZoom, ...arr.map(e => e / n)];
+        n *= 10;
+      } while (imgZoom[imgZoom.length - 1] > minImgZoom);
+
+      while (imgZoom[imgZoom.length - 1] < minImgZoom) {
+        imgZoom.pop();
+      }
+      imgZoom.push(minImgZoom);
+      imgZoom.sort((a, b) => {
+        return a - b;
       });
-    }
+
+      let htm = "";
+      let magContent = document.querySelector(".mag-content");
+      for (let i = 0; i < imgZoom.length; i++) {
+        htm += `<a href="#" data-value="${imgZoom[i]}">${Number((imgZoom[i] * 40).toFixed(3))}x</a>`;
+      }
+      magContent.innerHTML = htm;
+
+      for (let el of magContent.children) {
+        el.addEventListener("click", () => {
+          let attr = el.getAttribute("data-value");
+          let imageZoom = parseFloat(attr);
+          viewer.viewport.zoomTo(viewer.world.getItemAt(0)
+            .imageToViewportZoom(imageZoom));
+        });
+      }
+    });
 
     // BOOKMARK URL with ZOOM and X,Y
     document.getElementById(`btnShare${viewerInfo.idx}`).addEventListener('click', () => {
