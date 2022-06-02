@@ -88,18 +88,20 @@ class ImageViewer {
 
       let htm = "";
       let magContent = document.querySelector(".mag-content");
-      for (let i = 0; i < imgZoom.length; i++) {
-        htm += `<a href="#" data-value="${imgZoom[i]}">${Number((imgZoom[i] * 40).toFixed(3))}x</a>`;
-      }
-      magContent.innerHTML = htm;
+      if (magContent) {
+        for (let i = 0; i < imgZoom.length; i++) {
+          htm += `<a href="#" data-value="${imgZoom[i]}">${Number((imgZoom[i] * 40).toFixed(3))}x</a>`;
+        }
+        magContent.innerHTML = htm;
 
-      for (let el of magContent.children) {
-        el.addEventListener("click", () => {
-          let attr = el.getAttribute("data-value");
-          let imageZoom = parseFloat(attr);
-          viewer.viewport.zoomTo(viewer.world.getItemAt(0)
-            .imageToViewportZoom(imageZoom));
-        });
+        for (let el of magContent.children) {
+          el.addEventListener("click", () => {
+            let attr = el.getAttribute("data-value");
+            let imageZoom = parseFloat(attr);
+            viewer.viewport.zoomTo(viewer.world.getItemAt(0)
+              .imageToViewportZoom(imageZoom));
+          });
+        }
       }
     });
 
