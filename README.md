@@ -31,22 +31,34 @@ Distributed under the BSD 3-Clause License. See [LICENSE.txt](LICENSE.txt) for m
 
 When contributing, please attempt to match the code style already in the codebase.
 
-1. Fork this repo
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+1. Fork this repo via GitHub
+2. Create your feature branch
+```sh
+git checkout -b feature/fooBar
+```
+3. Commit your changes
+```sh
+git commit -am 'Add fooBar'
+```
+4. Push to the branch
+```sh
+git push origin feature/fooBar
+```
+5. Create a new Pull Request via GitHub
 
 ## Linting code
 
-**JavaScript**
+**Lint JavaScript**
 
 ```sh
+# all
 npm run lint:write
+# or
+npx eslint yourscript.js --fix
 ```
 <!-- node_modules/.bin/yarn lint:write -->
 
-**CSS**
+**Lint CSS**
 
 ```sh
 csscomb file.css
