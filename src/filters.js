@@ -28,9 +28,9 @@ const backgroundCorrection = data => {
   return data;
 };
 
-/** ********************
+/**********************
  CUSTOM COLOR FILTERS
- ********************* */
+ **********************/
 const colorFilter = OpenSeadragon.Filters.GREYSCALE;
 const colorChannel = 1;
 const alphaChannel = 3;
