@@ -1,12 +1,14 @@
 /**
- * Wrapper component around OpenSeadragon viewer
+ * Wrapper component around OpenSeadragon viewer.
  * Set up OSD viewer to allow for multiple viewer control.
- *
- * @param viewerInfo
- * @param numViewers: Total number of viewers.
- * @param options: Filters, paintbrush, etc.
  */
 class MultiViewer extends ImageViewer {
+  /**
+   * @constructor
+   * @param viewerInfo - Basic setup info.
+   * @param numViewers - Total number of viewers.
+   * @param options - Filters, paintbrush, etc.
+   */
   constructor(viewerInfo, numViewers, options) {
     super(viewerInfo);
 
@@ -37,10 +39,6 @@ class MultiViewer extends ImageViewer {
 
   getViewer() {
     return super.getViewer();
-  }
-
-  getViewerInfo() {
-    return super.getViewerInfo();
   }
 
   getPanZoom() {
