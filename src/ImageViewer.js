@@ -228,19 +228,11 @@ class ImageViewer {
     this.vInfo = viewerInfo;
   }
 
+  /**
+   * @return OpenSeadragon.Viewer
+   */
   getViewer() {
     return this.viewer;
   }
 
-  getOverlay() {
-    return this.overlay;
-  }
-
-  getCanvas() {
-    return this.canvas;
-  }
-
-  getViewerInfo() {
-    return this.vInfo;
-  }
 }
