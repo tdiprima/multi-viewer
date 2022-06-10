@@ -1,9 +1,12 @@
 /**
- * Wrapper component around OpenSeadragon viewer
+ * Wrapper component around OpenSeadragon viewer.
  * Set up 1 basic OSD viewer.
- * @param viewerInfo: object with info specific to 'this' viewer
  */
 class ImageViewer {
+  /**
+   * @constructor
+   * @param viewerInfo - object with info specific to 'this' viewer
+   */
   constructor(viewerInfo) {
     const layers = viewerInfo.layers;
 
