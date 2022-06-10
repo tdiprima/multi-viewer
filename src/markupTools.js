@@ -1,5 +1,8 @@
 /**
- * Create the fabric.js overlay and pass it to the markup tools.
+ * @param viewerInfo - Info specific to 'this' viewer
+ * @param options - Filters, paintbrush, etc.
+ * @param viewer - OpenSeadragon viewer
+ * @description Create the fabric.js overlay and pass it to the markup tools.
  */
 const markupTools = (viewerInfo, options, viewer) => {
   const overlay = viewer.fabricjsOverlay({ scale: 1, static: false });
