@@ -17,6 +17,13 @@ OS X & Linux:
 npm install; grunt
 ```
 
+## Generate docs
+
+```sh
+cd src
+jsdoc *.js
+```
+
 ## Usage
 
 Explore & run the HTML files for example usage.
