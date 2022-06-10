@@ -1,14 +1,15 @@
 /**
  * Allow user to draw a polygon on the image.
- * @param viewerInfo
- * @param viewer: OSD viewer object
- * @param overlay: fabric overlay object
+ * @param viewerInfo - Info specific to 'this' viewer
+ * @param viewer - OSD viewer object
+ * @param overlay - fabric overlay object
  */
 const drawPolygon = (viewerInfo, viewer, overlay) => {
   const idx = viewerInfo.idx;
   const btnDraw = document.getElementById(`btnDraw${idx}`);
   const mark = document.getElementById(`mark${idx}`);
-  const canvas = this.__canvas = overlay.fabricCanvas();
+  const canvas = overlay.fabricCanvas();
+  // const canvas = this.__canvas = overlay.fabricCanvas(); // for testing.
   const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   paintBrush.decimate = 12;
   paintBrush.color = mark.innerHTML;
