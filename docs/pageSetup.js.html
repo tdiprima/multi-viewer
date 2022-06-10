@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pageSetup.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pageSetup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Set up web page for multi-viewer.
+ * @param divId - Main div id.
+ * @param images - Items to be displayed in viewer.
+ * @param numViewers - Total number of viewers.
+ * @param rows - LAYOUT: Number of rows (of viewers)
+ * @param columns - LAYOUT: Number of columns (of viewers)
+ * @param width - Viewer width
+ * @param height - Viewer height
+ * @param opts - Multi-viewer options; paintbrush, etc.
+ */
+const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+  /*
+  When the 'images' parameter becomes an array with null elements,
+  it usually means that the session timed out or is in the process of timeout.
+  So log the user out and have them start again.
+   */
+  let viewers = []; // eslint-disable-line prefer-const
+  if (!isRealValue(images) || images[0] === null) {
+    // logout &amp; redirect
+    document.write(
+      "&lt;script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;&lt;/script>",
+    );
+  }
+
+  document.addEventListener('DOMContentLoaded', setUp);
+  window.addEventListener('keydown', hotKeysHandler);
+
+  function setUp() {
+    new Promise(resolve => {
+      return resolve(opts);
+    })
+      .then(opts => {
+        document.body.classList.add('theme--default');
+        // dark-mode
+        const modeToggle = e('i', { class: 'fas fa-moon moon' });
+
+        // Slide name
+        let name;
+        const slide = images[0][0].location; // layer 0 location
+        if (slide.includes('TCGA')) {
+          const str = slide.match(/TCGA-[^%.]+/)[0];
+          name = `Slide: ${str}`;
+        } else {
+          const arr = slide.split('/');
+          name = `Slide: ${arr[arr.length - 1]}`;
+        }
+
+        const top = e('div', { style: 'display: flex' }, [
+          e('div', { style: 'flex: 1' }, [modeToggle]),
+          e('div', { style: 'flex: 1; text-align: right;' }, [name])
+        ]);
+
+        const referenceNode = document.querySelector(`#${divId}`);
+        referenceNode.before(top);
+
+        const getMode = localStorage.getItem('mode');
+        if (getMode &amp;&amp; getMode === 'dark-mode') {
+          toggleButton(document.body, "theme--default", "theme--dark");
+        }
+
+        // toggle dark and light mode
+        modeToggle.addEventListener('click', () => {
+          toggleButton(modeToggle, "fa-sun", "fa-moon");
+          toggleButton(modeToggle, "sun", "moon");
+          toggleButton(document.body, "theme--default", "theme--dark");
+
+          // Keep user's selected mode even on page refresh
+          if (!document.body.classList.contains('theme--dark')) {
+            localStorage.setItem('mode', 'light-mode');
+          } else {
+            localStorage.setItem('mode', 'dark-mode');
+          }
+        });
+
+        // CREATE TABLE FOR VIEWERS
+        const mainDiv = document.getElementById(divId);
+        const table = e('table');
+        mainDiv.appendChild(table); // TABLE ADDED TO PAGE
+
+        // CREATE ROWS &amp; COLUMNS
+        let r;
+        const num = rows * columns;
+        let count = 0;
+        for (r = 0; r &lt; rows; r++) {
+          const tr = table.insertRow(r);
+          let c;
+          for (c = 0; c &lt; columns; c++) {
+            const td = tr.insertCell(c);
+            const osdId = createId(11); // DIV ID REQUIRED FOR OSD
+            // CREATE DIV WITH CONTROLS, RANGE SLIDERS, BUTTONS, AND VIEWER.
+            const idx = count;
+            count++;
+
+            if (numViewers &lt; num &amp;&amp; count - 1 === numViewers) {
+              // we've done our last viewer
+              break;
+            }
+
+            const container = e('div', { class: 'divSquare' });
+            container.style.width = `${width}px`;
+            td.appendChild(container); // ADD CONTAINER TO CELL
+
+            let htm = '';
+
+            // NAVIGATION TOOLS
+            if (numViewers > 1) {
+              htm += `&lt;input type="checkbox" id="chkPan${idx}" checked="">&lt;label for="chkPan${idx}">Match Pan&lt;/label>&amp;nbsp;
+&lt;input type="checkbox" id="chkZoom${idx}" checked="">&lt;label for="chkZoom${idx}">Match Zoom&lt;/label>&amp;nbsp;&amp;nbsp;`;
+            }
+
+            if (opts &amp;&amp; opts.toolbarOn) {
+              htm += `&lt;div class="controls showDiv" id="hideTools${idx}">&lt;div id="tools${idx}" class="showHover">`;
+
+              // ANNOTATION TOOLS
+              htm += '&lt;div class="floated">';
+
+              if (opts &amp;&amp; opts.paintbrushColor) {
+                htm += `&lt;mark id="mark${idx}">${opts.paintbrushColor}&lt;/mark>&amp;nbsp;`;
+              } else {
+                htm += `&lt;mark id="mark${idx}">#00f&lt;/mark>&amp;nbsp;`;
+              }
+
+              htm += `&lt;button id="btnDraw${idx}" class="annotationBtn" title="Draw">&lt;i class="fas fa-pencil-alt">&lt;/i>&lt;/button>
+&lt;button id="btnEdit${idx}" class="annotationBtn" title="Edit">&lt;i class="fas fa-draw-polygon">&lt;/i>&lt;/button>
+&lt;button id="btnGrid${idx}" class="annotationBtn" title="Grid">&lt;i class="fas fa-border-all">&lt;/i>&lt;/button>
+&lt;button id="btnGridMarker${idx}" class="annotationBtn" title="Mark grid">&lt;i class="fas fa-paint-brush">&lt;/i>&lt;/button>
+&lt;button id="btnRuler${idx}" class="annotationBtn" title="Measure in microns">&lt;i class="fas fa-ruler">&lt;/i>&lt;/button>
+&lt;button id="btnShare${idx}" class="annotationBtn" title="Share this link">&lt;i class="fas fa-share-alt">&lt;/i>&lt;/button>
+&lt;button id="btnCam${idx}" class="annotationBtn" title="Snapshot">&lt;i class="fas fa-camera">&lt;/i>&lt;/button>
+&lt;button id="btnBlender${idx}" class="annotationBtn" title="Blend-modes">&lt;i class="fas fa-blender">&lt;/i>&lt;/button>
+&lt;button id="btnCrosshairs${idx}" class="annotationBtn" title="Crosshairs">&lt;i class="fas fa-crosshairs">&lt;/i>&lt;/button>
+&lt;button id="btnSave${idx}" class="annotationBtn" title="Save">&lt;i class="fas fa-save">&lt;/i>&lt;/button>
+&lt;div class="mag" style="display: inline">
+  &lt;button class="annotationBtn">
+  &lt;i class="fas fa-search">&lt;/i>
+  &lt;/button>
+  &lt;!-- data-value = image zoom -->
+  &lt;div class="mag-content">
+    &lt;a href="#" data-value="0.025" id="1">1x&lt;/a>
+    &lt;a href="#" data-value="0.05" id="2">2x&lt;/a>
+    &lt;a href="#" data-value="0.1" id="4">4x&lt;/a>
+    &lt;a href="#" data-value="0.25" id="10">10x&lt;/a>
+    &lt;a href="#" data-value="0.5" id="20">20x&lt;/a>
+    &lt;a href="#" data-value="1.0" id="40">40x&lt;/a>
+  &lt;/div>
+&lt;/div>
+&lt;button id="btnMapMarker" class="annotationBtn" style="display: none">&lt;i class="fas fa-map-marker-alt">&lt;/i> Hide markers&lt;/button>
+&lt;/div>`;
+
+              // END
+              htm += '&lt;/div>&lt;/div>';
+            }
+
+            // CREATE VIEWER
+            htm += `&lt;table>&lt;tr>&lt;td>&lt;div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;">&lt;/div>
+&lt;/td>&lt;td id="layersAndColors${idx}" style="vertical-align: top;">&lt;/td>
+&lt;/tr>&lt;/table>`;
+
+            // ADD VIEWER &amp; WIDGETS TO CONTAINING DIV
+            container.innerHTML = htm;
+
+            // DRAW POLYGON COLOR PICKER
+            const colorPicker = new CP(document.getElementById(`mark${idx}`));
+            colorPicker.on('change', function(r, g, b, a) {
+              this.source.value = this.color(r, g, b, a);
+              this.source.innerHTML = this.color(r, g, b, a);
+              this.source.style.backgroundColor = this.color(r, g, b, a);
+            });
+
+            const vInfo = { idx, osdId, layers: images[idx] };
+            // Create MultiViewer object and add to array
+            viewers.push(new MultiViewer(vInfo, numViewers, opts));
+          }
+        }
+
+        return viewers;
+      })
+      .then(viewers => {
+        // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
+        synchronizeViewers(viewers);
+      });
+  }
+
+  // Hot keys
+  function hotKeysHandler(evt) {
+    const key = evt.key.toLocaleLowerCase();
+    // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
+    if (key === 'escape' || key === 'esc') {
+      evt.preventDefault();
+      // Button-reset
+      const buttons = document.getElementsByClassName('btnOn');
+      for (let i = 0; i &lt; buttons.length; i++) {
+        buttons[i].click();
+      }
+    }
+    // control-r for 'ruler'
+    if (evt.ctrlKey &amp;&amp; key === 'r') {
+      evt.preventDefault();
+      for (let i = 0; i &lt; viewers.length; i++) {
+        document.querySelectorAll('[id^="btnRuler"]').forEach(node => {
+          node.click();
+        });
+      }
+    }
+  }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#blender">blender</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#pageSetup">pageSetup</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Jun 10 2022 15:56:55 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

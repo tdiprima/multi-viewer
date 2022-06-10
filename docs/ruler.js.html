@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ruler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ruler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A measuring tool.
+ * @param button
+ * @param viewer
+ * @param overlay
+ */
+const ruler = (button, viewer, overlay) => {
+  let line;
+  let isDown;
+  let zoom;
+  let mode = 'x';
+  let fText;
+  const fStart = { x: 0, y: 0 };
+  const fEnd = { x: 0, y: 0 };
+  let oStart;
+  let oEnd;
+
+  const canvas = overlay.fabricCanvas();
+  fabric.Object.prototype.transparentCorners = false;
+  // let canvas = this.__canvas = overlay.fabricCanvas()
+
+  function clear() {
+    fStart.x = 0.0;
+    fEnd.x = 0.0;
+    fStart.y = 0.0;
+    fEnd.y = 0.0;
+  }
+
+  function mouseDownHandler(o) {
+    clear();
+    zoom = viewer.viewport.getZoom(true);
+    if (mode === 'draw') {
+      setOsdMove(viewer, false);
+      isDown = true;
+      const event = o.e;
+
+      const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+      try {
+        const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+        oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
+      } catch (e) {
+        console.error(`%c${e.message}`, 'font-size: larger;');
+      }
+
+      const pointer = canvas.getPointer(event);
+      const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      fStart.x = pointer.x;
+      fStart.y = pointer.y;
+      line = new fabric.Line(points, {
+        strokeWidth: 2 / zoom,
+        stroke: '#0f0',
+        originX: 'center',
+        originY: 'center',
+        selectable: false,
+        evented: false,
+        name: 'ruler'
+      });
+      canvas.add(line);
+    } else {
+      setOsdMove(viewer, true);
+      canvas.forEachObject(o => {
+        o.setCoords(); // update coordinates
+      });
+    }
+  }
+
+  function difference(a, b) {
+    return Math.abs(a - b);
+  }
+
+  function getHypotenuseLength(a, b, mpp) {
+    return Math.sqrt(a * a * mpp * mpp + b * b * mpp * mpp);
+  }
+
+  function drawText(x, y, text, showRect) {
+    const rect = new fabric.Rect({
+      left: x,
+      top: y,
+      width: 150 / zoom,
+      height: 25 / zoom,
+      rx: 5 / zoom,
+      ry: 5 / zoom,
+      fill: 'rgba(255,255,255,0.5)',
+      transparentCorners: true,
+      selectable: false,
+      evented: false,
+      name: 'ruler'
+    });
+
+    fText = new fabric.Text(text, {
+      left: x,
+      top: y,
+      fontFamily: 'Verdana',
+      fill: 'black',
+      selectable: false,
+      evented: false,
+      name: 'ruler'
+    });
+    fText.scaleToWidth(rect.width);
+
+    if (showRect) {
+      canvas.add(rect);
+    }
+    canvas.add(fText);
+  }
+
+  function mouseMoveHandler(o) {
+    if (!isDown) return;
+    canvas.remove(fText); // remove text element before re-adding it
+    canvas.renderAll();
+
+    const event = o.e;
+    const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+    // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
+    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
+
+    const w = difference(oStart.x, oEnd.x);
+    const h = difference(oStart.y, oEnd.y);
+    const hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
+    const t = valueWithUnit(hypot);
+
+    const pointer = canvas.getPointer(event);
+    line.set({ x2: pointer.x, y2: pointer.y });
+    fEnd.x = pointer.x;
+    fEnd.y = pointer.y;
+
+    if (mode === 'draw') {
+      // Show info while drawing line
+      drawText(fEnd.x, fEnd.y, t, false);
+    }
+    canvas.renderAll();
+  }
+
+  function valueWithUnit(value) {
+    if (value &lt; 0.000001) {
+      // 1 µ = 1e+9 fm
+      return `${(value * 1000000000).toFixed(3)} fm`;
+    }
+    if (value &lt; 0.001) {
+      // 1 µ = 1e+6 pm
+      return `${(value * 1000000).toFixed(3)} pm`;
+    }
+    if (value &lt; 1) {
+      // 1 µ = 1000 nm
+      return `${(value * 1000).toFixed(3)} nm`;
+    }
+    if (value >= 1000) {
+      // 1 µ = 0.001 mm
+      return `${(value / 1000).toFixed(3)} mm`;
+    }
+    // 1 µ
+    return `${value.toFixed(3)} \u00B5m`;
+  }
+
+  function mouseUpHandler(o) {
+    line.setCoords();
+    canvas.remove(fText);
+    isDown = false;
+    // console.log('%co', 'color: #ff6a5a; font-size: larger;', o);
+
+    // Make sure user actually drew a line
+    if (fEnd.x > 0) {
+      console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
+      const pointer = canvas.getPointer(o.e);
+      drawText(pointer.x, pointer.y, fText.text, zoom &lt; 100);
+      canvas.renderAll();
+    }
+  }
+
+  button.addEventListener('click', () => {
+    if (mode === 'draw') {
+      // Turn off
+      canvas.remove(...canvas.getItemsByName('ruler'));
+      // canvas.remove(...canvas.getObjects())
+      mode = 'x';
+      canvas.off('mouse:down', mouseDownHandler);
+      canvas.off('mouse:move', mouseMoveHandler);
+      canvas.off('mouse:up', mouseUpHandler);
+    } else {
+      // Turn on
+      mode = 'draw';
+      canvas.on('mouse:down', mouseDownHandler);
+      canvas.on('mouse:move', mouseMoveHandler);
+      canvas.on('mouse:up', mouseUpHandler);
+    }
+    toggleButton(button, 'btnOn', 'annotationBtn');
+  });
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#blender">blender</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#pageSetup">pageSetup</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Jun 10 2022 15:56:55 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
