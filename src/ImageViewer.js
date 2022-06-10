@@ -4,7 +4,6 @@
  */
 class ImageViewer {
   /**
-   * @constructor
    * @param viewerInfo - Info specific to 'this' viewer
    */
   constructor(viewerInfo) {
