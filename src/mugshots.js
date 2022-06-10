@@ -1,22 +1,24 @@
 /**
  * Create an array of ROIs.
  * Upon click of an ROI, the WSI will pan/zoom to the location and draw a box around the ROI.
- *
- * @param options:
- *   {
- *     'divId': options.divId,
- *     'thumbId': options.thumbId,
- *     'infoUrl': options.infoUrl,
- *     'imgDims': options.imgDims,
- *     'thumbnailSize': options.thumbnailSize,
- *     'scrollerLength': options.scrollerLength,
- *     'mugshotArray': options.mugshotArray,
- *     'roiColor': options.roiColor,
- *     'overlay': options.overlay,
- *     'viewer': options.viewer
- *   }
+ * @param options
  */
 const mugshots = function(options) {
+  /*
+    Options:
+    {
+    'divId': options.divId,
+    'thumbId': options.thumbId,
+    'infoUrl': options.infoUrl,
+    'imgDims': options.imgDims,
+    'thumbnailSize': options.thumbnailSize,
+    'scrollerLength': options.scrollerLength,
+    'mugshotArray': options.mugshotArray,
+    'roiColor': options.roiColor,
+    'overlay': options.overlay,
+    'viewer': options.viewer
+  }
+  */
   const canvas = (this.__canvas = options.overlay.fabricCanvas());
   options.overlay.resizeCanvas = function() {
     // Function override: Resize overlay canvas
