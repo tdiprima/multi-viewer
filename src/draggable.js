@@ -1,9 +1,9 @@
 /**
- * Create floating div user interface.
+ * @description Create floating div user interface.
  * Return the created div back to the calling program.
  * Calling program will create an HTML table and attach it to the body.
  *
- * Popup Div Naming Convention Example:
+ * @example Popup Div Naming Convention
  * nameXXX
  * nameXXXHeader
  * nameXXXBody
