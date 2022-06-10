@@ -1,19 +1,19 @@
 /**
- * Create floating div user interface
- * Return the created div back to the calling program
- * Calling program will create an HTML table and attach it to the body
+ * Create floating div user interface.
+ * Return the created div back to the calling program.
+ * Calling program will create an HTML table and attach it to the body.
  *
  * Popup Div Naming Convention Example:
  * nameXXX
  * nameXXXHeader
  * nameXXXBody
  *
- * @param prfx: id prefix to be used in the created elements
- * @param title: header title
- * @param left: location
- * @param top: location
- * @param viz: visibility
- * @returns {*} the floating div
+ * @param prfx - id prefix to be used in the created elements
+ * @param title - header title
+ * @param left - location
+ * @param top - location
+ * @param viz - visibility
+ * @returns myDiv - the floating div
  */
 function createDraggableDiv(prfx, title, left, top, viz = false) {
   const myDiv = e('div', { class: 'popup', id: prfx });
