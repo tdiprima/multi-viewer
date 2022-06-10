@@ -3,14 +3,14 @@
  * Create a popup div allowing user to adjust color ranges for that layer,
  * or adjust the colors being used to color each class in that layer.
  *
- * @param paletteBtn: dom element
- * @param prefLabel: string
- * @param colorscheme:
- * @param viewerLayers: Array
- * @param viewer: OpenSeadragon Viewer
- * @returns {*}
+ * @param paletteBtn - The DOM element
+ * @param prefLabel {string}
+ * @param colorscheme
+ * @param viewerLayers {Array}
+ * @param viewer - OpenSeadragon Viewer
+ * @returns div
  *
- * Popup Div For Color Levels Naming Convention:
+ * @example Popup Div For Color Levels Naming Convention:
  * markerXXX0 <- 0th row elements
  * lowXXX0 <- 0th row elements
  * hiXXX0 <- 0th row elements
