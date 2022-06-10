@@ -2,9 +2,9 @@
  * Draw a grid over the canvas and allow the user to mark the squares.
  * For demonstration purposes.
  *
- * @param btnGrid: clickable grid icon
- * @param btnGridMarker: clickable marker icon
- * @param overlay: draw the grid on this canvas
+ * @param btnGrid - Clickable grid icon
+ * @param btnGridMarker - Clickable marker icon
+ * @param overlay - Canvas on which to draw the grid
  */
 const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
   const cellSize = 25;
