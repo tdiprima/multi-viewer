@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mugshots</title>
+
+  <link href="favicon.ico" rel="icon" sizes="16x16 32x32" type="image/x-icon">
+  <!--<script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script>-->
+  <!--<script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>-->
+  <!--<script src="https://cdn.jsdelivr.net/gh/tdiprima/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"></script>-->
+  <script src="../vendor/openseadragon/openseadragon.min.js"></script>
+  <script src="../vendor/fabric.adapted.js"></script>
+  <script src="../vendor/openseadragon-fabricjs-overlay.js"></script>
+  <script src="../src/mugshots.js"></script>
+
+  <style>
+    .openseadragon {
+      width: 480px;
+      height: 640px;
+      color: #333;
+      border: 1px solid black;
+    }
+
+    /* MUGSHOTS */
+    .thumbnail-container {
+      overflow-x: scroll;
+      width: 100%;
+      padding: 0 15px;
+    }
+
+    .thumbnail-list {
+      list-style: none;
+      white-space: nowrap;
+    }
+
+    .thumbnail-list li {
+      display: inline-block;
+    }
+
+    .thumbnail-image {
+      display: block;
+      max-width: 100px;
+      height: auto;
+      padding: 2px;
+    }
+  </style>
+</head>
+<body>
+<!-- Mugshots Demo -->
+<div class="thumbnail-container" id="thumbnail-container"></div>
+<div class="openseadragon" id="contentDiv"></div>
+<script>
+  document.addEventListener('DOMContentLoaded', event => {
+    fetch('https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2/info.json')
+      .then(response => response.json())
+      .then(data => {
+        let viewer = OpenSeadragon({
+          id: 'contentDiv',
+          // prefixUrl: '//openseadragon.github.io/openseadragon/images/',
+          prefixUrl: '../vendor/openseadragon/images/',
+          tileSources: [
+            {tileSource: data}
+          ]
+        });
+
+        let overlay = viewer.fabricjsOverlay({scale: 1});
+        let opts = {
+          divId: 'contentDiv',
+          thumbId: 'thumbnail-container',
+          infoUrl: 'https://iiif.princeton.edu/loris/iiif/2/pudl0001%2F4609321%2Fs42%2F00000001.jp2',
+          imgDims: data,
+          thumbnailSize: 256, // In image coordinates
+          scrollerLength: 10,
+          mugshotArray: [],
+          roiColor: '#0f0',
+          viewer,
+          overlay: overlay,
+        };
+        mugshots(opts);
+      });
+  });
+</script>
+</body>
+</html>
