@@ -1,8 +1,8 @@
 /**
- * Allow user to edit the polygon that they drew
+ * Allow user to edit the polygon that they drew.
  *
- * @param button: edit polygon button
- * @param overlay: target canvas
+ * @param button - Edit-polygon button
+ * @param overlay - The target canvas
  */
 const editPolygon = (button, overlay) => {
   button.addEventListener('click', function() {
