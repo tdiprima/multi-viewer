@@ -1,4 +1,9 @@
-// Create popup interface and handle events
+/**
+ * Create popup interface and handle events
+ * @param divBody
+ * @param allLayers
+ * @param viewer
+ */
 const layerPopup = function(divBody, allLayers, viewer) {
   function createAttenuationBtn(allLayers, viewer) {
     // Color attenuation by probability
