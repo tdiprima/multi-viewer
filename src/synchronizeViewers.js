@@ -1,7 +1,7 @@
 /**
- * Synchronize pan & zoom on every viewer in the given array
+ * Synchronize pan & zoom on every viewer in the given array.
  *
- * @param multiViewerArray
+ * @param multiViewerArray - Array of MultiViewer objects
  */
 const synchronizeViewers = function(multiViewerArray) {
   const isGood = checkData(multiViewerArray);
