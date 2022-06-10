@@ -1,20 +1,20 @@
 /**
- * mugshots.js
- * Create an array of rois; onClick: image will zoom to area, and draw a box around the ROI.
+ * Create an array of ROIs.
+ * Upon click of an ROI, the WSI will pan/zoom to the location and draw a box around the ROI.
  *
  * @param options:
-  {
-    'divId': options.divId,
-    'thumbId': options.thumbId,
-    'infoUrl': options.infoUrl,
-    'imgDims': options.imgDims,
-    'thumbnailSize': options.thumbnailSize,
-    'scrollerLength': options.scrollerLength,
-    'mugshotArray': options.mugshotArray,
-    'roiColor': options.roiColor,
-    'overlay': options.overlay,
-    'viewer': options.viewer
-  }
+ *   {
+ *     'divId': options.divId,
+ *     'thumbId': options.thumbId,
+ *     'infoUrl': options.infoUrl,
+ *     'imgDims': options.imgDims,
+ *     'thumbnailSize': options.thumbnailSize,
+ *     'scrollerLength': options.scrollerLength,
+ *     'mugshotArray': options.mugshotArray,
+ *     'roiColor': options.roiColor,
+ *     'overlay': options.overlay,
+ *     'viewer': options.viewer
+ *   }
  */
 const mugshots = function(options) {
   const canvas = (this.__canvas = options.overlay.fabricCanvas());
