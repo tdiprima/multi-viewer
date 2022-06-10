@@ -1,3 +1,9 @@
+/**
+ * A measuring tool.
+ * @param button
+ * @param viewer
+ * @param overlay
+ */
 const ruler = (button, viewer, overlay) => {
   let line;
   let isDown;
