@@ -8,12 +8,12 @@
  * nameXXXHeader
  * nameXXXBody
  *
- * @param {string} prfx - id prefix to be used in the created elements
- * @param {string} title - header title
- * @param {number} left - location
- * @param {number} top - location
- * @param {boolean} viz - visibility
- * @returns {object} myDiv - the floating div
+ * @param {string} prfx - ID prefix to be used in the created elements
+ * @param {string} title - Header title
+ * @param {number} left - Location
+ * @param {number} top - Location
+ * @param {boolean} viz - Visibility
+ * @returns {object} myDiv - The floating div
  */
 function createDraggableDiv(prfx, title, left, top, viz = false) {
   const myDiv = e('div', { class: 'popup', id: prfx });
