@@ -1,8 +1,8 @@
 /**
  * A measuring tool.
- * @param button
- * @param viewer
- * @param overlay
+ * @param {object} button
+ * @param {object} viewer
+ * @param {object} overlay
  */
 const ruler = (button, viewer, overlay) => {
   let line;

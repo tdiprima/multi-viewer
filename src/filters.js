@@ -1,6 +1,7 @@
-// filters.js
-// Custom color filters
-
+/**
+ * @file filters.js
+ * Custom color filters
+ */
 const img2array = imgData => {
   return imgData.data.reduce((pixel, key, index) => {
     return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;

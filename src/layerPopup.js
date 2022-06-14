@@ -1,8 +1,8 @@
 /**
  * Create popup interface and handle events
- * @param divBody
- * @param allLayers
- * @param viewer
+ * @param {object} divBody
+ * @param {Array} allLayers
+ * @param {object} viewer
  */
 const layerPopup = function(divBody, allLayers, viewer) {
   function createAttenuationBtn(allLayers, viewer) {

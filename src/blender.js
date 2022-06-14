@@ -1,12 +1,11 @@
 /**
- * @method blender
- * @param blenderBtn - Clickable blender icon
- * @param viewer - OpenSeadragon viewer on which to apply the effects
- * @description Implementation of OpenSeadragon.TiledImage.setCompositeOperation
+ * Implementation of OpenSeadragon.TiledImage.setCompositeOperation
  * [uses CanvasRenderingContext2D.globalCompositeOperation]
  * to create different visual effects when applied to the layers.
  * Users can play with the different effects and see if it helps to
  * discover things from a new and different perspective.
+ * @param {object} blenderBtn - Clickable blender icon
+ * @param {object} viewer - OpenSeadragon viewer on which to apply the effects
  */
 const blender = (blenderBtn, viewer) => {
   const blendModes = [

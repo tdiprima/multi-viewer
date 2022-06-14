@@ -1,5 +1,5 @@
 /**
- * @description Create floating div user interface.
+ * Create floating div user interface.
  * Return the created div back to the calling program.
  * Calling program will create an HTML table and attach it to the body.
  *
@@ -8,12 +8,12 @@
  * nameXXXHeader
  * nameXXXBody
  *
- * @param prfx - id prefix to be used in the created elements
- * @param title - header title
- * @param left - location
- * @param top - location
- * @param viz - visibility
- * @returns myDiv - the floating div
+ * @param {string} prfx - id prefix to be used in the created elements
+ * @param {string} title - header title
+ * @param {number} left - location
+ * @param {number} top - location
+ * @param {boolean} viz - visibility
+ * @returns {object} myDiv - the floating div
  */
 function createDraggableDiv(prfx, title, left, top, viz = false) {
   const myDiv = e('div', { class: 'popup', id: prfx });

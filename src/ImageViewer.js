@@ -4,7 +4,7 @@
  */
 class ImageViewer {
   /**
-   * @param viewerInfo - Info specific to 'this' viewer
+   * @param {object} viewerInfo - Info specific to 'this' viewer
    */
   constructor(viewerInfo) {
     const layers = viewerInfo.layers;

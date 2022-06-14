@@ -3,20 +3,21 @@
  * Create a popup div allowing user to adjust color ranges for that layer,
  * or adjust the colors being used to color each class in that layer.
  *
- * @param paletteBtn - The DOM element
- * @param prefLabel {string}
- * @param colorscheme
- * @param viewerLayers {Array}
- * @param viewer - OpenSeadragon Viewer
- * @returns div
- *
- * @example Popup Div For Color Levels Naming Convention:
- * markerXXX0 <- 0th row elements
- * lowXXX0 <- 0th row elements
- * hiXXX0 <- 0th row elements
- * iXXX0 <- 0th row elements
+ * @param {object} paletteBtn - The DOM element
+ * @param {string} prefLabel
+ * @param {object} colorscheme
+ * @param {Array} viewerLayers
+ * @param {object} viewer - OpenSeadragon Viewer
+ * @returns {object} div
  */
 const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
+  /*
+  Popup Div For Color Levels Naming Convention:
+  markerXXX0 <- 0th row elements
+  lowXXX0 <- 0th row elements
+  hiXXX0 <- 0th row elements
+  iXXX0 <- 0th row elements
+  */
   setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
   const widget = createWidget(uniqueId, paletteBtn, prefLabel);

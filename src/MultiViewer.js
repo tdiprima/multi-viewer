@@ -4,9 +4,9 @@
  */
 class MultiViewer extends ImageViewer {
   /**
-   * @param viewerInfo - Info specific to 'this' viewer
-   * @param numViewers - Total number of viewers.
-   * @param options - Filters, paintbrush, etc.
+   * @param {object} viewerInfo - Info specific to 'this' viewer
+   * @param {number} numViewers - Total number of viewers.
+   * @param {object} options - Filters, paintbrush, etc.
    */
   constructor(viewerInfo, numViewers, options) {
     super(viewerInfo);

@@ -1,13 +1,14 @@
 /**
- * Set up web page for multi-viewer.
- * @param divId - Main div id.
- * @param images - Items to be displayed in viewer.
- * @param numViewers - Total number of viewers.
- * @param rows - LAYOUT: Number of rows (of viewers)
- * @param columns - LAYOUT: Number of columns (of viewers)
- * @param width - Viewer width
- * @param height - Viewer height
- * @param opts - Multi-viewer options; paintbrush, etc.
+ * @file pageSetup.js is the root file for this app
+ * @author Tammy DiPrima
+ * @param {string} divId - Main div id.
+ * @param {object} images - Items to be displayed in viewer.
+ * @param {number} numViewers - Total number of viewers.
+ * @param {number} rows - LAYOUT: Number of rows (of viewers)
+ * @param {number} columns - LAYOUT: Number of columns (of viewers)
+ * @param {number} width - Viewer width
+ * @param {number} height - Viewer height
+ * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   /*

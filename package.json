@@ -8,20 +8,18 @@
   "scripts": {
     "lint": "eslint --debug ./",
     "lint:write": "eslint --debug ./ --fix",
-    "prettier": "prettier --write ./**/*.js"
+    "prettier": "prettier --write ./**/*.js",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tdiprima/multi-viewer.git"
   },
-  "keywords": ["fabricjs", "openseadragon"],
+  "keywords": [
+    "fabricjs",
+    "openseadragon"
+  ],
   "devDependencies": {
-    "grunt": "^1.3.0",
-    "grunt-cli": "^1.3.2",
-    "grunt-concat-in-order": "^0.3.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-uglify": "^5.0.0",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
@@ -32,6 +30,13 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.9.1",
+    "grunt": "^1.3.0",
+    "grunt-cli": "^1.3.2",
+    "grunt-concat-in-order": "^0.3.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "jsdoc": "^3.6.10",
     "prettier": "^1.14.3",
     "yarn": "^1.22.18"
   },

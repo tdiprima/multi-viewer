@@ -2,8 +2,8 @@
  * For the spot that was right-clicked in viewer A, place a marker
  * at that location on all viewers.
  *
- * @param osdViewer - The OpenSeadragon viewer that has the focus
- * @param multiViewerArray - Array of MultiViewers
+ * @param {object} osdViewer - The OpenSeadragon viewer that has the focus
+ * @param {object} multiViewerArray - Array of MultiViewers
  */
 const mapMarker = (osdViewer, multiViewerArray) => {
   overrideRightClickMenu(osdViewer.element);
