@@ -1,4 +1,8 @@
-/*! multi-viewer - v1.0.0 - 2022-06-10 */
+/*! multi-viewer - v1.0.0 - 2022-06-15 */
+/**
+ * @file commonFunctions.js
+ * Contains utility functions
+ */
 // eslint-disable-next-line prefer-const
 let CONFIG = {
   osdImages: '/multi-viewer/vendor/openseadragon/images/',
@@ -340,15 +344,17 @@ const STATE = {
 };
 
 /**
- * Set up web page for multi-viewer.
- * @param divId - Main div id.
- * @param images - Items to be displayed in viewer.
- * @param numViewers - Total number of viewers.
- * @param rows - LAYOUT: Number of rows (of viewers)
- * @param columns - LAYOUT: Number of columns (of viewers)
- * @param width - Viewer width
- * @param height - Viewer height
- * @param opts - Multi-viewer options; paintbrush, etc.
+ * @file pageSetup.js is the root file for this app
+ * @author Tammy DiPrima
+ *
+ * @param {string} divId - Main div id.
+ * @param {object} images - Items to be displayed in viewer.
+ * @param {number} numViewers - Total number of viewers.
+ * @param {number} rows - LAYOUT: Number of rows (of viewers)
+ * @param {number} columns - LAYOUT: Number of columns (of viewers)
+ * @param {number} width - Viewer width
+ * @param {number} height - Viewer height
+ * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   /*
@@ -548,10 +554,10 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 };
 
 /**
- * Allow user to edit the polygon that they drew.
+ * Allow user to edit the polygon that they've drawn.
  *
- * @param button - Edit-polygon button
- * @param overlay - The target canvas
+ * @param {object} button - The edit-polygon button
+ * @param {object} overlay - The target canvas
  */
 const editPolygon = (button, overlay) => {
   button.addEventListener('click', function() {
@@ -671,9 +677,10 @@ function Edit(button, canvas) {
 
 /**
  * Allow user to draw a polygon on the image.
- * @param viewerInfo - Info specific to 'this' viewer
- * @param viewer - OSD viewer object
- * @param overlay - fabric overlay object
+ *
+ * @param {object} viewerInfo - Info specific to 'this' viewer
+ * @param {object} viewer - OSD viewer object
+ * @param {object} overlay - Canvas on which to draw the polygon
  */
 const drawPolygon = (viewerInfo, viewer, overlay) => {
   const idx = viewerInfo.idx;
@@ -863,9 +870,9 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
  * Draw a grid over the canvas and allow the user to mark the squares.
  * For demonstration purposes.
  *
- * @param btnGrid - Clickable grid icon
- * @param btnGridMarker - Clickable marker icon
- * @param overlay - Canvas on which to draw the grid
+ * @param {object} btnGrid - Clickable grid icon
+ * @param {object} btnGridMarker - Clickable marker icon
+ * @param {object} overlay - Canvas on which to draw the grid
  */
 const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
   const cellSize = 25;
@@ -1074,8 +1081,8 @@ function grandCross(btn, obj) {
  * For the spot that was right-clicked in viewer A, place a marker
  * at that location on all viewers.
  *
- * @param osdViewer - The OpenSeadragon viewer that has the focus
- * @param multiViewerArray - Array of MultiViewers
+ * @param {object} osdViewer - The OpenSeadragon viewer that has the focus
+ * @param {object} multiViewerArray - Array of MultiViewers
  */
 const mapMarker = (osdViewer, multiViewerArray) => {
   overrideRightClickMenu(osdViewer.element);
@@ -1152,12 +1159,13 @@ function handleButtonShowHide() {
 }
 
 /**
- * A measuring tool.
- * @param button
- * @param viewer
- * @param overlay
+ * A measuring tool.  Measure in microns.
+ *
+ * @param {object} btnRuler - Button that activates the ruler
+ * @param {object} viewer - OpenSeadragon.viewer
+ * @param {object} overlay - Canvas on which to draw the measurement
  */
-const ruler = (button, viewer, overlay) => {
+const ruler = (btnRuler, viewer, overlay) => {
   let line;
   let isDown;
   let zoom;
@@ -1321,7 +1329,7 @@ const ruler = (button, viewer, overlay) => {
     }
   }
 
-  button.addEventListener('click', () => {
+  btnRuler.addEventListener('click', () => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'));
@@ -1337,19 +1345,20 @@ const ruler = (button, viewer, overlay) => {
       canvas.on('mouse:move', mouseMoveHandler);
       canvas.on('mouse:up', mouseUpHandler);
     }
-    toggleButton(button, 'btnOn', 'annotationBtn');
+    toggleButton(btnRuler, 'btnOn', 'annotationBtn');
   });
 };
 
 /**
- * @method blender
- * @param blenderBtn - Clickable blender icon
- * @param viewer - OpenSeadragon viewer on which to apply the effects
- * @description Implementation of OpenSeadragon.TiledImage.setCompositeOperation
+ * Implementation of OpenSeadragon.TiledImage.setCompositeOperation
  * [uses CanvasRenderingContext2D.globalCompositeOperation]
  * to create different visual effects when applied to the layers.
+ *
  * Users can play with the different effects and see if it helps to
  * discover things from a new and different perspective.
+ *
+ * @param {object} blenderBtn - Clickable blender icon
+ * @param {object} viewer - OpenSeadragon viewer on which to apply the effects
  */
 const blender = (blenderBtn, viewer) => {
   const blendModes = [
@@ -1470,10 +1479,11 @@ const blender = (blenderBtn, viewer) => {
 };
 
 /**
- * @param viewerInfo - Info specific to 'this' viewer
- * @param options - Filters, paintbrush, etc.
- * @param viewer - OpenSeadragon viewer
- * @description Create the fabric.js overlay and pass it to the markup tools.
+ * Create the fabric.js overlay and pass it to the markup tools.
+ *
+ * @param {object} viewerInfo - Info specific to 'this' viewer
+ * @param {object} options - Filters, paintbrush, etc.
+ * @param {object} viewer - OpenSeadragon viewer
  */
 const markupTools = (viewerInfo, options, viewer) => {
   const overlay = viewer.fabricjsOverlay({ scale: 1, static: false });
@@ -1506,7 +1516,7 @@ const markupTools = (viewerInfo, options, viewer) => {
 };
 
 /**
- * @description Create floating div user interface.
+ * Create floating div user interface.
  * Return the created div back to the calling program.
  * Calling program will create an HTML table and attach it to the body.
  *
@@ -1515,12 +1525,12 @@ const markupTools = (viewerInfo, options, viewer) => {
  * nameXXXHeader
  * nameXXXBody
  *
- * @param prfx - id prefix to be used in the created elements
- * @param title - header title
- * @param left - location
- * @param top - location
- * @param viz - visibility
- * @returns myDiv - the floating div
+ * @param {string} prfx - ID prefix to be used in the created elements
+ * @param {string} title - Header title
+ * @param {number} left - The left edge of the positioned <div> element
+ * @param {number} top - The top edge of the positioned <div> element
+ * @param {boolean} viz - Visibility
+ * @returns {object} myDiv - The floating div
  */
 function createDraggableDiv(prfx, title, left, top, viz = false) {
   const myDiv = e('div', { class: 'popup', id: prfx });
@@ -1609,24 +1619,25 @@ function dragElement(_elem) {
  * Create a popup div allowing user to adjust color ranges for that layer,
  * or adjust the colors being used to color each class in that layer.
  *
- * @param paletteBtn - The DOM element
- * @param prefLabel {string}
- * @param colorscheme
- * @param viewerLayers {Array}
- * @param viewer - OpenSeadragon Viewer
- * @returns div
- *
- * @example Popup Div For Color Levels Naming Convention:
- * markerXXX0 <- 0th row elements
- * lowXXX0 <- 0th row elements
- * hiXXX0 <- 0th row elements
- * iXXX0 <- 0th row elements
+ * @param {object} paletteBtn - The DOM element
+ * @param {string} title - For the title bar of the floating div
+ * @param {object} colorscheme - Object containing array of "colors" and array of "colorspectrum", to use for the classifications and color ranges, respectively.
+ * @param {Array} viewerLayers - Array of layers (images) to be displayed in this viewer
+ * @param {object} viewer - OpenSeadragon Viewer
+ * @returns {object} popup - div
  */
-const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
+const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
+  /*
+  Popup Div For Color Levels Naming Convention:
+  markerXXX0 <- 0th row elements
+  lowXXX0 <- 0th row elements
+  hiXXX0 <- 0th row elements
+  iXXX0 <- 0th row elements
+  */
   setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
-  const widget = createWidget(uniqueId, paletteBtn, prefLabel);
-  const widgetBody = widget.lastChild; // known
+  const popup = createPopup(uniqueId, paletteBtn, title);
+  const popupBody = popup.lastChild; // known
   const classDiv = e('div');
   const probabilityDiv = e('div');
   const heatmapDiv = e('div');
@@ -1639,16 +1650,16 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
     viewerLayers,
     viewer,
   );
-  widgetBody.appendChild(selectList);
+  popupBody.appendChild(selectList);
 
   // By class
   classDiv.style.display = STATE.renderType === 'byClass' ? 'block' : 'none';
-  widgetBody.appendChild(classDiv);
+  popupBody.appendChild(classDiv);
   createUI(uniqueId, classDiv, colorscheme.colors, viewerLayers, viewer, 'byClass');
 
   // By probability
   probabilityDiv.style.display = STATE.renderType === 'byProbability' ? 'block' : 'none';
-  widgetBody.appendChild(probabilityDiv);
+  popupBody.appendChild(probabilityDiv);
   createUI(
     uniqueId,
     probabilityDiv,
@@ -1663,24 +1674,24 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
     "correspond to sureness and<br>" +
     "bluish colors to unsureness.";
   heatmapDiv.style.display = STATE.renderType === 'byHeatmap' ? 'block' : 'none';
-  widgetBody.appendChild(heatmapDiv);
+  popupBody.appendChild(heatmapDiv);
   heatmapDiv.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`;
 
   // By threshold
   thresholdDiv.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
-  widgetBody.appendChild(thresholdDiv);
+  popupBody.appendChild(thresholdDiv);
 
   createThresh(thresholdDiv, viewerLayers, viewer); // no cp
 
-  return widget;
+  return popup;
 };
 
-function createWidget(uniqueId, paletteBtn, prefLabel) {
+function createPopup(uniqueId, paletteBtn, title) {
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
-  // const title = `${prefLabel} color levels`;
+  // const title = `${title} color levels`;
   // return createDraggableDiv(widgetId, title, rect.left, rect.top);
-  return createDraggableDiv(widgetId, prefLabel, rect.left, rect.top);
+  return createDraggableDiv(widgetId, title, rect.left, rect.top);
 }
 
 function setChecked(colorscheme) {
@@ -2196,9 +2207,10 @@ function extraRow(uniq, colors, layers, viewer) {
   return tr;
 }
 
-// filters.js
-// Custom color filters
-
+/**
+ * @file filters.js
+ * Custom color filters
+ */
 const img2array = imgData => {
   return imgData.data.reduce((pixel, key, index) => {
     return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;
@@ -2502,7 +2514,7 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
  */
 class ImageViewer {
   /**
-   * @param viewerInfo - Info specific to 'this' viewer
+   * @param {object} viewerInfo - Info specific to 'this' viewer
    */
   constructor(viewerInfo) {
     const layers = viewerInfo.layers;
@@ -2737,16 +2749,20 @@ class ImageViewer {
 /**
  * Create 1 control panel row per layer.
  *
- * @description There's a column called "layersAndColors" to the right of each viewer.
+ * There's a column called "layersAndColors" to the right of each viewer.
  * Create an HTML table there, with each row corresponding to each layer displayed in viewer.
- * 
- * @description Each layer has:
- *     a draggable item: the layer
- *         naming convention: 0featXXX <- 0th feature
- *     an eyeball: turn layer on & off
- *     a slider: adjust transparency
- *     a color palette: change colors in layer
- *     a tachometer: adjust visualizations in layer
+ *
+ * @example Each layer has:
+ * a draggable item: the layer
+ *     naming convention: 0featXXX <- 0th feature
+ * an eyeball: turn layer on & off
+ * a slider: adjust transparency
+ * a color palette: change colors in layer
+ * a tachometer: adjust visualizations in layer
+ *
+ * @param {object} layersColumn - The HTML table column containing the layer gadgets
+ * @param {object} images - The images to be displayed in this viewer
+ * @param {object} viewer - OpenSeadragon viewer
  */
 const layerUI = (layersColumn, images, viewer) => {
   createLayerElements(layersColumn, images, viewer);
@@ -3204,10 +3220,11 @@ function getVals(slides) {
 }
 
 /**
- * Create popup interface and handle events
- * @param divBody
- * @param allLayers
- * @param viewer
+ * Create popup interface and handle events.
+ *
+ * @param {object} divBody - The body of the div, which we will fill in here.
+ * @param {Array} allLayers - Array of layers displayed in this viewer
+ * @param {object} viewer - OpenSeadragon viewer
  */
 const layerPopup = function(divBody, allLayers, viewer) {
   function createAttenuationBtn(allLayers, viewer) {
@@ -3360,9 +3377,9 @@ const layerPopup = function(divBody, allLayers, viewer) {
  */
 class MultiViewer extends ImageViewer {
   /**
-   * @param viewerInfo - Info specific to 'this' viewer
-   * @param numViewers - Total number of viewers.
-   * @param options - Filters, paintbrush, etc.
+   * @param {object} viewerInfo - Info specific to 'this' viewer
+   * @param {number} numViewers - Total number of viewers.
+   * @param {object} options - Filters, paintbrush, etc.
    */
   constructor(viewerInfo, numViewers, options) {
     super(viewerInfo);
@@ -3404,7 +3421,7 @@ class MultiViewer extends ImageViewer {
 /**
  * Synchronize pan & zoom on every viewer in the given array.
  *
- * @param multiViewerArray - Array of MultiViewer objects
+ * @param {Array} multiViewerArray - Array of MultiViewer objects
  */
 const synchronizeViewers = function(multiViewerArray) {
   const isGood = checkData(multiViewerArray);
