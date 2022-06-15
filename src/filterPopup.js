@@ -4,13 +4,13 @@
  * or adjust the colors being used to color each class in that layer.
  *
  * @param {object} paletteBtn - The DOM element
- * @param {string} prefLabel
- * @param {object} colorscheme
- * @param {Array} viewerLayers
+ * @param {string} title - For the title bar of the floating div
+ * @param {object} colorscheme - Object containing array of "colors" and array of "colorspectrum", to use for the classifications and color ranges, respectively.
+ * @param {Array} viewerLayers - Array of layers (images) to be displayed in this viewer
  * @param {object} viewer - OpenSeadragon Viewer
- * @returns {object} div
+ * @returns {object} popup - div
  */
-const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) => {
+const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
   /*
   Popup Div For Color Levels Naming Convention:
   markerXXX0 <- 0th row elements
@@ -20,8 +20,8 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
   */
   setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
-  const widget = createWidget(uniqueId, paletteBtn, prefLabel);
-  const widgetBody = widget.lastChild; // known
+  const popup = createPopup(uniqueId, paletteBtn, title);
+  const popupBody = popup.lastChild; // known
   const classDiv = e('div');
   const probabilityDiv = e('div');
   const heatmapDiv = e('div');
@@ -34,16 +34,16 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
     viewerLayers,
     viewer,
   );
-  widgetBody.appendChild(selectList);
+  popupBody.appendChild(selectList);
 
   // By class
   classDiv.style.display = STATE.renderType === 'byClass' ? 'block' : 'none';
-  widgetBody.appendChild(classDiv);
+  popupBody.appendChild(classDiv);
   createUI(uniqueId, classDiv, colorscheme.colors, viewerLayers, viewer, 'byClass');
 
   // By probability
   probabilityDiv.style.display = STATE.renderType === 'byProbability' ? 'block' : 'none';
-  widgetBody.appendChild(probabilityDiv);
+  popupBody.appendChild(probabilityDiv);
   createUI(
     uniqueId,
     probabilityDiv,
@@ -58,24 +58,24 @@ const filterPopup = (paletteBtn, prefLabel, colorscheme, viewerLayers, viewer) =
     "correspond to sureness and<br>" +
     "bluish colors to unsureness.";
   heatmapDiv.style.display = STATE.renderType === 'byHeatmap' ? 'block' : 'none';
-  widgetBody.appendChild(heatmapDiv);
+  popupBody.appendChild(heatmapDiv);
   heatmapDiv.innerHTML = `<p style="color: #ffffff; background: -webkit-linear-gradient(#FF0000, #0000FF);">${msg}</p>`;
 
   // By threshold
   thresholdDiv.style.display = STATE.renderType === 'byThreshold' ? 'block' : 'none';
-  widgetBody.appendChild(thresholdDiv);
+  popupBody.appendChild(thresholdDiv);
 
   createThresh(thresholdDiv, viewerLayers, viewer); // no cp
 
-  return widget;
+  return popup;
 };
 
-function createWidget(uniqueId, paletteBtn, prefLabel) {
+function createPopup(uniqueId, paletteBtn, title) {
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
-  // const title = `${prefLabel} color levels`;
+  // const title = `${title} color levels`;
   // return createDraggableDiv(widgetId, title, rect.left, rect.top);
-  return createDraggableDiv(widgetId, prefLabel, rect.left, rect.top);
+  return createDraggableDiv(widgetId, title, rect.left, rect.top);
 }
 
 function setChecked(colorscheme) {

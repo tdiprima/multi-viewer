@@ -10,8 +10,8 @@
  *
  * @param {string} prfx - ID prefix to be used in the created elements
  * @param {string} title - Header title
- * @param {number} left - Location
- * @param {number} top - Location
+ * @param {number} left - The left edge of the positioned <div> element
+ * @param {number} top - The top edge of the positioned <div> element
  * @param {boolean} viz - Visibility
  * @returns {object} myDiv - The floating div
  */
