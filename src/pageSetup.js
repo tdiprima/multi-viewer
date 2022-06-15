@@ -1,6 +1,7 @@
 /**
  * @file pageSetup.js is the root file for this app
  * @author Tammy DiPrima
+ *
  * @param {string} divId - Main div id.
  * @param {object} images - Items to be displayed in viewer.
  * @param {number} numViewers - Total number of viewers.

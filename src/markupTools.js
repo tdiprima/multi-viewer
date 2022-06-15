@@ -1,5 +1,6 @@
 /**
  * Create the fabric.js overlay and pass it to the markup tools.
+ *
  * @param {object} viewerInfo - Info specific to 'this' viewer
  * @param {object} options - Filters, paintbrush, etc.
  * @param {object} viewer - OpenSeadragon viewer
@@ -27,7 +28,10 @@ const markupTools = (viewerInfo, options, viewer) => {
     canvas.calcOffset();
   });
 
-  // SAVE
+  /**
+   * Save your work
+   * @type {HTMLElement}
+   */
   const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {
     saveSettings(canvas, options);

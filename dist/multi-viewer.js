@@ -3,18 +3,41 @@
  * @file commonFunctions.js
  * Contains utility functions
  */
-// eslint-disable-next-line prefer-const
+
+/**
+ * CONFIG - Location of application images and osd images.
+ * This setup is for the wickett server.
+ *
+ * @type {{appImages: string, osdImages: string}}
+ */
 let CONFIG = {
   osdImages: '/multi-viewer/vendor/openseadragon/images/',
   appImages: '/multi-viewer/images/'
 };
 
+/**
+ * Comment the above object, and uncomment below for working *locally*.
+ * @type {{appImages: string, osdImages: string}}
+ */
 // let CONFIG = {
 //   osdImages: 'vendor/openseadragon/images/',
 //   appImages: 'images/'
 // }
 
+/**
+ * Change the way the image is displayed, based on user input.
+ *
+ * @param {Array} layers - Layers (images) to be displayed in viewer
+ * @param {object} viewer - OpenSeadragon viewer
+ * @param {object} [range]
+ * @param {object} [thresh]
+ * @param {number} [thresh.val] - From user input
+ * @param {Array<number>} [thresh.rgba] - example: [126, 1, 0, 255]
+ */
 function setFilter(layers, viewer, range, thresh) {
+  console.log("range", typeof range, JSON.stringify(range));
+  console.log("thresh", typeof thresh, JSON.stringify(thresh));
+
   if (viewer.world) {
     let start = performance.now();
     // let caller = setFilter.caller;
@@ -262,6 +285,15 @@ function timeStamp() {
   return `${a}_${b}`;
 }
 
+/**
+ * Save user settings and markup.
+ * TODO: post object to server
+ *
+ * @param {object} canvas - Our osd fabric.js canvas object
+ * @param {object} options
+ * @param {string} options.paintbrushColor - example: "#0ff"
+ * @param {boolean} options.toolbarOn - example: true
+ */
 function saveSettings(canvas, options) {
   const jsonObject = {
     theme: document.body.className,
@@ -270,7 +302,6 @@ function saveSettings(canvas, options) {
     options,
   };
   console.log('settings', jsonObject);
-  // todo: post object to server
 }
 
 function extractLocation(layer) {
@@ -280,7 +311,7 @@ function extractLocation(layer) {
   } else if (typeof layer.location === 'object') {
     loc = layer.location.url;
   } else {
-    throw new TypeError('Unidentified URL type...', layer.location);
+    throw new TypeError(`Unidentified URL type... ${layer.location}`);
   }
   return loc;
 }
@@ -556,11 +587,11 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 /**
  * Allow user to edit the polygon that they've drawn.
  *
- * @param {object} button - The edit-polygon button
+ * @param {object} btnEdit - The edit-polygon button
  * @param {object} overlay - The target canvas
  */
-const editPolygon = (button, overlay) => {
-  button.addEventListener('click', function() {
+const editPolygon = (btnEdit, overlay) => {
+  btnEdit.addEventListener('click', function() {
     toggleButton(this, 'btnOn', 'annotationBtn');
     Edit(this, overlay.fabricCanvas());
   });
@@ -641,7 +672,7 @@ function getPolygon(canvas) {
   return 'null';
 }
 
-function Edit(button, canvas) {
+function Edit(btnEdit, canvas) {
   const fabricPolygon = getPolygon(canvas);
 
   if (isRealValue(fabricPolygon)) {
@@ -670,7 +701,7 @@ function Edit(button, canvas) {
     fabricPolygon.hasBorders = !fabricPolygon.edit;
     canvas.requestRenderAll();
   } else {
-    toggleButton(button, 'btnOn', 'annotationBtn');
+    toggleButton(btnEdit, 'btnOn', 'annotationBtn');
     alertMessage('Please select a polygon for editing.');
   }
 }
@@ -1508,7 +1539,10 @@ const markupTools = (viewerInfo, options, viewer) => {
     canvas.calcOffset();
   });
 
-  // SAVE
+  /**
+   * Save your work
+   * @type {HTMLElement}
+   */
   const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {
     saveSettings(canvas, options);
@@ -2650,7 +2684,12 @@ class ImageViewer {
       }
     });
 
+    /**
+     *
+     * @param params
+     */
     function useParams(params) {
+      console.log("params", typeof params, params);
       const zoom = viewer.viewport.getZoom();
       const pan = viewer.viewport.getCenter();
 
@@ -2669,7 +2708,11 @@ class ImageViewer {
       }
     }
 
-    // CUSTOM OPENSEADRAGON BUTTONS
+    /**
+     * Custom OpenSeadragon Buttons
+     * Zoom in 100%
+     * Zoom out 100%
+     */
     function addCustomButtons() {
       // Zoom all the way in
       const zinButton = new OpenSeadragon.Button({
@@ -2700,8 +2743,12 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
     }
 
-    // SET UP SCALE BAR
+    /**
+     * Set up scale bar
+     * @param ppm
+     */
     const setScaleBar = ppm => {
+      console.log("ppm", typeof ppm, ppm);
       viewer.scalebar({
         type: OpenSeadragon.ScalebarType.MICROSCOPY,
         pixelsPerMeter: ppm,

@@ -140,7 +140,12 @@ class ImageViewer {
       }
     });
 
+    /**
+     *
+     * @param params
+     */
     function useParams(params) {
+      console.log("params", typeof params, params);
       const zoom = viewer.viewport.getZoom();
       const pan = viewer.viewport.getCenter();
 
@@ -159,7 +164,11 @@ class ImageViewer {
       }
     }
 
-    // CUSTOM OPENSEADRAGON BUTTONS
+    /**
+     * Custom OpenSeadragon Buttons
+     * Zoom in 100%
+     * Zoom out 100%
+     */
     function addCustomButtons() {
       // Zoom all the way in
       const zinButton = new OpenSeadragon.Button({
@@ -190,8 +199,12 @@ class ImageViewer {
       viewer.addControl(zoutButton.element, { anchor: OpenSeadragon.ControlAnchor.TOP_LEFT });
     }
 
-    // SET UP SCALE BAR
+    /**
+     * Set up scale bar
+     * @param ppm
+     */
     const setScaleBar = ppm => {
+      console.log("ppm", typeof ppm, ppm);
       viewer.scalebar({
         type: OpenSeadragon.ScalebarType.MICROSCOPY,
         pixelsPerMeter: ppm,

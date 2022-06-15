@@ -1,8 +1,8 @@
 /**
  * Create an array of ROIs.
  * Upon click of an ROI, the WSI will pan/zoom to the location and draw a box around the ROI.
- * @param {object} options
  *
+ * @param {object} options
  * @param {string} options.divId - example: "contentDiv"
  * @param {string} options.thumbId - example: "thumbnail-container"
  * @param {string} options.infoUrl - example: "https://iiif.princeton.edu/loris/iiif/2/pudl0001/4609321/s42/00000001.jp2"

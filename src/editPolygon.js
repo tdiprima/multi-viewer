@@ -1,10 +1,11 @@
 /**
  * Allow user to edit the polygon that they've drawn.
- * @param {object} button - The edit-polygon button
+ *
+ * @param {object} btnEdit - The edit-polygon button
  * @param {object} overlay - The target canvas
  */
-const editPolygon = (button, overlay) => {
-  button.addEventListener('click', function() {
+const editPolygon = (btnEdit, overlay) => {
+  btnEdit.addEventListener('click', function() {
     toggleButton(this, 'btnOn', 'annotationBtn');
     Edit(this, overlay.fabricCanvas());
   });
@@ -85,7 +86,7 @@ function getPolygon(canvas) {
   return 'null';
 }
 
-function Edit(button, canvas) {
+function Edit(btnEdit, canvas) {
   const fabricPolygon = getPolygon(canvas);
 
   if (isRealValue(fabricPolygon)) {
@@ -114,7 +115,7 @@ function Edit(button, canvas) {
     fabricPolygon.hasBorders = !fabricPolygon.edit;
     canvas.requestRenderAll();
   } else {
-    toggleButton(button, 'btnOn', 'annotationBtn');
+    toggleButton(btnEdit, 'btnOn', 'annotationBtn');
     alertMessage('Please select a polygon for editing.');
   }
 }

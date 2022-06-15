@@ -1,14 +1,11 @@
 /**
  * A measuring tool.  Measure in microns.
+ *
  * @param {object} btnRuler - Button that activates the ruler
  * @param {object} viewer - OpenSeadragon.viewer
  * @param {object} overlay - Canvas on which to draw the measurement
  */
 const ruler = (btnRuler, viewer, overlay) => {
-  console.log("btnRuler", btnRuler);
-  console.log("viewer", viewer);
-  console.log("overlay", overlay);
-
   let line;
   let isDown;
   let zoom;

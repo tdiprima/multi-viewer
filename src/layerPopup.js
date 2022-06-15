@@ -1,5 +1,6 @@
 /**
- * Create popup interface and handle events
+ * Create popup interface and handle events.
+ *
  * @param {object} divBody - The body of the div, which we will fill in here.
  * @param {Array} allLayers - Array of layers displayed in this viewer
  * @param {object} viewer - OpenSeadragon viewer
