@@ -1,45 +1,18 @@
 /*! multi-viewer - v1.0.0 - 2022-06-15 */
-/**
- * @file commonFunctions.js
- * Contains utility functions
- */
-
-/**
- * CONFIG - Location of application images and osd images.
- * This setup is for the wickett server.
- *
- * @type {{appImages: string, osdImages: string}}
- */
-let CONFIG = {
-  osdImages: '/multi-viewer/vendor/openseadragon/images/',
-  appImages: '/multi-viewer/images/'
-};
-
-/**
- * Comment the above object, and uncomment below for working *locally*.
- * @type {{appImages: string, osdImages: string}}
- */
-// let CONFIG = {
-//   osdImages: 'vendor/openseadragon/images/',
-//   appImages: 'images/'
-// }
+/** @file commonFunctions.js - Contains utility functions */
 
 /**
  * Change the way the image is displayed, based on user input.
- *
  * @param {Array} layers - Layers (images) to be displayed in viewer
  * @param {object} viewer - OpenSeadragon viewer
  * @param {object} [range]
- * @param {object} [thresh]
+ * @param {object} [thresh] - Thresholding
  * @param {number} [thresh.val] - From user input
  * @param {Array<number>} [thresh.rgba] - example: [126, 1, 0, 255]
  */
 function setFilter(layers, viewer, range, thresh) {
-  console.log("range", typeof range, JSON.stringify(range));
-  console.log("thresh", typeof thresh, JSON.stringify(thresh));
-
   if (viewer.world) {
-    let start = performance.now();
+    // let start = performance.now();
     // let caller = setFilter.caller;
     // console.log('caller', caller);
 
@@ -114,30 +87,52 @@ function setFilter(layers, viewer, range, thresh) {
       }
     }
 
-    let end = performance.now();
+    // let end = performance.now();
     // console.log("start:", start, "end:", end);
-    console.log(`exec: ${end - start}`);
+    // console.log(`exec: ${end - start}`);
 
   } else {
     console.warn('No viewer.world');
   }
 }
 
+/**
+ * Freeze/unfreeze viewer to allow for drawing.
+ * @param {object} viewer - OpenSeadragon.Viewer
+ * @param {boolean} myBool - enable/disable
+ */
 function setOsdMove(viewer, myBool) {
   viewer.setMouseNavEnabled(myBool);
   viewer.outerTracker.setTracking(myBool);
   viewer.gestureSettingsMouse.clickToZoom = myBool;
 }
 
+/**
+ * Toggle between class names.
+ * Highlight/un-highlight button to indicate "on" or "off".
+ * @param {object} element - HTML element
+ * @param {string} class0 - class0
+ * @param {string} class1 - class1
+ */
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0);
   element.classList.toggle(class1);
 }
 
+/**
+ * Test for null or undefined.
+ * @param obj
+ * @return {boolean}
+ */
 function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined';
 }
 
+/**
+ * Check to see if an Array, a string, or an object is empty.
+ * @param {Array|object|string} value
+ * @return {boolean}
+ */
 const isEmpty = value => {
   const isEmptyObject = a => {
     if (typeof a.length === 'undefined') {
@@ -161,15 +156,32 @@ const isEmpty = value => {
   );
 };
 
+/**
+ * Message dialog.
+ * @param messageObject
+ * @return {boolean}
+ */
 function alertMessage(messageObject) {
   window.alert(messageObject);
   return true;
 }
 
+/**
+ * Randomize.
+ * @param {number} minm
+ * @param {number} maxm
+ * @return {number}
+ */
 function getRandomInt(minm, maxm) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
 }
 
+/**
+ * Generate random ID.
+ * @param {number} length
+ * @param {string} prefix
+ * @return {string}
+ */
 function createId(length, prefix) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -183,7 +195,10 @@ function createId(length, prefix) {
   return result;
 }
 
-// Standard replacement for Java's String.hashCode()
+/**
+ * Replacement for Java String.hashCode()
+ * @return {number}
+ */
 String.prototype.hashCode = function() {
   let hash = 0;
   if (this.length === 0) return hash;
@@ -196,7 +211,11 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
-// Item name is non-unique
+/**
+ * Get items by name, when the names are non-unique.
+ * @param {string} name
+ * @return {Array}
+ */
 fabric.Canvas.prototype.getItemsByName = function(name) {
   const objectList = [];
   const objects = this.getObjects();
@@ -210,10 +229,16 @@ fabric.Canvas.prototype.getItemsByName = function(name) {
   return objectList;
 };
 
-// Element creation abstraction
-const e = (name, properties = {}, children = []) => {
+/**
+ * Element creation abstraction
+ * @param {string} tagName
+ * @param {object} properties
+ * @param {Array} children
+ * @return {object}
+ */
+const e = (tagName, properties = {}, children = []) => {
   // Create the element
-  const element = document.createElement(name);
+  const element = document.createElement(tagName);
 
   // Apply properties
   Object.keys(properties).forEach(property => {
@@ -230,144 +255,72 @@ const e = (name, properties = {}, children = []) => {
   return element;
 };
 
-// github scijs/almost-equal
-const abs = Math.abs;
-const min = Math.min;
-
-function almostEqual(a, b, absoluteError, relativeError) {
-  const d = abs(a - b);
-  if (absoluteError == null) absoluteError = almostEqual.DBL_EPSILON;
-  if (relativeError == null) relativeError = absoluteError;
-  if (d <= absoluteError) {
-    return true;
-  }
-  if (d <= relativeError * min(abs(a), abs(b))) {
-    return true;
-  }
-  return a === b;
-}
-
-almostEqual.DBL_EPSILON = 2.2204460492503131e-16;
-
+/**
+ * rgb/a to array
+ * @param input
+ * @return {*}
+ */
 function colorToArray(input) {
   const arrStr = input.replace(/[a-z%\s()]/g, '').split(',');
   return arrStr.map(i => Number(i));
 }
 
-function parseHash() {
-  const params = {};
-  const hash = window.location.hash.replace(/^#/, '');
-  if (hash) {
-    const parts = hash.split('&');
-    parts.forEach(part => {
-      const subparts = part.split('=');
-      const key = subparts[0];
-      const value = parseFloat(subparts[1]);
-      if (!key || isNaN(value)) {
-        console.error('bad hash param', part);
-      } else {
-        params[key] = value;
-      }
-    });
-  }
-
-  return params;
-}
-
-function timeStamp() {
-  const dateString = new Date().toISOString();
-  const a = dateString.slice(0, 10);
-  let b = dateString.slice(10);
-  b = b
-    .replaceAll(':', '-')
-    .replace('T', '')
-    .slice(0, 8);
-  return `${a}_${b}`;
-}
-
 /**
- * Save user settings and markup.
- * TODO: post object to server
- *
- * @param {object} canvas - Our osd fabric.js canvas object
- * @param {object} options
- * @param {string} options.paintbrushColor - example: "#0ff"
- * @param {boolean} options.toolbarOn - example: true
+ * Scale rgb colors to percentage
+ * @param num
+ * @return {number}
  */
-function saveSettings(canvas, options) {
-  const jsonObject = {
-    theme: document.body.className,
-    canvas: canvas.toJSON(),
-    state: STATE,
-    options,
-  };
-  console.log('settings', jsonObject);
-}
-
-function extractLocation(layer) {
-  let loc;
-  if (typeof layer.location === 'string') {
-    loc = layer.location;
-  } else if (typeof layer.location === 'object') {
-    loc = layer.location.url;
-  } else {
-    throw new TypeError(`Unidentified URL type... ${layer.location}`);
-  }
-  return loc;
-}
-
-function isValidURL(string) {
-  let result;
-  let url;
-  try {
-    url = new URL(string);
-    result = true;
-  } catch (e) {
-    result = false;
-    console.log(`%c${e.message}`, 'color: #ff6a5a;', url);
-    console.log('%cscript:', 'color: #ff6a5a;', `${e.fileName}:${e.lineNumber}`);
-  }
-  return result;
-}
-
-// Array.flat() polyfill
-if (!Array.prototype.flat) {
-  console.log("!Array.prototype.flat");
-  Array.prototype.flat = function(depth) {
-    // If no depth is specified, default to 1
-    if (depth === undefined) {
-      depth = 1;
-    }
-
-    // Recursively reduce sub-arrays to the specified depth
-    let flatten = function(arr, depth) {
-      // If depth is 0, return the array as-is
-      if (depth < 1) {
-        return arr.slice();
-      }
-
-      // Otherwise, concatenate into the parent array
-      return arr.reduce((acc, val) => {
-        return acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val);
-      }, []);
-    };
-
-    return flatten(this, depth);
-  };
-}
-
 const scaleToPct = num => {
   return (num / 255) * 100;
 };
 
+/**
+ * num to rgb
+ * @param num
+ * @return {number}
+ */
 const scaleToRgb = num => {
   return (num * 255) / 100;
 };
 
+/**
+ * Location of application images and osd images.
+ * The following setup is for running this app on the wickett server.
+ * @type {{appImages: string, osdImages: string}}
+ */
+let CONFIG = {
+  osdImages: '/multi-viewer/vendor/openseadragon/images/',
+  appImages: '/multi-viewer/images/'
+};
+
+/** Configuration below is for working *locally*. */
+// let CONFIG = {
+//   osdImages: 'vendor/openseadragon/images/',
+//   appImages: 'images/'
+// }
+
+/**
+ * Max (as in color range 0 - 255)
+ * @type {number}
+ */
 const MAX = 255;
-// eslint-disable-next-line prefer-const
-let MICRONS_PER_PIX = 0.25; // default; actual value set later
+
+/**
+ * Microns Per Pixel (default=0.25; actual value set later)
+ * @type {number}
+ */
+let MICRONS_PER_PIX = 0.25;
+
+/**
+ * Render Types
+ * @type {string[]}
+ */
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+
+/**
+ * State
+ * @type {{attenuate: boolean, outline: boolean, renderType: string}}
+ */
 const STATE = {
   attenuate: false,
   outline: false,
@@ -920,15 +873,15 @@ const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
     gridAdded: false
   };
 
-  btnGrid.addEventListener('click', function() {
+  btnGrid.addEventListener('click', function () {
     gridHandler(this, gridProps);
   });
 
-  btnGridMarker.addEventListener('click', function() {
+  btnGridMarker.addEventListener('click', function () {
     markerHandler(this, gridProps);
   });
 
-  grandCross(btnGrid, gridProps);
+  drawCross(btnGrid.id.slice(-1), gridProps.canvas);
 };
 
 function gridHandler(button, gridProps) {
@@ -955,7 +908,7 @@ function turnGridOff(gridProps) {
 }
 
 function turnGridOn(gridProps) {
-  const lineProps = { stroke: gridProps.color, strokeWidth: 2, selectable: false };
+  const lineProps = {stroke: gridProps.color, strokeWidth: 2, selectable: false};
 
   createHorizontalLines(gridProps, lineProps);
   createVerticalLines(gridProps, lineProps);
@@ -1010,13 +963,13 @@ function getMousePosition(pointerEvent, gridProps) {
   const pointer = gridProps.canvas.getPointer(pointerEvent.e);
   const positionX = pointer.x / gridProps.cellWidth;
   const positionY = pointer.y / gridProps.cellHeight;
-  return { x: positionX, y: positionY };
+  return {x: positionX, y: positionY};
 }
 
 function getCellPosition(mousePosition) {
   const positionX = Math.ceil(mousePosition.x + 0.001);
   const positionY = Math.ceil(mousePosition.y + 0.001);
-  return { x: positionX, y: positionY };
+  return {x: positionX, y: positionY};
 }
 
 function markerHandler(button, gridProps) {
@@ -1042,70 +995,56 @@ function markerHandler(button, gridProps) {
   }
 }
 
-function grandCross(btn, obj) {
-  const canvas = obj.canvas;
-  let toggle = false; // eslint-disable-line prefer-const
-  const btnCrosshairs = document.getElementById(`btnCrosshairs${btn.id.slice(-1)}`);
+/**
+ * Toggle cross on/off
+ * @param {boolean} display
+ * @param canvas
+ */
+function toggleCross(display, canvas) {
+  if (!display) {
+    canvas.remove(...canvas.getItemsByName('cross'));
+    // For image:
+    // let cross = canvas.getActiveObject()
+    // canvas.remove(cross)
+  } else {
+    const midWidth = canvas.width / 2;
+    const midHeight = canvas.height / 2;
+
+    // Draw a line from x,0 to x,canvas.height.
+    line(midWidth, 0, midWidth, canvas.height);
+
+    // Draw a line from 0,y to width,y.
+    line(0, midHeight, canvas.width, midHeight);
+
+    function line(x1, y1, x2, y2) {
+      const line = new fabric.Line([x1, y1, x2, y2], {
+        stroke: 'yellow',
+        selectable: false,
+        strokeWidth: 2,
+        hoverCursor: 'default',
+        evented: false,
+        name: 'cross'
+      });
+      canvas.add(line);
+    }
+  }
+}
+
+/**
+ * Draw cross ("crosshairs") over viewer.
+ * @param idx
+ * @param canvas
+ */
+function drawCross(idx, canvas) {
+  const btnCrosshairs = document.getElementById(`btnCrosshairs${idx}`);
   btnCrosshairs.addEventListener('click', () => {
     if (btnCrosshairs.classList.contains('btnOn')) {
-      displayCrosshairs(false);
+      toggleCross(false, canvas);
     } else {
-      displayCrosshairs(true);
+      toggleCross(true, canvas);
     }
     toggleButton(btnCrosshairs, 'btnOn', 'annotationBtn');
   });
-
-  function displayCrosshairs(display) {
-    if (!display) {
-      canvas.remove(...canvas.getItemsByName('cross'));
-      // For image:
-      // let cross = canvas.getActiveObject()
-      // canvas.remove(cross)
-    } else {
-      const midWidth = canvas.width / 2;
-      const midHeight = canvas.height / 2;
-
-      // Draw a line from x,0 to x,canvas.height.
-      line(midWidth, 0, midWidth, canvas.height);
-
-      // Draw a line from 0,y to width,y.
-      line(0, midHeight, canvas.width, midHeight);
-
-      function line(x1, y1, x2, y2) {
-        const line = new fabric.Line([x1, y1, x2, y2], {
-          stroke: 'yellow',
-          selectable: false,
-          strokeWidth: 2,
-          hoverCursor: 'default',
-          evented: false,
-          name: 'cross'
-        });
-        canvas.add(line);
-      }
-      // CROSS IMAGE:
-      // fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
-      //   canvas.add(oImg.set({
-      //     width: 50,
-      //     hasControls: false,
-      //     selection: false,
-      //     lockRotation: false,
-      //     hoverCursor: 'default',
-      //     hasRotatingPoint: false,
-      //     hasBorders: false,
-      //     height: 50,
-      //     angle: 0,
-      //     cornerSize: 10,
-      //     left: 0,
-      //     top: 0
-      //   }))
-      //   // Set the object to be centered to the Canvas
-      //   canvas.centerObject(oImg)
-      //   canvas.setActiveObject(oImg)
-      //   canvas.renderAll()
-      //   oImg.setCoords()
-      // })
-    }
-  }
 }
 
 /**
@@ -1458,7 +1397,7 @@ const blender = (blenderBtn, viewer) => {
   // let uiCreated = false;
 
   // Set up user interface
-  function createBlendModesUI(div, viewer) {
+  function _createBlendModesUI(div, viewer) {
     const table = e('table');
     div.appendChild(table);
 
@@ -1502,7 +1441,7 @@ const blender = (blenderBtn, viewer) => {
     const rect = blenderBtn.getBoundingClientRect();
     const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top);
     div.style.display = 'block';
-    createBlendModesUI(document.getElementById(`${id}Body`), viewer);
+    _createBlendModesUI(document.getElementById(`${id}Body`), viewer);
     // uiCreated = true;
     // }
     // toggleButton(blenderBtn, 'btnOn', 'annotationBtn');
@@ -1540,9 +1479,24 @@ const markupTools = (viewerInfo, options, viewer) => {
   });
 
   /**
-   * Save your work
-   * @type {HTMLElement}
+   * Save user settings and markup.
+   * TODO: post object to server
+   *
+   * @param {object} canvas - Our osd fabric.js canvas object
+   * @param {object} options
+   * @param {string} options.paintbrushColor - example: "#0ff"
+   * @param {boolean} options.toolbarOn - example: true
    */
+  function saveSettings(canvas, options) {
+    const jsonObject = {
+      theme: document.body.className,
+      canvas: canvas.toJSON(),
+      state: STATE,
+      options,
+    };
+    console.log('settings', jsonObject);
+  }
+
   const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {
     saveSettings(canvas, options);
@@ -2241,10 +2195,8 @@ function extraRow(uniq, colors, layers, viewer) {
   return tr;
 }
 
-/**
- * @file filters.js
- * Custom color filters
- */
+/** Custom color filters */
+
 const img2array = imgData => {
   return imgData.data.reduce((pixel, key, index) => {
     return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;
@@ -2271,6 +2223,31 @@ const backgroundCorrection = data => {
   });
   return data;
 };
+
+// Array.flat() polyfill
+if (!Array.prototype.flat) {
+  Array.prototype.flat = function(depth) {
+    // If no depth is specified, default to 1
+    if (depth === undefined) {
+      depth = 1;
+    }
+
+    // Recursively reduce sub-arrays to the specified depth
+    let flatten = function(arr, depth) {
+      // If depth is 0, return the array as-is
+      if (depth < 1) {
+        return arr.slice();
+      }
+
+      // Otherwise, concatenate into the parent array
+      return arr.reduce((acc, val) => {
+        return acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val);
+      }, []);
+    };
+
+    return flatten(this, depth);
+  };
+}
 
 /**********************
  CUSTOM COLOR FILTERS
@@ -2597,6 +2574,46 @@ class ImageViewer {
       addInfo(item);
     });
 
+    function _parseHash() {
+      const params = {};
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        const parts = hash.split('&');
+        parts.forEach(part => {
+          const subparts = part.split('=');
+          const key = subparts[0];
+          const value = parseFloat(subparts[1]);
+          if (!key || isNaN(value)) {
+            console.error('bad hash param', part);
+          } else {
+            params[key] = value;
+          }
+        });
+      }
+
+      return params;
+    }
+
+    function _useParams(params) {
+      console.log("params", typeof params, params);
+      const zoom = viewer.viewport.getZoom();
+      const pan = viewer.viewport.getCenter();
+
+      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
+      if (params.zoom !== undefined && params.zoom !== zoom) {
+        viewer.viewport.zoomTo(params.zoom, null, true);
+      }
+
+      if (
+        params.x !== undefined
+        && params.y !== undefined
+        && (params.x !== pan.x || params.y !== pan.y)
+      ) {
+        const point = new OpenSeadragon.Point(params.x, params.y);
+        viewer.viewport.panTo(point, true);
+      }
+    }
+
     // Image has been downloaded and can be modified before being drawn to the canvas.
     viewer.addOnceHandler('tile-loaded', () => {
       drawer = viewer.drawer;
@@ -2605,8 +2622,8 @@ class ImageViewer {
       // console.log('drawer', drawer)
 
       if (window.location.hash) {
-        const params = parseHash();
-        useParams(params);
+        const params = _parseHash();
+        _useParams(params);
       }
       addCustomButtons();
       setFilter(layers, viewer);
@@ -2663,7 +2680,20 @@ class ImageViewer {
       prompt('Share this link:', url);
     });
 
-    // DOWNLOAD IMAGE SNAPSHOT
+    function timeStamp() {
+      const dateString = new Date().toISOString();
+      const a = dateString.slice(0, 10);
+      let b = dateString.slice(10);
+      b = b
+        .replaceAll(':', '-')
+        .replace('T', '')
+        .slice(0, 8);
+      return `${a}_${b}`;
+    }
+
+    /**
+     * Download image snapshot
+     */
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', () => {
       const parent = document.getElementById(viewerInfo.osdId);
       const children = parent.querySelectorAll('[id^="osd-overlaycanvas"]');
@@ -2683,30 +2713,6 @@ class ImageViewer {
         }
       }
     });
-
-    /**
-     *
-     * @param params
-     */
-    function useParams(params) {
-      console.log("params", typeof params, params);
-      const zoom = viewer.viewport.getZoom();
-      const pan = viewer.viewport.getCenter();
-
-      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
-      if (params.zoom !== undefined && params.zoom !== zoom) {
-        viewer.viewport.zoomTo(params.zoom, null, true);
-      }
-
-      if (
-        params.x !== undefined
-        && params.y !== undefined
-        && (params.x !== pan.x || params.y !== pan.y)
-      ) {
-        const point = new OpenSeadragon.Point(params.x, params.y);
-        viewer.viewport.panTo(point, true);
-      }
-    }
 
     /**
      * Custom OpenSeadragon Buttons
@@ -3034,9 +3040,21 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   }
 }
 
+function _extractLocation(layer) {
+  let loc;
+  if (typeof layer.location === 'string') {
+    loc = layer.location;
+  } else if (typeof layer.location === 'object') {
+    loc = layer.location.url;
+  } else {
+    throw new TypeError(`Unidentified URL type... ${layer.location}`);
+  }
+  return loc;
+}
+
 function getPreferredLabel(layer) {
   let featureName;
-  const loc = extractLocation(layer);
+  const loc = _extractLocation(layer);
   const sections = loc.split("/");
   const re = /^(?:[a-z]+:)?\b/gm;
 
@@ -3421,6 +3439,7 @@ const layerPopup = function(divBody, allLayers, viewer) {
 /**
  * Wrapper component around OpenSeadragon viewer.
  * Set up OSD viewer to allow for multiple viewer control.
+ * @extends ImageViewer
  */
 class MultiViewer extends ImageViewer {
   /**
@@ -3456,10 +3475,16 @@ class MultiViewer extends ImageViewer {
     );
   }
 
+  /**
+   * @return {OpenSeadragon.Viewer}
+   */
   getViewer() {
     return super.getViewer();
   }
 
+  /**
+   * @return {object} {checkPan: boolean, checkZoom: boolean}
+   */
   getPanZoom() {
     return this.checkboxes;
   }
