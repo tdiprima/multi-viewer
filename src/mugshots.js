@@ -1,24 +1,20 @@
 /**
  * Create an array of ROIs.
  * Upon click of an ROI, the WSI will pan/zoom to the location and draw a box around the ROI.
- * @param options
+ * @param {object} options
+ *
+ * @param {string} options.divId - @example "contentDiv"
+ * @param {string} options.thumbId - @example "thumbnail-container"
+ * @param {string} options.infoUrl - @example "https://iiif.princeton.edu/loris/iiif/2/pudl0001/4609321/s42/00000001.jp2"
+ * @param {object} options.imgDims - @example { "@context": "http://iiif.io/api/image/2/context.json", "@id": "https://iiif.princeton.edu/loris/iiif/2/pudl0001/4609321/s42/00000001.jp2", protocol: "http://iiif.io/api/image", width: 5233, height: 7200, sizes: (7) […], tiles: (1) […], profile: (2) […] }
+ * @param {number} options.thumbnailSize - @example 256
+ * @param {number} options.scrollerLength - @example 10
+ * @param {Array} options.mugshotArray - @example [] #todo - still need?
+ * @param {string} options.roiColor - @example "#0f0"
+ * @param {object} options.viewer - OpenSeadragon viewer
  */
 const mugshots = function(options) {
-  /*
-    Options:
-    {
-    'divId': options.divId,
-    'thumbId': options.thumbId,
-    'infoUrl': options.infoUrl,
-    'imgDims': options.imgDims,
-    'thumbnailSize': options.thumbnailSize,
-    'scrollerLength': options.scrollerLength,
-    'mugshotArray': options.mugshotArray,
-    'roiColor': options.roiColor,
-    'overlay': options.overlay,
-    'viewer': options.viewer
-  }
-  */
+
   const canvas = (this.__canvas = options.overlay.fabricCanvas());
   options.overlay.resizeCanvas = function() {
     // Function override: Resize overlay canvas

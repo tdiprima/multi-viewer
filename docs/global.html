@@ -659,7 +659,7 @@ nameXXXBody</code></pre>
 
             
 
-            <td class="description last"><p>fabric overlay object</p></td>
+            <td class="description last"><p>fabric.js overlay object</p></td>
         </tr>
 
     
@@ -796,7 +796,7 @@ nameXXXBody</code></pre>
 
             
 
-            <td class="description last"><p>Edit-polygon button</p></td>
+            <td class="description last"><p>The edit-polygon button</p></td>
         </tr>
 
     
@@ -1393,7 +1393,7 @@ For demonstration purposes.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The body of the div, which we will fill in here.</p></td>
         </tr>
 
     
@@ -1416,7 +1416,7 @@ For demonstration purposes.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Array of layers displayed in this viewer</p></td>
         </tr>
 
     
@@ -1439,7 +1439,7 @@ For demonstration purposes.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>OpenSeadragon viewer</p></td>
         </tr>
 
     
@@ -1525,6 +1525,8 @@ For demonstration purposes.</p>
 
 <div class="description">
     <p>Create 1 control panel row per layer.</p>
+<p>There's a column called &quot;layersAndColors&quot; to the right of each viewer.
+Create an HTML table there, with each row corresponding to each layer displayed in viewer.</p>
 </div>
 
 
@@ -1576,7 +1578,7 @@ For demonstration purposes.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The HTML table column containing the layer gadgets</p></td>
         </tr>
 
     
@@ -1599,7 +1601,7 @@ For demonstration purposes.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>The images to be displayed in this viewer</p></td>
         </tr>
 
     
@@ -1622,7 +1624,7 @@ For demonstration purposes.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>OpenSeadragon viewer</p></td>
         </tr>
 
     
@@ -1663,7 +1665,7 @@ For demonstration purposes.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="layerUI.js.html">layerUI.js</a>, <a href="layerUI.js.html#line7">line 7</a>
+        <a href="layerUI.js.html">layerUI.js</a>, <a href="layerUI.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -1690,6 +1692,17 @@ For demonstration purposes.</p>
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>Each layer has:
+a draggable item: the layer
+    naming convention: 0featXXX &lt;- 0th feature
+an eyeball: turn layer on &amp; off
+a slider: adjust transparency
+a color palette: change colors in layer
+a tachometer: adjust visualizations in layer</code></pre>
 
 
 
@@ -2093,13 +2106,251 @@ Upon click of an ROI, the WSI will pan/zoom to the location and draw a box aroun
 
             <td class="type">
             
+                
+<span class="param-type">object</span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last"></td>
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>divId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example &quot;contentDiv&quot;</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>thumbId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example &quot;thumbnail-container&quot;</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>infoUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example &quot;https://iiif.princeton.edu/loris/iiif/2/pudl0001/4609321/s42/00000001.jp2&quot;</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>imgDims</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example { &quot;@context&quot;: &quot;http://iiif.io/api/image/2/context.json&quot;, &quot;@id&quot;: &quot;https://iiif.princeton.edu/loris/iiif/2/pudl0001/4609321/s42/00000001.jp2&quot;, protocol: &quot;http://iiif.io/api/image&quot;, width: 5233, height: 7200, sizes: (7) […], tiles: (1) […], profile: (2) […] }</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>thumbnailSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example 256</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scrollerLength</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example 10</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mugshotArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example [] #todo - still need?</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roiColor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>@example &quot;#0f0&quot;</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>viewer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>OpenSeadragon viewer</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -2140,7 +2391,7 @@ Upon click of an ROI, the WSI will pan/zoom to the location and draw a box aroun
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mugshots.js.html">mugshots.js</a>, <a href="mugshots.js.html#line6">line 6</a>
+        <a href="mugshots.js.html">mugshots.js</a>, <a href="mugshots.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -2512,7 +2763,7 @@ Upon click of an ROI, the WSI will pan/zoom to the location and draw a box aroun
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 09:53:49 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 10:44:10 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
