@@ -37,10 +37,16 @@ class MultiViewer extends ImageViewer {
     );
   }
 
+  /**
+   * @return {OpenSeadragon.Viewer}
+   */
   getViewer() {
     return super.getViewer();
   }
 
+  /**
+   * @return {object} {checkPan: boolean, checkZoom: boolean}
+   */
   getPanZoom() {
     return this.checkboxes;
   }
