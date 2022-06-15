@@ -76,7 +76,7 @@ const blender = (blenderBtn, viewer) => {
   // let uiCreated = false;
 
   // Set up user interface
-  function createBlendModesUI(div, viewer) {
+  function _createBlendModesUI(div, viewer) {
     const table = e('table');
     div.appendChild(table);
 
@@ -120,7 +120,7 @@ const blender = (blenderBtn, viewer) => {
     const rect = blenderBtn.getBoundingClientRect();
     const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top);
     div.style.display = 'block';
-    createBlendModesUI(document.getElementById(`${id}Body`), viewer);
+    _createBlendModesUI(document.getElementById(`${id}Body`), viewer);
     // uiCreated = true;
     // }
     // toggleButton(blenderBtn, 'btnOn', 'annotationBtn');

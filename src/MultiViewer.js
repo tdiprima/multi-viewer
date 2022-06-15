@@ -1,6 +1,7 @@
 /**
  * Wrapper component around OpenSeadragon viewer.
  * Set up OSD viewer to allow for multiple viewer control.
+ * @extends ImageViewer
  */
 class MultiViewer extends ImageViewer {
   /**
