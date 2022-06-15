@@ -1,23 +1,6 @@
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
- * CONFIG - Location of application images and osd images.
- * The following setup is for the wickett server.
- *
- * @type {{appImages: string, osdImages: string}}
- */
-let CONFIG = {
-  osdImages: '/multi-viewer/vendor/openseadragon/images/',
-  appImages: '/multi-viewer/images/'
-};
-
-/** Comment the above object, and uncomment below for working *locally*. */
-// let CONFIG = {
-//   osdImages: 'vendor/openseadragon/images/',
-//   appImages: 'images/'
-// }
-
-/**
  * Change the way the image is displayed, based on user input.
  *
  * @param {Array} layers - Layers (images) to be displayed in viewer
@@ -357,10 +340,44 @@ const scaleToRgb = num => {
   return (num * 255) / 100;
 };
 
+/**
+ * Location of application images and osd images.
+ * The following setup is for running this app on the wickett server.
+ * @type {{appImages: string, osdImages: string}}
+ */
+let CONFIG = {
+  osdImages: '/multi-viewer/vendor/openseadragon/images/',
+  appImages: '/multi-viewer/images/'
+};
+
+/** Configuration below is for working *locally*. */
+// let CONFIG = {
+//   osdImages: 'vendor/openseadragon/images/',
+//   appImages: 'images/'
+// }
+
+/**
+ * Max (as in color range 0 - 255)
+ * @type {number}
+ */
 const MAX = 255;
-// eslint-disable-next-line prefer-const
-let MICRONS_PER_PIX = 0.25; // default; actual value set later
+
+/**
+ * Microns Per Pixel (default=0.25; actual value set later)
+ * @type {number}
+ */
+let MICRONS_PER_PIX = 0.25;
+
+/**
+ * Render Types
+ * @type {string[]}
+ */
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+
+/**
+ * State
+ * @type {{attenuate: boolean, outline: boolean, renderType: string}}
+ */
 const STATE = {
   attenuate: false,
   outline: false,
