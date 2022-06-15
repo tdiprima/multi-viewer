@@ -1,10 +1,14 @@
 /**
- * A measuring tool.
- * @param {object} button
- * @param {object} viewer
- * @param {object} overlay
+ * A measuring tool.  Measure in microns.
+ * @param {object} btnRuler - Button that activates the ruler
+ * @param {object} viewer - OpenSeadragon.viewer
+ * @param {object} overlay - Canvas on which to draw the measurement
  */
-const ruler = (button, viewer, overlay) => {
+const ruler = (btnRuler, viewer, overlay) => {
+  console.log("btnRuler", btnRuler);
+  console.log("viewer", viewer);
+  console.log("overlay", overlay);
+
   let line;
   let isDown;
   let zoom;
@@ -168,7 +172,7 @@ const ruler = (button, viewer, overlay) => {
     }
   }
 
-  button.addEventListener('click', () => {
+  btnRuler.addEventListener('click', () => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'));
@@ -184,6 +188,6 @@ const ruler = (button, viewer, overlay) => {
       canvas.on('mouse:move', mouseMoveHandler);
       canvas.on('mouse:up', mouseUpHandler);
     }
-    toggleButton(button, 'btnOn', 'annotationBtn');
+    toggleButton(btnRuler, 'btnOn', 'annotationBtn');
   });
 };

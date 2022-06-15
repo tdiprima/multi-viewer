@@ -2,7 +2,7 @@
  * Allow user to draw a polygon on the image.
  * @param {object} viewerInfo - Info specific to 'this' viewer
  * @param {object} viewer - OSD viewer object
- * @param {object} overlay - fabric.js overlay object
+ * @param {object} overlay - Canvas on which to draw the polygon
  */
 const drawPolygon = (viewerInfo, viewer, overlay) => {
   const idx = viewerInfo.idx;
