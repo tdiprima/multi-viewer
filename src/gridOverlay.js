@@ -21,15 +21,15 @@ const gridOverlay = (btnGrid, btnGridMarker, overlay) => {
     gridAdded: false
   };
 
-  btnGrid.addEventListener('click', function() {
+  btnGrid.addEventListener('click', function () {
     gridHandler(this, gridProps);
   });
 
-  btnGridMarker.addEventListener('click', function() {
+  btnGridMarker.addEventListener('click', function () {
     markerHandler(this, gridProps);
   });
 
-  grandCross(btnGrid, gridProps);
+  drawCross(btnGrid.id.slice(-1), gridProps.canvas);
 };
 
 function gridHandler(button, gridProps) {
@@ -56,7 +56,7 @@ function turnGridOff(gridProps) {
 }
 
 function turnGridOn(gridProps) {
-  const lineProps = { stroke: gridProps.color, strokeWidth: 2, selectable: false };
+  const lineProps = {stroke: gridProps.color, strokeWidth: 2, selectable: false};
 
   createHorizontalLines(gridProps, lineProps);
   createVerticalLines(gridProps, lineProps);
@@ -111,13 +111,13 @@ function getMousePosition(pointerEvent, gridProps) {
   const pointer = gridProps.canvas.getPointer(pointerEvent.e);
   const positionX = pointer.x / gridProps.cellWidth;
   const positionY = pointer.y / gridProps.cellHeight;
-  return { x: positionX, y: positionY };
+  return {x: positionX, y: positionY};
 }
 
 function getCellPosition(mousePosition) {
   const positionX = Math.ceil(mousePosition.x + 0.001);
   const positionY = Math.ceil(mousePosition.y + 0.001);
-  return { x: positionX, y: positionY };
+  return {x: positionX, y: positionY};
 }
 
 function markerHandler(button, gridProps) {
@@ -143,68 +143,54 @@ function markerHandler(button, gridProps) {
   }
 }
 
-function grandCross(btn, obj) {
-  const canvas = obj.canvas;
-  let toggle = false; // eslint-disable-line prefer-const
-  const btnCrosshairs = document.getElementById(`btnCrosshairs${btn.id.slice(-1)}`);
+/**
+ * Toggle cross on/off
+ * @param {boolean} display
+ * @param canvas
+ */
+function toggleCross(display, canvas) {
+  if (!display) {
+    canvas.remove(...canvas.getItemsByName('cross'));
+    // For image:
+    // let cross = canvas.getActiveObject()
+    // canvas.remove(cross)
+  } else {
+    const midWidth = canvas.width / 2;
+    const midHeight = canvas.height / 2;
+
+    // Draw a line from x,0 to x,canvas.height.
+    line(midWidth, 0, midWidth, canvas.height);
+
+    // Draw a line from 0,y to width,y.
+    line(0, midHeight, canvas.width, midHeight);
+
+    function line(x1, y1, x2, y2) {
+      const line = new fabric.Line([x1, y1, x2, y2], {
+        stroke: 'yellow',
+        selectable: false,
+        strokeWidth: 2,
+        hoverCursor: 'default',
+        evented: false,
+        name: 'cross'
+      });
+      canvas.add(line);
+    }
+  }
+}
+
+/**
+ * Draw cross ("crosshairs") over viewer.
+ * @param idx
+ * @param canvas
+ */
+function drawCross(idx, canvas) {
+  const btnCrosshairs = document.getElementById(`btnCrosshairs${idx}`);
   btnCrosshairs.addEventListener('click', () => {
     if (btnCrosshairs.classList.contains('btnOn')) {
-      displayCrosshairs(false);
+      toggleCross(false, canvas);
     } else {
-      displayCrosshairs(true);
+      toggleCross(true, canvas);
     }
     toggleButton(btnCrosshairs, 'btnOn', 'annotationBtn');
   });
-
-  function displayCrosshairs(display) {
-    if (!display) {
-      canvas.remove(...canvas.getItemsByName('cross'));
-      // For image:
-      // let cross = canvas.getActiveObject()
-      // canvas.remove(cross)
-    } else {
-      const midWidth = canvas.width / 2;
-      const midHeight = canvas.height / 2;
-
-      // Draw a line from x,0 to x,canvas.height.
-      line(midWidth, 0, midWidth, canvas.height);
-
-      // Draw a line from 0,y to width,y.
-      line(0, midHeight, canvas.width, midHeight);
-
-      function line(x1, y1, x2, y2) {
-        const line = new fabric.Line([x1, y1, x2, y2], {
-          stroke: 'yellow',
-          selectable: false,
-          strokeWidth: 2,
-          hoverCursor: 'default',
-          evented: false,
-          name: 'cross'
-        });
-        canvas.add(line);
-      }
-      // CROSS IMAGE:
-      // fabric.Image.fromURL(`${CONFIG.appImages}crosshairs-red.png`, function (oImg) {
-      //   canvas.add(oImg.set({
-      //     width: 50,
-      //     hasControls: false,
-      //     selection: false,
-      //     lockRotation: false,
-      //     hoverCursor: 'default',
-      //     hasRotatingPoint: false,
-      //     hasBorders: false,
-      //     height: 50,
-      //     angle: 0,
-      //     cornerSize: 10,
-      //     left: 0,
-      //     top: 0
-      //   }))
-      //   // Set the object to be centered to the Canvas
-      //   canvas.centerObject(oImg)
-      //   canvas.setActiveObject(oImg)
-      //   canvas.renderAll()
-      //   oImg.setCoords()
-      // })
-    }
-  }
 }

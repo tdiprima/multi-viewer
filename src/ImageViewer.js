@@ -53,6 +53,46 @@ class ImageViewer {
       addInfo(item);
     });
 
+    function _parseHash() {
+      const params = {};
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        const parts = hash.split('&');
+        parts.forEach(part => {
+          const subparts = part.split('=');
+          const key = subparts[0];
+          const value = parseFloat(subparts[1]);
+          if (!key || isNaN(value)) {
+            console.error('bad hash param', part);
+          } else {
+            params[key] = value;
+          }
+        });
+      }
+
+      return params;
+    }
+
+    function _useParams(params) {
+      console.log("params", typeof params, params);
+      const zoom = viewer.viewport.getZoom();
+      const pan = viewer.viewport.getCenter();
+
+      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
+      if (params.zoom !== undefined && params.zoom !== zoom) {
+        viewer.viewport.zoomTo(params.zoom, null, true);
+      }
+
+      if (
+        params.x !== undefined
+        && params.y !== undefined
+        && (params.x !== pan.x || params.y !== pan.y)
+      ) {
+        const point = new OpenSeadragon.Point(params.x, params.y);
+        viewer.viewport.panTo(point, true);
+      }
+    }
+
     // Image has been downloaded and can be modified before being drawn to the canvas.
     viewer.addOnceHandler('tile-loaded', () => {
       drawer = viewer.drawer;
@@ -61,8 +101,8 @@ class ImageViewer {
       // console.log('drawer', drawer)
 
       if (window.location.hash) {
-        const params = parseHash();
-        useParams(params);
+        const params = _parseHash();
+        _useParams(params);
       }
       addCustomButtons();
       setFilter(layers, viewer);
@@ -119,7 +159,20 @@ class ImageViewer {
       prompt('Share this link:', url);
     });
 
-    // DOWNLOAD IMAGE SNAPSHOT
+    function timeStamp() {
+      const dateString = new Date().toISOString();
+      const a = dateString.slice(0, 10);
+      let b = dateString.slice(10);
+      b = b
+        .replaceAll(':', '-')
+        .replace('T', '')
+        .slice(0, 8);
+      return `${a}_${b}`;
+    }
+
+    /**
+     * Download image snapshot
+     */
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', () => {
       const parent = document.getElementById(viewerInfo.osdId);
       const children = parent.querySelectorAll('[id^="osd-overlaycanvas"]');
@@ -139,30 +192,6 @@ class ImageViewer {
         }
       }
     });
-
-    /**
-     *
-     * @param params
-     */
-    function useParams(params) {
-      console.log("params", typeof params, params);
-      const zoom = viewer.viewport.getZoom();
-      const pan = viewer.viewport.getCenter();
-
-      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
-      if (params.zoom !== undefined && params.zoom !== zoom) {
-        viewer.viewport.zoomTo(params.zoom, null, true);
-      }
-
-      if (
-        params.x !== undefined
-        && params.y !== undefined
-        && (params.x !== pan.x || params.y !== pan.y)
-      ) {
-        const point = new OpenSeadragon.Point(params.x, params.y);
-        viewer.viewport.panTo(point, true);
-      }
-    }
 
     /**
      * Custom OpenSeadragon Buttons

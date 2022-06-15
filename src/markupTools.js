@@ -29,9 +29,24 @@ const markupTools = (viewerInfo, options, viewer) => {
   });
 
   /**
-   * Save your work
-   * @type {HTMLElement}
+   * Save user settings and markup.
+   * TODO: post object to server
+   *
+   * @param {object} canvas - Our osd fabric.js canvas object
+   * @param {object} options
+   * @param {string} options.paintbrushColor - example: "#0ff"
+   * @param {boolean} options.toolbarOn - example: true
    */
+  function saveSettings(canvas, options) {
+    const jsonObject = {
+      theme: document.body.className,
+      canvas: canvas.toJSON(),
+      state: STATE,
+      options,
+    };
+    console.log('settings', jsonObject);
+  }
+
   const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {
     saveSettings(canvas, options);

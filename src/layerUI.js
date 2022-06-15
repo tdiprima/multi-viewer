@@ -239,9 +239,21 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   }
 }
 
+function _extractLocation(layer) {
+  let loc;
+  if (typeof layer.location === 'string') {
+    loc = layer.location;
+  } else if (typeof layer.location === 'object') {
+    loc = layer.location.url;
+  } else {
+    throw new TypeError(`Unidentified URL type... ${layer.location}`);
+  }
+  return loc;
+}
+
 function getPreferredLabel(layer) {
   let featureName;
-  const loc = extractLocation(layer);
+  const loc = _extractLocation(layer);
   const sections = loc.split("/");
   const re = /^(?:[a-z]+:)?\b/gm;
 

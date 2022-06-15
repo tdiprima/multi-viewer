@@ -2,7 +2,6 @@
 
 /**
  * Change the way the image is displayed, based on user input.
- *
  * @param {Array} layers - Layers (images) to be displayed in viewer
  * @param {object} viewer - OpenSeadragon viewer
  * @param {object} [range]
@@ -11,11 +10,8 @@
  * @param {Array<number>} [thresh.rgba] - example: [126, 1, 0, 255]
  */
 function setFilter(layers, viewer, range, thresh) {
-  console.log("range", typeof range, JSON.stringify(range));
-  console.log("thresh", typeof thresh, JSON.stringify(thresh));
-
   if (viewer.world) {
-    let start = performance.now();
+    // let start = performance.now();
     // let caller = setFilter.caller;
     // console.log('caller', caller);
 
@@ -90,30 +86,52 @@ function setFilter(layers, viewer, range, thresh) {
       }
     }
 
-    let end = performance.now();
+    // let end = performance.now();
     // console.log("start:", start, "end:", end);
-    console.log(`exec: ${end - start}`);
+    // console.log(`exec: ${end - start}`);
 
   } else {
     console.warn('No viewer.world');
   }
 }
 
+/**
+ * Freeze/unfreeze viewer to allow for drawing.
+ * @param {object} viewer - OpenSeadragon.Viewer
+ * @param {boolean} myBool - enable/disable
+ */
 function setOsdMove(viewer, myBool) {
   viewer.setMouseNavEnabled(myBool);
   viewer.outerTracker.setTracking(myBool);
   viewer.gestureSettingsMouse.clickToZoom = myBool;
 }
 
+/**
+ * Toggle between class names.
+ * Highlight/un-highlight button to indicate "on" or "off".
+ * @param {object} element - HTML element
+ * @param {string} class0 - class0
+ * @param {string} class1 - class1
+ */
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0);
   element.classList.toggle(class1);
 }
 
+/**
+ * Test for null or undefined.
+ * @param obj
+ * @return {boolean}
+ */
 function isRealValue(obj) {
   return obj && obj !== 'null' && obj !== 'undefined';
 }
 
+/**
+ * Check to see if an Array, a string, or an object is empty.
+ * @param {Array|object|string} value
+ * @return {boolean}
+ */
 const isEmpty = value => {
   const isEmptyObject = a => {
     if (typeof a.length === 'undefined') {
@@ -137,15 +155,32 @@ const isEmpty = value => {
   );
 };
 
+/**
+ * Message dialog.
+ * @param messageObject
+ * @return {boolean}
+ */
 function alertMessage(messageObject) {
   window.alert(messageObject);
   return true;
 }
 
+/**
+ * Randomize.
+ * @param {number} minm
+ * @param {number} maxm
+ * @return {number}
+ */
 function getRandomInt(minm, maxm) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
 }
 
+/**
+ * Generate random ID.
+ * @param {number} length
+ * @param {string} prefix
+ * @return {string}
+ */
 function createId(length, prefix) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -159,7 +194,10 @@ function createId(length, prefix) {
   return result;
 }
 
-// Standard replacement for Java's String.hashCode()
+/**
+ * Replacement for Java String.hashCode()
+ * @return {number}
+ */
 String.prototype.hashCode = function() {
   let hash = 0;
   if (this.length === 0) return hash;
@@ -172,7 +210,11 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
-// Item name is non-unique
+/**
+ * Get items by name, when the names are non-unique.
+ * @param {string} name
+ * @return {Array}
+ */
 fabric.Canvas.prototype.getItemsByName = function(name) {
   const objectList = [];
   const objects = this.getObjects();
@@ -186,10 +228,16 @@ fabric.Canvas.prototype.getItemsByName = function(name) {
   return objectList;
 };
 
-// Element creation abstraction
-const e = (name, properties = {}, children = []) => {
+/**
+ * Element creation abstraction
+ * @param {string} tagName
+ * @param {object} properties
+ * @param {Array} children
+ * @return {object}
+ */
+const e = (tagName, properties = {}, children = []) => {
   // Create the element
-  const element = document.createElement(name);
+  const element = document.createElement(tagName);
 
   // Apply properties
   Object.keys(properties).forEach(property => {
@@ -206,136 +254,30 @@ const e = (name, properties = {}, children = []) => {
   return element;
 };
 
-// github scijs/almost-equal
-const abs = Math.abs;
-const min = Math.min;
-
-function almostEqual(a, b, absoluteError, relativeError) {
-  const d = abs(a - b);
-  if (absoluteError == null) absoluteError = almostEqual.DBL_EPSILON;
-  if (relativeError == null) relativeError = absoluteError;
-  if (d <= absoluteError) {
-    return true;
-  }
-  if (d <= relativeError * min(abs(a), abs(b))) {
-    return true;
-  }
-  return a === b;
-}
-
-almostEqual.DBL_EPSILON = 2.2204460492503131e-16;
-
+/**
+ * rgb/a to array
+ * @param input
+ * @return {*}
+ */
 function colorToArray(input) {
   const arrStr = input.replace(/[a-z%\s()]/g, '').split(',');
   return arrStr.map(i => Number(i));
 }
 
-function parseHash() {
-  const params = {};
-  const hash = window.location.hash.replace(/^#/, '');
-  if (hash) {
-    const parts = hash.split('&');
-    parts.forEach(part => {
-      const subparts = part.split('=');
-      const key = subparts[0];
-      const value = parseFloat(subparts[1]);
-      if (!key || isNaN(value)) {
-        console.error('bad hash param', part);
-      } else {
-        params[key] = value;
-      }
-    });
-  }
-
-  return params;
-}
-
-function timeStamp() {
-  const dateString = new Date().toISOString();
-  const a = dateString.slice(0, 10);
-  let b = dateString.slice(10);
-  b = b
-    .replaceAll(':', '-')
-    .replace('T', '')
-    .slice(0, 8);
-  return `${a}_${b}`;
-}
-
 /**
- * Save user settings and markup.
- * TODO: post object to server
- *
- * @param {object} canvas - Our osd fabric.js canvas object
- * @param {object} options
- * @param {string} options.paintbrushColor - example: "#0ff"
- * @param {boolean} options.toolbarOn - example: true
+ * Scale rgb colors to percentage
+ * @param num
+ * @return {number}
  */
-function saveSettings(canvas, options) {
-  const jsonObject = {
-    theme: document.body.className,
-    canvas: canvas.toJSON(),
-    state: STATE,
-    options,
-  };
-  console.log('settings', jsonObject);
-}
-
-function extractLocation(layer) {
-  let loc;
-  if (typeof layer.location === 'string') {
-    loc = layer.location;
-  } else if (typeof layer.location === 'object') {
-    loc = layer.location.url;
-  } else {
-    throw new TypeError(`Unidentified URL type... ${layer.location}`);
-  }
-  return loc;
-}
-
-function isValidURL(string) {
-  let result;
-  let url;
-  try {
-    url = new URL(string);
-    result = true;
-  } catch (e) {
-    result = false;
-    console.log(`%c${e.message}`, 'color: #ff6a5a;', url);
-    console.log('%cscript:', 'color: #ff6a5a;', `${e.fileName}:${e.lineNumber}`);
-  }
-  return result;
-}
-
-// Array.flat() polyfill
-if (!Array.prototype.flat) {
-  console.log("!Array.prototype.flat");
-  Array.prototype.flat = function(depth) {
-    // If no depth is specified, default to 1
-    if (depth === undefined) {
-      depth = 1;
-    }
-
-    // Recursively reduce sub-arrays to the specified depth
-    let flatten = function(arr, depth) {
-      // If depth is 0, return the array as-is
-      if (depth < 1) {
-        return arr.slice();
-      }
-
-      // Otherwise, concatenate into the parent array
-      return arr.reduce((acc, val) => {
-        return acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val);
-      }, []);
-    };
-
-    return flatten(this, depth);
-  };
-}
-
 const scaleToPct = num => {
   return (num / 255) * 100;
 };
 
+/**
+ * num to rgb
+ * @param num
+ * @return {number}
+ */
 const scaleToRgb = num => {
   return (num * 255) / 100;
 };
