@@ -30,7 +30,6 @@
 
 /**
  * Change the way the image is displayed, based on user input.
- *
  * @param {Array} layers - Layers (images) to be displayed in viewer
  * @param {object} viewer - OpenSeadragon viewer
  * @param {object} [range]
@@ -39,11 +38,8 @@
  * @param {Array&lt;number>} [thresh.rgba] - example: [126, 1, 0, 255]
  */
 function setFilter(layers, viewer, range, thresh) {
-  console.log("range", typeof range, JSON.stringify(range));
-  console.log("thresh", typeof thresh, JSON.stringify(thresh));
-
   if (viewer.world) {
-    let start = performance.now();
+    // let start = performance.now();
     // let caller = setFilter.caller;
     // console.log('caller', caller);
 
@@ -118,30 +114,52 @@ function setFilter(layers, viewer, range, thresh) {
       }
     }
 
-    let end = performance.now();
+    // let end = performance.now();
     // console.log("start:", start, "end:", end);
-    console.log(`exec: ${end - start}`);
+    // console.log(`exec: ${end - start}`);
 
   } else {
     console.warn('No viewer.world');
   }
 }
 
+/**
+ * Freeze/unfreeze viewer to allow for drawing.
+ * @param {object} viewer - OpenSeadragon.Viewer
+ * @param {boolean} myBool - enable/disable
+ */
 function setOsdMove(viewer, myBool) {
   viewer.setMouseNavEnabled(myBool);
   viewer.outerTracker.setTracking(myBool);
   viewer.gestureSettingsMouse.clickToZoom = myBool;
 }
 
+/**
+ * Toggle between class names.
+ * Highlight/un-highlight button to indicate "on" or "off".
+ * @param {object} element - HTML element
+ * @param {string} class0 - class0
+ * @param {string} class1 - class1
+ */
 function toggleButton(element, class0, class1) {
   element.classList.toggle(class0);
   element.classList.toggle(class1);
 }
 
+/**
+ * Test for null or undefined.
+ * @param obj
+ * @return {boolean}
+ */
 function isRealValue(obj) {
   return obj &amp;&amp; obj !== 'null' &amp;&amp; obj !== 'undefined';
 }
 
+/**
+ * Check to see if an Array, a string, or an object is empty.
+ * @param {Array|object|string} value
+ * @return {boolean}
+ */
 const isEmpty = value => {
   const isEmptyObject = a => {
     if (typeof a.length === 'undefined') {
@@ -165,15 +183,32 @@ const isEmpty = value => {
   );
 };
 
+/**
+ * Message dialog.
+ * @param messageObject
+ * @return {boolean}
+ */
 function alertMessage(messageObject) {
   window.alert(messageObject);
   return true;
 }
 
+/**
+ * Randomize.
+ * @param {number} minm
+ * @param {number} maxm
+ * @return {number}
+ */
 function getRandomInt(minm, maxm) {
   return Math.floor(Math.random() * (maxm - minm + 1)) + minm;
 }
 
+/**
+ * Generate random ID.
+ * @param {number} length
+ * @param {string} prefix
+ * @return {string}
+ */
 function createId(length, prefix) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -187,7 +222,10 @@ function createId(length, prefix) {
   return result;
 }
 
-// Standard replacement for Java's String.hashCode()
+/**
+ * Replacement for Java String.hashCode()
+ * @return {number}
+ */
 String.prototype.hashCode = function() {
   let hash = 0;
   if (this.length === 0) return hash;
@@ -200,7 +238,11 @@ String.prototype.hashCode = function() {
   return hash;
 };
 
-// Item name is non-unique
+/**
+ * Get items by name, when the names are non-unique.
+ * @param {string} name
+ * @return {Array}
+ */
 fabric.Canvas.prototype.getItemsByName = function(name) {
   const objectList = [];
   const objects = this.getObjects();
@@ -214,10 +256,16 @@ fabric.Canvas.prototype.getItemsByName = function(name) {
   return objectList;
 };
 
-// Element creation abstraction
-const e = (name, properties = {}, children = []) => {
+/**
+ * Element creation abstraction
+ * @param {string} tagName
+ * @param {object} properties
+ * @param {Array} children
+ * @return {object}
+ */
+const e = (tagName, properties = {}, children = []) => {
   // Create the element
-  const element = document.createElement(name);
+  const element = document.createElement(tagName);
 
   // Apply properties
   Object.keys(properties).forEach(property => {
@@ -234,136 +282,30 @@ const e = (name, properties = {}, children = []) => {
   return element;
 };
 
-// github scijs/almost-equal
-const abs = Math.abs;
-const min = Math.min;
-
-function almostEqual(a, b, absoluteError, relativeError) {
-  const d = abs(a - b);
-  if (absoluteError == null) absoluteError = almostEqual.DBL_EPSILON;
-  if (relativeError == null) relativeError = absoluteError;
-  if (d &lt;= absoluteError) {
-    return true;
-  }
-  if (d &lt;= relativeError * min(abs(a), abs(b))) {
-    return true;
-  }
-  return a === b;
-}
-
-almostEqual.DBL_EPSILON = 2.2204460492503131e-16;
-
+/**
+ * rgb/a to array
+ * @param input
+ * @return {*}
+ */
 function colorToArray(input) {
   const arrStr = input.replace(/[a-z%\s()]/g, '').split(',');
   return arrStr.map(i => Number(i));
 }
 
-function parseHash() {
-  const params = {};
-  const hash = window.location.hash.replace(/^#/, '');
-  if (hash) {
-    const parts = hash.split('&amp;');
-    parts.forEach(part => {
-      const subparts = part.split('=');
-      const key = subparts[0];
-      const value = parseFloat(subparts[1]);
-      if (!key || isNaN(value)) {
-        console.error('bad hash param', part);
-      } else {
-        params[key] = value;
-      }
-    });
-  }
-
-  return params;
-}
-
-function timeStamp() {
-  const dateString = new Date().toISOString();
-  const a = dateString.slice(0, 10);
-  let b = dateString.slice(10);
-  b = b
-    .replaceAll(':', '-')
-    .replace('T', '')
-    .slice(0, 8);
-  return `${a}_${b}`;
-}
-
 /**
- * Save user settings and markup.
- * TODO: post object to server
- *
- * @param {object} canvas - Our osd fabric.js canvas object
- * @param {object} options
- * @param {string} options.paintbrushColor - example: "#0ff"
- * @param {boolean} options.toolbarOn - example: true
+ * Scale rgb colors to percentage
+ * @param num
+ * @return {number}
  */
-function saveSettings(canvas, options) {
-  const jsonObject = {
-    theme: document.body.className,
-    canvas: canvas.toJSON(),
-    state: STATE,
-    options,
-  };
-  console.log('settings', jsonObject);
-}
-
-function extractLocation(layer) {
-  let loc;
-  if (typeof layer.location === 'string') {
-    loc = layer.location;
-  } else if (typeof layer.location === 'object') {
-    loc = layer.location.url;
-  } else {
-    throw new TypeError(`Unidentified URL type... ${layer.location}`);
-  }
-  return loc;
-}
-
-function isValidURL(string) {
-  let result;
-  let url;
-  try {
-    url = new URL(string);
-    result = true;
-  } catch (e) {
-    result = false;
-    console.log(`%c${e.message}`, 'color: #ff6a5a;', url);
-    console.log('%cscript:', 'color: #ff6a5a;', `${e.fileName}:${e.lineNumber}`);
-  }
-  return result;
-}
-
-// Array.flat() polyfill
-if (!Array.prototype.flat) {
-  console.log("!Array.prototype.flat");
-  Array.prototype.flat = function(depth) {
-    // If no depth is specified, default to 1
-    if (depth === undefined) {
-      depth = 1;
-    }
-
-    // Recursively reduce sub-arrays to the specified depth
-    let flatten = function(arr, depth) {
-      // If depth is 0, return the array as-is
-      if (depth &lt; 1) {
-        return arr.slice();
-      }
-
-      // Otherwise, concatenate into the parent array
-      return arr.reduce((acc, val) => {
-        return acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val);
-      }, []);
-    };
-
-    return flatten(this, depth);
-  };
-}
-
 const scaleToPct = num => {
   return (num / 255) * 100;
 };
 
+/**
+ * num to rgb
+ * @param num
+ * @return {number}
+ */
 const scaleToRgb = num => {
   return (num * 255) / 100;
 };
@@ -421,13 +363,13 @@ const STATE = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#blender">blender</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#img2array">img2array</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdMove">setOsdMove</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 16:19:35 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 17:38:38 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

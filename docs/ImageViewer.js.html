@@ -81,6 +81,46 @@ class ImageViewer {
       addInfo(item);
     });
 
+    function _parseHash() {
+      const params = {};
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        const parts = hash.split('&amp;');
+        parts.forEach(part => {
+          const subparts = part.split('=');
+          const key = subparts[0];
+          const value = parseFloat(subparts[1]);
+          if (!key || isNaN(value)) {
+            console.error('bad hash param', part);
+          } else {
+            params[key] = value;
+          }
+        });
+      }
+
+      return params;
+    }
+
+    function _useParams(params) {
+      console.log("params", typeof params, params);
+      const zoom = viewer.viewport.getZoom();
+      const pan = viewer.viewport.getCenter();
+
+      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
+      if (params.zoom !== undefined &amp;&amp; params.zoom !== zoom) {
+        viewer.viewport.zoomTo(params.zoom, null, true);
+      }
+
+      if (
+        params.x !== undefined
+        &amp;&amp; params.y !== undefined
+        &amp;&amp; (params.x !== pan.x || params.y !== pan.y)
+      ) {
+        const point = new OpenSeadragon.Point(params.x, params.y);
+        viewer.viewport.panTo(point, true);
+      }
+    }
+
     // Image has been downloaded and can be modified before being drawn to the canvas.
     viewer.addOnceHandler('tile-loaded', () => {
       drawer = viewer.drawer;
@@ -89,8 +129,8 @@ class ImageViewer {
       // console.log('drawer', drawer)
 
       if (window.location.hash) {
-        const params = parseHash();
-        useParams(params);
+        const params = _parseHash();
+        _useParams(params);
       }
       addCustomButtons();
       setFilter(layers, viewer);
@@ -147,7 +187,20 @@ class ImageViewer {
       prompt('Share this link:', url);
     });
 
-    // DOWNLOAD IMAGE SNAPSHOT
+    function timeStamp() {
+      const dateString = new Date().toISOString();
+      const a = dateString.slice(0, 10);
+      let b = dateString.slice(10);
+      b = b
+        .replaceAll(':', '-')
+        .replace('T', '')
+        .slice(0, 8);
+      return `${a}_${b}`;
+    }
+
+    /**
+     * Download image snapshot
+     */
     document.getElementById(`btnCam${viewerInfo.idx}`).addEventListener('click', () => {
       const parent = document.getElementById(viewerInfo.osdId);
       const children = parent.querySelectorAll('[id^="osd-overlaycanvas"]');
@@ -167,30 +220,6 @@ class ImageViewer {
         }
       }
     });
-
-    /**
-     *
-     * @param params
-     */
-    function useParams(params) {
-      console.log("params", typeof params, params);
-      const zoom = viewer.viewport.getZoom();
-      const pan = viewer.viewport.getCenter();
-
-      // In Chrome, these fire when you pan/zoom AND tab-switch to something else (like your IDE)
-      if (params.zoom !== undefined &amp;&amp; params.zoom !== zoom) {
-        viewer.viewport.zoomTo(params.zoom, null, true);
-      }
-
-      if (
-        params.x !== undefined
-        &amp;&amp; params.y !== undefined
-        &amp;&amp; (params.x !== pan.x || params.y !== pan.y)
-      ) {
-        const point = new OpenSeadragon.Point(params.x, params.y);
-        viewer.viewport.panTo(point, true);
-      }
-    }
 
     /**
      * Custom OpenSeadragon Buttons
@@ -286,13 +315,13 @@ class ImageViewer {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#blender">blender</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#img2array">img2array</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdMove">setOsdMove</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 11:33:59 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 17:38:38 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
