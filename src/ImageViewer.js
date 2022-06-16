@@ -109,8 +109,19 @@ class ImageViewer {
       getInfoForScalebar();
     });
 
-    // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
     viewer.addOnceHandler("open", e => {
+      // SET MAX ZOOM
+      try {
+        let tiledImage = viewer.world.getItemAt(0);
+        let imgWidth = tiledImage.source.dimensions.x;
+        let element = viewer.container;
+        let viewerContainerSize = new OpenSeadragon.Point(element.clientWidth, element.clientHeight);
+        viewer.maxZoomLevel = (1 * imgWidth) / viewerContainerSize.x;
+      } catch (e) {
+        console.warn(e.message);
+      }
+      
+      // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
       let minImgZoom = viewer.viewport.viewportToImageZoom(viewer.viewport.getMinZoom());
       let arr = [1, 0.5, 0.25];
       let n = 1;
