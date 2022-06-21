@@ -147,7 +147,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         fill: obj.stroke,
         opacity: 0.5
       });
-      // displayInfo()
+      // displayInfo(obj, canvas);
       canvas.renderAll();
     }
   }
