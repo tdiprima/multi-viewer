@@ -16,14 +16,21 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   paintBrush.color = mark.innerHTML;
 
   canvas.on('mouse:over', evt => {
-    fillPolygon(evt, canvas);
+    if (evt.target !== null) {
+      fillPolygon(evt, canvas);
+    }
   });
+
   canvas.on('mouse:out', evt => {
-    unfillPolygon(evt, canvas);
+    if (evt.target !== null) {
+      unfillPolygon(evt, canvas);
+    }
   });
+
   canvas.on('mouse:up', () => {
     turnDrawingOff(canvas, viewer);
   });
+
   canvas.on('path:created', opts => {
     pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer);
   });
