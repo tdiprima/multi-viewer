@@ -100,7 +100,7 @@ function setFilter(layers, viewer, range, thresh) {
  * @param {object} viewer - OpenSeadragon.Viewer
  * @param {boolean} myBool - enable/disable
  */
-function setOsdMove(viewer, myBool) {
+function setOsdTracking(viewer, myBool) {
   viewer.setMouseNavEnabled(myBool);
   viewer.outerTracker.setTracking(myBool);
   viewer.gestureSettingsMouse.clickToZoom = myBool;

@@ -43,7 +43,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     canvas.off('mouse:down', () => {
       setGestureSettings(canvas, viewer);
     });
-    setOsdMove(viewer, true);
+    setOsdTracking(viewer, true);
   }
 
   function turnDrawingOn(canvas, viewer, paintBrush, mark) {
@@ -53,7 +53,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     });
     paintBrush.color = mark.innerHTML;
     paintBrush.width = 10 / viewer.viewport.getZoom(true);
-    setOsdMove(viewer, false);
+    setOsdTracking(viewer, false);
   }
 
   function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {

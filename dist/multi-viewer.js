@@ -101,7 +101,7 @@ function setFilter(layers, viewer, range, thresh) {
  * @param {object} viewer - OpenSeadragon.Viewer
  * @param {boolean} myBool - enable/disable
  */
-function setOsdMove(viewer, myBool) {
+function setOsdTracking(viewer, myBool) {
   viewer.setMouseNavEnabled(myBool);
   viewer.outerTracker.setTracking(myBool);
   viewer.gestureSettingsMouse.clickToZoom = myBool;
@@ -704,7 +704,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     canvas.off('mouse:down', () => {
       setGestureSettings(canvas, viewer);
     });
-    setOsdMove(viewer, true);
+    setOsdTracking(viewer, true);
   }
 
   function turnDrawingOn(canvas, viewer, paintBrush, mark) {
@@ -714,7 +714,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     });
     paintBrush.color = mark.innerHTML;
     paintBrush.width = 10 / viewer.viewport.getZoom(true);
-    setOsdMove(viewer, false);
+    setOsdTracking(viewer, false);
   }
 
   function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {
@@ -1161,7 +1161,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     clear();
     zoom = viewer.viewport.getZoom(true);
     if (mode === 'draw') {
-      setOsdMove(viewer, false);
+      setOsdTracking(viewer, false);
       isDown = true;
       const event = o.e;
 
@@ -1188,7 +1188,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       });
       canvas.add(line);
     } else {
-      setOsdMove(viewer, true);
+      setOsdTracking(viewer, true);
       canvas.forEachObject(o => {
         o.setCoords(); // update coordinates
       });

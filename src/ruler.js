@@ -31,7 +31,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     clear();
     zoom = viewer.viewport.getZoom(true);
     if (mode === 'draw') {
-      setOsdMove(viewer, false);
+      setOsdTracking(viewer, false);
       isDown = true;
       const event = o.e;
 
@@ -58,7 +58,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       });
       canvas.add(line);
     } else {
-      setOsdMove(viewer, true);
+      setOsdTracking(viewer, true);
       canvas.forEachObject(o => {
         o.setCoords(); // update coordinates
       });
