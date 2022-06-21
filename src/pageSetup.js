@@ -12,6 +12,7 @@
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+  console.clear();
   /*
   When the 'images' parameter becomes an array with null elements,
   it usually means that the session timed out or is in the process of timeout.
