@@ -40,17 +40,23 @@ When contributing, please attempt to match the code style already in the codebas
 
 1. Fork this repo via GitHub
 2. Create your feature branch
+
 ```sh
 git checkout -b feature/fooBar
 ```
+
 3. Commit your changes
+
 ```sh
-git commit -am 'Add fooBar'
+git commit -m "Add fooBar"
 ```
+
 4. Push to the branch
+
 ```sh
 git push origin feature/fooBar
 ```
+
 5. Create a new Pull Request via GitHub
 
 ## Linting code
@@ -63,7 +69,6 @@ npm run lint:write
 # or
 npx eslint yourscript.js --fix
 ```
-<!-- node_modules/.bin/yarn lint:write -->
 
 **Lint CSS**
 

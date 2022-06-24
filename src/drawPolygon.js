@@ -10,7 +10,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   let btnDraw = document.getElementById(`btnDraw${idx}`);
   let mark = document.getElementById(`mark${idx}`);
   let canvas = overlay.fabricCanvas();
-  // let canvas = this.__canvas = overlay.fabricCanvas(); // for testing.
+
   let paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   paintBrush.decimate = 12;
   paintBrush.color = mark.innerHTML;
@@ -27,7 +27,8 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     }
   });
 
-  canvas.on('mouse:up', () => {
+  canvas.on('mouse:up', (evt) => {
+    // annotate(evt);
     drawingOff(canvas, viewer);
   });
 
@@ -35,7 +36,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer);
   });
 
-  btnDraw.addEventListener('click', function() {
+  btnDraw.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'annotationBtn');
     if (canvas.isDrawingMode) {
       // Drawing off
@@ -51,6 +52,26 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
       setOsdTracking(viewer, false);
     }
   });
+
+  function annotate(evt) {
+    // console.log("event", evt);
+    if (canvas.isDrawingMode) {
+      // let pointer = evt.absolutePointer;
+      let target = evt.currentTarget;
+      let text = new fabric.Textbox('Annotate...', {
+        width: 250,
+        cursorColor: 'blue',
+        // top: pointer.y,
+        // left: pointer.x,
+        top: target.top + target.height + 10,
+        left: target.left + target.width + 10,
+        fontSize: 20,
+        editable: true
+      });
+      canvas.add(text);
+      // console.log("text", text);
+    }
+  }
 
   function drawingOff(canvas, viewer) {
     canvas.isDrawingMode = false;
