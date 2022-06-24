@@ -18,7 +18,6 @@ const ruler = (btnRuler, viewer, overlay) => {
 
   const canvas = overlay.fabricCanvas();
   fabric.Object.prototype.transparentCorners = false;
-  // let canvas = this.__canvas = overlay.fabricCanvas()
 
   function clear() {
     fStart.x = 0.0;
@@ -158,7 +157,6 @@ const ruler = (btnRuler, viewer, overlay) => {
     line.setCoords();
     canvas.remove(fText);
     isDown = false;
-    // console.log('%co', 'color: #ff6a5a; font-size: larger;', o);
 
     // Make sure user actually drew a line
     if (fEnd.x > 0) {
