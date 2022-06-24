@@ -58,8 +58,8 @@ const ruler = (btnRuler, viewer, overlay) => {
       canvas.add(line);
     } else {
       setOsdTracking(viewer, true);
-      canvas.forEachObject(o => {
-        o.setCoords(); // update coordinates
+      canvas.forEachObject(obj => {
+        obj.setCoords(); // update coordinates
       });
     }
   }
@@ -96,7 +96,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       evented: false,
       name: 'ruler'
     });
-    fText.scaleToWidth(rect.width);
+    fText.scaleToWidth(rect.width, false);
 
     if (showRect) {
       canvas.add(rect);
@@ -159,7 +159,7 @@ const ruler = (btnRuler, viewer, overlay) => {
 
     // Make sure user actually drew a line
     if (fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0) {
-      console.log("click");
+      console.log('click');
     } else {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
       const pointer = canvas.getPointer(o.e);
