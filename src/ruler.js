@@ -104,6 +104,27 @@ const ruler = (btnRuler, viewer, overlay) => {
     canvas.add(fText);
   }
 
+  function valueWithUnit(value) {
+    if (value < 0.000001) {
+      // 1 µ = 1e+9 fm
+      return `${(value * 1000000000).toFixed(3)} fm`;
+    }
+    if (value < 0.001) {
+      // 1 µ = 1e+6 pm
+      return `${(value * 1000000).toFixed(3)} pm`;
+    }
+    if (value < 1) {
+      // 1 µ = 1000 nm
+      return `${(value * 1000).toFixed(3)} nm`;
+    }
+    if (value >= 1000) {
+      // 1 µ = 0.001 mm
+      return `${(value / 1000).toFixed(3)} mm`;
+    }
+    // 1 µ
+    return `${value.toFixed(3)} \u00B5m`;
+  }
+
   function mouseMoveHandler(o) {
     if (!isDown) return;
     canvas.remove(fText); // remove text element before re-adding it
@@ -129,27 +150,6 @@ const ruler = (btnRuler, viewer, overlay) => {
       drawText(fEnd.x, fEnd.y, t, false);
     }
     canvas.renderAll();
-  }
-
-  function valueWithUnit(value) {
-    if (value < 0.000001) {
-      // 1 µ = 1e+9 fm
-      return `${(value * 1000000000).toFixed(3)} fm`;
-    }
-    if (value < 0.001) {
-      // 1 µ = 1e+6 pm
-      return `${(value * 1000000).toFixed(3)} pm`;
-    }
-    if (value < 1) {
-      // 1 µ = 1000 nm
-      return `${(value * 1000).toFixed(3)} nm`;
-    }
-    if (value >= 1000) {
-      // 1 µ = 0.001 mm
-      return `${(value / 1000).toFixed(3)} mm`;
-    }
-    // 1 µ
-    return `${value.toFixed(3)} \u00B5m`;
   }
 
   function mouseUpHandler(o) {
