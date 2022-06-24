@@ -39,7 +39,7 @@ const ruler = (btnRuler, viewer, overlay) => {
         const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
       } catch (e) {
-        console.error(`%c${e.message}`, 'font-size: larger;');
+        console.error(e.message);
       }
 
       const pointer = canvas.getPointer(event);
@@ -111,7 +111,6 @@ const ruler = (btnRuler, viewer, overlay) => {
 
     const event = o.e;
     const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
-    // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
     const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
     oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
 
