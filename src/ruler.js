@@ -169,7 +169,6 @@ const ruler = (btnRuler, viewer, overlay) => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'));
-      // canvas.remove(...canvas.getObjects());
       mode = 'x';
       canvas.off('mouse:down', mouseDownHandler);
       canvas.off('mouse:move', mouseMoveHandler);
