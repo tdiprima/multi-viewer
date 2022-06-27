@@ -15,7 +15,17 @@ const ruler = (btnRuler, viewer, overlay) => {
   let fEnd = { x: 0, y: 0 };
   let oStart;
   let oEnd;
-  let lineColor, bgColor, fontColor;
+
+  let bgColor, fontColor, lineColor;
+  // lineColor = '#ccff00'; // neon yellow
+  // lineColor = '#39ff14'; // neon green
+  // lineColor = '#b3f836'; // in-between
+  // fontColor = '#000';
+  // bgColor = 'rgba(255,255,255,0.5)';
+
+  bgColor = '#009933';
+  fontColor = '#fff';
+  lineColor = '#00cc01';
 
   let canvas = overlay.fabricCanvas();
   fabric.Object.prototype.transparentCorners = false;
@@ -35,9 +45,8 @@ const ruler = (btnRuler, viewer, overlay) => {
     if (mode === 'draw') {
       setOsdTracking(viewer, false);
       isDown = true;
-      let event = o.e;
 
-      let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+      let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
       try {
         let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
@@ -45,13 +54,13 @@ const ruler = (btnRuler, viewer, overlay) => {
         console.error(e.message);
       }
 
-      let pointer = canvas.getPointer(event);
+      let pointer = canvas.getPointer(o.e);
       let points = [pointer.x, pointer.y, pointer.x, pointer.y];
       fStart.x = pointer.x;
       fStart.y = pointer.y;
       line = new fabric.Line(points, {
         strokeWidth: 2 / zoom, // adjust font size on zoom
-        stroke: '#0f0',
+        stroke: lineColor,
         originX: 'center',
         originY: 'center',
         selectable: false,
@@ -105,7 +114,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       height: 25 / zoom,
       rx: 5 / zoom,
       ry: 5 / zoom,
-      fill: 'rgba(255,255,255,0.5)',
+      fill: bgColor,
       transparentCorners: true,
       selectable: false,
       evented: false,
@@ -116,7 +125,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       left: x,
       top: y,
       fontFamily: 'Verdana',
-      fill: 'black',
+      fill: fontColor,
       selectable: false,
       evented: false,
       name: 'ruler'
@@ -135,8 +144,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     canvas.remove(fText); // remove text element before re-adding it
     canvas.renderAll();
 
-    let event = o.e;
-    let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+    let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
     let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
     oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
 
@@ -145,7 +153,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
     let t = valueWithUnit(hypot);
 
-    let pointer = canvas.getPointer(event);
+    let pointer = canvas.getPointer(o.e);
     line.set({ x2: pointer.x, y2: pointer.y });
     fEnd.x = pointer.x;
     fEnd.y = pointer.y;
@@ -159,7 +167,6 @@ const ruler = (btnRuler, viewer, overlay) => {
 
   // MOUSE UP
   function mouseUpHandler(o) {
-    let event = o.e;
     line.setCoords();
     canvas.remove(fText);
     isDown = false;
@@ -169,7 +176,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       console.log('click');
     } else {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
-      let pointer = canvas.getPointer(event);
+      let pointer = canvas.getPointer(o.e);
       drawText(pointer.x, pointer.y, fText.text, zoom < 100);
       canvas.renderAll();
     }
