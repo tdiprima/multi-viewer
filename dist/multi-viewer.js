@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2022-06-15 */
+/*! multi-viewer - v1.0.0 - 2022-06-27 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -341,6 +341,7 @@ const STATE = {
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+  console.clear();
   /*
   When the 'images' parameter becomes an array with null elements,
   it usually means that the session timed out or is in the process of timeout.
@@ -667,39 +668,74 @@ function Edit(btnEdit, canvas) {
  * @param {object} overlay - Canvas on which to draw the polygon
  */
 const drawPolygon = (viewerInfo, viewer, overlay) => {
-  const idx = viewerInfo.idx;
-  const btnDraw = document.getElementById(`btnDraw${idx}`);
-  const mark = document.getElementById(`mark${idx}`);
-  const canvas = overlay.fabricCanvas();
-  // const canvas = this.__canvas = overlay.fabricCanvas(); // for testing.
-  const paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+  let idx = viewerInfo.idx;
+  let btnDraw = document.getElementById(`btnDraw${idx}`);
+  let mark = document.getElementById(`mark${idx}`);
+  let canvas = overlay.fabricCanvas();
+
+  let paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   paintBrush.decimate = 12;
   paintBrush.color = mark.innerHTML;
 
   canvas.on('mouse:over', evt => {
-    fillPolygon(evt, canvas);
+    if (evt.target !== null) {
+      fillPolygon(evt, canvas, true);
+    }
   });
+
   canvas.on('mouse:out', evt => {
-    unfillPolygon(evt, canvas);
+    if (evt.target !== null) {
+      fillPolygon(evt, canvas, false);
+    }
   });
-  canvas.on('mouse:up', () => {
-    turnDrawingOff(canvas, viewer);
+
+  canvas.on('mouse:up', (evt) => {
+    // annotate(evt);
+    drawingOff(canvas, viewer);
   });
+
   canvas.on('path:created', opts => {
     pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer);
   });
 
-  btnDraw.addEventListener('click', function() {
+  btnDraw.addEventListener('click', function () {
     toggleButton(this, 'btnOn', 'annotationBtn');
-    // Toggle drawing
     if (canvas.isDrawingMode) {
-      turnDrawingOff(canvas, viewer);
+      // Drawing off
+      drawingOff(canvas, viewer);
     } else {
-      turnDrawingOn(canvas, viewer, paintBrush, mark);
+      // Drawing on
+      canvas.isDrawingMode = true;
+      canvas.on('mouse:down', () => {
+        setGestureSettings(canvas, viewer);
+      });
+      paintBrush.color = mark.innerHTML;
+      paintBrush.width = 10 / viewer.viewport.getZoom(true);
+      setOsdTracking(viewer, false);
     }
   });
 
-  function turnDrawingOff(canvas, viewer) {
+  function annotate(evt) {
+    // console.log("event", evt);
+    if (canvas.isDrawingMode) {
+      // let pointer = evt.absolutePointer;
+      let target = evt.currentTarget;
+      let text = new fabric.Textbox('Annotate...', {
+        width: 250,
+        cursorColor: 'blue',
+        // top: pointer.y,
+        // left: pointer.x,
+        top: target.top + target.height + 10,
+        left: target.left + target.width + 10,
+        fontSize: 20,
+        editable: true
+      });
+      canvas.add(text);
+      // console.log("text", text);
+    }
+  }
+
+  function drawingOff(canvas, viewer) {
     canvas.isDrawingMode = false;
     canvas.off('mouse:down', () => {
       setGestureSettings(canvas, viewer);
@@ -707,19 +743,9 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     setOsdTracking(viewer, true);
   }
 
-  function turnDrawingOn(canvas, viewer, paintBrush, mark) {
-    canvas.isDrawingMode = true;
-    canvas.on('mouse:down', () => {
-      setGestureSettings(canvas, viewer);
-    });
-    paintBrush.color = mark.innerHTML;
-    paintBrush.width = 10 / viewer.viewport.getZoom(true);
-    setOsdTracking(viewer, false);
-  }
-
   function pathCreatedHandler(options, button, canvas, paintBrush, viewer) {
     convertPathToPolygon(options.path, canvas, paintBrush);
-    customizePolygonControls(options.path, canvas, viewer);
+    setupDeleteButton(options.path);
     toggleButton(button, 'annotationBtn', 'btnOn');
     canvas.off('path:created', () => {
       pathCreatedHandler(options, button, canvas, paintBrush, viewer);
@@ -730,21 +756,17 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     viewer.gestureSettingsMouse.clickToZoom = !canvas.getActiveObject();
   }
 
-  function customizePolygonControls(obj, canvas, viewer) {
+  function setupDeleteButton(obj) {
     obj.lockMovementX = true;
     obj.lockMovementY = true;
-    setupDeleteButton(canvas, viewer);
-  }
+    let deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
 
-  function setupDeleteButton() {
-    const deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
-
-    const deleteImg = document.createElement('img');
+    let deleteImg = document.createElement('img');
     deleteImg.src = deleteIcon;
 
     function renderIcon(icon) {
       return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
-        const size = this.cornerSize;
+        let size = this.cornerSize;
         ctx.save();
         ctx.translate(left, top);
         ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
@@ -765,9 +787,9 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     });
 
     function deleteObject(mouseEvent, transform) {
-      const target = transform.target;
+      let target = transform.target;
       try {
-        const canvas = target.canvas;
+        let canvas = target.canvas;
         canvas.remove(target);
         canvas.requestRenderAll();
       } catch (e) {
@@ -777,12 +799,12 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   }
 
   function convertPathToPolygon(pathObject, canvas, paintBrush) {
-    const _points0 = pathObject.path.map(item => ({
+    let _points0 = pathObject.path.map(item => ({
       x: item[1],
       y: item[2]
     }));
 
-    const poly = new fabric.Polygon(_points0, {
+    let poly = new fabric.Polygon(_points0, {
       left: pathObject.left,
       top: pathObject.top,
       fill: '',
@@ -801,52 +823,44 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
     canvas.remove(pathObject);
   }
 
-  function fillPolygon(pointerEvent, canvas) {
-    if (weHoveredOverPolygon(pointerEvent)) {
-      const obj = pointerEvent.target;
-      obj.set({
-        fill: obj.stroke,
-        opacity: 0.5
-      });
-      // displayInfo()
+  function fillPolygon(pointerEvent, canvas, fill) {
+    let obj = pointerEvent.target;
+
+    if (isRealValue(obj) && obj.type === 'polygon') {
+      // polygon hover
+      if (fill) {
+        obj.set({
+          fill: obj.stroke,
+          opacity: 0.5
+        });
+        // displayInfo(obj, canvas);
+      } else {
+        obj.set({
+          fill: ''
+        });
+        // canvas.remove(infoText);
+      }
       canvas.renderAll();
     }
   }
 
-  function unfillPolygon(pointerEvent, canvas) {
-    if (weHoveredOverPolygon(pointerEvent)) {
-      const obj = pointerEvent.target;
-      if (obj !== null) {
-        obj.set({
-          fill: ''
-        });
-        // canvas.remove(infoText)
-        canvas.renderAll();
-      }
-    }
-  }
-
-  function weHoveredOverPolygon(pointerEvent) {
-    return isRealValue(pointerEvent.target) && pointerEvent.target.type === 'polygon';
-  }
-
-  // function displayInfo (obj, canvas) {
+  // function displayInfo(obj, canvas) {
   //   // Display some kind of information. TBA.
   //   // Right now this displays what type of object it is. (Polygon, obviously.)
-  //   const type = obj.type
-  //   const left = obj.left
-  //   const top = obj.top
+  //   let type = obj.type;
+  //   let left = obj.left;
+  //   let top = obj.top;
   //
-  //   const infoText = new fabric.Text(type, {
+  //   let infoText = new fabric.Text(type, {
   //     fontSize: 18,
   //     fontFamily: 'Courier',
   //     backgroundColor: 'rgba(102, 102, 102, 0.7)',
   //     stroke: 'rgba(255, 255, 255, 1)',
   //     fill: 'rgba(255, 255, 255, 1)',
-  //     left: left, // pointer.x,
-  //     top: top // pointer.y
-  //   })
-  //   canvas.add(infoText)
+  //     left, // pointer.x,
+  //     top, // pointer.y
+  //   });
+  //   canvas.add(infoText);
   // }
 };
 
@@ -1141,45 +1155,58 @@ const ruler = (btnRuler, viewer, overlay) => {
   let zoom;
   let mode = 'x';
   let fText;
-  const fStart = { x: 0, y: 0 };
-  const fEnd = { x: 0, y: 0 };
+  let fStart = {x: 0, y: 0};
+  let fEnd = {x: 0, y: 0};
   let oStart;
   let oEnd;
+  let fontSize = 15;
 
-  const canvas = overlay.fabricCanvas();
+  let bgColor, fontColor, lineColor;
+  // lineColor = '#ccff00'; // neon yellow
+  // lineColor = '#39ff14'; // neon green
+  // lineColor = '#b3f836'; // in-between
+  // fontColor = '#000';
+  // bgColor = 'rgba(255,255,255,0.5)';
+
+  bgColor = '#009933';
+  fontColor = '#fff';
+  lineColor = '#00cc01';
+
+  let canvas = overlay.fabricCanvas();
   fabric.Object.prototype.transparentCorners = false;
-  // let canvas = this.__canvas = overlay.fabricCanvas()
 
+  // CLEAR
   function clear() {
     fStart.x = 0.0;
     fEnd.x = 0.0;
     fStart.y = 0.0;
     fEnd.y = 0.0;
+    canvas.remove(...canvas.getItemsByName('ruler'));
   }
 
+  // MOUSE DOWN
   function mouseDownHandler(o) {
     clear();
     zoom = viewer.viewport.getZoom(true);
     if (mode === 'draw') {
       setOsdTracking(viewer, false);
       isDown = true;
-      const event = o.e;
 
-      const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+      let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
       try {
-        const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+        let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
       } catch (e) {
-        console.error(`%c${e.message}`, 'font-size: larger;');
+        console.error(e.message);
       }
 
-      const pointer = canvas.getPointer(event);
-      const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      let pointer = canvas.getPointer(o.e);
+      let points = [pointer.x, pointer.y, pointer.x, pointer.y];
       fStart.x = pointer.x;
       fStart.y = pointer.y;
       line = new fabric.Line(points, {
-        strokeWidth: 2 / zoom,
-        stroke: '#0f0',
+        strokeWidth: 2 / zoom, // adjust stroke width on zoom
+        stroke: lineColor,
         originX: 'center',
         originY: 'center',
         selectable: false,
@@ -1188,79 +1215,20 @@ const ruler = (btnRuler, viewer, overlay) => {
       });
       canvas.add(line);
     } else {
-      setOsdTracking(viewer, true);
-      canvas.forEachObject(o => {
-        o.setCoords(); // update coordinates
+      setOsdTracking(viewer, true); // keep image from panning/zooming as you draw line
+      canvas.forEachObject(obj => {
+        obj.setCoords(); // update coordinates
       });
     }
   }
 
+  // CALCULATE
   function difference(a, b) {
     return Math.abs(a - b);
   }
 
   function getHypotenuseLength(a, b, mpp) {
     return Math.sqrt(a * a * mpp * mpp + b * b * mpp * mpp);
-  }
-
-  function drawText(x, y, text, showRect) {
-    const rect = new fabric.Rect({
-      left: x,
-      top: y,
-      width: 150 / zoom,
-      height: 25 / zoom,
-      rx: 5 / zoom,
-      ry: 5 / zoom,
-      fill: 'rgba(255,255,255,0.5)',
-      transparentCorners: true,
-      selectable: false,
-      evented: false,
-      name: 'ruler'
-    });
-
-    fText = new fabric.Text(text, {
-      left: x,
-      top: y,
-      fontFamily: 'Verdana',
-      fill: 'black',
-      selectable: false,
-      evented: false,
-      name: 'ruler'
-    });
-    fText.scaleToWidth(rect.width);
-
-    if (showRect) {
-      canvas.add(rect);
-    }
-    canvas.add(fText);
-  }
-
-  function mouseMoveHandler(o) {
-    if (!isDown) return;
-    canvas.remove(fText); // remove text element before re-adding it
-    canvas.renderAll();
-
-    const event = o.e;
-    const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
-    // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
-    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
-    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
-
-    const w = difference(oStart.x, oEnd.x);
-    const h = difference(oStart.y, oEnd.y);
-    const hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
-    const t = valueWithUnit(hypot);
-
-    const pointer = canvas.getPointer(event);
-    line.set({ x2: pointer.x, y2: pointer.y });
-    fEnd.x = pointer.x;
-    fEnd.y = pointer.y;
-
-    if (mode === 'draw') {
-      // Show info while drawing line
-      drawText(fEnd.x, fEnd.y, t, false);
-    }
-    canvas.renderAll();
   }
 
   function valueWithUnit(value) {
@@ -1284,17 +1252,62 @@ const ruler = (btnRuler, viewer, overlay) => {
     return `${value.toFixed(3)} \u00B5m`;
   }
 
+  function drawText(x, y, text) {
+    fText = new fabric.Text(text, {
+      left: x,
+      top: y,
+      fill: fontColor,
+      fontFamily: "effra,Verdana,Tahoma,'DejaVu Sans',sans-serif",
+      // fontSize: fontSize / zoom, // adjust font size on zoom
+      fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
+      textBackgroundColor: bgColor,
+      selectable: false,
+      evented: false,
+      name: 'ruler'
+    });
+    canvas.add(fText);
+  }
+
+  // MOUSE MOVE
+  function mouseMoveHandler(o) {
+    if (!isDown) return;
+    canvas.remove(fText); // remove text element before re-adding it
+    canvas.renderAll();
+
+    let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
+    let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
+
+    let w = difference(oStart.x, oEnd.x);
+    let h = difference(oStart.y, oEnd.y);
+    let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
+    let t = valueWithUnit(hypot);
+
+    let pointer = canvas.getPointer(o.e);
+    line.set({x2: pointer.x, y2: pointer.y});
+    fEnd.x = pointer.x;
+    fEnd.y = pointer.y;
+
+    if (mode === 'draw') {
+      // Show info while drawing line
+      drawText(fEnd.x, fEnd.y, t);
+    }
+    canvas.renderAll();
+  }
+
+  // MOUSE UP
   function mouseUpHandler(o) {
     line.setCoords();
     canvas.remove(fText);
     isDown = false;
-    // console.log('%co', 'color: #ff6a5a; font-size: larger;', o);
 
     // Make sure user actually drew a line
-    if (fEnd.x > 0) {
+    if (fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0) {
+      console.log('click');
+    } else {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
-      const pointer = canvas.getPointer(o.e);
-      drawText(pointer.x, pointer.y, fText.text, zoom < 100);
+      let pointer = canvas.getPointer(o.e);
+      drawText(pointer.x, pointer.y, fText.text);
       canvas.renderAll();
     }
   }
@@ -1303,7 +1316,6 @@ const ruler = (btnRuler, viewer, overlay) => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'));
-      // canvas.remove(...canvas.getObjects())
       mode = 'x';
       canvas.off('mouse:down', mouseDownHandler);
       canvas.off('mouse:move', mouseMoveHandler);
@@ -2630,8 +2642,8 @@ class ImageViewer {
       getInfoForScalebar();
     });
 
-    // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
     viewer.addOnceHandler("open", e => {
+      // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
       let minImgZoom = viewer.viewport.viewportToImageZoom(viewer.viewport.getMinZoom());
       let arr = [1, 0.5, 0.25];
       let n = 1;

@@ -39,45 +39,58 @@ const ruler = (btnRuler, viewer, overlay) => {
   let zoom;
   let mode = 'x';
   let fText;
-  const fStart = { x: 0, y: 0 };
-  const fEnd = { x: 0, y: 0 };
+  let fStart = {x: 0, y: 0};
+  let fEnd = {x: 0, y: 0};
   let oStart;
   let oEnd;
+  let fontSize = 15;
 
-  const canvas = overlay.fabricCanvas();
+  let bgColor, fontColor, lineColor;
+  // lineColor = '#ccff00'; // neon yellow
+  // lineColor = '#39ff14'; // neon green
+  // lineColor = '#b3f836'; // in-between
+  // fontColor = '#000';
+  // bgColor = 'rgba(255,255,255,0.5)';
+
+  bgColor = '#009933';
+  fontColor = '#fff';
+  lineColor = '#00cc01';
+
+  let canvas = overlay.fabricCanvas();
   fabric.Object.prototype.transparentCorners = false;
-  // let canvas = this.__canvas = overlay.fabricCanvas()
 
+  // CLEAR
   function clear() {
     fStart.x = 0.0;
     fEnd.x = 0.0;
     fStart.y = 0.0;
     fEnd.y = 0.0;
+    canvas.remove(...canvas.getItemsByName('ruler'));
   }
 
+  // MOUSE DOWN
   function mouseDownHandler(o) {
     clear();
     zoom = viewer.viewport.getZoom(true);
     if (mode === 'draw') {
       setOsdTracking(viewer, false);
       isDown = true;
-      const event = o.e;
 
-      const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+      let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
       try {
-        const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+        let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
       } catch (e) {
-        console.error(`%c${e.message}`, 'font-size: larger;');
+        console.error(e.message);
       }
 
-      const pointer = canvas.getPointer(event);
-      const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      let pointer = canvas.getPointer(o.e);
+      let points = [pointer.x, pointer.y, pointer.x, pointer.y];
       fStart.x = pointer.x;
       fStart.y = pointer.y;
       line = new fabric.Line(points, {
-        strokeWidth: 2 / zoom,
-        stroke: '#0f0',
+        strokeWidth: 2 / zoom, // adjust stroke width on zoom
+        stroke: lineColor,
         originX: 'center',
         originY: 'center',
         selectable: false,
@@ -86,79 +99,20 @@ const ruler = (btnRuler, viewer, overlay) => {
       });
       canvas.add(line);
     } else {
-      setOsdTracking(viewer, true);
-      canvas.forEachObject(o => {
-        o.setCoords(); // update coordinates
+      setOsdTracking(viewer, true); // keep image from panning/zooming as you draw line
+      canvas.forEachObject(obj => {
+        obj.setCoords(); // update coordinates
       });
     }
   }
 
+  // CALCULATE
   function difference(a, b) {
     return Math.abs(a - b);
   }
 
   function getHypotenuseLength(a, b, mpp) {
     return Math.sqrt(a * a * mpp * mpp + b * b * mpp * mpp);
-  }
-
-  function drawText(x, y, text, showRect) {
-    const rect = new fabric.Rect({
-      left: x,
-      top: y,
-      width: 150 / zoom,
-      height: 25 / zoom,
-      rx: 5 / zoom,
-      ry: 5 / zoom,
-      fill: 'rgba(255,255,255,0.5)',
-      transparentCorners: true,
-      selectable: false,
-      evented: false,
-      name: 'ruler'
-    });
-
-    fText = new fabric.Text(text, {
-      left: x,
-      top: y,
-      fontFamily: 'Verdana',
-      fill: 'black',
-      selectable: false,
-      evented: false,
-      name: 'ruler'
-    });
-    fText.scaleToWidth(rect.width);
-
-    if (showRect) {
-      canvas.add(rect);
-    }
-    canvas.add(fText);
-  }
-
-  function mouseMoveHandler(o) {
-    if (!isDown) return;
-    canvas.remove(fText); // remove text element before re-adding it
-    canvas.renderAll();
-
-    const event = o.e;
-    const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
-    // oEnd = viewer.viewport.windowToImageCoordinates(webPoint)
-    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
-    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
-
-    const w = difference(oStart.x, oEnd.x);
-    const h = difference(oStart.y, oEnd.y);
-    const hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
-    const t = valueWithUnit(hypot);
-
-    const pointer = canvas.getPointer(event);
-    line.set({ x2: pointer.x, y2: pointer.y });
-    fEnd.x = pointer.x;
-    fEnd.y = pointer.y;
-
-    if (mode === 'draw') {
-      // Show info while drawing line
-      drawText(fEnd.x, fEnd.y, t, false);
-    }
-    canvas.renderAll();
   }
 
   function valueWithUnit(value) {
@@ -182,17 +136,62 @@ const ruler = (btnRuler, viewer, overlay) => {
     return `${value.toFixed(3)} \u00B5m`;
   }
 
+  function drawText(x, y, text) {
+    fText = new fabric.Text(text, {
+      left: x,
+      top: y,
+      fill: fontColor,
+      fontFamily: "effra,Verdana,Tahoma,'DejaVu Sans',sans-serif",
+      // fontSize: fontSize / zoom, // adjust font size on zoom
+      fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
+      textBackgroundColor: bgColor,
+      selectable: false,
+      evented: false,
+      name: 'ruler'
+    });
+    canvas.add(fText);
+  }
+
+  // MOUSE MOVE
+  function mouseMoveHandler(o) {
+    if (!isDown) return;
+    canvas.remove(fText); // remove text element before re-adding it
+    canvas.renderAll();
+
+    let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
+    let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
+
+    let w = difference(oStart.x, oEnd.x);
+    let h = difference(oStart.y, oEnd.y);
+    let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
+    let t = valueWithUnit(hypot);
+
+    let pointer = canvas.getPointer(o.e);
+    line.set({x2: pointer.x, y2: pointer.y});
+    fEnd.x = pointer.x;
+    fEnd.y = pointer.y;
+
+    if (mode === 'draw') {
+      // Show info while drawing line
+      drawText(fEnd.x, fEnd.y, t);
+    }
+    canvas.renderAll();
+  }
+
+  // MOUSE UP
   function mouseUpHandler(o) {
     line.setCoords();
     canvas.remove(fText);
     isDown = false;
-    // console.log('%co', 'color: #ff6a5a; font-size: larger;', o);
 
     // Make sure user actually drew a line
-    if (fEnd.x > 0) {
+    if (fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0) {
+      console.log('click');
+    } else {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
-      const pointer = canvas.getPointer(o.e);
-      drawText(pointer.x, pointer.y, fText.text, zoom &lt; 100);
+      let pointer = canvas.getPointer(o.e);
+      drawText(pointer.x, pointer.y, fText.text);
       canvas.renderAll();
     }
   }
@@ -201,7 +200,6 @@ const ruler = (btnRuler, viewer, overlay) => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'));
-      // canvas.remove(...canvas.getObjects())
       mode = 'x';
       canvas.off('mouse:down', mouseDownHandler);
       canvas.off('mouse:move', mouseMoveHandler);
@@ -232,7 +230,7 @@ const ruler = (btnRuler, viewer, overlay) => {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 17:38:38 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Jun 27 2022 15:41:39 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
