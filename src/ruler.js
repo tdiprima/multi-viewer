@@ -11,8 +11,8 @@ const ruler = (btnRuler, viewer, overlay) => {
   let zoom;
   let mode = 'x';
   let fText;
-  let fStart = { x: 0, y: 0 };
-  let fEnd = { x: 0, y: 0 };
+  let fStart = {x: 0, y: 0};
+  let fEnd = {x: 0, y: 0};
   let oStart;
   let oEnd;
 
@@ -59,7 +59,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       fStart.x = pointer.x;
       fStart.y = pointer.y;
       line = new fabric.Line(points, {
-        strokeWidth: 2 / zoom, // adjust font size on zoom
+        strokeWidth: 2 / zoom, // adjust stroke width on zoom
         stroke: lineColor,
         originX: 'center',
         originY: 'center',
@@ -106,35 +106,18 @@ const ruler = (btnRuler, viewer, overlay) => {
     return `${value.toFixed(3)} \u00B5m`;
   }
 
-  function drawText(x, y, text, showRect) {
-    let rect = new fabric.Rect({
-      left: x,
-      top: y,
-      width: 150 / zoom,
-      height: 25 / zoom,
-      rx: 5 / zoom,
-      ry: 5 / zoom,
-      fill: bgColor,
-      transparentCorners: true,
-      selectable: false,
-      evented: false,
-      name: 'ruler'
-    });
-
+  function drawText(x, y, text) {
     fText = new fabric.Text(text, {
       left: x,
       top: y,
-      fontFamily: 'Verdana',
       fill: fontColor,
+      fontFamily: "effra,Verdana,Tahoma,'DejaVu Sans',sans-serif",
+      fontSize: 15 / viewer.viewport.getZoom(true), // adjust font size on zoom
+      textBackgroundColor: bgColor,
       selectable: false,
       evented: false,
       name: 'ruler'
     });
-    fText.scaleToWidth(rect.width, false);
-
-    if (showRect) {
-      canvas.add(rect);
-    }
     canvas.add(fText);
   }
 
@@ -154,13 +137,13 @@ const ruler = (btnRuler, viewer, overlay) => {
     let t = valueWithUnit(hypot);
 
     let pointer = canvas.getPointer(o.e);
-    line.set({ x2: pointer.x, y2: pointer.y });
+    line.set({x2: pointer.x, y2: pointer.y});
     fEnd.x = pointer.x;
     fEnd.y = pointer.y;
 
     if (mode === 'draw') {
       // Show info while drawing line
-      drawText(fEnd.x, fEnd.y, t, false);
+      drawText(fEnd.x, fEnd.y, t);
     }
     canvas.renderAll();
   }
@@ -177,7 +160,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     } else {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
       let pointer = canvas.getPointer(o.e);
-      drawText(pointer.x, pointer.y, fText.text, zoom < 100);
+      drawText(pointer.x, pointer.y, fText.text);
       canvas.renderAll();
     }
   }
