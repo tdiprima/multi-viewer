@@ -16,9 +16,10 @@ const ruler = (btnRuler, viewer, overlay) => {
   let oStart;
   let oEnd;
 
-  const canvas = overlay.fabricCanvas();
+  let canvas = overlay.fabricCanvas();
   fabric.Object.prototype.transparentCorners = false;
 
+  // CLEAR
   function clear() {
     fStart.x = 0.0;
     fEnd.x = 0.0;
@@ -26,24 +27,25 @@ const ruler = (btnRuler, viewer, overlay) => {
     fEnd.y = 0.0;
   }
 
+  // MOUSE DOWN
   function mouseDownHandler(o) {
     clear();
     zoom = viewer.viewport.getZoom(true);
     if (mode === 'draw') {
       setOsdTracking(viewer, false);
       isDown = true;
-      const event = o.e;
+      let event = o.e;
 
-      const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+      let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
       try {
-        const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+        let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
         oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
       } catch (e) {
         console.error(e.message);
       }
 
-      const pointer = canvas.getPointer(event);
-      const points = [pointer.x, pointer.y, pointer.x, pointer.y];
+      let pointer = canvas.getPointer(event);
+      let points = [pointer.x, pointer.y, pointer.x, pointer.y];
       fStart.x = pointer.x;
       fStart.y = pointer.y;
       line = new fabric.Line(points, {
@@ -57,13 +59,14 @@ const ruler = (btnRuler, viewer, overlay) => {
       });
       canvas.add(line);
     } else {
-      setOsdTracking(viewer, true);
+      setOsdTracking(viewer, true); // keep image from panning/zooming as you draw line
       canvas.forEachObject(obj => {
         obj.setCoords(); // update coordinates
       });
     }
   }
 
+  // CALCULATE
   function difference(a, b) {
     return Math.abs(a - b);
   }
@@ -72,8 +75,29 @@ const ruler = (btnRuler, viewer, overlay) => {
     return Math.sqrt(a * a * mpp * mpp + b * b * mpp * mpp);
   }
 
+  function valueWithUnit(value) {
+    if (value < 0.000001) {
+      // 1 µ = 1e+9 fm
+      return `${(value * 1000000000).toFixed(3)} fm`;
+    }
+    if (value < 0.001) {
+      // 1 µ = 1e+6 pm
+      return `${(value * 1000000).toFixed(3)} pm`;
+    }
+    if (value < 1) {
+      // 1 µ = 1000 nm
+      return `${(value * 1000).toFixed(3)} nm`;
+    }
+    if (value >= 1000) {
+      // 1 µ = 0.001 mm
+      return `${(value / 1000).toFixed(3)} mm`;
+    }
+    // 1 µ
+    return `${value.toFixed(3)} \u00B5m`;
+  }
+
   function drawText(x, y, text, showRect) {
-    const rect = new fabric.Rect({
+    let rect = new fabric.Rect({
       left: x,
       top: y,
       width: 150 / zoom,
@@ -104,43 +128,23 @@ const ruler = (btnRuler, viewer, overlay) => {
     canvas.add(fText);
   }
 
-  function valueWithUnit(value) {
-    if (value < 0.000001) {
-      // 1 µ = 1e+9 fm
-      return `${(value * 1000000000).toFixed(3)} fm`;
-    }
-    if (value < 0.001) {
-      // 1 µ = 1e+6 pm
-      return `${(value * 1000000).toFixed(3)} pm`;
-    }
-    if (value < 1) {
-      // 1 µ = 1000 nm
-      return `${(value * 1000).toFixed(3)} nm`;
-    }
-    if (value >= 1000) {
-      // 1 µ = 0.001 mm
-      return `${(value / 1000).toFixed(3)} mm`;
-    }
-    // 1 µ
-    return `${value.toFixed(3)} \u00B5m`;
-  }
-
+  // MOUSE MOVE
   function mouseMoveHandler(o) {
     if (!isDown) return;
     canvas.remove(fText); // remove text element before re-adding it
     canvas.renderAll();
 
-    const event = o.e;
-    const webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
-    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+    let event = o.e;
+    let webPoint = new OpenSeadragon.Point(event.clientX, event.clientY);
+    let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
     oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
 
-    const w = difference(oStart.x, oEnd.x);
-    const h = difference(oStart.y, oEnd.y);
-    const hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
-    const t = valueWithUnit(hypot);
+    let w = difference(oStart.x, oEnd.x);
+    let h = difference(oStart.y, oEnd.y);
+    let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
+    let t = valueWithUnit(hypot);
 
-    const pointer = canvas.getPointer(event);
+    let pointer = canvas.getPointer(event);
     line.set({ x2: pointer.x, y2: pointer.y });
     fEnd.x = pointer.x;
     fEnd.y = pointer.y;
@@ -152,7 +156,9 @@ const ruler = (btnRuler, viewer, overlay) => {
     canvas.renderAll();
   }
 
+  // MOUSE UP
   function mouseUpHandler(o) {
+    let event = o.e;
     line.setCoords();
     canvas.remove(fText);
     isDown = false;
@@ -162,7 +168,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       console.log('click');
     } else {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
-      const pointer = canvas.getPointer(o.e);
+      let pointer = canvas.getPointer(event);
       drawText(pointer.x, pointer.y, fText.text, zoom < 100);
       canvas.renderAll();
     }
