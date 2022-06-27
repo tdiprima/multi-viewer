@@ -15,6 +15,7 @@ const ruler = (btnRuler, viewer, overlay) => {
   let fEnd = {x: 0, y: 0};
   let oStart;
   let oEnd;
+  let fontSize = 15;
 
   let bgColor, fontColor, lineColor;
   // lineColor = '#ccff00'; // neon yellow
@@ -112,7 +113,8 @@ const ruler = (btnRuler, viewer, overlay) => {
       top: y,
       fill: fontColor,
       fontFamily: "effra,Verdana,Tahoma,'DejaVu Sans',sans-serif",
-      fontSize: 15 / viewer.viewport.getZoom(true), // adjust font size on zoom
+      // fontSize: fontSize / zoom, // adjust font size on zoom
+      fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
       textBackgroundColor: bgColor,
       selectable: false,
       evented: false,
