@@ -15,6 +15,7 @@ const ruler = (btnRuler, viewer, overlay) => {
   let fEnd = { x: 0, y: 0 };
   let oStart;
   let oEnd;
+  let lineColor, bgColor, fontColor;
 
   let canvas = overlay.fabricCanvas();
   fabric.Object.prototype.transparentCorners = false;
@@ -49,7 +50,7 @@ const ruler = (btnRuler, viewer, overlay) => {
       fStart.x = pointer.x;
       fStart.y = pointer.y;
       line = new fabric.Line(points, {
-        strokeWidth: 2 / zoom,
+        strokeWidth: 2 / zoom, // adjust font size on zoom
         stroke: '#0f0',
         originX: 'center',
         originY: 'center',
