@@ -37,6 +37,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     fEnd.x = 0.0;
     fStart.y = 0.0;
     fEnd.y = 0.0;
+    canvas.remove(...canvas.getItemsByName('ruler'));
   }
 
   // MOUSE DOWN
