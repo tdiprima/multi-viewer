@@ -11,8 +11,8 @@ const ruler = (btnRuler, viewer, overlay) => {
   let zoom;
   let mode = 'x';
   let fText;
-  const fStart = { x: 0, y: 0 };
-  const fEnd = { x: 0, y: 0 };
+  let fStart = { x: 0, y: 0 };
+  let fEnd = { x: 0, y: 0 };
   let oStart;
   let oEnd;
 
@@ -172,7 +172,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     if (mode === 'draw') {
       // Turn off
       canvas.remove(...canvas.getItemsByName('ruler'));
-      // canvas.remove(...canvas.getObjects())
+      // canvas.remove(...canvas.getObjects());
       mode = 'x';
       canvas.off('mouse:down', mouseDownHandler);
       canvas.off('mouse:move', mouseMoveHandler);
