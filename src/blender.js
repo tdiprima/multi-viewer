@@ -1,6 +1,7 @@
 /**
- * Implementation of OpenSeadragon.TiledImage.setCompositeOperation
- * [uses CanvasRenderingContext2D.globalCompositeOperation]
+ * Implementation of <code>OpenSeadragon.TiledImage.setCompositeOperation</code>.
+ *
+ * [Uses <code>CanvasRenderingContext2D.globalCompositeOperation</code>]
  * to create different visual effects when applied to the layers.
  *
  * Users can play with the different effects and see if it helps to

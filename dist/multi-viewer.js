@@ -1,8 +1,9 @@
-/*! multi-viewer - v1.0.0 - 2022-06-27 */
+/*! multi-viewer - v1.0.0 - 2022-06-28 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
  * Change the way the image is displayed, based on user input.
+ *
  * @param {Array} layers - Layers (images) to be displayed in viewer
  * @param {object} viewer - OpenSeadragon viewer
  * @param {object} [range]
@@ -98,6 +99,7 @@ function setFilter(layers, viewer, range, thresh) {
 
 /**
  * Freeze/unfreeze viewer to allow for drawing.
+ *
  * @param {object} viewer - OpenSeadragon.Viewer
  * @param {boolean} myBool - enable/disable
  */
@@ -109,7 +111,9 @@ function setOsdTracking(viewer, myBool) {
 
 /**
  * Toggle between class names.
+ *
  * Highlight/un-highlight button to indicate "on" or "off".
+ *
  * @param {object} element - HTML element
  * @param {string} class0 - class0
  * @param {string} class1 - class1
@@ -121,6 +125,7 @@ function toggleButton(element, class0, class1) {
 
 /**
  * Test for null or undefined.
+ *
  * @param obj
  * @return {boolean}
  */
@@ -130,6 +135,7 @@ function isRealValue(obj) {
 
 /**
  * Check to see if an Array, a string, or an object is empty.
+ *
  * @param {Array|object|string} value
  * @return {boolean}
  */
@@ -158,6 +164,7 @@ const isEmpty = value => {
 
 /**
  * Message dialog.
+ *
  * @param messageObject
  * @return {boolean}
  */
@@ -168,6 +175,7 @@ function alertMessage(messageObject) {
 
 /**
  * Randomize.
+ *
  * @param {number} minm
  * @param {number} maxm
  * @return {number}
@@ -178,6 +186,7 @@ function getRandomInt(minm, maxm) {
 
 /**
  * Generate random ID.
+ *
  * @param {number} length
  * @param {string} prefix
  * @return {string}
@@ -196,23 +205,17 @@ function createId(length, prefix) {
 }
 
 /**
- * Replacement for Java String.hashCode()
- * @return {number}
+ * Generate random ID 2.
+ *
+ * @return {string}
  */
-String.prototype.hashCode = function() {
-  let hash = 0;
-  if (this.length === 0) return hash;
-  let char;
-  for (let i = 0; i < this.length; i++) {
-    char = this.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash &= hash; // Convert to 32bit integer
-  }
-  return hash;
-};
+function createId2() {
+  return `_${Math.random().toString(36).substring(2, 13)}`;
+}
 
 /**
  * Get items by name, when the names are non-unique.
+ *
  * @param {string} name
  * @return {Array}
  */
@@ -231,6 +234,7 @@ fabric.Canvas.prototype.getItemsByName = function(name) {
 
 /**
  * Element creation abstraction
+ *
  * @param {string} tagName
  * @param {object} properties
  * @param {Array} children
@@ -257,6 +261,7 @@ const e = (tagName, properties = {}, children = []) => {
 
 /**
  * rgb/a to array
+ *
  * @param input
  * @return {*}
  */
@@ -267,6 +272,7 @@ function colorToArray(input) {
 
 /**
  * Scale rgb colors to percentage
+ *
  * @param num
  * @return {number}
  */
@@ -276,6 +282,7 @@ const scaleToPct = num => {
 
 /**
  * num to rgb
+ *
  * @param num
  * @return {number}
  */
@@ -284,8 +291,39 @@ const scaleToRgb = num => {
 };
 
 /**
+ * Save user settings and markup:
+ *
+ * <ul>
+ *  <li> CSS theme (dark, light)
+ *  <li> Canvas objects (polygons, annotations, measurement, etc.)
+ *  <li> App state (attenuate, outline, renderType)
+ *  <li> Options (toolbarOn, paintbrushColor)
+ * </ul>
+ *
+ * @param {object} canvas - Our osd fabric.js canvas object
+ * @param {object} options
+ * @param {string} options.paintbrushColor - example: "#0ff"
+ * @param {boolean} options.toolbarOn - example: true
+ *
+ * TODO: post info to server
+ */
+function saveSettings(canvas, options) {
+  const jsonObject = {
+    theme: document.body.className,
+    canvas: canvas.toJSON(),
+    state: STATE,
+    options,
+  };
+  console.log('settings', jsonObject);
+  // console.log('stringify', JSON.stringify(jsonObject.canvas.objects));
+  // console.log('stringify', JSON.stringify(jsonObject));
+}
+
+/**
  * Location of application images and osd images.
- * The following setup is for running this app on the wickett server.
+ *
+ * The following setup is for running this app on our Apache Wicket implementation.
+ *
  * @type {{appImages: string, osdImages: string}}
  */
 let CONFIG = {
@@ -301,24 +339,28 @@ let CONFIG = {
 
 /**
  * Max (as in color range 0 - 255)
+ *
  * @type {number}
  */
 const MAX = 255;
 
 /**
  * Microns Per Pixel (default=0.25; actual value set later)
+ *
  * @type {number}
  */
 let MICRONS_PER_PIX = 0.25;
 
 /**
  * Render Types
+ *
  * @type {string[]}
  */
 const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
 
 /**
  * State
+ *
  * @type {{attenuate: boolean, outline: boolean, renderType: string}}
  */
 const STATE = {
@@ -672,6 +714,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   let btnDraw = document.getElementById(`btnDraw${idx}`);
   let mark = document.getElementById(`mark${idx}`);
   let canvas = overlay.fabricCanvas();
+  let tag;
 
   let paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   paintBrush.decimate = 12;
@@ -690,7 +733,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('mouse:up', (evt) => {
-    // annotate(evt);
+    annotate(evt);
     drawingOff(canvas, viewer);
   });
 
@@ -718,6 +761,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   function annotate(evt) {
     // console.log("event", evt);
     if (canvas.isDrawingMode) {
+      tag = createId2();
       // let pointer = evt.absolutePointer;
       let target = evt.currentTarget;
       let text = new fabric.Textbox('Annotate...', {
@@ -728,7 +772,8 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         top: target.top + target.height + 10,
         left: target.left + target.width + 10,
         fontSize: 20,
-        editable: true
+        editable: true,
+        tag: tag
       });
       canvas.add(text);
       // console.log("text", text);
@@ -815,7 +860,8 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
       objectCaching: false,
       transparentCorners: false,
       cornerColor: 'rgba(0, 0, 255, 0.5)',
-      cornerStyle: 'square'
+      cornerStyle: 'square',
+      tag: tag
     });
     canvas.add(poly);
     poly.setControlVisible('tr', false);
@@ -1332,8 +1378,9 @@ const ruler = (btnRuler, viewer, overlay) => {
 };
 
 /**
- * Implementation of OpenSeadragon.TiledImage.setCompositeOperation
- * [uses CanvasRenderingContext2D.globalCompositeOperation]
+ * Implementation of <code>OpenSeadragon.TiledImage.setCompositeOperation</code>.
+ *
+ * [Uses <code>CanvasRenderingContext2D.globalCompositeOperation</code>]
  * to create different visual effects when applied to the layers.
  *
  * Users can play with the different effects and see if it helps to
@@ -1489,25 +1536,6 @@ const markupTools = (viewerInfo, options, viewer) => {
   canvas.on('after:render', () => {
     canvas.calcOffset();
   });
-
-  /**
-   * Save user settings and markup.
-   * TODO: post object to server
-   *
-   * @param {object} canvas - Our osd fabric.js canvas object
-   * @param {object} options
-   * @param {string} options.paintbrushColor - example: "#0ff"
-   * @param {boolean} options.toolbarOn - example: true
-   */
-  function saveSettings(canvas, options) {
-    const jsonObject = {
-      theme: document.body.className,
-      canvas: canvas.toJSON(),
-      state: STATE,
-      options,
-    };
-    console.log('settings', jsonObject);
-  }
 
   const btnSave = document.getElementById(`btnSave${viewerInfo.idx}`);
   btnSave.addEventListener('click', () => {

@@ -10,6 +10,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   let btnDraw = document.getElementById(`btnDraw${idx}`);
   let mark = document.getElementById(`mark${idx}`);
   let canvas = overlay.fabricCanvas();
+  let tag;
 
   let paintBrush = canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
   paintBrush.decimate = 12;
@@ -28,7 +29,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('mouse:up', (evt) => {
-    // annotate(evt);
+    annotate(evt);
     drawingOff(canvas, viewer);
   });
 
@@ -56,6 +57,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   function annotate(evt) {
     // console.log("event", evt);
     if (canvas.isDrawingMode) {
+      tag = createId2();
       // let pointer = evt.absolutePointer;
       let target = evt.currentTarget;
       let text = new fabric.Textbox('Annotate...', {
@@ -66,7 +68,8 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         top: target.top + target.height + 10,
         left: target.left + target.width + 10,
         fontSize: 20,
-        editable: true
+        editable: true,
+        tag: tag
       });
       canvas.add(text);
       // console.log("text", text);
@@ -153,7 +156,8 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
       objectCaching: false,
       transparentCorners: false,
       cornerColor: 'rgba(0, 0, 255, 0.5)',
-      cornerStyle: 'square'
+      cornerStyle: 'square',
+      tag: tag
     });
     canvas.add(poly);
     poly.setControlVisible('tr', false);
