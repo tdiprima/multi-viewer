@@ -309,7 +309,7 @@ const scaleToRgb = num => {
 function saveSettings(canvas, options) {
   const jsonObject = {
     theme: document.body.className,
-    canvas: canvas.toJSON(),
+    canvas: canvas.toJSON(['name','tag']),
     state: STATE,
     options,
   };
