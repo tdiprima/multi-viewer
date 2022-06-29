@@ -314,7 +314,7 @@ function saveSettings(canvas, options) {
     options,
   };
   console.log('settings', jsonObject);
-  // console.log('stringify', JSON.stringify(jsonObject.canvas.objects));
+  // console.log('canvas', jsonObject.canvas.objects);
   // console.log('stringify', JSON.stringify(jsonObject));
 }
 

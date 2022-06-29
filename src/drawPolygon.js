@@ -34,6 +34,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('path:created', opts => {
+    tag = createId2();
     pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer);
   });
 
@@ -57,7 +58,6 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   function annotate(evt) {
     // console.log("event", evt);
     if (canvas.isDrawingMode) {
-      tag = createId2();
       // let pointer = evt.absolutePointer;
       let target = evt.currentTarget;
       let text = new fabric.Textbox('Annotate...', {
