@@ -290,6 +290,47 @@ const scaleToRgb = num => {
 };
 
 /**
+ * Render Types
+ *
+ * @type {string[]}
+ */
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+
+/**
+ * State
+ *
+ * @type {{attenuate: boolean, outline: boolean, renderType: string}}
+ */
+const STATE = {
+  attenuate: false,
+  outline: false,
+  renderType: RENDER_TYPES[0]
+};
+
+/**
+ * Stringify shortcut
+ * @param param
+ * @return {string}
+ */
+function stringy(param) {
+  return JSON.stringify(param);
+}
+
+/**
+ * Setting values in storage
+ * @param canvas
+ * @param options
+ */
+function populateStorage(canvas, options) {
+  localStorage.setItem('theme', document.body.className);
+  const myObject = canvas.toJSON(['name','tag']);
+  localStorage.setItem('canvas', stringy(myObject));
+  localStorage.setItem('state', stringy(STATE));
+  localStorage.setItem('options', stringy(options));
+  // console.log("saved", window.localStorage);
+}
+
+/**
  * Save user settings and markup:
  *
  * <ul>
@@ -303,19 +344,19 @@ const scaleToRgb = num => {
  * @param {object} options
  * @param {string} options.paintbrushColor - example: "#0ff"
  * @param {boolean} options.toolbarOn - example: true
- *
- * TODO: post info to server
  */
 function saveSettings(canvas, options) {
+  // For now, set values in localStorage
+  populateStorage(canvas, options);
   const jsonObject = {
     theme: document.body.className,
     canvas: canvas.toJSON(['name','tag']),
     state: STATE,
     options,
   };
-  console.log('settings', jsonObject);
+  console.log('saved', jsonObject);
   // console.log('canvas', jsonObject.canvas.objects);
-  // console.log('stringify', JSON.stringify(jsonObject));
+  // console.log('stringify', stringy(jsonObject));
 }
 
 /**
@@ -349,21 +390,3 @@ const MAX = 255;
  * @type {number}
  */
 let MICRONS_PER_PIX = 0.25;
-
-/**
- * Render Types
- *
- * @type {string[]}
- */
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
-
-/**
- * State
- *
- * @type {{attenuate: boolean, outline: boolean, renderType: string}}
- */
-const STATE = {
-  attenuate: false,
-  outline: false,
-  renderType: RENDER_TYPES[0]
-};

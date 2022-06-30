@@ -15,7 +15,7 @@ class ImageViewer {
       const layer = layers[i];
       tileSources.push({ tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0 });
     }
-    // console.log('tileSources', JSON.stringify(ts))
+    // console.log('tileSources', stringy(ts));
 
     // SET UP VIEWER
     let viewer;
