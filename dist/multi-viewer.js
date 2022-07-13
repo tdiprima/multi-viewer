@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2022-06-28 */
+/*! multi-viewer - v1.0.0 - 2022-07-13 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -291,6 +291,47 @@ const scaleToRgb = num => {
 };
 
 /**
+ * Render Types
+ *
+ * @type {string[]}
+ */
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+
+/**
+ * State
+ *
+ * @type {{attenuate: boolean, outline: boolean, renderType: string}}
+ */
+const STATE = {
+  attenuate: false,
+  outline: false,
+  renderType: RENDER_TYPES[0]
+};
+
+/**
+ * Stringify shortcut
+ * @param param
+ * @return {string}
+ */
+function stringy(param) {
+  return JSON.stringify(param);
+}
+
+/**
+ * Setting values in storage
+ * @param canvas
+ * @param options
+ */
+function populateStorage(canvas, options) {
+  localStorage.setItem('theme', document.body.className);
+  const myObject = canvas.toJSON(['name','tag']);
+  localStorage.setItem('canvas', stringy(myObject));
+  localStorage.setItem('state', stringy(STATE));
+  localStorage.setItem('options', stringy(options));
+  // console.log("saved", window.localStorage);
+}
+
+/**
  * Save user settings and markup:
  *
  * <ul>
@@ -304,19 +345,19 @@ const scaleToRgb = num => {
  * @param {object} options
  * @param {string} options.paintbrushColor - example: "#0ff"
  * @param {boolean} options.toolbarOn - example: true
- *
- * TODO: post info to server
  */
 function saveSettings(canvas, options) {
+  // For now, set values in localStorage
+  populateStorage(canvas, options);
   const jsonObject = {
     theme: document.body.className,
-    canvas: canvas.toJSON(),
+    canvas: canvas.toJSON(['name','tag']),
     state: STATE,
     options,
   };
-  console.log('settings', jsonObject);
-  // console.log('stringify', JSON.stringify(jsonObject.canvas.objects));
-  // console.log('stringify', JSON.stringify(jsonObject));
+  console.log('saved', jsonObject);
+  // console.log('canvas', jsonObject.canvas.objects);
+  // console.log('stringify', stringy(jsonObject));
 }
 
 /**
@@ -350,24 +391,6 @@ const MAX = 255;
  * @type {number}
  */
 let MICRONS_PER_PIX = 0.25;
-
-/**
- * Render Types
- *
- * @type {string[]}
- */
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
-
-/**
- * State
- *
- * @type {{attenuate: boolean, outline: boolean, renderType: string}}
- */
-const STATE = {
-  attenuate: false,
-  outline: false,
-  renderType: RENDER_TYPES[0]
-};
 
 /**
  * @file pageSetup.js is the root file for this app
@@ -738,6 +761,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('path:created', opts => {
+    tag = createId2();
     pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer);
   });
 
@@ -761,7 +785,6 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   function annotate(evt) {
     // console.log("event", evt);
     if (canvas.isDrawingMode) {
-      tag = createId2();
       // let pointer = evt.absolutePointer;
       let target = evt.currentTarget;
       let text = new fabric.Textbox('Annotate...', {
@@ -1348,6 +1371,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     isDown = false;
 
     // Make sure user actually drew a line
+    // if (fEnd.x > 0) {
     if (fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0) {
       console.log('click');
     } else {
@@ -2576,7 +2600,7 @@ class ImageViewer {
       const layer = layers[i];
       tileSources.push({ tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0 });
     }
-    // console.log('tileSources', JSON.stringify(ts))
+    // console.log('tileSources', stringy(ts));
 
     // SET UP VIEWER
     let viewer;
