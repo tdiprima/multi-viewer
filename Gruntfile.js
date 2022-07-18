@@ -35,7 +35,7 @@ module.exports = function (grunt) {
         src: ['vendor/openseadragon/openseadragon.min.js',
           'vendor/openseadragon-fabricjs-overlay.js',
           'vendor/jquery-3.5.1.min.js',
-          // Dependency required in vendor/fabric.js does not exist: jsdom
+          // Dependency required in vendor/fabric-5.2.1.js does not exist: jsdom
           // Dependency required in vendor/openseadragon-filtering.js does not exist: openseadragon
           'vendor/openseadragon-scalebar.js',
           'vendor/color-picker.js'],
