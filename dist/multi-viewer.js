@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2022-07-13 */
+/*! multi-viewer - v1.0.0 - 2022-07-18 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
