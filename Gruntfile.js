@@ -15,6 +15,7 @@ module.exports = function (grunt) {
           'src/pageSetup.js',
           'src/editPolygon.js',
           'src/drawPolygon.js',
+          // 'src/mugshots.js',
           'src/gridOverlay.js',
           'src/mapMarker.js',
           'src/ruler.js',
@@ -55,7 +56,7 @@ module.exports = function (grunt) {
       target: {
         files: {
           'dist/main.min.css': ['css/*.css']
-          // fontawesome all.min.css needs to stay put
+          // vendor/fontawesome needs to stay put
         }
       }
     }
