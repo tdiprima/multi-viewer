@@ -38,7 +38,7 @@ module.exports = function (grunt) {
           // Dependency required in vendor/fabric-5.2.1.js does not exist: jsdom
           // Dependency required in vendor/openseadragon-filtering.js does not exist: openseadragon
           'vendor/openseadragon-scalebar.js',
-          'vendor/color-picker.js'],
+          'vendor/color-picker-2.2.4.js'],
         dest: 'dist/vendor.min.js'
       }
     },
