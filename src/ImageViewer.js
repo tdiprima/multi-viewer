@@ -233,7 +233,7 @@ class ImageViewer {
      * @param ppm
      */
     const setScaleBar = ppm => {
-      console.log("ppm", typeof ppm, ppm);
+      // console.log("ppm", typeof ppm, ppm);
       viewer.scalebar({
         type: OpenSeadragon.ScalebarType.MICROSCOPY,
         pixelsPerMeter: ppm,
