@@ -159,9 +159,7 @@ const ruler = (btnRuler, viewer, overlay) => {
 
     // Make sure user actually drew a line
     // if (fEnd.x > 0) {
-    if (fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0) {
-      console.log('click');
-    } else {
+    if (!(fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0)) {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
       let pointer = canvas.getPointer(o.e);
       drawText(pointer.x, pointer.y, fText.text);
