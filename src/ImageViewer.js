@@ -125,7 +125,11 @@ class ImageViewer {
 
     viewer.addOnceHandler("open", e => {
       // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
-      let minImgZoom = viewer.viewport.viewportToImageZoom(viewer.viewport.getMinZoom());
+      let minViewportZoom = viewer.viewport.getMinZoom();
+      // let minImgZoom = viewer.viewport.viewportToImageZoom(minViewportZoom);
+      let tiledImage = viewer.world.getItemAt(0);
+      let minImgZoom = tiledImage.viewportToImageZoom(minViewportZoom);
+
       let arr = [1, 0.5, 0.25];
       let n = 1;
       let imgZoom = [];
