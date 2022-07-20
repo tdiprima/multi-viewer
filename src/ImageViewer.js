@@ -22,30 +22,28 @@ class ImageViewer {
     try {
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
+        prefixUrl: CONFIG.osdImages,
+        tileSources,
         crossOriginPolicy: 'Anonymous',
         blendTime: 0,
-        prefixUrl: CONFIG.osdImages,
         minZoomImageRatio: 1,
         maxZoomPixelRatio: 1, // when the user zooms all the way in they are at 100%
-        tileSources,
       });
     } catch (e) {
       console.error(e.message);
     }
 
-    /*
-    let anno = OpenSeadragon.Annotorious(viewer, {
-      locale: 'auto',
-      drawOnSingleClick: true,
-      allowEmpty: true
-    });
-    anno.setAuthInfo({
-      id: 'http://www.example.com/tdiprima',
-      displayName: 'tdiprima'
-    });
-    anno.setDrawingTool('rect');
-    anno.setDrawingEnabled(true);
-    */
+    // let anno = OpenSeadragon.Annotorious(viewer, {
+    //   locale: "auto",
+    //   drawOnSingleClick: true,
+    //   allowEmpty: true
+    // });
+    // anno.setAuthInfo({
+    //   id: "http://www.example.com/tdiprima",
+    //   displayName: "tdiprima"
+    // });
+    // anno.setDrawingTool("rect");
+    // anno.setDrawingEnabled(true);
 
     let drawer;
 
@@ -97,11 +95,7 @@ class ImageViewer {
         viewer.viewport.zoomTo(params.zoom, null, true);
       }
 
-      if (
-        params.x !== undefined
-        && params.y !== undefined
-        && (params.x !== pan.x || params.y !== pan.y)
-      ) {
+      if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
         const point = new OpenSeadragon.Point(params.x, params.y);
         viewer.viewport.panTo(point, true);
       }
@@ -158,8 +152,7 @@ class ImageViewer {
           el.addEventListener("click", () => {
             let attr = el.getAttribute("data-value");
             let imageZoom = parseFloat(attr);
-            viewer.viewport.zoomTo(viewer.world.getItemAt(0)
-              .imageToViewportZoom(imageZoom));
+            viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom));
           });
         }
       }
@@ -293,5 +286,4 @@ class ImageViewer {
   getViewer() {
     return this.viewer;
   }
-
 }
