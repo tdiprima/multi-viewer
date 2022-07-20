@@ -65,7 +65,14 @@ colorFilter.prototype.OUTLINE = rgba => {
     // console.log('outline')
     const width = context.canvas.width;
     const height = context.canvas.height;
-    const imgData = context.getImageData(0, 0, width, height);
+    let imgData;
+    try {
+      imgData = context.getImageData(0, 0, width, height);
+    } catch (e) {
+      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      return;
+    }
+
     let data = backgroundCorrection(img2array(imgData));
 
     for (let i = 0; i < data.length; i++) {
@@ -145,7 +152,14 @@ colorFilter.prototype.OUTLINE = rgba => {
 colorFilter.prototype.PROBABILITY = (data, rgba) => {
   return (context, callback) => {
     // console.log('probability')
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    let imgData;
+    try {
+      imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    } catch (e) {
+      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      return;
+    }
+
     let pixels = imgData.data;
 
     if (data.type === 'inside') {
@@ -187,7 +201,13 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
     // console.log('colorlevels')
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    let imgData;
+    try {
+      imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    } catch (e) {
+      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      return;
+    }
     const data = bgTrans(imgData.data);
 
     const colorGroup = layerColors.filter(x => x.checked === true);
@@ -274,7 +294,13 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
 
     if (typeof thresh !== 'undefined') {
       // console.log('thresh', thresh)
-      let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+      let imgData;
+      try {
+        imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+      } catch (e) {
+        console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+        return;
+      }
       let pixels = imgData.data;
 
       let color;
