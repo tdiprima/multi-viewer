@@ -6,14 +6,14 @@ const img2array = imgData => {
   }, []);
 };
 
-const bgTrans = function (imageData) {
+const bgTrans = function(imageData) {
   for (let i = 0; i < imageData.length; i += 4) {
     if (imageData[i + 1] === 0) {
-      imageData[i + 3] = 0
+      imageData[i + 3] = 0;
     }
   }
-  return imageData
-}
+  return imageData;
+};
 
 const backgroundCorrection = data => {
   data.forEach(px => {
@@ -179,10 +179,7 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
       for (let i = 0; i < pixels.length; i += 4) {
         const probability = pixels[i + 1];
         // Has to be > zero; not >=.
-        if (
-          (probability > 0 && probability <= data.min) ||
-          (probability <= 255 && probability >= data.max)
-        ) {
+        if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
           pixels[i] = rgba[0];
           pixels[i + 1] = rgba[1];
           pixels[i + 2] = rgba[2];
@@ -251,22 +248,22 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
             return;
           }
           // Set
-          data[i] = rgba[0]
-          data[i + 1] = rgba[1]
-          data[i + 2] = rgba[2]
-          data[i + 3] = rgba[3]
+          data[i] = rgba[0];
+          data[i + 1] = rgba[1];
+          data[i + 2] = rgba[2];
+          data[i + 3] = rgba[3];
 
           if (rgba[3] > 0) {
             // If attenuation is on,
             // then use green channel value for the alpha value
-            data[i + 3] = STATE.attenuate ? greenChannel : 255
+            data[i + 3] = STATE.attenuate ? greenChannel : 255;
           }
         } else {
           // No nuclear material
-          data[i] = 0
-          data[i + 1] = 0
-          data[i + 2] = 0
-          data[i + 3] = 0
+          data[i] = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+          data[i + 3] = 0;
         }
       }
     }
@@ -289,9 +286,8 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
   };
 };
 
-colorFilter.prototype.THRESHOLDING = (thresh) => {
+colorFilter.prototype.THRESHOLDING = thresh => {
   return (context, callback) => {
-
     if (typeof thresh !== 'undefined') {
       // console.log('thresh', thresh)
       let imgData;
@@ -311,8 +307,7 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
       }
 
       if (typeof thresh.classId !== 'undefined') {
-
-        let classId = parseInt(thresh.classId)
+        let classId = parseInt(thresh.classId);
         // console.log('classId', classId)
 
         for (let i = 0; i < pixels.length; i += 4) {
@@ -343,7 +338,7 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
       context.putImageData(imgData, 0, 0);
       callback();
     } else {
-      console.warn("thresh is undefined")
+      console.warn("thresh is undefined");
     }
   };
 };
