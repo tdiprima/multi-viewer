@@ -20,8 +20,7 @@ npm install; grunt
 ## Generate docs
 
 ```sh
-cd src
-jsdoc *.js
+npm run doc
 ```
 
 ## Usage
