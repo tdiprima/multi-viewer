@@ -188,6 +188,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   // Hot keys
   function hotKeysHandler(evt) {
     const key = evt.key.toLocaleLowerCase();
+
     // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
     if (key === 'escape' || key === 'esc') {
       evt.preventDefault();
@@ -197,6 +198,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         buttons[i].click();
       }
     }
+
     // control-r for 'ruler'
     if (evt.ctrlKey && key === 'r') {
       evt.preventDefault();
@@ -206,5 +208,6 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         });
       }
     }
+    
   }
 };
