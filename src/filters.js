@@ -62,7 +62,7 @@ const alphaChannel = 3;
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = rgba => {
   return (context, callback) => {
-    // console.log('outline')
+    // console.log('outline');
     const width = context.canvas.width;
     const height = context.canvas.height;
     let imgData;
@@ -151,7 +151,7 @@ colorFilter.prototype.OUTLINE = rgba => {
 // Handles 'inside' and 'outside' sliders
 colorFilter.prototype.PROBABILITY = (data, rgba) => {
   return (context, callback) => {
-    // console.log('probability')
+    // console.log('probability');
     let imgData;
     try {
       imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
@@ -197,7 +197,7 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    // console.log('colorlevels')
+    // console.log('colorlevels');
     let imgData;
     try {
       imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
@@ -289,7 +289,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 colorFilter.prototype.THRESHOLDING = thresh => {
   return (context, callback) => {
     if (typeof thresh !== 'undefined') {
-      // console.log('thresh', thresh)
+      // console.log('thresh', thresh);
       let imgData;
       try {
         imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
@@ -308,7 +308,7 @@ colorFilter.prototype.THRESHOLDING = thresh => {
 
       if (typeof thresh.classId !== 'undefined') {
         let classId = parseInt(thresh.classId);
-        // console.log('classId', classId)
+        // console.log('classId', classId);
 
         for (let i = 0; i < pixels.length; i += 4) {
           if (pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val) {
@@ -321,7 +321,7 @@ colorFilter.prototype.THRESHOLDING = thresh => {
           }
         }
       } else {
-        // console.log('classId undefined')
+        // console.log('classId undefined');
         for (let i = 0; i < pixels.length; i += 4) {
           // Test green channel value above threshold.
           if (pixels[i + 1] >= thresh.val) {
