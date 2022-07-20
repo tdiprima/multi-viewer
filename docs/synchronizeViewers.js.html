@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: synchronizeViewers.js</title>
+<meta charset="utf-8">
+<title>JSDoc: Source: synchronizeViewers.js</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
+<script src="scripts/prettify/prettify.js"></script>
+<script src="scripts/prettify/lang-css.js"></script>
+<!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<link type="text/css" rel="stylesheet" href=
+"styles/prettify-tomorrow.css">
+<link type="text/css" rel="stylesheet" href=
+"styles/jsdoc-default.css">
 </head>
-
 <body>
-
 <div id="main">
-
-    <h1 class="page-title">Source: synchronizeViewers.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Synchronize pan &amp; zoom on every viewer in the given array.
+<h1 class="page-title">Source: synchronizeViewers.js</h1>
+<section>
+<article>
+<pre class="prettyprint source linenums"><code>/**
+ * Synchronize pan & zoom on every viewer in the given array.
  *
  * @param {Array} multiViewerArray - Array of MultiViewer objects
  */
@@ -101,18 +94,18 @@ function isZoomOn(imageViewer) {
 function setPanZoomOthers(imageViewer) {
   const currentViewer = imageViewer.getViewer();
 
-  this.SYNCED_IMAGE_VIEWERS.forEach(syncedObject => {
+  this.SYNCED_IMAGE_VIEWERS.forEach(syncedObject =&gt; {
     const syncedViewer = syncedObject.getViewer();
 
     if (syncedViewer.id === currentViewer.id) {
       return;
     }
 
-    if (isPanOn(syncedObject) &amp;&amp; isPanOn(imageViewer)) {
+    if (isPanOn(syncedObject) &amp;& isPanOn(imageViewer)) {
       syncedViewer.viewport.panTo(currentViewer.viewport.getCenter(false), false);
     }
 
-    if (isZoomOn(syncedObject) &amp;&amp; isZoomOn(imageViewer)) {
+    if (isZoomOn(syncedObject) &amp;& isZoomOn(imageViewer)) {
       syncedViewer.viewport.zoomTo(currentViewer.viewport.getZoom(false));
     }
   });
@@ -135,26 +128,66 @@ function checkData(multiViewerArray) {
 
   return true;
 }
-</code></pre>
-        </article>
-    </section>
-
-
-
-
+</code></pre></article>
+</section>
 </div>
-
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#img2array">img2array</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdTracking">setOsdTracking</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
+<h2><a href="index.html">Home</a></h2>
+<h3>Classes</h3>
+<ul>
+<li><a href="ImageViewer.html">ImageViewer</a></li>
+<li><a href="MultiViewer.html">MultiViewer</a></li>
+</ul>
+<h3>Global</h3>
+<ul>
+<li><a href="global.html#alertMessage">alertMessage</a></li>
+<li><a href="global.html#blender">blender</a></li>
+<li><a href="global.html#colorToArray">colorToArray</a></li>
+<li><a href="global.html#CONFIG">CONFIG</a></li>
+<li><a href=
+"global.html#createDraggableDiv">createDraggableDiv</a></li>
+<li><a href="global.html#createId">createId</a></li>
+<li><a href="global.html#createId2">createId2</a></li>
+<li><a href="global.html#drawCross">drawCross</a></li>
+<li><a href="global.html#drawPolygon">drawPolygon</a></li>
+<li><a href="global.html#e">e</a></li>
+<li><a href="global.html#editPolygon">editPolygon</a></li>
+<li><a href="global.html#filterPopup">filterPopup</a></li>
+<li><a href="global.html#getRandomInt">getRandomInt</a></li>
+<li><a href="global.html#gridOverlay">gridOverlay</a></li>
+<li><a href="global.html#img2array">img2array</a></li>
+<li><a href="global.html#isEmpty">isEmpty</a></li>
+<li><a href="global.html#isRealValue">isRealValue</a></li>
+<li><a href="global.html#layerPopup">layerPopup</a></li>
+<li><a href="global.html#layerUI">layerUI</a></li>
+<li><a href="global.html#mapMarker">mapMarker</a></li>
+<li><a href="global.html#markupTools">markupTools</a></li>
+<li><a href="global.html#MAX">MAX</a></li>
+<li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li>
+<li><a href="global.html#mugshots">mugshots</a></li>
+<li><a href="global.html#populateStorage">populateStorage</a></li>
+<li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li>
+<li><a href="global.html#ruler">ruler</a></li>
+<li><a href="global.html#saveSettings">saveSettings</a></li>
+<li><a href="global.html#scaleToPct">scaleToPct</a></li>
+<li><a href="global.html#scaleToRgb">scaleToRgb</a></li>
+<li><a href="global.html#setFilter">setFilter</a></li>
+<li><a href="global.html#setOsdTracking">setOsdTracking</a></li>
+<li><a href="global.html#STATE">STATE</a></li>
+<li><a href="global.html#stringy">stringy</a></li>
+<li><a href=
+"global.html#synchronizeViewers">synchronizeViewers</a></li>
+<li><a href="global.html#toggleButton">toggleButton</a></li>
+<li><a href="global.html#toggleCross">toggleCross</a></li>
+</ul>
 </nav>
-
 <br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jun 15 2022 17:38:38 GMT-0400 (Eastern Daylight Time)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<footer>Documentation generated by <a href=
+"https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 20
+2022 14:05:36 GMT-0400 (Eastern Daylight Time)</footer>
+<script>
+ prettyPrint(); 
+</script> 
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>
