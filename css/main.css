@@ -595,3 +595,15 @@ output::after {
   border-radius: 3px;
   background-color: var(--tooltip);
 }
+
+.map-annotate-button {
+  font-size: 11px;
+  position: absolute;
+  z-index: 10000;
+  top: 3px;
+  left: 150px;
+  padding: 3px 8px;
+  text-decoration: none;
+  color: #fff;
+  background-color: #000;
+}
