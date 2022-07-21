@@ -33,6 +33,25 @@ class ImageViewer {
       console.error(e.message);
     }
 
+    const button = document.getElementById("map-annotate-button");
+
+    function annotate(button) {
+      button.style.color = "#777";
+
+      anno.activateSelector(() => {
+        // Reset button style
+        button.style.color = "#fff";
+      });
+    }
+
+    button.addEventListener("click", function() {
+      annotate(button);
+      return false;
+    });
+
+    // make annotatable by Annotorious library
+    anno.makeAnnotatable(viewer);
+
     let drawer;
 
     function addInfo(item) {
