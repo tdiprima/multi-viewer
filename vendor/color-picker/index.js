@@ -1,5 +1,5 @@
 /*!
- * "version": "2.2.4"
+ *
  * The MIT License (MIT)
  *
  * Copyright © 2021 Taufik Nurrohman
@@ -197,11 +197,7 @@
         return value;
     };
     var getParent = function getParent(node) {
-      // console.log('getParent') // debug output
-      // console.log('node', node)
-      let parentNode = node.parentNode
-      // console.log('parentNode', parentNode)
-        return parentNode || null;
+        return node.parentNode || null;
     };
     var getState = function getState(node, state) {
         return hasState(node, state) && node[state] || null;

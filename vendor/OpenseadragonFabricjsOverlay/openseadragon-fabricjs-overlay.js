@@ -4,7 +4,7 @@
  */
 (function() {
   if (!window.OpenSeadragon) {
-    console.error('[openseadragon-canvas-overlay] requires OpenSeadragon');
+    console.error('[openseadragon-fabricjs-overlay] requires OpenSeadragon');
     return;
   }
   let testing = false;

@@ -83,7 +83,7 @@ csscomb file.css
 
 [Font Awesome](https://use.fontawesome.com/releases/v5.15.3/fontawesome-free-5.15.3-web.zip)
 
-[jQuery](https://code.jquery.com/jquery-3.5.1.min.js)
+[jQuery](https://github.com/jquery/jquery/archive/refs/tags/3.5.1.tar.gz)
 
 
 [OpenSeadragon](https://github.com/openseadragon/openseadragon/releases/tag/v2.4.2)
