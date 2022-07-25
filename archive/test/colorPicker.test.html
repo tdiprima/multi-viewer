@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width" name="viewport">
+  <title>Color Picker</title>
+  <link href="../css/color-picker.min.css" rel="stylesheet">
+  <style>
+    .color-picker\:a {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<h1>Expect color picker to work in browser</h1>
+<div><mark id="myMark">#0ff</mark></div>
+<script src="../js/vendor/color-picker.min.js"></script>
+<script src="../js/colorPicker.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const myMark = document.getElementById('myMark')
+    // Test no input argument:
+    // colorPicker() // Uncomment for testing.
+    // Test:
+    colorPicker(myMark)
+  })
+</script>
+</body>
+</html>
