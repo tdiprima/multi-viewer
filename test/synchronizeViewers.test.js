@@ -1,4 +1,4 @@
-// Oct 14 16:36:55 2020
+// Oct 14, 2020
 const synchronizeViewers = require('./src/synchronizeViewers');
 
 console.log('Test empty array');
