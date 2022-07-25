@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2022-07-20 */
+/*! multi-viewer - v1.0.0 - 2022-07-25 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -582,6 +582,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   // Hot keys
   function hotKeysHandler(evt) {
     const key = evt.key.toLocaleLowerCase();
+
     // esc: means 'Forget what I said I wanted to do!'; 'Clear'.
     if (key === 'escape' || key === 'esc') {
       evt.preventDefault();
@@ -591,6 +592,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         buttons[i].click();
       }
     }
+
     // control-r for 'ruler'
     if (evt.ctrlKey && key === 'r') {
       evt.preventDefault();
@@ -600,6 +602,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         });
       }
     }
+    
   }
 };
 
@@ -797,61 +800,6 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         tag: tag
       });
       canvas.add(text);
-
-      /*
-      // ANNOTORIOUS-STYLE DIV FOR ANNOTATION
-      let left, top;
-      top = target.top + target.height + 25;
-      left = target.left + target.width + 25;
-      let myDiv = `<div class="r6o-editor r6o-arrow-top r6o-arrow-left" style="transform: translate(0px); top: ${top}px; left: ${left}px; opacity: 1;">
-      <div class="r6o-arrow"></div><!-- ARROW -->
-      <div class="r6o-editor-inner">
-        <div class="r6o-widget comment">
-          <textarea class="r6o-editable-text" placeholder="Add a comment..." disabled rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;"></textarea>
-          <div class="r6o-icon r6o-arrow-down">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" width="12">
-              <metadata>IcoFont Icons</metadata>
-              <title>simple-down</title>
-              <glyph glyph-name="simple-down" unicode="\uEAB2" horiz-advx="1000"></glyph>
-              <path fill="currentColor" d="M200 392.6l300 300 300-300-85.10000000000002-85.10000000000002-214.89999999999998 214.79999999999995-214.89999999999998-214.89999999999998-85.10000000000002 85.20000000000005z"></path>
-            </svg>
-          </div>
-        </div><!-- END comment -->
-        <div class="r6o-widget comment editable">
-          <textarea class="r6o-editable-text" placeholder="Add a reply..." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;"></textarea>
-        </div><!-- END reply -->
-        <div class="r6o-widget r6o-tag">
-          <ul class="r6o-taglist">
-            <!-- existing tags go here. -->
-            <li></li>
-          </ul><!-- END taglist -->
-          <div class="r6o-autocomplete">
-            <div><input placeholder="Add tag..."></div>
-            <ul><!-- tags go here --></ul>
-          </div><!-- END add tag -->
-        </div><!-- END tag section -->
-        <div class="r6o-footer r6o-draggable">
-          <button class="r6o-btn left delete-annotation" title="Delete">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12">
-              <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
-            </svg>
-          </button><!-- DELETE button -->
-          <button class="r6o-btn outline">Cancel</button><!-- CANCEL button -->
-          <button class="r6o-btn">OK</button><!-- OK button -->
-        </div><!-- END footer -->
-      </div><!-- END editor-inner -->
-    </div><!-- END editor -->`;
-      try {
-        const myDiv1 = e('div');
-        myDiv1.style.left = `${left}px`;
-        myDiv1.style.top = `${top}px`;
-        myDiv1.innerHTML = myDiv;
-        document.body.appendChild(myDiv1);
-
-      } catch (e) {
-        console.log(`%c${e.message}`, "color: #ff00cc;");
-      }
-      */
     }
   }
 
@@ -2317,14 +2265,14 @@ const img2array = imgData => {
   }, []);
 };
 
-const bgTrans = function (imageData) {
+const bgTrans = function(imageData) {
   for (let i = 0; i < imageData.length; i += 4) {
     if (imageData[i + 1] === 0) {
-      imageData[i + 3] = 0
+      imageData[i + 3] = 0;
     }
   }
-  return imageData
-}
+  return imageData;
+};
 
 const backgroundCorrection = data => {
   data.forEach(px => {
@@ -2373,10 +2321,17 @@ const alphaChannel = 3;
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = rgba => {
   return (context, callback) => {
-    // console.log('outline')
+    // console.log('outline');
     const width = context.canvas.width;
     const height = context.canvas.height;
-    const imgData = context.getImageData(0, 0, width, height);
+    let imgData;
+    try {
+      imgData = context.getImageData(0, 0, width, height);
+    } catch (e) {
+      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      return;
+    }
+
     let data = backgroundCorrection(img2array(imgData));
 
     for (let i = 0; i < data.length; i++) {
@@ -2455,8 +2410,15 @@ colorFilter.prototype.OUTLINE = rgba => {
 // Handles 'inside' and 'outside' sliders
 colorFilter.prototype.PROBABILITY = (data, rgba) => {
   return (context, callback) => {
-    // console.log('probability')
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    // console.log('probability');
+    let imgData;
+    try {
+      imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    } catch (e) {
+      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      return;
+    }
+
     let pixels = imgData.data;
 
     if (data.type === 'inside') {
@@ -2476,10 +2438,7 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
       for (let i = 0; i < pixels.length; i += 4) {
         const probability = pixels[i + 1];
         // Has to be > zero; not >=.
-        if (
-          (probability > 0 && probability <= data.min) ||
-          (probability <= 255 && probability >= data.max)
-        ) {
+        if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
           pixels[i] = rgba[0];
           pixels[i + 1] = rgba[1];
           pixels[i + 2] = rgba[2];
@@ -2497,8 +2456,14 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    // console.log('colorlevels')
-    const imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    // console.log('colorlevels');
+    let imgData;
+    try {
+      imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    } catch (e) {
+      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      return;
+    }
     const data = bgTrans(imgData.data);
 
     const colorGroup = layerColors.filter(x => x.checked === true);
@@ -2542,22 +2507,22 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
             return;
           }
           // Set
-          data[i] = rgba[0]
-          data[i + 1] = rgba[1]
-          data[i + 2] = rgba[2]
-          data[i + 3] = rgba[3]
+          data[i] = rgba[0];
+          data[i + 1] = rgba[1];
+          data[i + 2] = rgba[2];
+          data[i + 3] = rgba[3];
 
           if (rgba[3] > 0) {
             // If attenuation is on,
             // then use green channel value for the alpha value
-            data[i + 3] = STATE.attenuate ? greenChannel : 255
+            data[i + 3] = STATE.attenuate ? greenChannel : 255;
           }
         } else {
           // No nuclear material
-          data[i] = 0
-          data[i + 1] = 0
-          data[i + 2] = 0
-          data[i + 3] = 0
+          data[i] = 0;
+          data[i + 1] = 0;
+          data[i + 2] = 0;
+          data[i + 3] = 0;
         }
       }
     }
@@ -2580,12 +2545,17 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
   };
 };
 
-colorFilter.prototype.THRESHOLDING = (thresh) => {
+colorFilter.prototype.THRESHOLDING = thresh => {
   return (context, callback) => {
-
     if (typeof thresh !== 'undefined') {
-      // console.log('thresh', thresh)
-      let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+      // console.log('thresh', thresh);
+      let imgData;
+      try {
+        imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+      } catch (e) {
+        console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+        return;
+      }
       let pixels = imgData.data;
 
       let color;
@@ -2596,9 +2566,8 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
       }
 
       if (typeof thresh.classId !== 'undefined') {
-
-        let classId = parseInt(thresh.classId)
-        // console.log('classId', classId)
+        let classId = parseInt(thresh.classId);
+        // console.log('classId', classId);
 
         for (let i = 0; i < pixels.length; i += 4) {
           if (pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val) {
@@ -2611,7 +2580,7 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
           }
         }
       } else {
-        // console.log('classId undefined')
+        // console.log('classId undefined');
         for (let i = 0; i < pixels.length; i += 4) {
           // Test green channel value above threshold.
           if (pixels[i + 1] >= thresh.val) {
@@ -2628,7 +2597,7 @@ colorFilter.prototype.THRESHOLDING = (thresh) => {
       context.putImageData(imgData, 0, 0);
       callback();
     } else {
-      console.warn("thresh is undefined")
+      console.warn("thresh is undefined");
     }
   };
 };
@@ -2657,30 +2626,16 @@ class ImageViewer {
     try {
       viewer = OpenSeadragon({
         id: viewerInfo.osdId,
+        prefixUrl: CONFIG.osdImages,
+        tileSources,
         crossOriginPolicy: 'Anonymous',
         blendTime: 0,
-        prefixUrl: CONFIG.osdImages,
         minZoomImageRatio: 1,
         maxZoomPixelRatio: 1, // when the user zooms all the way in they are at 100%
-        tileSources,
       });
     } catch (e) {
       console.error(e.message);
     }
-
-    /*
-    let anno = OpenSeadragon.Annotorious(viewer, {
-      locale: 'auto',
-      drawOnSingleClick: true,
-      allowEmpty: true
-    });
-    anno.setAuthInfo({
-      id: 'http://www.example.com/tdiprima',
-      displayName: 'tdiprima'
-    });
-    anno.setDrawingTool('rect');
-    anno.setDrawingEnabled(true);
-    */
 
     let drawer;
 
@@ -2732,11 +2687,7 @@ class ImageViewer {
         viewer.viewport.zoomTo(params.zoom, null, true);
       }
 
-      if (
-        params.x !== undefined
-        && params.y !== undefined
-        && (params.x !== pan.x || params.y !== pan.y)
-      ) {
+      if (params.x !== undefined && params.y !== undefined && (params.x !== pan.x || params.y !== pan.y)) {
         const point = new OpenSeadragon.Point(params.x, params.y);
         viewer.viewport.panTo(point, true);
       }
@@ -2793,8 +2744,7 @@ class ImageViewer {
           el.addEventListener("click", () => {
             let attr = el.getAttribute("data-value");
             let imageZoom = parseFloat(attr);
-            viewer.viewport.zoomTo(viewer.world.getItemAt(0)
-              .imageToViewportZoom(imageZoom));
+            viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(imageZoom));
           });
         }
       }
@@ -2855,10 +2805,10 @@ class ImageViewer {
       // Zoom all the way in
       const zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest: `${CONFIG.osdImages}zin_rest.png`,
-        srcGroup: `${CONFIG.osdImages}zin_grouphover.png`,
-        srcHover: `${CONFIG.osdImages}zin_hover.png`,
-        srcDown: `${CONFIG.osdImages}zin_pressed.png`,
+        srcRest: `${CONFIG.appImages}zin_rest.png`,
+        srcGroup: `${CONFIG.appImages}zin_grouphover.png`,
+        srcHover: `${CONFIG.appImages}zin_hover.png`,
+        srcDown: `${CONFIG.appImages}zin_pressed.png`,
         onClick() {
           viewer.viewport.zoomTo(viewer.viewport.getMaxZoom());
           // viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
@@ -2868,10 +2818,10 @@ class ImageViewer {
       // Zoom all the way out
       const zoutButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 0%',
-        srcRest: `${CONFIG.osdImages}zout_rest.png`,
-        srcGroup: `${CONFIG.osdImages}zout_grouphover.png`,
-        srcHover: `${CONFIG.osdImages}zout_hover.png`,
-        srcDown: `${CONFIG.osdImages}zout_pressed.png`,
+        srcRest: `${CONFIG.appImages}zout_rest.png`,
+        srcGroup: `${CONFIG.appImages}zout_grouphover.png`,
+        srcHover: `${CONFIG.appImages}zout_hover.png`,
+        srcDown: `${CONFIG.appImages}zout_pressed.png`,
         onClick() {
           viewer.viewport.goHome(true);
           // viewer.viewport.zoomTo(viewer.viewport.getHomeZoom());
@@ -2928,7 +2878,6 @@ class ImageViewer {
   getViewer() {
     return this.viewer;
   }
-
 }
 
 /**

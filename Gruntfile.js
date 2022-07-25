@@ -33,12 +33,12 @@ module.exports = function (grunt) {
       },
       extras: {
         src: ['vendor/openseadragon/openseadragon.min.js',
-          'vendor/openseadragon-fabricjs-overlay.js',
-          'vendor/jquery-3.5.1.min.js',
-          // Dependency required in vendor/fabric-5.2.1.js does not exist: jsdom
-          // Dependency required in vendor/openseadragon-filtering.js does not exist: openseadragon
-          'vendor/openseadragon-scalebar.js',
-          'vendor/color-picker-2.2.4.js'],
+          'vendor/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js',
+          'vendor/jquery.min.js',
+          // Dependency required in fabric.js does not exist: jsdom
+          // Dependency required in openseadragon-filtering.js does not exist: openseadragon
+          'vendor/OpenSeadragonScalebar/openseadragon-scalebar.js',
+          'vendor/color-picker/index.min.js'],
         dest: 'dist/vendor.min.js'
       }
     },
@@ -55,7 +55,7 @@ module.exports = function (grunt) {
     cssmin: {
       target: {
         files: {
-          'dist/main.min.css': ['css/*.css']
+          'dist/main.min.css': ['css/main.css', 'vendor/color-picker/index.css']
           // vendor/fontawesome needs to stay put
         }
       }
