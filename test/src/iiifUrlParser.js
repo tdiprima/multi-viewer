@@ -66,4 +66,4 @@ function parse(url) {
 
 }
 
-// module.exports = parse
+module.exports = parse;

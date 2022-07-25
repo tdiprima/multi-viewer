@@ -39,8 +39,8 @@ const isEmpty = function (value) {
     value === false || typeof value === 'undefined' || value === null || (typeof value === 'object' && isEmptyObject(value))
   )
 }
-// Uncomment while testing:
-// module.exports = isEmpty
+// TODO: Uncomment while testing:
+module.exports = isEmpty;
 
 // eslint-disable-next-line no-unused-vars
 function getAColorThatShowsUp (strokeColor) {

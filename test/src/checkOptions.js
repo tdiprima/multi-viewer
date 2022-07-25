@@ -41,8 +41,8 @@ function makeStructuresEqual (expected, actual) {
   }
 }
 
-// Uncomment lines while testing:
-// const isEmpty = require('../js/commonFunctions')
-// Uncomment line while testing:
-// module.exports = checkOptions // <- Either THIS...
-// module.exports = makeStructuresEqual // <- OR THAT.
+// TODO: Uncomment lines while testing:
+const isEmpty = require('./commonFunctions');
+// TODO: Uncomment line while testing:
+// module.exports = checkOptions; // <- Either THIS...
+module.exports = makeStructuresEqual; // <- OR THAT.

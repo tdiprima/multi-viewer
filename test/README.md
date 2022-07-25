@@ -12,7 +12,7 @@ Therefore, add...
 ### synchronizeViewers.js
 
 ```js
-const isEmpty = require('../src/commonFunctions');
+const isEmpty = require('./commonFunctions');
 module.exports = synchronizeViewers;
 ```
 

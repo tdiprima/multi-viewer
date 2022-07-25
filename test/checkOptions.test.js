@@ -1,4 +1,5 @@
 // Oct 9, 2020
+// node checkOptions.test.js
 const checkOptions = require('./src/checkOptions');
 let result;
 
