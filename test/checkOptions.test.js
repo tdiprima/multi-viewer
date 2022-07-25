@@ -1,3 +1,4 @@
+// Oct 9, 2020
 const checkOptions = require('./src/checkOptions');
 let result;
 

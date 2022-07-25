@@ -1,4 +1,5 @@
 // Uncomment module.exports=makeStructuresEqual in checkOptions.js and module.exports=isEqual in commonFunctions.js
+// Oct 14, 2020
 const makeStructuresEqual = require('./src/checkOptions');
 let result;
 

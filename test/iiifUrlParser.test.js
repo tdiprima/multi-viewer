@@ -1,6 +1,7 @@
 // JavaScript IIIF URL Parser TESTING
 // Adapted from: https://github.com/NCSU-Libraries/iiif_url/blob/master/test/iiif_url_parser_test.rb
 // IIIF Image API: https://iiif.io/api/image/3.0/
+// Feb 15, 2021
 const parse = require('./src/iiifUrlParser');
 // TODO: Uncomment `module.exports = parse` in iiifUrlParser.
 
