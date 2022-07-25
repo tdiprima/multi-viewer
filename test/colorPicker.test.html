@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width" name="viewport">
+  <!-- Oct 13, 2020 -->
   <title>Color Picker</title>
-  <link href="../css/color-picker.min.css" rel="stylesheet">
+  <link href="./src/color-picker.min.css" rel="stylesheet">
   <style>
     .color-picker\:a {
       display: none;
@@ -14,8 +15,8 @@
 <body>
 <h1>Expect color picker to work in browser</h1>
 <div><mark id="myMark">#0ff</mark></div>
-<script src="../js/vendor/color-picker.min.js"></script>
-<script src="../js/colorPicker.js"></script>
+<script src="./src/color-picker.min.js"></script>
+<script src="./src/colorPicker.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const myMark = document.getElementById('myMark');
@@ -24,6 +25,13 @@
     // Test:
     colorPicker(myMark);
   });
+  
+  // TODO: Odd... alpha didn't shut off.
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   let picker = document.getElementById('mark1');
+  //   colorPicker(picker);
+  //   // expect color picker to work in browser
+  // });
 </script>
 </body>
 </html>
