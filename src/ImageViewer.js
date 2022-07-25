@@ -201,10 +201,10 @@ class ImageViewer {
       // Zoom all the way in
       const zinButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 100%',
-        srcRest: `${CONFIG.osdImages}zin_rest.png`,
-        srcGroup: `${CONFIG.osdImages}zin_grouphover.png`,
-        srcHover: `${CONFIG.osdImages}zin_hover.png`,
-        srcDown: `${CONFIG.osdImages}zin_pressed.png`,
+        srcRest: `${CONFIG.appImages}zin_rest.png`,
+        srcGroup: `${CONFIG.appImages}zin_grouphover.png`,
+        srcHover: `${CONFIG.appImages}zin_hover.png`,
+        srcDown: `${CONFIG.appImages}zin_pressed.png`,
         onClick() {
           viewer.viewport.zoomTo(viewer.viewport.getMaxZoom());
           // viewer.viewport.zoomTo(viewer.world.getItemAt(0).imageToViewportZoom(1.0));
@@ -214,10 +214,10 @@ class ImageViewer {
       // Zoom all the way out
       const zoutButton = new OpenSeadragon.Button({
         tooltip: 'Zoom to 0%',
-        srcRest: `${CONFIG.osdImages}zout_rest.png`,
-        srcGroup: `${CONFIG.osdImages}zout_grouphover.png`,
-        srcHover: `${CONFIG.osdImages}zout_hover.png`,
-        srcDown: `${CONFIG.osdImages}zout_pressed.png`,
+        srcRest: `${CONFIG.appImages}zout_rest.png`,
+        srcGroup: `${CONFIG.appImages}zout_grouphover.png`,
+        srcHover: `${CONFIG.appImages}zout_hover.png`,
+        srcDown: `${CONFIG.appImages}zout_pressed.png`,
         onClick() {
           viewer.viewport.goHome(true);
           // viewer.viewport.zoomTo(viewer.viewport.getHomeZoom());
