@@ -74,3 +74,23 @@ npx eslint yourscript.js --fix
 ```sh
 csscomb file.css
 ```
+
+## Dependencies
+
+[color-picker](https://github.com/taufik-nurrohman/color-picker/releases/tag/v2.2.4)
+
+[fabric.js](https://github.com/fabricjs/fabric.js/releases/tag/v521)
+
+[Font Awesome](https://use.fontawesome.com/releases/v5.15.3/fontawesome-free-5.15.3-web.zip)
+
+[jQuery](https://code.jquery.com/jquery-3.5.1.min.js)
+
+
+[OpenSeadragon](https://github.com/openseadragon/openseadragon/releases/tag/v2.4.2)
+
+[OpenseadragonFabricjsOverlay](https://github.com/tdiprima/OpenseadragonFabricjsOverlay)
+
+[OpenSeadragonFiltering](https://github.com/usnistgov/OpenSeadragonFiltering)
+
+[OpenSeadragonScalebar
+](https://github.com/usnistgov/OpenSeadragonScalebar)
