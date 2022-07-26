@@ -30082,6 +30082,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       if (r === 'path') {
         return yh(n).find((a) => ns(o, a));
       }
+      if (r === 'line') {
+        return true;
+      }
       throw `Unsupported SVG shape type: ${r}`;
     }
   };
@@ -31240,6 +31243,9 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       this._initDrawingTools(true);
     }
     resize() {
+      if (!this.store) {
+        return;
+      }
       const t = this.viewer.viewport.getBounds(true);
       const e = new Rt.Rect(
         t.x - t.width / 10,
