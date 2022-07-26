@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2022-07-25 */
+/*! multi-viewer - v1.0.0 - 2022-07-26 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -759,7 +759,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('mouse:up', (evt) => {
-    annotate(evt);
+    // annotate(evt); // not comfortable with it yet.
     drawingOff(canvas, viewer);
   });
 
