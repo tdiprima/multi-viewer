@@ -33,6 +33,7 @@ class ImageViewer {
       console.error(e.message);
     }
 
+    // 2.7.7
     // let anno = OpenSeadragon.Annotorious(viewer, {
     //   locale: "auto",
     //   drawOnSingleClick: true,
@@ -45,6 +46,7 @@ class ImageViewer {
     // anno.setDrawingTool("rect");
     // anno.setDrawingEnabled(true);
 
+    // 0.6.4
     const button = document.getElementById(`btnAnnotate${viewerInfo.idx}`);
 
     button.addEventListener("click", function() {
