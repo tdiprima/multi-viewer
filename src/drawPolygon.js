@@ -70,6 +70,61 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         tag: tag
       });
       canvas.add(text);
+
+      /*
+      // ANNOTORIOUS-STYLE DIV FOR ANNOTATION
+      let left, top;
+      top = target.top + target.height + 25;
+      left = target.left + target.width + 25;
+      let myDiv = `<div class="r6o-editor r6o-arrow-top r6o-arrow-left" style="transform: translate(0px); top: ${top}px; left: ${left}px; opacity: 1;">
+      <div class="r6o-arrow"></div><!-- ARROW -->
+      <div class="r6o-editor-inner">
+        <div class="r6o-widget comment">
+          <textarea class="r6o-editable-text" placeholder="Add a comment..." disabled rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;"></textarea>
+          <div class="r6o-icon r6o-arrow-down">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" width="12">
+              <metadata>IcoFont Icons</metadata>
+              <title>simple-down</title>
+              <glyph glyph-name="simple-down" unicode="\uEAB2" horiz-advx="1000"></glyph>
+              <path fill="currentColor" d="M200 392.6l300 300 300-300-85.10000000000002-85.10000000000002-214.89999999999998 214.79999999999995-214.89999999999998-214.89999999999998-85.10000000000002 85.20000000000005z"></path>
+            </svg>
+          </div>
+        </div><!-- END comment -->
+        <div class="r6o-widget comment editable">
+          <textarea class="r6o-editable-text" placeholder="Add a reply..." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;"></textarea>
+        </div><!-- END reply -->
+        <div class="r6o-widget r6o-tag">
+          <ul class="r6o-taglist">
+            <!-- existing tags go here. -->
+            <li></li>
+          </ul><!-- END taglist -->
+          <div class="r6o-autocomplete">
+            <div><input placeholder="Add tag..."></div>
+            <ul><!-- tags go here --></ul>
+          </div><!-- END add tag -->
+        </div><!-- END tag section -->
+        <div class="r6o-footer r6o-draggable">
+          <button class="r6o-btn left delete-annotation" title="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12">
+              <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+            </svg>
+          </button><!-- DELETE button -->
+          <button class="r6o-btn outline">Cancel</button><!-- CANCEL button -->
+          <button class="r6o-btn">OK</button><!-- OK button -->
+        </div><!-- END footer -->
+      </div><!-- END editor-inner -->
+    </div><!-- END editor -->`;
+      try {
+        const myDiv1 = e('div');
+        myDiv1.style.left = `${left}px`;
+        myDiv1.style.top = `${top}px`;
+        myDiv1.innerHTML = myDiv;
+        document.body.appendChild(myDiv1);
+
+      } catch (e) {
+        console.log(`%c${e.message}`, "color: #ff00cc;");
+      }
+      */
     }
   }
 

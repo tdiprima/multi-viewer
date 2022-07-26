@@ -33,6 +33,20 @@ class ImageViewer {
       console.error(e.message);
     }
 
+    /*
+    let anno = OpenSeadragon.Annotorious(viewer, {
+      locale: 'auto',
+      drawOnSingleClick: true,
+      allowEmpty: true
+    });
+    anno.setAuthInfo({
+      id: 'http://www.example.com/tdiprima',
+      displayName: 'tdiprima'
+    });
+    anno.setDrawingTool('rect');
+    anno.setDrawingEnabled(true);
+    */
+
     const button = document.getElementById(`btnAnnotate${viewerInfo.idx}`);
 
     button.addEventListener("click", function() {

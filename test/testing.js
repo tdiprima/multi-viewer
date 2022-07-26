@@ -1,6 +1,3 @@
-let appImages = 'images/';
-// let appImages = '/multi-viewer/images/';
-
 let baseUrl;
 let layer;
 
