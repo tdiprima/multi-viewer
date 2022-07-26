@@ -126,7 +126,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
               htm += `<button id="btnDraw${idx}" class="annotationBtn" title="Draw"><i class="fas fa-pencil-alt"></i></button>
 <button id="btnEdit${idx}" class="annotationBtn" title="Edit"><i class="fas fa-draw-polygon"></i></button>
-<button id="btnAnnotate${idx}" class="annotationBtn" title="Add Annotation"><i class="fas fa-box-tissue"></i></button>
+<button id="btnAnnotate${idx}" class="annotationBtn" title="Add Annotation"><i class="fas fa-sticky-note"></i></button>
 <button id="btnGrid${idx}" class="annotationBtn" title="Grid"><i class="fas fa-border-all"></i></button>
 <button id="btnGridMarker${idx}" class="annotationBtn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>
 <button id="btnRuler${idx}" class="annotationBtn" title="Measure in microns"><i class="fas fa-ruler"></i></button>
