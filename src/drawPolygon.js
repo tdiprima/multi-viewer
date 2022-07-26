@@ -72,7 +72,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
       canvas.add(text);
 
       /*
-      // ANNOTORIOUS-STYLE DIV FOR ANNOTATION
+      // Try to re-create/simplify annotorious-style div for annotation
       let left, top;
       top = target.top + target.height + 25;
       left = target.left + target.width + 25;
