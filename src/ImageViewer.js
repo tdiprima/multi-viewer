@@ -47,18 +47,15 @@ class ImageViewer {
     // anno.setDrawingEnabled(true);
 
     // 0.6.4
-    const button = document.getElementById(`btnAnnotate${viewerInfo.idx}`);
-
-    button.addEventListener("click", function() {
-      anno.activateSelector();
-      return false;
-    });
-
+    // const button = document.getElementById(`btnAnnotate${viewerInfo.idx}`);
+    // button.addEventListener("click", function() {
+    //   anno.activateSelector();
+    //   return false;
+    // });
     // make annotatable by Annotorious library
-    anno.makeAnnotatable(viewer);
+    // anno.makeAnnotatable(viewer);
 
     let drawer;
-
     function addInfo(item) {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item);

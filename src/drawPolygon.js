@@ -29,7 +29,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('mouse:up', (evt) => {
-    annotate(evt); // TODO: wip
+    // annotate(evt); // TODO: wip
     drawingOff(canvas, viewer);
   });
 
