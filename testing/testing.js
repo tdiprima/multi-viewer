@@ -1,14 +1,11 @@
-let appImages = 'images/';
-// let appImages = '/multi-viewer/images/';
-
 let baseUrl;
 let layer;
 
-baseUrl = "//openseadragon.github.io/example-images/highsmith/highsmith.dzi";
-// baseUrl = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
+layer = '//openseadragon.github.io/example-images/duomo/duomo.dzi';
+baseUrl = '//openseadragon.github.io/example-images/highsmith/highsmith.dzi';
 
-layer = "//openseadragon.github.io/example-images/duomo/duomo.dzi";
-// layer = "./img/smiley.png";
+// baseUrl = "http://openseadragon.github.io/example-images/duomo/duomo.dzi";
+// baseUrl = "./img/smiley.png";
 // layer = "./img/transparent.png";
 // layer = "./img/default.png";
 

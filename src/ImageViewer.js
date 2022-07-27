@@ -33,6 +33,30 @@ class ImageViewer {
       console.error(e.message);
     }
 
+    // 2.7.7
+    // let anno = OpenSeadragon.Annotorious(viewer, {
+    //   locale: "auto",
+    //   drawOnSingleClick: true,
+    //   allowEmpty: true
+    // });
+    // anno.setAuthInfo({
+    //   id: "http://www.example.com/tdiprima",
+    //   displayName: "tdiprima"
+    // });
+    // anno.setDrawingTool("rect");
+    // anno.setDrawingEnabled(true);
+
+    // 0.6.4
+    const button = document.getElementById(`btnAnnotate${viewerInfo.idx}`);
+
+    button.addEventListener("click", function() {
+      anno.activateSelector();
+      return false;
+    });
+
+    // make annotatable by Annotorious library
+    anno.makeAnnotatable(viewer);
+
     let drawer;
 
     function addInfo(item) {
