@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THREE.js</title>
+  <!-- https://threejs.org/ -->
+  <style>
+    body { margin: 0; }
+    /* three.js adds a canvas to the document body */
+    canvas { width: 100%; height: 100% }
+  </style>
+</head>
+<body>
+<!-- bare minimum three.js code -->
+<script src="https://threejs.org/build/three.js"></script>
+<script>
+  // Create scene
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Create cube, add to scene
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  // cube/camera coords = (0,0,0). So, move camera out a bit.
+  camera.position.z = 5;
+
+  // Render scene
+  function animate() {
+    requestAnimationFrame(animate);
+    // you can add cube.rotation here
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+<!-- three.js adds webgl code to your page -->
+</body>
+</html>
