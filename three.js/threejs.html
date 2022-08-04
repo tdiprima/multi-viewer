@@ -5,30 +5,35 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THREE.js</title>
-  <style>
+  <link rel="stylesheet" href="main.css">
+  <!-- <style>
     body {
       margin: 0;
       padding: 0;
       background: #002347;
     }
 
-    /* #container {
+    #container {
       position: absolute;
-    } */
+    }
 
     canvas {
       width: 100%;
       height: 100%;
     }
-  </style>
+  </style> -->
 </head>
 <body>
 
+<div id="container"></div>
 <!-- <canvas id="container"></canvas> -->
 
-<script src="https://threejs.org/build/three.js"></script>
+<script src="three.js"></script>
 
 <script>
+  console.clear();
+  console.log("%cthree.js version", "color: #ccff00;", THREE.REVISION);
+
   let geometry;
   let material;
   let renderer;
