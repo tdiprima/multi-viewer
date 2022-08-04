@@ -4,7 +4,6 @@
   "description": "Multiple synchronized OpenSeadragon viewers",
   "main": "Gruntfile.js",
   "author": "Tammy DiPrima",
-  "license": "BSD-3-Clause",
   "scripts": {
     "lint": "eslint --debug ./",
     "lint:write": "eslint --debug ./ --fix",
