@@ -6,10 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THREE.js</title>
   <link rel="stylesheet" href="main.css">
+  <!-- <link rel="stylesheet" href="style1.css"> -->
 </head>
 <body>
 
-<div id="container"></div>
+<!-- <div id="container"></div> -->
 <!-- <canvas id="container"></canvas> -->
 
 <!-- <script src="three.js"></script> -->
@@ -30,6 +31,7 @@
   console.log("%cthree.js version", "color: #ccff00;", THREE.REVISION);
 
   import * as THREE from 'three';
+  import {OrbitControls} from './jsm/controls/OrbitControls.js';
 
   let geometry;
   let material;
@@ -50,6 +52,8 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement); // without container
 
+  let controls = new OrbitControls(camera, renderer.domElement);
+
   function randomPosition() {
     return Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
   }
@@ -67,9 +71,10 @@
   }
 
   // addCube();
-  Array(count).fill().forEach(addCube);
+  // Array(count).fill().forEach(addCube);
 
   function addStar() {
+    // TODO: Use with canvas, WebGLRenderer({...}), and style1.css.
     geometry = new THREE.SphereGeometry(0.25, 24, 24);
     material = new THREE.MeshStandardMaterial({color: 0xffffff});
     let star = new THREE.Mesh(geometry, material);
@@ -97,7 +102,7 @@
 
   }
 
-  // addParticles();
+  addParticles();
 
   camera.position.z = 5;
 
