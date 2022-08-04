@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #002347;
+}
+
+#container {
+  position: absolute;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
