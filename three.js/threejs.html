@@ -12,14 +12,19 @@
       background: #002347;
     }
 
-    #container {
+    /* #container {
       position: absolute;
+    } */
+
+    canvas {
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
 <body>
 
-<canvas id="container"></canvas>
+<!-- <canvas id="container"></canvas> -->
 
 <script src="https://threejs.org/build/three.js"></script>
 
@@ -27,37 +32,35 @@
   let geometry;
   let material;
   let renderer;
+  const count = 1000;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  // renderer = new THREE.WebGLRenderer(); // cube
+  renderer = new THREE.WebGLRenderer();
 
-  renderer = new THREE.WebGLRenderer({
-    canvas: document.querySelector("#container"),
-    antialias: true,
-    alpha: true,
-  });
+  // renderer = new THREE.WebGLRenderer({
+  //   canvas: document.querySelector("#container"),
+  //   antialias: true,
+  //   alpha: true,
+  // });
 
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // document.body.appendChild(renderer.domElement); // without container
-
-  camera.position.z = 5;
-
-  renderer.render(scene, camera);
+  document.body.appendChild(renderer.domElement); // without container
 
   function addCube() {
     geometry = new THREE.BoxGeometry(1, 1, 1);
-    material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    material = new THREE.MeshBasicMaterial({color: 0x00ff00});
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
   }
+
   // addCube();
 
   function addStar() {
-    let geometry = new THREE.SphereGeometry(0.25, 24, 24);
-    let material = new THREE.MeshStandardMaterial({color: 0xffffff});
-    let star = new THREE.Mesh(geometry, material);
+    geometry = new THREE.SphereGeometry(0.25, 24, 24);
+    material = new THREE.MeshStandardMaterial({color: 0xffffff});
+    star = new THREE.Mesh(geometry, material);
 
     // generate position values
     let [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
@@ -65,12 +68,35 @@
     star.position.set(x, y, z);
     scene.add(star);
   }
-  Array(1000).fill().forEach(addStar);
+
+  // Array(count).fill().forEach(addStar);
+
+  function addParticles() {
+    let particle = new THREE.Object3D();
+    scene.add(particle);
+
+    let geometry = new THREE.TetrahedronGeometry(2, 0);
+    let material = new THREE.MeshNormalMaterial();
+
+    for (let i = 0; i < count; i++) {
+      let mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      mesh.position.multiplyScalar(90 + Math.random() * 700);
+      mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+      particle.add(mesh);
+    }
+
+  }
+
+  addParticles();
+
+  camera.position.z = 5;
 
   function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
   }
+
   animate();
 </script>
 </body>
