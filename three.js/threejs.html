@@ -6,12 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THREE.js</title>
   <style>
-    body { margin: 0; }
-    canvas { width: 100%; height: 100% }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #002347;
+    }
+
+    #container {
+      position: absolute;
+    }
   </style>
 </head>
 <body>
+
+<canvas id="container"></canvas>
+
 <script src="https://threejs.org/build/three.js"></script>
+
 <script>
   let geometry;
   let material;
@@ -19,13 +30,21 @@
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  // renderer = new THREE.WebGLRenderer(); // cube
 
-  renderer = new THREE.WebGLRenderer(); // cube
+  renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector("#container"),
+    antialias: true,
+    alpha: true,
+  });
+
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  // document.body.appendChild(renderer.domElement); // without container
 
   camera.position.z = 5;
+
+  renderer.render(scene, camera);
 
   function addCube() {
     geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -33,7 +52,20 @@
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
   }
-  addCube();
+  // addCube();
+
+  function addStar() {
+    let geometry = new THREE.SphereGeometry(0.25, 24, 24);
+    let material = new THREE.MeshStandardMaterial({color: 0xffffff});
+    let star = new THREE.Mesh(geometry, material);
+
+    // generate position values
+    let [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+
+    star.position.set(x, y, z);
+    scene.add(star);
+  }
+  Array(1000).fill().forEach(addStar);
 
   function animate() {
     requestAnimationFrame(animate);
