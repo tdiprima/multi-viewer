@@ -48,23 +48,30 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement); // without container
 
+  function randomPosition() {
+    return Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+  }
+
   function addCube() {
-    geometry = new THREE.BoxGeometry(1, 1, 1);
+    // geometry = new THREE.BoxGeometry(1, 1, 1);
+    geometry = new THREE.BoxGeometry(.05, .05, 1);
     material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-    cube = new THREE.Mesh(geometry, material);
+    let cube = new THREE.Mesh(geometry, material);
+
+    let [x, y, z] = randomPosition();
+    cube.position.set(x, y, z);
+
     scene.add(cube);
   }
 
   // addCube();
+  Array(count).fill().forEach(addCube);
 
   function addStar() {
     geometry = new THREE.SphereGeometry(0.25, 24, 24);
     material = new THREE.MeshStandardMaterial({color: 0xffffff});
-    star = new THREE.Mesh(geometry, material);
-
-    // generate position values
-    let [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
-
+    let star = new THREE.Mesh(geometry, material);
+    let [x, y, z] = randomPosition();
     star.position.set(x, y, z);
     scene.add(star);
   }
@@ -88,7 +95,7 @@
 
   }
 
-  addParticles();
+  // addParticles();
 
   camera.position.z = 5;
 
