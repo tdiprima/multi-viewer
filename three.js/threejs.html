@@ -5,12 +5,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THREE.js</title>
-  <link rel="stylesheet" href="main.css">
-  <!-- <link rel="stylesheet" href="style1.css"> -->
+  <link rel="stylesheet" href="./css/main.css">
+  <!-- <link rel="stylesheet" href="./css/style1.css"> -->
 </head>
 <body>
 
-<!-- <div id="container"></div> -->
 <!-- <canvas id="container"></canvas> -->
 
 <!-- <script src="three.js"></script> -->
@@ -21,7 +20,7 @@
 <script type="importmap">
   {
     "imports": {
-      "three": "./three.module.js"
+      "three": "./build/three.module.js"
     }
   }
 </script>
@@ -32,16 +31,23 @@
 
   import * as THREE from 'three';
   import {OrbitControls} from './jsm/controls/OrbitControls.js';
+  import {GUI} from './jsm/libs/lil-gui.module.min.js';
 
   let geometry;
   let material;
   let renderer;
-  const count = 1000;
+  let gui = new GUI();
+  const api = {
+    count: 1000,
+    // max: 5000
+    max: 1000000
+  };
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  renderer = new THREE.WebGLRenderer();
+  camera.position.z = 5;
 
+  renderer = new THREE.WebGLRenderer();
   // renderer = new THREE.WebGLRenderer({
   //   canvas: document.querySelector("#container"),
   //   antialias: true,
@@ -71,7 +77,7 @@
   }
 
   // addCube();
-  // Array(count).fill().forEach(addCube);
+  // Array(api.count).fill().forEach(addCube);
 
   function addStar() {
     // TODO: Use with canvas, WebGLRenderer({...}), and style1.css.
@@ -83,7 +89,7 @@
     scene.add(star);
   }
 
-  // Array(count).fill().forEach(addStar);
+  // Array(api.count).fill().forEach(addStar);
 
   function addParticles() {
     let particle = new THREE.Object3D();
@@ -92,7 +98,7 @@
     let geometry = new THREE.TetrahedronGeometry(2, 0);
     let material = new THREE.MeshNormalMaterial();
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < api.count; i++) {
       let mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
       mesh.position.multiplyScalar(90 + Math.random() * 700);
@@ -102,9 +108,25 @@
 
   }
 
-  addParticles();
+  // addParticles();
 
-  camera.position.z = 5;
+  // camera.position.z = 5;
+
+  function draw() {
+    scene.clear();
+    geometry = new THREE.BoxGeometry(.5, .5, 1);
+    material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    for (let i = 0; i < api.count; i++) {
+      let mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      mesh.position.multiplyScalar(90 + Math.random() * 700);
+      mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+      scene.add(mesh);
+    }
+  }
+  draw();
+
+  gui.add(api, 'count', 1, api.max).step(1).onChange(draw);
 
   function animate() {
     requestAnimationFrame(animate);
