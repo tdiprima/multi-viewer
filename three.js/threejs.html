@@ -10,6 +10,7 @@
 </head>
 <body>
 
+<div id="container"></div>
 <!-- <canvas id="container"></canvas> -->
 
 <!-- <script src="three.js"></script> -->
@@ -32,6 +33,7 @@
   import * as THREE from 'three';
   import {OrbitControls} from './jsm/controls/OrbitControls.js';
   import {GUI} from './jsm/libs/lil-gui.module.min.js';
+  import Stats from './jsm/libs/stats.module.js';
 
   let geometry;
   let material;
@@ -39,8 +41,8 @@
   let gui = new GUI();
   const api = {
     count: 1000,
-    // max: 5000
-    max: 1000000
+    max: 5000
+    // max: 1000000
   };
 
   const scene = new THREE.Scene();
@@ -56,9 +58,21 @@
 
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement); // without container
+  // document.body.appendChild(renderer.domElement); // without container
+
+  let container = document.getElementById('container');
+  container.appendChild(renderer.domElement);
 
   let controls = new OrbitControls(camera, renderer.domElement);
+
+  let stats = new Stats();
+  stats.showPanel(0); // FPS Frames rendered in the last second. The higher the number the better.
+
+  // 1: MS Milliseconds needed to render a frame. The lower the number the better.
+  // 2: MB MBytes of allocated memory.
+  // stats.showPanel(1);
+
+  container.appendChild(stats.dom);
 
   function randomPosition() {
     return Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
@@ -130,6 +144,8 @@
 
   function animate() {
     requestAnimationFrame(animate);
+    controls.update();
+    stats.update();
     renderer.render(scene, camera);
   }
 
