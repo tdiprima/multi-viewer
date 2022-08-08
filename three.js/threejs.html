@@ -79,8 +79,7 @@
   }
 
   function addCube() {
-    // geometry = new THREE.BoxGeometry(1, 1, 1);
-    geometry = new THREE.BoxGeometry(.05, .05, 1);
+    geometry = new THREE.BoxBufferGeometry(.05, .05, 1);
     material = new THREE.MeshBasicMaterial({color: 0x00ff00});
     let cube = new THREE.Mesh(geometry, material);
 
