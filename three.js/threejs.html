@@ -127,7 +127,7 @@
 
   function draw() {
     scene.clear();
-    geometry = new THREE.BoxGeometry(.5, .5, 1);
+    geometry = new THREE.BoxBufferGeometry(.5, .5, 1);
     material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     for (let i = 0; i < api.count; i++) {
       let mesh = new THREE.Mesh(geometry, material);
