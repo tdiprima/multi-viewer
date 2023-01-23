@@ -1,6 +1,6 @@
 Part of the "images" array parameter passed to "pageSetup.js", contains <mark>**"colorscheme":**</mark> and then the following JSON.  I added formatting to make it clear:
 
-```json5
+```jsonld
 {
     @type: "ColorScheme", 
     name: "Default Color Scheme", 
@@ -96,7 +96,7 @@ Part of the "images" array parameter passed to "pageSetup.js", contains <mark>**
 
 <mark>**"colorspectrum"**</mark> identifies the probabilities
 
-```json5
+```jsonld
 {
     color: "rgba(44, 131, 186, 255)", 
     high: 99, 
