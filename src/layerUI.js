@@ -239,6 +239,11 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   }
 }
 
+/**
+ * If the input is a string, return it.
+ * If the input is an object, return the url property
+ * from the location object within the layer object.
+ */
 function _extractLocation(layer) {
   let loc;
   if (typeof layer.location === 'string') {
@@ -251,6 +256,10 @@ function _extractLocation(layer) {
   return loc;
 }
 
+/**
+ * Parse url for the feature name
+ * whilst we wait for that information to be available.
+ */
 function getPreferredLabel(layer) {
   let featureName;
   const loc = _extractLocation(layer);
@@ -266,6 +275,7 @@ function getPreferredLabel(layer) {
   }
 
   if (featureName.includes(".")) {
+    // Final
     featureName = featureName.substring(0, featureName.indexOf("."));
   }
 
