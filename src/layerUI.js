@@ -275,7 +275,7 @@ function getPreferredLabel(layer) {
   }
 
   if (featureName.includes(".")) {
-    // Final
+    // Final name
     featureName = featureName.substring(0, featureName.indexOf("."));
   }
 
