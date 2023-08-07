@@ -294,7 +294,8 @@ const scaleToRgb = num => {
  *
  * @type {string[]}
  */
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+// const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap'];
 
 /**
  * State
