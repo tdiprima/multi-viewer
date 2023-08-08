@@ -74,7 +74,6 @@ function createPopup(uniqueId, paletteBtn, title) {
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
   // const title = `${title} color levels`;
-  // return createDraggableDiv(widgetId, title, rect.left, rect.top);
   return createDraggableDiv(widgetId, title, rect.left, rect.top);
 }
 
