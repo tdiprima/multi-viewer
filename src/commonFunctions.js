@@ -9,60 +9,68 @@
  * @param {object} [thresh] - Class thresholding; e.g. { "val": 128, "rgba": [ 255, 255, 0, 255 ], "classId": 1 }
  */
 function setFilter(layers, viewer, range, thresh) {
-  let filterOpts = [];
-
   if (viewer.world) {
+    // let start = performance.now();
+    // let caller = setFilter.caller;
+    // console.log('caller', caller);
+
     const itemCount = viewer.world.getItemCount();
+    let filterOpts = [];
 
     // One does not color just the affected layer; you have to do all of them.
     for (let i = 0; i < itemCount; i++) {
       if (i === 0) continue; // Skip base
 
       const tiledImage = viewer.world.getItemAt(i);
-      let processors;
 
       if (!isEmpty(range)) {
-        // in-slider = Cyan; out-slider = Purple Heart
-        processors = colorFilter.prototype.PROBABILITY(
-          range, range.type === 'inside' ? [0, 255, 255, 255] : [74, 0, 180, 255]
-        );
-      } else {
-        switch (STATE.renderType) {
-          case 'byProbability':
-            // Use color spectrum
-            processors = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum);
-            break;
-          case 'byClass':
-            // Use color scheme
-            processors = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
-            break;
-          case 'byHeatmap':
-            processors = thresh ? colorFilter.prototype.THRESHOLDING(thresh) : colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
-            break;
-          case 'byThreshold':
-            processors = colorFilter.prototype.THRESHOLDING(thresh);
-            break;
-          default:
-            processors = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
-            break;
+        // USE RANGE VALUES
+        let rgba;
+        if (range.type === 'inside') {
+          rgba = [0, 255, 255, 255]; // #00ffff (Cyan)
+        } else {
+          rgba = [74, 0, 180, 255]; // #4a00b4 (Purple Heart)
         }
-
-        if (STATE.outline) {
-          // Outline in blue.  Color can not have green in it.
-          processors = colorFilter.prototype.OUTLINE([0, 0, 255, 255]);
-        }
-      }
-
-      if (processors) {
         filterOpts.push({
           items: tiledImage,
-          processors: processors
+          processors: colorFilter.prototype.PROBABILITY(range, rgba)
+        });
+      } else if (STATE.outline) {
+        // Outline in blue.  Color can not have green in it.
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.OUTLINE([0, 0, 255, 255]),
+        });
+      } else if (STATE.renderType === 'byProbability') {
+        // Use color spectrum
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum),
+        });
+      } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
+        let processor;
+        if (thresh) {
+          // Use threshold
+          processor = colorFilter.prototype.THRESHOLDING(thresh);
+        } else {
+          // Use color scheme
+          processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
+        }
+        filterOpts.push({
+          items: tiledImage,
+          processors: processor
+        });
+      } else if (STATE.renderType === 'byThreshold') {
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.THRESHOLDING(thresh)
         });
       }
     }
 
     if (!isEmpty(filterOpts)) {
       try {
+        // Set all layers at once (required)
         viewer.setFilterOptions({
           filters: filterOpts,
           loadMode: 'sync'
@@ -71,6 +79,11 @@ function setFilter(layers, viewer, range, thresh) {
         console.error(e.message);
       }
     }
+
+    // let end = performance.now();
+    // console.log("start:", start, "end:", end);
+    // console.log(`exec: ${end - start}`);
+
   } else {
     console.warn('No viewer.world');
   }
