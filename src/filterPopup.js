@@ -95,7 +95,7 @@ function setChecked(colorscheme) {
 }
 
 function createThresh(div, layers, viewer, colorPicker, classId) {
-  const val = '1'; // 128
+  const val = '1'; // Initial value
   let color;
   if (colorPicker) {
     color = colorToArray(colorPicker.style.backgroundColor);
@@ -103,7 +103,7 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
       color.push(255);
     }
   } else {
-    color = [126, 1, 0, 255];
+    color = [126, 1, 0, 255]; // Default thresh color maroon
   }
 
   // slider value
