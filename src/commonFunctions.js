@@ -11,8 +11,7 @@
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
     // let start = performance.now();
-    // let caller = setFilter.caller;
-    // console.log('caller', caller);
+    // console.log(setFilter.caller);
 
     const itemCount = viewer.world.getItemCount();
     let filterOpts = [];
