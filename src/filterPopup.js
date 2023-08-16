@@ -126,17 +126,16 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
   });
 
   div.appendChild(e('div', {}, [number, range]));
-  number.addEventListener('input', function() {
-    range.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
-    // console.log('number input');
-  });
 
-  range.addEventListener('input', function() {
-    number.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
-    // console.log('range input');
-  });
+  function createInputHandler(updateElement) {
+    return function() {
+      updateElement.value = this.value;
+      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
+    };
+  }
+
+  number.addEventListener('input', createInputHandler(range));
+  range.addEventListener('input', createInputHandler(number));
 }
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer) {
