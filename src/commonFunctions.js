@@ -23,7 +23,7 @@ function setFilter(layers, viewer, range, thresh) {
       const tiledImage = viewer.world.getItemAt(i);
 
       if (!isEmpty(range)) {
-        // USE RANGE VALUES
+        // Use range values
         let rgba;
         if (range.type === 'inside') {
           rgba = [0, 255, 255, 255]; // #00ffff (Cyan)
