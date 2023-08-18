@@ -55,8 +55,6 @@ a:link {
   -webkit-transition: background-color .2s linear;
        -o-transition: background-color .2s linear;
           transition: background-color .2s linear;
-  /* -webkit-animation: 1s ease-out 0s 1 slide-in-from-top; */
-          /* animation: 1s ease-out 0s 1 slide-in-from-top; */
 
   background-color: var(--text-light);
 }
@@ -66,27 +64,6 @@ a:link {
   color: var(--text-light);
   background-color: var(--text-dark);;
 }
-
-/* @-webkit-keyframes slide-in-from-top {
-  0% {
-    -webkit-transform: translateY(-100%);
-    transform: translateY(-100%);
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
-@keyframes slide-in-from-top {
-  0% {
-    -webkit-transform: translateY(-100%);
-    transform: translateY(-100%);
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-} */
 
 .divSquare {
   float: left;
@@ -116,14 +93,6 @@ a:link {
   display: table-cell;
   vertical-align: middle;
 }
-
-/* scroll interferes with visibility slider... */
-/* .scroll {
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 200px;
-  height: 475px;
-} */
 
 .hide {
   z-index: 10;
@@ -250,7 +219,6 @@ a:link {
   border: 3px dotted var(--highlight);
 }
 
-/* css transition: .block, .color-fade */
 .block {
   display: block;
   width: 90px;
