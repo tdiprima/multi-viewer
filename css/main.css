@@ -11,15 +11,6 @@
   --rgba-on: rgba(255, 255, 255, 1);
   --grad: #d7e1ec;
   --shadow: #899599;
-  /* just hypothetical values */
-  --a: 1;
-  --b: 2;
-  --a1: 1;
-  --b1: 2;
-  --c: 2;
-  --max: 0;
-  --min: 0;
-  --dif: 3;
 }
 
 .theme--default {
@@ -60,11 +51,9 @@ a:link {
 
 .navbar {
   overflow: hidden;
-
   -webkit-transition: background-color .2s linear;
-       -o-transition: background-color .2s linear;
-          transition: background-color .2s linear;
-
+  -o-transition: background-color .2s linear;
+  transition: background-color .2s linear;
   background-color: var(--text-light);
 }
 
@@ -132,6 +121,7 @@ a:link {
 
 *[draggable=true] {
   cursor: move;
+  -webkit-user-drag: element;
 }
 
 .fas:focus,
@@ -174,17 +164,17 @@ a:link {
   cursor: pointer;
   color: var(--text-light);
   border: #ddd;
-  background:   -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(74%, var(--grad)));
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(74%, var(--grad)));
   background: -o-linear-gradient(top, #fff 0%, var(--grad) 74%);
-  background:    linear-gradient(to bottom, #fff 0%, var(--grad) 74%);
+  background: linear-gradient(to bottom, #fff 0%, var(--grad) 74%);
   background-color: #fff;
 }
 
 .annotationBtn:hover {
   color: var(--highlight);
-  background:   -webkit-gradient(linear, left top, left bottom, from(var(--grad)), color-stop(74%, #fff));
+  background: -webkit-gradient(linear, left top, left bottom, from(var(--grad)), color-stop(74%, #fff));
   background: -o-linear-gradient(top, var(--grad) 0%, #fff 74%);
-  background:    linear-gradient(to bottom, var(--grad) 0%, #fff 74%);
+  background: linear-gradient(to bottom, var(--grad) 0%, #fff 74%);
 }
 
 .layer {
@@ -198,9 +188,9 @@ a:link {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--text-light);
-  background:   -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), to(var(--grad)));
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), to(var(--grad)));
   background: -o-linear-gradient(top, #ededed 5%, var(--grad) 100%);
-  background:    linear-gradient(to bottom, #ededed 5%, var(--grad) 100%);
+  background: linear-gradient(to bottom, #ededed 5%, var(--grad) 100%);
   background-color: #ededed;
   -webkit-box-shadow: 3px 4px 0 0 var(--shadow);
   box-shadow: 3px 4px 0 0 var(--shadow);
@@ -210,9 +200,9 @@ a:link {
 
 .layer:hover {
   color: var(--highlight);
-  background:   -webkit-gradient(linear, left top, left bottom, color-stop(5%, var(--grad)), to(#ededed));
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, var(--grad)), to(#ededed));
   background: -o-linear-gradient(top, var(--grad) 5%, #ededed 100%);
-  background:    linear-gradient(to bottom, var(--grad) 5%, #ededed 100%);
+  background: linear-gradient(to bottom, var(--grad) 5%, #ededed 100%);
   background-color: var(--grad);
 }
 
@@ -226,36 +216,34 @@ a:link {
   border: 3px dotted var(--highlight);
 }
 
+/* css transition: .block, .color-fade */
 .block {
   display: block;
   width: 90px;
   padding: .5em 1em;
-
   cursor: move;
   -webkit-transition: background-color 1000ms linear;
-       -o-transition: background-color 1000ms linear;
-          transition: background-color 1000ms linear;
+  -o-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
   -ms-transform: skew(-10deg);
-      transform: skew(-10deg);
+  transform: skew(-10deg);
 }
 
 .color-fade {
   width: 90px;
   padding: .5em 1em;
-
   cursor: move;
   -webkit-transition: background-color 1000ms linear;
-       -o-transition: background-color 1000ms linear;
-          transition: background-color 1000ms linear;
+  -o-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
   -ms-transform: skew(-10deg);
-      transform: skew(-10deg);
-
+  transform: skew(-10deg);
   color: #ccc;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: var(--highlight);
   -webkit-box-shadow: 3px 4px 0 0 var(--shadow);
-          box-shadow: 3px 4px 0 0 var(--shadow);
+  box-shadow: 3px 4px 0 0 var(--shadow);
   text-shadow: 0 1px 0 #e1e2ed;
 }
 
@@ -269,7 +257,7 @@ a:link {
   border-radius: 7px;
   background-color: var(--bg-light);
   -webkit-box-shadow: 5px 5px 5px var(--text-light);
-          box-shadow: 5px 5px 5px var(--text-light);
+  box-shadow: 5px 5px 5px var(--text-light);
 }
 
 .popupHeader {
@@ -298,7 +286,7 @@ a:link {
   border-radius: 7px;
   background-color: rgba(249, 249, 249, .5);
   -webkit-box-shadow: 5px 5px 5px var(--text-light);
-          box-shadow: 5px 5px 5px var(--text-light);
+  box-shadow: 5px 5px 5px var(--text-light);
 }
 
 .mag-content a {
@@ -334,9 +322,9 @@ input {
   background: -webkit-gradient(linear, left bottom, left top, color-stop(1em, var(--no-frills)), color-stop(0, transparent));
   background: -o-linear-gradient(bottom, var(--no-frills) 1em, transparent 0);
   background: linear-gradient(0deg, var(--no-frills) 1em, transparent 0);
-
   --dif: calc(var(--max) - var(--min));
-  grid-template: repeat(2, max-content) 1em/1fr 1fr;
+  grid-template-rows: repeat(2, max-content) 1em;
+  grid-template-columns: 1fr 1fr;
 }
 
 .dualSlider::before,
@@ -378,8 +366,8 @@ input {
 .dualSlider input[type='range']::-webkit-slider-thumb,
 .dualSlider input[type='range'] {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .dualSlider input[type='range']::-webkit-slider-runnable-track {
@@ -470,8 +458,8 @@ output::after {
 .dualSlider1 input[type='range']::-webkit-slider-thumb,
 .dualSlider1 input[type='range'] {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .dualSlider1 input[type='range']::-webkit-slider-runnable-track {
@@ -517,12 +505,10 @@ output::after {
 .singleSlider {
   height: 12px;
   opacity: 2;
-
   background: var(--rgb-on);
-  background:   -webkit-gradient(linear, left top, right top, from(var(--rgba-on)), color-stop(35%, var(--highlight)), to(var(--text-light)));
+  background: -webkit-gradient(linear, left top, right top, from(var(--rgba-on)), color-stop(35%, var(--highlight)), to(var(--text-light)));
   background: -o-linear-gradient(left, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background:    linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-
+  background: linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
   -webkit-appearance: none;
 }
 
@@ -531,10 +517,9 @@ output::after {
   height: 12px;
   cursor: pointer;
   background: var(--text-dark);
-
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .singleSlider:hover {
@@ -560,7 +545,7 @@ output::after {
   padding: 5px;
   content: attr(data-tooltip);
   -ms-transform: translateX(-15%);
-      transform: translateX(-15%);
+  transform: translateX(-15%);
   text-align: center;
   border-radius: 3px;
   background-color: var(--tooltip);
