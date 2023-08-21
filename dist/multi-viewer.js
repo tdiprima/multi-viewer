@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2022-07-26 */
+/*! multi-viewer - v1.0.0 - 2023-08-21 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -6,73 +6,65 @@
  *
  * @param {Array} layers - Layers (images) to be displayed in viewer
  * @param {object} viewer - OpenSeadragon viewer
- * @param {object} [range]
- * @param {object} [thresh] - Thresholding
- * @param {number} [thresh.val] - From user input
- * @param {Array<number>} [thresh.rgba] - example: [126, 1, 0, 255]
+ * @param {object} [range] - For inside/outside; e.g. { "min": 70, "max": 170, "type": "inside" }
+ * @param {object} [thresh] - Class thresholding; e.g. { "val": 128, "rgba": [ 255, 255, 0, 255 ], "classId": 1 }
  */
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
     // let start = performance.now();
-    // let caller = setFilter.caller;
-    // console.log('caller', caller);
+    // console.log(setFilter.caller);
 
     const itemCount = viewer.world.getItemCount();
     let filterOpts = [];
 
-    // Because one does not simply color the affected layer.
-    // No. You have to do all of them.
+    // One does not color just the affected layer; you have to do all of them.
     for (let i = 0; i < itemCount; i++) {
+      if (i === 0) continue; // Skip base
+
       const tiledImage = viewer.world.getItemAt(i);
-      // Skip base
-      if (i > 0) {
-        if (!isEmpty(range)) {
-          // USE RANGE VALUES
-          let rgba;
-          if (range.type === 'inside') {
-            // Color #00FFFF is cyan
-            rgba = [0, 255, 255, 255];
-          } else {
-            // Color #4A00B4 is Purple Heart
-            rgba = [74, 0, 180, 255];
-          }
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.PROBABILITY(range, rgba)
-          });
-        } else if (STATE.outline) {
-          // OUTLINE POLYS
-          // NOTE: Color can not have green in it.
-          // Color #0000FF is blue
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.OUTLINE([0, 0, 255, 255]),
-          });
-        } else if (STATE.renderType === 'byProbability') {
-          // USE COLOR SPECTRUM
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum),
-          });
-        } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
-          let processor;
-          if (thresh) {
-            // USE THRESHOLD
-            processor = colorFilter.prototype.THRESHOLDING(thresh);
-          } else {
-            // USE COLOR SCHEME
-            processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
-          }
-          filterOpts.push({
-            items: tiledImage,
-            processors: processor,
-          });
-        } else if (STATE.renderType === 'byThreshold') {
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.THRESHOLDING(thresh)
-          });
+
+      if (!isEmpty(range)) {
+        // Use range values
+        let rgba;
+        if (range.type === 'inside') {
+          rgba = [0, 255, 255, 255]; // #00ffff (Cyan)
+        } else {
+          rgba = [74, 0, 180, 255]; // #4a00b4 (Purple Heart)
         }
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.PROBABILITY(range, rgba)
+        });
+      } else if (STATE.outline) {
+        // Outline in blue.  Color can not have green in it.
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.OUTLINE([0, 0, 255, 255]),
+        });
+      } else if (STATE.renderType === 'byProbability') {
+        // Use color spectrum
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum),
+        });
+      } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
+        let processor;
+        if (thresh) {
+          // Use threshold
+          processor = colorFilter.prototype.THRESHOLDING(thresh);
+        } else {
+          // Use color scheme
+          processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
+        }
+        filterOpts.push({
+          items: tiledImage,
+          processors: processor
+        });
+      } else if (STATE.renderType === 'byThreshold') {
+        filterOpts.push({
+          items: tiledImage,
+          processors: colorFilter.prototype.THRESHOLDING(thresh)
+        });
       }
     }
 
@@ -144,8 +136,8 @@ const isEmpty = value => {
     if (typeof a.length === 'undefined') {
       // it's an Object, not an Array
       const hasNonempty = Object.keys(a).some(element => {
-          return !isEmpty(a[element]);
-        });
+        return !isEmpty(a[element]);
+      });
       return hasNonempty ? false : isEmptyObject(Object.keys(a));
     }
 
@@ -246,8 +238,8 @@ const e = (tagName, properties = {}, children = []) => {
 
   // Apply properties
   Object.keys(properties).forEach(property => {
-      element.setAttribute(property, properties[property]);
-    });
+    element.setAttribute(property, properties[property]);
+  });
 
   // Append children
   children.forEach(c => {
@@ -295,7 +287,8 @@ const scaleToRgb = num => {
  *
  * @type {string[]}
  */
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+// const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap'];
 
 /**
  * State
@@ -324,7 +317,7 @@ function stringy(param) {
  */
 function populateStorage(canvas, options) {
   localStorage.setItem('theme', document.body.className);
-  const myObject = canvas.toJSON(['name','tag']);
+  const myObject = canvas.toJSON(['name', 'tag']);
   localStorage.setItem('canvas', stringy(myObject));
   localStorage.setItem('state', stringy(STATE));
   localStorage.setItem('options', stringy(options));
@@ -351,7 +344,7 @@ function saveSettings(canvas, options) {
   populateStorage(canvas, options);
   const jsonObject = {
     theme: document.body.className,
-    canvas: canvas.toJSON(['name','tag']),
+    canvas: canvas.toJSON(['name', 'tag']),
     state: STATE,
     options,
   };
@@ -406,19 +399,8 @@ let MICRONS_PER_PIX = 0.25;
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
-  console.clear();
-  /*
-  When the 'images' parameter becomes an array with null elements,
-  it usually means that the session timed out or is in the process of timeout.
-  So log the user out and have them start again.
-   */
+  // console.clear();
   let viewers = []; // eslint-disable-line prefer-const
-  if (!isRealValue(images) || images[0] === null) {
-    // logout & redirect
-    document.write(
-      "<script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>",
-    );
-  }
 
   document.addEventListener('DOMContentLoaded', setUp);
   window.addEventListener('keydown', hotKeysHandler);
@@ -520,6 +502,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
               htm += `<button id="btnDraw${idx}" class="annotationBtn" title="Draw"><i class="fas fa-pencil-alt"></i></button>
 <button id="btnEdit${idx}" class="annotationBtn" title="Edit"><i class="fas fa-draw-polygon"></i></button>
+<!--<button id="btnAnnotate${idx}" class="annotationBtn" title="Add Annotation"><i class="fas fa-sticky-note"></i></button>-->
 <button id="btnGrid${idx}" class="annotationBtn" title="Grid"><i class="fas fa-border-all"></i></button>
 <button id="btnGridMarker${idx}" class="annotationBtn" title="Mark grid"><i class="fas fa-paint-brush"></i></button>
 <button id="btnRuler${idx}" class="annotationBtn" title="Measure in microns"><i class="fas fa-ruler"></i></button>
@@ -602,7 +585,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         });
       }
     }
-    
+
   }
 };
 
@@ -759,7 +742,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
   });
 
   canvas.on('mouse:up', (evt) => {
-    // annotate(evt); // not comfortable with it yet.
+    // annotate(evt); // TODO: wip
     drawingOff(canvas, viewer);
   });
 
@@ -800,6 +783,61 @@ const drawPolygon = (viewerInfo, viewer, overlay) => {
         tag: tag
       });
       canvas.add(text);
+
+      /*
+      // Try to re-create/simplify annotorious-style div for annotation
+      let left, top;
+      top = target.top + target.height + 25;
+      left = target.left + target.width + 25;
+      let myDiv = `<div class="r6o-editor r6o-arrow-top r6o-arrow-left" style="transform: translate(0px); top: ${top}px; left: ${left}px; opacity: 1;">
+      <div class="r6o-arrow"></div><!-- ARROW -->
+      <div class="r6o-editor-inner">
+        <div class="r6o-widget comment">
+          <textarea class="r6o-editable-text" placeholder="Add a comment..." disabled rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;"></textarea>
+          <div class="r6o-icon r6o-arrow-down">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" width="12">
+              <metadata>IcoFont Icons</metadata>
+              <title>simple-down</title>
+              <glyph glyph-name="simple-down" unicode="\uEAB2" horiz-advx="1000"></glyph>
+              <path fill="currentColor" d="M200 392.6l300 300 300-300-85.10000000000002-85.10000000000002-214.89999999999998 214.79999999999995-214.89999999999998-214.89999999999998-85.10000000000002 85.20000000000005z"></path>
+            </svg>
+          </div>
+        </div><!-- END comment -->
+        <div class="r6o-widget comment editable">
+          <textarea class="r6o-editable-text" placeholder="Add a reply..." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;"></textarea>
+        </div><!-- END reply -->
+        <div class="r6o-widget r6o-tag">
+          <ul class="r6o-taglist">
+            <!-- existing tags go here. -->
+            <li></li>
+          </ul><!-- END taglist -->
+          <div class="r6o-autocomplete">
+            <div><input placeholder="Add tag..."></div>
+            <ul><!-- tags go here --></ul>
+          </div><!-- END add tag -->
+        </div><!-- END tag section -->
+        <div class="r6o-footer r6o-draggable">
+          <button class="r6o-btn left delete-annotation" title="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12">
+              <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+            </svg>
+          </button><!-- DELETE button -->
+          <button class="r6o-btn outline">Cancel</button><!-- CANCEL button -->
+          <button class="r6o-btn">OK</button><!-- OK button -->
+        </div><!-- END footer -->
+      </div><!-- END editor-inner -->
+    </div><!-- END editor -->`;
+      try {
+        const myDiv1 = e('div');
+        myDiv1.style.left = `${left}px`;
+        myDiv1.style.top = `${top}px`;
+        myDiv1.innerHTML = myDiv;
+        document.body.appendChild(myDiv1);
+
+      } catch (e) {
+        console.log(`%c${e.message}`, "color: #ff00cc;");
+      }
+      */
     }
   }
 
@@ -1740,7 +1778,6 @@ function createPopup(uniqueId, paletteBtn, title) {
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
   // const title = `${title} color levels`;
-  // return createDraggableDiv(widgetId, title, rect.left, rect.top);
   return createDraggableDiv(widgetId, title, rect.left, rect.top);
 }
 
@@ -1762,7 +1799,7 @@ function setChecked(colorscheme) {
 }
 
 function createThresh(div, layers, viewer, colorPicker, classId) {
-  const val = '1'; // 128
+  const val = '1'; // Initial value
   let color;
   if (colorPicker) {
     color = colorToArray(colorPicker.style.backgroundColor);
@@ -1770,7 +1807,7 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
       color.push(255);
     }
   } else {
-    color = [126, 1, 0, 255];
+    color = [126, 1, 0, 255]; // Default thresh color maroon
   }
 
   // slider value
@@ -1793,17 +1830,16 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
   });
 
   div.appendChild(e('div', {}, [number, range]));
-  number.addEventListener('input', function() {
-    range.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
-    // console.log('number input');
-  });
 
-  range.addEventListener('input', function() {
-    number.value = this.value;
-    setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
-    // console.log('range input');
-  });
+  function createInputHandler(updateElement) {
+    return function() {
+      updateElement.value = this.value;
+      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
+    };
+  }
+
+  number.addEventListener('input', createInputHandler(range));
+  range.addEventListener('input', createInputHandler(number));
 }
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer) {
@@ -2317,6 +2353,7 @@ if (!Array.prototype.flat) {
 const colorFilter = OpenSeadragon.Filters.GREYSCALE;
 const colorChannel = 1;
 const alphaChannel = 3;
+const message = "Set OSD viewer: { crossOriginPolicy: \"Anonymous\" }";
 
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = rgba => {
@@ -2328,7 +2365,7 @@ colorFilter.prototype.OUTLINE = rgba => {
     try {
       imgData = context.getImageData(0, 0, width, height);
     } catch (e) {
-      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      console.error(`${e.name}\n${message}`);
       return;
     }
 
@@ -2415,7 +2452,7 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
     try {
       imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     } catch (e) {
-      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      console.error(`${e.name}\n${message}`);
       return;
     }
 
@@ -2456,12 +2493,12 @@ colorFilter.prototype.PROBABILITY = (data, rgba) => {
 
 colorFilter.prototype.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    // console.log('colorlevels');
+    // console.log('colorlevels', STATE.renderType);
     let imgData;
     try {
       imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     } catch (e) {
-      console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+      console.error(`${e.name}\n${message}`);
       return;
     }
     const data = bgTrans(imgData.data);
@@ -2553,7 +2590,7 @@ colorFilter.prototype.THRESHOLDING = thresh => {
       try {
         imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
       } catch (e) {
-        console.error(`${e.name}\nSet OSD viewer: { crossOriginPolicy: "Anonymous" }`);
+        console.error(`${e.name}\n${message}`);
         return;
       }
       let pixels = imgData.data;
@@ -2562,13 +2599,13 @@ colorFilter.prototype.THRESHOLDING = thresh => {
       if (typeof thresh.rgba !== 'undefined') {
         color = thresh.rgba;
       } else {
-        color = [126, 1, 0, 255]; // #7e0100
+        color = [126, 1, 0, 255]; // #7e0100 (Maroon)
       }
 
       if (typeof thresh.classId !== 'undefined') {
-        let classId = parseInt(thresh.classId);
-        // console.log('classId', classId);
+        // console.log('classId', thresh.classId);
 
+        // Test classId and probability value above threshold.
         for (let i = 0; i < pixels.length; i += 4) {
           if (pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val) {
             pixels[i] = color[0];
@@ -2581,8 +2618,8 @@ colorFilter.prototype.THRESHOLDING = thresh => {
         }
       } else {
         // console.log('classId undefined');
+        // Test green channel (probability) value above threshold.
         for (let i = 0; i < pixels.length; i += 4) {
-          // Test green channel value above threshold.
           if (pixels[i + 1] >= thresh.val) {
             pixels[i] = color[0];
             pixels[i + 1] = color[1];
@@ -2617,6 +2654,7 @@ class ImageViewer {
     const tileSources = [];
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i];
+      // console.log("%c\ntile source:\n", "color: #ccff00;", layer.location);
       tileSources.push({ tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0 });
     }
     // console.log('tileSources', stringy(ts));
@@ -2637,8 +2675,29 @@ class ImageViewer {
       console.error(e.message);
     }
 
-    let drawer;
+    // 2.7.7
+    // let anno = OpenSeadragon.Annotorious(viewer, {
+    //   locale: "auto",
+    //   drawOnSingleClick: true,
+    //   allowEmpty: true
+    // });
+    // anno.setAuthInfo({
+    //   id: "http://www.example.com/tdiprima",
+    //   displayName: "tdiprima"
+    // });
+    // anno.setDrawingTool("rect");
+    // anno.setDrawingEnabled(true);
 
+    // 0.6.4
+    // const button = document.getElementById(`btnAnnotate${viewerInfo.idx}`);
+    // button.addEventListener("click", function() {
+    //   anno.activateSelector();
+    //   return false;
+    // });
+    // make annotatable by Annotorious library
+    // anno.makeAnnotatable(viewer);
+
+    let drawer;
     function addInfo(item) {
       try {
         const itemIndex = viewer.world.getIndexOfItem(item);
@@ -3121,37 +3180,62 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   }
 }
 
-function _extractLocation(layer) {
-  let loc;
-  if (typeof layer.location === 'string') {
-    loc = layer.location;
-  } else if (typeof layer.location === 'object') {
-    loc = layer.location.url;
-  } else {
-    throw new TypeError(`Unidentified URL type... ${layer.location}`);
-  }
-  return loc;
-}
+// Patch for not having prefLabel info (server #1)
+// function _extractLocation(layer) {
+//   let loc;
+//   if (typeof layer.location === 'string') {
+//     loc = layer.location;
+//   } else if (typeof layer.location === 'object') {
+//     loc = layer.location.url;
+//   } else {
+//     throw new TypeError(`Unidentified URL type... ${layer.location}`);
+//   }
+//   return loc;
+// }
+// function getPreferredLabel(layer) {
+//   let featureName;
+//   const loc = _extractLocation(layer);
+//   const sections = loc.split("/");
+//   // const re = /^(?:[a-z]+:)?\b/gm;
+//   const re = /^https?:\/\//;
+//   if (loc.match(re)) {
+//     // Absolute URL
+//     featureName = sections[sections.length - 2];
+//   } else {
+//     // Relative URL
+//     featureName = sections[sections.length - 1];
+//   }
+//   if (featureName.includes(".")) {
+//     // Final name
+//     featureName = featureName.substring(0, featureName.indexOf("."));
+//   }
+//   return featureName;
+// }
 
+/**
+ * Parse url for the feature name
+ * whilst we wait for that information to be available.
+ */
 function getPreferredLabel(layer) {
-  let featureName;
-  const loc = _extractLocation(layer);
-  const sections = loc.split("/");
-  const re = /^(?:[a-z]+:)?\b/gm;
-
-  if (loc.match(re)) {
-    // Absolute URL
-    featureName = sections[sections.length - 2];
-  } else {
-    // Relative URL
-    featureName = sections[sections.length - 1];
+  // Patch for not having prefLabel (or 'label') info
+  let name = "undefined";
+  let url = layer.location;
+  try {
+    let search = "FeatureStorage";
+    let sections = url.split("/");
+    let res = sections.indexOf(search);
+    if (res > -1) {
+      name = `${sections[res + 1]}-${sections[res + 2]}`
+    } else {
+      name = sections[sections.length - 2];
+      if (name.includes(".")) {
+        name = name.substring(0, name.indexOf("."));
+      }
+    }
+  } catch (e) {
+    console.log(`%cError. Check WSI URL: ${url}`, "color: #ff6a5a; font-size: larger;");
   }
-
-  if (featureName.includes(".")) {
-    featureName = featureName.substring(0, featureName.indexOf("."));
-  }
-
-  return featureName;
+  return name;
 }
 
 // Feature (draggable)
@@ -3373,6 +3457,13 @@ function getVals(slides) {
  * @param {object} viewer - OpenSeadragon viewer
  */
 const layerPopup = function(divBody, allLayers, viewer) {
+  function switchRenderTypeIfNecessary() {
+    // If the current render type is not by probability, switch it.
+    if (STATE.renderType === 'byProbability') {
+      STATE.renderType = 'byProbability';
+    }
+  }
+
   function createAttenuationBtn(allLayers, viewer) {
     // Color attenuation by probability
     const attId = createId(5, 'atten');
@@ -3388,14 +3479,11 @@ const layerPopup = function(divBody, allLayers, viewer) {
 
     // Event listener
     icon.addEventListener('click', () => {
+      // Toggle attenuate state
       STATE.attenuate = !STATE.attenuate;
-      // Either outline is on or attenuate is on; not both. #attenuate
+      // Ensure that either outline or attenuate is on, but not both.
       STATE.outline = false;
-      // Attenuate on prob, class, or heatmap, for now.
-      // PTF: Switch to something else if it's by threshold.
-      if (STATE.renderType === 'byThreshold') {
-        STATE.renderType = 'byProbability';
-      }
+      switchRenderTypeIfNecessary();
       setFilter(allLayers, viewer);
     });
     return [label, icon];
@@ -3418,9 +3506,11 @@ const layerPopup = function(divBody, allLayers, viewer) {
 
     // Event listener
     icon.addEventListener('click', () => {
+      // Toggle outline state
       STATE.outline = !STATE.outline;
-      // Either outline is on or attenuate is on; not both. #outline
+      // Ensure only one flag is active (either attenuate or outline; not both).
       STATE.attenuate = false;
+      switchRenderTypeIfNecessary();
       toggleButton(icon, filledCircle, emptyCircle);
       setFilter(allLayers, viewer);
     });
