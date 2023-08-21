@@ -11,6 +11,15 @@
   --rgba-on: rgba(255, 255, 255, 1);
   --grad: #d7e1ec;
   --shadow: #899599;
+  /* just hypothetical values */
+  --a: 1;
+  --b: 2;
+  --a1: 1;
+  --b1: 2;
+  --c: 2;
+  --max: 0;
+  --min: 0;
+  --dif: 3;
 }
 
 .theme--default {
@@ -35,7 +44,7 @@
 }
 
 body {
-  font-family: effra,Verdana,Tahoma,'DejaVu Sans',sans-serif !important;
+  font-family: effra, Verdana, Tahoma, 'DejaVu Sans', sans-serif !important;
   font-size: 1rem !important;
   font-weight: 400 !important;
   line-height: 1.438rem !important;
@@ -140,8 +149,8 @@ a:link {
 }
 
 .btnOn {
-  color: #15f4ee;
   padding: .2em .7em;
+  color: #15f4ee;
 }
 
 .annotationBtn,
@@ -154,7 +163,8 @@ a:link {
   border-radius: 5px;
 }
 
-.annotationBtn:active, .layer:active {
+.annotationBtn:active,
+.layer:active {
   position: relative;
   top: 1px;
 }
@@ -164,17 +174,17 @@ a:link {
   cursor: pointer;
   color: var(--text-light);
   border: #ddd;
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(74%, var(--grad)));
+  background:   -webkit-gradient(linear, left top, left bottom, from(#fff), color-stop(74%, var(--grad)));
   background: -o-linear-gradient(top, #fff 0%, var(--grad) 74%);
-  background: linear-gradient(to bottom, #fff 0%, var(--grad) 74%);
+  background:    linear-gradient(to bottom, #fff 0%, var(--grad) 74%);
   background-color: #fff;
 }
 
 .annotationBtn:hover {
   color: var(--highlight);
-  background: -webkit-gradient(linear, left top, left bottom, from(var(--grad)), color-stop(74%, #fff));
+  background:   -webkit-gradient(linear, left top, left bottom, from(var(--grad)), color-stop(74%, #fff));
   background: -o-linear-gradient(top, var(--grad) 0%, #fff 74%);
-  background: linear-gradient(to bottom, var(--grad) 0%, #fff 74%);
+  background:    linear-gradient(to bottom, var(--grad) 0%, #fff 74%);
 }
 
 .layer {
@@ -184,25 +194,25 @@ a:link {
   padding: .5em 1em;
   cursor: move;
   -ms-transform: skew(-10deg);
-      transform: skew(-10deg);
+  transform: skew(-10deg);
   white-space: nowrap;
-  -o-text-overflow: ellipsis;
-     text-overflow: ellipsis;
+  text-overflow: ellipsis;
   color: var(--text-light);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), to(var(--grad)));
+  background:   -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ededed), to(var(--grad)));
   background: -o-linear-gradient(top, #ededed 5%, var(--grad) 100%);
-  background: linear-gradient(to bottom, #ededed 5%, var(--grad) 100%);
+  background:    linear-gradient(to bottom, #ededed 5%, var(--grad) 100%);
   background-color: #ededed;
   -webkit-box-shadow: 3px 4px 0 0 var(--shadow);
-          box-shadow: 3px 4px 0 0 var(--shadow);
+  box-shadow: 3px 4px 0 0 var(--shadow);
   text-shadow: 0 1px 0 #e1e2ed;
+  -o-text-overflow: ellipsis;
 }
 
 .layer:hover {
   color: var(--highlight);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, var(--grad)), to(#ededed));
+  background:   -webkit-gradient(linear, left top, left bottom, color-stop(5%, var(--grad)), to(#ededed));
   background: -o-linear-gradient(top, var(--grad) 5%, #ededed 100%);
-  background: linear-gradient(to bottom, var(--grad) 5%, #ededed 100%);
+  background:    linear-gradient(to bottom, var(--grad) 5%, #ededed 100%);
   background-color: var(--grad);
 }
 
@@ -269,12 +279,12 @@ a:link {
   padding: 10px;
   cursor: move;
   white-space: nowrap;
-  -o-text-overflow: ellipsis;
-     text-overflow: ellipsis;
+  text-overflow: ellipsis;
   color: var(--text-dark);
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
   background-color: var(--text-light);
+  -o-text-overflow: ellipsis;
 }
 
 .popupBody {
@@ -326,8 +336,6 @@ input {
   background: linear-gradient(0deg, var(--no-frills) 1em, transparent 0);
 
   --dif: calc(var(--max) - var(--min));
-  grid-template: repeat(2, -webkit-max-content) 1em/1fr 1fr;
-  grid-template: repeat(2, -moz-max-content) 1em/1fr 1fr;
   grid-template: repeat(2, max-content) 1em/1fr 1fr;
 }
 
@@ -511,9 +519,9 @@ output::after {
   opacity: 2;
 
   background: var(--rgb-on);
-  background: -webkit-gradient(linear, left top, right top, from(var(--rgba-on)), color-stop(35%, var(--highlight)), to(var(--text-light)));
+  background:   -webkit-gradient(linear, left top, right top, from(var(--rgba-on)), color-stop(35%, var(--highlight)), to(var(--text-light)));
   background: -o-linear-gradient(left, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
-  background: linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
+  background:    linear-gradient(90deg, var(--rgba-on) 0%, var(--highlight) 35%, var(--text-light) 100%);
 
   -webkit-appearance: none;
 }
