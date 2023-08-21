@@ -71,7 +71,7 @@ a:link {
 .navbar a:hover,
 .dropdown:hover .dropbtn {
   color: var(--text-light);
-  background-color: var(--text-dark);;
+  background-color: var(--text-dark);
 }
 
 .divSquare {
