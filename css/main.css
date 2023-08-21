@@ -123,8 +123,6 @@ a:link {
 
 *[draggable=true] {
   cursor: move;
-  -webkit-user-drag: element;
-     -moz-user-drag: element;
 }
 
 .fas:focus,
@@ -133,7 +131,7 @@ a:link {
 }
 
 .layer-icons {
-  padding: .5px;
+  padding: 1px;
 }
 
 .layer-icons:hover {
