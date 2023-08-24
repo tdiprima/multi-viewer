@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2023-08-21 */
+/*! multi-viewer - v1.0.0 - 2023-08-24 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -2071,6 +2071,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer) {
       init = false; // Update the state
       return;
     }
+    STATE.outline = false; // Shut outline off
     // console.log([r, g, b, a])
     this.source.value = this.color(r, g, b, a);
     this.source.innerHTML = this.color(r, g, b, a);
