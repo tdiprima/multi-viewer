@@ -59,14 +59,31 @@ module.exports = function (grunt) {
           // vendor/fontawesome needs to stay put
         }
       }
+    },
+
+    copy: {
+      main: {
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/',    // set the current working directory
+            src: 'main.min.css',  // what files to copy
+            dest: 'css/'     // where to put the copied files
+          }
+        ]
+      }
     }
-  })
+
+  });
 
   // Load npm plugins to provide necessary tasks.
-  grunt.loadNpmTasks('grunt-concat-in-order')
-  grunt.loadNpmTasks('grunt-contrib-uglify-es')
-  grunt.loadNpmTasks('grunt-contrib-cssmin')
+  grunt.loadNpmTasks('grunt-concat-in-order');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  // Default task(s).
-  grunt.registerTask('default', ['concat_in_order', 'uglify', 'cssmin'])
+  // Register tasks
+  grunt.registerTask('default', ['concat_in_order', 'uglify', 'cssmin', 'copy']);
+
 }
+
