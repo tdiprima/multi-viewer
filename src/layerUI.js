@@ -74,7 +74,6 @@ function handleDrag(layers, viewer) {
       evt.preventDefault();
       evt.stopPropagation();
 
-      evt.target.classList.remove('drag-over') // restore style
       const targetElement = evt.target;
       const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
@@ -83,13 +82,12 @@ function handleDrag(layers, viewer) {
         return false;
       }
 
-      // Find neighboring layersColumn
+      // Get neighboring elements:
       const columnWithViewer = viewerDiv.parentElement;
-      const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
-
-      // Find the neighboring table (we will add this feature here)
-      const divClassScroll = columnLayAndCol.firstChild;
-      const tableLayAndColor = divClassScroll.firstChild;
+    
+      // Directly find the .divTableBody within the sibling column
+      const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
+      console.log("%ctableLayAndColor", "color: #ffb439;", tableLayAndColor);
 
       const movedFeatId = evt.dataTransfer.getData("text");
       const movedFeature = document.getElementById(movedFeatId);
