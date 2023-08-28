@@ -84,7 +84,7 @@ function handleDrag(layers, viewer) {
 
       // Get neighboring elements:
       const columnWithViewer = viewerDiv.parentElement;
-    
+
       // Directly find the .divTableBody within the sibling column
       const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
       console.log("%ctableLayAndColor", "color: #ffb439;", tableLayAndColor);
@@ -101,15 +101,15 @@ function handleDrag(layers, viewer) {
       let foundMatchingSlide = false;
 
       // Iterate table rows
-      let myHTMLCollection = tableLayAndColor.children
+      let myHTMLCollection = tableLayAndColor.children;
       for (let i = 0; i < myHTMLCollection.length; i++) {
         // Skip first row (globals)
         if (i > 0) {
-          row = myHTMLCollection[i];
-          cells = row.children
-          lay = cells[0].firstChild;
+          const [firstCell, secondCell] = myHTMLCollection[i].children;
+          const lay = firstCell.firstChild;
+          const eye = secondCell.firstChild;
+
           layNum = lay.id[0]; // 1st char is array index
-          eye = cells[1].children[0];
 
           // css transition: .block, .color-fade
           if (lay.innerHTML === featureName) {
