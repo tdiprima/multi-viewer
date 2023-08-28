@@ -167,7 +167,6 @@ function handleDrag(layers, viewer) {
         try {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
           // We already turned on target feature eyeball
-
           // TODO: Uncomment if we want "move" instead of "copy":
           // sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
           // let eye1 = draggedFeature.parentNode.nextSibling.firstChild
@@ -182,10 +181,10 @@ function handleDrag(layers, viewer) {
         let location;
         try {
           location = sourceViewer.tileSources[layNum].tileSource;
+          console.warn("Did not find matching slide\nLocation:", location);
         } catch (e) {
-          console.error("oops.", e.message);
+          console.error("Error:", e.message);
         }
-        console.error("Did not find matching slide\nLocation:", location);
       }
     }
     return false;
