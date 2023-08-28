@@ -87,17 +87,11 @@ function handleDrag(layers, viewer) {
 
       // Directly find the .divTableBody within the sibling column
       const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
-      console.log("%ctableLayAndColor", "color: #ffb439;", tableLayAndColor);
-
       const movedFeatId = evt.dataTransfer.getData("text");
       const movedFeature = document.getElementById(movedFeatId);
       const featureName = movedFeature.innerHTML;
 
-      let row;
-      let cells;
-      let lay;
       let layNum;
-      let eye;
       let foundMatchingSlide = false;
 
       // Iterate table rows
