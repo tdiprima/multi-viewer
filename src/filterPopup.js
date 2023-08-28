@@ -21,7 +21,8 @@ const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
   setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
   const popup = createPopup(uniqueId, paletteBtn, title);
-  const popupBody = popup.lastChild; // known
+  // const popupBody = popup.lastChild; // known
+  const popupBody = document.getElementById(`${popup.id}Body`);
   const classDiv = e('div');
   const probabilityDiv = e('div');
   const heatmapDiv = e('div');
