@@ -102,36 +102,34 @@ function handleDrag(layers, viewer) {
 
       // Iterate table rows
       let myHTMLCollection = tableLayAndColor.children;
-      for (let i = 0; i < myHTMLCollection.length; i++) {
+      for (let i = 1; i < myHTMLCollection.length; i++) {
         // Skip first row (globals)
-        if (i > 0) {
-          const [firstCell, secondCell] = myHTMLCollection[i].children;
-          const lay = firstCell.firstChild;
-          const eye = secondCell.firstChild;
+        const [firstCell, secondCell] = myHTMLCollection[i].children;
+        const lay = firstCell.firstChild;
+        const eye = secondCell.firstChild;
 
-          layNum = lay.id[0]; // 1st char is array index
+        layNum = lay.id[0]; // 1st char is array index
 
-          // css transition: .block, .color-fade
-          if (lay.innerHTML === featureName) {
-            foundMatchingSlide = true;
+        // css transition: .block, .color-fade
+        if (lay.innerHTML === featureName) {
+          foundMatchingSlide = true;
 
-            // Highlight the layer
-            lay.classList.remove("layer");
-            lay.classList.add("block");
-            lay.classList.add("color-fade");
+          // Highlight the layer
+          lay.classList.remove("layer");
+          lay.classList.add("block");
+          lay.classList.add("color-fade");
 
-            /** timeout to turn it back to normal **/
-            setTimeout(function () {
-              lay.classList.remove("color-fade");
-              lay.classList.remove("block");
-              lay.classList.add("layer");
-            }, 2000);
+          /** timeout to turn it back to normal **/
+          setTimeout(() => {
+            lay.classList.remove("color-fade");
+            lay.classList.remove("block");
+            lay.classList.add("layer");
+          }, 2000);
 
-            // Toggle eyeball
-            eye.classList.remove("fa-eye-slash");
-            eye.classList.add("fa-eye");
-            break;
-          }
+          // Toggle eyeball
+          eye.classList.remove("fa-eye-slash");
+          eye.classList.add("fa-eye");
+          break;
         }
       }
 
