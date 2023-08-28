@@ -74,6 +74,7 @@ function handleDrag(layers, viewer) {
       evt.preventDefault();
       evt.stopPropagation();
 
+      evt.target.classList.remove('drag-over') // restore style
       const targetElement = evt.target;
       const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
@@ -132,6 +133,7 @@ function handleDrag(layers, viewer) {
       if (targetViewer !== null) {
         if (foundMatchingSlide) {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
+          // (And we already turned on target feature eyeball)
         } else {
           console.warn("Did not find matching slide.\nFeature:", featureName, "\nTarget viewer", targetViewer);
         }
