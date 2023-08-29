@@ -17,7 +17,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   When the 'images' parameter becomes an array with null elements,
   it usually means that the session timed out or is in the process of timeout.
    */
-  let viewers = []; // eslint-disable-line prefer-const
+  let viewers = [];
   if (!isRealValue(images) || images[0] === null) {
     // You have been logged out
     document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");

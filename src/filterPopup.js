@@ -21,7 +21,6 @@ const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
   setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
   const popup = createPopup(uniqueId, paletteBtn, title);
-  // const popupBody = popup.lastChild; // known
   const popupBody = document.getElementById(`${popup.id}Body`);
   const classDiv = e('div');
   const probabilityDiv = e('div');
@@ -74,7 +73,6 @@ const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
 function createPopup(uniqueId, paletteBtn, title) {
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
-  // const title = `${title} color levels`;
   return createDraggableDiv(widgetId, title, rect.left, rect.top);
 }
 
@@ -82,7 +80,6 @@ function setChecked(colorscheme) {
   // colorscheme.colors: is an array of class-colors objects
   // Now, add a flag called 'checked', and set it to true for use later:
   colorscheme.colors.map(a => {
-    // eslint-disable-next-line no-return-assign
     return (a.checked = true);
   });
 
