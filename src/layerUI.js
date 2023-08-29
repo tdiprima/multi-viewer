@@ -268,6 +268,8 @@ function getPreferredLabel(layer) {
         name = name.substring(0, name.indexOf("."));
       }
     }
+    // TODO: LONG NAME TEST
+    // name = "abcdefghijklmnopqrstuvwxyz"
   } catch (e) {
     console.log(`%cError. Check WSI URL: ${url}`, "color: #ff6a5a; font-size: larger;");
   }
