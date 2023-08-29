@@ -438,7 +438,8 @@ function createTachometer(row, featureName) {
   const id = createId(5, "pop");
   const rect = icon.getBoundingClientRect();
   const popup = createDraggableDiv(id, `${featureName} settings`, rect.left, rect.top);
-  const divBody = popup.lastChild;
+  // const divBody = popup.lastChild;
+  const divBody = document.getElementById(`${popup.id}Body`);
 
   icon.addEventListener("click", () => {
     popup.style.display = "block";

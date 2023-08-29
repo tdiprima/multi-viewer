@@ -499,16 +499,19 @@ function setOutlineStyle(a, b, style, color) {
 
 // The "Add color range" event
 function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer) {
+  // User clicked `+` to add row
   setOutlineStyle(num1, num2, '', ''); // clear any error
   if (num1.value === '0' && num2.value === '0') {
     // indicate 0 and 0 not allowed
     setOutlineStyle(num1, num2, 'solid', 'red');
   } else {
-    // Now replace + with - in UI
+    // Create remove button and add event listener
     const buttonId = `i${num1.id.replace('low', '')}`; // borrowing element id
     const removeBtn = e('i', { id: buttonId, class: 'fas fa-minus pointer' });
-    tr.lastChild.firstChild.remove(); // last element in row is modifier
-    tr.lastChild.appendChild(removeBtn); // replace old modifier with new one
+    // Get the desired <i> element
+    let iconElement = tr.querySelector('td:last-child i:first-child');
+    iconElement.replaceWith(removeBtn);
+
     removeBtn.addEventListener(
       'click',
       removeColor.bind(null, removeBtn, colors, tr, layers, viewer),
