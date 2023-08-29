@@ -135,7 +135,7 @@ function handleDrag(layers, viewer) {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
           // (And we already turned on target feature eyeball)
         } else {
-          console.warn("Did not find matching slide.\nFeature:", featureName, "\nTarget viewer", targetViewer);
+          console.warn("Did not find matching slide. Feature:", featureName);
         }
       }
       return false;
