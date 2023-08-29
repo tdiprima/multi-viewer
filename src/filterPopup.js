@@ -535,15 +535,15 @@ function seq(objArray) {
 
 // Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
-  let idx;
-  // const nums = seq(colors); // Use 'const'.
+  // let idx;
+  // const nums = seq(colors);
   // if (!nums || isEmpty(nums)) {
   //   idx = colors.length;
   // } else {
   //   idx = Array.isArray(nums) ? nums[0] : nums;
   // }
 
-  idx = colors.length;
+  let idx = colors.length;
 
   const colorObject = {
     color: 'rgba(255, 255, 255, 255)',

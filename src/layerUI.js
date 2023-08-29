@@ -83,7 +83,7 @@ function handleDrag(layers, viewer) {
         return false;
       }
 
-      // Get neighboring elements:
+      // Get neighboring elements
       const columnWithViewer = viewerDiv.parentElement;
 
       // Directly find the .divTableBody within the sibling column
@@ -253,7 +253,7 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
  * whilst we wait for that information to be available.
  */
 function getPreferredLabel(layer) {
-  // Patch for not having prefLabel (or 'label') info
+  // Temporary patch for unavailable prefLabel (or 'label') info
   let name = "undefined";
   let url = layer.location;
   try {
