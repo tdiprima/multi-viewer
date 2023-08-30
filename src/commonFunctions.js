@@ -17,9 +17,7 @@ function setFilter(layers, viewer, range, thresh) {
     let filterOpts = [];
 
     // One does not color just the affected layer; you have to do all of them.
-    for (let i = 0; i < itemCount; i++) {
-      if (i === 0) continue; // Skip base
-
+    for (let i = 1; i < itemCount; i++) {
       const tiledImage = viewer.world.getItemAt(i);
 
       if (!isEmpty(range)) {
