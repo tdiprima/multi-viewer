@@ -19,7 +19,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
    */
   let viewers = [];
   console.log("images[0]:", images[0]);
-  if (!isRealValue(images) || images[0] === null) {
+  if (!isRealValue(images) || images[0] === null || typeof images[0] === 'undefined') {
     // You have been logged out
     document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
     // logout & redirect
@@ -44,6 +44,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         try {
           slide = images[0][0].location; // layer 0 location
         } catch (e) {
+          // double-check
           document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
         }
         if (slide.includes('TCGA')) {
