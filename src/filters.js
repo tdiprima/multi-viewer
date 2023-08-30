@@ -290,7 +290,7 @@ colorFilter.prototype.COLORLEVELS = layerColors => {
 colorFilter.prototype.THRESHOLDING = thresh => {
   return (context, callback) => {
     if (typeof thresh !== 'undefined') {
-      // console.log('thresh', thresh);
+      // console.log('thresholding', thresh);
       let imgData;
       try {
         imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
