@@ -92,17 +92,22 @@ function setChecked(colorscheme) {
   });
 }
 
-function createThresh(div, layers, viewer, colorPicker, classId) {
-  const val = '1'; // Initial value
+function getThreshColor(colorPicker) {
   let color;
   if (colorPicker) {
     color = colorToArray(colorPicker.style.backgroundColor);
     if (color.length === 3) {
       color.push(255);
     }
+    return color;
+
   } else {
-    color = [126, 1, 0, 255]; // Default thresh color maroon
+    return [126, 1, 0, 255]; // Default thresh color maroon
   }
+}
+
+function createThresh(div, layers, viewer, colorPicker, classId) {
+  const val = '1'; // Initial value
 
   // slider value
   const number = e('input', {
@@ -128,7 +133,7 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
   function createInputHandler(updateElement) {
     return function() {
       updateElement.value = this.value;
-      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
+      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: getThreshColor(colorPicker), classId: classId });
     };
   }
 
