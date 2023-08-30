@@ -18,6 +18,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   it usually means that the session timed out or is in the process of timeout.
    */
   let viewers = [];
+  console.log("images[0]:", images[0]);
   if (!isRealValue(images) || images[0] === null) {
     // You have been logged out
     document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
@@ -39,7 +40,12 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         // Slide name
         let name;
-        const slide = images[0][0].location; // layer 0 location
+        let slide;
+        try {
+          slide = images[0][0].location; // layer 0 location
+        } catch (e) {
+          document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
+        }
         if (slide.includes('TCGA')) {
           const str = slide.match(/TCGA-[^%.]+/)[0];
           name = `Slide: ${str}`;
