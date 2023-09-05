@@ -68,7 +68,7 @@ const message = "Set OSD viewer: { crossOriginPolicy: \"Anonymous\" }";
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = rgba => {
   return (context, callback) => {
-    // console.time('Improved Function');
+    // console.time('Outline');
     const width = context.canvas.width;
     const height = context.canvas.height;
 
@@ -119,7 +119,7 @@ colorFilter.prototype.OUTLINE = rgba => {
     newImage.data.set(flatData);
     context.putImageData(newImage, 0, 0);
 
-    // console.timeEnd('Improved Function');
+    // console.timeEnd('Outline');
     callback();
   };
 };
