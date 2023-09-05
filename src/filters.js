@@ -1,11 +1,5 @@
 /** Custom color filters */
 
-const img2array = imgData => {
-  return imgData.data.reduce((pixel, key, index) => {
-    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;
-  }, []);
-};
-
 const bgTrans = function(imageData) {
   for (let i = 0; i < imageData.length; i += 4) {
     if (imageData[i + 1] === 0) {
@@ -15,16 +9,27 @@ const bgTrans = function(imageData) {
   return imageData;
 };
 
-const backgroundCorrection = data => {
-  data.forEach(px => {
-    if (px[1] === 0 || px[3] === 0) {
-      px[0] = 0;
-      px[1] = 0;
-      px[2] = 0;
-      px[3] = 0;
+const img2arrayWithBackgroundCorrection = imgData => {
+  return imgData.data.reduce((pixel, key, index) => {
+    if (index % 4 === 0) {
+      pixel.push([key]);
+    } else {
+      pixel[pixel.length - 1].push(key);
     }
-  });
-  return data;
+
+    // Apply background correction if the RGBA values for the pixel are fully populated
+    if (index % 4 === 3) {
+      const px = pixel[pixel.length - 1];
+      if (px[1] === 0 || px[3] === 0) {
+        px[0] = 0;
+        px[1] = 0;
+        px[2] = 0;
+        px[3] = 0;
+      }
+    }
+
+    return pixel;
+  }, []);
 };
 
 // Array.flat() polyfill
@@ -63,88 +68,58 @@ const message = "Set OSD viewer: { crossOriginPolicy: \"Anonymous\" }";
 // Outline the edge of the polygon
 colorFilter.prototype.OUTLINE = rgba => {
   return (context, callback) => {
-    // console.log('outline');
+    // console.time('Improved Function');
     const width = context.canvas.width;
     const height = context.canvas.height;
-    let imgData;
-    try {
-      imgData = context.getImageData(0, 0, width, height);
-    } catch (e) {
-      console.error(`${e.name}\n${message}`);
-      return;
-    }
 
-    let data = backgroundCorrection(img2array(imgData));
+    let imgData = context.getImageData(0, 0, width, height);
+    let data = img2arrayWithBackgroundCorrection(imgData);
+    let flatData = new Uint8ClampedArray(width * height * 4);
 
     for (let i = 0; i < data.length; i++) {
-      if (data[i][alphaChannel] === 255 && data[i][colorChannel] > 0) {
-        // right
-        try {
-          if (data[i + 1][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {
-          // It's okay.
+      let currentPixel = data[i];
+      let isEdge = false;
+
+      if (currentPixel[alphaChannel] === 255 && currentPixel[colorChannel] > 0) {
+        // Index calculations
+        let right = i + 1;
+        let left = i - 1;
+        let up = i - width;
+        let down = i + width;
+
+        if (data[right] && data[right][alphaChannel] === 0) isEdge = true;
+        if (data[left] && data[left][alphaChannel] === 0) isEdge = true;
+        if (data[up] && data[up][alphaChannel] === 0) isEdge = true;
+        if (data[down] && data[down][alphaChannel] === 0) isEdge = true;
+
+        if (isEdge) {
+          // Set to the desired RGBA for outline
+          currentPixel = rgba;
         }
-
-        // left
-        try {
-          if (data[i - 1][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {
-          // These things happen.
-        }
-
-        try {
-          // up
-          if (data[i - width][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {}
-
-        try {
-          // down
-          if (data[i + width][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {}
       } else {
-        // Set each pixel
-        data[i][0] = 0;
-        data[i][1] = 0;
-        data[i][2] = 0;
-        data[i][3] = 0;
+        // Set each pixel to transparent
+        currentPixel = [0, 0, 0, 0];
+      }
+
+      // Flatten data as we go
+      flatData.set(currentPixel, i * 4);
+    }
+
+    // Change the remaining colored pixels to transparent
+    for (let i = 0; i < flatData.length; i += 4) {
+      if (flatData[i + colorChannel] > 0) {
+        flatData[i] = 0;
+        flatData[i + 1] = 0;
+        flatData[i + 2] = 0;
+        flatData[i + 3] = 0;
       }
     }
 
-    // Change the remaining green pixels (middle of polygon) to transparent
-    data.forEach(px => {
-      // Use greater than
-      if (px[colorChannel] > 0) {
-        // Set each pixel
-        px[0] = 0;
-        px[1] = 0;
-        px[2] = 0;
-        px[3] = 0;
-      }
-    });
-
     let newImage = context.createImageData(width, height);
-    newImage.data.set(data.flat());
+    newImage.data.set(flatData);
     context.putImageData(newImage, 0, 0);
+
+    // console.timeEnd('Improved Function');
     callback();
   };
 };
