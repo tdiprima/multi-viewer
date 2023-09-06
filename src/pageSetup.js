@@ -12,18 +12,11 @@
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
-  // console.clear();
-  /*
-  When the 'images' parameter becomes an array with null elements,
-  it usually means that the session timed out or is in the process of timeout.
-   */
   let viewers = [];
-  console.log("images[0]:", images[0]);
-  if (!isRealValue(images) || images[0] === null || typeof images[0] === 'undefined') {
-    // You have been logged out
-    document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
-    // logout & redirect
-    // document.write("<script>window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;</script>");
+
+  if (!isRealValue(images) || !isRealValue(images[0])) {
+    // No images; notify and send them home.
+    document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/`;</script>");
   }
 
   document.addEventListener('DOMContentLoaded', setUp);
