@@ -119,7 +119,7 @@ function toggleButton(element, class0, class1) {
  * @return {boolean}
  */
 function isRealValue(obj) {
-  return obj && obj !== 'null' && obj !== 'undefined';
+  return obj !== null && obj !== undefined;
 }
 
 /**
