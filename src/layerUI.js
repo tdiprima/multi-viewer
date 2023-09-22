@@ -169,20 +169,19 @@ function handleDrag(layers, viewer) {
   })(viewer); // Pass the viewer into the IIFE
 }
 
+async function fetchData(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
 function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   const divTableRow = e("div", {class: "divTableRow"});
   divTable.appendChild(divTableRow);
 
   const layerNum = currentLayer.layerNum;
-
-  // FEATURE
-  async function fetchData(url) {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  }
 
   async function fetchAndDisplay(url) {
     try {
