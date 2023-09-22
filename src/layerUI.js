@@ -186,13 +186,12 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   async function fetchAndDisplay(url) {
     try {
       const data = await fetchData(url);
-      let arr = createDraggableBtn(layerNum, currentLayer, data);
-      const element = arr[0];
-      const featureName = arr[1];
+      const featureName = getFeatureName(layerNum, currentLayer, data)
+
+      let element = createDraggableBtn(layerNum, featureName);
       divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
 
-      // OKAY THIS MIGHT NOT WORK BUT I'M GONNA TRY (besides should have 1 idea per function):
-      // VISIBILITY TOGGLE
+      // Visibility toggle
       const faEye = layerEye(currentLayer);
       if (layerNum > 0) {
         myEyeArray.push(faEye);
@@ -200,7 +199,7 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
 
       divTableRow.appendChild(e("div", {class: "divTableCell"}, [faEye]));
 
-      // TRANSPARENCY SLIDER
+      // Transparency slider
       const [icon, slider] = transparencySlider(currentLayer, faEye, viewer);
 
       // .myDIV
@@ -209,17 +208,17 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
       // .hide
       div.appendChild(e("div", {class: "hide"}, [slider]));
 
-      // VISIBILITY
+      // Visibility
       // faEye.addEventListener('click', () => { layerEyeEvent(faEye, slider, layerNum, viewer) });
       faEye.addEventListener("click", layerEyeEvent.bind(null, faEye, slider, layerNum, viewer), false);
 
       divTableRow.appendChild(e("div", {class: "divTableCell"}, [div]));
 
       if (layerNum > 0) {
-        // COLOR PALETTE
+        // Color Palette
         createColorPalette(divTableRow, "featureName", currentLayer, allLayers, viewer);
 
-        // TACHOMETER
+        // Tachometer
         const divBody = createTachometer(divTableRow, "featureName");
 
         layerPopup(divBody, allLayers, viewer);
@@ -232,12 +231,10 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
     }
   }
 
-  // Calling the function
   fetchAndDisplay(currentLayer.location).then(result => { console.log("something"), result });
 }
 
-// Feature (draggable)
-function createDraggableBtn(layerNum, currentLayer, data) {
+function getFeatureName(layerNum, currentLayer, data) {
   let sections = new URL(currentLayer.location).search.split("/");
   const elementWithTCGA = sections.find(item => item.startsWith("TCGA"));
 
@@ -255,7 +252,11 @@ function createDraggableBtn(layerNum, currentLayer, data) {
   } else {
     featureName = currentLayer.location.split('/').pop();
   }
+  return featureName;
+}
 
+// Feature (draggable)
+function createDraggableBtn(layerNum, featureName) {
   const element = e("button", {
     id: `${layerNum}${createId(5, "feat")}`,
     class: "layer",
@@ -264,7 +265,7 @@ function createDraggableBtn(layerNum, currentLayer, data) {
     title: featureName
   });
   element.innerHTML = featureName;
-  return [element, featureName];
+  return element;
 }
 
 // Eyeball visibility: layer
