@@ -1,101 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Apple macOS version 5.8.0">
-<meta charset="utf-8">
-<title>JSDoc: Source: commonFunctions.js</title>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: commonFunctions.js</title>
 
-<script src="scripts/prettify/prettify.js"></script>
-<script src="scripts/prettify/lang-css.js"></script>
-<!--[if lt IE 9]>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<link type="text/css" rel="stylesheet" href=
-"styles/prettify-tomorrow.css">
-<link type="text/css" rel="stylesheet" href=
-"styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
+
 <body>
+
 <div id="main">
-<h1 class="page-title">Source: commonFunctions.js</h1>
-<section>
-<article>
-<pre class=
-"prettyprint source linenums"><code>/** @file commonFunctions.js - Contains utility functions */
+
+    <h1 class="page-title">Source: commonFunctions.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @file commonFunctions.js - Contains utility functions */
 
 /**
  * Change the way the image is displayed, based on user input.
  *
  * @param {Array} layers - Layers (images) to be displayed in viewer
  * @param {object} viewer - OpenSeadragon viewer
- * @param {object} [range]
- * @param {object} [thresh] - Thresholding
- * @param {number} [thresh.val] - From user input
- * @param {Array&lt;number&gt;} [thresh.rgba] - example: [126, 1, 0, 255]
+ * @param {object} [range] - For inside/outside; e.g. { "min": 70, "max": 170, "type": "inside" }
+ * @param {object} [thresh] - Class thresholding; e.g. { "val": 128, "rgba": [ 255, 255, 0, 255 ], "classId": 1 }
  */
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
     // let start = performance.now();
-    // let caller = setFilter.caller;
-    // console.log('caller', caller);
+    // console.log(setFilter.caller);
 
     const itemCount = viewer.world.getItemCount();
     let filterOpts = [];
 
-    // Because one does not simply color the affected layer.
-    // No. You have to do all of them.
-    for (let i = 0; i &lt; itemCount; i++) {
+    // One does not color just the affected layer; you have to do all of them.
+    for (let i = 1; i &lt; itemCount; i++) {
       const tiledImage = viewer.world.getItemAt(i);
-      // Skip base
-      if (i &gt; 0) {
-        if (!isEmpty(range)) {
-          // USE RANGE VALUES
-          let rgba;
-          if (range.type === 'inside') {
-            // Color #00FFFF is cyan
-            rgba = [0, 255, 255, 255];
-          } else {
-            // Color #4A00B4 is Purple Heart
-            rgba = [74, 0, 180, 255];
-          }
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.PROBABILITY(range, rgba)
-          });
-        } else if (STATE.outline) {
-          // OUTLINE POLYS
-          // NOTE: Color can not have green in it.
-          // Color #0000FF is blue
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.OUTLINE([0, 0, 255, 255]),
-          });
-        } else if (STATE.renderType === 'byProbability') {
-          // USE COLOR SPECTRUM
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum),
-          });
-        } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
-          let processor;
-          if (thresh) {
-            // USE THRESHOLD
-            processor = colorFilter.prototype.THRESHOLDING(thresh);
-          } else {
-            // USE COLOR SCHEME
-            processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
-          }
-          filterOpts.push({
-            items: tiledImage,
-            processors: processor,
-          });
-        } else if (STATE.renderType === 'byThreshold') {
-          filterOpts.push({
-            items: tiledImage,
-            processors: colorFilter.prototype.THRESHOLDING(thresh)
-          });
+
+      if (!isEmpty(range)) {
+        // Use range values
+        let rgba;
+        if (range.type === 'inside') {
+          rgba = [0, 255, 255, 255]; // #00ffff (Cyan)
+        } else {
+          rgba = [74, 0, 180, 255]; // #4a00b4 (Purple Heart)
         }
+        filterOpts.push({
+          items: tiledImage,
+          processors: OpenSeadragon.Filters.PROBABILITY(range, rgba)
+        });
+      } else if (STATE.outline) {
+        // Outline in blue.  Color can not have green in it.
+        filterOpts.push({
+          items: tiledImage,
+          processors: OpenSeadragon.Filters.OUTLINE([0, 0, 255, 255]),
+        });
+      } else if (STATE.renderType === 'byProbability') {
+        // Use color spectrum
+        filterOpts.push({
+          items: tiledImage,
+          processors: OpenSeadragon.Filters.COLORLEVELS(layers[i].colorscheme.colorspectrum),
+        });
+      } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
+        let processor;
+        if (thresh) {
+          // Use threshold
+          processor = OpenSeadragon.Filters.THRESHOLDING(thresh);
+        } else {
+          // Use color scheme
+          processor = OpenSeadragon.Filters.COLORLEVELS(layers[i].colorscheme.colors);
+        }
+        filterOpts.push({
+          items: tiledImage,
+          processors: processor
+        });
+      } else if (STATE.renderType === 'byThreshold') {
+        filterOpts.push({
+          items: tiledImage,
+          processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
+        });
       }
     }
 
@@ -153,7 +147,7 @@ function toggleButton(element, class0, class1) {
  * @return {boolean}
  */
 function isRealValue(obj) {
-  return obj &amp;& obj !== 'null' &amp;& obj !== 'undefined';
+  return obj !== null &amp;&amp; obj !== undefined;
 }
 
 /**
@@ -162,17 +156,17 @@ function isRealValue(obj) {
  * @param {Array|object|string} value
  * @return {boolean}
  */
-const isEmpty = value =&gt; {
-  const isEmptyObject = a =&gt; {
+const isEmpty = value => {
+  const isEmptyObject = a => {
     if (typeof a.length === 'undefined') {
       // it's an Object, not an Array
-      const hasNonempty = Object.keys(a).some(element =&gt; {
-          return !isEmpty(a[element]);
-        });
+      const hasNonempty = Object.keys(a).some(element => {
+        return !isEmpty(a[element]);
+      });
       return hasNonempty ? false : isEmptyObject(Object.keys(a));
     }
 
-    return !a.some(element =&gt; {
+    return !a.some(element => {
       // check if array is really not empty as JS thinks
       return !isEmpty(element); // at least one element should be non-empty
     });
@@ -181,7 +175,7 @@ const isEmpty = value =&gt; {
     value === false
     || typeof value === 'undefined'
     || value === null
-    || (typeof value === 'object' &amp;& isEmptyObject(value))
+    || (typeof value === 'object' &amp;&amp; isEmptyObject(value))
   );
 };
 
@@ -247,7 +241,7 @@ fabric.Canvas.prototype.getItemsByName = function(name) {
   const objects = this.getObjects();
 
   for (let i = 0, len = this.size(); i &lt; len; i++) {
-    if (objects[i].name &amp;& objects[i].name === name) {
+    if (objects[i].name &amp;&amp; objects[i].name === name) {
       objectList.push(objects[i]);
     }
   }
@@ -263,17 +257,17 @@ fabric.Canvas.prototype.getItemsByName = function(name) {
  * @param {Array} children
  * @return {object}
  */
-const e = (tagName, properties = {}, children = []) =&gt; {
+const e = (tagName, properties = {}, children = []) => {
   // Create the element
   const element = document.createElement(tagName);
 
   // Apply properties
-  Object.keys(properties).forEach(property =&gt; {
-      element.setAttribute(property, properties[property]);
-    });
+  Object.keys(properties).forEach(property => {
+    element.setAttribute(property, properties[property]);
+  });
 
   // Append children
-  children.forEach(c =&gt; {
+  children.forEach(c => {
     if (!c) return;
     const node = typeof c === 'string' ? document.createTextNode(c) : c;
     element.appendChild(node);
@@ -290,7 +284,7 @@ const e = (tagName, properties = {}, children = []) =&gt; {
  */
 function colorToArray(input) {
   const arrStr = input.replace(/[a-z%\s()]/g, '').split(',');
-  return arrStr.map(i =&gt; Number(i));
+  return arrStr.map(i => Number(i));
 }
 
 /**
@@ -299,7 +293,7 @@ function colorToArray(input) {
  * @param num
  * @return {number}
  */
-const scaleToPct = num =&gt; {
+const scaleToPct = num => {
   return (num / 255) * 100;
 };
 
@@ -309,7 +303,7 @@ const scaleToPct = num =&gt; {
  * @param num
  * @return {number}
  */
-const scaleToRgb = num =&gt; {
+const scaleToRgb = num => {
   return (num * 255) / 100;
 };
 
@@ -318,7 +312,8 @@ const scaleToRgb = num =&gt; {
  *
  * @type {string[]}
  */
-const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+// const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap', 'byThreshold'];
+const RENDER_TYPES = ['byProbability', 'byClass', 'byHeatmap'];
 
 /**
  * State
@@ -347,7 +342,7 @@ function stringy(param) {
  */
 function populateStorage(canvas, options) {
   localStorage.setItem('theme', document.body.className);
-  const myObject = canvas.toJSON(['name','tag']);
+  const myObject = canvas.toJSON(['name', 'tag']);
   localStorage.setItem('canvas', stringy(myObject));
   localStorage.setItem('state', stringy(STATE));
   localStorage.setItem('options', stringy(options));
@@ -357,12 +352,12 @@ function populateStorage(canvas, options) {
 /**
  * Save user settings and markup:
  *
- * &lt;ul&gt;
- *  &lt;li&gt; CSS theme (dark, light)
- *  &lt;li&gt; Canvas objects (polygons, annotations, measurement, etc.)
- *  &lt;li&gt; App state (attenuate, outline, renderType)
- *  &lt;li&gt; Options (toolbarOn, paintbrushColor)
- * &lt;/ul&gt;
+ * &lt;ul>
+ *  &lt;li> CSS theme (dark, light)
+ *  &lt;li> Canvas objects (polygons, annotations, measurement, etc.)
+ *  &lt;li> App state (attenuate, outline, renderType)
+ *  &lt;li> Options (toolbarOn, paintbrushColor)
+ * &lt;/ul>
  *
  * @param {object} canvas - Our osd fabric.js canvas object
  * @param {object} options
@@ -374,7 +369,7 @@ function saveSettings(canvas, options) {
   populateStorage(canvas, options);
   const jsonObject = {
     theme: document.body.className,
-    canvas: canvas.toJSON(['name','tag']),
+    canvas: canvas.toJSON(['name', 'tag']),
     state: STATE,
     options,
   };
@@ -414,66 +409,26 @@ const MAX = 255;
  * @type {number}
  */
 let MICRONS_PER_PIX = 0.25;
-</code></pre></article>
-</section>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
 </div>
+
 <nav>
-<h2><a href="index.html">Home</a></h2>
-<h3>Classes</h3>
-<ul>
-<li><a href="ImageViewer.html">ImageViewer</a></li>
-<li><a href="MultiViewer.html">MultiViewer</a></li>
-</ul>
-<h3>Global</h3>
-<ul>
-<li><a href="global.html#alertMessage">alertMessage</a></li>
-<li><a href="global.html#blender">blender</a></li>
-<li><a href="global.html#colorToArray">colorToArray</a></li>
-<li><a href="global.html#CONFIG">CONFIG</a></li>
-<li><a href=
-"global.html#createDraggableDiv">createDraggableDiv</a></li>
-<li><a href="global.html#createId">createId</a></li>
-<li><a href="global.html#createId2">createId2</a></li>
-<li><a href="global.html#drawCross">drawCross</a></li>
-<li><a href="global.html#drawPolygon">drawPolygon</a></li>
-<li><a href="global.html#e">e</a></li>
-<li><a href="global.html#editPolygon">editPolygon</a></li>
-<li><a href="global.html#filterPopup">filterPopup</a></li>
-<li><a href="global.html#getRandomInt">getRandomInt</a></li>
-<li><a href="global.html#gridOverlay">gridOverlay</a></li>
-<li><a href="global.html#img2array">img2array</a></li>
-<li><a href="global.html#isEmpty">isEmpty</a></li>
-<li><a href="global.html#isRealValue">isRealValue</a></li>
-<li><a href="global.html#layerPopup">layerPopup</a></li>
-<li><a href="global.html#layerUI">layerUI</a></li>
-<li><a href="global.html#mapMarker">mapMarker</a></li>
-<li><a href="global.html#markupTools">markupTools</a></li>
-<li><a href="global.html#MAX">MAX</a></li>
-<li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li>
-<li><a href="global.html#mugshots">mugshots</a></li>
-<li><a href="global.html#populateStorage">populateStorage</a></li>
-<li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li>
-<li><a href="global.html#ruler">ruler</a></li>
-<li><a href="global.html#saveSettings">saveSettings</a></li>
-<li><a href="global.html#scaleToPct">scaleToPct</a></li>
-<li><a href="global.html#scaleToRgb">scaleToRgb</a></li>
-<li><a href="global.html#setFilter">setFilter</a></li>
-<li><a href="global.html#setOsdTracking">setOsdTracking</a></li>
-<li><a href="global.html#STATE">STATE</a></li>
-<li><a href="global.html#stringy">stringy</a></li>
-<li><a href=
-"global.html#synchronizeViewers">synchronizeViewers</a></li>
-<li><a href="global.html#toggleButton">toggleButton</a></li>
-<li><a href="global.html#toggleCross">toggleCross</a></li>
-</ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#bgTrans">bgTrans</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#createId2">createId2</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getPreferredLabel">getPreferredLabel</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#populateStorage">populateStorage</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdTracking">setOsdTracking</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#stringy">stringy</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
 </nav>
+
 <br class="clear">
-<footer>Documentation generated by <a href=
-"https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jul 26
-2022 14:36:36 GMT-0400 (Eastern Daylight Time)</footer>
-<script>
- prettyPrint(); 
-</script> 
-<script src="scripts/linenumber.js"></script>
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Sep 08 2023 13:38:18 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>

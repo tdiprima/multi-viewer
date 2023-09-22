@@ -38,6 +38,7 @@
     "grunt-contrib-uglify": "^5.0.0",
     "jsdoc": "^3.6.10",
     "prettier": "^1.14.3",
+    "terser": "^5.19.4",
     "yarn": "^1.22.18"
   },
   "dependencies": {

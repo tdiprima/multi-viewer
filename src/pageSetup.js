@@ -13,10 +13,22 @@
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   let viewers = [];
+  // PRINT IMAGES
+  // const div = document.createElement('div');
+  // div.innerText = JSON.stringify(images)
+  // document.body.appendChild(div);
 
   if (!isRealValue(images) || !isRealValue(images[0])) {
     // No images; notify and send them home.
     document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/`;</script>");
+  } else {
+    // TODO: MY STUFF
+    // images = images.slice(0, 2);
+    // numViewers = 2;
+    // rows = 1;
+    // columns = 2;
+    // width = 800;
+    // height = 600;
   }
 
   document.addEventListener('DOMContentLoaded', setUp);
@@ -172,15 +184,15 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             });
 
             const vInfo = { idx, osdId, layers: images[idx] };
-            // Create MultiViewer object and add to array
-            viewers.push(new MultiViewer(vInfo, numViewers, opts));
+            // Create ImageViewer object and add to array
+            viewers.push(new ImageViewer(vInfo, numViewers, opts));
           }
         }
 
         return viewers;
       })
       .then(viewers => {
-        // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
+        // PAN/ZOOM CONTROLLER - accepts array of ImageViewers
         synchronizeViewers(viewers);
       });
   }

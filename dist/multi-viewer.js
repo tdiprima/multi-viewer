@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2023-08-24 */
+/*! multi-viewer - v1.0.0 - 2023-09-19 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -18,9 +18,7 @@ function setFilter(layers, viewer, range, thresh) {
     let filterOpts = [];
 
     // One does not color just the affected layer; you have to do all of them.
-    for (let i = 0; i < itemCount; i++) {
-      if (i === 0) continue; // Skip base
-
+    for (let i = 1; i < itemCount; i++) {
       const tiledImage = viewer.world.getItemAt(i);
 
       if (!isEmpty(range)) {
@@ -33,28 +31,28 @@ function setFilter(layers, viewer, range, thresh) {
         }
         filterOpts.push({
           items: tiledImage,
-          processors: colorFilter.prototype.PROBABILITY(range, rgba)
+          processors: OpenSeadragon.Filters.PROBABILITY(range, rgba)
         });
       } else if (STATE.outline) {
         // Outline in blue.  Color can not have green in it.
         filterOpts.push({
           items: tiledImage,
-          processors: colorFilter.prototype.OUTLINE([0, 0, 255, 255]),
+          processors: OpenSeadragon.Filters.OUTLINE([0, 0, 255, 255]),
         });
       } else if (STATE.renderType === 'byProbability') {
         // Use color spectrum
         filterOpts.push({
           items: tiledImage,
-          processors: colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colorspectrum),
+          processors: OpenSeadragon.Filters.COLORLEVELS(layers[i].colorscheme.colorspectrum),
         });
       } else if (STATE.renderType === 'byClass' || STATE.renderType === 'byHeatmap') {
         let processor;
         if (thresh) {
           // Use threshold
-          processor = colorFilter.prototype.THRESHOLDING(thresh);
+          processor = OpenSeadragon.Filters.THRESHOLDING(thresh);
         } else {
           // Use color scheme
-          processor = colorFilter.prototype.COLORLEVELS(layers[i].colorscheme.colors);
+          processor = OpenSeadragon.Filters.COLORLEVELS(layers[i].colorscheme.colors);
         }
         filterOpts.push({
           items: tiledImage,
@@ -63,7 +61,7 @@ function setFilter(layers, viewer, range, thresh) {
       } else if (STATE.renderType === 'byThreshold') {
         filterOpts.push({
           items: tiledImage,
-          processors: colorFilter.prototype.THRESHOLDING(thresh)
+          processors: OpenSeadragon.Filters.THRESHOLDING(thresh)
         });
       }
     }
@@ -122,7 +120,7 @@ function toggleButton(element, class0, class1) {
  * @return {boolean}
  */
 function isRealValue(obj) {
-  return obj && obj !== 'null' && obj !== 'undefined';
+  return obj !== null && obj !== undefined;
 }
 
 /**
@@ -399,8 +397,20 @@ let MICRONS_PER_PIX = 0.25;
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
-  // console.clear();
-  let viewers = []; // eslint-disable-line prefer-const
+  let viewers = [];
+
+  if (!isRealValue(images) || !isRealValue(images[0])) {
+    // No images; notify and send them home.
+    document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/`;</script>");
+  } else {
+    // TODO: MY STUFF
+    // images = images.slice(0, 2);
+    // numViewers = 2;
+    // rows = 1;
+    // columns = 2;
+    // width = 800;
+    // height = 600;
+  }
 
   document.addEventListener('DOMContentLoaded', setUp);
   window.addEventListener('keydown', hotKeysHandler);
@@ -416,7 +426,13 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         // Slide name
         let name;
-        const slide = images[0][0].location; // layer 0 location
+        let slide;
+        try {
+          slide = images[0][0].location; // layer 0 location
+        } catch (e) {
+          // double-check
+          document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
+        }
         if (slide.includes('TCGA')) {
           const str = slide.match(/TCGA-[^%.]+/)[0];
           name = `Slide: ${str}`;
@@ -549,15 +565,15 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             });
 
             const vInfo = { idx, osdId, layers: images[idx] };
-            // Create MultiViewer object and add to array
-            viewers.push(new MultiViewer(vInfo, numViewers, opts));
+            // Create ImageViewer object and add to array
+            viewers.push(new ImageViewer(vInfo, numViewers, opts));
           }
         }
 
         return viewers;
       })
       .then(viewers => {
-        // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
+        // PAN/ZOOM CONTROLLER - accepts array of ImageViewers
         synchronizeViewers(viewers);
       });
   }
@@ -585,7 +601,6 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         });
       }
     }
-
   }
 };
 
@@ -1173,12 +1188,12 @@ function drawCross(idx, canvas) {
  * at that location on all viewers.
  *
  * @param {object} osdViewer - The OpenSeadragon viewer that has the focus
- * @param {object} multiViewerArray - Array of MultiViewers
+ * @param {object} imageViewerArray - Array of ImageViewers
  */
-const mapMarker = (osdViewer, multiViewerArray) => {
+const mapMarker = (osdViewer, imageViewerArray) => {
   overrideRightClickMenu(osdViewer.element);
 
-  handleMarkerDisplay(osdViewer, multiViewerArray);
+  handleMarkerDisplay(osdViewer, imageViewerArray);
 
   handleButtonShowHide();
 };
@@ -1189,7 +1204,7 @@ function overrideRightClickMenu(viewerDiv) {
   });
 }
 
-function handleMarkerDisplay(osdViewer, multiViewerArray) {
+function handleMarkerDisplay(osdViewer, imageViewerArray) {
   osdViewer.addHandler('canvas-nonprimary-press', osdEvent => {
     if (isRightClick(osdEvent)) {
       const clickPosition = osdEvent.position;
@@ -1199,7 +1214,7 @@ function handleMarkerDisplay(osdViewer, multiViewerArray) {
       buttons.forEach(item => {
         item.style.display = 'block';
       });
-      displayMapMarker(clickPositionViewport, osdViewer, multiViewerArray);
+      displayMapMarker(clickPositionViewport, osdViewer, imageViewerArray);
     }
   });
 }
@@ -1208,8 +1223,8 @@ function isRightClick(evt) {
   return evt.button === 2;
 }
 
-function displayMapMarker(point, osdViewer, multiViewerArray) {
-  multiViewerArray.forEach(item => {
+function displayMapMarker(point, osdViewer, imageViewerArray) {
+  imageViewerArray.forEach(item => {
     item.getViewer().addOverlay({
       element: createLink(),
       location: point,
@@ -1725,7 +1740,7 @@ const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
   setChecked(colorscheme);
   const uniqueId = getRandomInt(100, 999);
   const popup = createPopup(uniqueId, paletteBtn, title);
-  const popupBody = popup.lastChild; // known
+  const popupBody = document.getElementById(`${popup.id}Body`);
   const classDiv = e('div');
   const probabilityDiv = e('div');
   const heatmapDiv = e('div');
@@ -1777,7 +1792,6 @@ const filterPopup = (paletteBtn, title, colorscheme, viewerLayers, viewer) => {
 function createPopup(uniqueId, paletteBtn, title) {
   const widgetId = `filters${uniqueId}`;
   const rect = paletteBtn.getBoundingClientRect();
-  // const title = `${title} color levels`;
   return createDraggableDiv(widgetId, title, rect.left, rect.top);
 }
 
@@ -1785,7 +1799,6 @@ function setChecked(colorscheme) {
   // colorscheme.colors: is an array of class-colors objects
   // Now, add a flag called 'checked', and set it to true for use later:
   colorscheme.colors.map(a => {
-    // eslint-disable-next-line no-return-assign
     return (a.checked = true);
   });
 
@@ -1798,17 +1811,22 @@ function setChecked(colorscheme) {
   });
 }
 
-function createThresh(div, layers, viewer, colorPicker, classId) {
-  const val = '1'; // Initial value
+function getThreshColor(colorPicker) {
   let color;
   if (colorPicker) {
     color = colorToArray(colorPicker.style.backgroundColor);
     if (color.length === 3) {
       color.push(255);
     }
+    return color;
+
   } else {
-    color = [126, 1, 0, 255]; // Default thresh color maroon
+    return [126, 1, 0, 255]; // Default thresh color maroon
   }
+}
+
+function createThresh(div, layers, viewer, colorPicker, classId) {
+  const val = '1'; // Initial value
 
   // slider value
   const number = e('input', {
@@ -1834,7 +1852,7 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
   function createInputHandler(updateElement) {
     return function() {
       updateElement.value = this.value;
-      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: color, classId: classId });
+      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: getThreshColor(colorPicker), classId: classId });
     };
   }
 
@@ -2202,16 +2220,19 @@ function setOutlineStyle(a, b, style, color) {
 
 // The "Add color range" event
 function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer) {
+  // User clicked `+` to add row
   setOutlineStyle(num1, num2, '', ''); // clear any error
   if (num1.value === '0' && num2.value === '0') {
     // indicate 0 and 0 not allowed
     setOutlineStyle(num1, num2, 'solid', 'red');
   } else {
-    // Now replace + with - in UI
+    // Create remove button and add event listener
     const buttonId = `i${num1.id.replace('low', '')}`; // borrowing element id
     const removeBtn = e('i', { id: buttonId, class: 'fas fa-minus pointer' });
-    tr.lastChild.firstChild.remove(); // last element in row is modifier
-    tr.lastChild.appendChild(removeBtn); // replace old modifier with new one
+    // Get the desired <i> element
+    let iconElement = tr.querySelector('td:last-child i:first-child');
+    iconElement.replaceWith(removeBtn);
+
     removeBtn.addEventListener(
       'click',
       removeColor.bind(null, removeBtn, colors, tr, layers, viewer),
@@ -2238,13 +2259,15 @@ function seq(objArray) {
 
 // Extra row for adding color and range values
 function extraRow(uniq, colors, layers, viewer) {
-  let idx;
-  const nums = seq(colors); // Use 'const'.
-  if (!nums || isEmpty(nums)) {
-    idx = colors.length;
-  } else {
-    idx = Array.isArray(nums) ? nums[0] : nums;
-  }
+  // let idx;
+  // const nums = seq(colors);
+  // if (!nums || isEmpty(nums)) {
+  //   idx = colors.length;
+  // } else {
+  //   idx = Array.isArray(nums) ? nums[0] : nums;
+  // }
+
+  let idx = colors.length;
 
   const colorObject = {
     color: 'rgba(255, 255, 255, 255)',
@@ -2296,12 +2319,6 @@ function extraRow(uniq, colors, layers, viewer) {
 
 /** Custom color filters */
 
-const img2array = imgData => {
-  return imgData.data.reduce((pixel, key, index) => {
-    return (index % 4 === 0 ? pixel.push([key]) : pixel[pixel.length - 1].push(key)) && pixel;
-  }, []);
-};
-
 const bgTrans = function(imageData) {
   for (let i = 0; i < imageData.length; i += 4) {
     if (imageData[i + 1] === 0) {
@@ -2311,289 +2328,203 @@ const bgTrans = function(imageData) {
   return imageData;
 };
 
-const backgroundCorrection = data => {
-  data.forEach(px => {
-    if (px[1] === 0 || px[3] === 0) {
-      px[0] = 0;
-      px[1] = 0;
-      px[2] = 0;
-      px[3] = 0;
-    }
-  });
-  return data;
-};
-
-// Array.flat() polyfill
-if (!Array.prototype.flat) {
-  Array.prototype.flat = function(depth) {
-    // If no depth is specified, default to 1
-    if (depth === undefined) {
-      depth = 1;
+const img2arrayWithBackgroundCorrection = imgData => {
+  return imgData.data.reduce((pixel, key, index) => {
+    if (index % 4 === 0) {
+      pixel.push([key]);
+    } else {
+      pixel[pixel.length - 1].push(key);
     }
 
-    // Recursively reduce sub-arrays to the specified depth
-    let flatten = function(arr, depth) {
-      // If depth is 0, return the array as-is
-      if (depth < 1) {
-        return arr.slice();
-      }
-
-      // Otherwise, concatenate into the parent array
-      return arr.reduce((acc, val) => {
-        return acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val);
-      }, []);
-    };
-
-    return flatten(this, depth);
-  };
-}
-
-/**********************
- CUSTOM COLOR FILTERS
- **********************/
-const colorFilter = OpenSeadragon.Filters.GREYSCALE;
-const colorChannel = 1;
-const alphaChannel = 3;
-const message = "Set OSD viewer: { crossOriginPolicy: \"Anonymous\" }";
-
-// Outline the edge of the polygon
-colorFilter.prototype.OUTLINE = rgba => {
-  return (context, callback) => {
-    // console.log('outline');
-    const width = context.canvas.width;
-    const height = context.canvas.height;
-    let imgData;
-    try {
-      imgData = context.getImageData(0, 0, width, height);
-    } catch (e) {
-      console.error(`${e.name}\n${message}`);
-      return;
-    }
-
-    let data = backgroundCorrection(img2array(imgData));
-
-    for (let i = 0; i < data.length; i++) {
-      if (data[i][alphaChannel] === 255 && data[i][colorChannel] > 0) {
-        // right
-        try {
-          if (data[i + 1][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {
-          // It's okay.
-        }
-
-        // left
-        try {
-          if (data[i - 1][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {
-          // These things happen.
-        }
-
-        try {
-          // up
-          if (data[i - width][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {}
-
-        try {
-          // down
-          if (data[i + width][alphaChannel] === 0) {
-            data[i][0] = rgba[0];
-            data[i][1] = rgba[1];
-            data[i][2] = rgba[2];
-            data[i][3] = rgba[3];
-          }
-        } catch (e) {}
-      } else {
-        // Set each pixel
-        data[i][0] = 0;
-        data[i][1] = 0;
-        data[i][2] = 0;
-        data[i][3] = 0;
-      }
-    }
-
-    // Change the remaining green pixels (middle of polygon) to transparent
-    data.forEach(px => {
-      // Use greater than
-      if (px[colorChannel] > 0) {
-        // Set each pixel
+    // Apply background correction if the RGBA values for the pixel are fully populated
+    if (index % 4 === 3) {
+      const px = pixel[pixel.length - 1];
+      if (px[1] === 0 || px[3] === 0) {
         px[0] = 0;
         px[1] = 0;
         px[2] = 0;
         px[3] = 0;
       }
-    });
+    }
+
+    return pixel;
+  }, []);
+};
+
+/**********************
+ CUSTOM COLOR FILTERS
+ **********************/
+const colorChannel = 1;
+const alphaChannel = 3;
+const maxPixelValue = 255;
+
+// Outline the edge of the polygon
+OpenSeadragon.Filters.OUTLINE = rgba => {
+  return (context, callback) => {
+    // console.time('Outline');
+    const width = context.canvas.width;
+    const height = context.canvas.height;
+
+    let imgData = context.getImageData(0, 0, width, height);
+    let data = img2arrayWithBackgroundCorrection(imgData);
+    let flatData = new Uint8ClampedArray(width * height * 4);
+
+    for (let i = 0; i < data.length; i++) {
+      let currentPixel = data[i];
+      let isEdge = false;
+
+      if (currentPixel[alphaChannel] === maxPixelValue && currentPixel[colorChannel] > 0) {
+        // Index calculations
+        let right = i + 1;
+        let left = i - 1;
+        let up = i - width;
+        let down = i + width;
+
+        if (data[right] && data[right][alphaChannel] === 0) isEdge = true;
+        if (data[left] && data[left][alphaChannel] === 0) isEdge = true;
+        if (data[up] && data[up][alphaChannel] === 0) isEdge = true;
+        if (data[down] && data[down][alphaChannel] === 0) isEdge = true;
+
+        if (isEdge) {
+          // Set to the desired RGBA for outline
+          currentPixel = rgba;
+        }
+      } else {
+        // Set each pixel to transparent
+        currentPixel = [0, 0, 0, 0];
+      }
+
+      // Flatten data as we go
+      flatData.set(currentPixel, i * 4);
+    }
+
+    // Change the remaining colored pixels to transparent
+    for (let i = 0; i < flatData.length; i += 4) {
+      if (flatData[i + colorChannel] > 0) {
+        flatData[i] = 0;
+        flatData[i + 1] = 0;
+        flatData[i + 2] = 0;
+        flatData[i + 3] = 0;
+      }
+    }
 
     let newImage = context.createImageData(width, height);
-    newImage.data.set(data.flat());
+    newImage.data.set(flatData);
     context.putImageData(newImage, 0, 0);
+
+    // console.timeEnd('Outline');
     callback();
   };
 };
 
 // Handles 'inside' and 'outside' sliders
-colorFilter.prototype.PROBABILITY = (data, rgba) => {
+OpenSeadragon.Filters.PROBABILITY = (data, rgba) => {
   return (context, callback) => {
-    // console.log('probability');
-    let imgData;
-    try {
-      imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    } catch (e) {
-      console.error(`${e.name}\n${message}`);
-      return;
-    }
-
+    // console.time('Probability');
+    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     let pixels = imgData.data;
 
-    if (data.type === 'inside') {
-      for (let i = 0; i < pixels.length; i += 4) {
-        const probability = pixels[i + 1];
-        // has to be gt zero (not >=)
-        if (probability > data.min && probability <= data.max) {
-          pixels[i] = rgba[0];
-          pixels[i + 1] = rgba[1];
-          pixels[i + 2] = rgba[2];
-          pixels[i + 3] = rgba[3];
-        } else {
-          pixels[i + 3] = 0;
-        }
-      }
-    } else if (data.type === 'outside') {
-      for (let i = 0; i < pixels.length; i += 4) {
-        const probability = pixels[i + 1];
-        // Has to be > zero; not >=.
-        if ((probability > 0 && probability <= data.min) || (probability <= 255 && probability >= data.max)) {
-          pixels[i] = rgba[0];
-          pixels[i + 1] = rgba[1];
-          pixels[i + 2] = rgba[2];
-          pixels[i + 3] = rgba[3];
-        } else {
-          pixels[i + 3] = 0;
-        }
+    // Define the condition check based on the type
+    let shouldColor;
+    switch (data.type) {
+      case 'inside':
+        shouldColor = greenChannel => greenChannel > data.slideHandle1 && greenChannel <= data.slideHandle2;
+        break;
+      case 'outside':
+        shouldColor = greenChannel => (greenChannel > 0 && greenChannel <= data.slideHandle1) || (greenChannel <= maxPixelValue && greenChannel >= data.slideHandle2);
+        break;
+      default:
+        throw new Error(`Invalid type: ${data.type}`);
+    }
+
+    for (let i = 0; i < pixels.length; i += 4) {
+      const probability = pixels[i + 1]; // green channel is "probability"
+
+      if (shouldColor(probability)) {
+        pixels[i] = rgba[0];
+        pixels[i + 1] = rgba[1];
+        pixels[i + 2] = rgba[2];
+        pixels[i + 3] = rgba[3];
+      } else {
+        pixels[i + 3] = 0;
       }
     }
 
     context.putImageData(imgData, 0, 0);
+    // console.timeEnd('Probability');
     callback();
   };
 };
 
-colorFilter.prototype.COLORLEVELS = layerColors => {
+const getRangeColor = (channelValue, colorRanges, rgbas) => {
+  for (let i = 0; i < colorRanges.length; i++) {
+    if (channelValue >= colorRanges[i].low && channelValue <= colorRanges[i].high) {
+      return rgbas[i];
+    }
+  }
+  return [0, 0, 0, 0];
+};
+
+const getClassColor = (channelValue, classifications, rgbas) => {
+  for (let i = 0; i < classifications.length; i++) {
+    if (channelValue === classifications[i].classid) {
+      return rgbas[i];
+    }
+  }
+  return [0, 0, 0, 0];
+};
+
+const setPixelData = (data, i, rgba, greenChannel, attenuate) => {
+  data[i] = rgba[0];
+  data[i + 1] = rgba[1];
+  data[i + 2] = rgba[2];
+  data[i + 3] = attenuate ? greenChannel : rgba[3];
+};
+
+const gradient = [[0, 0, 255, 255], [1, 0, 254, 255], [2, 0, 253, 255], [3, 0, 252, 255], [4, 0, 251, 255], [5, 0, 250, 255], [6, 0, 249, 255], [7, 0, 248, 255], [8, 0, 247, 255], [9, 0, 246, 255], [10, 0, 245, 255], [11, 0, 244, 255], [12, 0, 243, 255], [13, 0, 242, 255], [14, 0, 241, 255], [15, 0, 240, 255], [16, 0, 239, 255], [17, 0, 238, 255], [18, 0, 237, 255], [19, 0, 236, 255], [20, 0, 235, 255], [21, 0, 234, 255], [22, 0, 233, 255], [23, 0, 232, 255], [24, 0, 231, 255], [25, 0, 230, 255], [26, 0, 229, 255], [27, 0, 228, 255], [28, 0, 227, 255], [29, 0, 226, 255], [30, 0, 225, 255], [31, 0, 224, 255], [32, 0, 223, 255], [33, 0, 222, 255], [34, 0, 221, 255], [35, 0, 220, 255], [36, 0, 219, 255], [37, 0, 218, 255], [38, 0, 217, 255], [39, 0, 216, 255], [40, 0, 215, 255], [41, 0, 214, 255], [42, 0, 213, 255], [43, 0, 212, 255], [44, 0, 211, 255], [45, 0, 210, 255], [46, 0, 209, 255], [47, 0, 208, 255], [48, 0, 207, 255], [49, 0, 206, 255], [50, 0, 205, 255], [51, 0, 204, 255], [52, 0, 203, 255], [53, 0, 202, 255], [54, 0, 201, 255], [55, 0, 200, 255], [56, 0, 199, 255], [57, 0, 198, 255], [58, 0, 197, 255], [59, 0, 196, 255], [60, 0, 195, 255], [61, 0, 194, 255], [62, 0, 193, 255], [63, 0, 192, 255], [64, 0, 191, 255], [65, 0, 190, 255], [66, 0, 189, 255], [67, 0, 188, 255], [68, 0, 187, 255], [69, 0, 186, 255], [70, 0, 185, 255], [71, 0, 184, 255], [72, 0, 183, 255], [73, 0, 182, 255], [74, 0, 181, 255], [75, 0, 180, 255], [76, 0, 179, 255], [77, 0, 178, 255], [78, 0, 177, 255], [79, 0, 176, 255], [80, 0, 175, 255], [81, 0, 174, 255], [82, 0, 173, 255], [83, 0, 172, 255], [84, 0, 171, 255], [85, 0, 170, 255], [86, 0, 169, 255], [87, 0, 168, 255], [88, 0, 167, 255], [89, 0, 166, 255], [90, 0, 165, 255], [91, 0, 164, 255], [92, 0, 163, 255], [93, 0, 162, 255], [94, 0, 161, 255], [95, 0, 160, 255], [96, 0, 159, 255], [97, 0, 158, 255], [98, 0, 157, 255], [99, 0, 156, 255], [100, 0, 155, 255], [101, 0, 154, 255], [102, 0, 153, 255], [103, 0, 152, 255], [104, 0, 151, 255], [105, 0, 150, 255], [106, 0, 149, 255], [107, 0, 148, 255], [108, 0, 147, 255], [109, 0, 146, 255], [110, 0, 145, 255], [111, 0, 144, 255], [112, 0, 143, 255], [113, 0, 142, 255], [114, 0, 141, 255], [115, 0, 140, 255], [116, 0, 139, 255], [117, 0, 138, 255], [118, 0, 137, 255], [119, 0, 136, 255], [120, 0, 135, 255], [121, 0, 134, 255], [122, 0, 133, 255], [123, 0, 132, 255], [124, 0, 131, 255], [125, 0, 130, 255], [126, 0, 129, 255], [127, 0, 128, 255], [128, 0, 127, 255], [129, 0, 126, 255], [130, 0, 125, 255], [131, 0, 124, 255], [132, 0, 123, 255], [133, 0, 122, 255], [134, 0, 121, 255], [135, 0, 120, 255], [136, 0, 119, 255], [137, 0, 118, 255], [138, 0, 117, 255], [139, 0, 116, 255], [140, 0, 115, 255], [141, 0, 114, 255], [142, 0, 113, 255], [143, 0, 112, 255], [144, 0, 111, 255], [145, 0, 110, 255], [146, 0, 109, 255], [147, 0, 108, 255], [148, 0, 107, 255], [149, 0, 106, 255], [150, 0, 105, 255], [151, 0, 104, 255], [152, 0, 103, 255], [153, 0, 102, 255], [154, 0, 101, 255], [155, 0, 100, 255], [156, 0, 99, 255], [157, 0, 98, 255], [158, 0, 97, 255], [159, 0, 96, 255], [160, 0, 95, 255], [161, 0, 94, 255], [162, 0, 93, 255], [163, 0, 92, 255], [164, 0, 91, 255], [165, 0, 90, 255], [166, 0, 89, 255], [167, 0, 88, 255], [168, 0, 87, 255], [169, 0, 86, 255], [170, 0, 85, 255], [171, 0, 84, 255], [172, 0, 83, 255], [173, 0, 82, 255], [174, 0, 81, 255], [175, 0, 80, 255], [176, 0, 79, 255], [177, 0, 78, 255], [178, 0, 77, 255], [179, 0, 76, 255], [180, 0, 75, 255], [181, 0, 74, 255], [182, 0, 73, 255], [183, 0, 72, 255], [184, 0, 71, 255], [185, 0, 70, 255], [186, 0, 69, 255], [187, 0, 68, 255], [188, 0, 67, 255], [189, 0, 66, 255], [190, 0, 65, 255], [191, 0, 64, 255], [192, 0, 63, 255], [193, 0, 62, 255], [194, 0, 61, 255], [195, 0, 60, 255], [196, 0, 59, 255], [197, 0, 58, 255], [198, 0, 57, 255], [199, 0, 56, 255], [200, 0, 55, 255], [201, 0, 54, 255], [202, 0, 53, 255], [203, 0, 52, 255], [204, 0, 51, 255], [205, 0, 50, 255], [206, 0, 49, 255], [207, 0, 48, 255], [208, 0, 47, 255], [209, 0, 46, 255], [210, 0, 45, 255], [211, 0, 44, 255], [212, 0, 43, 255], [213, 0, 42, 255], [214, 0, 41, 255], [215, 0, 40, 255], [216, 0, 39, 255], [217, 0, 38, 255], [218, 0, 37, 255], [219, 0, 36, 255], [220, 0, 35, 255], [221, 0, 34, 255], [222, 0, 33, 255], [223, 0, 32, 255], [224, 0, 31, 255], [225, 0, 30, 255], [226, 0, 29, 255], [227, 0, 28, 255], [228, 0, 27, 255], [229, 0, 26, 255], [230, 0, 25, 255], [231, 0, 24, 255], [232, 0, 23, 255], [233, 0, 22, 255], [234, 0, 21, 255], [235, 0, 20, 255], [236, 0, 19, 255], [237, 0, 18, 255], [238, 0, 17, 255], [239, 0, 16, 255], [240, 0, 15, 255], [241, 0, 14, 255], [242, 0, 13, 255], [243, 0, 12, 255], [244, 0, 11, 255], [245, 0, 10, 255], [246, 0, 9, 255], [247, 0, 8, 255], [248, 0, 7, 255], [249, 0, 6, 255], [250, 0, 5, 255], [251, 0, 4, 255], [252, 0, 3, 255], [253, 0, 2, 255], [254, 0, 1, 255], [255, 0, 0, 255]];
+
+OpenSeadragon.Filters.COLORLEVELS = layerColors => {
   return (context, callback) => {
-    // console.log('colorlevels', STATE.renderType);
-    let imgData;
-    try {
-      imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    } catch (e) {
-      console.error(`${e.name}\n${message}`);
-      return;
-    }
+    // console.time('ColorLevels');
+    let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     const data = bgTrans(imgData.data);
+    const colorGroup = layerColors.filter(x => x.checked);
+    const rgbas = colorGroup.map(element => colorToArray(element.color));
 
-    const colorGroup = layerColors.filter(x => x.checked === true);
-    const rgbas = colorGroup.map(element => {
-      return colorToArray(element.color); // Save the [r, g, b, a]'s for access later
-    });
-
-    const getRangeColor = (channelValue, colorRanges, rgbas1) => {
-      for (let i = 0; i < colorRanges.length; i++) {
-        if (channelValue >= colorRanges[i].low && channelValue <= colorRanges[i].high) {
-          return rgbas1[i]; // return color
-        }
-      }
-      return 0;
-    };
-
-    const getClassColor = (channelValue, classifications, rgbas2) => {
-      for (let i = 0; i < classifications.length; i++) {
-        if (channelValue === classifications[i].classid) {
-          return rgbas2[i];
-        }
-      }
-      return 0;
-    };
-
-    function setPix(myFunction, colorMap) {
+    const setPix = (myFunction, colorMap) => {
       for (let i = 0; i < data.length; i += 4) {
-        // Alpha 255 means that nuclear material exists here
-        if (data[i + 3] === 255) {
-          const redChannel = data[i]; // red channel = class
-          const greenChannel = data[i + 1]; // green channel = probability
-          let rgba;
-          if (STATE.renderType === 'byClass') {
-            rgba = myFunction(redChannel, colorGroup, rgbas);
-          } else if (STATE.renderType === 'byProbability') {
-            rgba = myFunction(greenChannel, colorGroup, rgbas);
-          } else if (STATE.renderType === 'byHeatmap') {
-            rgba = colorMap[greenChannel];
-          } else {
-            console.error('renderType?', STATE.renderType);
-            return;
-          }
-          // Set
-          data[i] = rgba[0];
-          data[i + 1] = rgba[1];
-          data[i + 2] = rgba[2];
-          data[i + 3] = rgba[3];
+        if (data[i + 3] === maxPixelValue) {
+          const redChannel = data[i];
+          const greenChannel = data[i + 1];
+          const rgba = STATE.renderType === 'byClass' ? myFunction(redChannel, colorGroup, rgbas) :
+            STATE.renderType === 'byProbability' ? myFunction(greenChannel, colorGroup, rgbas) :
+              STATE.renderType === 'byHeatmap' ? colorMap[greenChannel] :
+                (console.error('renderType?', STATE.renderType), [0, 0, 0, 0]);
 
-          if (rgba[3] > 0) {
-            // If attenuation is on,
-            // then use green channel value for the alpha value
-            data[i + 3] = STATE.attenuate ? greenChannel : 255;
-          }
+          setPixelData(data, i, rgba, greenChannel, STATE.attenuate);
         } else {
-          // No nuclear material
-          data[i] = 0;
-          data[i + 1] = 0;
-          data[i + 2] = 0;
-          data[i + 3] = 0;
+          data[i] = data[i + 1] = data[i + 2] = data[i + 3] = 0;
         }
       }
-    }
+    };
 
-    if (STATE.renderType === 'byClass') {
-      setPix(getClassColor);
-    }
-
-    if (STATE.renderType === 'byProbability') {
-      setPix(getRangeColor);
-    }
-
-    if (STATE.renderType === 'byHeatmap') {
-      // blue to red gradient; 256 colors
-      setPix({}, [[0, 0, 255, 255], [1, 0, 254, 255], [2, 0, 253, 255], [3, 0, 252, 255], [4, 0, 251, 255], [5, 0, 250, 255], [6, 0, 249, 255], [7, 0, 248, 255], [8, 0, 247, 255], [9, 0, 246, 255], [10, 0, 245, 255], [11, 0, 244, 255], [12, 0, 243, 255], [13, 0, 242, 255], [14, 0, 241, 255], [15, 0, 240, 255], [16, 0, 239, 255], [17, 0, 238, 255], [18, 0, 237, 255], [19, 0, 236, 255], [20, 0, 235, 255], [21, 0, 234, 255], [22, 0, 233, 255], [23, 0, 232, 255], [24, 0, 231, 255], [25, 0, 230, 255], [26, 0, 229, 255], [27, 0, 228, 255], [28, 0, 227, 255], [29, 0, 226, 255], [30, 0, 225, 255], [31, 0, 224, 255], [32, 0, 223, 255], [33, 0, 222, 255], [34, 0, 221, 255], [35, 0, 220, 255], [36, 0, 219, 255], [37, 0, 218, 255], [38, 0, 217, 255], [39, 0, 216, 255], [40, 0, 215, 255], [41, 0, 214, 255], [42, 0, 213, 255], [43, 0, 212, 255], [44, 0, 211, 255], [45, 0, 210, 255], [46, 0, 209, 255], [47, 0, 208, 255], [48, 0, 207, 255], [49, 0, 206, 255], [50, 0, 205, 255], [51, 0, 204, 255], [52, 0, 203, 255], [53, 0, 202, 255], [54, 0, 201, 255], [55, 0, 200, 255], [56, 0, 199, 255], [57, 0, 198, 255], [58, 0, 197, 255], [59, 0, 196, 255], [60, 0, 195, 255], [61, 0, 194, 255], [62, 0, 193, 255], [63, 0, 192, 255], [64, 0, 191, 255], [65, 0, 190, 255], [66, 0, 189, 255], [67, 0, 188, 255], [68, 0, 187, 255], [69, 0, 186, 255], [70, 0, 185, 255], [71, 0, 184, 255], [72, 0, 183, 255], [73, 0, 182, 255], [74, 0, 181, 255], [75, 0, 180, 255], [76, 0, 179, 255], [77, 0, 178, 255], [78, 0, 177, 255], [79, 0, 176, 255], [80, 0, 175, 255], [81, 0, 174, 255], [82, 0, 173, 255], [83, 0, 172, 255], [84, 0, 171, 255], [85, 0, 170, 255], [86, 0, 169, 255], [87, 0, 168, 255], [88, 0, 167, 255], [89, 0, 166, 255], [90, 0, 165, 255], [91, 0, 164, 255], [92, 0, 163, 255], [93, 0, 162, 255], [94, 0, 161, 255], [95, 0, 160, 255], [96, 0, 159, 255], [97, 0, 158, 255], [98, 0, 157, 255], [99, 0, 156, 255], [100, 0, 155, 255], [101, 0, 154, 255], [102, 0, 153, 255], [103, 0, 152, 255], [104, 0, 151, 255], [105, 0, 150, 255], [106, 0, 149, 255], [107, 0, 148, 255], [108, 0, 147, 255], [109, 0, 146, 255], [110, 0, 145, 255], [111, 0, 144, 255], [112, 0, 143, 255], [113, 0, 142, 255], [114, 0, 141, 255], [115, 0, 140, 255], [116, 0, 139, 255], [117, 0, 138, 255], [118, 0, 137, 255], [119, 0, 136, 255], [120, 0, 135, 255], [121, 0, 134, 255], [122, 0, 133, 255], [123, 0, 132, 255], [124, 0, 131, 255], [125, 0, 130, 255], [126, 0, 129, 255], [127, 0, 128, 255], [128, 0, 127, 255], [129, 0, 126, 255], [130, 0, 125, 255], [131, 0, 124, 255], [132, 0, 123, 255], [133, 0, 122, 255], [134, 0, 121, 255], [135, 0, 120, 255], [136, 0, 119, 255], [137, 0, 118, 255], [138, 0, 117, 255], [139, 0, 116, 255], [140, 0, 115, 255], [141, 0, 114, 255], [142, 0, 113, 255], [143, 0, 112, 255], [144, 0, 111, 255], [145, 0, 110, 255], [146, 0, 109, 255], [147, 0, 108, 255], [148, 0, 107, 255], [149, 0, 106, 255], [150, 0, 105, 255], [151, 0, 104, 255], [152, 0, 103, 255], [153, 0, 102, 255], [154, 0, 101, 255], [155, 0, 100, 255], [156, 0, 99, 255], [157, 0, 98, 255], [158, 0, 97, 255], [159, 0, 96, 255], [160, 0, 95, 255], [161, 0, 94, 255], [162, 0, 93, 255], [163, 0, 92, 255], [164, 0, 91, 255], [165, 0, 90, 255], [166, 0, 89, 255], [167, 0, 88, 255], [168, 0, 87, 255], [169, 0, 86, 255], [170, 0, 85, 255], [171, 0, 84, 255], [172, 0, 83, 255], [173, 0, 82, 255], [174, 0, 81, 255], [175, 0, 80, 255], [176, 0, 79, 255], [177, 0, 78, 255], [178, 0, 77, 255], [179, 0, 76, 255], [180, 0, 75, 255], [181, 0, 74, 255], [182, 0, 73, 255], [183, 0, 72, 255], [184, 0, 71, 255], [185, 0, 70, 255], [186, 0, 69, 255], [187, 0, 68, 255], [188, 0, 67, 255], [189, 0, 66, 255], [190, 0, 65, 255], [191, 0, 64, 255], [192, 0, 63, 255], [193, 0, 62, 255], [194, 0, 61, 255], [195, 0, 60, 255], [196, 0, 59, 255], [197, 0, 58, 255], [198, 0, 57, 255], [199, 0, 56, 255], [200, 0, 55, 255], [201, 0, 54, 255], [202, 0, 53, 255], [203, 0, 52, 255], [204, 0, 51, 255], [205, 0, 50, 255], [206, 0, 49, 255], [207, 0, 48, 255], [208, 0, 47, 255], [209, 0, 46, 255], [210, 0, 45, 255], [211, 0, 44, 255], [212, 0, 43, 255], [213, 0, 42, 255], [214, 0, 41, 255], [215, 0, 40, 255], [216, 0, 39, 255], [217, 0, 38, 255], [218, 0, 37, 255], [219, 0, 36, 255], [220, 0, 35, 255], [221, 0, 34, 255], [222, 0, 33, 255], [223, 0, 32, 255], [224, 0, 31, 255], [225, 0, 30, 255], [226, 0, 29, 255], [227, 0, 28, 255], [228, 0, 27, 255], [229, 0, 26, 255], [230, 0, 25, 255], [231, 0, 24, 255], [232, 0, 23, 255], [233, 0, 22, 255], [234, 0, 21, 255], [235, 0, 20, 255], [236, 0, 19, 255], [237, 0, 18, 255], [238, 0, 17, 255], [239, 0, 16, 255], [240, 0, 15, 255], [241, 0, 14, 255], [242, 0, 13, 255], [243, 0, 12, 255], [244, 0, 11, 255], [245, 0, 10, 255], [246, 0, 9, 255], [247, 0, 8, 255], [248, 0, 7, 255], [249, 0, 6, 255], [250, 0, 5, 255], [251, 0, 4, 255], [252, 0, 3, 255], [253, 0, 2, 255], [254, 0, 1, 255], [255, 0, 0, 255]])
-    }
+    setPix(
+      STATE.renderType === 'byClass' ? getClassColor :
+        STATE.renderType === 'byProbability' ? getRangeColor : {},
+      STATE.renderType === 'byHeatmap' ? gradient : {}
+    );
 
     context.putImageData(imgData, 0, 0);
+    // console.timeEnd('ColorLevels');
     callback();
   };
 };
 
-colorFilter.prototype.THRESHOLDING = thresh => {
+OpenSeadragon.Filters.THRESHOLDING = thresh => {
   return (context, callback) => {
     if (typeof thresh !== 'undefined') {
-      // console.log('thresh', thresh);
-      let imgData;
-      try {
-        imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-      } catch (e) {
-        console.error(`${e.name}\n${message}`);
-        return;
-      }
+      // console.time('Thresholding');
+      let imgData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
       let pixels = imgData.data;
 
       let color;
@@ -2633,6 +2564,7 @@ colorFilter.prototype.THRESHOLDING = thresh => {
       }
 
       context.putImageData(imgData, 0, 0);
+      // console.timeEnd('Thresholding');
       callback();
     } else {
       console.warn("thresh is undefined");
@@ -2648,32 +2580,44 @@ class ImageViewer {
   /**
    * @param {object} viewerInfo - Info specific to 'this' viewer
    */
-  constructor(viewerInfo) {
+  constructor(viewerInfo, numViewers, options) {
     const layers = viewerInfo.layers;
+
+    if (numViewers === undefined) numViewers = 1;
+    if (options === undefined) options = {};
+
+    this.checkboxes = { checkPan: true, checkZoom: true };
+
+    if (numViewers > 1) {
+      this.checkboxes.checkPan = document.getElementById(`chkPan${viewerInfo.idx}`);
+      this.checkboxes.checkZoom = document.getElementById(`chkZoom${viewerInfo.idx}`);
+    }
 
     // Array of tileSources for the viewer
     const tileSources = [];
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i];
-      // console.log("%c\ntile source:\n", "color: #ccff00;", layer.location);
       tileSources.push({ tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0 });
     }
     // console.log('tileSources', stringy(ts));
 
     // SET UP VIEWER
-    let viewer;
-    try {
-      viewer = OpenSeadragon({
-        id: viewerInfo.osdId,
-        prefixUrl: CONFIG.osdImages,
-        tileSources,
-        crossOriginPolicy: 'Anonymous',
-        blendTime: 0,
-        minZoomImageRatio: 1,
-        maxZoomPixelRatio: 1, // when the user zooms all the way in they are at 100%
-      });
-    } catch (e) {
-      console.error(e.message);
+    let viewer = OpenSeadragon({
+      id: viewerInfo.osdId,
+      prefixUrl: CONFIG.osdImages,
+      tileSources,
+      crossOriginPolicy: 'Anonymous',
+      blendTime: 0,
+      minZoomImageRatio: 1,
+      maxZoomPixelRatio: 1, // when the user zooms all the way in they are at 100%
+    });
+    this.viewer = viewer; // SET THIS VIEWER
+
+    this.overlay = this.viewer.fabricjsOverlay({ scale: 1000 });
+    this.canvas = this.overlay.fabricCanvas();
+
+    if (options.toolbarOn) {
+      markupTools(viewerInfo, options, viewer);
     }
 
     // 2.7.7
@@ -2698,24 +2642,42 @@ class ImageViewer {
     // make annotatable by Annotorious library
     // anno.makeAnnotatable(viewer);
 
-    let drawer;
-    function addInfo(item) {
-      try {
+    // When an item is added to the World, grab the info
+    // viewer.world.addHandler('add-item', ({ item }) => {
+    //   const itemIndex = viewer.world.getIndexOfItem(item);
+    //   const source = viewer.world.getItemAt(itemIndex).source;
+
+    //   if (typeof source.prefLabel !== 'undefined') layers[itemIndex].prefLabel = source.prefLabel;
+    //   if (typeof source.resolutionUnit !== 'undefined') layers[itemIndex].resolutionUnit = source.resolutionUnit;
+    //   if (typeof source.xResolution !== 'undefined') layers[itemIndex].xResolution = source.xResolution;
+
+    //   layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), layers, viewer);
+    // });
+
+    function myHandler(callback) {
+      viewer.world.addHandler('add-item', ({ item }) => {
+        // When an item is added to the World, grab the info
         const itemIndex = viewer.world.getIndexOfItem(item);
         const source = viewer.world.getItemAt(itemIndex).source;
+        if (isRealValue(source.hasCreateAction) && isRealValue(source.hasCreateAction.name)) {
+          layers[itemIndex].name = source.hasCreateAction.name;
+          // console.log("name", source.hasCreateAction.name);
+        }
+        if (isRealValue(source.resolutionUnit)) layers[itemIndex].resolutionUnit = source.resolutionUnit;
+        if (isRealValue(source.xResolution)) layers[itemIndex].xResolution = source.xResolution;
 
-        if (typeof source.prefLabel !== 'undefined') layers[itemIndex].prefLabel = source.prefLabel;
-        if (typeof source.resolutionUnit !== 'undefined') layers[itemIndex].resolutionUnit = source.resolutionUnit;
-        if (typeof source.xResolution !== 'undefined') layers[itemIndex].xResolution = source.xResolution;
-      } catch (e) {
-        console.log(`%c${e.message}`, 'color: #ff6a5a;');
-      }
+        if (isRealValue(layers[itemIndex].name) || layers[itemIndex].location.endsWith("svs")) {
+          callback(
+            document.getElementById(`layersAndColors${viewerInfo.idx}`),
+            layers,
+            viewer
+          );
+        }
+      });
     }
 
-    // When an item is added to the World, grab the info
-    viewer.world.addHandler('add-item', ({ item }) => {
-      addInfo(item);
-    });
+    // Pass layerUI as a callback function
+    myHandler(layerUI);
 
     function _parseHash() {
       const params = {};
@@ -2738,7 +2700,7 @@ class ImageViewer {
     }
 
     function _useParams(params) {
-      console.log("params", typeof params, params);
+      // console.log("params", typeof params, params);
       const zoom = viewer.viewport.getZoom();
       const pan = viewer.viewport.getCenter();
 
@@ -2754,6 +2716,7 @@ class ImageViewer {
     }
 
     // Image has been downloaded and can be modified before being drawn to the canvas.
+    let drawer;
     viewer.addOnceHandler('tile-loaded', () => {
       drawer = viewer.drawer;
       drawer.imageSmoothingEnabled = false;
@@ -2926,10 +2889,6 @@ class ImageViewer {
       }
     }
 
-    this.viewer = viewer; // SET THIS VIEWER
-    this.overlay = this.viewer.fabricjsOverlay({ scale: 1000 });
-    this.canvas = this.overlay.fabricCanvas();
-    this.vInfo = viewerInfo;
   }
 
   /**
@@ -2937,6 +2896,10 @@ class ImageViewer {
    */
   getViewer() {
     return this.viewer;
+  }
+
+  getPanZoom() {
+    return this.checkboxes;
   }
 }
 
@@ -2989,94 +2952,63 @@ function createLayerElements(layersColumn, layers, viewer) {
 
 // VIEWER'S DRAGGABLE LAYERS
 function handleDrag(layers, viewer) {
-  // Div containing viewer (Remember this is executed for each viewer.)
-  const osdDiv = document.getElementById(viewer.id);
+  // Wrap everything related to drag and drop inside an IIFE
+  (function (viewer) {
+    // These variables are now specific to this viewer
+    let sourceViewer;
+    let draggedFeature;
 
-  // The features/layers to the right of the viewer
-  const features = document.querySelectorAll(".layer");
-  features.forEach(feature => {
-    feature.addEventListener("dragstart", handleDragStart);
-    feature.addEventListener("dragend", handleDragEnd);
-  });
+    // Div containing viewer (Remember this is executed for each viewer.)
+    const osdDiv = document.getElementById(viewer.id);
 
-  /* events fired on the draggable target */
-
-  function handleDragStart(evt) {
-    evt.target.style.opacity = "0.4";
-    sourceViewer = viewer; // eslint-disable-line no-undef
-    draggedFeature = this; // eslint-disable-line no-undef
-    evt.dataTransfer.effectAllowed = "move";
-    evt.dataTransfer.setData("text/plain", evt.target.id);
-  }
-
-  function handleDragEnd(evt) {
-    evt.target.style.opacity = "1"; // this = the draggable feature
-    osdDiv.classList.remove("drag-over");
-  }
-
-  /* events fired on the drop targets */
-
-  osdDiv.addEventListener("dragover", evt => {
-    // prevent default to allow drop
-    evt.preventDefault();
-    return false;
-  });
-
-  osdDiv.addEventListener("dragenter", function (evt) {
-    // highlight potential drop target when the draggable element enters it
-    evt.target.classList.add('drag-over');
-  });
-
-  osdDiv.addEventListener("dragleave", function (evt) {
-    // reset border of potential drop target when the draggable element leaves it
-    evt.target.classList.remove('drag-over')
-  });
-
-  osdDiv.addEventListener("drop", handleDrop);
-
-  function handleDrop(evt) {
-    // prevent default action (open as link for some elements)
-    evt.preventDefault();
-    evt.stopPropagation();
-
-    evt.target.classList.remove('drag-over') // restore style
-    const targetElement = evt.target;
-    const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
-
-    if (!viewerDiv) {
-      console.error("!viewerDiv");
-      return false;
+    function handleDragStart(evt) {
+      evt.target.style.opacity = "0.4";
+      sourceViewer = viewer;
+      draggedFeature = this;
+      evt.dataTransfer.effectAllowed = "move";
+      evt.dataTransfer.setData("text/plain", evt.target.id);
     }
 
-    // Find neighboring layersColumn
-    const columnWithViewer = viewerDiv.parentElement;
-    const columnLayAndCol = columnWithViewer.nextSibling; // Target viewer's layersAndColors column
+    function handleDragEnd(evt) {
+      evt.target.style.opacity = "1"; // this = the draggable feature
+      osdDiv.classList.remove("drag-over");
+    }
 
-    // Find the neighboring table (we will add this feature here)
-    const divClassScroll = columnLayAndCol.firstChild;
-    const tableLayAndColor = divClassScroll.firstChild;
+    function handleDrop(evt) {
+      // prevent default action (open as link for some elements)
+      evt.preventDefault();
+      evt.stopPropagation();
 
-    const movedFeatId = evt.dataTransfer.getData("text");
-    const movedFeature = document.getElementById(movedFeatId);
-    const featureName = movedFeature.innerHTML;
+      evt.target.classList.remove('drag-over') // restore style
+      const targetElement = evt.target;
+      const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
-    let row;
-    let cells;
-    let lay;
-    let layNum;
-    let eye;
-    let foundMatchingSlide = false;
+      if (!viewerDiv) {
+        console.error("!viewerDiv");
+        return false;
+      }
 
-    // Iterate table rows
-    let myHTMLCollection = tableLayAndColor.children
-    for (let i = 0; i < myHTMLCollection.length; i++) {
-      // Skip first row (globals)
-      if (i > 0) {
-        row = myHTMLCollection[i];
-        cells = row.children
-        lay = cells[0].firstChild;
+      // Get neighboring elements
+      const columnWithViewer = viewerDiv.parentElement;
+
+      // Directly find the .divTableBody within the sibling column
+      const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
+      const movedFeatId = evt.dataTransfer.getData("text");
+      const movedFeature = document.getElementById(movedFeatId);
+      const featureName = movedFeature.innerHTML;
+
+      let layNum;
+      let foundMatchingSlide = false;
+
+      // Iterate table rows
+      let myHTMLCollection = tableLayAndColor.children;
+      for (let i = 1; i < myHTMLCollection.length; i++) {
+        // Skip first row (globals)
+        const [firstCell, secondCell] = myHTMLCollection[i].children;
+        const lay = firstCell.firstChild;
+        const eye = secondCell.firstChild;
+
         layNum = lay.id[0]; // 1st char is array index
-        eye = cells[1].children[0];
 
         // css transition: .block, .color-fade
         if (lay.innerHTML === featureName) {
@@ -3088,7 +3020,7 @@ function handleDrag(layers, viewer) {
           lay.classList.add("color-fade");
 
           /** timeout to turn it back to normal **/
-          setTimeout(function () {
+          setTimeout(() => {
             lay.classList.remove("color-fade");
             lay.classList.remove("block");
             lay.classList.add("layer");
@@ -3100,38 +3032,46 @@ function handleDrag(layers, viewer) {
           break;
         }
       }
-    }
 
-    const targetViewer = getOsdViewer(evt, viewerDiv);
-    if (targetViewer !== null) {
-      if (foundMatchingSlide) {
-        console.log("Found matching slide");
-        try {
+      const targetViewer = getOsdViewer(evt, viewerDiv);
+
+      if (targetViewer !== null) {
+        if (foundMatchingSlide) {
           targetViewer.world.getItemAt(layNum).setOpacity(1); // show
-          // We already turned on target feature eyeball
-
-          // TODO: Uncomment if we want "move" instead of "copy":
-          // sourceViewer.world.getItemAt(layNum).setOpacity(0) // hide
-          // let eye1 = draggedFeature.parentNode.nextSibling.firstChild
-          // Toggle eyeball on source feature
-          // eye1.classList.remove('fa-eye');
-          // eye1.classList.add('fa-eye-slash');
-        } catch (e) {
-          // It may get here if the handler executes twice on one drop
-          console.warn(e.message);
+          // (And we already turned on target feature eyeball)
+        } else {
+          console.warn("Did not find matching slide. Feature:", featureName);
         }
-      } else {
-        let location;
-        try {
-          location = sourceViewer.tileSources[layNum].tileSource;
-        } catch (e) {
-          console.error("oops.", e.message);
-        }
-        console.error("Did not find matching slide\nLocation:", location);
       }
+      return false;
     }
-    return false;
-  }
+
+    // Attach the event listeners
+    const features = document.querySelectorAll(".layer");
+    features.forEach(feature => {
+      feature.addEventListener("dragstart", handleDragStart);
+      feature.addEventListener("dragend", handleDragEnd);
+    });
+
+    osdDiv.addEventListener("dragover", evt => {
+      // prevent default to allow drop
+      evt.preventDefault();
+      return false;
+    });
+
+    osdDiv.addEventListener("dragenter", function (evt) {
+      // highlight potential drop target when the draggable element enters it
+      evt.target.classList.add('drag-over');
+    });
+
+    osdDiv.addEventListener("dragleave", function (evt) {
+      // reset border of potential drop target when the draggable element leaves it
+      evt.target.classList.remove('drag-over');
+    });
+
+    osdDiv.addEventListener("drop", handleDrop);
+
+  })(viewer); // Pass the viewer into the IIFE
 }
 
 function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
@@ -3139,7 +3079,23 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   divTable.appendChild(divTableRow);
 
   const layerNum = currentLayer.layerNum;
-  const featureName = getPreferredLabel(currentLayer);
+  let featureName = currentLayer.name;
+
+  if (!isRealValue(featureName)) {
+    // Parse URL for info
+    let url = currentLayer.location;
+    let search = "FeatureStorage";
+    let sections = url.split("/");
+    let res = sections.indexOf(search);
+    if (res > -1) {
+      featureName = `${sections[res + 1]}-${sections[res + 2]}`
+    } else {
+      featureName = sections[sections.length - 2];
+      if (name.includes(".")) {
+        featureName = name.substring(0, name.indexOf("."));
+      }
+    }
+  }
 
   // FEATURE
   const feat = createDraggableBtn(layerNum, featureName);
@@ -3193,6 +3149,7 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
 //   }
 //   return loc;
 // }
+
 // function getPreferredLabel(layer) {
 //   let featureName;
 //   const loc = _extractLocation(layer);
@@ -3217,27 +3174,34 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
  * Parse url for the feature name
  * whilst we wait for that information to be available.
  */
-function getPreferredLabel(layer) {
-  // Patch for not having prefLabel (or 'label') info
-  let name = "undefined";
-  let url = layer.location;
-  try {
-    let search = "FeatureStorage";
-    let sections = url.split("/");
-    let res = sections.indexOf(search);
-    if (res > -1) {
-      name = `${sections[res + 1]}-${sections[res + 2]}`
-    } else {
-      name = sections[sections.length - 2];
-      if (name.includes(".")) {
-        name = name.substring(0, name.indexOf("."));
-      }
-    }
-  } catch (e) {
-    console.log(`%cError. Check WSI URL: ${url}`, "color: #ff6a5a; font-size: larger;");
-  }
-  return name;
-}
+// function getPreferredLabel(layer) {
+//   // console.log("layer", layer);
+//   if (layer.name) {
+//     return layer.name;
+//   } else {
+//     // Patch for unavailable "name" info
+//     let name = "undefined";
+//     let url = layer.location;
+//     try {
+//       let search = "FeatureStorage";
+//       let sections = url.split("/");
+//       let res = sections.indexOf(search);
+//       if (res > -1) {
+//         name = `${sections[res + 1]}-${sections[res + 2]}`
+//       } else {
+//         name = sections[sections.length - 2];
+//         if (name.includes(".")) {
+//           name = name.substring(0, name.indexOf("."));
+//         }
+//       }
+//       // TODO: LONG NAME TEST
+//       // name = "abcdefghijklmnopqrstuvwxyz"
+//     } catch (e) {
+//       console.log(`%cError. Check WSI URL: ${url}`, "color: #ff6a5a; font-size: larger;");
+//     }
+//     return name;
+//   }
+// }
 
 // Feature (draggable)
 function createDraggableBtn(layerNum, featureName) {
@@ -3401,7 +3365,7 @@ function createTachometer(row, featureName) {
   const id = createId(5, "pop");
   const rect = icon.getBoundingClientRect();
   const popup = createDraggableDiv(id, `${featureName} settings`, rect.left, rect.top);
-  const divBody = popup.lastChild;
+  const divBody = document.getElementById(`${popup.id}Body`);
 
   icon.addEventListener("click", () => {
     popup.style.display = "block";
@@ -3562,9 +3526,9 @@ const layerPopup = function(divBody, allLayers, viewer) {
       const slideVals = getVals([ARange, BRange]);
 
       if (d.type === 'outside') {
-        setFilter(allLayers, viewer, { min: slideVals[0], max: slideVals[1], type: 'outside' });
+        setFilter(allLayers, viewer, { slideHandle1: slideVals[0], slideHandle2: slideVals[1], type: 'outside' });
       } else {
-        setFilter(allLayers, viewer, { min: slideVals[0], max: slideVals[1], type: 'inside' });
+        setFilter(allLayers, viewer, { slideHandle1: slideVals[0], slideHandle2: slideVals[1], type: 'inside' });
       }
     }
 
@@ -3608,74 +3572,22 @@ const layerPopup = function(divBody, allLayers, viewer) {
   divBody.appendChild(dd);
 };
 
-/**
- * Wrapper component around OpenSeadragon viewer.
- * Set up OSD viewer to allow for multiple viewer control.
- * @extends ImageViewer
- */
-class MultiViewer extends ImageViewer {
-  /**
-   * @param {object} viewerInfo - Info specific to 'this' viewer
-   * @param {number} numViewers - Total number of viewers.
-   * @param {object} options - Filters, paintbrush, etc.
-   */
-  constructor(viewerInfo, numViewers, options) {
-    super(viewerInfo);
-
-    if (typeof options === 'undefined') {
-      options = {};
-    }
-
-    this.checkboxes = {
-      checkPan: true,
-      checkZoom: true
-    };
-
-    if (numViewers > 1) {
-      this.checkboxes.checkPan = document.getElementById(`chkPan${viewerInfo.idx}`);
-      this.checkboxes.checkZoom = document.getElementById(`chkZoom${viewerInfo.idx}`);
-    }
-
-    if (options.toolbarOn) {
-      markupTools(viewerInfo, options, super.getViewer());
-    }
-
-    layerUI(
-      document.getElementById(`layersAndColors${viewerInfo.idx}`),
-      viewerInfo.layers,
-      super.getViewer(),
-    );
-  }
-
-  /**
-   * @return {OpenSeadragon.Viewer}
-   */
-  getViewer() {
-    return super.getViewer();
-  }
-
-  /**
-   * @return {object} {checkPan: boolean, checkZoom: boolean}
-   */
-  getPanZoom() {
-    return this.checkboxes;
-  }
-}
+// REMOVE THIS FILE!!!!! AND REMOVE SRC DEF FROM HTML!!!!!!!
 
 /**
  * Synchronize pan & zoom on every viewer in the given array.
  *
- * @param {Array} multiViewerArray - Array of MultiViewer objects
+ * @param {Array} imageViewerArray - Array of ImageViewer objects
  */
-const synchronizeViewers = function(multiViewerArray) {
-  const isGood = checkData(multiViewerArray);
+const synchronizeViewers = function(imageViewerArray) {
+  const isGood = checkData(imageViewerArray);
 
   if (isGood) {
     this.SYNCED_IMAGE_VIEWERS = [];
     this.activeViewerId = null;
-    this.numViewers = multiViewerArray.length;
+    this.numViewers = imageViewerArray.length;
 
-    multiViewerArray.forEach(function(imageViewer) {
+    imageViewerArray.forEach(function(imageViewer) {
       const currentViewer = imageViewer.getViewer();
 
       setPanZoomCurrent(currentViewer, handler);
@@ -3758,14 +3670,14 @@ function resetFlag() {
   this.activeViewerId = null;
 }
 
-function checkData(multiViewerArray) {
-  if (isEmpty(multiViewerArray)) {
+function checkData(imageViewerArray) {
+  if (isEmpty(imageViewerArray)) {
     console.error('synchronizeViewers.js: Expected input argument, but received none.');
     return false;
   }
 
-  if (!(multiViewerArray[0] instanceof Object)) {
-    console.error('synchronizeViewers.js: Array elements should be MultiViewer objects.');
+  if (!(imageViewerArray[0] instanceof Object)) {
+    console.error('synchronizeViewers.js: Array elements should be ImageViewer objects.');
     return false;
   }
 

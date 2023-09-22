@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Apple macOS version 5.8.0">
-<meta charset="utf-8">
-<title>JSDoc: Source: drawPolygon.js</title>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: drawPolygon.js</title>
 
-<script src="scripts/prettify/prettify.js"></script>
-<script src="scripts/prettify/lang-css.js"></script>
-<!--[if lt IE 9]>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<link type="text/css" rel="stylesheet" href=
-"styles/prettify-tomorrow.css">
-<link type="text/css" rel="stylesheet" href=
-"styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
+
 <body>
+
 <div id="main">
-<h1 class="page-title">Source: drawPolygon.js</h1>
-<section>
-<article>
-<pre class="prettyprint source linenums"><code>/**
+
+    <h1 class="page-title">Source: drawPolygon.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Allow user to draw a polygon on the image.
  *
  * @param {object} viewerInfo - Info specific to 'this' viewer
  * @param {object} viewer - OSD viewer object
  * @param {object} overlay - Canvas on which to draw the polygon
  */
-const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
+const drawPolygon = (viewerInfo, viewer, overlay) => {
   let idx = viewerInfo.idx;
   let btnDraw = document.getElementById(`btnDraw${idx}`);
   let mark = document.getElementById(`mark${idx}`);
@@ -39,24 +44,24 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
   paintBrush.decimate = 12;
   paintBrush.color = mark.innerHTML;
 
-  canvas.on('mouse:over', evt =&gt; {
+  canvas.on('mouse:over', evt => {
     if (evt.target !== null) {
       fillPolygon(evt, canvas, true);
     }
   });
 
-  canvas.on('mouse:out', evt =&gt; {
+  canvas.on('mouse:out', evt => {
     if (evt.target !== null) {
       fillPolygon(evt, canvas, false);
     }
   });
 
-  canvas.on('mouse:up', (evt) =&gt; {
-    // annotate(evt); // not comfortable with it yet.
+  canvas.on('mouse:up', (evt) => {
+    // annotate(evt); // TODO: wip
     drawingOff(canvas, viewer);
   });
 
-  canvas.on('path:created', opts =&gt; {
+  canvas.on('path:created', opts => {
     tag = createId2();
     pathCreatedHandler(opts, btnDraw, canvas, paintBrush, viewer);
   });
@@ -69,7 +74,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
     } else {
       // Drawing on
       canvas.isDrawingMode = true;
-      canvas.on('mouse:down', () =&gt; {
+      canvas.on('mouse:down', () => {
         setGestureSettings(canvas, viewer);
       });
       paintBrush.color = mark.innerHTML;
@@ -93,12 +98,67 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
         tag: tag
       });
       canvas.add(text);
+
+      /*
+      // Try to re-create/simplify annotorious-style div for annotation
+      let left, top;
+      top = target.top + target.height + 25;
+      left = target.left + target.width + 25;
+      let myDiv = `&lt;div class="r6o-editor r6o-arrow-top r6o-arrow-left" style="transform: translate(0px); top: ${top}px; left: ${left}px; opacity: 1;">
+      &lt;div class="r6o-arrow">&lt;/div>&lt;!-- ARROW -->
+      &lt;div class="r6o-editor-inner">
+        &lt;div class="r6o-widget comment">
+          &lt;textarea class="r6o-editable-text" placeholder="Add a comment..." disabled rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;">&lt;/textarea>
+          &lt;div class="r6o-icon r6o-arrow-down">
+            &lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 940" width="12">
+              &lt;metadata>IcoFont Icons&lt;/metadata>
+              &lt;title>simple-down&lt;/title>
+              &lt;glyph glyph-name="simple-down" unicode="\uEAB2" horiz-advx="1000">&lt;/glyph>
+              &lt;path fill="currentColor" d="M200 392.6l300 300 300-300-85.10000000000002-85.10000000000002-214.89999999999998 214.79999999999995-214.89999999999998-214.89999999999998-85.10000000000002 85.20000000000005z">&lt;/path>
+            &lt;/svg>
+          &lt;/div>
+        &lt;/div>&lt;!-- END comment -->
+        &lt;div class="r6o-widget comment editable">
+          &lt;textarea class="r6o-editable-text" placeholder="Add a reply..." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 35px;">&lt;/textarea>
+        &lt;/div>&lt;!-- END reply -->
+        &lt;div class="r6o-widget r6o-tag">
+          &lt;ul class="r6o-taglist">
+            &lt;!-- existing tags go here. -->
+            &lt;li>&lt;/li>
+          &lt;/ul>&lt;!-- END taglist -->
+          &lt;div class="r6o-autocomplete">
+            &lt;div>&lt;input placeholder="Add tag...">&lt;/div>
+            &lt;ul>&lt;!-- tags go here -->&lt;/ul>
+          &lt;/div>&lt;!-- END add tag -->
+        &lt;/div>&lt;!-- END tag section -->
+        &lt;div class="r6o-footer r6o-draggable">
+          &lt;button class="r6o-btn left delete-annotation" title="Delete">
+            &lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12">
+              &lt;path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z">&lt;/path>
+            &lt;/svg>
+          &lt;/button>&lt;!-- DELETE button -->
+          &lt;button class="r6o-btn outline">Cancel&lt;/button>&lt;!-- CANCEL button -->
+          &lt;button class="r6o-btn">OK&lt;/button>&lt;!-- OK button -->
+        &lt;/div>&lt;!-- END footer -->
+      &lt;/div>&lt;!-- END editor-inner -->
+    &lt;/div>&lt;!-- END editor -->`;
+      try {
+        const myDiv1 = e('div');
+        myDiv1.style.left = `${left}px`;
+        myDiv1.style.top = `${top}px`;
+        myDiv1.innerHTML = myDiv;
+        document.body.appendChild(myDiv1);
+
+      } catch (e) {
+        console.log(`%c${e.message}`, "color: #ff00cc;");
+      }
+      */
     }
   }
 
   function drawingOff(canvas, viewer) {
     canvas.isDrawingMode = false;
-    canvas.off('mouse:down', () =&gt; {
+    canvas.off('mouse:down', () => {
       setGestureSettings(canvas, viewer);
     });
     setOsdTracking(viewer, true);
@@ -108,7 +168,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
     convertPathToPolygon(options.path, canvas, paintBrush);
     setupDeleteButton(options.path);
     toggleButton(button, 'annotationBtn', 'btnOn');
-    canvas.off('path:created', () =&gt; {
+    canvas.off('path:created', () => {
       pathCreatedHandler(options, button, canvas, paintBrush, viewer);
     });
   }
@@ -160,7 +220,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
   }
 
   function convertPathToPolygon(pathObject, canvas, paintBrush) {
-    let _points0 = pathObject.path.map(item =&gt; ({
+    let _points0 = pathObject.path.map(item => ({
       x: item[1],
       y: item[2]
     }));
@@ -188,7 +248,7 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
   function fillPolygon(pointerEvent, canvas, fill) {
     let obj = pointerEvent.target;
 
-    if (isRealValue(obj) &amp;& obj.type === 'polygon') {
+    if (isRealValue(obj) &amp;&amp; obj.type === 'polygon') {
       // polygon hover
       if (fill) {
         obj.set({
@@ -225,66 +285,26 @@ const drawPolygon = (viewerInfo, viewer, overlay) =&gt; {
   //   canvas.add(infoText);
   // }
 };
-</code></pre></article>
-</section>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
 </div>
+
 <nav>
-<h2><a href="index.html">Home</a></h2>
-<h3>Classes</h3>
-<ul>
-<li><a href="ImageViewer.html">ImageViewer</a></li>
-<li><a href="MultiViewer.html">MultiViewer</a></li>
-</ul>
-<h3>Global</h3>
-<ul>
-<li><a href="global.html#alertMessage">alertMessage</a></li>
-<li><a href="global.html#blender">blender</a></li>
-<li><a href="global.html#colorToArray">colorToArray</a></li>
-<li><a href="global.html#CONFIG">CONFIG</a></li>
-<li><a href=
-"global.html#createDraggableDiv">createDraggableDiv</a></li>
-<li><a href="global.html#createId">createId</a></li>
-<li><a href="global.html#createId2">createId2</a></li>
-<li><a href="global.html#drawCross">drawCross</a></li>
-<li><a href="global.html#drawPolygon">drawPolygon</a></li>
-<li><a href="global.html#e">e</a></li>
-<li><a href="global.html#editPolygon">editPolygon</a></li>
-<li><a href="global.html#filterPopup">filterPopup</a></li>
-<li><a href="global.html#getRandomInt">getRandomInt</a></li>
-<li><a href="global.html#gridOverlay">gridOverlay</a></li>
-<li><a href="global.html#img2array">img2array</a></li>
-<li><a href="global.html#isEmpty">isEmpty</a></li>
-<li><a href="global.html#isRealValue">isRealValue</a></li>
-<li><a href="global.html#layerPopup">layerPopup</a></li>
-<li><a href="global.html#layerUI">layerUI</a></li>
-<li><a href="global.html#mapMarker">mapMarker</a></li>
-<li><a href="global.html#markupTools">markupTools</a></li>
-<li><a href="global.html#MAX">MAX</a></li>
-<li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li>
-<li><a href="global.html#mugshots">mugshots</a></li>
-<li><a href="global.html#populateStorage">populateStorage</a></li>
-<li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li>
-<li><a href="global.html#ruler">ruler</a></li>
-<li><a href="global.html#saveSettings">saveSettings</a></li>
-<li><a href="global.html#scaleToPct">scaleToPct</a></li>
-<li><a href="global.html#scaleToRgb">scaleToRgb</a></li>
-<li><a href="global.html#setFilter">setFilter</a></li>
-<li><a href="global.html#setOsdTracking">setOsdTracking</a></li>
-<li><a href="global.html#STATE">STATE</a></li>
-<li><a href="global.html#stringy">stringy</a></li>
-<li><a href=
-"global.html#synchronizeViewers">synchronizeViewers</a></li>
-<li><a href="global.html#toggleButton">toggleButton</a></li>
-<li><a href="global.html#toggleCross">toggleCross</a></li>
-</ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#bgTrans">bgTrans</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#createId2">createId2</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getPreferredLabel">getPreferredLabel</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#populateStorage">populateStorage</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdTracking">setOsdTracking</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#stringy">stringy</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
 </nav>
+
 <br class="clear">
-<footer>Documentation generated by <a href=
-"https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jul 26
-2022 14:36:36 GMT-0400 (Eastern Daylight Time)</footer>
-<script>
- prettyPrint(); 
-</script> 
-<script src="scripts/linenumber.js"></script>
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Sep 08 2023 13:38:18 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 let baseUrl;
 let layer;
 
-layer = '//openseadragon.github.io/example-images/duomo/duomo.dzi';
-baseUrl = '//openseadragon.github.io/example-images/highsmith/highsmith.dzi';
+layer = 'http://openseadragon.github.io/example-images/duomo/duomo.dzi';
+baseUrl = 'http://openseadragon.github.io/example-images/highsmith/highsmith.dzi';
 
 // baseUrl = "http://openseadragon.github.io/example-images/duomo/duomo.dzi";
 // baseUrl = "./img/smiley.png";

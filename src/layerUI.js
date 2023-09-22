@@ -24,7 +24,7 @@ const layerUI = (layersColumn, images, viewer) => {
 function createLayerElements(layersColumn, layers, viewer) {
   const myEyeArray = [];
 
-  const globalEyeball = globalEye(layersColumn)
+  const globalEyeball = globalEye(layersColumn);
 
   const divTable = e("div", {class: "divTable"});
   // const scrollDiv = e("div", {class: "divTableBody scroll"});
@@ -174,11 +174,30 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   divTable.appendChild(divTableRow);
 
   const layerNum = currentLayer.layerNum;
-  const featureName = getPreferredLabel(currentLayer);
 
   // FEATURE
-  const feat = createDraggableBtn(layerNum, featureName);
-  divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [feat]));
+  async function fetchData(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async function fetchAndDisplay(url) {
+    try {
+      const data = await fetchData(url);
+      const element = createDraggableBtn(layerNum, currentLayer, data);
+      // Append
+      divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
+    } catch (error) {
+      console.error('There was a problem:', error);
+    }
+  }
+
+  // Calling the function
+  fetchAndDisplay(currentLayer.location).then(r => console.log("something"));
+
 
   // VISIBILITY TOGGLE
   const faEye = layerEye(currentLayer);
@@ -203,12 +222,13 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
 
   divTableRow.appendChild(e("div", {class: "divTableCell"}, [div]));
 
+  // TODO:
   if (layerNum > 0) {
     // COLOR PALETTE
-    createColorPalette(divTableRow, featureName, currentLayer, allLayers, viewer);
+    createColorPalette(divTableRow, "featureName", currentLayer, allLayers, viewer);
 
     // TACHOMETER
-    const divBody = createTachometer(divTableRow, featureName);
+    const divBody = createTachometer(divTableRow, "featureName");
 
     layerPopup(divBody, allLayers, viewer);
   } else {
@@ -216,68 +236,26 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   }
 }
 
-// Patch for not having prefLabel info (server #1)
-// function _extractLocation(layer) {
-//   let loc;
-//   if (typeof layer.location === 'string') {
-//     loc = layer.location;
-//   } else if (typeof layer.location === 'object') {
-//     loc = layer.location.url;
-//   } else {
-//     throw new TypeError(`Unidentified URL type... ${layer.location}`);
-//   }
-//   return loc;
-// }
-// function getPreferredLabel(layer) {
-//   let featureName;
-//   const loc = _extractLocation(layer);
-//   const sections = loc.split("/");
-//   // const re = /^(?:[a-z]+:)?\b/gm;
-//   const re = /^https?:\/\//;
-//   if (loc.match(re)) {
-//     // Absolute URL
-//     featureName = sections[sections.length - 2];
-//   } else {
-//     // Relative URL
-//     featureName = sections[sections.length - 1];
-//   }
-//   if (featureName.includes(".")) {
-//     // Final name
-//     featureName = featureName.substring(0, featureName.indexOf("."));
-//   }
-//   return featureName;
-// }
-
-/**
- * Parse url for the feature name
- * whilst we wait for that information to be available.
- */
-function getPreferredLabel(layer) {
-  // Temporary patch for unavailable prefLabel (or 'label') info
-  let name = "undefined";
-  let url = layer.location;
-  try {
-    let search = "FeatureStorage";
-    let sections = url.split("/");
-    let res = sections.indexOf(search);
-    if (res > -1) {
-      name = `${sections[res + 1]}-${sections[res + 2]}`
-    } else {
-      name = sections[sections.length - 2];
-      if (name.includes(".")) {
-        name = name.substring(0, name.indexOf("."));
-      }
-    }
-    // TODO: LONG NAME TEST
-    // name = "abcdefghijklmnopqrstuvwxyz"
-  } catch (e) {
-    console.log(`%cError. Check WSI URL: ${url}`, "color: #ff6a5a; font-size: larger;");
-  }
-  return name;
-}
-
 // Feature (draggable)
-function createDraggableBtn(layerNum, featureName) {
+function createDraggableBtn(layerNum, currentLayer, data) {
+  let sections = new URL(currentLayer.location).search.split("/");
+  const elementWithTCGA = sections.find(item => item.startsWith("TCGA"));
+
+  let featureName;
+  if (elementWithTCGA) {
+    const isFeature = currentLayer.location.includes("FeatureStorage");
+
+    if (isFeature) {
+      featureName = data.hasCreateAction.name
+        ? data.hasCreateAction.name
+        : `${sections[sections.indexOf("FeatureStorage") + 1]}-${sections[sections.indexOf("FeatureStorage") + 2]}`;
+    } else {
+      featureName = elementWithTCGA.split(".")[0];
+    }
+  } else {
+    featureName = currentLayer.location.split('/').pop();
+  }
+
   const element = e("button", {
     id: `${layerNum}${createId(5, "feat")}`,
     class: "layer",

@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Apple macOS version 5.8.0">
-<meta charset="utf-8">
-<title>JSDoc: Source: pageSetup.js</title>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pageSetup.js</title>
 
-<script src="scripts/prettify/prettify.js"></script>
-<script src="scripts/prettify/lang-css.js"></script>
-<!--[if lt IE 9]>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<link type="text/css" rel="stylesheet" href=
-"styles/prettify-tomorrow.css">
-<link type="text/css" rel="stylesheet" href=
-"styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
+
 <body>
+
 <div id="main">
-<h1 class="page-title">Source: pageSetup.js</h1>
-<section>
-<article>
-<pre class="prettyprint source linenums"><code>/**
+
+    <h1 class="page-title">Source: pageSetup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file pageSetup.js is the root file for this app
  * @author Tammy DiPrima
  *
@@ -34,36 +39,43 @@
  * @param {number} height - Viewer height
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
-const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) =&gt; {
-  console.clear();
-  /*
-  When the 'images' parameter becomes an array with null elements,
-  it usually means that the session timed out or is in the process of timeout.
-  So log the user out and have them start again.
-   */
-  let viewers = []; // eslint-disable-line prefer-const
-  if (!isRealValue(images) || images[0] === null) {
-    // logout & redirect
-    document.write(
-      "&lt;script&gt;window.alert('Click OK to continue...');window.location=`${window.location.origin}/auth/realms/Halcyon/protocol/openid-connect/logout?redirect_uri=${window.location.origin}`;&lt;/script&gt;",
-    );
+const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+  let viewers = [];
+
+  if (!isRealValue(images) || !isRealValue(images[0])) {
+    // No images; notify and send them home.
+    document.write("&lt;script>window.alert('You are logged out...');window.location=`${window.location.origin}/`;&lt;/script>");
+  } else {
+    // TODO: MY STUFF
+    images = images.slice(0, 2);
+    numViewers = 2;
+    rows = 2;
+    columns = 1;
+    width = 800;
+    height = 600;
   }
 
   document.addEventListener('DOMContentLoaded', setUp);
   window.addEventListener('keydown', hotKeysHandler);
 
   function setUp() {
-    new Promise(resolve =&gt; {
+    new Promise(resolve => {
       return resolve(opts);
     })
-      .then(opts =&gt; {
+      .then(opts => {
         document.body.classList.add('theme--default');
         // dark-mode
         const modeToggle = e('i', { class: 'fas fa-moon moon' });
 
         // Slide name
         let name;
-        const slide = images[0][0].location; // layer 0 location
+        let slide;
+        try {
+          slide = images[0][0].location; // layer 0 location
+        } catch (e) {
+          // double-check
+          document.write("&lt;script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;&lt;/script>");
+        }
         if (slide.includes('TCGA')) {
           const str = slide.match(/TCGA-[^%.]+/)[0];
           name = `Slide: ${str}`;
@@ -81,12 +93,12 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         referenceNode.before(top);
 
         const getMode = localStorage.getItem('mode');
-        if (getMode &amp;& getMode === 'dark-mode') {
+        if (getMode &amp;&amp; getMode === 'dark-mode') {
           toggleButton(document.body, "theme--default", "theme--dark");
         }
 
         // toggle dark and light mode
-        modeToggle.addEventListener('click', () =&gt; {
+        modeToggle.addEventListener('click', () => {
           toggleButton(modeToggle, "fa-sun", "fa-moon");
           toggleButton(modeToggle, "sun", "moon");
           toggleButton(document.body, "theme--default", "theme--dark");
@@ -104,7 +116,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
         const table = e('table');
         mainDiv.appendChild(table); // TABLE ADDED TO PAGE
 
-        // CREATE ROWS & COLUMNS
+        // CREATE ROWS &amp; COLUMNS
         let r;
         const num = rows * columns;
         let count = 0;
@@ -118,7 +130,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             const idx = count;
             count++;
 
-            if (numViewers &lt; num &amp;& count - 1 === numViewers) {
+            if (numViewers &lt; num &amp;&amp; count - 1 === numViewers) {
               // we've done our last viewer
               break;
             }
@@ -130,60 +142,61 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
             let htm = '';
 
             // NAVIGATION TOOLS
-            if (numViewers &gt; 1) {
-              htm += `&lt;input type="checkbox" id="chkPan${idx}" checked=""&gt;&lt;label for="chkPan${idx}"&gt;Match Pan&lt;/label&gt;&amp;nbsp;
-&lt;input type="checkbox" id="chkZoom${idx}" checked=""&gt;&lt;label for="chkZoom${idx}"&gt;Match Zoom&lt;/label&gt;&amp;nbsp;&amp;nbsp;`;
+            if (numViewers > 1) {
+              htm += `&lt;input type="checkbox" id="chkPan${idx}" checked="">&lt;label for="chkPan${idx}">Match Pan&lt;/label>&amp;nbsp;
+&lt;input type="checkbox" id="chkZoom${idx}" checked="">&lt;label for="chkZoom${idx}">Match Zoom&lt;/label>&amp;nbsp;&amp;nbsp;`;
             }
 
-            if (opts &amp;& opts.toolbarOn) {
-              htm += `&lt;div class="controls showDiv" id="hideTools${idx}"&gt;&lt;div id="tools${idx}" class="showHover"&gt;`;
+            if (opts &amp;&amp; opts.toolbarOn) {
+              htm += `&lt;div class="controls showDiv" id="hideTools${idx}">&lt;div id="tools${idx}" class="showHover">`;
 
               // ANNOTATION TOOLS
-              htm += '&lt;div class="floated"&gt;';
+              htm += '&lt;div class="floated">';
 
-              if (opts &amp;& opts.paintbrushColor) {
-                htm += `&lt;mark id="mark${idx}"&gt;${opts.paintbrushColor}&lt;/mark&gt;&amp;nbsp;`;
+              if (opts &amp;&amp; opts.paintbrushColor) {
+                htm += `&lt;mark id="mark${idx}">${opts.paintbrushColor}&lt;/mark>&amp;nbsp;`;
               } else {
-                htm += `&lt;mark id="mark${idx}"&gt;#00f&lt;/mark&gt;&amp;nbsp;`;
+                htm += `&lt;mark id="mark${idx}">#00f&lt;/mark>&amp;nbsp;`;
               }
 
-              htm += `&lt;button id="btnDraw${idx}" class="annotationBtn" title="Draw"&gt;&lt;i class="fas fa-pencil-alt"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnEdit${idx}" class="annotationBtn" title="Edit"&gt;&lt;i class="fas fa-draw-polygon"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnGrid${idx}" class="annotationBtn" title="Grid"&gt;&lt;i class="fas fa-border-all"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnGridMarker${idx}" class="annotationBtn" title="Mark grid"&gt;&lt;i class="fas fa-paint-brush"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnRuler${idx}" class="annotationBtn" title="Measure in microns"&gt;&lt;i class="fas fa-ruler"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnShare${idx}" class="annotationBtn" title="Share this link"&gt;&lt;i class="fas fa-share-alt"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnCam${idx}" class="annotationBtn" title="Snapshot"&gt;&lt;i class="fas fa-camera"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnBlender${idx}" class="annotationBtn" title="Blend-modes"&gt;&lt;i class="fas fa-blender"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnCrosshairs${idx}" class="annotationBtn" title="Crosshairs"&gt;&lt;i class="fas fa-crosshairs"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;button id="btnSave${idx}" class="annotationBtn" title="Save"&gt;&lt;i class="fas fa-save"&gt;&lt;/i&gt;&lt;/button&gt;
-&lt;div class="mag" style="display: inline"&gt;
-  &lt;button class="annotationBtn"&gt;
-  &lt;i class="fas fa-search"&gt;&lt;/i&gt;
-  &lt;/button&gt;
-  &lt;!-- data-value = image zoom --&gt;
-  &lt;div class="mag-content"&gt;
-    &lt;a href="#" data-value="0.025" id="1"&gt;1x&lt;/a&gt;
-    &lt;a href="#" data-value="0.05" id="2"&gt;2x&lt;/a&gt;
-    &lt;a href="#" data-value="0.1" id="4"&gt;4x&lt;/a&gt;
-    &lt;a href="#" data-value="0.25" id="10"&gt;10x&lt;/a&gt;
-    &lt;a href="#" data-value="0.5" id="20"&gt;20x&lt;/a&gt;
-    &lt;a href="#" data-value="1.0" id="40"&gt;40x&lt;/a&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;button id="btnMapMarker" class="annotationBtn" style="display: none"&gt;&lt;i class="fas fa-map-marker-alt"&gt;&lt;/i&gt; Hide markers&lt;/button&gt;
-&lt;/div&gt;`;
+              htm += `&lt;button id="btnDraw${idx}" class="annotationBtn" title="Draw">&lt;i class="fas fa-pencil-alt">&lt;/i>&lt;/button>
+&lt;button id="btnEdit${idx}" class="annotationBtn" title="Edit">&lt;i class="fas fa-draw-polygon">&lt;/i>&lt;/button>
+&lt;!--&lt;button id="btnAnnotate${idx}" class="annotationBtn" title="Add Annotation">&lt;i class="fas fa-sticky-note">&lt;/i>&lt;/button>-->
+&lt;button id="btnGrid${idx}" class="annotationBtn" title="Grid">&lt;i class="fas fa-border-all">&lt;/i>&lt;/button>
+&lt;button id="btnGridMarker${idx}" class="annotationBtn" title="Mark grid">&lt;i class="fas fa-paint-brush">&lt;/i>&lt;/button>
+&lt;button id="btnRuler${idx}" class="annotationBtn" title="Measure in microns">&lt;i class="fas fa-ruler">&lt;/i>&lt;/button>
+&lt;button id="btnShare${idx}" class="annotationBtn" title="Share this link">&lt;i class="fas fa-share-alt">&lt;/i>&lt;/button>
+&lt;button id="btnCam${idx}" class="annotationBtn" title="Snapshot">&lt;i class="fas fa-camera">&lt;/i>&lt;/button>
+&lt;button id="btnBlender${idx}" class="annotationBtn" title="Blend-modes">&lt;i class="fas fa-blender">&lt;/i>&lt;/button>
+&lt;button id="btnCrosshairs${idx}" class="annotationBtn" title="Crosshairs">&lt;i class="fas fa-crosshairs">&lt;/i>&lt;/button>
+&lt;button id="btnSave${idx}" class="annotationBtn" title="Save">&lt;i class="fas fa-save">&lt;/i>&lt;/button>
+&lt;div class="mag" style="display: inline">
+  &lt;button class="annotationBtn">
+  &lt;i class="fas fa-search">&lt;/i>
+  &lt;/button>
+  &lt;!-- data-value = image zoom -->
+  &lt;div class="mag-content">
+    &lt;a href="#" data-value="0.025" id="1">1x&lt;/a>
+    &lt;a href="#" data-value="0.05" id="2">2x&lt;/a>
+    &lt;a href="#" data-value="0.1" id="4">4x&lt;/a>
+    &lt;a href="#" data-value="0.25" id="10">10x&lt;/a>
+    &lt;a href="#" data-value="0.5" id="20">20x&lt;/a>
+    &lt;a href="#" data-value="1.0" id="40">40x&lt;/a>
+  &lt;/div>
+&lt;/div>
+&lt;button id="btnMapMarker" class="annotationBtn" style="display: none">&lt;i class="fas fa-map-marker-alt">&lt;/i> Hide markers&lt;/button>
+&lt;/div>`;
 
               // END
-              htm += '&lt;/div&gt;&lt;/div&gt;';
+              htm += '&lt;/div>&lt;/div>';
             }
 
             // CREATE VIEWER
-            htm += `&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;"&gt;&lt;/div&gt;
-&lt;/td&gt;&lt;td id="layersAndColors${idx}" style="vertical-align: top;"&gt;&lt;/td&gt;
-&lt;/tr&gt;&lt;/table&gt;`;
+            htm += `&lt;table>&lt;tr>&lt;td>&lt;div id="${osdId}" class="viewer dropzone" style="width: ${width}px; height: ${height}px;">&lt;/div>
+&lt;/td>&lt;td id="layersAndColors${idx}" style="vertical-align: top;">&lt;/td>
+&lt;/tr>&lt;/table>`;
 
-            // ADD VIEWER & WIDGETS TO CONTAINING DIV
+            // ADD VIEWER &amp; WIDGETS TO CONTAINING DIV
             container.innerHTML = htm;
 
             // DRAW POLYGON COLOR PICKER
@@ -202,7 +215,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         return viewers;
       })
-      .then(viewers =&gt; {
+      .then(viewers => {
         // PAN/ZOOM CONTROLLER - accepts array of MultiViewers
         synchronizeViewers(viewers);
       });
@@ -223,77 +236,36 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
     }
 
     // control-r for 'ruler'
-    if (evt.ctrlKey &amp;& key === 'r') {
+    if (evt.ctrlKey &amp;&amp; key === 'r') {
       evt.preventDefault();
       for (let i = 0; i &lt; viewers.length; i++) {
-        document.querySelectorAll('[id^="btnRuler"]').forEach(node =&gt; {
+        document.querySelectorAll('[id^="btnRuler"]').forEach(node => {
           node.click();
         });
       }
     }
-    
   }
 };
-</code></pre></article>
-</section>
+</code></pre>
+        </article>
+    </section>
+
+
+
+
 </div>
+
 <nav>
-<h2><a href="index.html">Home</a></h2>
-<h3>Classes</h3>
-<ul>
-<li><a href="ImageViewer.html">ImageViewer</a></li>
-<li><a href="MultiViewer.html">MultiViewer</a></li>
-</ul>
-<h3>Global</h3>
-<ul>
-<li><a href="global.html#alertMessage">alertMessage</a></li>
-<li><a href="global.html#blender">blender</a></li>
-<li><a href="global.html#colorToArray">colorToArray</a></li>
-<li><a href="global.html#CONFIG">CONFIG</a></li>
-<li><a href=
-"global.html#createDraggableDiv">createDraggableDiv</a></li>
-<li><a href="global.html#createId">createId</a></li>
-<li><a href="global.html#createId2">createId2</a></li>
-<li><a href="global.html#drawCross">drawCross</a></li>
-<li><a href="global.html#drawPolygon">drawPolygon</a></li>
-<li><a href="global.html#e">e</a></li>
-<li><a href="global.html#editPolygon">editPolygon</a></li>
-<li><a href="global.html#filterPopup">filterPopup</a></li>
-<li><a href="global.html#getRandomInt">getRandomInt</a></li>
-<li><a href="global.html#gridOverlay">gridOverlay</a></li>
-<li><a href="global.html#img2array">img2array</a></li>
-<li><a href="global.html#isEmpty">isEmpty</a></li>
-<li><a href="global.html#isRealValue">isRealValue</a></li>
-<li><a href="global.html#layerPopup">layerPopup</a></li>
-<li><a href="global.html#layerUI">layerUI</a></li>
-<li><a href="global.html#mapMarker">mapMarker</a></li>
-<li><a href="global.html#markupTools">markupTools</a></li>
-<li><a href="global.html#MAX">MAX</a></li>
-<li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li>
-<li><a href="global.html#mugshots">mugshots</a></li>
-<li><a href="global.html#populateStorage">populateStorage</a></li>
-<li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li>
-<li><a href="global.html#ruler">ruler</a></li>
-<li><a href="global.html#saveSettings">saveSettings</a></li>
-<li><a href="global.html#scaleToPct">scaleToPct</a></li>
-<li><a href="global.html#scaleToRgb">scaleToRgb</a></li>
-<li><a href="global.html#setFilter">setFilter</a></li>
-<li><a href="global.html#setOsdTracking">setOsdTracking</a></li>
-<li><a href="global.html#STATE">STATE</a></li>
-<li><a href="global.html#stringy">stringy</a></li>
-<li><a href=
-"global.html#synchronizeViewers">synchronizeViewers</a></li>
-<li><a href="global.html#toggleButton">toggleButton</a></li>
-<li><a href="global.html#toggleCross">toggleCross</a></li>
-</ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#bgTrans">bgTrans</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#createId2">createId2</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getPreferredLabel">getPreferredLabel</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#populateStorage">populateStorage</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdTracking">setOsdTracking</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#stringy">stringy</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
 </nav>
+
 <br class="clear">
-<footer>Documentation generated by <a href=
-"https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jul 26
-2022 14:36:36 GMT-0400 (Eastern Daylight Time)</footer>
-<script>
- prettyPrint(); 
-</script> 
-<script src="scripts/linenumber.js"></script>
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Sep 08 2023 13:38:18 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>
