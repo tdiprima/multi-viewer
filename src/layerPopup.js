@@ -109,14 +109,12 @@ const layerPopup = function(divBody, allLayers, viewer) {
 
       const slideVals = getVals([ARange, BRange]);
 
-      if (d.type === 'outside') {
-        // Pass layers, viewer, and range info
-        setFilter(allLayers, viewer, {
-          slideHandle1: slideVals[0],
-          slideHandle2: slideVals[1],
-          type: (d.type === 'outside') ? 'outside' : 'inside'
-        });
-      }
+      // Pass layers, viewer, and range info
+      setFilter(allLayers, viewer, {
+        slideHandle1: slideVals[0],
+        slideHandle2: slideVals[1],
+        type: (d.type === 'outside') ? 'outside' : 'inside'
+      });
     }
 
     ARange.addEventListener('input', updateDisplay);
