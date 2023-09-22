@@ -133,7 +133,12 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
   function createInputHandler(updateElement) {
     return function() {
       updateElement.value = this.value;
-      setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: getThreshColor(colorPicker), classId: classId });
+      // Layers, viewer, and threshold
+      setFilter(layers, viewer, {}, {
+        val: parseInt(this.value),
+        rgba: getThreshColor(colorPicker),
+        classId: classId
+      });
     };
   }
 
@@ -193,7 +198,11 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
 
     // Initial values set
     if (STATE.renderType === 'byThreshold') {
-      setFilter(allLayers, viewer, {}, { val: 1, rgba: [126, 1, 0, 255] }); // 128
+      // Layers, viewer, and threshold
+      setFilter(allLayers, viewer, {}, {
+        val: 1,
+        rgba: [126, 1, 0, 255]
+      });
     } else {
       setFilter(allLayers, viewer);
     }
