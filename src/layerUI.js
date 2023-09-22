@@ -187,53 +187,54 @@ function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   async function fetchAndDisplay(url) {
     try {
       const data = await fetchData(url);
-      const element = createDraggableBtn(layerNum, currentLayer, data);
-      // Append
+      let arr = createDraggableBtn(layerNum, currentLayer, data);
+      const element = arr[0];
+      const featureName = arr[1];
       divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
+
+      // OKAY THIS MIGHT NOT WORK BUT I'M GONNA TRY (besides should have 1 idea per function):
+      // VISIBILITY TOGGLE
+      const faEye = layerEye(currentLayer);
+      if (layerNum > 0) {
+        myEyeArray.push(faEye);
+      }
+
+      divTableRow.appendChild(e("div", {class: "divTableCell"}, [faEye]));
+
+      // TRANSPARENCY SLIDER
+      const [icon, slider] = transparencySlider(currentLayer, faEye, viewer);
+
+      // .myDIV
+      const div = e("div", {class: "myDIV", title: "transparency slider"}, [icon]);
+
+      // .hide
+      div.appendChild(e("div", {class: "hide"}, [slider]));
+
+      // VISIBILITY
+      // faEye.addEventListener('click', () => { layerEyeEvent(faEye, slider, layerNum, viewer) });
+      faEye.addEventListener("click", layerEyeEvent.bind(null, faEye, slider, layerNum, viewer), false);
+
+      divTableRow.appendChild(e("div", {class: "divTableCell"}, [div]));
+
+      if (layerNum > 0) {
+        // COLOR PALETTE
+        createColorPalette(divTableRow, "featureName", currentLayer, allLayers, viewer);
+
+        // TACHOMETER
+        const divBody = createTachometer(divTableRow, "featureName");
+
+        layerPopup(divBody, allLayers, viewer);
+      } else {
+        divTableRow.appendChild(e("div", {class: "divTableCell"}));
+      }
+
     } catch (error) {
       console.error('There was a problem:', error);
     }
   }
 
   // Calling the function
-  fetchAndDisplay(currentLayer.location).then(r => console.log("something"));
-
-
-  // VISIBILITY TOGGLE
-  const faEye = layerEye(currentLayer);
-  if (layerNum > 0) {
-    myEyeArray.push(faEye);
-  }
-
-  divTableRow.appendChild(e("div", {class: "divTableCell"}, [faEye]));
-
-  // TRANSPARENCY SLIDER
-  const [icon, slider] = transparencySlider(currentLayer, faEye, viewer);
-
-  // .myDIV
-  const div = e("div", {class: "myDIV", title: "transparency slider"}, [icon]);
-
-  // .hide
-  div.appendChild(e("div", {class: "hide"}, [slider]));
-
-  // VISIBILITY
-  // faEye.addEventListener('click', () => { layerEyeEvent(faEye, slider, layerNum, viewer) });
-  faEye.addEventListener("click", layerEyeEvent.bind(null, faEye, slider, layerNum, viewer), false);
-
-  divTableRow.appendChild(e("div", {class: "divTableCell"}, [div]));
-
-  // TODO:
-  if (layerNum > 0) {
-    // COLOR PALETTE
-    createColorPalette(divTableRow, "featureName", currentLayer, allLayers, viewer);
-
-    // TACHOMETER
-    const divBody = createTachometer(divTableRow, "featureName");
-
-    layerPopup(divBody, allLayers, viewer);
-  } else {
-    divTableRow.appendChild(e("div", {class: "divTableCell"}));
-  }
+  fetchAndDisplay(currentLayer.location).then(result => { console.log("something"), result });
 }
 
 // Feature (draggable)
@@ -264,7 +265,7 @@ function createDraggableBtn(layerNum, currentLayer, data) {
     title: featureName
   });
   element.innerHTML = featureName;
-  return element;
+  return [element, featureName];
 }
 
 // Eyeball visibility: layer
