@@ -50,24 +50,10 @@ function handleDrag(layers, viewer) {
   // Wrap everything related to drag and drop inside an IIFE
   (function (viewer) {
     // These variables are now specific to this viewer
-    let sourceViewer;
     let draggedFeature;
 
     // Div containing viewer (Remember this is executed for each viewer.)
     const osdDiv = document.getElementById(viewer.id);
-
-    function handleDragStart(evt) {
-      evt.target.style.opacity = "0.4";
-      sourceViewer = viewer;
-      draggedFeature = this;
-      evt.dataTransfer.effectAllowed = "move";
-      evt.dataTransfer.setData("text/plain", evt.target.id);
-    }
-
-    function handleDragEnd(evt) {
-      evt.target.style.opacity = "1"; // this = the draggable feature
-      osdDiv.classList.remove("drag-over");
-    }
 
     function handleDrop(evt) {
       // prevent default action (open as link for some elements)
@@ -141,13 +127,6 @@ function handleDrag(layers, viewer) {
       return false;
     }
 
-    // Attach the event listeners
-    const features = document.querySelectorAll(".layer");
-    features.forEach(feature => {
-      feature.addEventListener("dragstart", handleDragStart);
-      feature.addEventListener("dragend", handleDragEnd);
-    });
-
     osdDiv.addEventListener("dragover", evt => {
       // prevent default to allow drop
       evt.preventDefault();
@@ -212,6 +191,16 @@ function createDraggableBtn(layerNum, currentLayer, featureName) {
   return element;
 }
 
+function handleDragStart(evt) {
+  evt.target.style.opacity = "0.4";
+  evt.dataTransfer.effectAllowed = "move";
+  evt.dataTransfer.setData("text/plain", evt.target.id);
+}
+
+function handleDragEnd(evt) {
+  evt.target.style.opacity = "1"; // this = the draggable feature
+}
+
 async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   const divTableRow = e("div", {class: "divTableRow"});
   divTable.appendChild(divTableRow);
@@ -221,9 +210,14 @@ async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer)
   try {
     const data = await fetchData(currentLayer.location);
     const featureName = getFeatureName(layerNum, currentLayer, data);
-    const element = createDraggableBtn(layerNum, currentLayer, featureName);
+    // const featureName = createId2(); // testing mode
 
+    const element = createDraggableBtn(layerNum, currentLayer, featureName);
     divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
+
+    // Attach drag & drop event listeners
+    element.addEventListener("dragstart", handleDragStart);
+    element.addEventListener("dragend", handleDragEnd);
 
     // Visibility toggle
     const faEye = layerEye(currentLayer);
