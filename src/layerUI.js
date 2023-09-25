@@ -177,14 +177,6 @@ async function fetchData(url) {
   return response.json();
 }
 
-async function fetchData(url) {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-  return response.json();
-}
-
 function getFeatureName(layerNum, currentLayer, data) {
   // Extract featureName and return
   let sections = new URL(currentLayer.location).search.split("/");
@@ -428,27 +420,18 @@ function createTachometer(row, featureName) {
 }
 
 function getOsdViewer(evt, sourceViewerDiv) {
-  const targetElement = evt.target;
-  const tagName = targetElement.tagName.toLowerCase();
-
-  if (tagName === "canvas") {
+  // Verify the event target is a canvas (versus a button)
+  if (evt.target.tagName.toLowerCase() === "canvas") {
     try {
-      let retVal;
-      try {
-        for (const sync of SYNCED_IMAGE_VIEWERS) {
-          if (sync.getViewer().id === sourceViewerDiv.id) {
-            retVal = sync.getViewer();
-            break;
-          }
-        }
-      } catch (e) {
-        console.error("message:", e.message);
-      }
-      return retVal;
+      // Try to find and return a viewer from the list that has the same ID as sourceViewerDiv.id
+      return SYNCED_IMAGE_VIEWERS.find(
+        sync => sync.getViewer().id === sourceViewerDiv.id
+      )?.getViewer() || null;
     } catch (e) {
-      console.error(e.message)
+      console.error("Something happened...", e.message);
     }
   }
+  // If the target is not a <canvas> or if no matching viewer is found, return null.
   return null;
 }
 
