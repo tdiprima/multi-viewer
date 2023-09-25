@@ -50,10 +50,9 @@ function handleDrag(layers, viewer) {
   // Wrap everything related to drag and drop inside an IIFE
   (function (viewer) {
     // These variables are now specific to this viewer
-    let draggedFeature;
 
     // Div containing viewer (Remember this is executed for each viewer.)
-    const osdDiv = document.getElementById(viewer.id);
+    const sourceDiv = document.getElementById(viewer.id);
 
     function handleDrop(evt) {
       // prevent default action (open as link for some elements)
@@ -114,7 +113,7 @@ function handleDrag(layers, viewer) {
         }
       }
 
-      const targetViewer = getOsdViewer(evt, targetDiv);
+      const targetViewer = getOsdViewer(evt, targetDiv.id);
 
       if (targetViewer !== null) {
         if (foundMatchingSlide) {
@@ -127,23 +126,23 @@ function handleDrag(layers, viewer) {
       return false;
     }
 
-    osdDiv.addEventListener("dragover", evt => {
+    sourceDiv.addEventListener("dragover", evt => {
       // prevent default to allow drop
       evt.preventDefault();
       return false;
     });
 
-    osdDiv.addEventListener("dragenter", function (evt) {
+    sourceDiv.addEventListener("dragenter", function (evt) {
       // highlight potential drop target when the draggable element enters it
       evt.target.classList.add('drag-over');
     });
 
-    osdDiv.addEventListener("dragleave", function (evt) {
+    sourceDiv.addEventListener("dragleave", function (evt) {
       // reset border of potential drop target when the draggable element leaves it
       evt.target.classList.remove('drag-over');
     });
 
-    osdDiv.addEventListener("drop", handleDrop);
+    sourceDiv.addEventListener("drop", handleDrop);
 
   })(viewer); // Pass the viewer into the IIFE
 }
@@ -413,13 +412,13 @@ function createTachometer(row, featureName) {
   return divBody;
 }
 
-function getOsdViewer(evt, sourceViewerDiv) {
+function getOsdViewer(evt, divId) {
   // Verify the event target is a canvas (versus a button)
   if (evt.target.tagName.toLowerCase() === "canvas") {
     try {
-      // Try to find and return a viewer from the list that has the same ID as sourceViewerDiv.id
+      // Get the viewer to this div id
       return SYNCED_IMAGE_VIEWERS.find(
-        sync => sync.getViewer().id === sourceViewerDiv.id
+        sync => sync.getViewer().id === divId
       )?.getViewer() || null;
     } catch (e) {
       console.error("Something happened...", e.message);
