@@ -53,6 +53,7 @@ function handleDrag(layers, viewer) {
     const sourceDiv = document.getElementById(viewer.id);
 
     function handleDrop(evt) {
+      // console.log("%chandleDrop", "color: #0ff;", evt.target);
       // prevent default action (open as link for some elements)
       evt.preventDefault();
       evt.stopPropagation();
@@ -184,12 +185,14 @@ function createDraggableBtn(layerNum, currentLayer, featureName) {
 }
 
 function handleDragStart(evt) {
+  // console.log("%chandleDragStart", "color: #0f0;", evt.target);
   evt.target.style.opacity = "0.4";
   evt.dataTransfer.effectAllowed = "move";
   evt.dataTransfer.setData("text/plain", evt.target.id);
 }
 
 function handleDragEnd(evt) {
+  // console.log("%chandleDragEnd", "color: #ff00cc;", evt.target);
   evt.target.style.opacity = "1"; // this = the draggable feature
 }
 
@@ -200,9 +203,10 @@ async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer)
   const layerNum = currentLayer.layerNum;
 
   try {
-    const data = await fetchData(currentLayer.location);
-    const featureName = getFeatureName(layerNum, currentLayer, data);
-    // const featureName = createId2(); // testing mode
+    // TJD
+    // const data = await fetchData(currentLayer.location);
+    // const featureName = getFeatureName(layerNum, currentLayer, data);
+    const featureName = createId2(); // testing mode
 
     const element = createDraggableBtn(layerNum, currentLayer, featureName);
     divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
