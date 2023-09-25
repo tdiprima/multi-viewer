@@ -50,14 +50,14 @@ function setupDragAndDrop(viewer) {
   const sourceDiv = document.getElementById(viewer.id);
 
   function handleDrop(evt) {
-    // console.log("%chandleDrop", "color: #0ff;", evt.target);
+    console.log("%chandleDrop", "color: #0ff;", evt.target);
     // prevent default action (open as link for some elements)
     evt.preventDefault();
     evt.stopPropagation();
 
     evt.target.classList.remove('drag-over') // restore style
-    const targetElement = evt.target;
-    const targetDiv = targetElement.closest(".viewer"); // where they dropped the feature
+    const targetElement = evt.target; // canvas
+    const targetDiv = targetElement.closest(".viewer"); // div container
 
     // Get neighboring elements
     const columnWithViewer = targetDiv.parentElement;
@@ -104,8 +104,8 @@ function setupDragAndDrop(viewer) {
       }
     }
 
-    const targetViewer = getOsdViewer(evt, targetDiv.id);
-    console.log(viewer.id, targetViewer.id);
+    const targetViewer = getOsdViewer(targetDiv.id);
+    console.log(sourceViewer.id, targetViewer.id);
 
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
@@ -180,8 +180,15 @@ function createDraggableBtn(layerNum, currentLayer, featureName) {
   return element;
 }
 
+let sourceViewer;
 function handleDragStart(evt) {
   // console.log("%chandleDragStart", "color: #0f0;", evt.target);
+  let draggedFeature = evt.target;
+
+  let el = draggedFeature.closest("table").parentElement.querySelector('.viewer');
+  sourceViewer = getOsdViewer(el.id);
+  // console.log("sourceViewer", sourceViewer);
+
   evt.target.style.opacity = "0.4";
   evt.dataTransfer.effectAllowed = "move";
   evt.dataTransfer.setData("text/plain", evt.target.id);
@@ -399,20 +406,15 @@ function createTachometer(row, featureName) {
   return divBody;
 }
 
-function getOsdViewer(evt, divId) {
-  // Verify the event target is a canvas (versus a button)
-  if (evt.target.tagName.toLowerCase() === "canvas") {
-    try {
-      // Get the viewer to this div id
-      return SYNCED_IMAGE_VIEWERS.find(
-        sync => sync.getViewer().id === divId
-      )?.getViewer() || null;
-    } catch (e) {
-      console.error("Something happened...", e.message);
-    }
+function getOsdViewer(divId) {
+  try {
+    // Get the viewer to this div id
+    return SYNCED_IMAGE_VIEWERS.find(
+      sync => sync.getViewer().id === divId
+    )?.getViewer() || null;
+  } catch (e) {
+    console.error("Something happened...", e.message);
   }
-  // If the target is not a <canvas> or if no matching viewer is found, return null.
-  return null;
 }
 
 function getVals(slides) {
