@@ -49,8 +49,6 @@ function createLayerElements(layersColumn, layers, viewer) {
 function handleDrag(layers, viewer) {
   // Wrap everything related to drag and drop inside an IIFE
   (function (viewer) {
-    // These variables are now specific to this viewer
-
     // Div containing viewer (Remember this is executed for each viewer.)
     const sourceDiv = document.getElementById(viewer.id);
 
@@ -62,11 +60,6 @@ function handleDrag(layers, viewer) {
       evt.target.classList.remove('drag-over') // restore style
       const targetElement = evt.target;
       const targetDiv = targetElement.closest(".viewer"); // where they dropped the feature
-
-      if (!targetDiv) {
-        console.error("!targetDiv");
-        return false;
-      }
 
       // Get neighboring elements
       const columnWithViewer = targetDiv.parentElement;
