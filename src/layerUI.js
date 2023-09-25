@@ -62,15 +62,15 @@ function handleDrag(layers, viewer) {
 
       evt.target.classList.remove('drag-over') // restore style
       const targetElement = evt.target;
-      const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
+      const targetDiv = targetElement.closest(".viewer"); // where they dropped the feature
 
-      if (!viewerDiv) {
-        console.error("!viewerDiv");
+      if (!targetDiv) {
+        console.error("!targetDiv");
         return false;
       }
 
       // Get neighboring elements
-      const columnWithViewer = viewerDiv.parentElement;
+      const columnWithViewer = targetDiv.parentElement;
 
       // Directly find the .divTableBody within the sibling column
       const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
@@ -114,7 +114,7 @@ function handleDrag(layers, viewer) {
         }
       }
 
-      const targetViewer = getOsdViewer(evt, viewerDiv);
+      const targetViewer = getOsdViewer(evt, targetDiv);
 
       if (targetViewer !== null) {
         if (foundMatchingSlide) {
