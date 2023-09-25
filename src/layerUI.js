@@ -268,23 +268,17 @@ function layerEyeEvent(icon, slider, layerNum, viewer) {
   toggleButton(icon, "fa-eye", "fa-eye-slash");
   const tiledImage = viewer.world.getItemAt(layerNum);
 
-  if (typeof tiledImage !== "undefined") {
-    if (icon.classList.contains("fa-eye-slash")) {
-      // Turn off layer
-      tiledImage.setOpacity(0);
-      // slider.value = "0" // Set slider to 0
-    } else {
-      // Turn on layer
-      let opacity;
-      if (parseInt(slider.value) === 0) {
-        opacity = 1;
-        slider.value = "100";
-      } else {
-        opacity = slider.value / 100
-      }
-      tiledImage.setOpacity(opacity);
-      // tiledImage.setOpacity(1) // Turn on layer
-      // slider.value = "100" // Set slider to (opacity * 100)
+  if (!tiledImage) return;
+
+  if (icon.classList.contains("fa-eye-slash")) {
+    tiledImage.setOpacity(0);
+  } else {
+    const sliderValue = parseInt(slider.value);
+    const opacity = (sliderValue === 0) ? 1 : sliderValue / 100;
+    tiledImage.setOpacity(opacity);
+
+    if (sliderValue === 0) {
+      slider.value = "100";
     }
   }
 }
