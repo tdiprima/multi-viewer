@@ -21,15 +21,16 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
   if (!isRealValue(images) || !isRealValue(images[0])) {
     // No images; notify and send them home.
     document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/`;</script>");
-  } else {
-    // TODO: MY STUFF
-    // images = images.slice(0, 2);
-    // numViewers = 2;
-    // rows = 1;
-    // columns = 2;
-    // width = 800;
-    // height = 600;
   }
+  // else {
+  //   // TODO: MY STUFF
+  //   images = images.slice(0, 2);
+  //   numViewers = 2;
+  //   rows = 1;
+  //   columns = 2;
+  //   width = 800;
+  //   height = 600;
+  // }
 
   document.addEventListener('DOMContentLoaded', setUp);
   window.addEventListener('keydown', hotKeysHandler);
@@ -45,13 +46,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         // Slide name
         let name;
-        let slide;
-        try {
-          slide = images[0][0].location; // layer 0 location
-        } catch (e) {
-          // double-check
-          document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
-        }
+        const slide = images[0][0].location; // layer 0 location
         if (slide.includes('TCGA')) {
           const str = slide.match(/TCGA-[^%.]+/)[0];
           name = `Slide: ${str}`;

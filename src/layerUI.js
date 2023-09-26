@@ -47,10 +47,10 @@ function createLayerElements(layersColumn, layers, viewer) {
 
 function setupDragAndDrop(viewer) {
   // Div containing viewer (Remember this is executed for each viewer.)
-  const sourceDiv = document.getElementById(viewer.id);
+  const currentViewerDiv = document.getElementById(viewer.id);
 
   function handleDrop(evt) {
-    console.log("%chandleDrop", "color: #0ff;", evt.target);
+    // console.log("%chandleDrop", "color: #0ff;", evt.target);
     // prevent default action (open as link for some elements)
     evt.preventDefault();
     evt.stopPropagation();
@@ -105,36 +105,46 @@ function setupDragAndDrop(viewer) {
     }
 
     const targetViewer = getOsdViewer(targetDiv.id);
-    console.log(sourceViewer.id, targetViewer.id);
+    // console.log(sourceViewer.id, targetViewer.id);
 
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
         targetViewer.world.getItemAt(layNum).setOpacity(1); // show
         // (And we already turned on target feature eyeball)
       } else {
-        console.warn("Did not find matching slide. Feature:", featureName);
+        // TODO: Add the layer to the target viewer (and add icon row)
+        if (isRealValue(sourceViewer)) {
+          // What layer was it now?
+          const sourceLayer = sourceViewer.world.getItemAt(1);
+          targetViewer.addTiledImage({
+            tileSource: sourceLayer.source,
+            // Add more properties if needed
+          });
+        }
+        // console.warn("Did not find matching slide. Feature:", featureName);
       }
     }
     return false;
   }
 
-  sourceDiv.addEventListener("dragover", evt => {
+  // Add event listeners to current div
+  currentViewerDiv.addEventListener("dragover", evt => {
     // prevent default to allow drop
     evt.preventDefault();
     return false;
   });
 
-  sourceDiv.addEventListener("dragenter", function (evt) {
+  currentViewerDiv.addEventListener("dragenter", function (evt) {
     // highlight potential drop target when the draggable element enters it
     evt.target.classList.add('drag-over');
   });
 
-  sourceDiv.addEventListener("dragleave", function (evt) {
+  currentViewerDiv.addEventListener("dragleave", function (evt) {
     // reset border of potential drop target when the draggable element leaves it
     evt.target.classList.remove('drag-over');
   });
 
-  sourceDiv.addEventListener("drop", handleDrop);
+  currentViewerDiv.addEventListener("drop", handleDrop);
 }
 
 async function fetchData(url) {
@@ -182,12 +192,15 @@ function createDraggableBtn(layerNum, currentLayer, featureName) {
 
 let sourceViewer;
 function handleDragStart(evt) {
-  // console.log("%chandleDragStart", "color: #0f0;", evt.target);
+  console.log("%chandleDragStart", "color: #0f0;", evt.target);
   let draggedFeature = evt.target;
 
-  let el = draggedFeature.closest("table").parentElement.querySelector('.viewer');
-  sourceViewer = getOsdViewer(el.id);
-  // console.log("sourceViewer", sourceViewer);
+  let el;
+  if (typeof draggedFeature?.closest === "function") {
+    el = draggedFeature.closest("table")?.parentElement?.querySelector('.viewer');
+    sourceViewer = getOsdViewer(el.id);
+    // console.log("sourceViewer", sourceViewer);
+  }
 
   evt.target.style.opacity = "0.4";
   evt.dataTransfer.effectAllowed = "move";
@@ -207,9 +220,9 @@ async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer)
 
   try {
     // TJD
-    // const data = await fetchData(currentLayer.location);
-    // const featureName = getFeatureName(layerNum, currentLayer, data);
-    const featureName = createId2(); // testing mode
+    const data = await fetchData(currentLayer.location);
+    const featureName = getFeatureName(layerNum, currentLayer, data);
+    // const featureName = createId2(); // testing mode
 
     const element = createDraggableBtn(layerNum, currentLayer, featureName);
     divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
