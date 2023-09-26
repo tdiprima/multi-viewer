@@ -64,6 +64,7 @@ function setupDragAndDrop(viewer) {
 
     // Directly find the .divTableBody within the sibling column
     const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
+
     const movedFeatId = evt.dataTransfer.getData("text");
     const movedFeature = document.getElementById(movedFeatId);
     const featureName = movedFeature.innerHTML;
@@ -112,9 +113,9 @@ function setupDragAndDrop(viewer) {
         targetViewer.world.getItemAt(layNum).setOpacity(1); // show
         // (And we already turned on target feature eyeball)
       } else {
-        // TODO: Add the layer to the target viewer (and add icon row)
+        // TODO: Add layer to target viewer & JSON, and add icon row
+        //  Get source layerNum and options (opacity, colorize it, etc.)
         if (isRealValue(sourceViewer)) {
-          // What layer was it now?
           const sourceLayer = sourceViewer.world.getItemAt(1);
           targetViewer.addTiledImage({
             tileSource: sourceLayer.source,
@@ -192,7 +193,8 @@ function createDraggableBtn(layerNum, currentLayer, featureName) {
 
 let sourceViewer;
 function handleDragStart(evt) {
-  console.log("%chandleDragStart", "color: #0f0;", evt.target);
+  // console.log("%chandleDragStart", "color: #0f0;", evt.target);
+  // 1st char id = layer index
   let draggedFeature = evt.target;
 
   let el;

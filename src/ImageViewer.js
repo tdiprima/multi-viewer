@@ -72,10 +72,16 @@ class ImageViewer {
     viewer.world.addHandler('add-item', ({ item }) => {
       const itemIndex = viewer.world.getIndexOfItem(item);
       const source = viewer.world.getItemAt(itemIndex).source;
+      // console.log(itemIndex, layers[itemIndex]);
 
-      if (isRealValue(source.hasCreateAction) && isRealValue(source.hasCreateAction.name)) layers[itemIndex].name = source.hasCreateAction.name;
-      if (isRealValue(source.resolutionUnit)) layers[itemIndex].resolutionUnit = source.resolutionUnit;
-      if (isRealValue(source.xResolution)) layers[itemIndex].xResolution = source.xResolution;
+      try {
+        if (isRealValue(source.hasCreateAction) && isRealValue(source.hasCreateAction.name)) layers[itemIndex].name = source.hasCreateAction.name;
+        if (isRealValue(source.resolutionUnit)) layers[itemIndex].resolutionUnit = source.resolutionUnit;
+        if (isRealValue(source.xResolution)) layers[itemIndex].xResolution = source.xResolution;
+      } catch (e) {
+        console.log(`%c${e.message}`, "color: #ff6a5a; font-size: larger;");
+      }
+
     });
 
     layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), layers, viewer);
