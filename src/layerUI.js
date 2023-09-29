@@ -50,7 +50,6 @@ function setupDragAndDrop(viewer) {
   const currentViewerDiv = document.getElementById(viewer.id);
 
   function handleDrop(evt) {
-    // console.log("%chandleDrop", "color: #0ff;", evt.target);
     // prevent default action (open as link for some elements)
     evt.preventDefault();
     evt.stopPropagation();
@@ -64,7 +63,6 @@ function setupDragAndDrop(viewer) {
 
     // Directly find the .divTableBody within the sibling column
     const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
-
     const movedFeatId = evt.dataTransfer.getData("text");
     const movedFeature = document.getElementById(movedFeatId);
     const featureName = movedFeature.innerHTML;
@@ -106,23 +104,13 @@ function setupDragAndDrop(viewer) {
     }
 
     const targetViewer = getOsdViewer(targetDiv.id);
-    // console.log(sourceViewer.id, targetViewer.id);
 
     if (targetViewer !== null) {
       if (foundMatchingSlide) {
         targetViewer.world.getItemAt(layNum).setOpacity(1); // show
         // (And we already turned on target feature eyeball)
       } else {
-        // TODO: Add layer to target viewer & JSON, and add icon row
-        //  Get source layerNum and options (opacity, colorize it, etc.)
-        if (isRealValue(sourceViewer)) {
-          const sourceLayer = sourceViewer.world.getItemAt(1);
-          targetViewer.addTiledImage({
-            tileSource: sourceLayer.source,
-            // Add more properties if needed
-          });
-        }
-        // console.warn("Did not find matching slide. Feature:", featureName);
+        console.warn("Did not find matching slide. Feature:", featureName);
       }
     }
     return false;
@@ -191,26 +179,13 @@ function createDraggableBtn(layerNum, currentLayer, featureName) {
   return element;
 }
 
-let sourceViewer;
 function handleDragStart(evt) {
-  // console.log("%chandleDragStart", "color: #0f0;", evt.target);
-  // 1st char id = layer index
-  let draggedFeature = evt.target;
-
-  let el;
-  if (typeof draggedFeature?.closest === "function") {
-    el = draggedFeature.closest("table")?.parentElement?.querySelector('.viewer');
-    sourceViewer = getOsdViewer(el.id);
-    // console.log("sourceViewer", sourceViewer);
-  }
-
   evt.target.style.opacity = "0.4";
   evt.dataTransfer.effectAllowed = "move";
   evt.dataTransfer.setData("text/plain", evt.target.id);
 }
 
 function handleDragEnd(evt) {
-  // console.log("%chandleDragEnd", "color: #ff00cc;", evt.target);
   evt.target.style.opacity = "1"; // this = the draggable feature
 }
 
