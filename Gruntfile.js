@@ -27,7 +27,6 @@ module.exports = function (grunt) {
           'src/ImageViewer.js',
           'src/layerUI.js',
           'src/layerPopup.js',
-          'src/MultiViewer.js',
           'src/synchronizeViewers.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
@@ -86,4 +85,3 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['concat_in_order', 'uglify', 'cssmin', 'copy']);
 
 }
-

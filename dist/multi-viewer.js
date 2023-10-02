@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2023-09-19 */
+/*! multi-viewer - v1.0.0 - 2023-10-02 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -398,19 +398,24 @@ let MICRONS_PER_PIX = 0.25;
  */
 const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   let viewers = [];
+  // PRINT IMAGES
+  // const div = document.createElement('div');
+  // div.innerText = JSON.stringify(images)
+  // document.body.appendChild(div);
 
   if (!isRealValue(images) || !isRealValue(images[0])) {
     // No images; notify and send them home.
     document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/`;</script>");
-  } else {
-    // TODO: MY STUFF
-    // images = images.slice(0, 2);
-    // numViewers = 2;
-    // rows = 1;
-    // columns = 2;
-    // width = 800;
-    // height = 600;
   }
+  // else {
+  //   // TODO: MY STUFF
+  //   images = images.slice(0, 2);
+  //   numViewers = 2;
+  //   rows = 1;
+  //   columns = 2;
+  //   width = 800;
+  //   height = 600;
+  // }
 
   document.addEventListener('DOMContentLoaded', setUp);
   window.addEventListener('keydown', hotKeysHandler);
@@ -426,13 +431,7 @@ const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts
 
         // Slide name
         let name;
-        let slide;
-        try {
-          slide = images[0][0].location; // layer 0 location
-        } catch (e) {
-          // double-check
-          document.write("<script>window.alert('You are logged out...');window.location=`${window.location.origin}/account`;</script>");
-        }
+        const slide = images[0][0].location; // layer 0 location
         if (slide.includes('TCGA')) {
           const str = slide.match(/TCGA-[^%.]+/)[0];
           name = `Slide: ${str}`;
@@ -1452,111 +1451,61 @@ const ruler = (btnRuler, viewer, overlay) => {
   });
 };
 
-/**
- * Implementation of <code>OpenSeadragon.TiledImage.setCompositeOperation</code>.
- *
- * [Uses <code>CanvasRenderingContext2D.globalCompositeOperation</code>]
- * to create different visual effects when applied to the layers.
- *
- * Users can play with the different effects and see if it helps to
- * discover things from a new and different perspective.
- *
- * @param {object} blenderBtn - Clickable blender icon
- * @param {object} viewer - OpenSeadragon viewer on which to apply the effects
- */
-const blender = (blenderBtn, viewer) => {
+const blender = (blenderBtn, viewer, showDescriptions = true) => {
   const blendModes = [
     ['normal', 'normal'],
-    [
-      'difference',
-      'The Difference blend mode subtracts the pixels of the base and blend layers and the result is the greater brightness value. When you subtract two pixels with the same value, the result is black.',
-    ],
-    [
-      'multiply',
-      'The Multiply mode multiplies the colors of the blending layer and the base layers, resulting in a darker color. This mode is useful for coloring shadows.',
-    ],
-    [
-      'screen',
-      'With Screen blend mode, the values of the pixels in the layers are inverted, multiplied, and then inverted again. The result is the opposite of Multiply: wherever either layer was darker than white, the composite is brighter.',
-    ],
-    [
-      'overlay',
-      'The Overlay blend mode both multiplies dark areas and screens light areas at the same time, so dark areas become darker and light areas become lighter. Anything that is 50% gray completely disappears from view.',
-    ],
-    [
-      'darken',
-      'The Darken Blending Mode looks at the luminance values in each of the RGB channels and selects the color of whichever layer is darkest.',
-    ],
-    [
-      'lighten',
-      'The Lighten Blending Mode takes a look at color of the layers, and keeps whichever one is lightest.',
-    ],
-    [
-      'color-dodge',
-      'The Color Dodge blend mode divides the bottom layer by the inverted top layer.',
-    ],
-    [
-      'color-burn',
-      'The Color Burn Blending Mode gives you a darker result than Multiply by increasing the contrast between the base and the blend colors resulting in more highly saturated mid-tones and reduced highlights.',
-    ],
-    [
-      'hard-light',
-      'Hard Light combines the Multiply and Screen Blending Modes using the brightness values of the Blend layer to make its calculations. The results with Hard Light tend to be intense.',
-    ],
-    [
-      'soft-light',
-      'With the Soft Light blending mode, every color that is lighter than 50% grey will get even lighter, like it would if you shine a soft spotlight to it. In the same way, every color darker than 50% grey will get even darker.',
-    ],
-    [
-      'exclusion',
-      'Exclusion is very similar to Difference. Blending with white inverts the base color values, while blending with black produces no change. However, Blending with 50% gray produces 50% gray.',
-    ],
-    [
-      'hue',
-      'The Hue Blending Mode preserves the luminosity and saturation of the base pixels while adopting the hue of the blend pixels.',
-    ],
-    [
-      'saturation',
-      'The Saturation Blending Mode preserves the luminosity and hue of the base layer while adopting the saturation of the blend layer.',
-    ],
-    [
-      'color',
-      'The Color blend mode is a combination of Hue and Saturation. Only the color (the hues and their saturation values) from the layer is blended in with the layer or layers below it.',
-    ],
-    [
-      'luminosity',
-      'The Luminosity blend mode preserves the hue and chroma of the bottom layers, while adopting the luma of the top layer.',
-    ]
+    ['difference', 'The Difference blend mode subtracts the pixels of the base and blend layers and the result is the greater brightness value. When you subtract two pixels with the same value, the result is black.'],
+    ['multiply', 'The Multiply mode multiplies the colors of the blending layer and the base layers, resulting in a darker color. This mode is useful for coloring shadows.'],
+    ['screen', 'With Screen blend mode, the values of the pixels in the layers are inverted, multiplied, and then inverted again. The result is the opposite of Multiply: wherever either layer was darker than white, the composite is brighter.'],
+    ['overlay', 'The Overlay blend mode both multiplies dark areas and screens light areas at the same time, so dark areas become darker and light areas become lighter. Anything that is 50% gray completely disappears from view.'],
+    ['darken', 'The Darken Blending Mode looks at the luminance values in each of the RGB channels and selects the color of whichever layer is darkest.'],
+    ['lighten', 'The Lighten Blending Mode takes a look at color of the layers, and keeps whichever one is lightest.'],
+    ['color-dodge', 'The Color Dodge blend mode divides the bottom layer by the inverted top layer.'],
+    ['color-burn', 'The Color Burn Blending Mode gives you a darker result than Multiply by increasing the contrast between the base and the blend colors resulting in more highly saturated mid-tones and reduced highlights.'],
+    ['hard-light', 'Hard Light combines the Multiply and Screen Blending Modes using the brightness values of the Blend layer to make its calculations. The results with Hard Light tend to be intense.'],
+    ['soft-light', 'With the Soft Light blending mode, every color that is lighter than 50% grey will get even lighter, like it would if you shine a soft spotlight to it. In the same way, every color darker than 50% grey will get even darker.'],
+    ['exclusion', 'Exclusion is very similar to Difference. Blending with white inverts the base color values, while blending with black produces no change. However, Blending with 50% gray produces 50% gray.'],
+    ['hue', 'The Hue Blending Mode preserves the luminosity and saturation of the base pixels while adopting the hue of the blend pixels.'],
+    ['saturation', 'The Saturation Blending Mode preserves the luminosity and hue of the base layer while adopting the saturation of the blend layer.'],
+    ['color', 'The Color blend mode is a combination of Hue and Saturation. Only the color (the hues and their saturation values) from the layer is blended in with the layer or layers below it.'],
+    ['luminosity', 'The Luminosity blend mode preserves the hue and chroma of the bottom layers, while adopting the luma of the top layer.']
   ];
-  // let uiCreated = false;
 
   // Set up user interface
   function _createBlendModesUI(div, viewer) {
-    const table = e('table');
+    const table = document.createElement('table');
     div.appendChild(table);
 
     blendModes.forEach(item => {
-      const name = item[0];
-      const def = item[1];
-      const blendBtn = e('button', {
+      const [name, description] = item;
+      const def = showDescriptions ? description : '';
+
+      const blendModeBtn = document.createElement('button');
+      Object.assign(blendModeBtn, {
         type: 'button',
         id: name.replace('-', '_'),
         value: name,
-        class: 'annotationBtn css-tooltip',
-        style: 'width: 120px',
-        'data-tooltip': def
+        className: showDescriptions ? 'annotationBtn css-tooltip' : 'annotationBtn',
+        style: 'width: 120px'
       });
-      blendBtn.innerHTML = name;
+      if (showDescriptions) {
+        blendModeBtn.setAttribute('data-tooltip', def); // Set data-tooltip using setAttribute
+      }
+      blendModeBtn.innerHTML = name;
 
-      const row = e('tr', {}, [e('td', {class: 'tooltip'}, [blendBtn, e('br')])]);
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.className = 'tooltip';
+      cell.appendChild(blendModeBtn);
+      row.appendChild(cell);
       table.appendChild(row);
 
       // User interface event handler
-      blendBtn.addEventListener('click', () => {
+      blendModeBtn.addEventListener('click', () => {
         try {
           const count = viewer.world.getItemCount();
           const topImage = viewer.world.getItemAt(count - 1); // Blend all
-          topImage.setCompositeOperation(blendBtn.value);
+          topImage.setCompositeOperation(blendModeBtn.value);
         } catch (e) {
           console.error(e.message);
         }
@@ -1566,19 +1515,11 @@ const blender = (blenderBtn, viewer) => {
 
   // onClick handler for blender icon
   blenderBtn.addEventListener('click', () => {
-    // if (uiCreated) {
-    //   // Turn off
-    //   uiCreated = false;
-    // } else {
-    // Turn on
     const id = createId(5, 'modes');
     const rect = blenderBtn.getBoundingClientRect();
     const div = createDraggableDiv(id, 'Blend Modes', rect.left, rect.top);
     div.style.display = 'block';
     _createBlendModesUI(document.getElementById(`${id}Body`), viewer);
-    // uiCreated = true;
-    // }
-    // toggleButton(blenderBtn, 'btnOn', 'annotationBtn');
   });
 };
 
@@ -1605,7 +1546,7 @@ const markupTools = (viewerInfo, options, viewer) => {
 
   ruler(document.getElementById(`btnRuler${idx}`), viewer, overlay);
 
-  blender(document.getElementById(`btnBlender${idx}`), viewer);
+  blender(document.getElementById(`btnBlender${idx}`), viewer, false); // Set to true if you want to show descriptions
 
   const canvas = overlay.fabricCanvas();
   canvas.on('after:render', () => {
@@ -1852,6 +1793,7 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
   function createInputHandler(updateElement) {
     return function() {
       updateElement.value = this.value;
+      // Layers, viewer, and threshold
       setFilter(layers, viewer, {}, { val: parseInt(this.value), rgba: getThreshColor(colorPicker), classId: classId });
     };
   }
@@ -1912,7 +1854,8 @@ function createDropdown(uniqueId, divArr, allLayers, viewer) {
 
     // Initial values set
     if (STATE.renderType === 'byThreshold') {
-      setFilter(allLayers, viewer, {}, { val: 1, rgba: [126, 1, 0, 255] }); // 128
+      // Layers, viewer, and threshold
+      setFilter(allLayers, viewer, {}, { val: 1, rgba: [126, 1, 0, 255] });
     } else {
       setFilter(allLayers, viewer);
     }
@@ -2643,41 +2586,16 @@ class ImageViewer {
     // anno.makeAnnotatable(viewer);
 
     // When an item is added to the World, grab the info
-    // viewer.world.addHandler('add-item', ({ item }) => {
-    //   const itemIndex = viewer.world.getIndexOfItem(item);
-    //   const source = viewer.world.getItemAt(itemIndex).source;
+    viewer.world.addHandler('add-item', ({ item }) => {
+      const itemIndex = viewer.world.getIndexOfItem(item);
+      const source = viewer.world.getItemAt(itemIndex).source;
 
-    //   if (typeof source.prefLabel !== 'undefined') layers[itemIndex].prefLabel = source.prefLabel;
-    //   if (typeof source.resolutionUnit !== 'undefined') layers[itemIndex].resolutionUnit = source.resolutionUnit;
-    //   if (typeof source.xResolution !== 'undefined') layers[itemIndex].xResolution = source.xResolution;
+      if (isRealValue(source.hasCreateAction) && isRealValue(source.hasCreateAction.name)) layers[itemIndex].name = source.hasCreateAction.name;
+      if (isRealValue(source.resolutionUnit)) layers[itemIndex].resolutionUnit = source.resolutionUnit;
+      if (isRealValue(source.xResolution)) layers[itemIndex].xResolution = source.xResolution;
+    });
 
-    //   layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), layers, viewer);
-    // });
-
-    function myHandler(callback) {
-      viewer.world.addHandler('add-item', ({ item }) => {
-        // When an item is added to the World, grab the info
-        const itemIndex = viewer.world.getIndexOfItem(item);
-        const source = viewer.world.getItemAt(itemIndex).source;
-        if (isRealValue(source.hasCreateAction) && isRealValue(source.hasCreateAction.name)) {
-          layers[itemIndex].name = source.hasCreateAction.name;
-          // console.log("name", source.hasCreateAction.name);
-        }
-        if (isRealValue(source.resolutionUnit)) layers[itemIndex].resolutionUnit = source.resolutionUnit;
-        if (isRealValue(source.xResolution)) layers[itemIndex].xResolution = source.xResolution;
-
-        if (isRealValue(layers[itemIndex].name) || layers[itemIndex].location.endsWith("svs")) {
-          callback(
-            document.getElementById(`layersAndColors${viewerInfo.idx}`),
-            layers,
-            viewer
-          );
-        }
-      });
-    }
-
-    // Pass layerUI as a callback function
-    myHandler(layerUI);
+    layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), layers, viewer);
 
     function _parseHash() {
       const params = {};
@@ -2888,7 +2806,6 @@ class ImageViewer {
         }
       }
     }
-
   }
 
   /**
@@ -2923,13 +2840,13 @@ class ImageViewer {
  */
 const layerUI = (layersColumn, images, viewer) => {
   createLayerElements(layersColumn, images, viewer);
-  handleDrag(images, viewer);
+  setupDragAndDrop(viewer);
 };
 
 function createLayerElements(layersColumn, layers, viewer) {
   const myEyeArray = [];
 
-  const globalEyeball = globalEye(layersColumn)
+  const globalEyeball = globalEye(layersColumn);
 
   const divTable = e("div", {class: "divTable"});
   // const scrollDiv = e("div", {class: "divTableBody scroll"});
@@ -2950,270 +2867,202 @@ function createLayerElements(layersColumn, layers, viewer) {
 
 }
 
-// VIEWER'S DRAGGABLE LAYERS
-function handleDrag(layers, viewer) {
-  // Wrap everything related to drag and drop inside an IIFE
-  (function (viewer) {
-    // These variables are now specific to this viewer
-    let sourceViewer;
-    let draggedFeature;
+function setupDragAndDrop(viewer) {
+  // Div containing viewer (Remember this is executed for each viewer.)
+  const currentViewerDiv = document.getElementById(viewer.id);
 
-    // Div containing viewer (Remember this is executed for each viewer.)
-    const osdDiv = document.getElementById(viewer.id);
+  function handleDrop(evt) {
+    // prevent default action (open as link for some elements)
+    evt.preventDefault();
+    evt.stopPropagation();
 
-    function handleDragStart(evt) {
-      evt.target.style.opacity = "0.4";
-      sourceViewer = viewer;
-      draggedFeature = this;
-      evt.dataTransfer.effectAllowed = "move";
-      evt.dataTransfer.setData("text/plain", evt.target.id);
+    evt.target.classList.remove('drag-over') // restore style
+    const targetElement = evt.target; // canvas
+    const targetDiv = targetElement.closest(".viewer"); // div container
+
+    // Get neighboring elements
+    const columnWithViewer = targetDiv.parentElement;
+
+    // Directly find the .divTableBody within the sibling column
+    const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
+    const movedFeatId = evt.dataTransfer.getData("text");
+    const movedFeature = document.getElementById(movedFeatId);
+    const featureName = movedFeature.innerHTML;
+
+    let layNum;
+    let foundMatchingSlide = false;
+
+    // Iterate table rows
+    let myHTMLCollection = tableLayAndColor.children;
+    for (let i = 1; i < myHTMLCollection.length; i++) {
+      // Skip first row (globals)
+      const [firstCell, secondCell] = myHTMLCollection[i].children;
+      const lay = firstCell.firstChild;
+      const eye = secondCell.firstChild;
+
+      layNum = lay.id[0]; // 1st char is array index
+
+      // css transition: .block, .color-fade
+      if (lay.innerHTML === featureName) {
+        foundMatchingSlide = true;
+
+        // Highlight the layer
+        lay.classList.remove("layer");
+        lay.classList.add("block");
+        lay.classList.add("color-fade");
+
+        /** timeout to turn it back to normal **/
+        setTimeout(() => {
+          lay.classList.remove("color-fade");
+          lay.classList.remove("block");
+          lay.classList.add("layer");
+        }, 2000);
+
+        // Toggle eyeball
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+        break;
+      }
     }
 
-    function handleDragEnd(evt) {
-      evt.target.style.opacity = "1"; // this = the draggable feature
-      osdDiv.classList.remove("drag-over");
+    const targetViewer = getOsdViewer(targetDiv.id);
+
+    if (targetViewer !== null) {
+      if (foundMatchingSlide) {
+        targetViewer.world.getItemAt(layNum).setOpacity(1); // show
+        // (And we already turned on target feature eyeball)
+      } else {
+        console.warn("Did not find matching slide. Feature:", featureName);
+      }
     }
+    return false;
+  }
 
-    function handleDrop(evt) {
-      // prevent default action (open as link for some elements)
-      evt.preventDefault();
-      evt.stopPropagation();
+  // Add event listeners to current div
+  currentViewerDiv.addEventListener("dragover", evt => {
+    // prevent default to allow drop
+    evt.preventDefault();
+    return false;
+  });
 
-      evt.target.classList.remove('drag-over') // restore style
-      const targetElement = evt.target;
-      const viewerDiv = targetElement.closest(".viewer"); // where they dropped the feature
+  currentViewerDiv.addEventListener("dragenter", function (evt) {
+    // highlight potential drop target when the draggable element enters it
+    evt.target.classList.add('drag-over');
+  });
 
-      if (!viewerDiv) {
-        console.error("!viewerDiv");
-        return false;
-      }
+  currentViewerDiv.addEventListener("dragleave", function (evt) {
+    // reset border of potential drop target when the draggable element leaves it
+    evt.target.classList.remove('drag-over');
+  });
 
-      // Get neighboring elements
-      const columnWithViewer = viewerDiv.parentElement;
-
-      // Directly find the .divTableBody within the sibling column
-      const tableLayAndColor = columnWithViewer.nextSibling.querySelector('.divTableBody');
-      const movedFeatId = evt.dataTransfer.getData("text");
-      const movedFeature = document.getElementById(movedFeatId);
-      const featureName = movedFeature.innerHTML;
-
-      let layNum;
-      let foundMatchingSlide = false;
-
-      // Iterate table rows
-      let myHTMLCollection = tableLayAndColor.children;
-      for (let i = 1; i < myHTMLCollection.length; i++) {
-        // Skip first row (globals)
-        const [firstCell, secondCell] = myHTMLCollection[i].children;
-        const lay = firstCell.firstChild;
-        const eye = secondCell.firstChild;
-
-        layNum = lay.id[0]; // 1st char is array index
-
-        // css transition: .block, .color-fade
-        if (lay.innerHTML === featureName) {
-          foundMatchingSlide = true;
-
-          // Highlight the layer
-          lay.classList.remove("layer");
-          lay.classList.add("block");
-          lay.classList.add("color-fade");
-
-          /** timeout to turn it back to normal **/
-          setTimeout(() => {
-            lay.classList.remove("color-fade");
-            lay.classList.remove("block");
-            lay.classList.add("layer");
-          }, 2000);
-
-          // Toggle eyeball
-          eye.classList.remove("fa-eye-slash");
-          eye.classList.add("fa-eye");
-          break;
-        }
-      }
-
-      const targetViewer = getOsdViewer(evt, viewerDiv);
-
-      if (targetViewer !== null) {
-        if (foundMatchingSlide) {
-          targetViewer.world.getItemAt(layNum).setOpacity(1); // show
-          // (And we already turned on target feature eyeball)
-        } else {
-          console.warn("Did not find matching slide. Feature:", featureName);
-        }
-      }
-      return false;
-    }
-
-    // Attach the event listeners
-    const features = document.querySelectorAll(".layer");
-    features.forEach(feature => {
-      feature.addEventListener("dragstart", handleDragStart);
-      feature.addEventListener("dragend", handleDragEnd);
-    });
-
-    osdDiv.addEventListener("dragover", evt => {
-      // prevent default to allow drop
-      evt.preventDefault();
-      return false;
-    });
-
-    osdDiv.addEventListener("dragenter", function (evt) {
-      // highlight potential drop target when the draggable element enters it
-      evt.target.classList.add('drag-over');
-    });
-
-    osdDiv.addEventListener("dragleave", function (evt) {
-      // reset border of potential drop target when the draggable element leaves it
-      evt.target.classList.remove('drag-over');
-    });
-
-    osdDiv.addEventListener("drop", handleDrop);
-
-  })(viewer); // Pass the viewer into the IIFE
+  currentViewerDiv.addEventListener("drop", handleDrop);
 }
 
-function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
+async function fetchData(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
+}
+
+function getFeatureName(layerNum, currentLayer, data) {
+  // Extract featureName and return
+  let sections = new URL(currentLayer.location).search.split("/");
+  const elementWithTCGA = sections.find(item => item.startsWith("TCGA"));
+
+  let featureName;
+  if (elementWithTCGA) {
+    const isFeature = currentLayer.location.includes("FeatureStorage");
+
+    if (isFeature) {
+      featureName = data.hasCreateAction.name
+        ? data.hasCreateAction.name
+        : `${sections[sections.indexOf("FeatureStorage") + 1]}-${sections[sections.indexOf("FeatureStorage") + 2]}`;
+    } else {
+      featureName = elementWithTCGA.split(".")[0];
+    }
+  } else {
+    featureName = currentLayer.location.split('/').pop();
+  }
+  return featureName;
+}
+
+function createDraggableBtn(layerNum, currentLayer, featureName) {
+  // Create and return the draggable button
+  const span = e("span", {class: "button-text"}, [featureName]);
+  const element = e("button", {
+    id: `${layerNum}${createId(5, "feat")}`,
+    class: "layer expandable-button",
+    draggable: "true"
+  });
+  element.append(span);
+  return element;
+}
+
+function handleDragStart(evt) {
+  evt.target.style.opacity = "0.4";
+  evt.dataTransfer.effectAllowed = "move";
+  evt.dataTransfer.setData("text/plain", evt.target.id);
+}
+
+function handleDragEnd(evt) {
+  evt.target.style.opacity = "1"; // this = the draggable feature
+}
+
+async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer) {
   const divTableRow = e("div", {class: "divTableRow"});
   divTable.appendChild(divTableRow);
 
   const layerNum = currentLayer.layerNum;
-  let featureName = currentLayer.name;
 
-  if (!isRealValue(featureName)) {
-    // Parse URL for info
-    let url = currentLayer.location;
-    let search = "FeatureStorage";
-    let sections = url.split("/");
-    let res = sections.indexOf(search);
-    if (res > -1) {
-      featureName = `${sections[res + 1]}-${sections[res + 2]}`
-    } else {
-      featureName = sections[sections.length - 2];
-      if (name.includes(".")) {
-        featureName = name.substring(0, name.indexOf("."));
-      }
+  try {
+    // TJD
+    const data = await fetchData(currentLayer.location);
+    const featureName = getFeatureName(layerNum, currentLayer, data);
+    // const featureName = createId2(); // testing mode
+
+    const element = createDraggableBtn(layerNum, currentLayer, featureName);
+    divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
+
+    // Attach drag & drop event listeners
+    element.addEventListener("dragstart", handleDragStart);
+    element.addEventListener("dragend", handleDragEnd);
+
+    // Visibility toggle
+    const faEye = layerEye(currentLayer);
+    if (layerNum > 0) {
+      myEyeArray.push(faEye);
     }
+    divTableRow.appendChild(e("div", {class: "divTableCell"}, [faEye]));
+
+    // Transparency slider
+    const [icon, slider] = transparencySlider(currentLayer, faEye, viewer);
+
+    // .myDIV
+    const div = e("div", {class: "myDIV", title: "transparency slider"}, [icon]);
+
+    // .hide
+    div.appendChild(e("div", {class: "hide"}, [slider]));
+
+    // Visibility
+    faEye.addEventListener("click", layerEyeEvent.bind(null, faEye, slider, layerNum, viewer), false);
+
+    divTableRow.appendChild(e("div", {class: "divTableCell"}, [div]));
+
+    if (layerNum > 0) {
+      // Color Palette
+      createColorPalette(divTableRow, featureName, currentLayer, allLayers, viewer);
+
+      // Tachometer
+      const divBody = createTachometer(divTableRow, featureName);
+      layerPopup(divBody, allLayers, viewer);
+    } else {
+      divTableRow.appendChild(e("div", {class: "divTableCell"}));
+    }
+  } catch (error) {
+    console.error("There was a problem:", error);
   }
-
-  // FEATURE
-  const feat = createDraggableBtn(layerNum, featureName);
-  divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [feat]));
-
-  // VISIBILITY TOGGLE
-  const faEye = layerEye(currentLayer);
-  if (layerNum > 0) {
-    myEyeArray.push(faEye);
-  }
-
-  divTableRow.appendChild(e("div", {class: "divTableCell"}, [faEye]));
-
-  // TRANSPARENCY SLIDER
-  const [icon, slider] = transparencySlider(currentLayer, faEye, viewer);
-
-  // .myDIV
-  const div = e("div", {class: "myDIV", title: "transparency slider"}, [icon]);
-
-  // .hide
-  div.appendChild(e("div", {class: "hide"}, [slider]));
-
-  // VISIBILITY
-  // faEye.addEventListener('click', () => { layerEyeEvent(faEye, slider, layerNum, viewer) });
-  faEye.addEventListener("click", layerEyeEvent.bind(null, faEye, slider, layerNum, viewer), false);
-
-  divTableRow.appendChild(e("div", {class: "divTableCell"}, [div]));
-
-  if (layerNum > 0) {
-    // COLOR PALETTE
-    createColorPalette(divTableRow, featureName, currentLayer, allLayers, viewer);
-
-    // TACHOMETER
-    const divBody = createTachometer(divTableRow, featureName);
-
-    layerPopup(divBody, allLayers, viewer);
-  } else {
-    divTableRow.appendChild(e("div", {class: "divTableCell"}));
-  }
-}
-
-// Patch for not having prefLabel info (server #1)
-// function _extractLocation(layer) {
-//   let loc;
-//   if (typeof layer.location === 'string') {
-//     loc = layer.location;
-//   } else if (typeof layer.location === 'object') {
-//     loc = layer.location.url;
-//   } else {
-//     throw new TypeError(`Unidentified URL type... ${layer.location}`);
-//   }
-//   return loc;
-// }
-
-// function getPreferredLabel(layer) {
-//   let featureName;
-//   const loc = _extractLocation(layer);
-//   const sections = loc.split("/");
-//   // const re = /^(?:[a-z]+:)?\b/gm;
-//   const re = /^https?:\/\//;
-//   if (loc.match(re)) {
-//     // Absolute URL
-//     featureName = sections[sections.length - 2];
-//   } else {
-//     // Relative URL
-//     featureName = sections[sections.length - 1];
-//   }
-//   if (featureName.includes(".")) {
-//     // Final name
-//     featureName = featureName.substring(0, featureName.indexOf("."));
-//   }
-//   return featureName;
-// }
-
-/**
- * Parse url for the feature name
- * whilst we wait for that information to be available.
- */
-// function getPreferredLabel(layer) {
-//   // console.log("layer", layer);
-//   if (layer.name) {
-//     return layer.name;
-//   } else {
-//     // Patch for unavailable "name" info
-//     let name = "undefined";
-//     let url = layer.location;
-//     try {
-//       let search = "FeatureStorage";
-//       let sections = url.split("/");
-//       let res = sections.indexOf(search);
-//       if (res > -1) {
-//         name = `${sections[res + 1]}-${sections[res + 2]}`
-//       } else {
-//         name = sections[sections.length - 2];
-//         if (name.includes(".")) {
-//           name = name.substring(0, name.indexOf("."));
-//         }
-//       }
-//       // TODO: LONG NAME TEST
-//       // name = "abcdefghijklmnopqrstuvwxyz"
-//     } catch (e) {
-//       console.log(`%cError. Check WSI URL: ${url}`, "color: #ff6a5a; font-size: larger;");
-//     }
-//     return name;
-//   }
-// }
-
-// Feature (draggable)
-function createDraggableBtn(layerNum, featureName) {
-  const element = e("button", {
-    id: `${layerNum}${createId(5, "feat")}`,
-    class: "layer",
-    style: "display: inline-block",
-    draggable: "true",
-    title: featureName
-  });
-  element.innerHTML = featureName;
-  return element;
 }
 
 // Eyeball visibility: layer
@@ -3230,23 +3079,17 @@ function layerEyeEvent(icon, slider, layerNum, viewer) {
   toggleButton(icon, "fa-eye", "fa-eye-slash");
   const tiledImage = viewer.world.getItemAt(layerNum);
 
-  if (typeof tiledImage !== "undefined") {
-    if (icon.classList.contains("fa-eye-slash")) {
-      // Turn off layer
-      tiledImage.setOpacity(0);
-      // slider.value = "0" // Set slider to 0
-    } else {
-      // Turn on layer
-      let opacity;
-      if (parseInt(slider.value) === 0) {
-        opacity = 1;
-        slider.value = "100";
-      } else {
-        opacity = slider.value / 100
-      }
-      tiledImage.setOpacity(opacity);
-      // tiledImage.setOpacity(1) // Turn on layer
-      // slider.value = "100" // Set slider to (opacity * 100)
+  if (!tiledImage) return;
+
+  if (icon.classList.contains("fa-eye-slash")) {
+    tiledImage.setOpacity(0);
+  } else {
+    const sliderValue = parseInt(slider.value);
+    const opacity = (sliderValue === 0) ? 1 : sliderValue / 100;
+    tiledImage.setOpacity(opacity);
+
+    if (sliderValue === 0) {
+      slider.value = "100";
     }
   }
 }
@@ -3374,29 +3217,15 @@ function createTachometer(row, featureName) {
   return divBody;
 }
 
-function getOsdViewer(evt, sourceViewerDiv) {
-  const targetElement = evt.target;
-  const tagName = targetElement.tagName.toLowerCase();
-
-  if (tagName === "canvas") {
-    try {
-      let retVal;
-      try {
-        for (const sync of SYNCED_IMAGE_VIEWERS) {
-          if (sync.getViewer().id === sourceViewerDiv.id) {
-            retVal = sync.getViewer();
-            break;
-          }
-        }
-      } catch (e) {
-        console.error("message:", e.message);
-      }
-      return retVal;
-    } catch (e) {
-      console.error(e.message)
-    }
+function getOsdViewer(divId) {
+  try {
+    // Get the viewer to this div id
+    return SYNCED_IMAGE_VIEWERS.find(
+      sync => sync.getViewer().id === divId
+    )?.getViewer() || null;
+  } catch (e) {
+    console.error("Something happened...", e.message);
   }
-  return null;
 }
 
 function getVals(slides) {
@@ -3525,11 +3354,12 @@ const layerPopup = function(divBody, allLayers, viewer) {
 
       const slideVals = getVals([ARange, BRange]);
 
-      if (d.type === 'outside') {
-        setFilter(allLayers, viewer, { slideHandle1: slideVals[0], slideHandle2: slideVals[1], type: 'outside' });
-      } else {
-        setFilter(allLayers, viewer, { slideHandle1: slideVals[0], slideHandle2: slideVals[1], type: 'inside' });
-      }
+      // Pass layers, viewer, and range info
+      setFilter(allLayers, viewer, {
+        slideHandle1: slideVals[0],
+        slideHandle2: slideVals[1],
+        type: (d.type === 'outside') ? 'outside' : 'inside'
+      });
     }
 
     ARange.addEventListener('input', updateDisplay);
@@ -3571,8 +3401,6 @@ const layerPopup = function(divBody, allLayers, viewer) {
   const dd = e('div', {}, [section, wrapper]);
   divBody.appendChild(dd);
 };
-
-// REMOVE THIS FILE!!!!! AND REMOVE SRC DEF FROM HTML!!!!!!!
 
 /**
  * Synchronize pan & zoom on every viewer in the given array.
