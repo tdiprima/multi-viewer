@@ -11,8 +11,8 @@ const ruler = (btnRuler, viewer, overlay) => {
   let zoom;
   let mode = 'x';
   let fText;
-  let fStart = {x: 0, y: 0};
-  let fEnd = {x: 0, y: 0};
+  let fStart = { x: 0, y: 0 };
+  let fEnd = { x: 0, y: 0 };
   let oStart;
   let oEnd;
 
@@ -113,12 +113,12 @@ const ruler = (btnRuler, viewer, overlay) => {
   }
 
   function adjustor() {
-    let currentZoom = viewer.viewport.getZoom(true); // Ensure you get the current zoom level from OpenSeadragon.
+    let currentZoom = viewer.viewport.getZoom(true); // Get the current zoom level from OpenSeadragon.
     let scaleFactor = 1 / currentZoom; // Calculate a scaling factor based on the zoom level.
     // Adjust original dimensions with scaleFactor
     let adjustedFontSize = baseFontSize * scaleFactor;
     let adjustedStrokeWidth = baseStrokeWidth * scaleFactor;
-    return {fontSize: adjustedFontSize, lineWidth: adjustedStrokeWidth};
+    return { scaleFactor: scaleFactor, fontSize: adjustedFontSize, lineWidth: adjustedStrokeWidth };
   }
 
   function drawText(x, y, text) {
@@ -151,7 +151,7 @@ const ruler = (btnRuler, viewer, overlay) => {
     let t = valueWithUnit(hypot);
 
     let pointer = canvas.getPointer(o.e);
-    line.set({x2: pointer.x, y2: pointer.y});
+    line.set({ x2: pointer.x, y2: pointer.y });
     fEnd.x = pointer.x;
     fEnd.y = pointer.y;
 
@@ -167,7 +167,6 @@ const ruler = (btnRuler, viewer, overlay) => {
     isDown = false;
 
     // Make sure user actually drew a line
-    // if (fEnd.x > 0) {
     if (!(fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0)) {
       console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
       let pointer = canvas.getPointer(o.e);
