@@ -279,15 +279,19 @@ class ImageViewer {
       // Get info for scale bar
       const item = layers[0];
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
-      if (isRealValue(item.resolutionUnit)) {
-        if (item.resolutionUnit === 3) {
-          const pixPerCm = item.xResolution;
-          setScaleBar(pixPerCm * 100);
-          MICRONS_PER_PIX = 10000 / pixPerCm;
-        } else {
-          console.warn('resolutionUnit <> 3', item.resolutionUnit);
-        }
-      }
+      // TODO: TESTING
+      const pixPerCm = item.xResolution;
+      setScaleBar(pixPerCm * 100);
+      MICRONS_PER_PIX = 10000 / pixPerCm;
+      // if (isRealValue(item.resolutionUnit)) {
+      //   if (item.resolutionUnit === 3) {
+      //     const pixPerCm = item.xResolution;
+      //     setScaleBar(pixPerCm * 100);
+      //     MICRONS_PER_PIX = 10000 / pixPerCm;
+      //   } else {
+      //     console.warn('resolutionUnit <> 3', item.resolutionUnit);
+      //   }
+      // }
     }
   }
 
