@@ -132,6 +132,8 @@ const ruler = (btnRuler, viewer, overlay) => {
     fabText = new fabric.Text(text, {
       left: x,
       top: y,
+      originX: 'left',
+      originY: 'top',
       fill: fontColor,
       fontFamily: "Arial,Helvetica,sans-serif",
       fontSize: adjustor().fontSize,
