@@ -118,7 +118,7 @@ function createThresh(div, layers, viewer, colorPicker, classId, vInfo) {
     max: MAX.toString(),
     step: '1',
     size: '5',
-    value: val,
+    value: val
   });
 
   // slider
@@ -127,13 +127,14 @@ function createThresh(div, layers, viewer, colorPicker, classId, vInfo) {
     min: '0',
     max: MAX.toString(),
     step: '1',
-    value: val,
+    value: val
   });
 
   div.appendChild(e('div', {}, [number, range]));
 
   function createInputHandler(updateElement) {
     return function() {
+      if (vInfo.STATE.outline === true) { vInfo.STATE.outline = false; }
       updateElement.value = this.value;
       // Layers, viewer, and threshold
       setFilter(vInfo, layers, viewer, {}, { val: parseInt(this.value), rgba: getThreshColor(colorPicker), classId: classId });
@@ -146,6 +147,7 @@ function createThresh(div, layers, viewer, colorPicker, classId, vInfo) {
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer, vInfo) {
   checkboxElement.addEventListener('click', () => {
+    if (vInfo.STATE.outline === true) { vInfo.STATE.outline = false; }
     // look up color by 'classid', set 'checked' to the state of the checkbox
     displayColors.find(x => x.classid === parseInt(checkboxElement.value)).checked =
       checkboxElement.checked;
@@ -245,7 +247,6 @@ function createUI(uniq, div, layerColors, layers, viewer, vInfo, type) {
 
       if (byProb) {
         // adjust range (low to high)
-        // TODO: STATE
         numLow = createNumericInput(
           `low${uniq}${cIdx}`,
           table,
@@ -417,6 +418,7 @@ function rgba2hex(orig) {
 // Last stop before "set filter"
 function numericEvent(numEl, colorObject, layers, viewer, vInfo) {
   const intVal = parseInt(numEl.value);
+  if (vInfo.STATE.outline === true) { vInfo.STATE.outline = false; }
 
   // If they set it to something outside 0-MAX, reset it
   if (intVal > MAX) numEl.value = MAX.toString();
@@ -444,7 +446,7 @@ function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer
     max: MAX.toString(),
     step: '1',
     size: '5',
-    value: val,
+    value: val
   });
 
   // Event listeners
