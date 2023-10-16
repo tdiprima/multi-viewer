@@ -1,14 +1,6 @@
 /*! multi-viewer - v1.0.0 - 2023-10-16 */
-/** @file commonFunctions.js - Contains utility functions */
-
-/**
- * Change the way the image is displayed, based on user input.
- *
- * @param {Array} layers - Layers (images) to be displayed in viewer
- * @param {object} viewer - OpenSeadragon viewer
- * @param {object} [range] - For inside/outside; e.g. { "min": 70, "max": 170, "type": "inside" }
- * @param {object} [thresh] - Class thresholding; e.g. { "val": 128, "rgba": [ 255, 255, 0, 255 ], "classId": 1 }
- */
+var pageSetup;
+try {
 function setFilter(layers, viewer, range, thresh) {
   if (viewer.world) {
     // let start = performance.now();
@@ -396,7 +388,7 @@ let MICRONS_PER_PIX = 0.25;
  * @param {number} height - Viewer height
  * @param {object} opts - Multi-viewer options; paintbrush, etc.
  */
-const pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
+pageSetup = (divId, images, numViewers, rows, columns, width, height, opts) => {
   let viewers = [];
   // PRINT IMAGES
   // const div = document.createElement('div');
@@ -3533,4 +3525,18 @@ function checkData(imageViewerArray) {
   }
 
   return true;
+}
+
+} catch (error) {
+    console.error(error.message);
+
+    // Extract line number information from the error stack
+    const stackLines = error.stack.split('\n');
+    if (stackLines[1]) {
+        const lineInfo = stackLines[1].match(/:(\d+):(\d+)/);
+        if (lineInfo) {
+            const [_, lineNumber, columnNumber] = lineInfo; // Using destructuring to extract line and column numbers
+            console.log(`Error occurred at line: ${lineNumber}, column: ${columnNumber}`);
+        }
+    }
 }
