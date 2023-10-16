@@ -1,4 +1,4 @@
-/*! multi-viewer - v1.0.0 - 2023-10-02 */
+/*! multi-viewer - v1.0.0 - 2023-10-16 */
 /** @file commonFunctions.js - Contains utility functions */
 
 /**
@@ -91,12 +91,12 @@ function setFilter(layers, viewer, range, thresh) {
  * Freeze/unfreeze viewer to allow for drawing.
  *
  * @param {object} viewer - OpenSeadragon.Viewer
- * @param {boolean} myBool - enable/disable
+ * @param {boolean} enable - toggle (enable/disable)
  */
-function setOsdTracking(viewer, myBool) {
-  viewer.setMouseNavEnabled(myBool);
-  viewer.outerTracker.setTracking(myBool);
-  viewer.gestureSettingsMouse.clickToZoom = myBool;
+function setOsdTracking(viewer, enable) {
+  viewer.setMouseNavEnabled(enable);
+  viewer.outerTracker.setTracking(enable);
+  viewer.gestureSettingsMouse.clickToZoom = enable;
 }
 
 /**
@@ -1271,16 +1271,19 @@ function handleButtonShowHide() {
  * @param {object} overlay - Canvas on which to draw the measurement
  */
 const ruler = (btnRuler, viewer, overlay) => {
-  let line;
+  let fabLine;
   let isDown;
   let zoom;
   let mode = 'x';
-  let fText;
-  let fStart = {x: 0, y: 0};
-  let fEnd = {x: 0, y: 0};
-  let oStart;
-  let oEnd;
-  let fontSize = 15;
+  let fabText;
+  let fabStart = { x: 0, y: 0 };
+  let fabEnd = { x: 0, y: 0 };
+  let osdStart = { x: 0, y: 0 };
+  let osdEnd = { x: 0, y: 0 };
+
+  // Define original or base font size and rectangle dimensions
+  const baseFontSize = 15;
+  const baseStrokeWidth = 2;
 
   let bgColor, fontColor, lineColor;
   // lineColor = '#ccff00'; // neon yellow
@@ -1294,18 +1297,15 @@ const ruler = (btnRuler, viewer, overlay) => {
   lineColor = '#00cc01';
 
   let canvas = overlay.fabricCanvas();
-  fabric.Object.prototype.transparentCorners = false;
 
-  // CLEAR
   function clear() {
-    fStart.x = 0.0;
-    fEnd.x = 0.0;
-    fStart.y = 0.0;
-    fEnd.y = 0.0;
+    fabStart.x = 0.0;
+    fabEnd.x = 0.0;
+    fabStart.y = 0.0;
+    fabEnd.y = 0.0;
     canvas.remove(...canvas.getItemsByName('ruler'));
   }
 
-  // MOUSE DOWN
   function mouseDownHandler(o) {
     clear();
     zoom = viewer.viewport.getZoom(true);
@@ -1313,20 +1313,26 @@ const ruler = (btnRuler, viewer, overlay) => {
       setOsdTracking(viewer, false);
       isDown = true;
 
-      let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
       try {
+        if (!o || !o.e) throw new Error('Event object or client coordinates are missing');
+        let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
+
+        if (!viewer || !viewer.viewport) throw new Error('Viewer or viewport is not initialized');
         let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
-        oStart = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
+
+        let item = viewer.world.getItemAt(0);
+        if (!item) throw new Error('No item found at index 0 in the viewer world');
+        osdStart = item.viewportToImageCoordinates(viewportPoint);
       } catch (e) {
         console.error(e.message);
       }
 
       let pointer = canvas.getPointer(o.e);
       let points = [pointer.x, pointer.y, pointer.x, pointer.y];
-      fStart.x = pointer.x;
-      fStart.y = pointer.y;
-      line = new fabric.Line(points, {
-        strokeWidth: 2 / zoom, // adjust stroke width on zoom
+      fabStart.x = pointer.x;
+      fabStart.y = pointer.y;
+      fabLine = new fabric.Line(points, {
+        strokeWidth: adjustor().lineWidth, // adjust stroke width on zoom
         stroke: lineColor,
         originX: 'center',
         originY: 'center',
@@ -1334,7 +1340,7 @@ const ruler = (btnRuler, viewer, overlay) => {
         evented: false,
         name: 'ruler'
       });
-      canvas.add(line);
+      canvas.add(fabLine);
     } else {
       setOsdTracking(viewer, true); // keep image from panning/zooming as you draw line
       canvas.forEachObject(obj => {
@@ -1343,12 +1349,15 @@ const ruler = (btnRuler, viewer, overlay) => {
     }
   }
 
-  // CALCULATE
   function difference(a, b) {
     return Math.abs(a - b);
   }
 
   function getHypotenuseLength(a, b, mpp) {
+    if (!mpp || typeof mpp !== 'number' || mpp <= 0) {
+      console.error("Invalid MICRONS_PER_PIX value:", mpp);
+      return 0;
+    }
     return Math.sqrt(a * a * mpp * mpp + b * b * mpp * mpp);
   }
 
@@ -1373,76 +1382,88 @@ const ruler = (btnRuler, viewer, overlay) => {
     return `${value.toFixed(3)} \u00B5m`;
   }
 
+  function adjustor() {
+    let currentZoom = viewer.viewport.getZoom(true); // Get the current zoom level from OpenSeadragon.
+    let scaleFactor = 1 / currentZoom; // Calculate a scaling factor based on the zoom level.
+    // Adjust original dimensions with scaleFactor
+    let adjustedFontSize = baseFontSize * scaleFactor;
+    let adjustedStrokeWidth = baseStrokeWidth * scaleFactor;
+    return { scaleFactor: scaleFactor, fontSize: adjustedFontSize, lineWidth: adjustedStrokeWidth };
+  }
+
   function drawText(x, y, text) {
-    fText = new fabric.Text(text, {
-      left: x,
-      top: y,
+    canvas.remove(fabText); // remove text element before re-adding it
+
+    fabText = new fabric.Text(text, {
+      left: x - 0.5,
+      top: y - 0.5,
+      originX: 'left',
+      originY: 'top',
       fill: fontColor,
-      fontFamily: "effra,Verdana,Tahoma,'DejaVu Sans',sans-serif",
-      // fontSize: fontSize / zoom, // adjust font size on zoom
-      fontSize: zoom >= 100 ? 0.2 : (fontSize / zoom).toFixed(2),
+      fontFamily: "Arial,Helvetica,sans-serif",
+      fontSize: adjustor().fontSize,
       textBackgroundColor: bgColor,
       selectable: false,
       evented: false,
       name: 'ruler'
     });
-    canvas.add(fText);
+    canvas.add(fabText);
   }
 
-  // MOUSE MOVE
   function mouseMoveHandler(o) {
     if (!isDown) return;
-    canvas.remove(fText); // remove text element before re-adding it
-    canvas.renderAll();
 
     let webPoint = new OpenSeadragon.Point(o.e.clientX, o.e.clientY);
     let viewportPoint = viewer.viewport.pointFromPixel(webPoint);
-    oEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
+    osdEnd = viewer.world.getItemAt(0).viewportToImageCoordinates(viewportPoint);
 
-    let w = difference(oStart.x, oEnd.x);
-    let h = difference(oStart.y, oEnd.y);
+    let w = difference(osdStart.x, osdEnd.x);
+    let h = difference(osdStart.y, osdEnd.y);
     let hypot = getHypotenuseLength(w, h, MICRONS_PER_PIX);
     let t = valueWithUnit(hypot);
 
     let pointer = canvas.getPointer(o.e);
-    line.set({x2: pointer.x, y2: pointer.y});
-    fEnd.x = pointer.x;
-    fEnd.y = pointer.y;
+    fabLine.set({ x2: pointer.x, y2: pointer.y });
+    fabEnd.x = pointer.x;
+    fabEnd.y = pointer.y;
 
     if (mode === 'draw') {
       // Show info while drawing line
-      drawText(fEnd.x, fEnd.y, t);
+      drawText(fabEnd.x, fabEnd.y, t);
     }
     canvas.renderAll();
   }
 
-  // MOUSE UP
   function mouseUpHandler(o) {
-    line.setCoords();
-    canvas.remove(fText);
     isDown = false;
+    // canvas.forEachObject(function(object) {
+    //   console.log("object", object);
+    //   object.setCoords(); // update coordinates
+    //   object.set('selectable', true);
+    // });
+    fabLine.setCoords();
+    fabText.setCoords();
 
     // Make sure user actually drew a line
-    // if (fEnd.x > 0) {
-    if (!(fStart.x === fEnd.x || fStart.y === fEnd.y || fEnd.x === 0)) {
-      console.log(`%clength: ${fText.text}`, 'color: #ccff00;');
+    if (!(fabStart.x === fabEnd.x || fabStart.y === fabEnd.y || fabEnd.x === 0)) {
+      console.log(`%clength: ${fabText.text}`, 'color: #ccff00;');
       let pointer = canvas.getPointer(o.e);
-      drawText(pointer.x, pointer.y, fText.text);
+      drawText(pointer.x, pointer.y, fabText.text);
       canvas.renderAll();
     }
   }
 
   btnRuler.addEventListener('click', () => {
-    if (mode === 'draw') {
-      // Turn off
+    const isDrawMode = mode === 'draw';
+
+    mode = isDrawMode ? 'x' : 'draw';
+
+    if (isDrawMode) {
       canvas.remove(...canvas.getItemsByName('ruler'));
-      mode = 'x';
       canvas.off('mouse:down', mouseDownHandler);
       canvas.off('mouse:move', mouseMoveHandler);
       canvas.off('mouse:up', mouseUpHandler);
     } else {
-      // Turn on
-      mode = 'draw';
       canvas.on('mouse:down', mouseDownHandler);
       canvas.on('mouse:move', mouseMoveHandler);
       canvas.on('mouse:up', mouseUpHandler);
@@ -1804,6 +1825,7 @@ function createThresh(div, layers, viewer, colorPicker, classId) {
 
 function checkboxHandler(checkboxElement, displayColors, layers, viewer) {
   checkboxElement.addEventListener('click', () => {
+    STATE.outline = false;
     // look up color by 'classid', set 'checked' to the state of the checkbox
     displayColors.find(x => x.classid === parseInt(checkboxElement.value)).checked =
       checkboxElement.checked;
@@ -2591,8 +2613,12 @@ class ImageViewer {
       const source = viewer.world.getItemAt(itemIndex).source;
 
       if (isRealValue(source.hasCreateAction) && isRealValue(source.hasCreateAction.name)) layers[itemIndex].name = source.hasCreateAction.name;
-      if (isRealValue(source.resolutionUnit)) layers[itemIndex].resolutionUnit = source.resolutionUnit;
-      if (isRealValue(source.xResolution)) layers[itemIndex].xResolution = source.xResolution;
+
+      if (isRealValue(source.xResolution) && isRealValue(source.resolutionUnit) && source.resolutionUnit === 3) {
+        MICRONS_PER_PIX = 10000 / source.xResolution; // Unit 3 = pixels per centimeter
+        layers[itemIndex].resolutionUnit = source.resolutionUnit;
+        layers[itemIndex].xResolution = source.xResolution;
+      }
     });
 
     layerUI(document.getElementById(`layersAndColors${viewerInfo.idx}`), layers, viewer);
@@ -2653,7 +2679,6 @@ class ImageViewer {
     viewer.addOnceHandler("open", e => {
       // SETUP ZOOM TO MAGNIFICATION - 10x, 20x, etc.
       let minViewportZoom = viewer.viewport.getMinZoom();
-      // let minImgZoom = viewer.viewport.viewportToImageZoom(minViewportZoom);
       let tiledImage = viewer.world.getItemAt(0);
       let minImgZoom = tiledImage.viewportToImageZoom(minViewportZoom);
 
@@ -2796,14 +2821,8 @@ class ImageViewer {
       // Get info for scale bar
       const item = layers[0];
       // plugin assumes that the provided pixelsPerMeter is the one of the image at index 0 in world.getItemAt
-      if (isRealValue(item.resolutionUnit)) {
-        if (item.resolutionUnit === 3) {
-          const pixPerCm = item.xResolution;
-          setScaleBar(pixPerCm * 100);
-          MICRONS_PER_PIX = 10000 / pixPerCm;
-        } else {
-          console.warn('resolutionUnit <> 3', item.resolutionUnit);
-        }
+      if (isRealValue(item.xResolution) && isRealValue(item.resolutionUnit) && item.resolutionUnit === 3) {
+        setScaleBar(item.xResolution * 100);
       }
     }
   }
@@ -3220,9 +3239,13 @@ function createTachometer(row, featureName) {
 function getOsdViewer(divId) {
   try {
     // Get the viewer to this div id
-    return SYNCED_IMAGE_VIEWERS.find(
-      sync => sync.getViewer().id === divId
-    )?.getViewer() || null;
+    // return SYNCED_IMAGE_VIEWERS.find(item => item.getViewer().id === divId)?.getViewer() || null;
+    let result = SYNCED_IMAGE_VIEWERS.find(item => item.getViewer().id === divId);
+    if (result) {
+      return result.getViewer();
+    } else {
+      return null;
+    }
   } catch (e) {
     console.error("Something happened...", e.message);
   }
@@ -3253,7 +3276,7 @@ function getVals(slides) {
 const layerPopup = function(divBody, allLayers, viewer) {
   function switchRenderTypeIfNecessary() {
     // If the current render type is not by probability, switch it.
-    if (STATE.renderType === 'byProbability') {
+    if (STATE.renderType !== 'byProbability') {
       STATE.renderType = 'byProbability';
     }
   }
