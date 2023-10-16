@@ -398,9 +398,7 @@ function createTachometer(row, featureName) {
 function getOsdViewer(divId) {
   try {
     // Get the viewer to this div id
-    return SYNCED_IMAGE_VIEWERS.find(
-      sync => sync.getViewer().id === divId
-    )?.getViewer() || null;
+    return SYNCED_IMAGE_VIEWERS.find(sync => sync.getViewer().id === divId)?.getViewer() || null;
   } catch (e) {
     console.error("Something happened...", e.message);
   }
