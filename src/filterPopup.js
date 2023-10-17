@@ -233,7 +233,7 @@ function createUI(uniq, div, layerColors, layers, viewer, vInfo, type) {
       });
 
       if (colorObject.checked) {
-        checkbox.setAttribute('checked', true);
+        checkbox.setAttribute("checked", "true"); // string, string.
       } else {
         checkbox.removeAttribute('checked');
       }
@@ -373,7 +373,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer, vInfo) {
   m.style.backgroundColor = colorCode;
   m.innerHTML = `#${rgba2hex(colorCode)}`;
 
-  function handleColorChange(r, g, b, a, vInfo) {
+  function handleColorChange(r, g, b, a) {
     if (init) {
       init = false; // Update the state
       return;
@@ -450,10 +450,8 @@ function createNumericInput(id, table, uniq, layers, colorObject, colors, viewer
   });
 
   // Event listeners
-  // numEl.addEventListener('change', isIntersect.bind(null, table), {passive: true})
-  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer, vInfo), {
-    passive: true
-  });
+  // numEl.addEventListener('change', isIntersect.bind(null, table), { passive: true });
+  numEl.addEventListener('input', numericEvent.bind(null, numEl, colorObject, layers, viewer, vInfo), { passive: true });
   return numEl;
 }
 

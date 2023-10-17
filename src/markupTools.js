@@ -1,7 +1,7 @@
 /**
  * Create the fabric.js overlay and pass it to the markup tools.
  *
- * @param {object} viewerInfo - Info specific to 'this' viewer
+ * @param {object} vInfo - Info specific to 'this' viewer
  * @param {object} options - Filters, paintbrush, etc.
  * @param {object} viewer - OpenSeadragon viewer
  */
