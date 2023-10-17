@@ -308,7 +308,7 @@ function createUI(uniq, div, layerColors, layers, viewer, vInfo, type) {
 
     // After all that is done...
     if (byProb) {
-      table.appendChild(extraRow(uniq, layerColors, layers, viewer));
+      table.appendChild(extraRow(uniq, layerColors, layers, viewer, vInfo));
     }
   } else {
     console.warn('Layer colors?', layerColors);
