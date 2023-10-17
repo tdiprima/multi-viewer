@@ -298,7 +298,7 @@ function createUI(uniq, div, layerColors, layers, viewer, vInfo, type) {
         // TR has been defined, now we can use it
         removeBtn.addEventListener(
           'click',
-          removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer),
+          removeColor.bind(null, removeBtn, layerColors, tr, layers, viewer, vInfo),
           {
             passive: true,
           }
@@ -316,7 +316,7 @@ function createUI(uniq, div, layerColors, layers, viewer, vInfo, type) {
   // Done.
 }
 
-function removeColor(el, ourRanges, tr, layers, viewer) {
+function removeColor(el, ourRanges, tr, layers, viewer, vInfo) {
   const str = el.id;
   const n = str.charAt(str.length - 1);
   ourRanges.splice(parseInt(n), 1); // remove from list
@@ -373,7 +373,7 @@ function createColorPicker(cIdx, uniq, colorObject, layers, viewer, vInfo) {
   m.style.backgroundColor = colorCode;
   m.innerHTML = `#${rgba2hex(colorCode)}`;
 
-  function handleColorChange(r, g, b, a) {
+  function handleColorChange(r, g, b, a, vInfo) {
     if (init) {
       init = false; // Update the state
       return;
@@ -525,10 +525,7 @@ function addColor(idx, num1, num2, cpEl, chkEl, uniq, tr, colors, layers, viewer
 
     removeBtn.addEventListener(
       'click',
-      removeColor.bind(null, removeBtn, colors, tr, layers, viewer),
-      {
-        passive: true,
-      }
+      removeColor.bind(null, removeBtn, colors, tr, layers, viewer, vInfo), { passive: true }
     );
 
     checkboxHandler(chkEl, colors, layers, viewer, vInfo);
