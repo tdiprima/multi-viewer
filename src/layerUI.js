@@ -194,12 +194,15 @@ async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer,
   divTable.appendChild(divTableRow);
 
   const layerNum = currentLayer.layerNum;
+  let featureName;
 
   try {
-    // TJD
-    const data = await fetchData(currentLayer.location);
-    const featureName = getFeatureName(layerNum, currentLayer, data);
-    // const featureName = createId2(); // testing mode
+    if (currentLayer.location.endsWith("info.json")) {
+      let data = await fetchData(currentLayer.location);
+      featureName = getFeatureName(layerNum, currentLayer, data);
+    } else {
+      featureName = currentLayer.location.split('/').pop();
+    }
 
     const element = createDraggableBtn(layerNum, currentLayer, featureName);
     divTableRow.appendChild(e("div", {class: "divTableCell", style: "padding: 3px"}, [element]));
