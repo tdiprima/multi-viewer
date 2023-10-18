@@ -158,6 +158,7 @@ function getFeatureName(layerNum, currentLayer, data) {
       featureName = data.hasCreateAction.name
         ? data.hasCreateAction.name
         : `${sections[sections.indexOf("FeatureStorage") + 1]}-${sections[sections.indexOf("FeatureStorage") + 2]}`;
+      if (featureName === "TIL Pipeline") featureName = `${featureName} ${sections[6]}`; // gives more info
     } else {
       featureName = elementWithTCGA.split(".")[0];
     }
