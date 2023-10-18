@@ -18,7 +18,7 @@
  */
 const layerUI = (layersColumn, images, viewer, vInfo) => {
   createLayerElements(layersColumn, images, viewer, vInfo);
-  setupDragAndDrop(viewer, vInfo);
+  setupDragAndDrop(viewer);
 };
 
 function createLayerElements(layersColumn, layers, viewer, vInfo) {
@@ -27,7 +27,6 @@ function createLayerElements(layersColumn, layers, viewer, vInfo) {
   const globalEyeball = globalEye(layersColumn);
 
   const divTable = e("div", {class: "divTable"});
-  // const scrollDiv = e("div", {class: "divTableBody scroll"});
   const scrollDiv = e("div", {class: "divTableBody"});
   layersColumn.appendChild(divTable);
   divTable.appendChild(scrollDiv);
@@ -45,7 +44,9 @@ function createLayerElements(layersColumn, layers, viewer, vInfo) {
 
 }
 
-function setupDragAndDrop(viewer, vInfo) {
+function setupDragAndDrop(viewer) {
+  // For the draggable layers
+
   // Div containing viewer (Remember this is executed for each viewer.)
   const currentViewerDiv = document.getElementById(viewer.id);
 
@@ -191,6 +192,7 @@ function handleDragEnd(evt) {
 }
 
 async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer, vInfo) {
+  // Set up row of icons for the layer
   const divTableRow = e("div", {class: "divTableRow"});
   divTable.appendChild(divTableRow);
 
@@ -250,6 +252,7 @@ async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer,
 
 // Eyeball visibility: layer
 function layerEye(currentLayer) {
+  // Set up layer eye
   const cssClass = currentLayer.opacity === 0 ? "fas fa-eye-slash" : "fas fa-eye";
   return e("i", {
     id: createId(5, "eye"),
@@ -259,6 +262,7 @@ function layerEye(currentLayer) {
 }
 
 function layerEyeEvent(icon, slider, layerNum, viewer) {
+  // User clicked the layer eye
   toggleButton(icon, "fa-eye", "fa-eye-slash");
   const tiledImage = viewer.world.getItemAt(layerNum);
 
@@ -279,6 +283,7 @@ function layerEyeEvent(icon, slider, layerNum, viewer) {
 
 // Eyeball visibility: global
 function globalEye(layersColumn) {
+  // Set up global eye
   const vNum = layersColumn.id.slice(-1);
   // 'fas fa-eye-slash' : 'fas fa-eye'
   return e("i", {
@@ -289,8 +294,10 @@ function globalEye(layersColumn) {
 }
 
 function globalEyeEvent(element, arr) {
+  // Global eye event handler
 
   element.addEventListener("click", function () {
+    // Toggle global eye on and off.
     let activate;
     if (this.classList.contains("fa-eye-slash")) {
       this.classList.remove("fa-eye-slash");
@@ -302,6 +309,7 @@ function globalEyeEvent(element, arr) {
       activate = false;
     }
 
+    // Toggle the other layers' eyes
     arr.forEach(eye => {
       if (activate) {
         // If it's off, switch it on.
@@ -320,6 +328,7 @@ function globalEyeEvent(element, arr) {
 }
 
 function transparencySlider(currentLayer, faEye, viewer) {
+  // Set up layer transparency slider
   // Icon
   const icon = document.createElement("i");
   icon.classList.add("fas");
@@ -339,13 +348,16 @@ function transparencySlider(currentLayer, faEye, viewer) {
   });
 
   element.addEventListener("input", function () {
+    // Layer's transparency slider event
     const worldItem = viewer.world.getItemAt(currentLayer.layerNum);
     if (worldItem !== undefined) {
       worldItem.setOpacity(this.value / 100);
+      // If zero, toggle eye off.
       if (this.value === "0") {
         faEye.classList.remove("fa-eye");
         faEye.classList.add("fa-eye-slash");
       }
+      // Greater than zero, toggle eye on.
       if (parseFloat(this.value) > 0) {
         faEye.classList.remove("fa-eye-slash");
         faEye.classList.add("fa-eye");
@@ -359,6 +371,7 @@ function transparencySlider(currentLayer, faEye, viewer) {
 
 // Color palette
 function createColorPalette(row, featureName, currentLayer, allLayers, viewer, vInfo) {
+  // Set up icon and draggable popup div
   const icon = e("i", {
     id: createId(5, "palette"),
     class: "fas fa-palette pointer layer-icons",
@@ -382,6 +395,7 @@ function createColorPalette(row, featureName, currentLayer, allLayers, viewer, v
 }
 
 function createTachometer(row, featureName) {
+  // Set up clickable icon and draggable settings div
   const icon = e("i", {
     id: createId(5, "tach"),
     class: "fas fa-tachometer-alt layer-icons",
@@ -411,6 +425,7 @@ function getOsdViewer(divId) {
 }
 
 function getVals(slides) {
+  // For the dual handle sliders
   // Get slider values
   let slide1 = parseFloat(slides[0].value);
   let slide2 = parseFloat(slides[1].value);
