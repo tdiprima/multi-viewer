@@ -148,7 +148,7 @@ const getRangeColor = (channelValue, colorRanges, rgbas) => {
 
 const getClassColor = (channelValue, classifications, rgbas) => {
   for (let i = 0; i < classifications.length; i++) {
-    if (channelValue === classifications[i].classid) {
+    if (channelValue === classifications[i].classid && channelValue >= classifications[i].val) {
       return rgbas[i];
     }
   }
