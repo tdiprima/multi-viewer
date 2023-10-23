@@ -209,7 +209,7 @@ OpenSeadragon.Filters.THRESHOLDING = thresh => {
       let pixels = imgData.data;
 
       let color;
-      if (typeof thresh.rgba !== 'undefined') {
+      if (isRealValue(thresh.rgba)) {
         color = thresh.rgba;
       } else {
         color = [126, 1, 0, 255]; // #7e0100 (Maroon)
@@ -217,10 +217,11 @@ OpenSeadragon.Filters.THRESHOLDING = thresh => {
 
       let shouldColor;
 
-      if (typeof thresh.classId !== 'undefined') {
-        const id = parseInt(thresh.classId);
-        shouldColor = (i) => pixels[i] === id && pixels[i + 1] >= thresh.val;
+      if (isRealValue(thresh.classId)) {
+        // Test classId and probability value above threshold.
+        shouldColor = (i) => pixels[i] === thresh.classId && pixels[i + 1] >= thresh.val;
       } else {
+        // Test probability (green channel) value above threshold.
         shouldColor = (i) => pixels[i + 1] >= thresh.val;
       }
 
