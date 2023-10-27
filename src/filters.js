@@ -2,6 +2,7 @@
 
 const bgTrans = function(imageData) {
   for (let i = 0; i < imageData.length; i += 4) {
+    // For some reason they make it 128 when it should be zero
     if (imageData[i + 1] === 0) {
       imageData[i + 3] = 0;
     }
