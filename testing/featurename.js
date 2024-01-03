@@ -8,6 +8,8 @@ let url = "http://localhost:8888/halcyon/?iiif=file:///data/erich/FeatureStorage
 
 // fake url
 // let url = "http://whatever.com";
+// let url = "http://whatever.com/somefile";
+// let url = "www.whatever.com";
 
 // Code for fetching data
 
@@ -16,7 +18,7 @@ let url = "http://localhost:8888/halcyon/?iiif=file:///data/erich/FeatureStorage
 
 let sections = url.split("/");
 const elementsContainingTCGA = sections.filter(item => item.includes("TCGA"));
-console.log(elementsContainingTCGA);
+// console.log(elementsContainingTCGA);
 let longId;
 if (elementsContainingTCGA.length > 0) {
   longId = elementsContainingTCGA.pop();
@@ -27,8 +29,8 @@ if (elementsContainingTCGA.length > 0) {
     // return longId
     console.log(longId);
   }
-
 } else {
   // return url;
-  console.log(url);
+  // console.log(url);
+  console.log(url.split('/').pop());
 }
