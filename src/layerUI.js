@@ -15,6 +15,7 @@
  * @param {object} layersColumn - The HTML table column containing the layer gadgets
  * @param {object} images - The images to be displayed in this viewer
  * @param {object} viewer - OpenSeadragon viewer
+ * @param vInfo viewer info - index, osd id, layers, state
  */
 const layerUI = (layersColumn, images, viewer, vInfo) => {
   createLayerElements(layersColumn, images, viewer, vInfo);
@@ -146,7 +147,7 @@ async function fetchData(url) {
   return response.json();
 }
 
-function getFeatureName(layerNum, currentLayer, data) {
+function getFeatureName(currentLayer, data) {
   // Extract featureName and return
   let sections = new URL(currentLayer.location).search.split("/");
   const elementWithTCGA = sections.find(item => item.startsWith("TCGA"));
@@ -202,7 +203,7 @@ async function addIconRow(myEyeArray, divTable, currentLayer, allLayers, viewer,
   try {
     if (currentLayer.location.endsWith("info.json")) {
       let data = await fetchData(currentLayer.location);
-      featureName = getFeatureName(layerNum, currentLayer, data);
+      featureName = getFeatureName(currentLayer, data);
     } else {
       featureName = currentLayer.location.split('/').pop();
     }
