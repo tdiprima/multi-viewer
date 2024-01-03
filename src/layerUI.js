@@ -148,27 +148,49 @@ async function fetchData(url) {
 }
 
 function getFeatureName(currentLayer, data) {
-  // Extract featureName and return
-  let sections = new URL(currentLayer.location).search.split("/");
-  const elementWithTCGA = sections.find(item => item.startsWith("TCGA"));
-
-  let featureName;
-  if (elementWithTCGA) {
-    const isFeature = currentLayer.location.includes("FeatureStorage");
-
-    if (isFeature) {
-      featureName = data.name
-        ? data.name
-        : `${sections[sections.indexOf("FeatureStorage") + 1]}-${sections[sections.indexOf("FeatureStorage") + 2]}`;
-      if (featureName === "TIL Pipeline") featureName = `${featureName} ${sections[6]}`; // gives more info
-    } else {
-      featureName = elementWithTCGA.split(".")[0];
-    }
+  if (data.name !== "Unknown") {
+    return data.name;
   } else {
-    featureName = currentLayer.location.split('/').pop();
+    let url = currentLayer.location;
+    let sections = url.split("/");
+    const elementsContainingTCGA = sections.filter(item => item.includes("TCGA"));
+
+    let longId;
+    if (elementsContainingTCGA.length > 0) {
+      longId = elementsContainingTCGA.pop();
+      if (longId.includes(".")) {
+        return longId.substring(0, longId.indexOf("."));
+      } else {
+        return longId;
+      }
+    } else {
+      return sections.pop();
+    }
   }
-  return featureName;
 }
+
+// function getFeatureName(currentLayer, data) {
+//   // Extract featureName and return
+//   let sections = new URL(currentLayer.location).search.split("/");
+//   const elementWithTCGA = sections.find(item => item.startsWith("TCGA"));
+//
+//   let featureName;
+//   if (elementWithTCGA) {
+//     const isFeature = currentLayer.location.includes("FeatureStorage");
+//
+//     if (isFeature) {
+//       featureName = data.name
+//         ? data.name
+//         : `${sections[sections.indexOf("FeatureStorage") + 1]}-${sections[sections.indexOf("FeatureStorage") + 2]}`;
+//       if (featureName === "TIL Pipeline") featureName = `${featureName} ${sections[6]}`; // gives more info
+//     } else {
+//       featureName = elementWithTCGA.split(".")[0];
+//     }
+//   } else {
+//     featureName = currentLayer.location.split('/').pop();
+//   }
+//   return featureName;
+// }
 
 function createDraggableBtn(layerNum, currentLayer, featureName) {
   // Create and return the draggable button
