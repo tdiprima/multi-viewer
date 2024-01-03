@@ -29,6 +29,7 @@ class ImageViewer {
     const tileSources = [];
     for (let i = 0; i < layers.length; i++) {
       const layer = layers[i];
+      console.log(layers[i].location);
       tileSources.push({ tileSource: layer.location, opacity: layer.opacity, x: 0, y: 0 });
     }
     // console.log('tileSources', stringy(ts));
@@ -80,6 +81,7 @@ class ImageViewer {
       const source = viewer.world.getItemAt(itemIndex).source;
 
       if (isRealValue(source.name)) layers[itemIndex].name = source.name;
+      console.log("source.name", source.name);
 
       if (isRealValue(source.xResolution) && isRealValue(source.resolutionUnit) && source.resolutionUnit === 3) {
         MICRONS_PER_PIX = 10000 / source.xResolution; // Unit 3 = pixels per centimeter
