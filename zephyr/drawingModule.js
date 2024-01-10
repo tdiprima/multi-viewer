@@ -63,6 +63,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
       mouseIsPressed = true;
 
       // BUILD INTERSECTABLE OBJECTS FROM ImageViewer
+      intersectableObjects = [];
       scene.children.forEach(child => {
         if (child instanceof THREE.LOD) {
           child.children.forEach(lodChild => {
