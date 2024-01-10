@@ -54,6 +54,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
   let polygonPositions = []; // Store positions for each polygon
   const distanceThreshold = 0.1;
   let intersectableObjects = [];
+  let objects = [];
 
   renderer.domElement.addEventListener('pointerdown', event => {
     // ivDump();
@@ -62,24 +63,23 @@ export function enableDrawing(scene, camera, renderer, controls) {
     if (isDrawing) {
       mouseIsPressed = true;
 
-      intersectableObjects = [];
-
-      // Build the intersectableObjects array
-      // scene.children.forEach(child => {
-      //   if (child instanceof THREE.LOD) {
-      //     child.children.forEach(lodChild => {
-      //       if (lodChild instanceof THREE.Mesh) {
-      //         intersectableObjects.push(lodChild);
-      //       } else if (lodChild instanceof THREE.Group) {
-      //         lodChild.children.forEach(groupChild => {
-      //           if (groupChild instanceof THREE.Mesh) {
-      //             intersectableObjects.push(groupChild);
-      //           }
-      //         });
-      //       }
-      //     });
-      //   }
-      // });
+      // Build the objects array
+      objects = [];
+      scene.children.forEach(child => {
+        if (child instanceof THREE.LOD) {
+          child.children.forEach(lodChild => {
+            if (lodChild instanceof THREE.Mesh) {
+              objects.push(lodChild);
+            } else if (lodChild instanceof THREE.Group) {
+              lodChild.children.forEach(groupChild => {
+                if (groupChild instanceof THREE.Mesh) {
+                  objects.push(groupChild);
+                }
+              });
+            }
+          });
+        }
+      });
 
       // Build the intersectableObjects array
       intersectableObjects = [];
@@ -90,6 +90,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
       });
 
       console.log("intersectableObjects:", intersectableObjects);
+      console.log("objects:", objects);
       console.log("scene.children:", scene.children);
 
       // Create a new BufferAttribute for each line
@@ -107,6 +108,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
 
       raycaster.setFromCamera(mouse, camera);
       // let intersects = raycaster.intersectObjects(scene.children, true);
+      // let intersects = raycaster.intersectObjects(objects, true);
       let intersects = raycaster.intersectObjects(intersectableObjects, true);
 
       // console.log(intersects.length > 0);
