@@ -1,12 +1,12 @@
 // drawingModule.js
 import * as THREE from 'three';
-import {dumpObject, sceneDump} from './dumpObject.js';
 
 export function enableDrawing(scene, camera, renderer, controls) {
   let btnDraw = document.getElementById("toggleButton");
   let isDrawing = false;
   let mouseIsPressed = false;
   let color = "#0000ff";
+  let plane;
 
   btnDraw.addEventListener("click", function () {
     if (isDrawing) {
@@ -27,13 +27,61 @@ export function enableDrawing(scene, camera, renderer, controls) {
     }
   });
 
-  function ivDump() {
-    scene.children.forEach(child => {
-      if (child instanceof THREE.LOD) {
-        console.log(`%c${dumpObject(child).join('\n')}`, "color: #00ff00;");
-      }
-    });
+  function plane1() {
+    // Set up geometry to raycast against
+    let aspectRatio = window.innerWidth / window.innerHeight;
+    let planeWidth = 16;
+    let planeHeight = planeWidth / aspectRatio;
+    console.log(planeWidth, planeHeight);
+
+    let planeGeom = new THREE.PlaneGeometry(planeWidth, planeHeight);
+    let planeMat = new THREE.MeshBasicMaterial({transparent: true, opacity: 0.5, side: THREE.DoubleSide});
+    let planeMesh = new THREE.Mesh(planeGeom, planeMat);
+    scene.add(planeMesh);
+
+    return planeMesh;
   }
+
+  // plane = plane1();
+
+  function plane2() {
+    // Create the plane geometry
+    let planeGeometry = new THREE.PlaneGeometry(1000, 1000); // Large enough size
+
+    // Create a transparent material
+    let planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.5,
+      depthTest: false
+    });
+
+    let planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+
+    // Add plane to the camera
+    camera.add(planeMesh);
+
+    // Position the plane in front of the camera
+    planeMesh.position.set(0, 0, -1);
+
+    // Set a high render order
+    planeMesh.renderOrder = 999;
+
+    // Add the camera to the scene (because it has not already been added, afaik)
+    scene.add(camera);
+
+    // Be a static object in the scene:
+    scene.add(planeMesh);
+
+    // Render the scene
+    renderer.render(scene, camera);
+
+    return planeMesh;
+  }
+
+  plane = plane2();
+
+  let objects = [plane];
 
   // Set up the raycaster and mouse vector
   let raycaster = new THREE.Raycaster();
@@ -53,43 +101,11 @@ export function enableDrawing(scene, camera, renderer, controls) {
   let currentPolygonPositions = []; // Store positions for current polygon
   let polygonPositions = []; // Store positions for each polygon
   const distanceThreshold = 0.1;
-  let intersectableObjects = [];
-  let objects = [];
 
   renderer.domElement.addEventListener('pointerdown', event => {
-    // ivDump();
-    // sceneDump(scene);
-
     if (isDrawing) {
       mouseIsPressed = true;
 
-      // Build the objects array
-      objects = [];
-      scene.children.forEach(child => {
-        if (child instanceof THREE.LOD) {
-          child.children.forEach(lodChild => {
-            if (lodChild instanceof THREE.Mesh) {
-              objects.push(lodChild);
-            } else if (lodChild instanceof THREE.Group) {
-              lodChild.children.forEach(groupChild => {
-                if (groupChild instanceof THREE.Mesh) {
-                  objects.push(groupChild);
-                }
-              });
-            }
-          });
-        }
-      });
-
-      // Build the intersectableObjects array
-      intersectableObjects = [];
-      scene.traverse(function (object) {
-        if (object instanceof THREE.Mesh && object.visible) {
-          intersectableObjects.push(object);
-        }
-      });
-
-      console.log("intersectableObjects:", intersectableObjects);
       console.log("objects:", objects);
       console.log("scene.children:", scene.children);
 
@@ -108,11 +124,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
 
       raycaster.setFromCamera(mouse, camera);
       // let intersects = raycaster.intersectObjects(scene.children, true);
-      // let intersects = raycaster.intersectObjects(objects, true);
-      let intersects = raycaster.intersectObjects(intersectableObjects, true);
-
-      // console.log(intersects.length > 0);
-      // console.log(raycaster.ray.direction);
+      let intersects = raycaster.intersectObjects(objects, true);
 
       if (intersects.length > 0) {
         console.log('Intersected!');
