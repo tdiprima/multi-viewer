@@ -10,7 +10,7 @@ import {
   Mesh
 } from 'three';
 
-import {dumpObject} from './dumpObject.js';
+// import {dumpObject} from './dumpObject.js';
 
 function srcurl(src, x, y, w, h, tilex, tiley) {
   const ha = src + "/" + x + "," + y + "," + w + "," + h + "/" + tilex + ",/0/default.jpg";
@@ -52,7 +52,7 @@ function CreateImageViewer(scene, url, offset) {
       const lod = new ImageViewer(url, x, y, w, h, tilex, tiley, offset, data);
       lod.name = "ImageViewer";
       scene.add(lod);
-      console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
+      // console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
     }).catch(error => console.error('Error fetching data:', error));
 }
 

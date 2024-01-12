@@ -1,14 +1,20 @@
-// drawingModule.js
 import * as THREE from 'three';
-import {dumpObject, sceneDump} from './dumpObject.js';
+import { dumpObject, imageViewerDump } from './dumpObject.js';
 
 export function enableDrawing(scene, camera, renderer, controls) {
-  let btnDraw = document.getElementById("toggleButton");
+  // let btnDraw = document.getElementById("toggleButton");
+  let btnDraw = document.createElement("button");
+  btnDraw.id = "toggleButton";
+  btnDraw.innerHTML = "drawing toggle";
+  let canvas = document.querySelector('canvas');
+  document.body.insertBefore(btnDraw, canvas);
+
   let isDrawing = false;
   let mouseIsPressed = false;
   let color = "#0000ff";
 
   btnDraw.addEventListener("click", function () {
+    console.log("button clicked");
     if (isDrawing) {
       isDrawing = false;
       controls.enabled = true;
@@ -58,7 +64,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
 
   renderer.domElement.addEventListener('pointerdown', event => {
     // ivDump();
-    // sceneDump(scene);
+    // imageViewerDump(scene);
 
     if (isDrawing) {
       mouseIsPressed = true;
@@ -107,9 +113,10 @@ export function enableDrawing(scene, camera, renderer, controls) {
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      // let intersects = raycaster.intersectObjects(scene.children, true);
+      // TESTING DIFFERENT INTERSECT OBJECTS
+      let intersects = raycaster.intersectObjects(scene.children, true);
       // let intersects = raycaster.intersectObjects(objects, true);
-      let intersects = raycaster.intersectObjects(intersectableObjects, true);
+      // let intersects = raycaster.intersectObjects(intersectableObjects, true);
 
       // console.log(intersects.length > 0);
       // console.log(raycaster.ray.direction);
@@ -138,6 +145,8 @@ export function enableDrawing(scene, camera, renderer, controls) {
         if (line.geometry.attributes.position) {
           line.geometry.attributes.position.needsUpdate = true;
         }
+      } else {
+        console.log("Raycasting didn't work.");
       }
     }
   }

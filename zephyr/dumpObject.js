@@ -14,6 +14,12 @@ export function dumpObject(obj, lines = [], isLast = true, prefix = '') {
 
 export function sceneDump(scene) {
   scene.children.forEach(child => {
+    console.log(`%c${dumpObject(child).join('\n')}`, "color: #00ff00;");
+  });
+}
+
+export function imageViewerDump(scene) {
+  scene.children.forEach(child => {
     // CHILDREN OF ImageViewer INSTANCE
     if (child instanceof THREE.LOD) {
       console.log(child, "\nfound with children:\n", child.children);

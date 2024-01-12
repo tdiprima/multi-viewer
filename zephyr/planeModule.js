@@ -1,14 +1,20 @@
-// drawingModule.js
 import * as THREE from 'three';
 
-export function enableDrawing(scene, camera, renderer, controls) {
-  let btnDraw = document.getElementById("toggleButton");
+export function addPlane(scene, camera, renderer, controls) {
+  // let btnDraw = document.getElementById("toggleButton");
+  let btnDraw = document.createElement("button");
+  btnDraw.id = "addPlane";
+  btnDraw.innerHTML = "draw on plane";
+  let canvas = document.querySelector('canvas');
+  document.body.insertBefore(btnDraw, canvas);
+
   let isDrawing = false;
   let mouseIsPressed = false;
   let color = "#0000ff";
   let plane;
 
   btnDraw.addEventListener("click", function () {
+    console.log("button clicked");
     if (isDrawing) {
       isDrawing = false;
       controls.enabled = true;
@@ -150,6 +156,8 @@ export function enableDrawing(scene, camera, renderer, controls) {
         if (line.geometry.attributes.position) {
           line.geometry.attributes.position.needsUpdate = true;
         }
+      } else {
+        console.log("Raycasting didn't work.");
       }
     }
   }
