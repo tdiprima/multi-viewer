@@ -3,7 +3,7 @@
  * Raycasting target meshes are the squares that rapture.js creates.
  */
 import * as THREE from 'three';
-import { dumpObject, imageViewerDump, squareProperties } from './dumpObject.js';
+import { dumpObject, imageViewerDump, objectProperties } from './dumpObject.js';
 
 console.log("drawingModule.js");
 
@@ -27,7 +27,6 @@ export function enableDrawing(scene, camera, renderer, controls) {
   let color = "#0000ff";
 
   btnDraw.addEventListener("click", function () {
-    console.log("button clicked");
     if (isDrawing) {
       isDrawing = false;
       controls.enabled = true;
@@ -72,7 +71,6 @@ export function enableDrawing(scene, camera, renderer, controls) {
   let currentPolygonPositions = []; // Store positions for current polygon
   let polygonPositions = []; // Store positions for each polygon
   const distanceThreshold = 0.1;
-  let squares = [];
   let objects = [];
 
   renderer.domElement.addEventListener('pointerdown', event => {
@@ -82,37 +80,16 @@ export function enableDrawing(scene, camera, renderer, controls) {
     if (isDrawing) {
       mouseIsPressed = true;
 
-      // Build the objects array (children of ImageViewer)
-      // Ends up being (1) square
+      // Build the objects array
       objects = [];
-      scene.children.forEach(child => {
-        if (child instanceof THREE.LOD) {
-          child.children.forEach(lodChild => {
-            if (lodChild instanceof THREE.Mesh) {
-              objects.push(lodChild);
-            } else if (lodChild instanceof THREE.Group) {
-              lodChild.children.forEach(groupChild => {
-                if (groupChild instanceof THREE.Mesh) {
-                  objects.push(groupChild);
-                }
-              });
-            }
-          });
-        }
-      });
-
-      // Build the squares array
-      squares = [];
       scene.traverse(function (object) {
         if (object instanceof THREE.Mesh && object.visible) {
-          squares.push(object);
+          objects.push(object);
         }
       });
 
-      console.log("\nsquares:", squares);
-      squareProperties(squares);
-      console.log("\nobjects:", objects);
-      console.log("\nscene.children:", scene.children);
+      console.log("Intersectable Objects:", objects);
+      // objectProperties(objects);
 
       // Create a new BufferAttribute for each line
       line = new THREE.Line(new THREE.BufferGeometry(), lineMaterial);
@@ -134,13 +111,9 @@ export function enableDrawing(scene, camera, renderer, controls) {
       // console.log("\nTesting... scene.children");
       // let intersects = raycaster.intersectObjects(scene.children, true);
 
-      // Objects is 1 square
-      // console.log("\nTesting... objects");
-      // let intersects = raycaster.intersectObjects(objects, true);
-
       // These are all of the squares
       console.log("\nTesting... squares");
-      let intersects = raycaster.intersectObjects(squares, true);
+      let intersects = raycaster.intersectObjects(objects, true);
 
       // console.log(intersects.length > 0);
       // console.log(raycaster.ray.direction);
