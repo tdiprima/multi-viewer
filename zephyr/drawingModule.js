@@ -1,5 +1,11 @@
+/**
+ * Allows user to draw on an image.
+ * Raycasting target meshes are the squares that rapture.js creates.
+ */
 import * as THREE from 'three';
 import { dumpObject, imageViewerDump } from './dumpObject.js';
+
+console.log("drawingModule.js");
 
 export function enableDrawing(scene, camera, renderer, controls) {
   // let btnDraw = document.getElementById("toggleButton");
@@ -113,10 +119,16 @@ export function enableDrawing(scene, camera, renderer, controls) {
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
+
       // TESTING DIFFERENT INTERSECT OBJECTS
-      let intersects = raycaster.intersectObjects(scene.children, true);
+      // console.log("Testing... scene.children");
+      // let intersects = raycaster.intersectObjects(scene.children, true);
+
+      // console.log("Testing... objects");
       // let intersects = raycaster.intersectObjects(objects, true);
-      // let intersects = raycaster.intersectObjects(intersectableObjects, true);
+
+      console.log("Testing... intersectableObjects");
+      let intersects = raycaster.intersectObjects(intersectableObjects, true);
 
       // console.log(intersects.length > 0);
       // console.log(raycaster.ray.direction);

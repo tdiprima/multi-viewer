@@ -1,5 +1,10 @@
+/**
+ * Create a cube and add it to the scene.
+ */
 import * as THREE from 'three';
 // import { dumpObject } from './dumpObject.js';
+
+console.log("cubeModule.js");
 
 export function addCube(scene) {
   let btnDraw = document.createElement("button");

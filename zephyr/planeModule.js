@@ -1,4 +1,10 @@
+/**
+ * Create a plane and allow user to draw on it.
+ * Try raycasting against scene.children and try raycasting against the plane.
+ */
 import * as THREE from 'three';
+
+console.log("planeModule.js");
 
 export function addPlane(scene, camera, renderer, controls) {
   // let btnDraw = document.getElementById("toggleButton");
@@ -129,8 +135,12 @@ export function addPlane(scene, camera, renderer, controls) {
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      // let intersects = raycaster.intersectObjects(scene.children, true);
-      let intersects = raycaster.intersectObjects(objects, true);
+
+      console.log("Testing... scene.children");
+      let intersects = raycaster.intersectObjects(scene.children, true);
+
+      // console.log("Testing... [plane]");
+      // let intersects = raycaster.intersectObjects(objects, true);
 
       if (intersects.length > 0) {
         console.log('Intersected!');
