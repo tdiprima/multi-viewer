@@ -34,3 +34,28 @@ export function imageViewerDump(scene) {
     }
   });
 }
+
+export function squareProperties(squares) {
+  // Assuming you have an array of square meshes
+  // Loop through each square and log its material's transparency and opacity
+  squares.forEach((square, index) => {
+    if (square.material) {
+      console.log(`Square ${index} - Transparent: ${square.material.transparent}, Opacity: ${square.material.opacity}`);
+    } else {
+      console.log(`Square ${index} does not have a material.`);
+    }
+
+    // Log boundingBox and boundingSphere
+    if (square.geometry.boundingBox) {
+      console.log('Square has a custom bounding box:', square.geometry.boundingBox);
+    } else {
+      console.log('Square does not have a custom bounding box.');
+    }
+
+    if (square.geometry.boundingSphere) {
+      console.log('Square has a custom bounding sphere:', square.geometry.boundingSphere);
+    } else {
+      console.log('Square does not have a custom bounding sphere.');
+    }
+  });
+}

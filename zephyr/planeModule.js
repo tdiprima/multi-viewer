@@ -20,7 +20,6 @@ export function addPlane(scene, camera, renderer, controls) {
   let plane;
 
   btnDraw.addEventListener("click", function () {
-    console.log("button clicked");
     if (isDrawing) {
       isDrawing = false;
       controls.enabled = true;
@@ -41,20 +40,22 @@ export function addPlane(scene, camera, renderer, controls) {
 
   function plane1() {
     // Set up geometry to raycast against
-    let aspectRatio = window.innerWidth / window.innerHeight;
-    let planeWidth = 16;
-    let planeHeight = planeWidth / aspectRatio;
-    console.log(planeWidth, planeHeight);
+    // let aspectRatio = window.innerWidth / window.innerHeight;
+    // let planeWidth = 16;
+    // let planeHeight = planeWidth / aspectRatio;
+    // console.log(planeWidth, planeHeight);
 
-    let planeGeom = new THREE.PlaneGeometry(planeWidth, planeHeight);
+    // let planeGeom = new THREE.PlaneGeometry(planeWidth, planeHeight);
+    let planeGeom = new THREE.PlaneGeometry(1000, 1000);
     let planeMat = new THREE.MeshBasicMaterial({transparent: true, opacity: 0.5, side: THREE.DoubleSide});
     let planeMesh = new THREE.Mesh(planeGeom, planeMat);
+    planeMesh.name = "plane";
     scene.add(planeMesh);
 
     return planeMesh;
   }
 
-  // plane = plane1();
+  plane = plane1();
 
   function plane2() {
     // Create the plane geometry
@@ -69,6 +70,7 @@ export function addPlane(scene, camera, renderer, controls) {
     });
 
     let planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+    planeMesh.name = "plane";
 
     // Add plane to the camera
     camera.add(planeMesh);
@@ -91,7 +93,7 @@ export function addPlane(scene, camera, renderer, controls) {
     return planeMesh;
   }
 
-  plane = plane2();
+  // plane = plane2();
 
   let objects = [plane];
 
@@ -136,11 +138,11 @@ export function addPlane(scene, camera, renderer, controls) {
 
       raycaster.setFromCamera(mouse, camera);
 
-      console.log("Testing... scene.children");
-      let intersects = raycaster.intersectObjects(scene.children, true);
+      // console.log("Testing... scene.children");
+      // let intersects = raycaster.intersectObjects(scene.children, true);
 
-      // console.log("Testing... [plane]");
-      // let intersects = raycaster.intersectObjects(objects, true);
+      console.log("Testing... [plane]");
+      let intersects = raycaster.intersectObjects(objects, true);
 
       if (intersects.length > 0) {
         console.log('Intersected!');

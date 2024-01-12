@@ -2,7 +2,7 @@
  * Create a cube and add it to the scene.
  */
 import * as THREE from 'three';
-// import { dumpObject } from './dumpObject.js';
+import { dumpObject } from './dumpObject.js';
 
 console.log("cubeModule.js");
 
@@ -32,8 +32,8 @@ export function addCube(scene) {
     // Add the cube to the scene
     scene.add(cube);
 
-    console.log(scene.children);
-    // console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
+    // console.log("scene.children:", scene.children);
+    console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
   }
 
   btnDraw.addEventListener("click", cubeFun);
