@@ -1,30 +1,27 @@
 import * as THREE from 'three';
+import { dumpObject } from './dumpObject.js';
 console.log("draw.js");
 
 export function draw(scene, renderer, controls) {
+  console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
   let isDrawing = false;
   let color = 0x000000;
-  let size = 100;
+  let size = 500;
   let smoothness = 32;
 
   // Set up event listeners
   renderer.domElement.addEventListener("mousedown", startDrawing);
-  renderer.domElement.addEventListener("mousemove", draw);
+  renderer.domElement.addEventListener("mousemove", drawing);
   renderer.domElement.addEventListener("mouseup", stopDrawing);
   renderer.domElement.addEventListener("mouseout", stopDrawing);
 
-  // Geometries
-  function cube() {
-    let geometry = new THREE.BoxGeometry(size, size, size);
-    let material = new THREE.MeshBasicMaterial({ color });
-    let cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-
-    return cube;
-  }
-
+  // Geometry
   function sphere() {
     let geometry = new THREE.SphereGeometry(size, smoothness, smoothness);
+    // Generate a random color
+    // let randomColor = new THREE.Color(Math.random(), Math.random(), Math.random());
+    // let material = new THREE.MeshBasicMaterial({ color: randomColor });
+
     let material = new THREE.MeshBasicMaterial( { color } );
     let sphere = new THREE.Mesh( geometry, material );
     scene.add( sphere );
@@ -32,48 +29,38 @@ export function draw(scene, renderer, controls) {
     return sphere;
   }
 
-  function circle() {
-    let geometry = new THREE.CircleGeometry( size, smoothness );
-    let material = new THREE.MeshBasicMaterial( { color } );
-    let circle = new THREE.Mesh( geometry, material );
-    scene.add( circle );
-
-    return circle;
-  }
-
   // Draw on canvas
-  function draw(event) {
-    if (isDrawing) {
-      // Limit drawing to the image boundaries
-      const rect = renderer.domElement.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+  function drawing(event) {
+    // console.log("drawing", isDrawing);
+    if (!isDrawing) return;
 
-      if (mouseX >= 0 && mouseX < window.innerWidth && mouseY >= 0 && mouseY < window.innerHeight) {
-        // Continue with drawing the geometry
-        // let mesh = cube();
-        let mesh = sphere();
-        // let mesh = circle();
+    // Calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+    let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+    let y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+    x *= 5000;
+    y *= 5000;
+    // console.log(x, y);
 
-        let x = (event.clientX / window.innerWidth) * 2 - 1;
-        let y = -(event.clientY / window.innerHeight) * 2 + 1;
-        mesh.position.set(x, y, 0);
-      } else {
-        // Mouse is outside the image boundaries, so exit the function
+    // Create a new sphere
+    let mesh = sphere();
 
-      }
-    }
+    // For simplicity, this just sets it directly based on mouse coordinates
+    mesh.position.set(x, y, 0);
+
   }
 
   // Start drawing
   function startDrawing(event) {
+    // console.log("startDrawing");
     isDrawing = true;
     controls.enabled = false;
-    draw(event);
+    drawing(event);
   }
 
   // Stop drawing
   function stopDrawing() {
+    // console.log("stopDrawing");
     isDrawing = false;
     controls.enabled = true;
   }
