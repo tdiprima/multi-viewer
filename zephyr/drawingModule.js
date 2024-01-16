@@ -15,13 +15,6 @@ export function enableDrawing(scene, camera, renderer, controls) {
   let canvas = document.querySelector('canvas');
   document.body.insertBefore(btnDraw, canvas);
 
-  // Make sure that the camera is correctly positioned and oriented in your scene.
-  // The raycaster depends on the camera's view frustum to determine where to cast the ray.
-  // But image does not get rendered if I do this(???)
-  // camera.position.set(0, 0, 0);
-  // camera.lookAt(new THREE.Vector3(0, 0, 0));
-  // scene.add(camera);
-
   let isDrawing = false;
   let mouseIsPressed = false;
   let color = "#0000ff";
