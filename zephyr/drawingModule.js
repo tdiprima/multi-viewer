@@ -8,7 +8,8 @@ import { dumpObject, imageViewerDump, objectProperties } from './dumpObject.js';
 console.log("drawingModule.js");
 
 export function enableDrawing(scene, camera, renderer, controls) {
-  // let btnDraw = document.getElementById("toggleButton");
+  // console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
+
   let btnDraw = document.createElement("button");
   btnDraw.id = "toggleButton";
   btnDraw.innerHTML = "drawing toggle";
@@ -46,8 +47,23 @@ export function enableDrawing(scene, camera, renderer, controls) {
     });
   }
 
+  function arrow() {
+    const dir = new THREE.Vector3( 1, 2, 0 );
+
+    //normalize the direction vector (convert to vector of length 1)
+    dir.normalize();
+
+    const origin = new THREE.Vector3( 0, 0, 0 );
+    const length = 100;
+    const hex = 0xff0000;
+
+    const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+    scene.add( arrowHelper );
+  }
+
   // Set up the raycaster and mouse vector
   let raycaster = new THREE.Raycaster();
+  // console.log("raycaster", raycaster);
   let mouse = new THREE.Vector2();
 
   let lineMaterial = new THREE.LineBasicMaterial({color});
@@ -71,6 +87,8 @@ export function enableDrawing(scene, camera, renderer, controls) {
     // imageViewerDump(scene);
 
     if (isDrawing) {
+      // arrow();
+
       mouseIsPressed = true;
 
       // Build the objects array
@@ -81,7 +99,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
         }
       });
 
-      console.log("Intersectable Objects:", objects);
+      // console.log("Intersectable Objects:", objects);
       // objectProperties(objects);
 
       // Create a new BufferAttribute for each line
@@ -97,22 +115,25 @@ export function enableDrawing(scene, camera, renderer, controls) {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+      // mouse.x *= 10000;
+      // mouse.y *= 10000;
+
       raycaster.setFromCamera(mouse, camera);
 
       // TESTING DIFFERENT INTERSECT OBJECTS
       // scene.children is just ImageViewer and Line, but we're passing recurse=true
-      // console.log("\nTesting... scene.children");
       // let intersects = raycaster.intersectObjects(scene.children, true);
-
-      // These are all of the squares
-      console.log("\nTesting... squares");
+      // These are all the squares
       let intersects = raycaster.intersectObjects(objects, true);
 
       // console.log(intersects.length > 0);
       // console.log(raycaster.ray.direction);
 
       if (intersects.length > 0) {
-        console.log('Intersected!');
+        console.log('Intersected!\n', intersects);
+        console.log('Camera position:', camera.position);
+        console.log('origin, direction:', raycaster.ray.direction, raycaster.ray.origin);
+
         let point = intersects[0].point;
 
         // Check if it's the first vertex of the current polygon
@@ -135,9 +156,10 @@ export function enableDrawing(scene, camera, renderer, controls) {
         if (line.geometry.attributes.position) {
           line.geometry.attributes.position.needsUpdate = true;
         }
-      } else {
-        console.log("Raycasting didn't work.");
       }
+      // else {
+      //   console.log(intersects);
+      // }
     }
   }
 

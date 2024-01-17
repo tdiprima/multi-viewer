@@ -22,9 +22,9 @@ export function draw(scene, renderer, controls) {
     // let randomColor = new THREE.Color(Math.random(), Math.random(), Math.random());
     // let material = new THREE.MeshBasicMaterial({ color: randomColor });
 
-    let material = new THREE.MeshBasicMaterial( { color } );
-    let sphere = new THREE.Mesh( geometry, material );
-    scene.add( sphere );
+    let material = new THREE.MeshBasicMaterial({ color });
+    let sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
 
     return sphere;
   }
@@ -38,8 +38,8 @@ export function draw(scene, renderer, controls) {
     // (-1 to +1) for both components
     let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
     let y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-    x *= 5000;
-    y *= 5000;
+    x *= 10000;
+    y *= 10000;
     // console.log(x, y);
 
     // Create a new sphere

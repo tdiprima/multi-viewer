@@ -6,7 +6,6 @@
 </head>
 
 <body>
-  <!-- <button id="toggleButton">DRAW</button> -->
   <script type="importmap">
     {
         "imports": {
@@ -22,10 +21,10 @@
     import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
     import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
     import * as ZEPHYR from 'zephyr';
-    // import { enableDrawing } from '/zephyr/drawingModule.js';
-    // import { addPlane } from '/zephyr/planeModule.js';
-    // import { addCube } from '/zephyr/cubeModule.js';
-    import { draw } from './draw.js';
+    import { enableDrawing } from './drawingModule.js';
+    // import { addPlane } from './planeModule.js';
+    // import { addCube } from './cubeModule.js';
+    // import { draw } from './draw.js';
 
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -35,9 +34,14 @@
 
     THREE.Cache.enabled = true;
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, -10, 100);
+
+    // const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, -10, 100);
     // camera.position.set(0, 0, 150000);
+    // camera.position.set(0, 0, 11000);
+
+    const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 12000);
     camera.position.set(0, 0, 11000);
+
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
 
@@ -53,10 +57,10 @@
     ZEPHYR.CreateImageViewer(scene, "https://beak.bmi.stonybrook.edu:8890/iiif/?iiif=https://beak.bmi.stonybrook.edu:8890/Storage/images/tcga_data/brca/TCGA-E2-A15K-06A-01-TS1.svs", 0);
 
     // Enable drawing on the scene
-    // enableDrawing(scene, camera, renderer, controls);
+    enableDrawing(scene, camera, renderer, controls);
     // addPlane(scene, camera, renderer);
     // addCube(scene);
-    draw(scene, renderer, controls);
+    // draw(scene, renderer, controls);
 
     function animate() {
       controls.update();

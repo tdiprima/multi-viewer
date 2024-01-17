@@ -14,7 +14,6 @@ export function addCube(scene) {
   document.body.insertBefore(btnDraw, canvas);
 
   function cubeFun() {
-    console.log("button clicked");
     // Create a geometry and material for the cube
     const geometry = new THREE.BoxGeometry(1000, 1000, 1000);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -33,7 +32,7 @@ export function addCube(scene) {
     scene.add(cube);
 
     // console.log("scene.children:", scene.children);
-    console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
+    // console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
   }
 
   btnDraw.addEventListener("click", cubeFun);
