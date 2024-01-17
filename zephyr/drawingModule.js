@@ -112,11 +112,12 @@ export function enableDrawing(scene, camera, renderer, controls) {
 
   function onMouseMove(event) {
     if (isDrawing && mouseIsPressed) {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      // Get the bounding rectangle of the renderer's DOM element
+      const rect = renderer.domElement.getBoundingClientRect();
 
-      // mouse.x *= 10000;
-      // mouse.y *= 10000;
+      // Adjust the mouse coordinates
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
 
