@@ -3,13 +3,9 @@
  * Raycasting target meshes are the squares that rapture.js creates.
  */
 import * as THREE from 'three';
-import { dumpObject, imageViewerDump, objectProperties } from './dumpObject.js';
-
-console.log("drawingModule.js");
+import { convertToImageCoordinates } from "./conversions.js"
 
 export function enableDrawing(scene, camera, renderer, controls) {
-  // console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
-
   let btnDraw = document.createElement("button");
   btnDraw.id = "toggleButton";
   btnDraw.innerHTML = "drawing toggle";
@@ -39,31 +35,8 @@ export function enableDrawing(scene, camera, renderer, controls) {
     }
   });
 
-  function ivDump() {
-    scene.children.forEach(child => {
-      if (child instanceof THREE.LOD) {
-        console.log(`%c${dumpObject(child).join('\n')}`, "color: #00ff00;");
-      }
-    });
-  }
-
-  function arrow() {
-    const dir = new THREE.Vector3( 1, 2, 0 );
-
-    //normalize the direction vector (convert to vector of length 1)
-    dir.normalize();
-
-    const origin = new THREE.Vector3( 0, 0, 0 );
-    const length = 100;
-    const hex = 0xff0000;
-
-    const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
-    scene.add( arrowHelper );
-  }
-
   // Set up the raycaster and mouse vector
   let raycaster = new THREE.Raycaster();
-  // console.log("raycaster", raycaster);
   let mouse = new THREE.Vector2();
 
   let lineMaterial = new THREE.LineBasicMaterial({color});
@@ -83,12 +56,7 @@ export function enableDrawing(scene, camera, renderer, controls) {
   let objects = [];
 
   renderer.domElement.addEventListener('pointerdown', event => {
-    // ivDump();
-    // imageViewerDump(scene);
-
     if (isDrawing) {
-      // arrow();
-
       mouseIsPressed = true;
 
       // Build the objects array
@@ -98,9 +66,6 @@ export function enableDrawing(scene, camera, renderer, controls) {
           objects.push(object);
         }
       });
-
-      // console.log("Intersectable Objects:", objects);
-      // objectProperties(objects);
 
       // Create a new BufferAttribute for each line
       line = new THREE.Line(new THREE.BufferGeometry(), lineMaterial);
@@ -121,21 +86,13 @@ export function enableDrawing(scene, camera, renderer, controls) {
 
       raycaster.setFromCamera(mouse, camera);
 
-      // TESTING DIFFERENT INTERSECT OBJECTS
-      // scene.children is just ImageViewer and Line, but we're passing recurse=true
-      // let intersects = raycaster.intersectObjects(scene.children, true);
       // These are all the squares
       let intersects = raycaster.intersectObjects(objects, true);
 
-      // console.log(intersects.length > 0);
-      // console.log(raycaster.ray.direction);
-
       if (intersects.length > 0) {
-        console.log('Intersected!\n', intersects);
-        console.log('Camera position:', camera.position);
-        console.log('origin, direction:', raycaster.ray.direction, raycaster.ray.origin);
-
-        let point = intersects[0].point;
+        const intersect = intersects[0];
+        let point = intersect.point;
+        // console.log("intersect object scale:", intersect.object.scale);
 
         // Check if it's the first vertex of the current polygon
         const isFirstVertex = currentPolygonPositions.length === 0;
@@ -158,9 +115,6 @@ export function enableDrawing(scene, camera, renderer, controls) {
           line.geometry.attributes.position.needsUpdate = true;
         }
       }
-      // else {
-      //   console.log(intersects);
-      // }
     }
   }
 
@@ -173,7 +127,29 @@ export function enableDrawing(scene, camera, renderer, controls) {
       line.geometry.computeBoundingSphere();
 
       polygonPositions.push(currentPolygonPositions); // Store the current polygon's positions in the polygonPositions array
+
+      toImageCoords(currentPolygonPositions);
+
       currentPolygonPositions = []; // Clear the current polygon's array
+    }
+  }
+
+  function toImageCoords(currentPolygonPositions) {
+    console.log("line geometry positions:\n", currentPolygonPositions);
+
+    // Convert to image coordinates
+    let imageWidth, imageHeight;
+    scene.children.forEach(child => {
+      if (child instanceof THREE.LOD) {
+        imageWidth = child.imageWidth;
+        imageHeight = child.imageHeight;
+      }
+    });
+
+    if (imageWidth && imageHeight) {
+      console.log("image w,h:", imageWidth, imageHeight);
+      const imgCoords = convertToImageCoordinates(currentPolygonPositions, imageWidth, imageHeight);
+      console.log("Image coordinates:", imgCoords);
     }
   }
 }

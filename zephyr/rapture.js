@@ -10,9 +10,6 @@ import {
   Mesh
 } from 'three';
 
-// import { VertexNormalsHelper } from 'three/addons/helpers/VertexNormalsHelper.js';
-// import { FaceNormalsHelper } from 'three/addons/helpers/FaceNormalsHelper.js';
-
 // import {dumpObject} from './dumpObject.js';
 
 function srcurl(src, x, y, w, h, tilex, tiley) {
@@ -38,16 +35,7 @@ function Square(x, y, w, h, src, offset) {
   X.frustumCulled = false;
   X.position.set(0, 0, offset);
   // console.log("offset:", offset);
-
   // console.log(`Scaling square: ${w},${h}`);
-
-  // Add VertexNormalsHelper
-  // let normalHelper = new VertexNormalsHelper(X, 2, 0x00ff00, 1);
-  // scene.add(normalHelper);
-
-  // Add FaceNormalsHelper
-  // let faceNormalsHelper = new FaceNormalsHelper(X, 0.1, 0xff0000, 1);
-  // scene.add(faceNormalsHelper);
 
   return X;
 }
@@ -65,8 +53,11 @@ function CreateImageViewer(scene, url, offset) {
       const offset = 0;
       const tilex = data.tiles[0].width;
       const tiley = data.tiles[0].height;
+      // console.log("width, height:", w, h);
       const lod = new ImageViewer(url, x, y, w, h, tilex, tiley, offset, data);
       lod.name = "ImageViewer";
+      lod.imageWidth = w;
+      lod.imageHeight = h;
       scene.add(lod);
       // console.log(`%c${dumpObject(scene).join('\n')}`, "color: #00ff00;");
     }).catch(error => console.error('Error fetching data:', error));
