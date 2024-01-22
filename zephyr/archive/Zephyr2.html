@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <wicket:head>
-  <style> body { margin: 0; } </style>
+    <style> body { margin: 0; } </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/multi-viewer/css/main.min.css">
 </wicket:head>
 
 <body>
@@ -22,8 +24,8 @@
     import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
     import * as ZEPHYR from 'zephyr';
     import { enableDrawing } from '/zephyr/drawingModule.js';
-    import { addPlane } from '/zephyr/planeModule.js';
-    import { addCube } from '/zephyr/cubeModule.js';
+    import { polygons } from '/zephyr/polygons.js';
+    // import { ruler } from '/zephyr/ruler.js';
 
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -56,8 +58,8 @@
 
     // Enable drawing on the scene
     enableDrawing(scene, camera, renderer, controls);
-    addPlane(scene, camera, renderer);
-    addCube(scene);
+    polygons(scene, camera, renderer, controls);
+    // ruler(scene, camera, renderer, controls);
 
     function animate() {
       controls.update();

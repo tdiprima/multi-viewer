@@ -3,6 +3,8 @@
 <head>
   <title>Testing</title>
   <style> body { margin: 0; } </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/multi-viewer/css/main.min.css">
 </head>
 
 <body>
@@ -22,9 +24,9 @@
     import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
     import * as ZEPHYR from 'zephyr';
     import { enableDrawing } from './drawingModule.js';
-    // import { addPlane } from './planeModule.js';
-    // import { addCube } from './cubeModule.js';
-    // import { draw } from './draw.js';
+    // import { polygons } from './polygons.js';
+    import { polygons } from './polygons1.js';
+    // import { ruler } from './ruler.js';
 
     function onWindowResize() {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -34,10 +36,6 @@
 
     THREE.Cache.enabled = true;
     const scene = new THREE.Scene();
-
-    // const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, -10, 100);
-    // camera.position.set(0, 0, 150000);
-    // camera.position.set(0, 0, 11000);
 
     const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 12000);
     camera.position.set(0, 0, 11000);
@@ -50,16 +48,12 @@
     document.body.appendChild(renderer.domElement);
     window.addEventListener('resize', onWindowResize);
     let controls = new TrackballControls(camera, renderer.domElement);
-    // ZEPHYR.CreateImageViewer(scene, "http://localhost:8888/HalcyonStorage/tcga/coad/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.svs",0);
-    // console.log("HERE THIS ===> " + options.target);
-    // ZEPHYR.CreateImageViewer(scene, options.target, 0);
     ZEPHYR.CreateImageViewer(scene, "https://beak.bmi.stonybrook.edu:8890/iiif/?iiif=https://beak.bmi.stonybrook.edu:8890/Storage/images/tcga_data/brca/TCGA-E2-A15K-06A-01-TS1.svs", 0);
 
     // Enable drawing on the scene
     enableDrawing(scene, camera, renderer, controls);
-    // addPlane(scene, camera, renderer);
-    // addCube(scene);
-    // draw(scene, renderer, controls);
+    polygons(scene, camera, renderer, controls);
+    // ruler(scene, camera, renderer, controls);
 
     function animate() {
       controls.update();
