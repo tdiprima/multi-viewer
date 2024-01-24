@@ -1,0 +1,92 @@
+{
+    "@id": "http://localhost:8888/iiif/?iiif=http://localhost:8888/HalcyonStorage/nuclearsegmentation2019/coad/TCGA-CM-5348-01Z-00-DX1.2ad0b8f6-684a-41a7-b568-26e97675cce9.zip",
+    "sizes": [
+        {
+            "height": 325,
+            "width": 439
+        },
+        {
+            "height": 649,
+            "width": 877
+        },
+        {
+            "height": 1297,
+            "width": 1754
+        },
+        {
+            "height": 2594,
+            "width": 3508
+        },
+        {
+            "height": 5187,
+            "width": 7015
+        },
+        {
+            "height": 10373,
+            "width": 14029
+        },
+        {
+            "height": 20746,
+            "width": 28058
+        },
+        {
+            "height": 41492,
+            "width": 56116
+        },
+        {
+            "height": 82984,
+            "width": 112231
+        }
+    ],
+    "tiles": [
+        {
+            "width": 512,
+            "height": 512,
+            "scaleFactors": [
+                256,
+                128,
+                64,
+                32,
+                16,
+                8,
+                4,
+                2,
+                1
+            ]
+        }
+    ],
+    "protocol": "http://iiif.io/api/image",
+    "profile": [
+        {
+            "formats": [
+                "jpg",
+                "color",
+                "gray",
+                "png"
+            ],
+            "qualities": [
+                "color",
+                "gray",
+                "bitonal",
+                "default"
+            ],
+            "supports": [
+                "profileLinkHeader",
+                "sizeAboveFull",
+                "mirroring",
+                "rotationArbitrary",
+                "regionSquare",
+                "canonicalLinkHeader"
+            ]
+        },
+        "http://iiif.io/api/image/2/level2.json"
+    ],
+    "height": 82984,
+    "resolutionUnit": 3,
+    "width": 112231,
+    "name": "cnn-nuclear-segmentations-2019",
+    "@context": "http://iiif.io/api/image/2/context.json",
+    "preferredFormats": [
+        "png"
+    ]
+}
