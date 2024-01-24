@@ -29,15 +29,11 @@ export function shapes(scene, camera, renderer, controls) {
       this.startPoint = new THREE.Vector2(0, 0);
       this.endPoint = new THREE.Vector2(0, 0);
       this.points = [];
-      this.previousMousePosition = { x: 0, y: 0 }; // Store the previous mouse position
     }
 
     onMouseDown(event) {
       this.isDrawing = true;
       this.controls.enabled = false;
-      // Store the current mouse position
-      this.previousMousePosition.x = event.clientX;
-      this.previousMousePosition.y = event.clientY;
     }
 
     onMouseMove(event) {
@@ -45,21 +41,7 @@ export function shapes(scene, camera, renderer, controls) {
 
     onMouseUp(event) {
       this.isDrawing = false;
-      // Reset the state of the controls
-      this.resetControlsState();
       this.controls.enabled = true;
-    }
-
-    resetControlsState() {
-      // Reset the internal state of TrackballControls
-      // This is a workaround and might need adjustments based on the control's behavior
-      this.controls.target0.copy(this.controls.target);
-      this.controls.position0.copy(this.controls.object.position);
-      this.controls.zoom0 = this.controls.object.zoom;
-
-      // Optionally, reset the last delta or mouse movement
-      this.controls.update();
-      this.controls.dispatchEvent({ type: 'change' }); // Force an update to the controls
     }
 
     onDoubleClick(event) {
@@ -71,13 +53,17 @@ export function shapes(scene, camera, renderer, controls) {
 
   class Rectangle extends Shape {
     constructor(mesh, controls) {
-      super(mesh, controls);
+      super(mesh);
+      this.controls = controls;
       // Initialize the geometry with four vertices
       this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(4 * 3), 3));
+      // Initialize with an arbitrary number of vertices, you can dynamically resize this later
+      // this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(10 * 3), 3));
     }
 
     onMouseDown(event) {
-      super.onMouseDown(event); // Call the superclass method
+      this.isDrawing = true;
+      this.controls.enabled = false;
       this.startPoint = getMousePosition(event.clientX, event.clientY);
     }
 
@@ -88,12 +74,12 @@ export function shapes(scene, camera, renderer, controls) {
     }
 
     onMouseUp(event) {
-      super.onMouseUp(event); // Call the superclass method
+      this.isDrawing = false;
+      this.controls.enabled = true;
       this.update();
     }
 
     update() {
-      // Rectangle-specific update logic
       let positions = this.mesh.geometry.attributes.position.array;
       positions[0] = this.startPoint.x;
       positions[1] = this.startPoint.y;
@@ -113,14 +99,16 @@ export function shapes(scene, camera, renderer, controls) {
 
   class Ellipse extends Shape {
     constructor(mesh, controls, segments = 64) {
-      super(mesh, controls);
+      super(mesh);
+      this.controls = controls;
       this.segments = segments;
       // Initialize the geometry with segments + 1 vertices
       this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array((segments + 1) * 3), 3));
     }
 
     onMouseDown(event) {
-      super.onMouseDown(event); // Call the superclass method
+      this.isDrawing = true;
+      this.controls.enabled = false;
       this.startPoint = getMousePosition(event.clientX, event.clientY);
     }
 
@@ -131,7 +119,8 @@ export function shapes(scene, camera, renderer, controls) {
     }
 
     onMouseUp(event) {
-      super.onMouseUp(event); // Call the superclass method
+      this.isDrawing = false;
+      this.controls.enabled = true;
       this.update();
     }
 
@@ -156,13 +145,15 @@ export function shapes(scene, camera, renderer, controls) {
 
   class Polygon extends Shape {
     constructor(mesh, controls) {
-      super(mesh, controls);
+      super(mesh);
+      this.controls = controls;
       this.points = [];
     }
 
     onMouseDown(event) {
       if (!this.isDrawing) {
-        super.onMouseDown(event); // Call the superclass method
+        this.isDrawing = true;
+        this.controls.enabled = false;
         this.points = [];
       }
       this.points.push(getMousePosition(event.clientX, event.clientY));
@@ -181,7 +172,8 @@ export function shapes(scene, camera, renderer, controls) {
 
     onDoubleClick(event) {
       if (this.isDrawing && this.points.length > 2) {
-        super.onMouseUp(event); // Call the superclass method
+        this.isDrawing = false;
+        this.controls.enabled = true;
         this.update();
       }
     }
@@ -244,6 +236,7 @@ export function shapes(scene, camera, renderer, controls) {
     currentShape = factory.createShape("polygon");
   });
 
+  // Canvas event listeners
   renderer.domElement.addEventListener("mousedown", function (event) {
     if (currentShape) currentShape.onMouseDown(event);
   }, false);
@@ -273,5 +266,4 @@ export function shapes(scene, camera, renderer, controls) {
     let pos = camera.position.clone().add(dir.multiplyScalar(distance));
     return pos;
   }
-
 }
