@@ -3,7 +3,6 @@ import { createButton } from "./button.js"
 
 export function shapes(scene, camera, renderer, controls) {
 
-  // Button event listeners
   let rectangleButton = createButton({
     id: "rectangle",
     innerHtml: "<i class=\"fa-regular fa-square\"></i>",
@@ -30,11 +29,15 @@ export function shapes(scene, camera, renderer, controls) {
       this.startPoint = new THREE.Vector2(0, 0);
       this.endPoint = new THREE.Vector2(0, 0);
       this.points = [];
+      this.previousMousePosition = { x: 0, y: 0 }; // Store the previous mouse position
     }
 
     onMouseDown(event) {
       this.isDrawing = true;
       this.controls.enabled = false;
+      // Store the current mouse position
+      this.previousMousePosition.x = event.clientX;
+      this.previousMousePosition.y = event.clientY;
     }
 
     onMouseMove(event) {
@@ -42,7 +45,21 @@ export function shapes(scene, camera, renderer, controls) {
 
     onMouseUp(event) {
       this.isDrawing = false;
+      // Reset the state of the controls
+      this.resetControlsState();
       this.controls.enabled = true;
+    }
+
+    resetControlsState() {
+      // Reset the internal state of TrackballControls
+      // This is a workaround and might need adjustments based on the control's behavior
+      this.controls.target0.copy(this.controls.target);
+      this.controls.position0.copy(this.controls.object.position);
+      this.controls.zoom0 = this.controls.object.zoom;
+
+      // Optionally, reset the last delta or mouse movement
+      this.controls.update();
+      this.controls.dispatchEvent({ type: 'change' }); // Force an update to the controls
     }
 
     onDoubleClick(event) {
@@ -54,17 +71,13 @@ export function shapes(scene, camera, renderer, controls) {
 
   class Rectangle extends Shape {
     constructor(mesh, controls) {
-      super(mesh);
-      this.controls = controls;
+      super(mesh, controls);
       // Initialize the geometry with four vertices
       this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(4 * 3), 3));
-      // Initialize with an arbitrary number of vertices, you can dynamically resize this later
-      // this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(10 * 3), 3));
     }
 
     onMouseDown(event) {
-      this.isDrawing = true;
-      this.controls.enabled = false;
+      super.onMouseDown(event); // Call the superclass method
       this.startPoint = getMousePosition(event.clientX, event.clientY);
     }
 
@@ -75,12 +88,12 @@ export function shapes(scene, camera, renderer, controls) {
     }
 
     onMouseUp(event) {
-      this.isDrawing = false;
-      this.controls.enabled = true;
+      super.onMouseUp(event); // Call the superclass method
       this.update();
     }
 
     update() {
+      // Rectangle-specific update logic
       let positions = this.mesh.geometry.attributes.position.array;
       positions[0] = this.startPoint.x;
       positions[1] = this.startPoint.y;
@@ -100,16 +113,14 @@ export function shapes(scene, camera, renderer, controls) {
 
   class Ellipse extends Shape {
     constructor(mesh, controls, segments = 64) {
-      super(mesh);
-      this.controls = controls;
+      super(mesh, controls);
       this.segments = segments;
       // Initialize the geometry with segments + 1 vertices
       this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array((segments + 1) * 3), 3));
     }
 
     onMouseDown(event) {
-      this.isDrawing = true;
-      this.controls.enabled = false;
+      super.onMouseDown(event); // Call the superclass method
       this.startPoint = getMousePosition(event.clientX, event.clientY);
     }
 
@@ -120,8 +131,7 @@ export function shapes(scene, camera, renderer, controls) {
     }
 
     onMouseUp(event) {
-      this.isDrawing = false;
-      this.controls.enabled = true;
+      super.onMouseUp(event); // Call the superclass method
       this.update();
     }
 
@@ -146,15 +156,13 @@ export function shapes(scene, camera, renderer, controls) {
 
   class Polygon extends Shape {
     constructor(mesh, controls) {
-      super(mesh);
-      this.controls = controls;
+      super(mesh, controls);
       this.points = [];
     }
 
     onMouseDown(event) {
       if (!this.isDrawing) {
-        this.isDrawing = true;
-        this.controls.enabled = false;
+        super.onMouseDown(event); // Call the superclass method
         this.points = [];
       }
       this.points.push(getMousePosition(event.clientX, event.clientY));
@@ -173,8 +181,7 @@ export function shapes(scene, camera, renderer, controls) {
 
     onDoubleClick(event) {
       if (this.isDrawing && this.points.length > 2) {
-        this.isDrawing = false;
-        this.controls.enabled = true;
+        super.onMouseUp(event); // Call the superclass method
         this.update();
       }
     }
@@ -215,14 +222,16 @@ export function shapes(scene, camera, renderer, controls) {
     }
   }
 
-  let material = new THREE.LineBasicMaterial({color: 0x00ff00});
+  let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
   let geometry = new THREE.BufferGeometry();
   let mesh = new THREE.LineLoop(geometry, material);
+  mesh.renderOrder = 999;
   scene.add(mesh);
 
   let factory = new ShapeFactory(mesh, controls);
   let currentShape = null;
 
+  // Button event listeners
   rectangleButton.addEventListener("click", function () {
     currentShape = factory.createShape("rectangle");
   });
