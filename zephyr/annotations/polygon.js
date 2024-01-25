@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createButton } from "../helpers/button.js"
+import { getMousePosition } from "../helpers/mouse.js"
 
 export function polygon(scene, camera, renderer, controls) {
   let polygonButton = createButton({
@@ -19,22 +20,23 @@ export function polygon(scene, camera, renderer, controls) {
     console.log("polygon isDrawing:", isDrawing);
   });
 
+  const canvas = renderer.domElement;
   let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
   let isDrawing = false;
   let mouseIsPressed = false;
   let points = [];
   let currentPolygon = null;
 
-  renderer.domElement.addEventListener("mousedown", onMouseDown, false);
-  renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-  renderer.domElement.addEventListener("mouseup", onMouseUp, false);
-  renderer.domElement.addEventListener("dblclick", onDoubleClick, false);
+  canvas.addEventListener("mousedown", onMouseDown, false);
+  canvas.addEventListener("mousemove", onMouseMove, false);
+  canvas.addEventListener("mouseup", onMouseUp, false);
+  canvas.addEventListener("dblclick", onDoubleClick, false);
 
   function onMouseDown(event) {
     if (isDrawing) {
       mouseIsPressed = true;
       points = []; // Reset points
-      let point = getMousePosition(event.clientX, event.clientY);
+      let point = getMousePosition(event.clientX, event.clientY, canvas, camera);
       points.push(point);
       currentPolygon = createPolygon();
     }
@@ -42,7 +44,7 @@ export function polygon(scene, camera, renderer, controls) {
 
   function onMouseMove(event) {
     if (isDrawing && mouseIsPressed) {
-      let point = getMousePosition(event.clientX, event.clientY);
+      let point = getMousePosition(event.clientX, event.clientY, canvas, camera);
       points[points.length - 1] = point;
       updatePolygon();
     }
@@ -50,7 +52,7 @@ export function polygon(scene, camera, renderer, controls) {
 
   function onMouseUp(event) {
     if (isDrawing) {
-      let point = getMousePosition(event.clientX, event.clientY);
+      let point = getMousePosition(event.clientX, event.clientY, canvas, camera);
       points.push(point);
       updatePolygon();
     }
@@ -63,22 +65,6 @@ export function polygon(scene, camera, renderer, controls) {
       updatePolygon();
       currentPolygon = null;
     }
-  }
-
-  function getMousePosition(clientX, clientY) {
-    let domRect = renderer.domElement.getBoundingClientRect();
-
-    let mouse = new THREE.Vector2();
-    mouse.x = ((clientX - domRect.left) / domRect.width) * 2 - 1;
-    mouse.y = -((clientY - domRect.top) / domRect.height) * 2 + 1;
-
-    let raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-
-    let intersectionPoint = new THREE.Vector3();
-    raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
-
-    return intersectionPoint;
   }
 
   function createPolygon() {

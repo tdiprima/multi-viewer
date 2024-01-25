@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createButton } from "../helpers/button.js"
+import { getMousePosition } from "../helpers/mouse.js"
 
 export function ellipse(scene, camera, renderer, controls) {
   let ellipseButton = createButton({
@@ -19,6 +20,7 @@ export function ellipse(scene, camera, renderer, controls) {
     console.log("ellipse isDrawing:", isDrawing);
   });
 
+  const canvas = renderer.domElement;
   let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
   let segments = 64; // 64 line segments is a common choice
 
@@ -28,21 +30,21 @@ export function ellipse(scene, camera, renderer, controls) {
   let endPoint;
   let currentEllipse; // This will hold the ellipse currently being drawn
 
-  renderer.domElement.addEventListener("mousedown", onMouseDown, false);
-  renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-  renderer.domElement.addEventListener("mouseup", onMouseUp, false);
+  canvas.addEventListener("mousedown", onMouseDown, false);
+  canvas.addEventListener("mousemove", onMouseMove, false);
+  canvas.addEventListener("mouseup", onMouseUp, false);
 
   function onMouseDown(event) {
     if (isDrawing) {
       mouseIsPressed = true;
-      startPoint = getMousePosition(event.clientX, event.clientY);
+      startPoint = getMousePosition(event.clientX, event.clientY, canvas, camera);
       currentEllipse = createEllipse();
     }
   }
 
   function onMouseMove(event) {
     if (isDrawing && mouseIsPressed) {
-      endPoint = getMousePosition(event.clientX, event.clientY);
+      endPoint = getMousePosition(event.clientX, event.clientY, canvas, camera);
       updateEllipse();
     }
   }
@@ -50,26 +52,10 @@ export function ellipse(scene, camera, renderer, controls) {
   function onMouseUp(event) {
     if (isDrawing) {
       mouseIsPressed = false;
-      endPoint = getMousePosition(event.clientX, event.clientY);
+      endPoint = getMousePosition(event.clientX, event.clientY, canvas, camera);
       updateEllipse();
       currentEllipse = null; // Reset currentEllipse after drawing is completed
     }
-  }
-
-  function getMousePosition(clientX, clientY) {
-    let domRect = renderer.domElement.getBoundingClientRect();
-
-    let mouse = new THREE.Vector2();
-    mouse.x = ((clientX - domRect.left) / domRect.width) * 2 - 1;
-    mouse.y = -((clientY - domRect.top) / domRect.height) * 2 + 1;
-
-    let raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-
-    let intersectionPoint = new THREE.Vector3();
-    raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
-
-    return intersectionPoint;
   }
 
   function createEllipse() {

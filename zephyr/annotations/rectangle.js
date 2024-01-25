@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createButton } from "../helpers/button.js"
+import { getMousePosition } from "../helpers/mouse.js"
 
 export function rectangle(scene, camera, renderer, controls) {
   let rectangleButton = createButton({
@@ -16,9 +17,10 @@ export function rectangle(scene, camera, renderer, controls) {
       isDrawing = true;
       controls.enabled = false;
     }
-    console.log("isDrawing:", isDrawing);
+    console.log("rectangle isDrawing:", isDrawing);
   });
 
+  const canvas = renderer.domElement;
   let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
   // Set up geometry
@@ -36,20 +38,20 @@ export function rectangle(scene, camera, renderer, controls) {
   let mouseIsPressed = false;
   let startPoint;
   let endPoint;
-  renderer.domElement.addEventListener("mousedown", onMouseDown, false);
-  renderer.domElement.addEventListener("mousemove", onMouseMove, false);
-  renderer.domElement.addEventListener("mouseup", onMouseUp, false);
+  canvas.addEventListener("mousedown", onMouseDown, false);
+  canvas.addEventListener("mousemove", onMouseMove, false);
+  canvas.addEventListener("mouseup", onMouseUp, false);
 
   function onMouseDown(event) {
     if (isDrawing) {
       mouseIsPressed = true;
-      startPoint = getMousePosition(event.clientX, event.clientY);
+      startPoint = getMousePosition(event.clientX, event.clientY, canvas, camera);
     }
   }
 
   function onMouseMove(event) {
     if (isDrawing && mouseIsPressed) {
-      endPoint = getMousePosition(event.clientX, event.clientY);
+      endPoint = getMousePosition(event.clientX, event.clientY, canvas, camera);
       updateRectangle();
     }
   }
@@ -98,29 +100,8 @@ export function rectangle(scene, camera, renderer, controls) {
   function onMouseUp(event) {
     if (isDrawing) {
       mouseIsPressed = false;
-      endPoint = getMousePosition(event.clientX, event.clientY);
+      endPoint = getMousePosition(event.clientX, event.clientY, canvas, camera);
       addRectangle(startPoint, endPoint);
     }
-  }
-
-  function getMousePosition(clientX, clientY) {
-    // Get the size and position of the canvas element
-    let domRect = renderer.domElement.getBoundingClientRect();
-
-    // Normalize mouse coordinates
-    let mouse = new THREE.Vector2();
-    mouse.x = ((clientX - domRect.left) / domRect.width) * 2 - 1;
-    mouse.y = -((clientY - domRect.top) / domRect.height) * 2 + 1;
-
-    // Initialize our Raycaster
-    let raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera); // set raycaster's origin and direction
-
-    // Define an intersection point
-    let intersectionPoint = new THREE.Vector3();
-    // Calculate intersection with plane
-    raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
-
-    return intersectionPoint;
   }
 }
