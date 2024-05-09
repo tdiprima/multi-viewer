@@ -31,7 +31,7 @@ Explore & run the HTML files for example usage.
 
 Tammy DiPrima tammy.diprima&#64;stonybrook.edu
 
-Distributed under the BSD 3-Clause License. See [LICENSE.txt](LICENSE.txt) for more information.
+Distributed under the Apache License 2.0. See [LICENSE.txt](LICENSE.txt) for more information.
 
 ## Contributing
 
