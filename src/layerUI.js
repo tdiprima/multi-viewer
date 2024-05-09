@@ -42,7 +42,6 @@ function createLayerElements(layersColumn, layers, viewer, vInfo) {
   });
 
   globalEyeEvent(globalEyeball, myEyeArray);
-
 }
 
 function setupDragAndDrop(viewer) {
