@@ -40,5 +40,8 @@
   },
   "dependencies": {
     "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony"
+  },
+  "overrides": {
+    "trim-newlines": ">=3.0.1"
   }
 }
