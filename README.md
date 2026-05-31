@@ -1,79 +1,65 @@
 # multi-viewer
 
-Multiple synchronized OpenSeadragon viewers
+Multiple synchronized OpenSeadragon viewers for comparing whole-slide images with layered overlays, annotation tools, and real-time pan/zoom sync.
 
-Renders colorized segmentations, heatmaps, etc.
+## The Challenge of Side-by-Side Pathology Review
 
-The code uses HTML5, JavaScript ES6, CSS3, the npm package manager, Grunt automation...
+Comparing whole-slide images — across stains, timepoints, or model outputs — is painful when each viewer behaves independently. Zooming into a region of interest in one pane means manually re-navigating every other pane. Layer management is either absent or buried. Annotation tools require separate software. Researchers and pathologists end up splitting attention across multiple applications with no coherent workflow.
 
-<!-- Segmentation layer color ordering:<br>
-![](images/color-ordering.png) -->
+## What multi-viewer Does
 
-## Install & Build
+multi-viewer renders any number of OpenSeadragon viewers in a configurable grid layout and keeps them locked in sync. Pan or zoom in one pane and all others follow instantly. Each viewer supports multiple image layers — segmentation masks, heatmaps, base scans — with per-layer controls rendered in a sidebar: visibility toggle, opacity slider, color palette, drag-to-reorder, and visualization mode selector.
 
-OS X & Linux:
+A Fabric.js overlay sits on top of each viewer and powers interactive annotation: freehand polygon drawing, polygon editing, a calibrated ruler that measures in microns using image resolution metadata, and a grid overlay for structured review. Viewers can be independently opted out of sync via per-pane pan and zoom checkboxes, and the current viewport state (zoom level, x/y coordinates) can be shared as a bookmarkable URL. Snapshots of any pane can be downloaded as timestamped PNG files.
 
-```sh
-npm install; grunt
+## Concrete Example
+
+```js
+// Two viewers side-by-side, synced
+pageSetup(
+  'viewerContainer',
+  [
+    [{ location: 'https://example.com/slide1.tiff', opacity: 1 }],
+    [{ location: 'https://example.com/slide2.tiff', opacity: 1 }]
+  ],
+  2,    // numViewers
+  1,    // rows
+  2,    // columns
+  800,  // width (px)
+  600,  // height (px)
+  { toolbarOn: true }
+);
+
+// Synchronize pan & zoom across all viewers
+synchronizeViewers(viewers);
 ```
 
-## Generate docs
+Each image array entry is a viewer; each item within it is a layer. Layers are loaded as OpenSeadragon tile sources and rendered in order.
+
+## Usage
+
+**Install dependencies and build:**
+
+```sh
+npm install
+grunt
+```
+
+**Generate API docs:**
 
 ```sh
 npm run doc
 ```
 
-## Usage
-
-Explore & run the HTML files for example usage.
-
-## Meta
-
-Tammy DiPrima tammy.diprima&#64;stonybrook.edu
-
-Distributed under the Apache License 2.0. See [LICENSE.txt](LICENSE.txt) for more information.
-
-## Contributing
-
-When contributing, please attempt to match the code style already in the codebase.
-
-1. Fork this repo via GitHub
-2. Create your feature branch
+**Run the linter:**
 
 ```sh
-git checkout -b feature/fooBar
+npm run lint
 ```
 
-3. Commit your changes
+Open any HTML file in the `docs/` directory to explore the API reference, or wire up `pageSetup` in your own HTML with a target `<div>` and your tile source URLs.
 
-```sh
-git commit -m "Add fooBar"
-```
-
-4. Push to the branch
-
-```sh
-git push origin feature/fooBar
-```
-
-5. Create a new Pull Request via GitHub
-
-## Linting code
-
-**Lint JavaScript**
-
-```sh
-# all
-npm run lint:write
-# or
-npx eslint yourscript.js --fix
-```
-
-**Lint CSS**
-
-```sh
-csscomb file.css
-```
+**Built with:** OpenSeadragon, Fabric.js, Grunt, Babel, ESLint, ES6, HTML5, CSS3
 
 ## Dependencies
 
@@ -96,3 +82,5 @@ csscomb file.css
 
 [OpenSeadragonScalebar
 ](https://github.com/usnistgov/OpenSeadragonScalebar)
+
+<br>
