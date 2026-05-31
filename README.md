@@ -12,7 +12,7 @@ multi-viewer renders any number of OpenSeadragon viewers in a configurable grid 
 
 A Fabric.js overlay sits on top of each viewer and powers interactive annotation: freehand polygon drawing, polygon editing, a calibrated ruler that measures in microns using image resolution metadata, and a grid overlay for structured review. Viewers can be independently opted out of sync via per-pane pan and zoom checkboxes, and the current viewport state (zoom level, x/y coordinates) can be shared as a bookmarkable URL. Snapshots of any pane can be downloaded as timestamped PNG files.
 
-## Concrete Example
+## Example
 
 ```js
 // Two viewers side-by-side, synced
