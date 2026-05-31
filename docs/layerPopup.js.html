@@ -33,15 +33,15 @@
  * @param {Array} allLayers - Array of layers displayed in this viewer
  * @param {object} viewer - OpenSeadragon viewer
  */
-const layerPopup = function(divBody, allLayers, viewer) {
+const layerPopup = function(divBody, allLayers, viewer, vInfo) {
   function switchRenderTypeIfNecessary() {
     // If the current render type is not by probability, switch it.
-    if (STATE.renderType === 'byProbability') {
-      STATE.renderType = 'byProbability';
+    if (vInfo.STATE.renderType !== 'byProbability') {
+      vInfo.STATE.renderType = 'byProbability';
     }
   }
 
-  function createAttenuationBtn(allLayers, viewer) {
+  function createAttenuationBtn(allLayers, viewer, vInfo) {
     // Color attenuation by probability
     const attId = createId(5, 'atten');
     const label = e('label', { for: attId });
@@ -57,17 +57,17 @@ const layerPopup = function(divBody, allLayers, viewer) {
     // Event listener
     icon.addEventListener('click', () => {
       // Toggle attenuate state
-      STATE.attenuate = !STATE.attenuate;
+      vInfo.STATE.attenuate = !vInfo.STATE.attenuate;
       // Ensure that either outline or attenuate is on, but not both.
-      STATE.outline = false;
+      vInfo.STATE.outline = false;
       switchRenderTypeIfNecessary();
-      setFilter(allLayers, viewer);
+      setFilter(vInfo, allLayers, viewer);
     });
     return [label, icon];
   }
 
   // un/fill polygon
-  function createOutlineBtn(allLayers, viewer) {
+  function createOutlineBtn(allLayers, viewer, vInfo) {
     const fillId = createId(5, 'fill');
     const label = e('label', { for: fillId });
     label.innerHTML = '&amp;nbsp;&amp;nbsp;&amp;#58;&amp;nbsp;un/fill polygon&lt;br>';
@@ -84,12 +84,12 @@ const layerPopup = function(divBody, allLayers, viewer) {
     // Event listener
     icon.addEventListener('click', () => {
       // Toggle outline state
-      STATE.outline = !STATE.outline;
+      vInfo.STATE.outline = !vInfo.STATE.outline;
       // Ensure only one flag is active (either attenuate or outline; not both).
-      STATE.attenuate = false;
+      vInfo.STATE.attenuate = false;
       switchRenderTypeIfNecessary();
       toggleButton(icon, filledCircle, emptyCircle);
-      setFilter(allLayers, viewer);
+      setFilter(vInfo, allLayers, viewer);
     });
     return [label, icon];
   }
@@ -137,11 +137,12 @@ const layerPopup = function(divBody, allLayers, viewer) {
 
       const slideVals = getVals([ARange, BRange]);
 
-      if (d.type === 'outside') {
-        setFilter(allLayers, viewer, { min: slideVals[0], max: slideVals[1], type: 'outside' });
-      } else {
-        setFilter(allLayers, viewer, { min: slideVals[0], max: slideVals[1], type: 'inside' });
-      }
+      // Pass layers, viewer, and range info
+      setFilter(vInfo, allLayers, viewer, {
+        slideHandle1: slideVals[0],
+        slideHandle2: slideVals[1],
+        type: (d.type === 'outside') ? 'outside' : 'inside'
+      });
     }
 
     ARange.addEventListener('input', updateDisplay);
@@ -151,8 +152,8 @@ const layerPopup = function(divBody, allLayers, viewer) {
   }
 
   // Append to body
-  const [label1, atten] = createAttenuationBtn(allLayers, viewer);
-  const [label2, fillPoly] = createOutlineBtn(allLayers, viewer);
+  const [label1, atten] = createAttenuationBtn(allLayers, viewer, vInfo);
+  const [label2, fillPoly] = createOutlineBtn(allLayers, viewer, vInfo);
   divBody.appendChild(e('div', {}, [atten, label1, fillPoly, label2]));
 
   // todo: scale initial values
@@ -193,13 +194,13 @@ const layerPopup = function(divBody, allLayers, viewer) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li><li><a href="MultiViewer.html">MultiViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#bgTrans">bgTrans</a></li><li><a href="global.html#blender">blender</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#createId2">createId2</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getPreferredLabel">getPreferredLabel</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#populateStorage">populateStorage</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdTracking">setOsdTracking</a></li><li><a href="global.html#STATE">STATE</a></li><li><a href="global.html#stringy">stringy</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ImageViewer.html">ImageViewer</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CONFIG">CONFIG</a></li><li><a href="global.html#MAX">MAX</a></li><li><a href="global.html#MICRONS_PER_PIX">MICRONS_PER_PIX</a></li><li><a href="global.html#RENDER_TYPES">RENDER_TYPES</a></li><li><a href="global.html#alertMessage">alertMessage</a></li><li><a href="global.html#bgTrans">bgTrans</a></li><li><a href="global.html#colorToArray">colorToArray</a></li><li><a href="global.html#createDraggableDiv">createDraggableDiv</a></li><li><a href="global.html#createId">createId</a></li><li><a href="global.html#createId2">createId2</a></li><li><a href="global.html#drawCross">drawCross</a></li><li><a href="global.html#drawPolygon">drawPolygon</a></li><li><a href="global.html#e">e</a></li><li><a href="global.html#editPolygon">editPolygon</a></li><li><a href="global.html#filterPopup">filterPopup</a></li><li><a href="global.html#getRandomInt">getRandomInt</a></li><li><a href="global.html#gridOverlay">gridOverlay</a></li><li><a href="global.html#isEmpty">isEmpty</a></li><li><a href="global.html#isRealValue">isRealValue</a></li><li><a href="global.html#layerPopup">layerPopup</a></li><li><a href="global.html#layerUI">layerUI</a></li><li><a href="global.html#mapMarker">mapMarker</a></li><li><a href="global.html#markupTools">markupTools</a></li><li><a href="global.html#mugshots">mugshots</a></li><li><a href="global.html#populateStorage">populateStorage</a></li><li><a href="global.html#ruler">ruler</a></li><li><a href="global.html#saveSettings">saveSettings</a></li><li><a href="global.html#scaleToPct">scaleToPct</a></li><li><a href="global.html#scaleToRgb">scaleToRgb</a></li><li><a href="global.html#setFilter">setFilter</a></li><li><a href="global.html#setOsdTracking">setOsdTracking</a></li><li><a href="global.html#stringy">stringy</a></li><li><a href="global.html#synchronizeViewers">synchronizeViewers</a></li><li><a href="global.html#toggleButton">toggleButton</a></li><li><a href="global.html#toggleCross">toggleCross</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Sep 08 2023 13:38:18 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun May 31 2026 13:07:41 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
